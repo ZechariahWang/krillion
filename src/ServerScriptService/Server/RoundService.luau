@@ -63,7 +63,27 @@ function RoundService.aliveCount(): number
 	return MatchState.aliveCount(match)
 end
 
+local lastWinnerName = ""
+
+local function updateScoreboard()
+	local alive = RoundService.aliveCount()
+	if phase == "Waiting" then
+		MapService.setScoreboard("WAITING FOR PLAYERS", #Players:GetPlayers() .. " / " .. GameConfig.Round.MinPlayers)
+	elseif phase == "Intermission" then
+		MapService.setScoreboard("NEXT DIVE IN", tostring(secondsLeft))
+	elseif phase == "Prompt" and currentPrompt ~= nil then
+		MapService.setScoreboard("ROUND " .. round .. "  |  " .. alive .. " ALIVE  |  " .. secondsLeft, currentPrompt.prompt)
+	elseif phase == "Reveal" then
+		MapService.setScoreboard("ROUND " .. round .. "  |  " .. alive .. " ALIVE", "THE PILLARS RISE!")
+	elseif phase == "Surge" then
+		MapService.setScoreboard("ROUND " .. round .. "  |  " .. alive .. " ALIVE", "THE WATER IS RISING!")
+	elseif phase == "Results" then
+		MapService.setScoreboard("WINNER", lastWinnerName)
+	end
+end
+
 local function broadcastState()
+	updateScoreboard()
 	local aliveUserIds = {}
 	for _, player in alivePlayers() do
 		table.insert(aliveUserIds, player.UserId)
@@ -167,12 +187,13 @@ local function startMatch()
 	for index, player in participants do
 		MatchState.addPlayer(state, player)
 		platforms[player] = parts[index]
+		MapService.setPlatformName(parts[index], player.DisplayName)
 		PlayerService.sendToPlatform(player, parts[index])
 	end
 end
 
 -- Stage one lifts most of the way, a hold, then a snap with a small overshoot that settles.
-local function risePlatform(player: Player, fromTop: number, toTop: number)
+local function risePlatform(player: Player, fromTop: number, toTop: number, points: number)
 	local platform = platforms[player]
 	if platform == nil or platform.Parent == nil then
 		return
@@ -184,6 +205,9 @@ local function risePlatform(player: Player, fromTop: number, toTop: number)
 		return
 	end
 	MapService.setPlatformTop(platform, toTop + 0.6)
+	if points >= GameConfig.Platform.ConfettiMinPoints then
+		MapService.celebrate(platform, points)
+	end
 	task.wait(GameConfig.Platform.RiseSnapSeconds * 0.6)
 	if platform.Parent == nil then
 		return
@@ -198,8 +222,11 @@ local function runPrompt()
 	currentPrompt = prompt
 	LobbyQuizService.setLivePromptId(prompt.id)
 	AnswerService.openRound(prompt, alivePlayers())
+	local seconds = WaterCurve.promptSeconds(round)
+	-- Set before the phase change so clients start their timer from the right number, not the last countdown's 0.
+	secondsLeft = seconds
 	setPhase("Prompt")
-	countdown(WaterCurve.promptSeconds(round), matchOver)
+	countdown(seconds, matchOver)
 	return AnswerService.closeRound()
 end
 
@@ -224,7 +251,6 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 		table.insert(rows, {
 			userId = player.UserId,
 			name = player.DisplayName,
-			answered = submission ~= nil,
 			answer = shownAnswer,
 			tier = tier,
 			points = points,
@@ -232,7 +258,7 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 			height = state.heights[player],
 		})
 		if lift > 0 then
-			task.spawn(risePlatform, player, fromTop, state.heights[player])
+			task.spawn(risePlatform, player, fromTop, state.heights[player], points)
 		end
 	end
 	currentPrompt = nil
@@ -287,6 +313,7 @@ local function endMatch()
 		winnerName = winner.DisplayName
 	end
 	local top = podium(state, winner)
+	lastWinnerName = winnerName
 	for _, player in alivePlayers() do
 		MatchState.eliminate(state, player)
 		PlayerService.sendToLobby(player)
@@ -294,6 +321,7 @@ local function endMatch()
 	MapService.clearPlatforms()
 	platforms = {}
 	match = nil
+	secondsLeft = GameConfig.Round.ResultsSeconds
 	setPhase("Results")
 	Net.event("MatchEnded"):FireAllClients({
 		winnerName = winnerName,
@@ -325,6 +353,7 @@ end
 local function mainLoop()
 	while true do
 		waitForPlayers()
+		secondsLeft = GameConfig.Round.IntermissionSeconds
 		setPhase("Intermission")
 		countdown(GameConfig.Round.IntermissionSeconds, function()
 			return #readyPlayers() < GameConfig.Round.MinPlayers

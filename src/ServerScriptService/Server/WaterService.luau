@@ -1,5 +1,6 @@
 --!strict
 -- Owns the water surface: the two-stage surge animation and the "who is under water" poll.
+-- The water part's bottom stays on the tank floor; only its height grows.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
@@ -7,17 +8,30 @@ local TweenService = game:GetService("TweenService")
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local MapService = require(script.Parent.MapService)
 
-local WATER_DEPTH = 40
-
 local surfaceY = 0
 
 local WaterService = {}
 
+local function waterGoal(water: Part, y: number): { [string]: any }
+	local floorY = water:GetAttribute("FloorY") :: number
+	local height = y - floorY
+	return {
+		Size = Vector3.new(water.Size.X, height, water.Size.Z),
+		Position = Vector3.new(water.Position.X, floorY + height / 2, water.Position.Z),
+	}
+end
+
+local function foamGoal(foam: Part, y: number): { [string]: any }
+	return { Position = Vector3.new(foam.Position.X, y + 0.15, foam.Position.Z) }
+end
+
 local function placeSurface(y: number)
 	local water = MapService.getWater()
 	local foam = MapService.getFoam()
-	water.Position = Vector3.new(0, y - WATER_DEPTH / 2, 0)
-	foam.Position = Vector3.new(0, y + 0.1, 0)
+	local goal = waterGoal(water, y)
+	water.Size = goal.Size
+	water.Position = goal.Position
+	foam.Position = foamGoal(foam, y).Position
 end
 
 function WaterService.reset()
@@ -27,30 +41,26 @@ end
 
 function WaterService.getSurfaceY(): number
 	local water = MapService.getWater()
-	return water.Position.Y + WATER_DEPTH / 2
+	return water.Position.Y + water.Size.Y / 2
+end
+
+local function tweenSurface(y: number, info: TweenInfo)
+	local water = MapService.getWater()
+	local foam = MapService.getFoam()
+	local waterTween = TweenService:Create(water, info, waterGoal(water, y))
+	local foamTween = TweenService:Create(foam, info, foamGoal(foam, y))
+	waterTween:Play()
+	foamTween:Play()
+	waterTween.Completed:Wait()
 end
 
 -- Creeps most of the way, then jumps the rest. Blocks until the water has settled.
 function WaterService.surgeTo(targetY: number)
-	local water = MapService.getWater()
-	local foam = MapService.getFoam()
 	local creepY = surfaceY + (targetY - surfaceY) * GameConfig.Water.CreepFraction
-
 	local creepInfo = TweenInfo.new(GameConfig.Water.CreepSeconds, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 	local jumpInfo = TweenInfo.new(GameConfig.Water.JumpSeconds, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-
-	local creepWater = TweenService:Create(water, creepInfo, { Position = Vector3.new(0, creepY - WATER_DEPTH / 2, 0) })
-	local creepFoam = TweenService:Create(foam, creepInfo, { Position = Vector3.new(0, creepY + 0.1, 0) })
-	creepWater:Play()
-	creepFoam:Play()
-	creepWater.Completed:Wait()
-
-	local jumpWater = TweenService:Create(water, jumpInfo, { Position = Vector3.new(0, targetY - WATER_DEPTH / 2, 0) })
-	local jumpFoam = TweenService:Create(foam, jumpInfo, { Position = Vector3.new(0, targetY + 0.1, 0) })
-	jumpWater:Play()
-	jumpFoam:Play()
-	jumpWater.Completed:Wait()
-
+	tweenSurface(creepY, creepInfo)
+	tweenSurface(targetY, jumpInfo)
 	surfaceY = targetY
 	placeSurface(targetY)
 end

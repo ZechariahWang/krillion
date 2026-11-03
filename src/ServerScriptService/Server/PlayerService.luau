@@ -2,6 +2,10 @@
 -- Where each player is: lobby or on a platform. The "Playing" attribute is read by clients and LobbyQuizService.
 
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterPlayer = game:GetService("StarterPlayer")
+
+local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 
 local MapService = require(script.Parent.MapService)
 
@@ -55,13 +59,36 @@ function PlayerService.hasCharacter(player: Player): boolean
 	return character:FindFirstChild("HumanoidRootPart") ~= nil
 end
 
+-- On a pillar you cannot jump, so nobody hops onto a neighbour's higher pillar. Walking off still sinks you.
+local function setMovement(player: Player, onPillar: boolean)
+	local character = player.Character
+	if character == nil then
+		return
+	end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid == nil then
+		return
+	end
+	if onPillar then
+		humanoid.WalkSpeed = GameConfig.Platform.WalkSpeed
+		humanoid.JumpHeight = 0
+		humanoid.JumpPower = 0
+	else
+		humanoid.WalkSpeed = StarterPlayer.CharacterWalkSpeed
+		humanoid.JumpHeight = StarterPlayer.CharacterJumpHeight
+		humanoid.JumpPower = StarterPlayer.CharacterJumpPower
+	end
+end
+
 function PlayerService.sendToPlatform(player: Player, platform: Part)
 	player:SetAttribute("Playing", true)
+	setMovement(player, true)
 	pivotCharacter(player, MapService.platformStandCFrame(platform))
 end
 
 function PlayerService.sendToLobby(player: Player)
 	player:SetAttribute("Playing", false)
+	setMovement(player, false)
 	pivotCharacter(player, MapService.getLobbySpawnCFrame())
 end
 
