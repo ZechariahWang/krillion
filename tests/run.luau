@@ -18,6 +18,7 @@ local suites = {
 	require("./AnswerMatcher.test"),
 	require("./WaterCurve.test"),
 	require("./MatchState.test"),
+	require("./SpecialRound.test"),
 }
 
 for _, suite in suites do

@@ -50,6 +50,12 @@ local GameConfig = {
 		QuizSeconds = 20,
 		CoinsPerPoint = 0.5,
 	},
+	Special = {
+		MinRound = 3, -- no special rounds before this
+		Chance = 0.25, -- per eligible round; never two in a row
+		TidalWaveMultiplier = 2, -- water rises this many times further
+		DoubleLiftMultiplier = 2, -- pillars rise this many times further
+	},
 	Server = {
 		MaxPlayers = 12,
 	},
@@ -60,5 +66,6 @@ table.freeze(GameConfig.Water)
 table.freeze(GameConfig.Platform)
 table.freeze(GameConfig.Answer)
 table.freeze(GameConfig.Lobby)
+table.freeze(GameConfig.Special)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)

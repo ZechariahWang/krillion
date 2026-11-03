@@ -35,6 +35,8 @@ export type RoundStatePayload = {
 	starting: number, -- players who started the current match
 	height: number,
 	waterY: number,
+	surge: number, -- how far the water rises at the end of this round
+	special: string?, -- "TidalWave" | "DoubleLift" | nil
 }
 
 export type RevealRow = {

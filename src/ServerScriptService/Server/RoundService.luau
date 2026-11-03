@@ -9,6 +9,7 @@ local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local MatchState = require(ReplicatedStorage.Shared.MatchState)
 local Net = require(ReplicatedStorage.Shared.Net)
+local SpecialRound = require(ReplicatedStorage.Shared.SpecialRound)
 local WaterCurve = require(ReplicatedStorage.Shared.WaterCurve)
 local AnswerService = require(script.Parent.AnswerService)
 local LobbyQuizService = require(script.Parent.LobbyQuizService)
@@ -23,6 +24,8 @@ local currentPrompt: AnswerService.Prompt? = nil
 local match: MatchState.State? = nil
 local platforms: { [Player]: Part } = {}
 local usedPromptIds: { [string]: boolean } = {}
+local special: string? = nil -- this round's special, if any
+local roundSurge = 0 -- how far the water will rise at the end of this round
 local participantCount = 0
 
 local RoundService = {}
@@ -114,6 +117,8 @@ local function broadcastState()
 			playing = match ~= nil and match.alive[player] == true,
 			height = height,
 			waterY = waterY,
+			surge = roundSurge,
+			special = special,
 			playerCount = #Players:GetPlayers(),
 			starting = participantCount,
 			minPlayers = GameConfig.Round.MinPlayers,
@@ -182,6 +187,8 @@ local function startMatch()
 	match = state
 	round = 0
 	usedPromptIds = {}
+	special = nil
+	roundSurge = 0
 	platforms = {}
 	WaterService.reset()
 	local parts = MapService.spawnPlatforms(#participants, GameConfig.Water.StartHeight)
@@ -218,6 +225,8 @@ end
 
 local function runPrompt()
 	round += 1
+	special = SpecialRound.pick(round, special, math.random(), math.random())
+	roundSurge = SpecialRound.surge(round, special)
 	local prompt = AnswerService.randomPrompt(usedPromptIds)
 	usedPromptIds[prompt.id] = true
 	currentPrompt = prompt
@@ -245,7 +254,7 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 			-- Accepted answers are shown in the bank's spelling, which is our own text, so it needs no chat filter.
 			shownAnswer = submission.corrected
 		end
-		local lift = WaterCurve.lift(points)
+		local lift = SpecialRound.lift(points, special)
 		local fromTop = state.heights[player]
 		MatchState.applyLift(state, player, points, lift)
 		table.insert(rows, {
@@ -271,7 +280,7 @@ end
 local function runSurge()
 	local state = match :: MatchState.State
 	setPhase("Surge")
-	MatchState.surge(state, WaterCurve.surge(round))
+	MatchState.surge(state, roundSurge)
 	WaterService.surgeTo(state.waterY)
 	local culled = MatchState.cull(state)
 	for _, player in culled do
