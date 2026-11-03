@@ -31,7 +31,6 @@ local GameConfig = {
 		Height = 140, -- tall enough to reach the tank floor at any height
 		Spacing = 16,
 		Columns = 4,
-		WalkSpeed = 10, -- slower on the pillar so a stray key press is not instant death
 		RiseStageFraction = 0.65,
 		RiseStageSeconds = 0.6,
 		RiseHoldSeconds = 0.4,

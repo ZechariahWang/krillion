@@ -59,7 +59,7 @@ function PlayerService.hasCharacter(player: Player): boolean
 	return character:FindFirstChild("HumanoidRootPart") ~= nil
 end
 
--- On a pillar you cannot jump, so nobody hops onto a neighbour's higher pillar. Walking off still sinks you.
+-- On a pillar you cannot walk or jump, so nobody falls off by accident or hops onto a neighbour's pillar.
 local function setMovement(player: Player, onPillar: boolean)
 	local character = player.Character
 	if character == nil then
@@ -70,7 +70,7 @@ local function setMovement(player: Player, onPillar: boolean)
 		return
 	end
 	if onPillar then
-		humanoid.WalkSpeed = GameConfig.Platform.WalkSpeed
+		humanoid.WalkSpeed = 0
 		humanoid.JumpHeight = 0
 		humanoid.JumpPower = 0
 	else
