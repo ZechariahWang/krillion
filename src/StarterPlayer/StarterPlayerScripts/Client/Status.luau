@@ -1,11 +1,12 @@
 --!strict
--- Drives StarterGui.Status: the top status line (with accent underline) and the time | alive bar under it.
--- Shown in every phase, in the lobby and in the match.
+-- Drives StarterGui.Status: the top status line (with accent underline), the time | alive bar under it,
+-- and the tide chip that says how far the water rises this round. Shown in every phase.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
+local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
@@ -13,9 +14,18 @@ local statusFrame: Frame
 local statusText: TextLabel
 local secondaryText: TextLabel
 local aliveText: TextLabel
+local tide: Frame
+local tideAccent: Frame
+local tideText: TextLabel
 
 local lastStatus = ""
 local lastPrompt = ""
+local lastRound = 0
+
+local SPECIAL_NAMES = {
+	TidalWave = "TIDAL WAVE",
+	DoubleLift = "DOUBLE LIFT",
+}
 
 local Status = {}
 
@@ -42,11 +52,57 @@ function Status.init(playerGui: PlayerGui)
 	local secondary = gui:WaitForChild("SecondaryStatus")
 	secondaryText = secondary:WaitForChild("Secondary") :: TextLabel
 	aliveText = secondary:WaitForChild("Alive") :: TextLabel
+	tide = gui:WaitForChild("Tide") :: Frame
+	tideAccent = tide:WaitForChild("Accent") :: Frame
+	tideText = tide:WaitForChild("Text") :: TextLabel
+end
+
+local function updateTide(payload)
+	local inRound = payload.phase == "Prompt" or payload.phase == "Reveal"
+	tide.Visible = inRound
+	if not inRound then
+		return
+	end
+	local rise = "WATER +" .. string.format("%.1f", payload.surge)
+	local special = payload.special
+	if special == "TidalWave" then
+		tideAccent.BackgroundColor3 = Theme.Color.Red
+		tideText.Text = "TIDAL WAVE  |  " .. rise
+	elseif special == "DoubleLift" then
+		tideAccent.BackgroundColor3 = Theme.Color.Green
+		tideText.Text = "DOUBLE LIFT  |  " .. rise
+	else
+		tideAccent.BackgroundColor3 = Theme.Color.Water
+		tideText.Text = rise
+	end
+end
+
+-- Announces a special round once, when its prompt starts.
+local function announceSpecial(payload)
+	if payload.phase ~= "Prompt" or payload.round == lastRound then
+		return
+	end
+	lastRound = payload.round
+	local special = payload.special
+	if special == nil then
+		return
+	end
+	local color = Theme.Color.Green
+	if special == "TidalWave" then
+		color = Theme.Color.Red
+	end
+	Fx.callout(SPECIAL_NAMES[special] or special, color)
+	Sfx.play("Fanfare", 0.5)
 end
 
 function Status.onState(payload)
 	local phase = payload.phase
 	secondaryText.TextColor3 = Theme.Color.Cream
+	updateTide(payload)
+	announceSpecial(payload)
+	if phase == "Results" or phase == "Waiting" then
+		lastRound = 0
+	end
 
 	if phase == "Waiting" then
 		setStatus("WAITING FOR PLAYERS")

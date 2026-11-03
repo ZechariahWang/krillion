@@ -21,6 +21,7 @@ local coinChip: Frame
 local coinText: TextLabel
 local meter: Frame
 local marker: Frame
+local target: Frame
 local answerBar: Frame
 local answerBox: TextBox
 local submitButton: TextButton
@@ -109,11 +110,25 @@ function Hud.onAnswerResult(payload)
 	keepFocus()
 end
 
-local function updateMeter(height: number, waterY: number)
+-- Where a height sits on the meter, measured from the current water line.
+local function meterY(height: number, waterY: number): number
 	local margin = math.clamp((height - waterY) / METER_RANGE, 0, 1)
-	local y = 1 - METER_WATER - margin * (1 - METER_WATER)
-	Tween.play(marker, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, y) })
-	if margin < 0.15 then
+	return 1 - METER_WATER - margin * (1 - METER_WATER)
+end
+
+-- The marker is you; the target line is where the water will reach this round.
+-- The marker turns red while you are still below that line.
+local function updateMeter(payload)
+	local markerY = meterY(payload.height, payload.waterY)
+	Tween.play(marker, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, markerY) })
+	local showTarget = payload.phase == "Prompt" or payload.phase == "Reveal"
+	target.Visible = showTarget
+	if showTarget then
+		local targetY = meterY(payload.waterY + payload.surge, payload.waterY)
+		Tween.play(target, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, targetY) })
+	end
+	local willSink = payload.height < payload.waterY + payload.surge
+	if showTarget and willSink then
 		marker.BackgroundColor3 = Theme.Color.Red
 	else
 		marker.BackgroundColor3 = Theme.Color.Cream
@@ -146,6 +161,7 @@ function Hud.init(playerGui: PlayerGui)
 	coinText = coinChip:WaitForChild("CoinText") :: TextLabel
 	meter = gui:WaitForChild("WaterMeter") :: Frame
 	marker = meter:WaitForChild("Marker") :: Frame
+	target = meter:WaitForChild("Target") :: Frame
 	answerBar = gui:WaitForChild("AnswerBar") :: Frame
 	answerBox = answerBar:WaitForChild("AnswerBox") :: TextBox
 	submitButton = answerBar:WaitForChild("SubmitButton") :: TextButton
@@ -180,7 +196,7 @@ function Hud.onState(payload)
 
 	meter.Visible = payload.playing
 	if payload.playing then
-		updateMeter(payload.height, payload.waterY)
+		updateMeter(payload)
 	end
 
 	-- Prompt phase only, so it never sits on top of the reveal card.

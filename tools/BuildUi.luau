@@ -273,6 +273,16 @@ local function buildHud()
 	marker.BackgroundColor3 = C.Cream
 	marker.BorderSizePixel = 0
 	marker.Parent = meter
+	-- Where the water will reach this round.
+	local target = Instance.new("Frame")
+	target.Name = "Target"
+	target.AnchorPoint = Vector2.new(0.5, 0.5)
+	target.Position = UDim2.fromScale(0.5, 0.5)
+	target.Size = UDim2.new(1, 4, 0, 2)
+	target.BackgroundColor3 = C.Gold
+	target.BorderSizePixel = 0
+	target.Visible = false
+	target.Parent = meter
 	local meterLabel = label("MeterLabel", meter, "YOU", C.Cream, UDim2.fromOffset(40, 16), UDim2.new(0.5, 0, 0, -20), 14)
 	meterLabel.AnchorPoint = Vector2.new(0.5, 0)
 
@@ -486,6 +496,20 @@ local function buildStatus()
 	divider.BackgroundTransparency = 0.6
 	divider.BorderSizePixel = 0
 	divider.Parent = secondary
+
+	-- Tide chip: how far the water rises this round, under the time | alive bar (where the reference's TopBoard sits).
+	local tide = panel("Tide", gui, UDim2.fromScale(0.15, 0.034), UDim2.fromScale(0.5, 0.168), Vector2.new(0.5, 0), Theme.Panel.Transparency)
+	tide.Visible = false
+	local tideShadow = tide:FindFirstChildOfClass("UIShadow")
+	if tideShadow ~= nil then
+		tideShadow:Destroy()
+	end
+	sideAccent(tide, C.Water)
+	local tideText = label("Text", tide, "WATER +3.2", C.Cream, UDim2.new(1, -24, 1, 0), UDim2.fromOffset(18, 0), 100, Theme.Font.Heavy)
+	local tidePadding = Instance.new("UIPadding")
+	tidePadding.PaddingTop = UDim.new(0.18, 0)
+	tidePadding.PaddingBottom = UDim.new(0.18, 0)
+	tidePadding.Parent = tideText
 end
 
 -- Full-screen effects layer: flash, big callouts, floating coin text. Always enabled.
