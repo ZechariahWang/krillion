@@ -180,7 +180,7 @@ local function buildArena(): Model
 	end
 
 	local water = part("Water", Vector3.new(TANK_HALF * 2, -FLOOR_Y, TANK_HALF * 2), CFrame.new(0, FLOOR_Y / 2, 0), Theme.Color.Water, Enum.Material.SmoothPlastic, arena)
-	water.Transparency = 0.25
+	water.Transparency = 0.12
 	water.Reflectance = 0.1
 	water.CanCollide = false
 	water.CanQuery = false
@@ -280,6 +280,16 @@ local function buildDeck(lobby: Model)
 		local middle = (from + to) / 2
 		local bar = part("RailBar", Vector3.new(1, 0.8, length), CFrame.lookAt(middle + Vector3.new(0, 1.6, 0), to + Vector3.new(0, 1.6, 0)), Theme.Color.Wood, Enum.Material.Wood, lobby)
 		bar.Size = Vector3.new(1, 0.8, length + 1)
+		if from.Z == DECK_NEAR and to.Z == DECK_NEAR then
+			-- The tank-side rail is a clear glass panel so spectators can see down into the water.
+			bar.Name = "GlassRail"
+			bar.Size = Vector3.new(0.4, 4, length)
+			bar.CFrame = CFrame.lookAt(middle + Vector3.new(0, 0, 0), to)
+			bar.Material = Enum.Material.Glass
+			bar.Color = Color3.fromHex("CDEBFF")
+			bar.Transparency = 0.8
+			continue
+		end
 		local count = math.floor(length / 8)
 		for step = 0, count do
 			local point = from + (to - from) * (step / count)

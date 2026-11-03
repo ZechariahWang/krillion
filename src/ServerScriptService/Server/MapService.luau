@@ -87,9 +87,12 @@ function MapService.spawnPlatforms(count: number, topY: number): { Part }
 		local position = platformPosition(index, count, topY)
 		platform.CFrame = CFrame.new(position)
 		platform.Anchored = false
-		platform.Color = Theme.Pillars[((index - 1) % #Theme.Pillars) + 1]
+		local color = Theme.Pillars[((index - 1) % #Theme.Pillars) + 1]
+		platform.Color = color
 		local cap = platform:FindFirstChild("Cap") :: Part?
 		if cap ~= nil then
+			-- Lighter tint of the pillar colour, so you can tell your pillar apart from above.
+			cap.Color = color:Lerp(Theme.Color.White, 0.35)
 			cap.Anchored = false
 			cap.Massless = true
 			cap.CFrame = platform.CFrame * CFrame.new(0, GameConfig.Platform.Height / 2 + CAP_HEIGHT / 2, 0)
