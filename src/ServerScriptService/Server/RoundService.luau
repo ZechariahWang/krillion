@@ -242,9 +242,8 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 		if submission ~= nil then
 			points = submission.points
 			tier = submission.tier
-			if tier ~= nil then
-				shownAnswer = AnswerService.filterForBroadcast(player, submission.text)
-			end
+			-- Accepted answers are shown in the bank's spelling, which is our own text, so it needs no chat filter.
+			shownAnswer = submission.corrected
 		end
 		local lift = WaterCurve.lift(points)
 		local fromTop = state.heights[player]
@@ -325,6 +324,8 @@ local function endMatch()
 	secondsLeft = GameConfig.Round.ResultsSeconds
 	setPhase("Results")
 	Net.event("MatchEnded"):FireAllClients({
+		solo = participantCount == 1,
+		rounds = round,
 		winnerName = winnerName,
 		podium = top,
 		seconds = GameConfig.Round.ResultsSeconds,

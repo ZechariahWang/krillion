@@ -11,6 +11,7 @@ local Ui = require(script.Parent.Ui)
 
 local gui: ScreenGui
 local panel: Frame
+local titleText: TextLabel
 local winnerText: TextLabel
 local podium: Frame
 local nextText: TextLabel
@@ -20,13 +21,21 @@ local Results = {}
 function Results.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Results") :: ScreenGui
 	panel = gui:WaitForChild("Panel") :: Frame
+	titleText = panel:WaitForChild("Title") :: TextLabel
 	winnerText = panel:WaitForChild("WinnerText") :: TextLabel
 	podium = panel:WaitForChild("Podium") :: Frame
 	nextText = panel:WaitForChild("NextText") :: TextLabel
 end
 
 function Results.onMatchEnded(payload)
-	winnerText.Text = string.upper(payload.winnerName)
+	-- A solo dive has no winner to name: show how far the player got instead.
+	if payload.solo then
+		titleText.Text = "SOLO DIVE"
+		winnerText.Text = "SURVIVED " .. math.max(0, payload.rounds - 1) .. " ROUNDS"
+	else
+		titleText.Text = "LAST ONE FLOATING"
+		winnerText.Text = string.upper(payload.winnerName)
+	end
 	for place = 1, 3 do
 		local row = podium:FindFirstChild("Place" .. place) :: Frame?
 		if row ~= nil then
@@ -44,7 +53,7 @@ function Results.onMatchEnded(payload)
 	gui.Enabled = true
 	Ui.appear(panel)
 	Sfx.play("Fanfare", 0.8)
-	if payload.winnerName == Players.LocalPlayer.DisplayName then
+	if not payload.solo and payload.winnerName == Players.LocalPlayer.DisplayName then
 		Fx.flash(Theme.Color.Gold)
 		Fx.callout("YOU WIN", Theme.Color.Gold)
 	end

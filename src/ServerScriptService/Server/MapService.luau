@@ -23,8 +23,14 @@ function MapService.start()
 	template = arena:WaitForChild("PlatformTemplate") :: Part
 	template.Parent = nil
 	arena.Parent = workspace
-	lobby = (maps:WaitForChild("Lobby") :: Model):Clone()
-	lobby.Parent = workspace
+	-- A lobby already placed in Workspace (being edited in Studio) is used as-is; otherwise clone the stored one.
+	local placed = workspace:FindFirstChild("Lobby")
+	if placed ~= nil and placed:IsA("Model") then
+		lobby = placed
+	else
+		lobby = (maps:WaitForChild("Lobby") :: Model):Clone()
+		lobby.Parent = workspace
+	end
 	platformFolder = Instance.new("Folder")
 	platformFolder.Name = "Platforms"
 	platformFolder.Parent = workspace

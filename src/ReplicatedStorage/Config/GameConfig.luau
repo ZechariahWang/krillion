@@ -3,7 +3,7 @@
 
 local GameConfig = {
 	Round = {
-		MinPlayers = 2, -- 1 turns on solo practice matches on empty servers
+		MinPlayers = 1, -- one player plays solo until they sink; two or more play last-player-standing
 		IntermissionSeconds = 15,
 		PromptSeconds = 20,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
@@ -41,8 +41,8 @@ local GameConfig = {
 	},
 	Answer = {
 		MaxLength = 40,
-		FuzzyMinLength = 5,
-		FuzzyMaxDistance = 1,
+		FuzzyMinLength = 5, -- shorter answers must be spelled exactly
+		FuzzyLongLength = 10, -- answers this long or longer forgive two typos instead of one
 		RetryCooldown = 1, -- seconds between guesses, so a wrong answer can be retried but not spammed
 	},
 	Lobby = {
