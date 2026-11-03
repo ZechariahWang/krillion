@@ -187,7 +187,7 @@ local function buildLobby(): Model
 	return lobby
 end
 
--- Lighting.Technology cannot be set from a script: pick Future by hand in the Lighting properties.
+-- LightingStyle is not scriptable: set it to Realistic by hand in the Lighting properties.
 local function applyLighting()
 	Lighting.Ambient = Color3.fromRGB(12, 20, 40)
 	Lighting.OutdoorAmbient = Color3.fromRGB(20, 35, 70)
