@@ -53,23 +53,6 @@ return function(test)
 		assert(WaterCurve.surgeSeconds() == GameConfig.Water.CreepSeconds + GameConfig.Water.JumpSeconds)
 	end)
 
-	test("terrain water stops at the last whole voxel at or below the surface", function()
-		local voxel = GameConfig.Water.Voxel
-		assert(WaterCurve.terrainTop(0) == 0)
-		assert(WaterCurve.terrainTop(voxel * 2 - 0.1) == voxel)
-		assert(WaterCurve.terrainTop(voxel * 2) == voxel * 2)
-		assert(WaterCurve.terrainTop(-1) == -voxel)
-	end)
-
-	test("the surface slab always reaches down past the terrain top, so no gap shows", function()
-		local level = -3.5
-		while level < 40 do
-			local slabBottom = level - GameConfig.Water.SurfaceDepth
-			assert(slabBottom <= WaterCurve.terrainTop(level), "gap at level " .. level)
-			level += 0.37
-		end
-	end)
-
 	test("surge animation never moves the water down", function()
 		local previous = WaterCurve.surgeY(0, 10, 0)
 		local t = 0

@@ -26,8 +26,6 @@ local GameConfig = {
 		CreepFraction = 0.7, -- slow part of the surge
 		CreepSeconds = 2,
 		JumpSeconds = 0.4,
-		Voxel = 4, -- terrain resolution: terrain water is only ever whole 4-stud cells
-		SurfaceDepth = 4.2, -- the sliding surface slab's thickness; must exceed Voxel so no gap shows
 	},
 	Platform = {
 		Height = 140, -- tall enough to reach the tank floor at any height

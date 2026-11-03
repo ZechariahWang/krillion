@@ -16,13 +16,6 @@ function WaterCurve.lift(points: number): number
 	return points * GameConfig.Water.LiftPerPoint
 end
 
--- Terrain water cells are always full, so terrain only fills whole voxels up to this height and the
--- sliding surface slab covers the rest up to the real level.
-function WaterCurve.terrainTop(level: number): number
-	local voxel = GameConfig.Water.Voxel
-	return math.floor(level / voxel) * voxel
-end
-
 function WaterCurve.surgeSeconds(): number
 	return GameConfig.Water.CreepSeconds + GameConfig.Water.JumpSeconds
 end

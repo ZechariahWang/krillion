@@ -1,7 +1,7 @@
 --!strict
 -- Local water visuals: the NextLevel line showing where the water will reach, and the surge itself,
--- animated on this client every frame (surface slab plus local terrain). The server draws the final
--- level once at the end of the surge, which matches what this already shows.
+-- animated on this client every frame. The server sets the final level once at the end of the surge,
+-- which matches what this already shows.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -55,32 +55,25 @@ local function step(dt: number)
 	model:PivotTo(CFrame.new(pivot.Position.X, y, pivot.Position.Z))
 end
 
--- Slides the surface slab along the shared surge curve every frame; local terrain fills a voxel at a
--- time underneath, staying below the slab.
+-- Raises the water part along the shared surge curve, one step per frame.
 local function animateSurge(fromY: number, toY: number)
 	local marker = waterMarker
-	local surface = waterSurface
-	if marker == nil or surface == nil then
+	local water = waterSurface
+	if marker == nil or water == nil then
 		return
 	end
+	local floorY = marker:GetAttribute("FloorY") :: number
 	surgeToken += 1
 	local token = surgeToken
 	task.spawn(function()
-		local filledTo = fromY
 		local elapsed = 0
 		local total = WaterCurve.surgeSeconds()
 		while elapsed < total and token == surgeToken do
 			elapsed += RunService.RenderStepped:Wait()
-			local y = WaterCurve.surgeY(fromY, toY, elapsed)
-			WaterSurface.place(surface, y)
-			if WaterCurve.terrainTop(y) > WaterCurve.terrainTop(filledTo) then
-				WaterSurface.fillTerrain(marker, filledTo, y)
-				filledTo = y
-			end
+			WaterSurface.place(water, floorY, WaterCurve.surgeY(fromY, toY, elapsed))
 		end
 		if token == surgeToken then
-			WaterSurface.place(surface, toY)
-			WaterSurface.fillTerrain(marker, filledTo, toY)
+			WaterSurface.place(water, floorY, toY)
 		end
 	end)
 end

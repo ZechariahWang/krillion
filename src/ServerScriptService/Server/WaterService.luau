@@ -1,7 +1,6 @@
 --!strict
 -- Owns the tank water: the level, the two-stage surge, and the "who is under water" poll.
--- Terrain water (whole voxels) gives depth and the underwater look; the Arena.WaterSurface slab sits
--- exactly at the level so the surface moves smoothly (see Shared/WaterSurface).
+-- The water is the Arena.WaterSurface part (see Shared/WaterSurface); the sea outside stays terrain.
 -- The invisible Arena.Water box holds the bubble emitter; its Radius and FloorY attributes give the round
 -- tank's footprint and floor.
 
@@ -32,10 +31,10 @@ function WaterService.reset()
 	local marker = MapService.getWater()
 	local radius = marker:GetAttribute("Radius") :: number
 	local floorY = marker:GetAttribute("FloorY") :: number
+	-- Clears any terrain water left in the tank (the sea outside the tank is untouched).
 	workspace.Terrain:FillCylinder(CFrame.new(0, floorY + CLEAR_HEIGHT / 2, 0), CLEAR_HEIGHT, radius, Enum.Material.Air)
 	level = 0
-	WaterSurface.fillTerrain(marker, floorY, 0)
-	WaterSurface.place(MapService.getWaterSurface(), 0)
+	WaterSurface.place(MapService.getWaterSurface(), floorY, 0)
 	fitMarker(0)
 end
 
@@ -54,8 +53,8 @@ function WaterService.surgeTo(targetY: number)
 		elapsed += RunService.Heartbeat:Wait()
 		level = WaterCurve.surgeY(startY, targetY, elapsed)
 	end
-	WaterSurface.fillTerrain(MapService.getWater(), startY, targetY)
-	WaterSurface.place(MapService.getWaterSurface(), targetY)
+	local floorY = MapService.getWater():GetAttribute("FloorY") :: number
+	WaterSurface.place(MapService.getWaterSurface(), floorY, targetY)
 	level = targetY
 	fitMarker(targetY)
 end
