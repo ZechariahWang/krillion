@@ -8,7 +8,11 @@
     },
     "ServerStorage": {
       "$className": "ServerStorage",
-      "$path": "src/ServerStorage"
+      "$path": "src/ServerStorage",
+      "Maps": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true
+      }
     },
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
@@ -31,7 +35,8 @@
     },
     "StarterGui": {
       "$className": "StarterGui",
-      "$path": "src/StarterGui"
+      "$path": "src/StarterGui",
+      "$ignoreUnknownInstances": true
     },
     "StarterPack": {
       "$className": "StarterPack",
@@ -39,11 +44,13 @@
     },
     "Workspace": {
       "$className": "Workspace",
-      "$path": "src/Workspace"
+      "$path": "src/Workspace",
+      "$ignoreUnknownInstances": true
     },
     "Lighting": {
       "$className": "Lighting",
-      "$path": "src/Lighting"
+      "$path": "src/Lighting",
+      "$ignoreUnknownInstances": true
     }
   }
 }
