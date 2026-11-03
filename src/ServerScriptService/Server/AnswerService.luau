@@ -26,6 +26,7 @@ local accepting = false
 local currentPrompt: AnswerMatcher.Prompt? = nil
 local eligible: { [Player]: boolean } = {}
 local submissions: { [Player]: Submission } = {}
+local lastTry: { [Player]: number } = {}
 
 local AnswerService = {}
 
@@ -81,22 +82,40 @@ function AnswerService.randomPrompt(exclude: { [string]: boolean }): AnswerMatch
 	return PromptBank.random(exclude)
 end
 
+-- Wrong answers are rejected on the spot so the player can try again; only an accepted answer locks in.
+-- The tier stays secret until the reveal: the client only learns accepted or not.
+local function onSubmit(player: Player, text: any)
+	if not accepting or currentPrompt == nil then
+		return
+	end
+	if not eligible[player] or submissions[player] ~= nil then
+		return
+	end
+	local now = os.clock()
+	if now - (lastTry[player] or 0) < GameConfig.Answer.RetryCooldown then
+		return
+	end
+	lastTry[player] = now
+	local result = Net.event("AnswerResult")
+	if not AnswerService.isValidText(text) then
+		result:FireClient(player, { accepted = false })
+		return
+	end
+	local graded = AnswerService.grade(text, currentPrompt)
+	if graded.tier == nil then
+		result:FireClient(player, { accepted = false })
+		return
+	end
+	submissions[player] = graded
+	result:FireClient(player, { accepted = true })
+end
+
 function AnswerService.start()
-	Net.event("SubmitAnswer").OnServerEvent:Connect(function(player, text)
-		if not accepting or currentPrompt == nil then
-			return
-		end
-		if not eligible[player] or submissions[player] ~= nil then
-			return
-		end
-		if not AnswerService.isValidText(text) then
-			return
-		end
-		submissions[player] = AnswerService.grade(text, currentPrompt)
-	end)
+	Net.event("SubmitAnswer").OnServerEvent:Connect(onSubmit)
 	Players.PlayerRemoving:Connect(function(player)
 		eligible[player] = nil
 		submissions[player] = nil
+		lastTry[player] = nil
 	end)
 end
 

@@ -16,7 +16,7 @@ local NAMES = {
 	"Reveal",
 	"Eliminated",
 	"MatchEnded",
-	"WaterLevel",
+	"AnswerResult",
 	"LobbyQuizPrompt",
 	"LobbyQuizResult",
 	"CoinsChanged",
@@ -30,14 +30,15 @@ export type RoundStatePayload = {
 	prompt: string?,
 	promptId: string?,
 	playing: boolean, -- is the receiving player on a platform this match
+	height: number,
+	waterY: number,
 }
 
 export type RevealRow = {
 	userId: number,
 	name: string,
-	answered: boolean,
-	answer: string?, -- filtered, nil when refused or filter failed
-	tier: string?, -- nil when refused
+	answer: string?, -- filtered, nil when no accepted answer or the filter failed
+	tier: string?, -- nil when no accepted answer
 	points: number,
 	lift: number,
 	height: number,

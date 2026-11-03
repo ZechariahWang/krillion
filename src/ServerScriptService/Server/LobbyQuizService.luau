@@ -1,5 +1,5 @@
 --!strict
--- A personal prompt stream for anyone in the lobby. Accepted answers pay coins by tier.
+-- A personal prompt stream for anyone in the lobby. Accepted answers pay coins by tier; wrong ones can be retried.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -10,8 +10,6 @@ local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local AnswerService = require(script.Parent.AnswerService)
 local DataService = require(script.Parent.DataService)
 local PlayerService = require(script.Parent.PlayerService)
-
-local MIN_SECONDS_BETWEEN_ANSWERS = 1
 
 local current: { [Player]: AnswerService.Prompt? } = {}
 local lastAnswerAt: { [Player]: number } = {}
@@ -48,7 +46,7 @@ local function onAnswer(player: Player, text: any)
 		return
 	end
 	local now = os.clock()
-	if now - (lastAnswerAt[player] or 0) < MIN_SECONDS_BETWEEN_ANSWERS then
+	if now - (lastAnswerAt[player] or 0) < GameConfig.Answer.RetryCooldown then
 		return
 	end
 	lastAnswerAt[player] = now
@@ -56,10 +54,13 @@ local function onAnswer(player: Player, text: any)
 		return
 	end
 	local graded = AnswerService.grade(text, prompt)
-	local coins = WaterCurve.lobbyCoins(graded.points)
-	if coins > 0 then
-		DataService.addCoins(player, coins)
+	if graded.tier == nil then
+		-- Not in the bank: say so right away and keep the same prompt so they can try again.
+		Net.event("LobbyQuizResult"):FireClient(player, { tier = nil, coins = 0 })
+		return
 	end
+	local coins = WaterCurve.lobbyCoins(graded.points)
+	DataService.addCoins(player, coins)
 	Net.event("LobbyQuizResult"):FireClient(player, { tier = graded.tier, coins = coins })
 	serve(player)
 end
