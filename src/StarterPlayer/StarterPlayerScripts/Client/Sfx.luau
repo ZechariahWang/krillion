@@ -10,6 +10,7 @@ local SOUNDS = {
 	Splash = "rbxasset://sounds/impact_water.mp3",
 	Fanfare = "rbxasset://sounds/victory.wav",
 	Pop = "rbxasset://sounds/snap.wav",
+	Wrong = "rbxasset://sounds/clickfast.wav",
 }
 
 local cache: { [string]: Sound } = {}

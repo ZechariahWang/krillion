@@ -1,32 +1,38 @@
 --!strict
--- Drives StarterGui.Reveal: your tier badge with a count-up, and the ranked list of everyone's answers.
+-- Drives StarterGui.Reveal: your tier slams in with a count-up, then everyone's answers roll in.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
+local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
-local ROW_STAGGER = 0.12
+local ROW_STAGGER = 0.15
 
 local gui: ScreenGui
 local badge: Frame
-local yourAnswer: TextLabel
+local tierBanner: Frame
 local tierText: TextLabel
+local yourAnswer: TextLabel
 local pointsText: TextLabel
 local list: Frame
 local rowTemplate: Frame
+
+local streak = 0
 
 local Reveal = {}
 
 function Reveal.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Reveal") :: ScreenGui
 	badge = gui:WaitForChild("Badge") :: Frame
+	tierBanner = badge:WaitForChild("TierBanner") :: Frame
+	tierText = tierBanner:WaitForChild("TierText") :: TextLabel
 	yourAnswer = badge:WaitForChild("YourAnswer") :: TextLabel
-	tierText = badge:WaitForChild("TierText") :: TextLabel
 	pointsText = badge:WaitForChild("PointsText") :: TextLabel
 	list = gui:WaitForChild("List") :: Frame
 	rowTemplate = list:WaitForChild("RowTemplate") :: Frame
@@ -34,13 +40,13 @@ end
 
 local function tierLabel(tier: string?): string
 	if tier == nil then
-		return "REFUSED"
+		return "NO ANSWER"
 	end
 	local info = Tiers.ByName[tier]
 	if info == nil then
 		return tier
 	end
-	return string.upper(info.label)
+	return string.upper(info.label) .. "!"
 end
 
 local function countUp(points: number)
@@ -53,6 +59,9 @@ local function countUp(points: number)
 	tween.Completed:Once(function()
 		pointsText.Text = "+" .. points
 		value:Destroy()
+		if points > 0 then
+			Ui.bump(pointsText, 1.4)
+		end
 	end)
 	tween:Play()
 end
@@ -62,14 +71,17 @@ local function showBadge(row)
 		yourAnswer.Text = string.upper(row.answer)
 	elseif row.tier ~= nil then
 		yourAnswer.Text = "ACCEPTED"
-	elseif row.answered then
-		yourAnswer.Text = "NOT IN THE BANK"
 	else
-		yourAnswer.Text = "NO ANSWER"
+		yourAnswer.Text = "NO VALID ANSWER IN TIME"
 	end
 	tierText.Text = tierLabel(row.tier)
-	tierText.TextColor3 = Ui.tierColor(row.tier)
-	Ui.pop(badge)
+	tierBanner.BackgroundColor3 = Ui.tierColor(row.tier)
+	if row.points > 0 then
+		pointsText.TextColor3 = Theme.Color.Green
+	else
+		pointsText.TextColor3 = Theme.Color.Red
+	end
+	Ui.slam(badge)
 	countUp(row.points)
 end
 
@@ -96,8 +108,33 @@ local function showRows(rows)
 		clone.Parent = list
 		task.delay(ROW_STAGGER * index, function()
 			if clone.Parent ~= nil then
-				clone.Visible = true
+				Ui.pop(clone)
 			end
+		end)
+	end
+end
+
+local function celebrate(row)
+	local points = row.points
+	if points >= Tiers.ByName.OneInAKrillion.points then
+		Fx.flash(Theme.Tier.OneInAKrillion)
+		Fx.shake(0.4, 0.5)
+		Sfx.play("Fanfare", 0.8)
+	elseif points >= Tiers.ByName.Rare.points then
+		Fx.flash(Ui.tierColor(row.tier))
+		Sfx.play("Fanfare", 0.6)
+	elseif points > 0 then
+		Sfx.play("Rise", 0.5)
+	end
+
+	if points >= GameConfig.Round.StreakMinPoints then
+		streak += 1
+	else
+		streak = 0
+	end
+	if streak >= 2 then
+		task.delay(0.9, function()
+			Fx.callout("STREAK x" .. streak .. "!", Theme.Color.Orange)
 		end)
 	end
 end
@@ -107,31 +144,27 @@ function Reveal.onReveal(payload)
 	table.sort(rows, function(a, b)
 		return a.points > b.points
 	end)
+	if payload.round == 1 then
+		streak = 0
+	end
 	gui.Enabled = true
 
 	local me = Players.LocalPlayer.UserId
 	local myRow = nil
-	local bestTier = 0
 	for _, row in rows do
 		if row.userId == me then
 			myRow = row
-		end
-		if row.tier ~= nil then
-			bestTier = math.max(bestTier, Tiers.points(row.tier))
 		end
 	end
 
 	badge.Visible = myRow ~= nil
 	if myRow ~= nil then
 		showBadge(myRow)
-	end
-	showRows(rows)
-
-	if bestTier >= Tiers.ByName.DeepCut.points then
-		Sfx.play("Fanfare", 0.6)
-	elseif bestTier > 0 then
+		celebrate(myRow)
+	else
 		Sfx.play("Rise", 0.4)
 	end
+	showRows(rows)
 end
 
 function Reveal.onState(payload)

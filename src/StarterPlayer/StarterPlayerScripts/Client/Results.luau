@@ -1,6 +1,11 @@
 --!strict
 -- Drives StarterGui.Results: winner, podium, countdown to the next dive.
 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Theme = require(ReplicatedStorage.Config.Theme)
+local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
@@ -31,14 +36,18 @@ function Results.onMatchEnded(payload)
 				local nameLabel = row:FindFirstChild("Name") :: TextLabel
 				local pointsLabel = row:FindFirstChild("Points") :: TextLabel
 				nameLabel.Text = entry.name
-				pointsLabel.Text = tostring(entry.points)
+				pointsLabel.Text = entry.points .. " PTS"
 			end
 		end
 	end
 	nextText.Text = "Next dive in " .. payload.seconds
 	gui.Enabled = true
-	Ui.pop(panel)
-	Sfx.play("Fanfare", 0.6)
+	Ui.slam(panel)
+	Sfx.play("Fanfare", 0.8)
+	if payload.winnerName == Players.LocalPlayer.DisplayName then
+		Fx.flash(Theme.Color.Gold)
+		Fx.callout("YOU WIN!", Theme.Color.Gold)
+	end
 end
 
 function Results.onState(payload)

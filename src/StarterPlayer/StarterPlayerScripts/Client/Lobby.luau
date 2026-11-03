@@ -2,11 +2,15 @@
 -- Drives StarterGui.Lobby for anyone not on a platform: status banner, eliminated card, spectating.
 
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Theme = require(ReplicatedStorage.Config.Theme)
+local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
 local gui: ScreenGui
+local banner: Frame
 local bannerTitle: TextLabel
 local bannerText: TextLabel
 local eliminatedCard: Frame
@@ -67,8 +71,8 @@ end
 
 function Lobby.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Lobby") :: ScreenGui
-	local banner = gui:WaitForChild("Banner")
-	bannerTitle = banner:WaitForChild("BannerTitle") :: TextLabel
+	banner = gui:WaitForChild("Banner") :: Frame
+	bannerTitle = banner:WaitForChild("Header"):WaitForChild("BannerTitle") :: TextLabel
 	bannerText = banner:WaitForChild("BannerText") :: TextLabel
 	eliminatedCard = gui:WaitForChild("EliminatedCard") :: Frame
 	eliminatedSubtitle = eliminatedCard:WaitForChild("Subtitle") :: TextLabel
@@ -89,9 +93,11 @@ function Lobby.init(playerGui: PlayerGui)
 end
 
 function Lobby.onEliminated(payload)
-	eliminatedSubtitle.Text = "Round " .. payload.round
-	Ui.pop(eliminatedCard)
-	Sfx.play("Splash", 0.7)
+	eliminatedSubtitle.Text = "You made it to round " .. payload.round
+	Ui.slam(eliminatedCard)
+	Fx.flash(Theme.Color.Water)
+	Fx.shake(0.5, 0.6)
+	Sfx.play("Splash", 0.8)
 end
 
 function Lobby.onState(payload)
@@ -104,6 +110,8 @@ function Lobby.onState(payload)
 	end
 
 	aliveUserIds = payload.aliveUserIds or {}
+	-- During a match the Hud prompt card takes the top of the screen instead.
+	banner.Visible = not inMatch
 	if phase == "Waiting" then
 		bannerTitle.Text = "WAITING FOR PLAYERS"
 		bannerText.Text = payload.playerCount .. " / " .. payload.minPlayers
