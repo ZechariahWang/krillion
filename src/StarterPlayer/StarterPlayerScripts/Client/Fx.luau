@@ -61,6 +61,11 @@ function Fx.callout(text: string, color: Color3)
 	callout.Position = base + UDim2.fromOffset(0, 12)
 	callout.Visible = true
 	Tween.play(callout, Theme.Tween.Enter, { TextTransparency = 0, Position = base })
+	local scale = callout:FindFirstChildOfClass("UIScale")
+	if scale ~= nil then
+		scale.Scale = 0.85
+		Tween.play(scale, Theme.Tween.Pop, { Scale = 1 })
+	end
 	task.delay(CALLOUT_SECONDS, function()
 		if token ~= calloutToken then
 			return

@@ -120,6 +120,18 @@ function MapService.celebrate(platform: Part, points: number)
 	end
 end
 
+-- A quick bubble puff from the top of the pillar as it starts to rise.
+function MapService.riseBurst(platform: Part)
+	local top = platform:FindFirstChild("Top")
+	if top == nil then
+		return
+	end
+	local bubbles = top:FindFirstChild("Bubbles") :: ParticleEmitter?
+	if bubbles ~= nil then
+		bubbles:Emit(24)
+	end
+end
+
 -- Moves the pillar's resting target so its standing surface is at `topY`.
 function MapService.setPlatformTop(platform: Part, topY: number)
 	local lift = platform:FindFirstChild("Lift") :: AlignPosition

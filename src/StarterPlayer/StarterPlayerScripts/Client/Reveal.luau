@@ -14,6 +14,7 @@ local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
 local ROW_STAGGER = 0.15
+local COUNT_TICKS = 8
 
 local gui: ScreenGui
 local badge: Frame
@@ -50,18 +51,33 @@ local function tierLabel(tier: string?): string
 	return string.upper(info.label)
 end
 
--- Counts the points up from 0 with an ease-out, one frame at a time.
+-- Pitch of the closing ding: higher for rarer tiers.
+local function dingPitch(points: number): number
+	return 0.9 + 0.6 * (points / Tiers.MaxPoints)
+end
+
+-- Counts the points up from 0 with an ease-out, ticking as it climbs, then lands on a ding.
 local function countUp(points: number)
 	local info = Theme.Tween.Count
 	task.spawn(function()
 		local elapsed = 0
+		local ticksPlayed = 0
 		while elapsed < info.Time do
 			elapsed += RunService.RenderStepped:Wait()
 			local alpha = math.min(1, elapsed / info.Time)
 			local eased = TweenService:GetValue(alpha, info.EasingStyle, info.EasingDirection)
 			pointsText.Text = "+" .. math.floor(points * eased + 0.5)
+			local ticksDue = math.floor(eased * COUNT_TICKS)
+			if points > 0 and ticksDue > ticksPlayed and ticksDue < COUNT_TICKS then
+				ticksPlayed = ticksDue
+				Sfx.play("Pop", 0.25, 0.9 + 0.08 * ticksPlayed)
+			end
 		end
 		pointsText.Text = "+" .. points
+		if points > 0 then
+			Sfx.play("Tick", 0.6, dingPitch(points))
+			Ui.bump(pointsText, 1.15)
+		end
 	end)
 end
 
@@ -81,7 +97,7 @@ local function showBadge(row)
 	else
 		pointsText.TextColor3 = Theme.Color.Red
 	end
-	Ui.appear(badge)
+	Ui.pop(badge)
 	countUp(row.points)
 end
 
@@ -116,14 +132,18 @@ end
 
 local function celebrate(row)
 	local points = row.points
+	if row.lift > 0 then
+		-- Lands with the server's platform rise, which starts on the same reveal.
+		Sfx.play("Rise", 0.45)
+	end
 	if points >= Tiers.ByName.OneInAKrillion.points then
 		Fx.flash(Theme.Tier.OneInAKrillion)
+		Fx.shake(0.35, 0.5)
 		Sfx.play("Fanfare", 0.8)
 	elseif points >= Tiers.ByName.Rare.points then
 		Fx.flash(Ui.tierColor(row.tier))
-		Sfx.play("Fanfare", 0.6)
-	elseif points > 0 then
-		Sfx.play("Rise", 0.5)
+		Fx.shake(0.2, 0.25)
+		Sfx.play("Fanfare", 0.5)
 	end
 
 	if points >= GameConfig.Round.StreakMinPoints then
@@ -132,8 +152,10 @@ local function celebrate(row)
 		streak = 0
 	end
 	if streak >= 2 then
+		local level = streak
 		task.delay(0.9, function()
-			Fx.callout("STREAK x" .. streak, Theme.Color.Orange)
+			Fx.callout("STREAK x" .. level, Theme.Color.Orange)
+			Sfx.play("Tick", 0.5, 1 + 0.12 * math.min(level, 6))
 		end)
 	end
 end

@@ -49,6 +49,17 @@ function Ui.appear(object: GuiObject)
 	Tween.play(scale, Theme.Tween.Enter, { Scale = 1 })
 end
 
+-- A springy entrance that overshoots slightly and settles, for reward moments.
+function Ui.pop(object: GuiObject)
+	object.Visible = true
+	local scale = scaleOf(object)
+	if scale == nil then
+		return
+	end
+	scale.Scale = 0.85
+	Tween.play(scale, Theme.Tween.Pop, { Scale = 1 })
+end
+
 -- A small tick, used on timer seconds and counters.
 function Ui.bump(object: GuiObject, size: number)
 	local scale = scaleOf(object)

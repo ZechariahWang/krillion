@@ -187,6 +187,7 @@ local function risePlatform(player: Player, fromTop: number, toTop: number, poin
 		return
 	end
 	local stageTop = fromTop + (toTop - fromTop) * GameConfig.Platform.RiseStageFraction
+	MapService.riseBurst(platform)
 	MapService.setPlatformTop(platform, stageTop)
 	task.wait(GameConfig.Platform.RiseStageSeconds + GameConfig.Platform.RiseHoldSeconds)
 	if platform.Parent == nil then
