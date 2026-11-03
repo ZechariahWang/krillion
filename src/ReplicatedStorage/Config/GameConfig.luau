@@ -31,10 +31,7 @@ local GameConfig = {
 		Height = 140, -- tall enough to reach the tank floor at any height
 		Spacing = 16, -- minimum distance between pillar centres
 		RingMaxRadius = 34, -- outermost pillar centre; the reef rim sits outside this
-		RiseStageFraction = 0.65,
-		RiseStageSeconds = 0.6,
-		RiseHoldSeconds = 0.4,
-		RiseSnapSeconds = 0.5,
+		RiseSeconds = 1.1, -- one eased glide with a soft overshoot at the top
 		ConfettiMinPoints = 60,
 	},
 	Answer = {

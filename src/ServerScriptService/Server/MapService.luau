@@ -1,7 +1,9 @@
 --!strict
 -- Puts the Studio-built Arena and Lobby into Workspace and spawns per-player pillars.
 
+local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
+local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
@@ -15,6 +17,7 @@ local lobby: Model
 local template: Part
 local platformFolder: Folder
 local platforms: { Part } = {}
+local glideTokens: { [Part]: number } = {}
 
 local MapService = {}
 
@@ -91,6 +94,7 @@ function MapService.clearPlatforms()
 		platform:Destroy()
 	end
 	platforms = {}
+	glideTokens = {}
 end
 
 function MapService.setPlatformName(platform: Part, name: string)
@@ -128,11 +132,26 @@ function MapService.riseBurst(platform: Part)
 	end
 end
 
--- Moves the pillar's resting target so its standing surface is at `topY`.
-function MapService.setPlatformTop(platform: Part, topY: number)
+-- Moves the pillar's target to `topY` along an eased curve, one step per frame, so the pillar glides
+-- instead of snapping. A newer glide on the same pillar takes over. Blocks until done.
+function MapService.glidePlatformTop(platform: Part, topY: number, seconds: number, style: Enum.EasingStyle, direction: Enum.EasingDirection)
 	local lift = platform:FindFirstChild("Lift") :: AlignPosition
-	local current = lift.Position
-	lift.Position = Vector3.new(current.X, centerY(topY), current.Z)
+	local token = (glideTokens[platform] or 0) + 1
+	glideTokens[platform] = token
+	local startCenter = lift.Position.Y
+	local endCenter = centerY(topY)
+	local elapsed = 0
+	while elapsed < seconds do
+		elapsed += RunService.Heartbeat:Wait()
+		if platform.Parent == nil or glideTokens[platform] ~= token then
+			return
+		end
+		local alpha = math.min(1, elapsed / seconds)
+		local eased = TweenService:GetValue(alpha, style, direction)
+		local current = lift.Position
+		lift.Position = Vector3.new(current.X, startCenter + (endCenter - startCenter) * eased, current.Z)
+	end
+	glideTokens[platform] = nil
 end
 
 function MapService.platformStandCFrame(platform: Part): CFrame

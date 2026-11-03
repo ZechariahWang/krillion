@@ -189,9 +189,8 @@ local function onReviveUse(player: Player)
 	reviveUsed[player] = true
 	DataService.addRevives(player, -1)
 	local top = state.waterY + GameConfig.Revive.HeightAboveWater
-	MapService.setPlatformTop(platform, top)
-	-- Give the pillar a moment to rise out of the water before standing on it.
-	task.wait(0.6)
+	-- The pillar glides out of the water before the player is put back on it.
+	MapService.glidePlatformTop(platform, top, 0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 	if match ~= state or platform.Parent == nil then
 		return
 	end
@@ -257,28 +256,21 @@ local function startMatch()
 	end
 end
 
--- Stage one lifts most of the way, a hold, then a snap with a small overshoot that settles.
-local function risePlatform(player: Player, fromTop: number, toTop: number, points: number)
+-- One eased glide up with a soft overshoot; confetti fires as it nears the top.
+local function risePlatform(player: Player, toTop: number, points: number)
 	local platform = platforms[player]
 	if platform == nil or platform.Parent == nil then
 		return
 	end
-	local stageTop = fromTop + (toTop - fromTop) * GameConfig.Platform.RiseStageFraction
 	MapService.riseBurst(platform)
-	MapService.setPlatformTop(platform, stageTop)
-	task.wait(GameConfig.Platform.RiseStageSeconds + GameConfig.Platform.RiseHoldSeconds)
-	if platform.Parent == nil then
-		return
-	end
-	MapService.setPlatformTop(platform, toTop + 0.6)
 	if points >= GameConfig.Platform.ConfettiMinPoints then
-		MapService.celebrate(platform, points)
+		task.delay(GameConfig.Platform.RiseSeconds * 0.5, function()
+			if platform.Parent ~= nil then
+				MapService.celebrate(platform, points)
+			end
+		end)
 	end
-	task.wait(GameConfig.Platform.RiseSnapSeconds * 0.6)
-	if platform.Parent == nil then
-		return
-	end
-	MapService.setPlatformTop(platform, toTop)
+	MapService.glidePlatformTop(platform, toTop, GameConfig.Platform.RiseSeconds, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 end
 
 local function runPrompt()
@@ -313,7 +305,6 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 			shownAnswer = submission.corrected
 		end
 		local lift = SpecialRound.lift(points, special)
-		local fromTop = state.heights[player]
 		MatchState.applyLift(state, player, points, lift)
 		DataService.recordHeight(player, state.heights[player])
 		table.insert(rows, {
@@ -326,7 +317,7 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 			height = state.heights[player],
 		})
 		if lift > 0 then
-			task.spawn(risePlatform, player, fromTop, state.heights[player], points)
+			task.spawn(risePlatform, player, state.heights[player], points)
 		end
 	end
 	currentPrompt = nil
