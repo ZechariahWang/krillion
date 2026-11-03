@@ -66,6 +66,15 @@ function MatchState.cull(state: State): { any }
 	return culled
 end
 
+-- Brings an eliminated player back `above` studs over the current water, keeping their points.
+function MatchState.revive(state: State, id: any, above: number)
+	if state.heights[id] == nil then
+		return
+	end
+	state.alive[id] = true
+	state.heights[id] = state.waterY + above
+end
+
 function MatchState.aliveCount(state: State): number
 	local count = 0
 	for _ in state.alive do

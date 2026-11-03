@@ -1,5 +1,5 @@
 --!strict
--- Drives StarterGui.LobbyQuiz: the warm-up prompt stream that pays coins while you wait.
+-- Drives StarterGui.LobbyQuiz: the warm-up prompt stream that pays Cash while you wait.
 -- A wrong answer is rejected right away and the same prompt stays up for another try.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -64,7 +64,7 @@ local function skip()
 end
 
 local function updateHeader()
-	header.Text = "WARM-UP  |  " .. coins .. " COINS"
+	header.Text = "WARM-UP  |  " .. coins .. " CASH"
 end
 
 function LobbyQuiz.init(playerGui: PlayerGui)
@@ -95,7 +95,7 @@ function LobbyQuiz.init(playerGui: PlayerGui)
 	updateHeader()
 end
 
-function LobbyQuiz.setCoins(value: number)
+function LobbyQuiz.setCash(value: number)
 	coins = value
 	updateHeader()
 end
@@ -128,9 +128,9 @@ function LobbyQuiz.onResult(payload)
 		local corrected = payload.corrected or ""
 		resultTier.Text = string.upper(info.label) .. "  |  " .. string.upper(corrected)
 		resultTier.TextColor3 = Ui.tierColor(payload.tier)
-		resultCoins.Text = "+" .. payload.coins .. " COINS"
+		resultCoins.Text = "+" .. payload.cash .. " CASH"
 		Ui.appear(result)
-		Fx.coinPop("+" .. payload.coins, panel)
+		Fx.coinPop("+" .. payload.cash, panel)
 		Sfx.play("LockIn", 0.6)
 	else
 		resultTier.Text = "NOT IN THE BANK"

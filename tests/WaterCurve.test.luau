@@ -28,12 +28,6 @@ return function(test)
 		assert(WaterCurve.lift(100) == 100 * GameConfig.Water.LiftPerPoint)
 	end)
 
-	test("lobby coins are whole numbers proportional to points", function()
-		local coins = WaterCurve.lobbyCoins(15)
-		assert(coins == math.floor(coins))
-		assert(WaterCurve.lobbyCoins(100) > WaterCurve.lobbyCoins(10))
-	end)
-
 	test("surge eventually exceeds the best possible lift so matches end", function()
 		local bestLift = WaterCurve.lift(Tiers.MaxPoints)
 		local found = false

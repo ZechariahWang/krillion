@@ -59,6 +59,11 @@ function AnswerService.openRound(prompt: AnswerMatcher.Prompt, players: { Player
 	accepting = true
 end
 
+-- Lets a player who rejoined mid-round (a revive) answer the open prompt.
+function AnswerService.allow(player: Player)
+	eligible[player] = true
+end
+
 function AnswerService.closeRound(): { [Player]: Submission }
 	accepting = false
 	currentPrompt = nil

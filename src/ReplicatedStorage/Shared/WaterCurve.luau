@@ -16,8 +16,4 @@ function WaterCurve.lift(points: number): number
 	return points * GameConfig.Water.LiftPerPoint
 end
 
-function WaterCurve.lobbyCoins(points: number): number
-	return math.floor(points * GameConfig.Lobby.CoinsPerPoint)
-end
-
 return WaterCurve

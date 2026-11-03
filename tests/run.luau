@@ -19,6 +19,10 @@ local suites = {
 	require("./WaterCurve.test"),
 	require("./MatchState.test"),
 	require("./SpecialRound.test"),
+	require("./Profile.test"),
+	require("./Economy.test"),
+	require("./ArenaLayout.test"),
+	require("./Shop.test"),
 }
 
 for _, suite in suites do

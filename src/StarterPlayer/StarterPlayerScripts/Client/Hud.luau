@@ -1,5 +1,5 @@
 --!strict
--- Drives StarterGui.Hud during a match: answer box with instant feedback, coins, water meter, sudden-death card.
+-- Drives StarterGui.Hud during a match: answer box with instant feedback, Cash, water meter, sudden-death card.
 -- The prompt, timer and alive count live in StarterGui.Status (see Status.luau).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -179,8 +179,8 @@ function Hud.init(playerGui: PlayerGui)
 	end)
 end
 
-function Hud.setCoins(coins: number)
-	coinText.Text = coins .. " COINS"
+function Hud.setCash(cash: number)
+	coinText.Text = cash .. " CASH"
 	Ui.bump(coinChip, 1.03)
 end
 

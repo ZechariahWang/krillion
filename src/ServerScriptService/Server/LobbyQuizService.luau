@@ -1,15 +1,15 @@
 --!strict
--- A personal prompt stream for anyone in the lobby. Accepted answers pay coins by tier; wrong ones can be retried.
+-- A personal prompt stream for anyone in the lobby. Accepted answers pay Cash by tier; wrong ones can be retried.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Net = require(ReplicatedStorage.Shared.Net)
-local WaterCurve = require(ReplicatedStorage.Shared.WaterCurve)
+local Economy = require(ReplicatedStorage.Shared.Economy)
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local AnswerService = require(script.Parent.AnswerService)
-local DataService = require(script.Parent.DataService)
 local PlayerService = require(script.Parent.PlayerService)
+local StoreService = require(script.Parent.StoreService)
 
 local current: { [Player]: AnswerService.Prompt? } = {}
 local lastAnswerAt: { [Player]: number } = {}
@@ -56,12 +56,11 @@ local function onAnswer(player: Player, text: any)
 	local graded = AnswerService.grade(text, prompt)
 	if graded.tier == nil then
 		-- Not in the bank: say so right away and keep the same prompt so they can try again.
-		Net.event("LobbyQuizResult"):FireClient(player, { tier = nil, coins = 0 })
+		Net.event("LobbyQuizResult"):FireClient(player, { tier = nil, cash = 0 })
 		return
 	end
-	local coins = WaterCurve.lobbyCoins(graded.points)
-	DataService.addCoins(player, coins)
-	Net.event("LobbyQuizResult"):FireClient(player, { tier = graded.tier, coins = coins, corrected = graded.corrected })
+	local cash = StoreService.payEarned(player, Economy.lobbyCash(graded.points))
+	Net.event("LobbyQuizResult"):FireClient(player, { tier = graded.tier, cash = cash, corrected = graded.corrected })
 	serve(player)
 end
 

@@ -5,6 +5,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
+local ArenaLayout = require(ReplicatedStorage.Shared.ArenaLayout)
 local Theme = require(ReplicatedStorage.Config.Theme)
 
 local CAP_HEIGHT = 1
@@ -49,12 +50,7 @@ local function centerY(topY: number): number
 end
 
 local function platformPosition(index: number, count: number, topY: number): Vector3
-	local columns = GameConfig.Platform.Columns
-	local rows = math.ceil(count / columns)
-	local column = (index - 1) % columns
-	local row = math.floor((index - 1) / columns)
-	local x = (column - (columns - 1) / 2) * GameConfig.Platform.Spacing
-	local z = (row - (rows - 1) / 2) * GameConfig.Platform.Spacing
+	local x, z = ArenaLayout.position(index, count)
 	return Vector3.new(x, centerY(topY), z)
 end
 

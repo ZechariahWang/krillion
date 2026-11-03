@@ -29,8 +29,8 @@ local GameConfig = {
 	},
 	Platform = {
 		Height = 140, -- tall enough to reach the tank floor at any height
-		Spacing = 16,
-		Columns = 4,
+		Spacing = 16, -- minimum distance between pillar centres
+		RingMaxRadius = 34, -- outermost pillar centre; the reef rim sits outside this
 		RiseStageFraction = 0.65,
 		RiseStageSeconds = 0.6,
 		RiseHoldSeconds = 0.4,
@@ -45,7 +45,22 @@ local GameConfig = {
 	},
 	Lobby = {
 		QuizSeconds = 20,
-		CoinsPerPoint = 0.5,
+		CashPerPoint = 0.2, -- lobby quiz pays clearly less than surviving a match round
+	},
+	Cash = {
+		PerRoundSurvived = 25,
+		WinBonus = 100,
+		VipBonus = 0.1, -- multiplier bonuses add: VIP + 2x Cash = 2.1x
+		DoubleBonus = 1,
+	},
+	Revive = {
+		WindowSeconds = 5,
+		MinOthersAlive = 2, -- fewer than this and the match is already decided
+		HeightAboveWater = 4,
+	},
+	Leaderboard = {
+		RefreshSeconds = 60,
+		Size = 10,
 	},
 	Special = {
 		MinRound = 3, -- no special rounds before this
@@ -64,5 +79,8 @@ table.freeze(GameConfig.Platform)
 table.freeze(GameConfig.Answer)
 table.freeze(GameConfig.Lobby)
 table.freeze(GameConfig.Special)
+table.freeze(GameConfig.Cash)
+table.freeze(GameConfig.Revive)
+table.freeze(GameConfig.Leaderboard)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)
