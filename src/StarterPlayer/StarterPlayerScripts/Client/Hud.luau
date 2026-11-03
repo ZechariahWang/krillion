@@ -1,5 +1,5 @@
 --!strict
--- Drives StarterGui.Hud during a match: prompt, timer, answer box with instant feedback, alive chip, water meter.
+-- Drives StarterGui.Hud during a match: prompt, status bar (timer | alive), answer box with instant feedback, water meter.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -21,7 +21,7 @@ local promptCard: Frame
 local roundLabel: TextLabel
 local promptText: TextLabel
 local timerFill: Frame
-local timerChip: Frame
+local statusBar: Frame
 local timerText: TextLabel
 local aliveText: TextLabel
 local coinChip: Frame
@@ -32,7 +32,7 @@ local answerBar: Frame
 local answerBox: TextBox
 local submitButton: TextButton
 local lockedCard: Frame
-local feedback: TextLabel
+local feedback: Frame
 local banner: Frame
 
 local locked = false
@@ -114,15 +114,15 @@ end
 local function updateTimer(secondsLeft: number)
 	local fraction = secondsLeft / promptTotal
 	local color = Ui.timerColor(fraction)
-	timerChip.BackgroundColor3 = color
+	timerText.TextColor3 = color
 	timerFill.BackgroundColor3 = color
 	timerText.Text = tostring(secondsLeft)
 	if secondsLeft <= GameConfig.Round.DangerSeconds then
-		Ui.bump(timerChip, 1.35)
-		Ui.shake(timerChip, 0.25)
+		Ui.bump(timerText, 1.4)
+		Ui.shake(statusBar, 0.25)
 		Sfx.play("Tick", 0.5)
 	else
-		Ui.bump(timerChip, 1.12)
+		Ui.bump(timerText, 1.12)
 	end
 end
 
@@ -133,7 +133,7 @@ local function updateMeter(height: number, waterY: number)
 	if margin < 0.15 then
 		marker.BackgroundColor3 = Theme.Color.Red
 	else
-		marker.BackgroundColor3 = Theme.Color.Yellow
+		marker.BackgroundColor3 = Theme.Color.Cream
 	end
 end
 
@@ -151,7 +151,7 @@ local function onSurge(payload)
 	if payload.playing then
 		local margin = payload.height - payload.waterY
 		if margin < GameConfig.Round.CloseCallStuds then
-			Fx.callout("CLOSE CALL!", Theme.Color.Yellow)
+			Fx.callout("CLOSE CALL", Theme.Color.Yellow)
 			Sfx.play("Pop", 0.8)
 		end
 	end
@@ -160,12 +160,12 @@ end
 function Hud.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Hud") :: ScreenGui
 	promptCard = gui:WaitForChild("PromptCard") :: Frame
-	roundLabel = promptCard:WaitForChild("Header"):WaitForChild("RoundLabel") :: TextLabel
+	roundLabel = promptCard:WaitForChild("RoundLabel") :: TextLabel
 	promptText = promptCard:WaitForChild("PromptText") :: TextLabel
-	timerFill = promptCard:WaitForChild("TimerTrack"):WaitForChild("TimerFill") :: Frame
-	timerChip = gui:WaitForChild("TimerChip") :: Frame
-	timerText = timerChip:WaitForChild("TimerText") :: TextLabel
-	aliveText = gui:WaitForChild("AliveChip"):WaitForChild("AliveText") :: TextLabel
+	statusBar = gui:WaitForChild("StatusBar") :: Frame
+	timerFill = statusBar:WaitForChild("TimerTrack"):WaitForChild("TimerFill") :: Frame
+	timerText = statusBar:WaitForChild("TimerText") :: TextLabel
+	aliveText = statusBar:WaitForChild("AliveText") :: TextLabel
 	coinChip = gui:WaitForChild("CoinChip") :: Frame
 	coinText = coinChip:WaitForChild("CoinText") :: TextLabel
 	meter = gui:WaitForChild("WaterMeter") :: Frame
@@ -174,7 +174,7 @@ function Hud.init(playerGui: PlayerGui)
 	answerBox = answerBar:WaitForChild("AnswerBox") :: TextBox
 	submitButton = answerBar:WaitForChild("SubmitButton") :: TextButton
 	lockedCard = answerBar:WaitForChild("LockedText") :: Frame
-	feedback = answerBar:WaitForChild("Feedback") :: TextLabel
+	feedback = answerBar:WaitForChild("Feedback") :: Frame
 	banner = gui:WaitForChild("Banner") :: Frame
 
 	Ui.pressable(submitButton)
@@ -203,9 +203,9 @@ function Hud.onState(payload)
 
 	roundLabel.Text = "ROUND " .. payload.round
 	if payload.prompt ~= nil then
-		promptText.Text = payload.prompt
+		promptText.Text = string.upper(payload.prompt)
 	end
-	aliveText.Text = payload.alive .. " ALIVE"
+	aliveText.Text = "ALIVE " .. payload.alive
 	meter.Visible = payload.playing
 	if payload.playing then
 		updateMeter(payload.height, payload.waterY)
@@ -230,11 +230,16 @@ function Hud.onState(payload)
 	end
 
 	if phase == "Prompt" then
-		timerChip.Visible = true
 		updateTimer(payload.secondsLeft)
 		answerBar.Visible = payload.playing
 	else
-		timerChip.Visible = false
+		timerText.TextColor3 = Theme.Color.Accent
+		timerFill.Size = UDim2.fromScale(0, 1)
+		if phase == "Reveal" then
+			timerText.Text = "REVEAL"
+		else
+			timerText.Text = "RISING"
+		end
 		answerBar.Visible = false
 		answerBox:ReleaseFocus()
 	end

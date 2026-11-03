@@ -72,7 +72,7 @@ end
 function Lobby.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Lobby") :: ScreenGui
 	banner = gui:WaitForChild("Banner") :: Frame
-	bannerTitle = banner:WaitForChild("Header"):WaitForChild("BannerTitle") :: TextLabel
+	bannerTitle = banner:WaitForChild("BannerTitle") :: TextLabel
 	bannerText = banner:WaitForChild("BannerText") :: TextLabel
 	eliminatedCard = gui:WaitForChild("EliminatedCard") :: Frame
 	eliminatedSubtitle = eliminatedCard:WaitForChild("Subtitle") :: TextLabel
@@ -93,7 +93,7 @@ function Lobby.init(playerGui: PlayerGui)
 end
 
 function Lobby.onEliminated(payload)
-	eliminatedSubtitle.Text = "You made it to round " .. payload.round
+	eliminatedSubtitle.Text = "YOU MADE IT TO ROUND " .. payload.round
 	Ui.slam(eliminatedCard)
 	Fx.flash(Theme.Color.Water)
 	Fx.shake(0.5, 0.6)

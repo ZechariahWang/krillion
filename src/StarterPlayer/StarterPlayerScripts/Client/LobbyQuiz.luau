@@ -55,7 +55,7 @@ local function skip()
 end
 
 local function updateHeader()
-	header.Text = "WARM-UP: " .. coins .. " COINS"
+	header.Text = "WARM-UP  |  " .. coins .. " COINS"
 end
 
 function LobbyQuiz.init(playerGui: PlayerGui)
@@ -96,7 +96,7 @@ function LobbyQuiz.onPrompt(payload)
 		return
 	end
 	gui.Enabled = true
-	promptText.Text = payload.prompt
+	promptText.Text = string.upper(payload.prompt)
 	Ui.pop(promptText)
 	timerFill.Size = UDim2.fromScale(1, 1)
 	Tween.play(timerFill, TweenInfo.new(payload.seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) })
@@ -112,7 +112,7 @@ function LobbyQuiz.onResult(payload)
 	local token = resultToken
 	if payload.tier ~= nil then
 		local info = Tiers.ByName[payload.tier]
-		resultTier.Text = string.upper(info.label) .. "!"
+		resultTier.Text = string.upper(info.label)
 		resultTier.TextColor3 = Ui.tierColor(payload.tier)
 		resultCoins.Text = "+" .. payload.coins .. " COINS"
 		Ui.slam(result)
@@ -121,7 +121,7 @@ function LobbyQuiz.onResult(payload)
 	else
 		resultTier.Text = "NOT IN THE BANK"
 		resultTier.TextColor3 = Theme.Color.Red
-		resultCoins.Text = "TRY AGAIN!"
+		resultCoins.Text = "TRY AGAIN"
 		Ui.pop(result)
 		Ui.shake(panel, 0.3)
 		Sfx.play("Wrong", 0.5)

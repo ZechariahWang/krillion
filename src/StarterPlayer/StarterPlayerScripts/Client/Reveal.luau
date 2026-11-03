@@ -16,7 +16,7 @@ local ROW_STAGGER = 0.15
 
 local gui: ScreenGui
 local badge: Frame
-local tierBanner: Frame
+local accent: Frame
 local tierText: TextLabel
 local yourAnswer: TextLabel
 local pointsText: TextLabel
@@ -30,8 +30,8 @@ local Reveal = {}
 function Reveal.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Reveal") :: ScreenGui
 	badge = gui:WaitForChild("Badge") :: Frame
-	tierBanner = badge:WaitForChild("TierBanner") :: Frame
-	tierText = tierBanner:WaitForChild("TierText") :: TextLabel
+	accent = badge:WaitForChild("Accent") :: Frame
+	tierText = badge:WaitForChild("TierText") :: TextLabel
 	yourAnswer = badge:WaitForChild("YourAnswer") :: TextLabel
 	pointsText = badge:WaitForChild("PointsText") :: TextLabel
 	list = gui:WaitForChild("List") :: Frame
@@ -46,7 +46,7 @@ local function tierLabel(tier: string?): string
 	if info == nil then
 		return tier
 	end
-	return string.upper(info.label) .. "!"
+	return string.upper(info.label)
 end
 
 local function countUp(points: number)
@@ -72,12 +72,13 @@ local function showBadge(row)
 	elseif row.tier ~= nil then
 		yourAnswer.Text = "ACCEPTED"
 	else
-		yourAnswer.Text = "NO VALID ANSWER IN TIME"
+		yourAnswer.Text = "NO VALID ANSWER"
 	end
 	tierText.Text = tierLabel(row.tier)
-	tierBanner.BackgroundColor3 = Ui.tierColor(row.tier)
+	tierText.TextColor3 = Ui.tierColor(row.tier)
+	accent.BackgroundColor3 = Ui.tierColor(row.tier)
 	if row.points > 0 then
-		pointsText.TextColor3 = Theme.Color.Green
+		pointsText.TextColor3 = Theme.Color.Cream
 	else
 		pointsText.TextColor3 = Theme.Color.Red
 	end
@@ -86,7 +87,7 @@ local function showBadge(row)
 end
 
 local function showRows(rows)
-	Ui.clearClones(list, rowTemplate.Name)
+	Ui.clearClones(list, rowTemplate.Name, "Row")
 	for index, row in rows do
 		local clone = rowTemplate:Clone()
 		clone.Name = "Row" .. index
@@ -94,9 +95,9 @@ local function showRows(rows)
 		local nameLabel = clone:FindFirstChild("Name") :: TextLabel
 		local answerLabel = clone:FindFirstChild("Answer") :: TextLabel
 		local tierLabelObject = clone:FindFirstChild("Tier") :: TextLabel
-		nameLabel.Text = row.name
+		nameLabel.Text = string.upper(row.name)
 		if row.answer ~= nil then
-			answerLabel.Text = row.answer
+			answerLabel.Text = string.upper(row.answer)
 		elseif row.tier ~= nil then
 			answerLabel.Text = "accepted"
 		else
@@ -134,7 +135,7 @@ local function celebrate(row)
 	end
 	if streak >= 2 then
 		task.delay(0.9, function()
-			Fx.callout("STREAK x" .. streak .. "!", Theme.Color.Orange)
+			Fx.callout("STREAK x" .. streak, Theme.Color.Orange)
 		end)
 	end
 end

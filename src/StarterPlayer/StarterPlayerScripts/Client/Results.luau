@@ -35,24 +35,24 @@ function Results.onMatchEnded(payload)
 			if entry ~= nil then
 				local nameLabel = row:FindFirstChild("Name") :: TextLabel
 				local pointsLabel = row:FindFirstChild("Points") :: TextLabel
-				nameLabel.Text = entry.name
+				nameLabel.Text = string.upper(entry.name)
 				pointsLabel.Text = entry.points .. " PTS"
 			end
 		end
 	end
-	nextText.Text = "Next dive in " .. payload.seconds
+	nextText.Text = "NEXT DIVE IN " .. payload.seconds
 	gui.Enabled = true
 	Ui.slam(panel)
 	Sfx.play("Fanfare", 0.8)
 	if payload.winnerName == Players.LocalPlayer.DisplayName then
 		Fx.flash(Theme.Color.Gold)
-		Fx.callout("YOU WIN!", Theme.Color.Gold)
+		Fx.callout("YOU WIN", Theme.Color.Gold)
 	end
 end
 
 function Results.onState(payload)
 	if payload.phase == "Results" then
-		nextText.Text = "Next dive in " .. payload.secondsLeft
+		nextText.Text = "NEXT DIVE IN " .. payload.secondsLeft
 	else
 		gui.Enabled = false
 	end

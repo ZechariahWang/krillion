@@ -71,9 +71,11 @@ function Ui.shake(object: GuiObject, seconds: number)
 	end)
 end
 
-function Ui.clearClones(parent: Instance, templateName: string)
+-- Removes rows cloned from a template, leaving the template and any other children (titles) alone.
+function Ui.clearClones(parent: Instance, templateName: string, clonePrefix: string)
 	for _, child in parent:GetChildren() do
-		if child:IsA("GuiObject") and child.Name ~= templateName then
+		local isClone = string.sub(child.Name, 1, #clonePrefix) == clonePrefix
+		if isClone and child.Name ~= templateName then
 			child:Destroy()
 		end
 	end
