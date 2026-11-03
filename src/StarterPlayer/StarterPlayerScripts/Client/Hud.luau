@@ -1,5 +1,6 @@
 --!strict
--- Drives StarterGui.Hud during a match: prompt, status bar (timer | alive), answer box with instant feedback, water meter.
+-- Drives StarterGui.Hud during a match: answer box with instant feedback, coins, water meter, sudden-death card.
+-- The prompt, timer and alive count live in StarterGui.Status (see Status.luau).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -17,13 +18,6 @@ local METER_WATER = 0.2 -- fraction of the meter the water fill occupies
 local FEEDBACK_SECONDS = 1.5
 
 local gui: ScreenGui
-local promptCard: Frame
-local roundLabel: TextLabel
-local promptText: TextLabel
-local timerFill: Frame
-local statusBar: Frame
-local timerText: TextLabel
-local aliveText: TextLabel
 local coinChip: Frame
 local coinText: TextLabel
 local meter: Frame
@@ -41,7 +35,6 @@ local feedbackToken = 0
 local lastRound = 0
 local lastPhase = ""
 local lastWaterY = 0
-local promptTotal = 1
 
 local Hud = {}
 
@@ -49,7 +42,7 @@ local function showLocked()
 	answerBox:ReleaseFocus()
 	answerBox.Visible = false
 	submitButton.Visible = false
-	Ui.pop(lockedCard)
+	Ui.appear(lockedCard)
 end
 
 local function showEntry()
@@ -79,8 +72,8 @@ end
 local function showFeedback()
 	feedbackToken += 1
 	local token = feedbackToken
-	Ui.pop(feedback)
-	Ui.shake(answerBar, 0.3)
+	Ui.appear(feedback)
+	Ui.nudge(answerBar)
 	task.delay(FEEDBACK_SECONDS, function()
 		if token == feedbackToken then
 			feedback.Visible = false
@@ -104,28 +97,6 @@ function Hud.onAnswerResult(payload)
 	end
 end
 
-local function startTimer(seconds: number)
-	promptTotal = math.max(seconds, 1)
-	timerFill.Size = UDim2.fromScale(1, 1)
-	timerFill.BackgroundColor3 = Theme.Color.Green
-	Tween.play(timerFill, TweenInfo.new(seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) })
-end
-
-local function updateTimer(secondsLeft: number)
-	local fraction = secondsLeft / promptTotal
-	local color = Ui.timerColor(fraction)
-	timerText.TextColor3 = color
-	timerFill.BackgroundColor3 = color
-	timerText.Text = tostring(secondsLeft)
-	if secondsLeft <= GameConfig.Round.DangerSeconds then
-		Ui.bump(timerText, 1.4)
-		Ui.shake(statusBar, 0.25)
-		Sfx.play("Tick", 0.5)
-	else
-		Ui.bump(timerText, 1.12)
-	end
-end
-
 local function updateMeter(height: number, waterY: number)
 	local margin = math.clamp((height - waterY) / METER_RANGE, 0, 1)
 	local y = 1 - METER_WATER - margin * (1 - METER_WATER)
@@ -139,10 +110,10 @@ end
 
 local function onSurge(payload)
 	if payload.waterY == lastWaterY then
-		-- First Surge broadcast: the water is about to move. Rumble, then a hard jolt on the jump.
-		Fx.shake(GameConfig.Water.CreepSeconds, 0.15)
+		-- First Surge broadcast: the water is about to move. A faint rumble, then a firmer one on the jump.
+		Fx.shake(GameConfig.Water.CreepSeconds, 0.06)
 		task.delay(GameConfig.Water.CreepSeconds, function()
-			Fx.shake(GameConfig.Water.JumpSeconds + 0.3, 0.7)
+			Fx.shake(GameConfig.Water.JumpSeconds + 0.2, 0.3)
 			Sfx.play("Splash", 0.6)
 		end)
 		return
@@ -159,13 +130,6 @@ end
 
 function Hud.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Hud") :: ScreenGui
-	promptCard = gui:WaitForChild("PromptCard") :: Frame
-	roundLabel = promptCard:WaitForChild("RoundLabel") :: TextLabel
-	promptText = promptCard:WaitForChild("PromptText") :: TextLabel
-	statusBar = gui:WaitForChild("StatusBar") :: Frame
-	timerFill = statusBar:WaitForChild("TimerTrack"):WaitForChild("TimerFill") :: Frame
-	timerText = statusBar:WaitForChild("TimerText") :: TextLabel
-	aliveText = statusBar:WaitForChild("AliveText") :: TextLabel
 	coinChip = gui:WaitForChild("CoinChip") :: Frame
 	coinText = coinChip:WaitForChild("CoinText") :: TextLabel
 	meter = gui:WaitForChild("WaterMeter") :: Frame
@@ -188,7 +152,7 @@ end
 
 function Hud.setCoins(coins: number)
 	coinText.Text = coins .. " COINS"
-	Ui.bump(coinChip, 1.15)
+	Ui.bump(coinChip, 1.03)
 end
 
 function Hud.onState(payload)
@@ -201,19 +165,15 @@ function Hud.onState(payload)
 		return
 	end
 
-	roundLabel.Text = "ROUND " .. payload.round
-	if payload.prompt ~= nil then
-		promptText.Text = string.upper(payload.prompt)
-	end
-	aliveText.Text = "ALIVE " .. payload.alive
 	meter.Visible = payload.playing
 	if payload.playing then
 		updateMeter(payload.height, payload.waterY)
 	end
 
-	local suddenDeath = payload.playing and payload.alive == GameConfig.Round.SuddenDeathAlive
+	-- Prompt phase only, so it never sits on top of the reveal card.
+	local suddenDeath = phase == "Prompt" and payload.playing and payload.alive == GameConfig.Round.SuddenDeathAlive
 	if suddenDeath and not banner.Visible then
-		Ui.slam(banner)
+		Ui.appear(banner)
 	end
 	banner.Visible = suddenDeath
 
@@ -221,25 +181,14 @@ function Hud.onState(payload)
 	if newPrompt then
 		locked = false
 		showEntry()
-		startTimer(payload.secondsLeft)
-		Ui.pop(promptCard)
-		Sfx.play("Pop", 0.5)
 		if payload.playing and not UserInputService.TouchEnabled then
 			answerBox:CaptureFocus()
 		end
 	end
 
 	if phase == "Prompt" then
-		updateTimer(payload.secondsLeft)
 		answerBar.Visible = payload.playing
 	else
-		timerText.TextColor3 = Theme.Color.Accent
-		timerFill.Size = UDim2.fromScale(0, 1)
-		if phase == "Reveal" then
-			timerText.Text = "REVEAL"
-		else
-			timerText.Text = "RISING"
-		end
 		answerBar.Visible = false
 		answerBox:ReleaseFocus()
 	end

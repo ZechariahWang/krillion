@@ -2,7 +2,8 @@
 -- One-shot generator. Run once in Studio (via MCP execute_luau or the command bar) to build the
 -- ScreenGuis into StarterGui from Theme tokens, then hand-edit in Studio and save the place.
 -- Never run at runtime. Rebuilding replaces the existing ScreenGuis (only the ones named here).
--- Style: dark translucent navy panels, cream heavy text, 6px corners, thin aqua accent bars.
+-- Style: dark translucent navy panels, cream Roboto text (bold italic titles), 6px corners, thin aqua accent bars,
+-- soft drop shadows, no text outlines.
 
 local StarterGui = game:GetService("StarterGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -15,6 +16,13 @@ local function corner(parent: Instance)
 	local c = Instance.new("UICorner")
 	c.CornerRadius = Theme.Radius.Small
 	c.Parent = parent
+end
+
+local function shadow(parent: Instance)
+	local s = Instance.new("UIShadow")
+	s.Transparency = Theme.Shadow.Transparency
+	s.BlurRadius = UDim.new(0, Theme.Shadow.Blur)
+	s.Parent = parent
 end
 
 local function scale(parent: Instance)
@@ -49,6 +57,7 @@ local function panel(name: string, parent: Instance, size: UDim2, position: UDim
 	f.BorderSizePixel = 0
 	f.Parent = parent
 	corner(f)
+	shadow(f)
 	scale(f)
 	return f
 end
@@ -111,11 +120,11 @@ local function underline(parent: Instance, color: Color3)
 	g.Parent = a
 end
 
-local function label(name: string, parent: Instance, text: string, color: Color3, size: UDim2, position: UDim2, maxText: number): TextLabel
+local function label(name: string, parent: Instance, text: string, color: Color3, size: UDim2, position: UDim2, maxText: number, font: Font?): TextLabel
 	local l = Instance.new("TextLabel")
 	l.Name = name
 	l.Text = text
-	l.FontFace = Theme.Font.Title
+	l.FontFace = font or Theme.Font.Body
 	l.TextColor3 = color
 	l.BackgroundTransparency = 1
 	l.Size = size
@@ -130,22 +139,12 @@ local function label(name: string, parent: Instance, text: string, color: Color3
 	return l
 end
 
--- Text that floats over the 3D world gets a faint dark outline so it reads on bright sky.
-local function worldText(l: TextLabel)
-	local s = Instance.new("UIStroke")
-	s.Color = C.Panel
-	s.Thickness = 1.5
-	s.Transparency = 0.3
-	s.ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual
-	s.Parent = l
-end
-
 -- Secondary button: dark panel with a coloured side accent.
 local function button(name: string, parent: Instance, text: string, size: UDim2, position: UDim2, anchor: Vector2, accent: Color3): TextButton
 	local b = Instance.new("TextButton")
 	b.Name = name
 	b.Text = text
-	b.FontFace = Theme.Font.Title
+	b.FontFace = Theme.Font.Body
 	b.TextColor3 = C.Cream
 	b.BackgroundColor3 = C.Panel
 	b.BackgroundTransparency = Theme.Panel.Transparency
@@ -157,6 +156,7 @@ local function button(name: string, parent: Instance, text: string, size: UDim2,
 	b.AutoButtonColor = false
 	b.Parent = parent
 	corner(b)
+	shadow(b)
 	padding(b, 14, 8)
 	scale(b)
 	local c = Instance.new("UITextSizeConstraint")
@@ -186,7 +186,7 @@ local function textBox(name: string, parent: Instance, placeholder: string, size
 	t.Text = ""
 	t.PlaceholderText = placeholder
 	t.PlaceholderColor3 = C.Muted
-	t.FontFace = Theme.Font.Title
+	t.FontFace = Theme.Font.Body
 	t.TextColor3 = C.Cream
 	t.BackgroundColor3 = C.Field
 	t.BackgroundTransparency = 0.1
@@ -199,6 +199,7 @@ local function textBox(name: string, parent: Instance, placeholder: string, size
 	t.TextXAlignment = Enum.TextXAlignment.Left
 	t.Parent = parent
 	corner(t)
+	shadow(t)
 	padding(t, 14, 10)
 	local c = Instance.new("UITextSizeConstraint")
 	c.MinTextSize = 12
@@ -247,34 +248,6 @@ end
 local function buildHud()
 	local gui = screen("Hud", Enum.ScreenInsets.CoreUISafeInsets, false, 1)
 
-	-- Prompt: big status text at the top with a fading underline, no box.
-	local promptCard = blank("PromptCard", gui, UDim2.fromScale(0.5, 0.1), UDim2.fromScale(0.5, 0.025), Vector2.new(0.5, 0))
-	limit(promptCard, Vector2.new(320, 64), Vector2.new(900, 110))
-	local roundLabel = label("RoundLabel", promptCard, "ROUND 1", C.Accent, UDim2.fromScale(1, 0.32), UDim2.fromScale(0, 0), 20)
-	worldText(roundLabel)
-	local promptText = label("PromptText", promptCard, "NAME A BIRD", C.Cream, UDim2.fromScale(1, 0.68), UDim2.fromScale(0, 0.32), 46)
-	worldText(promptText)
-	underline(promptCard, C.Accent)
-
-	-- Timer | alive, split by a divider, with a thin progress line along the bottom.
-	local status = panel("StatusBar", gui, UDim2.fromScale(0.22, 0.05), UDim2.fromScale(0.5, 0.14), Vector2.new(0.5, 0), Theme.Panel.Transparency)
-	limit(status, Vector2.new(220, 38), Vector2.new(380, 56))
-	local timerText = label("TimerText", status, "20", C.Cream, UDim2.fromScale(0.5, 1), UDim2.fromScale(0, 0), 30)
-	padding(timerText, 0, 6)
-	scale(timerText)
-	local divider = Instance.new("Frame")
-	divider.Name = "Divider"
-	divider.Size = UDim2.new(0, 1, 0.6, 0)
-	divider.Position = UDim2.fromScale(0.5, 0.5)
-	divider.AnchorPoint = Vector2.new(0.5, 0.5)
-	divider.BackgroundColor3 = C.Cream
-	divider.BackgroundTransparency = 0.6
-	divider.BorderSizePixel = 0
-	divider.Parent = status
-	local aliveText = label("AliveText", status, "ALIVE 6", C.Cream, UDim2.fromScale(0.5, 1), UDim2.fromScale(0.5, 0), 22)
-	padding(aliveText, 0, 8)
-	progress("TimerTrack", status, UDim2.new(1, 0, 0, 3), UDim2.fromScale(0, 1), Vector2.new(0, 1))
-
 	local coinChip = panel("CoinChip", gui, UDim2.fromScale(0.12, 0.05), UDim2.new(1, -12, 0.025, 0), Vector2.new(1, 0), Theme.Panel.Transparency)
 	limit(coinChip, Vector2.new(130, 36), Vector2.new(220, 52))
 	sideAccent(coinChip, C.Gold)
@@ -302,7 +275,6 @@ local function buildHud()
 	marker.Parent = meter
 	local meterLabel = label("MeterLabel", meter, "YOU", C.Cream, UDim2.fromOffset(40, 16), UDim2.new(0.5, 0, 0, -20), 14)
 	meterLabel.AnchorPoint = Vector2.new(0.5, 0)
-	worldText(meterLabel)
 
 	-- Answer entry at the bottom.
 	local answerBar = blank("AnswerBar", gui, UDim2.fromScale(0.42, 0.075), UDim2.new(0.5, 0, 1, -20), Vector2.new(0.5, 1))
@@ -323,7 +295,7 @@ local function buildHud()
 	limit(banner, Vector2.new(240, 60), Vector2.new(380, 90))
 	banner.Visible = false
 	label("Title", banner, "LAST TWO", C.Cream, UDim2.fromScale(0.8, 0.35), UDim2.fromScale(0.1, 0.08), 18)
-	label("BannerText", banner, "SUDDEN DEATH", C.Red, UDim2.fromScale(0.85, 0.45), UDim2.fromScale(0.075, 0.45), 30)
+	label("BannerText", banner, "SUDDEN DEATH", C.Red, UDim2.fromScale(0.85, 0.45), UDim2.fromScale(0.075, 0.45), 30, Theme.Font.Title)
 end
 
 local function buildReveal()
@@ -334,7 +306,7 @@ local function buildReveal()
 	limit(badge, Vector2.new(260, 120), Vector2.new(420, 170))
 	topAccent(badge, C.Accent)
 	label("YourAnswer", badge, "ANDORRA", C.Muted, UDim2.fromScale(0.86, 0.2), UDim2.fromScale(0.07, 0.1), 20)
-	label("TierText", badge, "RARE", Theme.Tier.Rare, UDim2.fromScale(0.86, 0.38), UDim2.fromScale(0.07, 0.3), 44)
+	label("TierText", badge, "RARE", Theme.Tier.Rare, UDim2.fromScale(0.86, 0.38), UDim2.fromScale(0.07, 0.3), 44, Theme.Font.Title)
 	label("PointsText", badge, "+60", C.Cream, UDim2.fromScale(0.86, 0.24), UDim2.fromScale(0.07, 0.7), 28)
 
 	-- Everyone's answers, like the reference scoreboard.
@@ -347,7 +319,7 @@ local function buildReveal()
 	layout.Padding = UDim.new(0, 4)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
 	layout.Parent = list
-	local title = label("Title", list, "ANSWERS", C.Cream, UDim2.new(1, 0, 0, 22), UDim2.fromScale(0, 0), 20)
+	local title = label("Title", list, "ANSWERS", C.Cream, UDim2.new(1, 0, 0, 22), UDim2.fromScale(0, 0), 20, Theme.Font.Title)
 	title.LayoutOrder = -1
 	title.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -372,19 +344,11 @@ end
 local function buildLobby()
 	local gui = screen("Lobby", Enum.ScreenInsets.CoreUISafeInsets, false, 1)
 
-	local banner = blank("Banner", gui, UDim2.fromScale(0.35, 0.09), UDim2.fromScale(0.5, 0.025), Vector2.new(0.5, 0))
-	limit(banner, Vector2.new(280, 56), Vector2.new(600, 90))
-	local title = label("BannerTitle", banner, "DIVING IN", C.Accent, UDim2.fromScale(1, 0.35), UDim2.fromScale(0, 0), 20)
-	worldText(title)
-	local text = label("BannerText", banner, "15", C.Cream, UDim2.fromScale(1, 0.65), UDim2.fromScale(0, 0.35), 40)
-	worldText(text)
-	underline(banner, C.Accent)
-
 	local eliminated = panel("EliminatedCard", gui, UDim2.fromScale(0.3, 0.24), UDim2.fromScale(0.5, 0.42), Vector2.new(0.5, 0.5), Theme.Panel.ModalTransparency)
 	limit(eliminated, Vector2.new(280, 150), Vector2.new(440, 210))
 	eliminated.Visible = false
 	topAccent(eliminated, C.Red)
-	label("Title", eliminated, "YOU SANK", C.Red, UDim2.fromScale(0.86, 0.3), UDim2.fromScale(0.07, 0.1), 40)
+	label("Title", eliminated, "YOU SANK", C.Red, UDim2.fromScale(0.86, 0.3), UDim2.fromScale(0.07, 0.1), 40, Theme.Font.Title)
 	label("Subtitle", eliminated, "YOU MADE IT TO ROUND 4", C.Cream, UDim2.fromScale(0.86, 0.15), UDim2.fromScale(0.07, 0.42), 20)
 	button("SpectateButton", eliminated, "SPECTATE", UDim2.fromScale(0.6, 0.24), UDim2.new(0.5, 0, 1, -14), Vector2.new(0.5, 1), C.Purple)
 
@@ -410,7 +374,7 @@ local function buildLobbyQuiz()
 	local header = blank("HeaderBar", panelFrame, UDim2.new(1, -36, 0.12, 0), UDim2.new(0, 22, 0.05, 0), Vector2.new(0, 0))
 	local headerText = label("Header", header, "WARM-UP  |  0 COINS", C.Muted, UDim2.fromScale(1, 1), UDim2.fromScale(0, 0), 16)
 	headerText.TextXAlignment = Enum.TextXAlignment.Left
-	local prompt = label("PromptText", panelFrame, "NAME A BIRD", C.Cream, UDim2.new(1, -36, 0.24, 0), UDim2.new(0, 22, 0.19, 0), 26)
+	local prompt = label("PromptText", panelFrame, "NAME A BIRD", C.Cream, UDim2.new(1, -36, 0.24, 0), UDim2.new(0, 22, 0.19, 0), 26, Theme.Font.Title)
 	prompt.TextXAlignment = Enum.TextXAlignment.Left
 	progress("TimerTrack", panelFrame, UDim2.new(1, -36, 0, 3), UDim2.new(0, 22, 0.45, 0), Vector2.new(0, 0))
 	textBox("AnswerBox", panelFrame, "YOUR ANSWER", UDim2.new(1, -36, 0.2, 0), UDim2.new(0, 22, 0.51, 0))
@@ -439,7 +403,7 @@ local function buildResults()
 	limit(panelFrame, Vector2.new(300, 260), Vector2.new(480, 360))
 	topAccent(panelFrame, C.Gold)
 	label("Title", panelFrame, "LAST ONE FLOATING", C.Muted, UDim2.fromScale(0.9, 0.08), UDim2.fromScale(0.05, 0.06), 18)
-	label("WinnerText", panelFrame, "PLAYER", C.Gold, UDim2.fromScale(0.9, 0.16), UDim2.fromScale(0.05, 0.15), 44)
+	label("WinnerText", panelFrame, "PLAYER", C.Gold, UDim2.fromScale(0.9, 0.16), UDim2.fromScale(0.05, 0.15), 44, Theme.Font.Title)
 
 	local podium = Instance.new("Frame")
 	podium.Name = "Podium"
@@ -473,6 +437,57 @@ local function buildResults()
 	label("NextText", panelFrame, "NEXT DIVE IN 10", C.Muted, UDim2.fromScale(0.9, 0.07), UDim2.fromScale(0.05, 0.88), 16)
 end
 
+-- Top status line plus the time | alive bar, sized and placed exactly like the reference GUI.
+-- Its own screen with device insets so it sits in the top bar row, centred between Roblox's buttons.
+local function buildStatus()
+	local gui = screen("Status", Enum.ScreenInsets.DeviceSafeInsets, true, 5)
+	gui.IgnoreGuiInset = true
+
+	local statusFrame = blank("StatusFrame", gui, UDim2.fromScale(0.347, 0.0659), UDim2.fromScale(0.5, 0.0359), Vector2.new(0.5, 0))
+	local status = label("Status", statusFrame, "WAITING FOR PLAYERS", C.White, UDim2.fromScale(1, 1), UDim2.fromScale(0, 0.0195), 48, Theme.Font.Heavy)
+	local statusLimit = status:FindFirstChildOfClass("UITextSizeConstraint")
+	if statusLimit ~= nil then
+		statusLimit.MinTextSize = 1
+	end
+	-- Gold, not aqua: an aqua line disappears against the sky and sea behind it.
+	underline(statusFrame, C.Gold)
+
+	local secondary = Instance.new("Frame")
+	secondary.Name = "SecondaryStatus"
+	secondary.Size = UDim2.fromScale(0.21, 0.0432)
+	secondary.Position = UDim2.fromScale(0.5, 0.115)
+	secondary.AnchorPoint = Vector2.new(0.5, 0)
+	secondary.BackgroundColor3 = C.Panel
+	secondary.BackgroundTransparency = Theme.Panel.Transparency
+	secondary.BorderSizePixel = 0
+	secondary.Parent = gui
+	local square = Instance.new("UICorner")
+	square.CornerRadius = UDim.new(0, 0)
+	square.Parent = secondary
+
+	local left = label("Secondary", secondary, "0:15", C.Cream, UDim2.fromScale(0.5, 1), UDim2.fromScale(0, 0), 100, Theme.Font.Heavy)
+	local right = label("Alive", secondary, "PLAYERS 1/2", C.Cream, UDim2.fromScale(0.5, 1), UDim2.fromScale(1, 0), 100, Theme.Font.Heavy)
+	right.AnchorPoint = Vector2.new(1, 0)
+	for _, cell in { left, right } do
+		local inner = Instance.new("UIPadding")
+		inner.PaddingLeft = UDim.new(0.06, 0)
+		inner.PaddingRight = UDim.new(0.06, 0)
+		inner.PaddingTop = UDim.new(0.18, 0)
+		inner.PaddingBottom = UDim.new(0.18, 0)
+		inner.Parent = cell
+		scale(cell)
+	end
+	local divider = Instance.new("Frame")
+	divider.Name = "Divider"
+	divider.Size = UDim2.new(0, 1, 0.6, 0)
+	divider.Position = UDim2.fromScale(0.5, 0.5)
+	divider.AnchorPoint = Vector2.new(0.5, 0.5)
+	divider.BackgroundColor3 = C.Cream
+	divider.BackgroundTransparency = 0.6
+	divider.BorderSizePixel = 0
+	divider.Parent = secondary
+end
+
 -- Full-screen effects layer: flash, big callouts, floating coin text. Always enabled.
 local function buildFx()
 	local gui = screen("Fx", Enum.ScreenInsets.None, true, 10)
@@ -486,18 +501,17 @@ local function buildFx()
 	flash.BorderSizePixel = 0
 	flash.Parent = gui
 
-	local callout = label("Callout", gui, "CLOSE CALL", C.Yellow, UDim2.fromScale(0.5, 0.1), UDim2.fromScale(0.5, 0.62), 72)
+	local callout = label("Callout", gui, "CLOSE CALL", C.Yellow, UDim2.fromScale(0.5, 0.1), UDim2.fromScale(0.5, 0.62), 72, Theme.Font.Title)
 	callout.AnchorPoint = Vector2.new(0.5, 0.5)
 	callout.Visible = false
-	worldText(callout)
 	scale(callout)
 
 	local coinPop = label("CoinPop", gui, "+50", C.Gold, UDim2.fromOffset(200, 44), UDim2.fromScale(0.5, 0.5), 36)
 	coinPop.AnchorPoint = Vector2.new(0.5, 0.5)
 	coinPop.Visible = false
-	worldText(coinPop)
 end
 
+buildStatus()
 buildHud()
 buildReveal()
 buildLobby()

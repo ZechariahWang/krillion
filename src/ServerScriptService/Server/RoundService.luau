@@ -115,6 +115,7 @@ local function broadcastState()
 			height = height,
 			waterY = waterY,
 			playerCount = #Players:GetPlayers(),
+			starting = participantCount,
 			minPlayers = GameConfig.Round.MinPlayers,
 		})
 	end

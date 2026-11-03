@@ -30,6 +30,9 @@ export type RoundStatePayload = {
 	prompt: string?,
 	promptId: string?,
 	playing: boolean, -- is the receiving player on a platform this match
+	playerCount: number,
+	minPlayers: number,
+	starting: number, -- players who started the current match
 	height: number,
 	waterY: number,
 }

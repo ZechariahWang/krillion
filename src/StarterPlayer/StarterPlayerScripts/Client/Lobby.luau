@@ -1,5 +1,5 @@
 --!strict
--- Drives StarterGui.Lobby for anyone not on a platform: status banner, eliminated card, spectating.
+-- Drives StarterGui.Lobby for anyone not on a platform: eliminated card and spectating.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -10,9 +10,6 @@ local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
 local gui: ScreenGui
-local banner: Frame
-local bannerTitle: TextLabel
-local bannerText: TextLabel
 local eliminatedCard: Frame
 local eliminatedSubtitle: TextLabel
 local spectateButton: TextButton
@@ -71,9 +68,6 @@ end
 
 function Lobby.init(playerGui: PlayerGui)
 	gui = playerGui:WaitForChild("Lobby") :: ScreenGui
-	banner = gui:WaitForChild("Banner") :: Frame
-	bannerTitle = banner:WaitForChild("BannerTitle") :: TextLabel
-	bannerText = banner:WaitForChild("BannerText") :: TextLabel
 	eliminatedCard = gui:WaitForChild("EliminatedCard") :: Frame
 	eliminatedSubtitle = eliminatedCard:WaitForChild("Subtitle") :: TextLabel
 	spectateButton = eliminatedCard:WaitForChild("SpectateButton") :: TextButton
@@ -94,9 +88,8 @@ end
 
 function Lobby.onEliminated(payload)
 	eliminatedSubtitle.Text = "YOU MADE IT TO ROUND " .. payload.round
-	Ui.slam(eliminatedCard)
+	Ui.appear(eliminatedCard)
 	Fx.flash(Theme.Color.Water)
-	Fx.shake(0.5, 0.6)
 	Sfx.play("Splash", 0.8)
 end
 
@@ -110,21 +103,6 @@ function Lobby.onState(payload)
 	end
 
 	aliveUserIds = payload.aliveUserIds or {}
-	-- During a match the Hud prompt card takes the top of the screen instead.
-	banner.Visible = not inMatch
-	if phase == "Waiting" then
-		bannerTitle.Text = "WAITING FOR PLAYERS"
-		bannerText.Text = payload.playerCount .. " / " .. payload.minPlayers
-	elseif phase == "Intermission" then
-		bannerTitle.Text = "DIVING IN"
-		bannerText.Text = tostring(payload.secondsLeft)
-	elseif inMatch then
-		bannerTitle.Text = "ROUND " .. payload.round
-		bannerText.Text = payload.alive .. " ALIVE"
-	else
-		bannerTitle.Text = "NEXT DIVE IN"
-		bannerText.Text = tostring(payload.secondsLeft)
-	end
 
 	if not inMatch then
 		eliminatedCard.Visible = false
