@@ -31,9 +31,7 @@ function MapService.start()
 		lobby = (maps:WaitForChild("Lobby") :: Model):Clone()
 		lobby.Parent = workspace
 	end
-	platformFolder = Instance.new("Folder")
-	platformFolder.Name = "Platforms"
-	platformFolder.Parent = workspace
+	platformFolder = workspace:WaitForChild("Platforms") :: Folder
 end
 
 function MapService.getWater(): Part
@@ -60,8 +58,9 @@ local function platformPosition(index: number, count: number, topY: number): Vec
 	return Vector3.new(x, centerY(topY), z)
 end
 
--- Builds `count` pillars whose standing surface sits at `topY`. Pillars are unanchored and held by constraints
--- so physics carries standing characters when the server moves the AlignPosition target.
+-- Builds `count` pillars whose standing surface sits at `topY`. Pillars are unanchored and held by the
+-- template's Lift (AlignPosition) and Upright (AlignOrientation), so physics carries standing characters
+-- when the server moves the Lift target.
 function MapService.spawnPlatforms(count: number, topY: number): { Part }
 	MapService.clearPlatforms()
 	for index = 1, count do
@@ -81,26 +80,8 @@ function MapService.spawnPlatforms(count: number, topY: number): { Part }
 			cap.CFrame = platform.CFrame * CFrame.new(0, GameConfig.Platform.Height / 2 + CAP_HEIGHT / 2, 0)
 		end
 
-		local attachment = Instance.new("Attachment")
-		attachment.Name = "Anchor"
-		attachment.Parent = platform
-
-		local alignPosition = Instance.new("AlignPosition")
-		alignPosition.Name = "Lift"
-		alignPosition.Mode = Enum.PositionAlignmentMode.OneAttachment
-		alignPosition.Attachment0 = attachment
-		alignPosition.Position = position
-		alignPosition.MaxForce = math.huge
-		alignPosition.MaxVelocity = math.huge
-		alignPosition.Responsiveness = 40
-		alignPosition.Parent = platform
-
-		local alignOrientation = Instance.new("AlignOrientation")
-		alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
-		alignOrientation.Attachment0 = attachment
-		alignOrientation.CFrame = CFrame.identity
-		alignOrientation.RigidityEnabled = true
-		alignOrientation.Parent = platform
+		local lift = platform:FindFirstChild("Lift") :: AlignPosition
+		lift.Position = position
 
 		platform.Parent = platformFolder
 		platform:SetNetworkOwner(nil)

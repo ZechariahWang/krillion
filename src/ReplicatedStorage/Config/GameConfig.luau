@@ -28,7 +28,6 @@ local GameConfig = {
 		JumpSeconds = 0.4,
 	},
 	Platform = {
-		Width = 8,
 		Height = 140, -- tall enough to reach the tank floor at any height
 		Spacing = 16,
 		Columns = 4,
@@ -46,7 +45,6 @@ local GameConfig = {
 		RetryCooldown = 1, -- seconds between guesses, so a wrong answer can be retried but not spammed
 	},
 	Lobby = {
-		DeckHeight = 6, -- boardwalk height above the starting water; low enough to look into the tank
 		QuizSeconds = 20,
 		CoinsPerPoint = 0.5,
 	},

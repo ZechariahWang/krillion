@@ -8,13 +8,9 @@ local Tween = require(ReplicatedStorage.Shared.Tween)
 
 local Ui = {}
 
-local function scaleOf(object: GuiObject): UIScale
-	local scale = object:FindFirstChildOfClass("UIScale")
-	if scale == nil then
-		scale = Instance.new("UIScale")
-		scale.Parent = object
-	end
-	return scale :: UIScale
+-- Every animated element has a UIScale authored in Studio; without one, scale animations are skipped.
+local function scaleOf(object: GuiObject): UIScale?
+	return object:FindFirstChildOfClass("UIScale")
 end
 
 local basePositions: { [GuiObject]: UDim2 } = {}
@@ -22,6 +18,9 @@ local basePositions: { [GuiObject]: UDim2 } = {}
 -- Hover brightens the panel slightly; press dips the scale a hair.
 function Ui.pressable(button: GuiButton)
 	local scale = scaleOf(button)
+	if scale == nil then
+		return
+	end
 	local restTransparency = button.BackgroundTransparency
 	local hoverTransparency = math.max(0, restTransparency - 0.15)
 	button.MouseEnter:Connect(function()
@@ -41,15 +40,21 @@ end
 
 -- Shows an element with a short settle from 96% scale. No overshoot.
 function Ui.appear(object: GuiObject)
-	local scale = scaleOf(object)
-	scale.Scale = 0.96
 	object.Visible = true
+	local scale = scaleOf(object)
+	if scale == nil then
+		return
+	end
+	scale.Scale = 0.96
 	Tween.play(scale, Theme.Tween.Enter, { Scale = 1 })
 end
 
 -- A small tick, used on timer seconds and counters.
 function Ui.bump(object: GuiObject, size: number)
 	local scale = scaleOf(object)
+	if scale == nil then
+		return
+	end
 	scale.Scale = size
 	Tween.play(scale, Theme.Tween.Tick, { Scale = 1 })
 end

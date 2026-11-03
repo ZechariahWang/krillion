@@ -1,9 +1,4 @@
 --!strict
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-local Net = require(ReplicatedStorage.Shared.Net)
-Net.init()
-
 local Server = script.Parent:WaitForChild("Server")
 local DataService = require(Server.DataService)
 local MapService = require(Server.MapService)

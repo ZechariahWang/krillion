@@ -3,6 +3,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
@@ -49,18 +50,19 @@ local function tierLabel(tier: string?): string
 	return string.upper(info.label)
 end
 
+-- Counts the points up from 0 with an ease-out, one frame at a time.
 local function countUp(points: number)
-	pointsText.Text = "+0"
-	local value = Instance.new("NumberValue")
-	value.Changed:Connect(function(current)
-		pointsText.Text = "+" .. math.floor(current + 0.5)
-	end)
-	local tween = TweenService:Create(value, Theme.Tween.Count, { Value = points })
-	tween.Completed:Once(function()
+	local info = Theme.Tween.Count
+	task.spawn(function()
+		local elapsed = 0
+		while elapsed < info.Time do
+			elapsed += RunService.RenderStepped:Wait()
+			local alpha = math.min(1, elapsed / info.Time)
+			local eased = TweenService:GetValue(alpha, info.EasingStyle, info.EasingDirection)
+			pointsText.Text = "+" .. math.floor(points * eased + 0.5)
+		end
 		pointsText.Text = "+" .. points
-		value:Destroy()
 	end)
-	tween:Play()
 end
 
 local function showBadge(row)
