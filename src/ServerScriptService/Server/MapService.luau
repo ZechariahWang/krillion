@@ -1,5 +1,5 @@
 --!strict
--- Puts the Studio-built Arena and Lobby into Workspace, spawns per-player pillars, drives the lobby scoreboard.
+-- Puts the Studio-built Arena and Lobby into Workspace and spawns per-player pillars.
 
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -40,32 +40,9 @@ function MapService.getWater(): Part
 	return arena:WaitForChild("Water") :: Part
 end
 
-function MapService.getFoam(): Part
-	return arena:WaitForChild("Foam") :: Part
-end
-
 function MapService.getLobbySpawnCFrame(): CFrame
 	local spawn = lobby:WaitForChild("LobbySpawn") :: SpawnLocation
 	return spawn.CFrame + Vector3.new(0, 3, 0)
-end
-
-function MapService.setScoreboard(title: string, body: string)
-	local board = lobby:FindFirstChild("Scoreboard")
-	if board == nil then
-		return
-	end
-	local content = board:FindFirstChild("Content", true)
-	if content == nil then
-		return
-	end
-	local titleLabel = content:FindFirstChild("Title") :: TextLabel?
-	local bodyLabel = content:FindFirstChild("Body") :: TextLabel?
-	if titleLabel ~= nil then
-		titleLabel.Text = title
-	end
-	if bodyLabel ~= nil then
-		bodyLabel.Text = body
-	end
 end
 
 -- The pillar's center, given the height of its standing surface (top of the cap).

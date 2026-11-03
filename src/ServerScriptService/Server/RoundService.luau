@@ -66,27 +66,7 @@ function RoundService.aliveCount(): number
 	return MatchState.aliveCount(match)
 end
 
-local lastWinnerName = ""
-
-local function updateScoreboard()
-	local alive = RoundService.aliveCount()
-	if phase == "Waiting" then
-		MapService.setScoreboard("WAITING FOR PLAYERS", #Players:GetPlayers() .. " / " .. GameConfig.Round.MinPlayers)
-	elseif phase == "Intermission" then
-		MapService.setScoreboard("NEXT DIVE IN", tostring(secondsLeft))
-	elseif phase == "Prompt" and currentPrompt ~= nil then
-		MapService.setScoreboard("ROUND " .. round .. "  |  " .. alive .. " ALIVE  |  " .. secondsLeft, currentPrompt.prompt)
-	elseif phase == "Reveal" then
-		MapService.setScoreboard("ROUND " .. round .. "  |  " .. alive .. " ALIVE", "THE PILLARS RISE!")
-	elseif phase == "Surge" then
-		MapService.setScoreboard("ROUND " .. round .. "  |  " .. alive .. " ALIVE", "THE WATER IS RISING!")
-	elseif phase == "Results" then
-		MapService.setScoreboard("WINNER", lastWinnerName)
-	end
-end
-
 local function broadcastState()
-	updateScoreboard()
 	local aliveUserIds = {}
 	for _, player in alivePlayers() do
 		table.insert(aliveUserIds, player.UserId)
@@ -322,7 +302,6 @@ local function endMatch()
 		winnerName = winner.DisplayName
 	end
 	local top = podium(state, winner)
-	lastWinnerName = winnerName
 	for _, player in alivePlayers() do
 		MatchState.eliminate(state, player)
 		PlayerService.sendToLobby(player)
@@ -388,6 +367,8 @@ function RoundService.start()
 		end
 		return {}
 	end, eliminate)
+	-- Fill the tank now, so spectators in the lobby see water before the first match.
+	WaterService.reset()
 	task.spawn(mainLoop)
 end
 

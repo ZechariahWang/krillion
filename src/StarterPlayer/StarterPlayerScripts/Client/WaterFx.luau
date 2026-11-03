@@ -1,8 +1,7 @@
 --!strict
--- Local water visuals: scrolls the water textures and shows where the water will reach this round.
--- All of this is cosmetic and per-client; the server never moves the NextLevel line.
+-- Local water visuals: shows where the water will reach this round.
+-- Cosmetic and per-client; the server never moves the NextLevel line.
 
-local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
@@ -10,18 +9,12 @@ local Tween = require(ReplicatedStorage.Shared.Tween)
 
 local LINE_TRANSPARENCY = 0.15
 
-local textures: { Texture } = {}
 local nextLevel: Model? = nil
 local lines: { BasePart } = {}
 
 local WaterFx = {}
 
 local function collect(arena: Instance)
-	for _, d in arena:GetDescendants() do
-		if d:IsA("Texture") and d:GetAttribute("ScrollU") ~= nil then
-			table.insert(textures, d)
-		end
-	end
 	local model = arena:FindFirstChild("NextLevel")
 	if model ~= nil and model:IsA("Model") then
 		nextLevel = model
@@ -37,14 +30,6 @@ function WaterFx.init()
 	task.spawn(function()
 		local arena = workspace:WaitForChild("Arena")
 		collect(arena)
-	end)
-	RunService.Heartbeat:Connect(function(dt)
-		for _, texture in textures do
-			local u = texture:GetAttribute("ScrollU") :: number
-			local v = texture:GetAttribute("ScrollV") :: number
-			texture.OffsetStudsU = (texture.OffsetStudsU + u * dt) % texture.StudsPerTileU
-			texture.OffsetStudsV = (texture.OffsetStudsV + v * dt) % texture.StudsPerTileV
-		end
 	end)
 end
 
