@@ -1,7 +1,8 @@
 --!strict
 -- Owns the tank water: terrain water filled up from the tank floor, the two-stage surge, and the
 -- "who is under water" poll. Terrain water gives real waves, reflections and underwater depth.
--- The invisible Arena.Water box marks the tank's footprint and floor, and holds the bubble emitter.
+-- The invisible Arena.Water box holds the bubble emitter; its Radius and FloorY attributes give the round
+-- tank's footprint and floor.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -17,22 +18,27 @@ local level = 0 -- the water surface the game uses for eliminations
 
 local WaterService = {}
 
-local function footprint(): (Vector3, number)
+local function footprint(): (number, number)
 	local water = MapService.getWater()
+	local radius = water:GetAttribute("Radius") :: number
 	local floorY = water:GetAttribute("FloorY") :: number
-	return Vector3.new(water.Size.X, 0, water.Size.Z), floorY
+	return radius, floorY
 end
 
--- Fills the tank with water from `fromY` up to `toY`. FillBlock gives the top voxel a partial
+local function fillColumn(bottom: number, height: number, material: Enum.Material)
+	local radius = footprint()
+	workspace.Terrain:FillCylinder(CFrame.new(0, bottom + height / 2, 0), height, radius, material)
+end
+
+-- Fills the tank with water from `fromY` up to `toY`. FillCylinder gives the top voxel a partial
 -- fill, so the surface can sit between voxel boundaries.
 local function fillBetween(fromY: number, toY: number)
-	local size, floorY = footprint()
+	local _, floorY = footprint()
 	local bottom = math.max(floorY, fromY - VOXEL)
 	if toY <= bottom then
 		return
 	end
-	local height = toY - bottom
-	workspace.Terrain:FillBlock(CFrame.new(0, bottom + height / 2, 0), Vector3.new(size.X, height, size.Z), Enum.Material.Water)
+	fillColumn(bottom, toY - bottom, Enum.Material.Water)
 end
 
 -- Keeps the invisible marker box (and so its bubbles) the same size as the water.
@@ -45,8 +51,8 @@ local function fitMarker(y: number)
 end
 
 function WaterService.reset()
-	local size, floorY = footprint()
-	workspace.Terrain:FillBlock(CFrame.new(0, floorY + CLEAR_HEIGHT / 2, 0), Vector3.new(size.X, CLEAR_HEIGHT, size.Z), Enum.Material.Air)
+	local _, floorY = footprint()
+	fillColumn(floorY, CLEAR_HEIGHT, Enum.Material.Air)
 	level = 0
 	fillBetween(floorY, 0)
 	fitMarker(0)
