@@ -2,7 +2,7 @@
 -- One-shot generator. Run once in Studio (via MCP execute_luau or the command bar) to build
 -- ServerStorage.Maps.Arena and ServerStorage.Maps.Lobby plus lighting, then save the place.
 -- Not run at runtime. Rebuilding replaces the existing models.
--- The ocean is terrain: run tools/BuildOcean.luau separately (it is slow).
+-- The sea is one flat part rather than terrain water, which is far cheaper to render. Terrain is cleared.
 -- LightingStyle is not scriptable: set it to Realistic by hand in the Lighting properties.
 
 local ServerStorage = game:GetService("ServerStorage")
@@ -148,6 +148,12 @@ end
 local function buildArena(): Model
 	local arena = Instance.new("Model")
 	arena.Name = "Arena"
+
+	local ocean = part("Ocean", Vector3.new(2048, 1, 2048), CFrame.new(0, -4.5, 0), Color3.fromHex("1E90E0"), Enum.Material.SmoothPlastic, arena)
+	ocean.CanCollide = false
+	ocean.CanQuery = false
+	ocean.CanTouch = false
+	ocean.CastShadow = false
 
 	-- Sandy island the tank sits on. Pillars pass through it, so it does not collide.
 	local island = part("Island", Vector3.new(190, 4, 190), CFrame.new(0, -4, 0), Theme.Color.Sand, Enum.Material.Sand, arena)
@@ -413,6 +419,7 @@ for _, name in { "Arena", "Lobby" } do
 	end
 end
 
+workspace.Terrain:Clear()
 buildArena().Parent = maps
 buildLobby().Parent = maps
 applyLighting()
