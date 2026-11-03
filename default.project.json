@@ -32,7 +32,8 @@
       },
       "StarterCharacterScripts": {
         "$className": "StarterCharacterScripts",
-        "$path": "src/StarterPlayer/StarterCharacterScripts"
+        "$path": "src/StarterPlayer/StarterCharacterScripts",
+        "$ignoreUnknownInstances": true
       }
     },
     "StarterGui": {
