@@ -16,6 +16,10 @@ local GLASS = 1
 local FLOOR_Y = -20
 local WALL_TOP = 70
 local SEA_LEVEL = -4
+-- Terrain sea is only this wide (a multiple of 8). Past it a flat "far sea" ring takes over, and the
+-- atmosphere haze hides the seam, so the sea looks endless while staying cheap to render.
+local SEA_SIZE = 400
+local FAR_SEA_COLOR = Color3.fromHex("2FA9DC")
 local DECK_Y = GameConfig.Lobby.DeckHeight
 local DECK_NEAR = TANK_HALF + 6 -- deck edge closest to the tank
 local DECK_FAR = DECK_NEAR + 50
@@ -59,7 +63,7 @@ end
 local function buildTerrain()
 	local terrain = workspace.Terrain
 	terrain:Clear()
-	local seaSize = 1024
+	local seaSize = SEA_SIZE
 	terrain:FillBlock(CFrame.new(0, -30, 0), Vector3.new(seaSize, 4, seaSize), Enum.Material.Sand)
 	task.wait()
 	terrain:FillBlock(CFrame.new(0, (SEA_LEVEL - 28) / 2, 0), Vector3.new(seaSize, SEA_LEVEL + 28, seaSize), Enum.Material.Water)
@@ -150,6 +154,25 @@ end
 local function buildArena(): Model
 	local arena = Instance.new("Model")
 	arena.Name = "Arena"
+
+	-- Far sea: a flat ring at the water line around the terrain sea, fading into the haze.
+	-- It overlaps the terrain edge a little and sits just above the still water, so the terrain's
+	-- edge is hidden and only wave crests poke through, which reads as a distant swell.
+	local reach = 2048
+	local overlap = 8
+	local half = SEA_SIZE / 2 - overlap
+	local band = reach / 2 - half
+	local ring = {
+		{ Vector3.new(reach, 1, band), CFrame.new(0, SEA_LEVEL - 0.4, half + band / 2) },
+		{ Vector3.new(reach, 1, band), CFrame.new(0, SEA_LEVEL - 0.4, -half - band / 2) },
+		{ Vector3.new(band, 1, half * 2), CFrame.new(half + band / 2, SEA_LEVEL - 0.4, 0) },
+		{ Vector3.new(band, 1, half * 2), CFrame.new(-half - band / 2, SEA_LEVEL - 0.4, 0) },
+	}
+	for _, spec in ring do
+		local far = part("FarSea", spec[1], spec[2], FAR_SEA_COLOR, Enum.Material.SmoothPlastic, arena)
+		decor(far)
+		far.CastShadow = false
+	end
 
 	-- Dark slate floor, so the clear water above it reads as deep rather than shallow.
 	local floor = part("Floor", Vector3.new(TANK_HALF * 2, 20, TANK_HALF * 2), CFrame.new(0, FLOOR_Y - 10, 0), Color3.fromHex("1F3A52"), Enum.Material.Slate, arena)
@@ -518,12 +541,13 @@ local function applyLighting()
 	Lighting.FogColor = Color3.fromRGB(190, 225, 255)
 
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
-	atmosphere.Density = 0.3
-	atmosphere.Offset = 0.15
-	atmosphere.Color = Color3.fromRGB(205, 228, 250)
-	atmosphere.Decay = Color3.fromRGB(110, 165, 230)
-	atmosphere.Glare = 0.25
-	atmosphere.Haze = 0.6
+	-- Sea haze: thick enough to swallow the edge of the terrain sea, tinted to match the far water.
+	atmosphere.Density = 0.42
+	atmosphere.Offset = 0.3
+	atmosphere.Color = Color3.fromRGB(196, 222, 240)
+	atmosphere.Decay = Color3.fromRGB(120, 172, 215)
+	atmosphere.Glare = 0.2
+	atmosphere.Haze = 1.8
 	atmosphere.Parent = Lighting
 
 	local correction = Lighting:FindFirstChild("KrillionColor") or Instance.new("ColorCorrectionEffect")
