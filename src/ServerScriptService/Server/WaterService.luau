@@ -1,45 +1,23 @@
 --!strict
--- Owns the tank water: terrain water filled up from the tank floor, the two-stage surge, and the
--- "who is under water" poll. Terrain water gives real waves, reflections and underwater depth.
+-- Owns the tank water: the level, the two-stage surge, and the "who is under water" poll.
+-- Terrain water (whole voxels) gives depth and the underwater look; the Arena.WaterSurface slab sits
+-- exactly at the level so the surface moves smoothly (see Shared/WaterSurface).
 -- The invisible Arena.Water box holds the bubble emitter; its Radius and FloorY attributes give the round
 -- tank's footprint and floor.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
+local WaterCurve = require(ReplicatedStorage.Shared.WaterCurve)
+local WaterSurface = require(ReplicatedStorage.Shared.WaterSurface)
 local MapService = require(script.Parent.MapService)
 
-local VOXEL = 4 -- terrain resolution; refill one voxel below the old level so the top layer is rewritten
 local CLEAR_HEIGHT = 120 -- how far above the floor the tank column is cleared on reset
 
 local level = 0 -- the water surface the game uses for eliminations
 
 local WaterService = {}
-
-local function footprint(): (number, number)
-	local water = MapService.getWater()
-	local radius = water:GetAttribute("Radius") :: number
-	local floorY = water:GetAttribute("FloorY") :: number
-	return radius, floorY
-end
-
-local function fillColumn(bottom: number, height: number, material: Enum.Material)
-	local radius = footprint()
-	workspace.Terrain:FillCylinder(CFrame.new(0, bottom + height / 2, 0), height, radius, material)
-end
-
--- Fills the tank with water from `fromY` up to `toY`. FillCylinder gives the top voxel a partial
--- fill, so the surface can sit between voxel boundaries.
-local function fillBetween(fromY: number, toY: number)
-	local _, floorY = footprint()
-	local bottom = math.max(floorY, fromY - VOXEL)
-	if toY <= bottom then
-		return
-	end
-	fillColumn(bottom, toY - bottom, Enum.Material.Water)
-end
 
 -- Keeps the invisible marker box (and so its bubbles) the same size as the water.
 local function fitMarker(y: number)
@@ -51,10 +29,13 @@ local function fitMarker(y: number)
 end
 
 function WaterService.reset()
-	local _, floorY = footprint()
-	fillColumn(floorY, CLEAR_HEIGHT, Enum.Material.Air)
+	local marker = MapService.getWater()
+	local radius = marker:GetAttribute("Radius") :: number
+	local floorY = marker:GetAttribute("FloorY") :: number
+	workspace.Terrain:FillCylinder(CFrame.new(0, floorY + CLEAR_HEIGHT / 2, 0), CLEAR_HEIGHT, radius, Enum.Material.Air)
 	level = 0
-	fillBetween(floorY, 0)
+	WaterSurface.fillTerrain(marker, floorY, 0)
+	WaterSurface.place(MapService.getWaterSurface(), 0)
 	fitMarker(0)
 end
 
@@ -62,27 +43,20 @@ function WaterService.getSurfaceY(): number
 	return level
 end
 
--- Raises the water from the current level to `targetY` over `seconds`, eased, one fill per frame.
-local function riseTo(targetY: number, seconds: number, style: Enum.EasingStyle, direction: Enum.EasingDirection)
+-- Follows WaterCurve.surgeY frame by frame for eliminations, but draws the water once at the end:
+-- server edits reach clients in batches and would look like jumps, so each client animates the rise
+-- locally (WaterFx) and this final write lands on what they already show. Blocks until done.
+function WaterService.surgeTo(targetY: number)
 	local startY = level
 	local elapsed = 0
-	while elapsed < seconds do
+	local total = WaterCurve.surgeSeconds()
+	while elapsed < total do
 		elapsed += RunService.Heartbeat:Wait()
-		local alpha = math.min(1, elapsed / seconds)
-		local eased = TweenService:GetValue(alpha, style, direction)
-		local y = startY + (targetY - startY) * eased
-		fillBetween(level, y)
-		level = y
+		level = WaterCurve.surgeY(startY, targetY, elapsed)
 	end
-	fillBetween(level, targetY)
+	WaterSurface.fillTerrain(MapService.getWater(), startY, targetY)
+	WaterSurface.place(MapService.getWaterSurface(), targetY)
 	level = targetY
-end
-
--- Creeps most of the way, then jumps the rest. Blocks until the water has settled.
-function WaterService.surgeTo(targetY: number)
-	local creepY = level + (targetY - level) * GameConfig.Water.CreepFraction
-	riseTo(creepY, GameConfig.Water.CreepSeconds, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-	riseTo(targetY, GameConfig.Water.JumpSeconds, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 	fitMarker(targetY)
 end
 

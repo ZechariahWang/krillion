@@ -42,6 +42,10 @@ function MapService.getWater(): Part
 	return arena:WaitForChild("Water") :: Part
 end
 
+function MapService.getWaterSurface(): Part
+	return arena:WaitForChild("WaterSurface") :: Part
+end
+
 function MapService.getLobbySpawnCFrame(): CFrame
 	local spawn = lobby:WaitForChild("LobbySpawn") :: SpawnLocation
 	return spawn.CFrame + Vector3.new(0, 3, 0)
