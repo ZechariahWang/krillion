@@ -21,6 +21,9 @@ local DECK_Y = GameConfig.Lobby.DeckHeight
 local DECK_NEAR = TANK_HALF + 6 -- deck edge closest to the tank
 local DECK_FAR = DECK_NEAR + 50
 local DECK_HALF_X = 40
+-- Caustic water tile from the Creator Store, loaded through its thumbnail so no upload is needed.
+-- To swap it, upload your own image and put its rbxassetid:// here.
+local WATER_TEXTURE = "rbxthumb://type=Asset&id=73409355949729&w=420&h=420"
 
 local function part(name: string, size: Vector3, cframe: CFrame, color: Color3, material: Enum.Material, parent: Instance): Part
 	local p = Instance.new("Part")
@@ -89,6 +92,20 @@ local function board(parent: Instance, name: string, size: Vector3, cframe: CFra
 	return panel, frame
 end
 
+-- A tiled water texture on one face. ScrollU/ScrollV (studs per second) are read by the client, which animates them.
+local function waterTexture(target: BasePart, face: Enum.NormalId, studs: number, transparency: number, scrollU: number, scrollV: number)
+	local t = Instance.new("Texture")
+	t.Name = "WaterTexture"
+	t.Texture = WATER_TEXTURE
+	t.Face = face
+	t.StudsPerTileU = studs
+	t.StudsPerTileV = studs
+	t.Transparency = transparency
+	t:SetAttribute("ScrollU", scrollU)
+	t:SetAttribute("ScrollV", scrollV)
+	t.Parent = target
+end
+
 local function buildPlatformTemplate(arena: Model)
 	local width = GameConfig.Platform.Width
 	local height = GameConfig.Platform.Height
@@ -146,10 +163,21 @@ local function buildArena(): Model
 	ocean.CanQuery = false
 	ocean.CanTouch = false
 	ocean.CastShadow = false
+	waterTexture(ocean, Enum.NormalId.Top, 48, 0.45, 1.5, 0.8)
 
-	-- Sandy island the tank sits on. Pillars pass through it, so it does not collide.
-	local island = part("Island", Vector3.new(190, 4, 190), CFrame.new(0, -4, 0), Theme.Color.Sand, Enum.Material.Sand, arena)
-	island.CanCollide = false
+	-- Sandy island around the tank: four slabs, so no sand shows through the water inside the tank.
+	local islandHalf = 95
+	local outer = TANK_HALF + GLASS
+	local slabWidth = islandHalf - outer
+	local slabs = {
+		{ Vector3.new(islandHalf * 2, 4, slabWidth), CFrame.new(0, -4, outer + slabWidth / 2) },
+		{ Vector3.new(islandHalf * 2, 4, slabWidth), CFrame.new(0, -4, -outer - slabWidth / 2) },
+		{ Vector3.new(slabWidth, 4, outer * 2), CFrame.new(outer + slabWidth / 2, -4, 0) },
+		{ Vector3.new(slabWidth, 4, outer * 2), CFrame.new(-outer - slabWidth / 2, -4, 0) },
+	}
+	for _, spec in slabs do
+		part("Island", spec[1], spec[2], Theme.Color.Sand, Enum.Material.Sand, arena)
+	end
 
 	local floor = part("Floor", Vector3.new(TANK_HALF * 2, 20, TANK_HALF * 2), CFrame.new(0, FLOOR_Y - 10, 0), Theme.Color.Sand, Enum.Material.Sand, arena)
 	floor.CanCollide = false
@@ -165,8 +193,10 @@ local function buildArena(): Model
 		{ Vector3.new(GLASS, wallHeight, TANK_HALF * 2), CFrame.new(-edge, wallY, 0) },
 	}
 	for index, spec in walls do
-		local glass = part("Glass" .. index, spec[1], spec[2], Color3.fromHex("CDEBFF"), Enum.Material.Glass, arena)
-		glass.Transparency = 0.75
+		-- See-through plastic, not Glass: Roblox does not draw transparent parts (the water) behind Glass.
+		local glass = part("Glass" .. index, spec[1], spec[2], Color3.fromHex("CDEBFF"), Enum.Material.SmoothPlastic, arena)
+		glass.Transparency = 0.82
+		glass.Reflectance = 0.1
 		glass.CastShadow = false
 		local rimSize = spec[1] + Vector3.new(4, 0, 4)
 		part("Rim" .. index, Vector3.new(rimSize.X, 2, rimSize.Z), CFrame.new(spec[2].Position.X, WALL_TOP + 1, spec[2].Position.Z), Theme.Color.Wood, Enum.Material.WoodPlanks, arena)
@@ -184,12 +214,55 @@ local function buildArena(): Model
 	water.CanQuery = false
 	water.CastShadow = false
 	water:SetAttribute("FloorY", FLOOR_Y)
+	-- Caustics drifting upward on the sides you see through the glass.
+	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right } do
+		waterTexture(water, face, 24, 0.65, 0, 1.2)
+	end
 
+	local bubbles = Instance.new("ParticleEmitter")
+	bubbles.Name = "Bubbles"
+	bubbles.Shape = Enum.ParticleEmitterShape.Box
+	bubbles.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
+	bubbles.EmissionDirection = Enum.NormalId.Top
+	bubbles.Rate = 14
+	bubbles.Lifetime = NumberRange.new(3, 6)
+	bubbles.Speed = NumberRange.new(2, 4)
+	bubbles.SpreadAngle = Vector2.new(10, 10)
+	bubbles.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.15), NumberSequenceKeypoint.new(1, 0.4) })
+	bubbles.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.6), NumberSequenceKeypoint.new(0.8, 0.4), NumberSequenceKeypoint.new(1, 1) })
+	bubbles.Color = ColorSequence.new(Color3.fromRGB(230, 248, 255))
+	bubbles.LightEmission = 0.3
+	bubbles.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+	bubbles.Parent = water
+
+	-- The top surface: a near-invisible sheet carrying the moving wave texture.
 	local foam = part("Foam", Vector3.new(TANK_HALF * 2, 0.3, TANK_HALF * 2), CFrame.new(0, 0.15, 0), Theme.Color.Sky, Enum.Material.SmoothPlastic, arena)
-	foam.Transparency = 0.7
+	foam.Transparency = 0.85
 	foam.CanCollide = false
 	foam.CanQuery = false
 	foam.CastShadow = false
+	waterTexture(foam, Enum.NormalId.Top, 20, 0.2, 1, 0.6)
+
+	-- Where the water will reach at the end of this round: a thin line around the inside of the glass.
+	-- Hidden here; each client shows and moves it locally.
+	local nextLevel = Instance.new("Model")
+	nextLevel.Name = "NextLevel"
+	local inset = TANK_HALF - 0.3
+	local lines = {
+		{ Vector3.new(TANK_HALF * 2, 0.4, 0.4), Vector3.new(0, 0, inset) },
+		{ Vector3.new(TANK_HALF * 2, 0.4, 0.4), Vector3.new(0, 0, -inset) },
+		{ Vector3.new(0.4, 0.4, TANK_HALF * 2), Vector3.new(inset, 0, 0) },
+		{ Vector3.new(0.4, 0.4, TANK_HALF * 2), Vector3.new(-inset, 0, 0) },
+	}
+	for index, spec in lines do
+		local line = part("Line" .. index, spec[1], CFrame.new(spec[2]), Theme.Color.Gold, Enum.Material.SmoothPlastic, nextLevel)
+		line.Transparency = 1
+		line.CanCollide = false
+		line.CanQuery = false
+		line.CanTouch = false
+		line.CastShadow = false
+	end
+	nextLevel.Parent = arena
 
 	-- Two blocky palm trees on the island corners.
 	for _, spot in { Vector3.new(-80, -2, -80), Vector3.new(80, -2, -70) } do
@@ -283,9 +356,9 @@ local function buildDeck(lobby: Model)
 			bar.Name = "GlassRail"
 			bar.Size = Vector3.new(0.4, 4, length)
 			bar.CFrame = CFrame.lookAt(middle + Vector3.new(0, 0, 0), to)
-			bar.Material = Enum.Material.Glass
+			bar.Material = Enum.Material.SmoothPlastic
 			bar.Color = Color3.fromHex("CDEBFF")
-			bar.Transparency = 0.8
+			bar.Transparency = 0.82
 			continue
 		end
 		local count = math.floor(length / 8)
@@ -360,34 +433,47 @@ local function buildLobby(): Model
 	return lobby
 end
 
+-- Late-afternoon sun: warm key light, long soft shadows, a little bloom and sun rays off the water.
 local function applyLighting()
-	Lighting.Ambient = Color3.fromRGB(120, 130, 150)
-	Lighting.OutdoorAmbient = Color3.fromRGB(150, 160, 175)
-	Lighting.Brightness = 3
-	Lighting.ClockTime = 13.5
-	Lighting.GeographicLatitude = 30
+	Lighting.Ambient = Color3.fromRGB(110, 120, 140)
+	Lighting.OutdoorAmbient = Color3.fromRGB(140, 150, 170)
+	Lighting.Brightness = 2.6
+	Lighting.ClockTime = 15.6
+	Lighting.GeographicLatitude = 35
 	Lighting.EnvironmentDiffuseScale = 1
-	Lighting.EnvironmentSpecularScale = 0.5
+	Lighting.EnvironmentSpecularScale = 1
 	Lighting.GlobalShadows = true
+	Lighting.ShadowSoftness = 0.25
 	Lighting.FogEnd = 100000
 	Lighting.FogColor = Color3.fromRGB(190, 225, 255)
 
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
-	atmosphere.Density = 0.25
-	atmosphere.Offset = 0.1
-	atmosphere.Color = Color3.fromRGB(200, 230, 255)
-	atmosphere.Decay = Color3.fromRGB(120, 180, 240)
-	atmosphere.Glare = 0
-	atmosphere.Haze = 0
+	atmosphere.Density = 0.3
+	atmosphere.Offset = 0.15
+	atmosphere.Color = Color3.fromRGB(205, 228, 250)
+	atmosphere.Decay = Color3.fromRGB(110, 165, 230)
+	atmosphere.Glare = 0.25
+	atmosphere.Haze = 0.6
 	atmosphere.Parent = Lighting
 
 	local correction = Lighting:FindFirstChild("KrillionColor") or Instance.new("ColorCorrectionEffect")
 	correction.Name = "KrillionColor"
-	correction.TintColor = Color3.fromRGB(255, 255, 255)
-	correction.Brightness = 0.05
-	correction.Saturation = 0.2
-	correction.Contrast = 0.05
+	correction.TintColor = Color3.fromRGB(255, 248, 238)
+	correction.Brightness = 0.02
+	correction.Saturation = 0.15
+	correction.Contrast = 0.12
 	correction.Parent = Lighting
+
+	local bloom = Lighting:FindFirstChildOfClass("BloomEffect") or Instance.new("BloomEffect")
+	bloom.Intensity = 0.4
+	bloom.Size = 20
+	bloom.Threshold = 1.6
+	bloom.Parent = Lighting
+
+	local rays = Lighting:FindFirstChildOfClass("SunRaysEffect") or Instance.new("SunRaysEffect")
+	rays.Intensity = 0.06
+	rays.Spread = 0.8
+	rays.Parent = Lighting
 
 	local clouds = workspace.Terrain:FindFirstChildOfClass("Clouds") or Instance.new("Clouds")
 	clouds.Cover = 0.55
