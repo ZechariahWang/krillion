@@ -46,7 +46,7 @@ local GameConfig = {
 		RetryCooldown = 1, -- seconds between guesses, so a wrong answer can be retried but not spammed
 	},
 	Lobby = {
-		DeckHeight = 16,
+		DeckHeight = 6, -- boardwalk height above the starting water; low enough to look into the tank
 		QuizSeconds = 20,
 		CoinsPerPoint = 0.5,
 	},

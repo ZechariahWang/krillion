@@ -1,8 +1,7 @@
 --!strict
 -- One-shot generator. Run once in Studio (via MCP execute_luau or the command bar) to build
--- ServerStorage.Maps.Arena and ServerStorage.Maps.Lobby plus lighting, then save the place.
--- Not run at runtime. Rebuilding replaces the existing models.
--- The sea is one flat part rather than terrain water, which is far cheaper to render. Terrain is cleared.
+-- ServerStorage.Maps.Arena, the Lobby, the terrain (island, beach, sea) and lighting, then save the place.
+-- Not run at runtime. Rebuilding replaces the existing models and terrain.
 -- LightingStyle is not scriptable: set it to Realistic by hand in the Lighting properties.
 
 local ServerStorage = game:GetService("ServerStorage")
@@ -11,19 +10,21 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
-local Tiers = require(ReplicatedStorage.Config.Tiers)
 
-local TANK_HALF = 40 -- interior half width
+local TANK_HALF = 40 -- interior half width; a multiple of 4 so terrain voxels line up with the glass
 local GLASS = 1
 local FLOOR_Y = -20
 local WALL_TOP = 70
+local SEA_LEVEL = -4
 local DECK_Y = GameConfig.Lobby.DeckHeight
 local DECK_NEAR = TANK_HALF + 6 -- deck edge closest to the tank
 local DECK_FAR = DECK_NEAR + 50
 local DECK_HALF_X = 40
--- Caustic water tile from the Creator Store, loaded through its thumbnail so no upload is needed.
--- To swap it, upload your own image and put its rbxassetid:// here.
-local WATER_TEXTURE = "rbxthumb://type=Asset&id=73409355949729&w=420&h=420"
+
+local WOOD_LIGHT = Color3.fromHex("C69469")
+local WOOD = Theme.Color.Wood
+local WOOD_DARK = Theme.Color.WoodDark
+local WOOD_DEEP = Color3.fromHex("5E3B25")
 
 local function part(name: string, size: Vector3, cframe: CFrame, color: Color3, material: Enum.Material, parent: Instance): Part
 	local p = Instance.new("Part")
@@ -39,71 +40,63 @@ local function part(name: string, size: Vector3, cframe: CFrame, color: Color3, 
 	return p
 end
 
-local function signText(parent: Instance, name: string, text: string, font: Font, color: Color3, size: UDim2, position: UDim2): TextLabel
+local function cylinder(name: string, length: number, diameter: number, cframe: CFrame, color: Color3, material: Enum.Material, parent: Instance): Part
+	-- Roblox cylinders run along X; callers pass the CFrame of an upright cylinder.
+	local p = part(name, Vector3.new(length, diameter, diameter), cframe * CFrame.Angles(0, 0, math.rad(90)), color, material, parent)
+	p.Shape = Enum.PartType.Cylinder
+	return p
+end
+
+local function decor(p: BasePart)
+	p.CanCollide = false
+	p.CanQuery = false
+	p.CanTouch = false
+end
+
+-- Terrain ----------------------------------------------------------------------------------------
+
+-- Sea floor, open sea, the island the tank sits in, and a gentle beach running under the dock.
+local function buildTerrain()
+	local terrain = workspace.Terrain
+	terrain:Clear()
+	local seaSize = 1024
+	terrain:FillBlock(CFrame.new(0, -30, 0), Vector3.new(seaSize, 4, seaSize), Enum.Material.Sand)
+	task.wait()
+	terrain:FillBlock(CFrame.new(0, (SEA_LEVEL - 28) / 2, 0), Vector3.new(seaSize, SEA_LEVEL + 28, seaSize), Enum.Material.Water)
+	task.wait()
+	-- Island: x -96..96, z -96..56, top at y -2.
+	terrain:FillBlock(CFrame.new(0, -15, -20), Vector3.new(192, 26, 152), Enum.Material.Sand)
+	task.wait()
+	-- Beach: a gentle slope from the island edge (z 56, y -2) down under the sea (z 156, y -10), so the
+	-- shoreline runs under the back of the dock and the sea laps the sand beside it.
+	-- The wedge's high edge faces -Z after the half turn, so it meets the island.
+	terrain:FillWedge(CFrame.new(0, -6, 106) * CFrame.Angles(0, math.rad(180), 0), Vector3.new(192, 8, 100), Enum.Material.Sand)
+	terrain:FillBlock(CFrame.new(0, -19, 106), Vector3.new(192, 18, 100), Enum.Material.Sand)
+	task.wait()
+	-- The tank column stays clear: the game fills it with water itself (see WaterService).
+	terrain:FillBlock(CFrame.new(0, 20, 0), Vector3.new(TANK_HALF * 2, 120, TANK_HALF * 2), Enum.Material.Air)
+
+	terrain.WaterColor = Color3.fromHex("1A9BD0")
+	terrain.WaterTransparency = 0.6
+	terrain.WaterWaveSize = 0.15
+	terrain.WaterWaveSpeed = 10
+	terrain.WaterReflectance = 0.35
+	terrain:SetMaterialColor(Enum.Material.Sand, Color3.fromHex("EBD29A"))
+end
+
+-- Arena ------------------------------------------------------------------------------------------
+
+local function signText(parent: Instance, name: string, text: string, color: Color3)
 	local label = Instance.new("TextLabel")
 	label.Name = name
 	label.Text = text
-	label.FontFace = font
+	label.FontFace = Theme.Font.Body
 	label.TextColor3 = color
 	label.BackgroundTransparency = 1
-	label.Size = size
-	label.Position = position
+	label.Size = UDim2.fromScale(1, 1)
 	label.TextScaled = true
 	label.TextWrapped = true
 	label.Parent = parent
-	return label
-end
-
--- A board on two wooden posts with a SurfaceGui on the face that points at `face`.
-local function board(parent: Instance, name: string, size: Vector3, cframe: CFrame, face: Enum.NormalId, postDown: number): (Part, Frame)
-	local panel = part(name, size, cframe, Theme.Color.Ink, Enum.Material.SmoothPlastic, parent)
-	if postDown > 0 then
-		-- Posts run from below the board up to its top edge, one at each side.
-		local postHeight = size.Y + postDown
-		for _, side in { -1, 1 } do
-			local sideOffset = cframe.RightVector * (side * (size.X / 2 + 0.6))
-			local postCenter = cframe.Position + sideOffset - Vector3.new(0, postDown / 2, 0)
-			part(name .. "Post", Vector3.new(1.2, postHeight, 1.2), CFrame.new(postCenter), Theme.Color.WoodDark, Enum.Material.Wood, parent)
-		end
-	end
-	local gui = Instance.new("SurfaceGui")
-	gui.Face = face
-	gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
-	gui.PixelsPerStud = 30
-	gui.LightInfluence = 0
-	gui.Parent = panel
-	local frame = Instance.new("Frame")
-	frame.Name = "Content"
-	frame.Size = UDim2.fromScale(1, 1)
-	frame.BackgroundColor3 = Theme.Color.Ink
-	frame.BorderSizePixel = 0
-	frame.Parent = gui
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Theme.Color.Sky
-	stroke.Thickness = 12
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	stroke.Parent = frame
-	local padding = Instance.new("UIPadding")
-	padding.PaddingTop = UDim.new(0, 24)
-	padding.PaddingBottom = UDim.new(0, 24)
-	padding.PaddingLeft = UDim.new(0, 30)
-	padding.PaddingRight = UDim.new(0, 30)
-	padding.Parent = frame
-	return panel, frame
-end
-
--- A tiled water texture on one face. ScrollU/ScrollV (studs per second) are read by the client, which animates them.
-local function waterTexture(target: BasePart, face: Enum.NormalId, studs: number, transparency: number, scrollU: number, scrollV: number)
-	local t = Instance.new("Texture")
-	t.Name = "WaterTexture"
-	t.Texture = WATER_TEXTURE
-	t.Face = face
-	t.StudsPerTileU = studs
-	t.StudsPerTileV = studs
-	t.Transparency = transparency
-	t:SetAttribute("ScrollU", scrollU)
-	t:SetAttribute("ScrollV", scrollV)
-	t.Parent = target
 end
 
 local function buildPlatformTemplate(arena: Model)
@@ -151,38 +144,18 @@ local function buildPlatformTemplate(arena: Model)
 	tag.StudsOffsetWorldSpace = Vector3.new(0, height / 2 + 9, 0)
 	tag.MaxDistance = 200
 	tag.Parent = pillar
-	signText(tag, "NameText", "Player", Theme.Font.Body, Theme.Color.White, UDim2.fromScale(1, 1), UDim2.fromScale(0, 0))
+	signText(tag, "NameText", "Player", Theme.Color.White)
 end
 
 local function buildArena(): Model
 	local arena = Instance.new("Model")
 	arena.Name = "Arena"
 
-	local ocean = part("Ocean", Vector3.new(2048, 1, 2048), CFrame.new(0, -4.5, 0), Color3.fromHex("1E90E0"), Enum.Material.SmoothPlastic, arena)
-	ocean.CanCollide = false
-	ocean.CanQuery = false
-	ocean.CanTouch = false
-	ocean.CastShadow = false
-	waterTexture(ocean, Enum.NormalId.Top, 48, 0.45, 1.5, 0.8)
-
-	-- Sandy island around the tank: four slabs, so no sand shows through the water inside the tank.
-	local islandHalf = 95
-	local outer = TANK_HALF + GLASS
-	local slabWidth = islandHalf - outer
-	local slabs = {
-		{ Vector3.new(islandHalf * 2, 4, slabWidth), CFrame.new(0, -4, outer + slabWidth / 2) },
-		{ Vector3.new(islandHalf * 2, 4, slabWidth), CFrame.new(0, -4, -outer - slabWidth / 2) },
-		{ Vector3.new(slabWidth, 4, outer * 2), CFrame.new(outer + slabWidth / 2, -4, 0) },
-		{ Vector3.new(slabWidth, 4, outer * 2), CFrame.new(-outer - slabWidth / 2, -4, 0) },
-	}
-	for _, spec in slabs do
-		part("Island", spec[1], spec[2], Theme.Color.Sand, Enum.Material.Sand, arena)
-	end
-
-	local floor = part("Floor", Vector3.new(TANK_HALF * 2, 20, TANK_HALF * 2), CFrame.new(0, FLOOR_Y - 10, 0), Theme.Color.Sand, Enum.Material.Sand, arena)
+	-- Dark slate floor, so the clear water above it reads as deep rather than shallow.
+	local floor = part("Floor", Vector3.new(TANK_HALF * 2, 20, TANK_HALF * 2), CFrame.new(0, FLOOR_Y - 10, 0), Color3.fromHex("1F3A52"), Enum.Material.Slate, arena)
 	floor.CanCollide = false
 
-	-- Glass tank walls with painted corner posts and a wooden rim.
+	-- Tank walls with painted corner posts and a wooden rim.
 	local wallHeight = WALL_TOP - FLOOR_Y
 	local wallY = FLOOR_Y + wallHeight / 2
 	local edge = TANK_HALF + GLASS / 2
@@ -193,13 +166,13 @@ local function buildArena(): Model
 		{ Vector3.new(GLASS, wallHeight, TANK_HALF * 2), CFrame.new(-edge, wallY, 0) },
 	}
 	for index, spec in walls do
-		-- See-through plastic, not Glass: Roblox does not draw transparent parts (the water) behind Glass.
+		-- See-through plastic, not Glass: Roblox does not draw transparent things (the water) behind Glass.
 		local glass = part("Glass" .. index, spec[1], spec[2], Color3.fromHex("CDEBFF"), Enum.Material.SmoothPlastic, arena)
-		glass.Transparency = 0.82
+		glass.Transparency = 0.85
 		glass.Reflectance = 0.1
 		glass.CastShadow = false
 		local rimSize = spec[1] + Vector3.new(4, 0, 4)
-		part("Rim" .. index, Vector3.new(rimSize.X, 2, rimSize.Z), CFrame.new(spec[2].Position.X, WALL_TOP + 1, spec[2].Position.Z), Theme.Color.Wood, Enum.Material.WoodPlanks, arena)
+		part("Rim" .. index, Vector3.new(rimSize.X, 2, rimSize.Z), CFrame.new(spec[2].Position.X, WALL_TOP + 1, spec[2].Position.Z), WOOD, Enum.Material.WoodPlanks, arena)
 	end
 	for _, x in { -1, 1 } do
 		for _, z in { -1, 1 } do
@@ -207,17 +180,13 @@ local function buildArena(): Model
 		end
 	end
 
+	-- The tank water itself is terrain (WaterService fills it). This invisible box just marks the
+	-- water volume: WaterService reads its FloorY and sizes it to the water so its bubbles stay underwater.
 	local water = part("Water", Vector3.new(TANK_HALF * 2, -FLOOR_Y, TANK_HALF * 2), CFrame.new(0, FLOOR_Y / 2, 0), Theme.Color.Water, Enum.Material.SmoothPlastic, arena)
-	water.Transparency = 0.12
-	water.Reflectance = 0.1
-	water.CanCollide = false
-	water.CanQuery = false
+	water.Transparency = 1
+	decor(water)
 	water.CastShadow = false
 	water:SetAttribute("FloorY", FLOOR_Y)
-	-- Caustics drifting upward on the sides you see through the glass.
-	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right } do
-		waterTexture(water, face, 24, 0.65, 0, 1.2)
-	end
 
 	local bubbles = Instance.new("ParticleEmitter")
 	bubbles.Name = "Bubbles"
@@ -225,23 +194,15 @@ local function buildArena(): Model
 	bubbles.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
 	bubbles.EmissionDirection = Enum.NormalId.Top
 	bubbles.Rate = 14
-	bubbles.Lifetime = NumberRange.new(3, 6)
+	bubbles.Lifetime = NumberRange.new(2, 4)
 	bubbles.Speed = NumberRange.new(2, 4)
 	bubbles.SpreadAngle = Vector2.new(10, 10)
-	bubbles.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.15), NumberSequenceKeypoint.new(1, 0.4) })
+	bubbles.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.15), NumberSequenceKeypoint.new(1, 0.35) })
 	bubbles.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.6), NumberSequenceKeypoint.new(0.8, 0.4), NumberSequenceKeypoint.new(1, 1) })
 	bubbles.Color = ColorSequence.new(Color3.fromRGB(230, 248, 255))
 	bubbles.LightEmission = 0.3
 	bubbles.Texture = "rbxasset://textures/particles/sparkles_main.dds"
 	bubbles.Parent = water
-
-	-- The top surface: a near-invisible sheet carrying the moving wave texture.
-	local foam = part("Foam", Vector3.new(TANK_HALF * 2, 0.3, TANK_HALF * 2), CFrame.new(0, 0.15, 0), Theme.Color.Sky, Enum.Material.SmoothPlastic, arena)
-	foam.Transparency = 0.85
-	foam.CanCollide = false
-	foam.CanQuery = false
-	foam.CastShadow = false
-	waterTexture(foam, Enum.NormalId.Top, 20, 0.2, 1, 0.6)
 
 	-- Where the water will reach at the end of this round: a thin line around the inside of the glass.
 	-- Hidden here; each client shows and moves it locally.
@@ -257,87 +218,71 @@ local function buildArena(): Model
 	for index, spec in lines do
 		local line = part("Line" .. index, spec[1], CFrame.new(spec[2]), Theme.Color.Gold, Enum.Material.SmoothPlastic, nextLevel)
 		line.Transparency = 1
-		line.CanCollide = false
-		line.CanQuery = false
-		line.CanTouch = false
+		decor(line)
 		line.CastShadow = false
 	end
 	nextLevel.Parent = arena
 
-	-- Two blocky palm trees on the island corners.
-	for _, spot in { Vector3.new(-80, -2, -80), Vector3.new(80, -2, -70) } do
+	-- Blocky palm trees around the island.
+	for _, spot in { Vector3.new(-80, -2, -80), Vector3.new(80, -2, -70), Vector3.new(-84, -2, 30), Vector3.new(86, -2, 20) } do
 		for step = 0, 5 do
-			part("Trunk", Vector3.new(2.5, 3, 2.5), CFrame.new(spot + Vector3.new(step * 0.6, 1.5 + step * 3, 0)), Theme.Color.WoodDark, Enum.Material.Wood, arena)
+			part("Trunk", Vector3.new(2.5, 3, 2.5), CFrame.new(spot + Vector3.new(step * 0.6, 1.5 + step * 3, 0)), WOOD_DARK, Enum.Material.Wood, arena)
 		end
 		local crown = spot + Vector3.new(3.6, 19.5, 0)
 		part("Leaves", Vector3.new(14, 1.5, 4), CFrame.new(crown), Theme.Color.Leaf, Enum.Material.SmoothPlastic, arena)
 		part("Leaves", Vector3.new(4, 1.5, 14), CFrame.new(crown), Theme.Color.Leaf, Enum.Material.SmoothPlastic, arena)
+		part("Leaves", Vector3.new(9, 1.2, 9), CFrame.new(crown + Vector3.new(0, 1, 0)) * CFrame.Angles(0, math.rad(45), 0), Color3.fromHex("5FCF6A"), Enum.Material.SmoothPlastic, arena)
 	end
 
 	buildPlatformTemplate(arena)
 	return arena
 end
 
-local function buildHowToPlay(lobby: Model)
-	local cframe = CFrame.new(-DECK_HALF_X + 2, DECK_Y + 9, DECK_NEAR + 26) * CFrame.Angles(0, math.rad(90), 0)
-	local _, frame = board(lobby, "HowToPlay", Vector3.new(22, 14, 0.6), cframe, Enum.NormalId.Back, 3)
-	signText(frame, "Title", "HOW TO PLAY", Theme.Font.Title, Theme.Color.Yellow, UDim2.new(1, 0, 0.2, 0), UDim2.fromScale(0, 0))
-	local steps = {
-		"1. A prompt pops up. Type an answer!",
-		"2. Rarer answers lift your pillar higher.",
-		"3. Wrong answers? Try again fast!",
-		"4. The water rises every round.",
-		"5. Last one above water wins!",
-	}
-	for index, step in steps do
-		local y = 0.22 + (index - 1) * 0.155
-		local line = signText(frame, "Step" .. index, step, Theme.Font.Body, Theme.Color.White, UDim2.new(1, 0, 0.13, 0), UDim2.fromScale(0, y))
-		line.TextXAlignment = Enum.TextXAlignment.Left
-	end
-end
-
-local function buildTierChart(lobby: Model)
-	local cframe = CFrame.new(DECK_HALF_X - 2, DECK_Y + 9, DECK_NEAR + 26) * CFrame.Angles(0, math.rad(-90), 0)
-	local _, frame = board(lobby, "TierChart", Vector3.new(22, 14, 0.6), cframe, Enum.NormalId.Back, 3)
-	signText(frame, "Title", "HOW RARE?", Theme.Font.Title, Theme.Color.Yellow, UDim2.new(1, 0, 0.2, 0), UDim2.fromScale(0, 0))
-	for index, tier in Tiers.List do
-		local y = 0.22 + (index - 1) * 0.13
-		local name = signText(frame, tier.name, tier.label, Theme.Font.Title, Theme.Tier[tier.name], UDim2.new(0.7, 0, 0.11, 0), UDim2.fromScale(0, y))
-		name.TextXAlignment = Enum.TextXAlignment.Left
-		local points = signText(frame, tier.name .. "Points", "+" .. tier.points, Theme.Font.Title, Theme.Color.White, UDim2.new(0.3, 0, 0.11, 0), UDim2.fromScale(0.7, y))
-		points.TextXAlignment = Enum.TextXAlignment.Right
-	end
-end
-
-local function buildScoreboard(lobby: Model)
-	-- Hangs high over the tank-side rail so spectators can see under it into the tank.
-	local cframe = CFrame.new(0, DECK_Y + 20, DECK_NEAR + 1)
-	local _, titleFrame = board(lobby, "TitleSign", Vector3.new(34, 7, 0.6), cframe + Vector3.new(0, 9, 0), Enum.NormalId.Back, 0)
-	signText(titleFrame, "Logo", "KRILLION", Theme.Font.Title, Theme.Color.Yellow, UDim2.new(1, 0, 0.62, 0), UDim2.fromScale(0, 0))
-	signText(titleFrame, "Tagline", "Rare answers lift you up. Common ones get you wet!", Theme.Font.Body, Theme.Color.White, UDim2.new(1, 0, 0.32, 0), UDim2.fromScale(0, 0.66))
-
-	local _, frame = board(lobby, "Scoreboard", Vector3.new(30, 10, 0.6), cframe, Enum.NormalId.Back, 0)
-	signText(frame, "Title", "WAITING FOR PLAYERS", Theme.Font.Title, Theme.Color.Sky, UDim2.new(1, 0, 0.35, 0), UDim2.fromScale(0, 0))
-	signText(frame, "Body", "0 / 2", Theme.Font.Body, Theme.Color.White, UDim2.new(1, 0, 0.55, 0), UDim2.fromScale(0, 0.42))
-	for _, x in { -14, 14 } do
-		part("ScoreboardPole", Vector3.new(1.5, 30, 1.5), CFrame.new(x, DECK_Y + 15, DECK_NEAR + 1), Theme.Color.WoodDark, Enum.Material.Wood, lobby)
-	end
-end
+-- Lobby: a boardwalk over the beach ---------------------------------------------------------------
 
 local function buildDeck(lobby: Model)
 	local depth = DECK_FAR - DECK_NEAR
 	local centerZ = (DECK_NEAR + DECK_FAR) / 2
-	part("Deck", Vector3.new(DECK_HALF_X * 2, 2, depth), CFrame.new(0, DECK_Y - 1, centerZ), Theme.Color.Wood, Enum.Material.WoodPlanks, lobby)
 
-	-- Stilts down into the sea.
-	for _, x in { -DECK_HALF_X + 2, 0, DECK_HALF_X - 2 } do
-		for _, z in { DECK_NEAR + 2, DECK_FAR - 2 } do
-			part("Stilt", Vector3.new(3, DECK_Y + 30, 3), CFrame.new(x, DECK_Y / 2 - 15, z), Theme.Color.WoodDark, Enum.Material.Wood, lobby)
+	-- A dark sub-floor under the planks, so the small gaps between planks read as shadow.
+	part("SubFloor", Vector3.new(DECK_HALF_X * 2, 1, depth), CFrame.new(0, DECK_Y - 1.4, centerZ), WOOD_DEEP, Enum.Material.Wood, lobby)
+	-- Planks in three shades, with a small gap between each.
+	local shades = { WOOD, WOOD_LIGHT, WOOD, Color3.fromHex("A8774F") }
+	local plankDepth = 2
+	local count = math.floor(depth / plankDepth)
+	for index = 0, count - 1 do
+		local z = DECK_NEAR + plankDepth / 2 + index * plankDepth
+		local shade = shades[(index % #shades) + 1]
+		part("Plank", Vector3.new(DECK_HALF_X * 2, 0.6, plankDepth - 0.15), CFrame.new(0, DECK_Y - 0.6, z), shade, Enum.Material.Wood, lobby)
+	end
+	-- Trim beams around the edge.
+	part("Trim", Vector3.new(DECK_HALF_X * 2 + 1, 1.2, 1), CFrame.new(0, DECK_Y - 1, DECK_NEAR), WOOD_DEEP, Enum.Material.Wood, lobby)
+	part("Trim", Vector3.new(DECK_HALF_X * 2 + 1, 1.2, 1), CFrame.new(0, DECK_Y - 1, DECK_FAR), WOOD_DEEP, Enum.Material.Wood, lobby)
+	part("Trim", Vector3.new(1, 1.2, depth), CFrame.new(-DECK_HALF_X, DECK_Y - 1, centerZ), WOOD_DEEP, Enum.Material.Wood, lobby)
+	part("Trim", Vector3.new(1, 1.2, depth), CFrame.new(DECK_HALF_X, DECK_Y - 1, centerZ), WOOD_DEEP, Enum.Material.Wood, lobby)
+
+	-- Round stilts down into the sand, with cross braces between them.
+	local stiltXs = { -DECK_HALF_X + 2, -DECK_HALF_X / 3, DECK_HALF_X / 3, DECK_HALF_X - 2 }
+	local stiltZs = { DECK_NEAR + 2, centerZ, DECK_FAR - 2 }
+	local stiltBottom = -16
+	local stiltLength = DECK_Y - 1.5 - stiltBottom
+	for _, x in stiltXs do
+		for _, z in stiltZs do
+			cylinder("Stilt", stiltLength, 2.4, CFrame.new(x, stiltBottom + stiltLength / 2, z), WOOD_DARK, Enum.Material.Wood, lobby)
 		end
 	end
+	for _, z in stiltZs do
+		for index = 1, #stiltXs - 1 do
+			local a = Vector3.new(stiltXs[index], DECK_Y - 4, z)
+			local b = Vector3.new(stiltXs[index + 1], DECK_Y - 9, z)
+			local brace = part("Brace", Vector3.new(0.6, 0.8, (b - a).Magnitude), CFrame.lookAt((a + b) / 2, b), WOOD_DEEP, Enum.Material.Wood, lobby)
+			decor(brace)
+		end
+	end
+end
 
-	-- Rails: posts every 8 studs plus a top bar.
-	local railY = DECK_Y + 2
+local function buildRails(lobby: Model)
+	local railY = DECK_Y
 	local sides = {
 		{ Vector3.new(-DECK_HALF_X, railY, DECK_NEAR), Vector3.new(DECK_HALF_X, railY, DECK_NEAR) },
 		{ Vector3.new(-DECK_HALF_X, railY, DECK_FAR), Vector3.new(DECK_HALF_X, railY, DECK_FAR) },
@@ -349,81 +294,204 @@ local function buildDeck(lobby: Model)
 		local to = side[2]
 		local length = (to - from).Magnitude
 		local middle = (from + to) / 2
-		local bar = part("RailBar", Vector3.new(1, 0.8, length), CFrame.lookAt(middle + Vector3.new(0, 1.6, 0), to + Vector3.new(0, 1.6, 0)), Theme.Color.Wood, Enum.Material.Wood, lobby)
-		bar.Size = Vector3.new(1, 0.8, length + 1)
+		local facing = CFrame.lookAt(middle, to)
 		if from.Z == DECK_NEAR and to.Z == DECK_NEAR then
-			-- The tank-side rail is a clear glass panel so spectators can see down into the water.
-			bar.Name = "GlassRail"
-			bar.Size = Vector3.new(0.4, 4, length)
-			bar.CFrame = CFrame.lookAt(middle + Vector3.new(0, 0, 0), to)
-			bar.Material = Enum.Material.SmoothPlastic
-			bar.Color = Color3.fromHex("CDEBFF")
-			bar.Transparency = 0.82
-			continue
+			-- The tank-side rail is a clear panel with a wooden cap, so spectators can see into the water.
+			local panel = part("GlassRail", Vector3.new(0.3, 3.4, length), facing + Vector3.new(0, 1.7, 0), Color3.fromHex("CDEBFF"), Enum.Material.SmoothPlastic, lobby)
+			panel.Transparency = 0.85
+			panel.CastShadow = false
+			part("RailCap", Vector3.new(0.8, 0.4, length + 1), facing + Vector3.new(0, 3.6, 0), WOOD, Enum.Material.Wood, lobby)
+		else
+			part("RailTop", Vector3.new(0.8, 0.5, length + 1), facing + Vector3.new(0, 3.6, 0), WOOD, Enum.Material.Wood, lobby)
+			part("RailMid", Vector3.new(0.5, 0.4, length), facing + Vector3.new(0, 1.9, 0), WOOD_DARK, Enum.Material.Wood, lobby)
+			local posts = math.floor(length / 6)
+			for step = 0, posts do
+				local point = from + (to - from) * (step / posts)
+				part("RailPost", Vector3.new(1, 4, 1), CFrame.new(point + Vector3.new(0, 1.8, 0)), WOOD_DARK, Enum.Material.Wood, lobby)
+			end
 		end
-		local count = math.floor(length / 8)
-		for step = 0, count do
-			local point = from + (to - from) * (step / count)
-			part("RailPost", Vector3.new(1.2, 4, 1.2), CFrame.new(point), Theme.Color.WoodDark, Enum.Material.Wood, lobby)
-		end
-	end
-	-- Invisible wall so nobody hops the rail into the sea.
-	for _, side in sides do
-		local from = side[1]
-		local to = side[2]
-		local length = (to - from).Magnitude
-		local middle = (from + to) / 2
-		local wall = part("RailBlocker", Vector3.new(1, 12, length), CFrame.lookAt(middle + Vector3.new(0, 5, 0), to + Vector3.new(0, 5, 0)), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
+		-- Invisible wall so nobody hops the rail into the sea.
+		local wall = part("RailBlocker", Vector3.new(1, 12, length), facing + Vector3.new(0, 6, 0), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
 		wall.Transparency = 1
 	end
 
-	-- Lamp posts at the corners.
-	for _, x in { -DECK_HALF_X + 3, DECK_HALF_X - 3 } do
-		for _, z in { DECK_NEAR + 3, DECK_FAR - 3 } do
-			part("LampPost", Vector3.new(0.8, 9, 0.8), CFrame.new(x, DECK_Y + 4.5, z), Theme.Color.Ink, Enum.Material.SmoothPlastic, lobby)
-			local bulb = part("LampBulb", Vector3.new(1.8, 1.8, 1.8), CFrame.new(x, DECK_Y + 9.5, z), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
-			bulb.Shape = Enum.PartType.Ball
-			local light = Instance.new("PointLight")
-			light.Color = Color3.fromHex("FFF1C9")
-			light.Range = 16
-			light.Brightness = 1.2
-			light.Parent = bulb
+	-- Life rings hanging on the side rails.
+	for _, x in { -DECK_HALF_X - 0.6, DECK_HALF_X + 0.6 } do
+		local ring = cylinder("LifeRing", 0.6, 3.6, CFrame.new(x, DECK_Y + 2.2, DECK_NEAR + 20) * CFrame.Angles(0, 0, math.rad(90)), Theme.Color.Orange, Enum.Material.SmoothPlastic, lobby)
+		decor(ring)
+		local hole = cylinder("LifeRingHole", 0.7, 1.8, ring.CFrame * CFrame.Angles(0, 0, math.rad(-90)), WOOD_DARK, Enum.Material.Wood, lobby)
+		decor(hole)
+	end
+end
+
+local function lamp(lobby: Model, position: Vector3)
+	part("LampPost", Vector3.new(0.6, 9, 0.6), CFrame.new(position + Vector3.new(0, 4.5, 0)), Theme.Color.Ink, Enum.Material.Metal, lobby)
+	part("LampArm", Vector3.new(0.4, 0.4, 2), CFrame.new(position + Vector3.new(0, 9, 0.8)), Theme.Color.Ink, Enum.Material.Metal, lobby)
+	local housing = part("Lantern", Vector3.new(1.4, 1.8, 1.4), CFrame.new(position + Vector3.new(0, 8.1, 1.6)), Theme.Color.Ink, Enum.Material.Metal, lobby)
+	local glow = part("LanternGlass", Vector3.new(1, 1.2, 1), housing.CFrame, Color3.fromHex("FFE7B0"), Enum.Material.SmoothPlastic, lobby)
+	glow.Transparency = 0.2
+	decor(glow)
+	local light = Instance.new("PointLight")
+	light.Color = Color3.fromHex("FFD9A0")
+	light.Range = 14
+	light.Brightness = 1
+	light.Parent = glow
+end
+
+local function bench(lobby: Model, position: Vector3, facing: number)
+	local base = CFrame.new(position) * CFrame.Angles(0, math.rad(facing), 0)
+	part("BenchSeat", Vector3.new(8, 0.5, 2), base * CFrame.new(0, 1.6, 0), WOOD_LIGHT, Enum.Material.Wood, lobby)
+	part("BenchBack", Vector3.new(8, 2, 0.4), base * CFrame.new(0, 2.8, 0.9) * CFrame.Angles(math.rad(-10), 0, 0), WOOD_LIGHT, Enum.Material.Wood, lobby)
+	for _, x in { -3.4, 3.4 } do
+		part("BenchLeg", Vector3.new(0.5, 1.4, 1.8), base * CFrame.new(x, 0.7, 0), Theme.Color.Ink, Enum.Material.Metal, lobby)
+	end
+end
+
+local function lounger(lobby: Model, position: Vector3, towel: Color3)
+	local base = CFrame.new(position)
+	part("LoungerFrame", Vector3.new(2.4, 0.4, 6), base * CFrame.new(0, 1, 0), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
+	part("LoungerBack", Vector3.new(2.4, 0.4, 2.4), base * CFrame.new(0, 1.8, -2.6) * CFrame.Angles(math.rad(35), 0, 0), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
+	local cloth = part("Towel", Vector3.new(2, 0.1, 4.4), base * CFrame.new(0, 1.25, 0.4), towel, Enum.Material.Fabric, lobby)
+	decor(cloth)
+	for _, x in { -1, 1 } do
+		for _, z in { -2.6, 2.6 } do
+			part("LoungerLeg", Vector3.new(0.3, 0.8, 0.3), base * CFrame.new(x, 0.4, z), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
 		end
 	end
+end
 
-	-- Beach tables with umbrellas.
-	local umbrellas = {
-		{ Vector3.new(-24, 0, DECK_FAR - 12), Theme.Color.Red },
-		{ Vector3.new(24, 0, DECK_FAR - 12), Theme.Color.Yellow },
-	}
-	for _, spec in umbrellas do
-		local base = Vector3.new(spec[1].X, DECK_Y, spec[1].Z)
-		local tabletop = part("Table", Vector3.new(1, 5, 5), CFrame.new(base + Vector3.new(0, 2.5, 0)) * CFrame.Angles(0, 0, math.rad(90)), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
-		tabletop.Shape = Enum.PartType.Cylinder
-		part("Pole", Vector3.new(0.5, 10, 0.5), CFrame.new(base + Vector3.new(0, 5, 0)), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
-		local canopy = part("Umbrella", Vector3.new(1, 10, 10), CFrame.new(base + Vector3.new(0, 10, 0)) * CFrame.Angles(0, 0, math.rad(90)), spec[2], Enum.Material.SmoothPlastic, lobby)
-		canopy.Shape = Enum.PartType.Cylinder
+local function umbrellaTable(lobby: Model, position: Vector3, canopyColor: Color3)
+	local base = CFrame.new(position)
+	cylinder("TableTop", 0.4, 5, base * CFrame.new(0, 2.8, 0), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
+	cylinder("TableLeg", 2.6, 0.5, base * CFrame.new(0, 1.4, 0), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
+	cylinder("Pole", 10, 0.35, base * CFrame.new(0, 5, 0), Theme.Color.White, Enum.Material.SmoothPlastic, lobby)
+	-- Canopy: a wide disc with a smaller tilted ring of stripes.
+	cylinder("Canopy", 0.5, 11, base * CFrame.new(0, 9.6, 0), canopyColor, Enum.Material.Fabric, lobby)
+	cylinder("CanopyTop", 0.6, 4, base * CFrame.new(0, 10.1, 0), Theme.Color.White, Enum.Material.Fabric, lobby)
+	for _, angle in { 0, 90, 180, 270 } do
+		local seat = base * CFrame.Angles(0, math.rad(angle), 0) * CFrame.new(0, 0, 4)
+		part("Chair", Vector3.new(1.8, 0.4, 1.8), seat * CFrame.new(0, 1.6, 0), WOOD_LIGHT, Enum.Material.Wood, lobby)
+		part("ChairBack", Vector3.new(1.8, 1.8, 0.3), seat * CFrame.new(0, 2.6, 0.8), WOOD_LIGHT, Enum.Material.Wood, lobby)
+		part("ChairLeg", Vector3.new(1.4, 1.4, 1.4), seat * CFrame.new(0, 0.7, 0), Theme.Color.Ink, Enum.Material.Metal, lobby)
 	end
+end
 
-	-- Barrels and a life ring for flavour.
-	for _, x in { -34, -31 } do
-		local barrel = part("Barrel", Vector3.new(4, 3, 3), CFrame.new(x, DECK_Y + 1.5, DECK_FAR - 4) * CFrame.Angles(0, 0, math.rad(90)), Theme.Color.WoodDark, Enum.Material.Wood, lobby)
-		barrel.Shape = Enum.PartType.Cylinder
+local function pottedPalm(lobby: Model, position: Vector3)
+	cylinder("Pot", 2.4, 3, CFrame.new(position + Vector3.new(0, 1.2, 0)), Color3.fromHex("C2694A"), Enum.Material.Slate, lobby)
+	cylinder("Soil", 0.2, 2.6, CFrame.new(position + Vector3.new(0, 2.4, 0)), WOOD_DEEP, Enum.Material.Ground, lobby)
+	part("Trunk", Vector3.new(0.8, 4, 0.8), CFrame.new(position + Vector3.new(0, 4.4, 0)), WOOD_DARK, Enum.Material.Wood, lobby)
+	local crown = position + Vector3.new(0, 6.6, 0)
+	part("Leaves", Vector3.new(6, 0.5, 1.6), CFrame.new(crown), Theme.Color.Leaf, Enum.Material.SmoothPlastic, lobby)
+	part("Leaves", Vector3.new(1.6, 0.5, 6), CFrame.new(crown), Theme.Color.Leaf, Enum.Material.SmoothPlastic, lobby)
+	part("Leaves", Vector3.new(4, 0.5, 4), CFrame.new(crown + Vector3.new(0, 0.4, 0)) * CFrame.Angles(0, math.rad(45), 0), Color3.fromHex("5FCF6A"), Enum.Material.SmoothPlastic, lobby)
+end
+
+-- A small striped-roof beach shack at the back of the deck, with a serving counter.
+local function shack(lobby: Model)
+	local center = Vector3.new(0, DECK_Y, DECK_FAR - 6)
+	local width, height, depth = 16, 8, 8
+	part("ShackBack", Vector3.new(width, height, 0.6), CFrame.new(center + Vector3.new(0, height / 2, depth / 2)), WOOD_LIGHT, Enum.Material.WoodPlanks, lobby)
+	for _, x in { -width / 2, width / 2 } do
+		part("ShackSide", Vector3.new(0.6, height, depth), CFrame.new(center + Vector3.new(x, height / 2, 0)), WOOD_LIGHT, Enum.Material.WoodPlanks, lobby)
 	end
+	part("ShackFrontLow", Vector3.new(width, 3.4, 0.6), CFrame.new(center + Vector3.new(0, 1.7, -depth / 2)), WOOD, Enum.Material.WoodPlanks, lobby)
+	part("Counter", Vector3.new(width + 1, 0.4, 2), CFrame.new(center + Vector3.new(0, 3.6, -depth / 2 - 0.4)), WOOD_DARK, Enum.Material.Wood, lobby)
+	for _, x in { -width / 2, width / 2 } do
+		part("ShackPost", Vector3.new(0.8, height, 0.8), CFrame.new(center + Vector3.new(x, height / 2, -depth / 2)), WOOD_DARK, Enum.Material.Wood, lobby)
+	end
+	-- Striped awning roof, sloping toward the deck.
+	local stripes = 8
+	local stripeWidth = (width + 2) / stripes
+	for index = 0, stripes - 1 do
+		local x = -(width + 2) / 2 + stripeWidth / 2 + index * stripeWidth
+		local color = Theme.Color.Red
+		if index % 2 == 1 then
+			color = Theme.Color.White
+		end
+		part("Awning", Vector3.new(stripeWidth, 0.4, depth + 3), CFrame.new(center + Vector3.new(x, height + 0.6, -1)) * CFrame.Angles(math.rad(12), 0, 0), color, Enum.Material.Fabric, lobby)
+	end
+	-- Things on the counter.
+	for index, x in { -5, -2.5, 3, 5.5 } do
+		local colors = { Theme.Color.Yellow, Theme.Color.Sky, Theme.Color.Red, Theme.Color.Green }
+		local cup = cylinder("Cup", 0.9, 0.6, CFrame.new(center + Vector3.new(x, 4.25, -depth / 2 - 0.4)), colors[index], Enum.Material.SmoothPlastic, lobby)
+		decor(cup)
+	end
+	local light = Instance.new("PointLight")
+	light.Color = Color3.fromHex("FFD9A0")
+	light.Range = 12
+	light.Brightness = 0.8
+	local glow = part("ShackLight", Vector3.new(0.6, 0.6, 0.6), CFrame.new(center + Vector3.new(0, height - 1, 0)), Color3.fromHex("FFE7B0"), Enum.Material.SmoothPlastic, lobby)
+	decor(glow)
+	light.Parent = glow
+end
+
+-- Little triangle flags strung between two points.
+local function bunting(lobby: Model, from: Vector3, to: Vector3)
+	local colors = { Theme.Color.Red, Theme.Color.Yellow, Theme.Color.Sky, Theme.Color.Green, Theme.Color.White }
+	local length = (to - from).Magnitude
+	local count = math.floor(length / 2.5)
+	for index = 0, count do
+		local alpha = index / count
+		local sag = math.sin(alpha * math.pi) * 1.5
+		local point = from:Lerp(to, alpha) - Vector3.new(0, sag, 0)
+		local flag = Instance.new("WedgePart")
+		flag.Name = "Flag"
+		flag.Size = Vector3.new(0.1, 1.2, 1.2)
+		flag.CFrame = CFrame.lookAt(point, point + (to - from).Unit) * CFrame.Angles(0, math.rad(90), math.rad(180))
+		flag.Color = colors[(index % #colors) + 1]
+		flag.Material = Enum.Material.Fabric
+		flag.Anchored = true
+		decor(flag)
+		flag.Parent = lobby
+	end
+end
+
+local function buildProps(lobby: Model)
+	local centerZ = (DECK_NEAR + DECK_FAR) / 2
+	-- Lamps at the corners and halfway along the sides.
+	for _, x in { -DECK_HALF_X + 2.5, DECK_HALF_X - 2.5 } do
+		for _, z in { DECK_NEAR + 2.5, centerZ, DECK_FAR - 2.5 } do
+			lamp(lobby, Vector3.new(x, DECK_Y, z))
+		end
+	end
+	-- Benches facing the tank, right behind the clear rail.
+	for _, x in { -22, 0, 22 } do
+		bench(lobby, Vector3.new(x, DECK_Y, DECK_NEAR + 5), 0)
+	end
+	umbrellaTable(lobby, Vector3.new(-24, DECK_Y, centerZ + 6), Theme.Color.Red)
+	umbrellaTable(lobby, Vector3.new(24, DECK_Y, centerZ + 6), Theme.Color.Sky)
+	lounger(lobby, Vector3.new(-33, DECK_Y, centerZ - 6), Theme.Color.Yellow)
+	lounger(lobby, Vector3.new(33, DECK_Y, centerZ - 6), Theme.Color.Red)
+	shack(lobby)
+	pottedPalm(lobby, Vector3.new(-12, DECK_Y, DECK_FAR - 3))
+	pottedPalm(lobby, Vector3.new(12, DECK_Y, DECK_FAR - 3))
+	-- Crates and barrels stacked in the back corners.
+	for _, corner in { -1, 1 } do
+		local x = corner * (DECK_HALF_X - 5)
+		part("Crate", Vector3.new(3, 3, 3), CFrame.new(x, DECK_Y + 1.5, DECK_FAR - 4), WOOD_LIGHT, Enum.Material.WoodPlanks, lobby)
+		part("Crate", Vector3.new(2.4, 2.4, 2.4), CFrame.new(x, DECK_Y + 4.2, DECK_FAR - 4) * CFrame.Angles(0, math.rad(20), 0), WOOD, Enum.Material.WoodPlanks, lobby)
+		cylinder("Barrel", 3.2, 2.6, CFrame.new(x - corner * 3.4, DECK_Y + 1.6, DECK_FAR - 3.5), WOOD_DARK, Enum.Material.Wood, lobby)
+		cylinder("BarrelBand", 0.3, 2.75, CFrame.new(x - corner * 3.4, DECK_Y + 2.6, DECK_FAR - 3.5), Theme.Color.Ink, Enum.Material.Metal, lobby)
+		cylinder("RopeCoil", 0.8, 2.4, CFrame.new(x - corner * 1.5, DECK_Y + 0.4, DECK_FAR - 8), Color3.fromHex("D8C08A"), Enum.Material.Fabric, lobby)
+	end
+	-- Bunting along the back and the sides.
+	local flagY = DECK_Y + 8.6
+	bunting(lobby, Vector3.new(-DECK_HALF_X + 2.5, flagY, DECK_FAR - 2.5), Vector3.new(DECK_HALF_X - 2.5, flagY, DECK_FAR - 2.5))
+	bunting(lobby, Vector3.new(-DECK_HALF_X + 2.5, flagY, DECK_NEAR + 2.5), Vector3.new(-DECK_HALF_X + 2.5, flagY, centerZ))
+	bunting(lobby, Vector3.new(DECK_HALF_X - 2.5, flagY, DECK_NEAR + 2.5), Vector3.new(DECK_HALF_X - 2.5, flagY, centerZ))
 end
 
 local function buildLobby(): Model
 	local lobby = Instance.new("Model")
 	lobby.Name = "Lobby"
 	buildDeck(lobby)
-	buildHowToPlay(lobby)
-	buildTierChart(lobby)
-	buildScoreboard(lobby)
+	buildRails(lobby)
+	buildProps(lobby)
 
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name = "LobbySpawn"
 	spawn.Size = Vector3.new(8, 1, 8)
-	spawn.CFrame = CFrame.new(0, DECK_Y + 0.5, DECK_NEAR + 22)
+	spawn.CFrame = CFrame.new(0, DECK_Y + 0.5, DECK_NEAR + 18)
 	spawn.Anchored = true
 	spawn.Transparency = 1
 	spawn.CanCollide = false
@@ -432,6 +500,8 @@ local function buildLobby(): Model
 	spawn.Parent = lobby
 	return lobby
 end
+
+-- Lighting ---------------------------------------------------------------------------------------
 
 -- Late-afternoon sun: warm key light, long soft shadows, a little bloom and sun rays off the water.
 local function applyLighting()
@@ -482,6 +552,8 @@ local function applyLighting()
 	clouds.Parent = workspace.Terrain
 end
 
+-- Build ------------------------------------------------------------------------------------------
+
 local maps = ServerStorage:FindFirstChild("Maps")
 if maps == nil then
 	maps = Instance.new("Folder")
@@ -490,6 +562,13 @@ if maps == nil then
 end
 assert(maps ~= nil)
 
+-- A lobby already placed in Workspace is replaced in Workspace, so it stays where it was being edited.
+local lobbyParent: Instance = maps
+local placedLobby = workspace:FindFirstChild("Lobby")
+if placedLobby ~= nil then
+	lobbyParent = workspace
+	placedLobby:Destroy()
+end
 for _, name in { "Arena", "Lobby" } do
 	local old = maps:FindFirstChild(name)
 	if old ~= nil then
@@ -497,9 +576,9 @@ for _, name in { "Arena", "Lobby" } do
 	end
 end
 
-workspace.Terrain:Clear()
+buildTerrain()
 buildArena().Parent = maps
-buildLobby().Parent = maps
+buildLobby().Parent = lobbyParent
 applyLighting()
 
-print("BuildMap: Arena and Lobby built into ServerStorage.Maps")
+print("BuildMap: terrain, Arena and Lobby built")
