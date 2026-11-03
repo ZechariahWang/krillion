@@ -1,0 +1,20 @@
+--!strict
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Net = require(ReplicatedStorage.Shared.Net)
+Net.init()
+
+local Server = script.Parent:WaitForChild("Server")
+local DataService = require(Server.DataService)
+local MapService = require(Server.MapService)
+local PlayerService = require(Server.PlayerService)
+local AnswerService = require(Server.AnswerService)
+local LobbyQuizService = require(Server.LobbyQuizService)
+local RoundService = require(Server.RoundService)
+
+DataService.start()
+MapService.start()
+PlayerService.start()
+AnswerService.start()
+LobbyQuizService.start()
+RoundService.start()
