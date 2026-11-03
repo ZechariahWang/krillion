@@ -3,7 +3,6 @@
 -- A wrong answer is rejected right away and the same prompt stays up for another try.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
@@ -35,6 +34,15 @@ local lastSentAt = 0
 
 local LobbyQuiz = {}
 
+-- Deferred so it runs after the TextBox has finished losing focus from the Enter press.
+local function keepFocus()
+	task.defer(function()
+		if gui.Enabled then
+			answerBox:CaptureFocus()
+		end
+	end)
+end
+
 local function submit()
 	local text = answerBox.Text
 	if #text == 0 then
@@ -47,6 +55,7 @@ local function submit()
 	lastSentAt = now
 	answerBox.Text = ""
 	Net.event("LobbyQuizAnswer"):FireServer(text)
+	keepFocus()
 end
 
 local function skip()
@@ -74,7 +83,10 @@ function LobbyQuiz.init(playerGui: PlayerGui)
 	Ui.pressable(submitButton)
 	Ui.pressable(skipButton)
 	submitButton.Activated:Connect(submit)
-	skipButton.Activated:Connect(skip)
+	skipButton.Activated:Connect(function()
+		skip()
+		keepFocus()
+	end)
 	answerBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
 			submit()
@@ -112,7 +124,9 @@ function LobbyQuiz.onResult(payload)
 	local token = resultToken
 	if payload.tier ~= nil then
 		local info = Tiers.ByName[payload.tier]
-		resultTier.Text = string.upper(info.label)
+		-- Autocorrect: name the answer in the bank's spelling next to its tier.
+		local corrected = payload.corrected or ""
+		resultTier.Text = string.upper(info.label) .. "  |  " .. string.upper(corrected)
 		resultTier.TextColor3 = Ui.tierColor(payload.tier)
 		resultCoins.Text = "+" .. payload.coins .. " COINS"
 		Ui.appear(result)
@@ -125,9 +139,6 @@ function LobbyQuiz.onResult(payload)
 		Ui.appear(result)
 		Ui.nudge(panel)
 		Sfx.play("Wrong", 0.5)
-		if not UserInputService.TouchEnabled then
-			answerBox:CaptureFocus()
-		end
 	end
 	task.delay(RESULT_SECONDS, function()
 		if token == resultToken then

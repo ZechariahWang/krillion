@@ -3,7 +3,6 @@
 -- The prompt, timer and alive count live in StarterGui.Status (see Status.luau).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
@@ -26,6 +25,7 @@ local answerBar: Frame
 local answerBox: TextBox
 local submitButton: TextButton
 local lockedCard: Frame
+local lockedText: TextLabel
 local feedback: Frame
 local banner: Frame
 
@@ -37,6 +37,15 @@ local lastPhase = ""
 local lastWaterY = 0
 
 local Hud = {}
+
+-- Deferred so it runs after the TextBox has finished losing focus from the Enter press.
+local function keepFocus()
+	task.defer(function()
+		if answerBox.Visible and answerBar.Visible then
+			answerBox:CaptureFocus()
+		end
+	end)
+end
 
 local function showLocked()
 	answerBox:ReleaseFocus()
@@ -67,6 +76,7 @@ local function submit()
 	end
 	lastSentAt = now
 	Net.event("SubmitAnswer"):FireServer(text)
+	keepFocus()
 end
 
 local function showFeedback()
@@ -84,6 +94,10 @@ end
 function Hud.onAnswerResult(payload)
 	if payload.accepted then
 		locked = true
+		-- Autocorrect: show the answer in the bank's spelling, whatever was typed.
+		local corrected = payload.corrected or answerBox.Text
+		answerBox.Text = string.upper(corrected)
+		lockedText.Text = "LOCKED IN  |  " .. string.upper(corrected)
 		showLocked()
 		Sfx.play("LockIn", 0.7)
 		Fx.flash(Theme.Color.Green)
@@ -92,9 +106,7 @@ function Hud.onAnswerResult(payload)
 	answerBox.Text = ""
 	showFeedback()
 	Sfx.play("Wrong", 0.5)
-	if not UserInputService.TouchEnabled then
-		answerBox:CaptureFocus()
-	end
+	keepFocus()
 end
 
 local function updateMeter(height: number, waterY: number)
@@ -138,6 +150,7 @@ function Hud.init(playerGui: PlayerGui)
 	answerBox = answerBar:WaitForChild("AnswerBox") :: TextBox
 	submitButton = answerBar:WaitForChild("SubmitButton") :: TextButton
 	lockedCard = answerBar:WaitForChild("LockedText") :: Frame
+	lockedText = lockedCard:WaitForChild("Text") :: TextLabel
 	feedback = answerBar:WaitForChild("Feedback") :: Frame
 	banner = gui:WaitForChild("Banner") :: Frame
 
@@ -181,8 +194,9 @@ function Hud.onState(payload)
 	if newPrompt then
 		locked = false
 		showEntry()
-		if payload.playing and not UserInputService.TouchEnabled then
-			answerBox:CaptureFocus()
+		if payload.playing then
+			answerBar.Visible = true
+			keepFocus()
 		end
 	end
 
