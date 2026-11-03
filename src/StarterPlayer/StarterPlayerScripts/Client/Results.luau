@@ -42,7 +42,7 @@ function Results.onMatchEnded(payload)
 	end
 	nextText.Text = "NEXT DIVE IN " .. payload.seconds
 	gui.Enabled = true
-	Ui.slam(panel)
+	Ui.appear(panel)
 	Sfx.play("Fanfare", 0.8)
 	if payload.winnerName == Players.LocalPlayer.DisplayName then
 		Fx.flash(Theme.Color.Gold)

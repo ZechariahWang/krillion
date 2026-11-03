@@ -59,9 +59,6 @@ local function countUp(points: number)
 	tween.Completed:Once(function()
 		pointsText.Text = "+" .. points
 		value:Destroy()
-		if points > 0 then
-			Ui.bump(pointsText, 1.4)
-		end
 	end)
 	tween:Play()
 end
@@ -82,7 +79,7 @@ local function showBadge(row)
 	else
 		pointsText.TextColor3 = Theme.Color.Red
 	end
-	Ui.slam(badge)
+	Ui.appear(badge)
 	countUp(row.points)
 end
 
@@ -109,7 +106,7 @@ local function showRows(rows)
 		clone.Parent = list
 		task.delay(ROW_STAGGER * index, function()
 			if clone.Parent ~= nil then
-				Ui.pop(clone)
+				Ui.appear(clone)
 			end
 		end)
 	end
@@ -119,7 +116,6 @@ local function celebrate(row)
 	local points = row.points
 	if points >= Tiers.ByName.OneInAKrillion.points then
 		Fx.flash(Theme.Tier.OneInAKrillion)
-		Fx.shake(0.4, 0.5)
 		Sfx.play("Fanfare", 0.8)
 	elseif points >= Tiers.ByName.Rare.points then
 		Fx.flash(Ui.tierColor(row.tier))

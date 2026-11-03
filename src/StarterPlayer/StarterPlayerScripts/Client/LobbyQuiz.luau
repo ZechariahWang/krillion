@@ -97,7 +97,7 @@ function LobbyQuiz.onPrompt(payload)
 	end
 	gui.Enabled = true
 	promptText.Text = string.upper(payload.prompt)
-	Ui.pop(promptText)
+	Ui.appear(promptText)
 	timerFill.Size = UDim2.fromScale(1, 1)
 	Tween.play(timerFill, TweenInfo.new(payload.seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) })
 	task.delay(payload.seconds, function()
@@ -115,15 +115,15 @@ function LobbyQuiz.onResult(payload)
 		resultTier.Text = string.upper(info.label)
 		resultTier.TextColor3 = Ui.tierColor(payload.tier)
 		resultCoins.Text = "+" .. payload.coins .. " COINS"
-		Ui.slam(result)
+		Ui.appear(result)
 		Fx.coinPop("+" .. payload.coins, panel)
 		Sfx.play("LockIn", 0.6)
 	else
 		resultTier.Text = "NOT IN THE BANK"
 		resultTier.TextColor3 = Theme.Color.Red
 		resultCoins.Text = "TRY AGAIN"
-		Ui.pop(result)
-		Ui.shake(panel, 0.3)
+		Ui.appear(result)
+		Ui.nudge(panel)
 		Sfx.play("Wrong", 0.5)
 		if not UserInputService.TouchEnabled then
 			answerBox:CaptureFocus()

@@ -36,13 +36,6 @@ local function part(name: string, size: Vector3, cframe: CFrame, color: Color3, 
 	return p
 end
 
-local function outlined(label: TextLabel, thickness: number)
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Theme.Color.Ink
-	stroke.Thickness = thickness
-	stroke.Parent = label
-end
-
 local function signText(parent: Instance, name: string, text: string, font: Font, color: Color3, size: UDim2, position: UDim2): TextLabel
 	local label = Instance.new("TextLabel")
 	label.Name = name
@@ -141,8 +134,7 @@ local function buildPlatformTemplate(arena: Model)
 	tag.StudsOffsetWorldSpace = Vector3.new(0, height / 2 + 9, 0)
 	tag.MaxDistance = 200
 	tag.Parent = pillar
-	local tagText = signText(tag, "NameText", "Player", Theme.Font.Body, Theme.Color.White, UDim2.fromScale(1, 1), UDim2.fromScale(0, 0))
-	outlined(tagText, 2)
+	signText(tag, "NameText", "Player", Theme.Font.Body, Theme.Color.White, UDim2.fromScale(1, 1), UDim2.fromScale(0, 0))
 end
 
 local function buildArena(): Model

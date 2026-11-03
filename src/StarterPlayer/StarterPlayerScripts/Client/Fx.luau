@@ -6,7 +6,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Tween = require(ReplicatedStorage.Shared.Tween)
-local Ui = require(script.Parent.Ui)
 
 local CALLOUT_SECONDS = 1.4
 
@@ -15,6 +14,7 @@ local callout: TextLabel
 local coinPop: TextLabel
 
 local calloutToken = 0
+local calloutBase: UDim2? = nil
 local shakeUntil = 0
 local shakePower = 0
 
@@ -40,27 +40,41 @@ function Fx.init(playerGui: PlayerGui)
 	end)
 end
 
+-- A faint tint that fades out, never a full white-out.
 function Fx.flash(color: Color3)
 	flash.BackgroundColor3 = color
-	flash.BackgroundTransparency = 0.35
+	flash.BackgroundTransparency = 0.8
 	Tween.play(flash, Theme.Tween.Flash, { BackgroundTransparency = 1 })
 end
 
+-- Fades in while sliding up a few pixels, holds, then fades out.
 function Fx.callout(text: string, color: Color3)
 	calloutToken += 1
 	local token = calloutToken
+	if calloutBase == nil then
+		calloutBase = callout.Position
+	end
+	local base = calloutBase :: UDim2
 	callout.Text = text
 	callout.TextColor3 = color
-	callout.Rotation = math.random(-6, 6)
-	Ui.slam(callout)
+	callout.TextTransparency = 1
+	callout.Position = base + UDim2.fromOffset(0, 12)
+	callout.Visible = true
+	Tween.play(callout, Theme.Tween.Enter, { TextTransparency = 0, Position = base })
 	task.delay(CALLOUT_SECONDS, function()
-		if token == calloutToken then
-			callout.Visible = false
+		if token ~= calloutToken then
+			return
 		end
+		Tween.play(callout, Theme.Tween.Exit, { TextTransparency = 1 })
+		task.delay(0.2, function()
+			if token == calloutToken then
+				callout.Visible = false
+			end
+		end)
 	end)
 end
 
--- "+50" that floats up from a point on screen and fades.
+-- "+50" that drifts up from a point on screen and fades.
 function Fx.coinPop(text: string, from: GuiObject)
 	local pop = coinPop:Clone()
 	pop.Name = "CoinPopLive"
@@ -69,13 +83,8 @@ function Fx.coinPop(text: string, from: GuiObject)
 	pop.Position = UDim2.fromOffset(center.X, center.Y)
 	pop.Visible = true
 	pop.Parent = coinPop.Parent
-	Ui.pop(pop)
-	local goal = { Position = UDim2.fromOffset(center.X, center.Y - 90), TextTransparency = 1 }
+	local goal = { Position = UDim2.fromOffset(center.X, center.Y - 50), TextTransparency = 1 }
 	Tween.play(pop, Theme.Tween.Float, goal)
-	local stroke = pop:FindFirstChildOfClass("UIStroke")
-	if stroke ~= nil then
-		Tween.play(stroke, Theme.Tween.Float, { Transparency = 1 })
-	end
 	task.delay(1, function()
 		pop:Destroy()
 	end)

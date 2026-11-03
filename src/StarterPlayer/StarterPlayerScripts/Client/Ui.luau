@@ -17,57 +17,58 @@ local function scaleOf(object: GuiObject): UIScale
 	return scale :: UIScale
 end
 
+local basePositions: { [GuiObject]: UDim2 } = {}
+
+-- Hover brightens the panel slightly; press dips the scale a hair.
 function Ui.pressable(button: GuiButton)
 	local scale = scaleOf(button)
+	local restTransparency = button.BackgroundTransparency
+	local hoverTransparency = math.max(0, restTransparency - 0.15)
 	button.MouseEnter:Connect(function()
-		Tween.play(scale, Theme.Tween.Press, { Scale = 1.06 })
+		Tween.play(button, Theme.Tween.Hover, { BackgroundTransparency = hoverTransparency })
+	end)
+	button.MouseLeave:Connect(function()
+		Tween.play(button, Theme.Tween.Hover, { BackgroundTransparency = restTransparency })
+		Tween.play(scale, Theme.Tween.Hover, { Scale = 1 })
 	end)
 	button.MouseButton1Down:Connect(function()
-		Tween.play(scale, Theme.Tween.Press, { Scale = 0.92 })
+		Tween.play(scale, Theme.Tween.Press, { Scale = 0.98 })
 	end)
-	local function release()
-		Tween.play(scale, Theme.Tween.Pop, { Scale = 1 })
-	end
-	button.MouseButton1Up:Connect(release)
-	button.MouseLeave:Connect(release)
+	button.MouseButton1Up:Connect(function()
+		Tween.play(scale, Theme.Tween.Hover, { Scale = 1 })
+	end)
 end
 
--- Grows in from small with a bounce.
-function Ui.pop(object: GuiObject)
+-- Shows an element with a short settle from 96% scale. No overshoot.
+function Ui.appear(object: GuiObject)
 	local scale = scaleOf(object)
-	scale.Scale = 0.6
+	scale.Scale = 0.96
 	object.Visible = true
-	Tween.play(scale, Theme.Tween.Pop, { Scale = 1 })
+	Tween.play(scale, Theme.Tween.Enter, { Scale = 1 })
 end
 
--- Drops in from big, like a stamp hitting the screen.
-function Ui.slam(object: GuiObject)
-	local scale = scaleOf(object)
-	scale.Scale = 2
-	object.Visible = true
-	Tween.play(scale, Theme.Tween.Slam, { Scale = 1 })
-end
-
--- A quick bump, used on every timer tick.
+-- A small tick, used on timer seconds and counters.
 function Ui.bump(object: GuiObject, size: number)
 	local scale = scaleOf(object)
 	scale.Scale = size
 	Tween.play(scale, Theme.Tween.Tick, { Scale = 1 })
 end
 
--- Wiggles side to side for `seconds`.
-function Ui.shake(object: GuiObject, seconds: number)
+-- A short horizontal nudge, the "no" gesture for a rejected answer.
+function Ui.nudge(object: GuiObject)
+	local base = basePositions[object]
+	if base == nil then
+		base = object.Position
+		basePositions[object] = base
+	end
 	task.spawn(function()
-		local steps = math.floor(seconds / 0.04)
-		for step = 1, steps do
-			local direction = 1
-			if step % 2 == 0 then
-				direction = -1
-			end
-			object.Rotation = direction * 7
-			task.wait(0.04)
+		local offsets = { 6, -6, 3, 0 }
+		for _, offset in offsets do
+			local goal = UDim2.new(base.X.Scale, base.X.Offset + offset, base.Y.Scale, base.Y.Offset)
+			Tween.play(object, Theme.Tween.Nudge, { Position = goal })
+			task.wait(0.06)
 		end
-		object.Rotation = 0
+		object.Position = base
 	end)
 end
 

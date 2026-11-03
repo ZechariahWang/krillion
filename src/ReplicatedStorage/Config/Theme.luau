@@ -64,19 +64,25 @@ local Theme = {
 		Pill = UDim.new(1, 0),
 	},
 	Font = {
-		Title = Font.new("rbxasset://fonts/families/Roboto.json", Enum.FontWeight.Heavy),
 		Body = Font.new("rbxasset://fonts/families/Roboto.json", Enum.FontWeight.Bold),
+		Title = Font.new("rbxasset://fonts/families/Roboto.json", Enum.FontWeight.Bold, Enum.FontStyle.Italic),
+		Heavy = Font.new("rbxasset://fonts/families/Roboto.json", Enum.FontWeight.Heavy, Enum.FontStyle.Italic), -- top status bars
 	},
+	Shadow = {
+		Transparency = 0.5,
+		Blur = 20,
+	},
+	-- Minimal motion: short ease-outs, no overshoot, no bounce.
 	Tween = {
-		Enter = TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-		Exit = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-		Pop = TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-		Slam = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-		Press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		Tick = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-		Count = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		Flash = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		Float = TweenInfo.new(0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		Enter = TweenInfo.new(0.22, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+		Exit = TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+		Hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		Press = TweenInfo.new(0.06, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		Tick = TweenInfo.new(0.2, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+		Nudge = TweenInfo.new(0.06, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		Count = TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+		Flash = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		Float = TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
 	},
 }
 
