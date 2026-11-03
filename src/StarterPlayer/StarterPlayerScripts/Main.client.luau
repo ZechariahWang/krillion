@@ -14,6 +14,7 @@ local LobbyQuiz = require(Client.LobbyQuiz)
 local Results = require(Client.Results)
 local ShopUi = require(Client.ShopUi)
 local RevivePrompt = require(Client.RevivePrompt)
+local AnimationReset = require(Client.AnimationReset)
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
 Fx.init(playerGui)
@@ -26,6 +27,7 @@ LobbyQuiz.init(playerGui)
 Results.init(playerGui)
 ShopUi.init(playerGui)
 RevivePrompt.init(playerGui)
+AnimationReset.init()
 
 Net.event("RoundState").OnClientEvent:Connect(function(payload)
 	Hud.onState(payload)
