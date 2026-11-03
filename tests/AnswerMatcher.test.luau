@@ -29,7 +29,38 @@ return function(test)
 
 	test("one character typo is accepted for answers of 5+ characters", function()
 		assert(AnswerMatcher.match("andora", prompt) == "Rare")
-		assert(AnswerMatcher.match("argentian", prompt) == nil, "two edits is too far")
+		assert(AnswerMatcher.match("argxyzina", prompt) == nil, "three edits is too far")
+	end)
+
+	test("autocorrect returns the bank spelling for a typo", function()
+		local tier, corrected = AnswerMatcher.resolve("Andora", prompt)
+		assert(tier == "Rare")
+		assert(corrected == "andorra", tostring(corrected))
+	end)
+
+	test("swapped neighbouring letters count as one typo", function()
+		local tier, corrected = AnswerMatcher.resolve("argentian", prompt)
+		assert(tier == "Plankton")
+		assert(corrected == "argentina")
+	end)
+
+	test("long answers forgive two typos", function()
+		local tier, corrected = AnswerMatcher.resolve("antiqua and barbada", prompt)
+		assert(tier == "OneInAKrillion")
+		assert(corrected == "antigua and barbuda")
+	end)
+
+	test("autocorrect picks the closest bank answer, not the first one in tier order", function()
+		local berries = { id = "b", prompt = "x", answers = { Plankton = { "blackberries" }, Rare = { "blackberried" } }, aliases = {} }
+		local tier, corrected = AnswerMatcher.resolve("blackberrid", berries)
+		assert(tier == "Rare", tostring(tier))
+		assert(corrected == "blackberried")
+	end)
+
+	test("an alias autocorrects to its canonical answer", function()
+		local tier, corrected = AnswerMatcher.resolve("antigua", prompt)
+		assert(tier == "OneInAKrillion")
+		assert(corrected == "antigua and barbuda")
 	end)
 
 	test("short answers must match exactly", function()

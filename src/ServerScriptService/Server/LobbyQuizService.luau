@@ -61,7 +61,7 @@ local function onAnswer(player: Player, text: any)
 	end
 	local coins = WaterCurve.lobbyCoins(graded.points)
 	DataService.addCoins(player, coins)
-	Net.event("LobbyQuizResult"):FireClient(player, { tier = graded.tier, coins = coins })
+	Net.event("LobbyQuizResult"):FireClient(player, { tier = graded.tier, coins = coins, corrected = graded.corrected })
 	serve(player)
 end
 

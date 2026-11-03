@@ -40,7 +40,7 @@ export type RoundStatePayload = {
 export type RevealRow = {
 	userId: number,
 	name: string,
-	answer: string?, -- filtered, nil when no accepted answer or the filter failed
+	answer: string?, -- the bank spelling of the accepted answer, nil when there was none
 	tier: string?, -- nil when no accepted answer
 	points: number,
 	lift: number,

@@ -1,10 +1,9 @@
 --!strict
--- Receives match answers, validates them, grades them against the live prompt, and filters text for display.
+-- Receives match answers, validates them and grades them against the live prompt, with autocorrect.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
-local TextService = game:GetService("TextService")
 
 local AnswerMatcher = require(ReplicatedStorage.Shared.AnswerMatcher)
 local Net = require(ReplicatedStorage.Shared.Net)
@@ -17,6 +16,7 @@ export type Prompt = AnswerMatcher.Prompt
 export type Submission = {
 	text: string,
 	tier: string?,
+	corrected: string?, -- the bank spelling, shown back to players instead of what they typed
 	points: number,
 }
 
@@ -41,25 +41,12 @@ function AnswerService.isValidText(text: any): boolean
 end
 
 function AnswerService.grade(text: string, prompt: AnswerMatcher.Prompt): Submission
-	local tier = AnswerMatcher.match(text, prompt)
+	local tier, corrected = AnswerMatcher.resolve(text, prompt)
 	local points = 0
 	if tier ~= nil then
 		points = Tiers.points(tier)
 	end
-	return { text = text, tier = tier, points = points }
-end
-
--- Returns the text safe to show to everyone, or nil when filtering failed.
-function AnswerService.filterForBroadcast(player: Player, text: string): string?
-	local ok, result = pcall(function()
-		local filtered = TextService:FilterStringAsync(text, player.UserId)
-		return filtered:GetNonChatStringForBroadcastAsync()
-	end)
-	if ok then
-		return result
-	end
-	warn("AnswerService: filter failed for " .. player.Name .. ": " .. tostring(result))
-	return nil
+	return { text = text, tier = tier, corrected = corrected, points = points }
 end
 
 function AnswerService.openRound(prompt: AnswerMatcher.Prompt, players: { Player })
@@ -107,7 +94,7 @@ local function onSubmit(player: Player, text: any)
 		return
 	end
 	submissions[player] = graded
-	result:FireClient(player, { accepted = true })
+	result:FireClient(player, { accepted = true, corrected = graded.corrected })
 end
 
 function AnswerService.start()

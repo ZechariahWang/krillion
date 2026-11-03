@@ -19,29 +19,56 @@ function AnswerMatcher.normalize(text: string): string
 	return result
 end
 
+-- Edit distance where inserting, deleting or changing a letter costs 1, and so does swapping two
+-- neighbouring letters (the most common typo).
 function AnswerMatcher.distance(a: string, b: string): number
-	local previous = {}
+	local rows: { { number } } = {}
+	for i = 0, #a do
+		local row = {}
+		for j = 0, #b do
+			row[j] = 0
+		end
+		row[0] = i
+		rows[i] = row
+	end
 	for j = 0, #b do
-		previous[j] = j
+		rows[0][j] = j
 	end
 	for i = 1, #a do
-		local current = { [0] = i }
 		for j = 1, #b do
 			local cost = 1
 			if string.sub(a, i, i) == string.sub(b, j, j) then
 				cost = 0
 			end
-			local deletion = previous[j] + 1
-			local insertion = current[j - 1] + 1
-			local substitution = previous[j - 1] + cost
-			current[j] = math.min(deletion, insertion, substitution)
+			local deletion = rows[i - 1][j] + 1
+			local insertion = rows[i][j - 1] + 1
+			local substitution = rows[i - 1][j - 1] + cost
+			local best = math.min(deletion, insertion, substitution)
+			local swapped = i > 1
+				and j > 1
+				and string.sub(a, i, i) == string.sub(b, j - 1, j - 1)
+				and string.sub(a, i - 1, i - 1) == string.sub(b, j, j)
+			if swapped then
+				best = math.min(best, rows[i - 2][j - 2] + 1)
+			end
+			rows[i][j] = best
 		end
-		previous = current
 	end
-	return previous[#b]
+	return rows[#a][#b]
 end
 
-local function findTier(prompt: Prompt, answer: string): string?
+-- How many typos an answer of this length may have and still count.
+local function allowedTypos(answer: string): number
+	if #answer < GameConfig.Answer.FuzzyMinLength then
+		return 0
+	end
+	if #answer < GameConfig.Answer.FuzzyLongLength then
+		return 1
+	end
+	return 2
+end
+
+local function findExact(prompt: Prompt, answer: string): string?
 	for _, tier in Tiers.List do
 		local accepted = prompt.answers[tier.name]
 		if accepted ~= nil then
@@ -55,38 +82,48 @@ local function findTier(prompt: Prompt, answer: string): string?
 	return nil
 end
 
-local function findFuzzyTier(prompt: Prompt, answer: string): string?
+-- The bank answer with the fewest typos, if any is within the allowance.
+local function findClosest(prompt: Prompt, answer: string): (string?, string?)
+	local bestTier = nil
+	local bestAnswer = nil
+	local bestDistance = allowedTypos(answer) + 1
 	for _, tier in Tiers.List do
 		local accepted = prompt.answers[tier.name]
 		if accepted ~= nil then
 			for _, candidate in accepted do
-				if AnswerMatcher.distance(candidate, answer) <= GameConfig.Answer.FuzzyMaxDistance then
-					return tier.name
+				local distance = AnswerMatcher.distance(candidate, answer)
+				if distance < bestDistance then
+					bestDistance = distance
+					bestTier = tier.name
+					bestAnswer = candidate
 				end
 			end
 		end
 	end
-	return nil
+	return bestTier, bestAnswer
 end
 
--- Returns the tier name for an accepted answer, or nil when it is refused.
-function AnswerMatcher.match(text: string, prompt: Prompt): string?
+-- Returns the tier and the bank spelling for an accepted answer, or nil when it is refused.
+-- The bank spelling is what autocorrect shows back to the player.
+function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?)
 	local answer = AnswerMatcher.normalize(text)
 	if #answer == 0 or #answer > GameConfig.Answer.MaxLength then
-		return nil
+		return nil, nil
 	end
 	local canonical = prompt.aliases[answer]
 	if canonical ~= nil then
 		answer = canonical
 	end
-	local exact = findTier(prompt, answer)
+	local exact = findExact(prompt, answer)
 	if exact ~= nil then
-		return exact
+		return exact, answer
 	end
-	if #answer < GameConfig.Answer.FuzzyMinLength then
-		return nil
-	end
-	return findFuzzyTier(prompt, answer)
+	return findClosest(prompt, answer)
+end
+
+function AnswerMatcher.match(text: string, prompt: Prompt): string?
+	local tier = AnswerMatcher.resolve(text, prompt)
+	return tier
 end
 
 return AnswerMatcher
