@@ -11,6 +11,13 @@ return function(test)
 		assert(WaterCurve.promptSeconds(100) == GameConfig.Round.PromptSecondsMin, "floor holds")
 	end)
 
+	test("prompt timer is always whole seconds", function()
+		for round = 1, 20 do
+			local seconds = WaterCurve.promptSeconds(round)
+			assert(seconds == math.floor(seconds), "round " .. round .. " gave " .. seconds)
+		end
+	end)
+
 	test("surge grows every round", function()
 		assert(WaterCurve.surge(2) > WaterCurve.surge(1))
 		assert(WaterCurve.surge(1) > 0)

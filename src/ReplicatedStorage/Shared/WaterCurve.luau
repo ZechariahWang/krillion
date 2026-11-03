@@ -5,7 +5,7 @@ local WaterCurve = {}
 
 function WaterCurve.promptSeconds(round: number): number
 	local seconds = GameConfig.Round.PromptSeconds - GameConfig.Round.PromptSecondsStep * (round - 1)
-	return math.max(GameConfig.Round.PromptSecondsMin, seconds)
+	return math.max(GameConfig.Round.PromptSecondsMin, math.floor(seconds))
 end
 
 function WaterCurve.surge(round: number): number
