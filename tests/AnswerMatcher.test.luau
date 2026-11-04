@@ -69,6 +69,97 @@ return function(test)
 		assert(AnswerMatcher.match("rad", short) == nil)
 	end)
 
+	local food = {
+		id = "test_food",
+		prompt = "Name a food",
+		answers = {
+			Plankton = { "ice cream", "hot dog", "cherry", "mac and cheese" },
+			Schooler = { "box", "gas", "eiffel tower", "the moon" },
+			Rare = { "jalapeno", "pane", "pan", "hotdog bun" },
+			DeepCut = { "creme brulee" },
+		},
+		aliases = {
+			["macaroni and cheese"] = "mac and cheese",
+		},
+	}
+
+	test("normalize folds accents and turns & into and before stripping punctuation", function()
+		assert(AnswerMatcher.normalize("Jalapeño") == "jalapeno")
+		assert(AnswerMatcher.normalize("CRÈME BRÛLÉE") == "creme brulee")
+		assert(AnswerMatcher.normalize("mac&cheese") == "mac and cheese")
+		assert(AnswerMatcher.normalize("shepherd’s pie") == "shepherds pie")
+		assert(AnswerMatcher.normalize("pizza 🍕") == "pizza")
+		assert(AnswerMatcher.normalize("bad\255byte") == "bad byte", "invalid UTF-8 still normalizes")
+	end)
+
+	test("accented answers match the plain bank spelling", function()
+		local tier, corrected = AnswerMatcher.resolve("Jalapeño", food)
+		assert(tier == "Rare")
+		assert(corrected == "jalapeno")
+		assert(AnswerMatcher.match("crème brûlée", food) == "DeepCut")
+	end)
+
+	test("& matches an alias spelled with and", function()
+		local tier, corrected = AnswerMatcher.resolve("macaroni & cheese", food)
+		assert(tier == "Plankton")
+		assert(corrected == "mac and cheese")
+		assert(AnswerMatcher.match("mac & cheese", food) == "Plankton")
+	end)
+
+	test("a leading article is ignored on either side", function()
+		local tier, corrected = AnswerMatcher.resolve("the eiffel tower", food)
+		assert(tier == "Schooler")
+		assert(corrected == "eiffel tower")
+		local _, moon = AnswerMatcher.resolve("moon", food)
+		assert(moon == "the moon", tostring(moon))
+		assert(AnswerMatcher.match("an eiffel tower", food) == "Schooler")
+	end)
+
+	test("plurals fall back to the singular bank answer", function()
+		local tier, corrected = AnswerMatcher.resolve("cherries", food)
+		assert(tier == "Plankton")
+		assert(corrected == "cherry")
+		local _, box = AnswerMatcher.resolve("boxes", food)
+		assert(box == "box", tostring(box))
+		local _, pane = AnswerMatcher.resolve("panes", food)
+		assert(pane == "pane", "s is tried before es: " .. tostring(pane))
+		assert(AnswerMatcher.match("the hot dogs", food) == "Plankton")
+	end)
+
+	test("a singular answer matches a plural bank answer", function()
+		local berries = { id = "b", prompt = "x", answers = { Rare = { "cherries" } }, aliases = {} }
+		local tier, corrected = AnswerMatcher.resolve("cherry", berries)
+		assert(tier == "Rare")
+		assert(corrected == "cherries")
+	end)
+
+	test("plural stripping keeps a stem of at least 3 letters", function()
+		assert(AnswerMatcher.variants("gas")[2] == nil)
+		assert(AnswerMatcher.variants("glass")[2] == nil, "ss is not a plural")
+		local short = { id = "s", prompt = "x", answers = { Plankton = { "ga" } }, aliases = {} }
+		assert(AnswerMatcher.match("gas", short) == nil)
+		local _, gas = AnswerMatcher.resolve("gas", food)
+		assert(gas == "gas")
+	end)
+
+	test("spaces do not matter when nothing closer matches", function()
+		local tier, corrected = AnswerMatcher.resolve("icecream", food)
+		assert(tier == "Plankton")
+		assert(corrected == "ice cream")
+		local _, dog = AnswerMatcher.resolve("hotdog", food)
+		assert(dog == "hot dog", tostring(dog))
+		local _, bun = AnswerMatcher.resolve("hot dog bun", food)
+		assert(bun == "hotdog bun", tostring(bun))
+		assert(AnswerMatcher.match("ice creams", food) == "Plankton")
+	end)
+
+	test("fallback ties resolve to the lowest tier", function()
+		local tied = { id = "t", prompt = "x", answers = { Plankton = { "the cat" }, Rare = { "a cat" } }, aliases = {} }
+		local tier, corrected = AnswerMatcher.resolve("cat", tied)
+		assert(tier == "Plankton")
+		assert(corrected == "the cat")
+	end)
+
 	test("empty, too long and unknown answers are rejected", function()
 		assert(AnswerMatcher.match("", prompt) == nil)
 		assert(AnswerMatcher.match("   ", prompt) == nil)

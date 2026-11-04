@@ -1,0 +1,978 @@
+{
+  "className": "Folder",
+  "attributes": {
+    "Note": "Trail cosmetics (Config/Cosmetics `trail`). CosmeticService clones each folder's children into the HumanoidRootPart and re-points the Trail at the cloned TrailTop/TrailBottom; ShopUi reads KrillionTrail.Color for the shop stripe."
+  },
+  "children": [
+    {
+      "name": "Bubbles",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "TrailTop",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "TrailBottom",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  -0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "KrillionTrail",
+          "className": "Trail",
+          "properties": {
+            "Color": {
+              "ColorSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "color": [
+                      1.0,
+                      1.0,
+                      1.0
+                    ]
+                  },
+                  {
+                    "time": 1,
+                    "color": [
+                      0.6275,
+                      0.8627,
+                      1.0
+                    ]
+                  }
+                ]
+              }
+            },
+            "Lifetime": 0.6,
+            "MinLength": 0.1,
+            "LightEmission": 0.4,
+            "FaceCamera": true,
+            "WidthScale": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 1,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 0,
+                    "envelope": 0
+                  }
+                ]
+              }
+            },
+            "Transparency": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 0.15,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 1,
+                    "envelope": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Seafoam",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "TrailTop",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "TrailBottom",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  -0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "KrillionTrail",
+          "className": "Trail",
+          "properties": {
+            "Color": {
+              "ColorSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "color": [
+                      0.149,
+                      0.7765,
+                      0.7686
+                    ]
+                  },
+                  {
+                    "time": 1,
+                    "color": [
+                      0.8863,
+                      0.9686,
+                      1.0
+                    ]
+                  }
+                ]
+              }
+            },
+            "Lifetime": 0.6,
+            "MinLength": 0.1,
+            "LightEmission": 0.4,
+            "FaceCamera": true,
+            "WidthScale": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 1,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 0,
+                    "envelope": 0
+                  }
+                ]
+              }
+            },
+            "Transparency": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 0.15,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 1,
+                    "envelope": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sunset",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "TrailTop",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "TrailBottom",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  -0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "KrillionTrail",
+          "className": "Trail",
+          "properties": {
+            "Color": {
+              "ColorSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "color": [
+                      1.0,
+                      0.4706,
+                      0.4706
+                    ]
+                  },
+                  {
+                    "time": 1,
+                    "color": [
+                      1.0,
+                      0.7843,
+                      0.2392
+                    ]
+                  }
+                ]
+              }
+            },
+            "Lifetime": 0.6,
+            "MinLength": 0.1,
+            "LightEmission": 0.4,
+            "FaceCamera": true,
+            "WidthScale": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 1,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 0,
+                    "envelope": 0
+                  }
+                ]
+              }
+            },
+            "Transparency": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 0.15,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 1,
+                    "envelope": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Abyssal",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "TrailTop",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "TrailBottom",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  -0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "KrillionTrail",
+          "className": "Trail",
+          "properties": {
+            "Color": {
+              "ColorSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "color": [
+                      0.7098,
+                      0.3137,
+                      0.9216
+                    ]
+                  },
+                  {
+                    "time": 1,
+                    "color": [
+                      0.0667,
+                      0.1843,
+                      0.3373
+                    ]
+                  }
+                ]
+              }
+            },
+            "Lifetime": 0.6,
+            "MinLength": 0.1,
+            "LightEmission": 0.4,
+            "FaceCamera": true,
+            "WidthScale": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 1,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 0,
+                    "envelope": 0
+                  }
+                ]
+              }
+            },
+            "Transparency": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 0.15,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 1,
+                    "envelope": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rainbow",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "TrailTop",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "TrailBottom",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  -0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "KrillionTrail",
+          "className": "Trail",
+          "properties": {
+            "Color": {
+              "ColorSequence": {
+                "keypoints": [
+                  {
+                    "time": 0.0,
+                    "color": [
+                      1,
+                      0.25,
+                      0.25
+                    ]
+                  },
+                  {
+                    "time": 0.2,
+                    "color": [
+                      1.0,
+                      1,
+                      0.25
+                    ]
+                  },
+                  {
+                    "time": 0.4,
+                    "color": [
+                      0.25,
+                      1,
+                      0.25
+                    ]
+                  },
+                  {
+                    "time": 0.6,
+                    "color": [
+                      0.25,
+                      1.0,
+                      1
+                    ]
+                  },
+                  {
+                    "time": 0.8,
+                    "color": [
+                      0.25,
+                      0.25,
+                      1
+                    ]
+                  },
+                  {
+                    "time": 1.0,
+                    "color": [
+                      1,
+                      0.25,
+                      1.0
+                    ]
+                  }
+                ]
+              }
+            },
+            "Lifetime": 0.6,
+            "MinLength": 0.1,
+            "LightEmission": 0.4,
+            "FaceCamera": true,
+            "WidthScale": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 1,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 0,
+                    "envelope": 0
+                  }
+                ]
+              }
+            },
+            "Transparency": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 0.15,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 1,
+                    "envelope": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "GoldWake",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "TrailTop",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "TrailBottom",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  -0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "KrillionTrail",
+          "className": "Trail",
+          "properties": {
+            "Color": {
+              "ColorSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "color": [
+                      1.0,
+                      0.7843,
+                      0.2392
+                    ]
+                  },
+                  {
+                    "time": 1,
+                    "color": [
+                      1.0,
+                      1.0,
+                      1.0
+                    ]
+                  }
+                ]
+              }
+            },
+            "Lifetime": 0.6,
+            "MinLength": 0.1,
+            "LightEmission": 0.4,
+            "FaceCamera": true,
+            "WidthScale": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 1,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 0,
+                    "envelope": 0
+                  }
+                ]
+              }
+            },
+            "Transparency": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 0.15,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 1,
+                    "envelope": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pod",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "TrailTop",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "TrailBottom",
+          "className": "Attachment",
+          "properties": {
+            "CFrame": {
+              "CFrame": {
+                "position": [
+                  0,
+                  -0.9,
+                  0
+                ],
+                "orientation": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "KrillionTrail",
+          "className": "Trail",
+          "properties": {
+            "Color": {
+              "ColorSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "color": [
+                      1.0,
+                      0.5882,
+                      0.1569
+                    ]
+                  },
+                  {
+                    "time": 1,
+                    "color": [
+                      1.0,
+                      0.9255,
+                      0.7451
+                    ]
+                  }
+                ]
+              }
+            },
+            "Lifetime": 0.6,
+            "MinLength": 0.1,
+            "LightEmission": 0.4,
+            "FaceCamera": true,
+            "WidthScale": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 1,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 0,
+                    "envelope": 0
+                  }
+                ]
+              }
+            },
+            "Transparency": {
+              "NumberSequence": {
+                "keypoints": [
+                  {
+                    "time": 0,
+                    "value": 0.15,
+                    "envelope": 0
+                  },
+                  {
+                    "time": 1,
+                    "value": 1,
+                    "envelope": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

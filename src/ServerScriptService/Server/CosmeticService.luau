@@ -1,6 +1,6 @@
 --!strict
--- Applies equipped cosmetics: the title over a player's head, their pillar skin, their elimination splash.
--- Titles and splashes are clones of templates authored under ReplicatedStorage.Templates.
+-- Applies equipped cosmetics: the title over a player's head, their pillar skin, their elimination splash
+-- and the trail behind them. Titles, splashes and trails are clones of templates under ReplicatedStorage.Templates.
 
 local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
@@ -11,6 +11,8 @@ local Shop = require(ReplicatedStorage.Shared.Shop)
 local DataService = require(script.Parent.DataService)
 
 local TITLE_NAME = "KrillionTitle"
+local TRAIL_PREFIX = "KrillionTrail" -- every trail clone in the root part is named with this, for removal
+local TRAIL_NAME = "KrillionTrail"
 
 local passLookup: (Player) -> { [string]: boolean } = function()
 	return {}
@@ -81,11 +83,59 @@ local function applyTitle(player: Player)
 	title.Parent = head
 end
 
+-- Swaps the trail in the HumanoidRootPart for the equipped one: Templates.Trails.<trail> holds two
+-- attachments and a Trail; clones lose the Trail's links to them, so it is re-pointed here.
+local function applyTrail(player: Player)
+	local character = player.Character
+	if character == nil then
+		return
+	end
+	local root = character:FindFirstChild("HumanoidRootPart")
+	if root == nil then
+		return
+	end
+	for _, child in root:GetChildren() do
+		if string.sub(child.Name, 1, #TRAIL_PREFIX) == TRAIL_PREFIX then
+			child:Destroy()
+		end
+	end
+	local item = CosmeticService.equipped(player, "Trail")
+	local trailName = if item ~= nil then item.trail else nil
+	if trailName == nil then
+		return
+	end
+	local folder = templates():FindFirstChild("Trails")
+	local template = if folder ~= nil then folder:FindFirstChild(trailName) else nil
+	if template == nil then
+		warn("CosmeticService: no trail template " .. trailName)
+		return
+	end
+	local top = template:FindFirstChild("TrailTop")
+	local bottom = template:FindFirstChild("TrailBottom")
+	local trailTemplate = template:FindFirstChild(TRAIL_NAME)
+	if top == nil or bottom == nil or trailTemplate == nil or not trailTemplate:IsA("Trail") then
+		return
+	end
+	local topClone = top:Clone() :: Attachment
+	topClone.Name = TRAIL_PREFIX .. "Top"
+	topClone.Parent = root
+	local bottomClone = bottom:Clone() :: Attachment
+	bottomClone.Name = TRAIL_PREFIX .. "Bottom"
+	bottomClone.Parent = root
+	local trail = trailTemplate:Clone()
+	trail.Name = TRAIL_NAME
+	trail.Attachment0 = topClone
+	trail.Attachment1 = bottomClone
+	trail.Parent = root
+end
+
 function CosmeticService.refresh(player: Player)
 	applyTitle(player)
+	applyTrail(player)
 end
 
 -- Recolours a freshly spawned pillar (and its cap) with the player's skin, if they have one equipped.
+-- Skins with a `top` colour give the cap that colour; others get a lightened body colour.
 function CosmeticService.applySkin(player: Player, platform: Part)
 	local item = CosmeticService.equipped(player, "Skin")
 	if item == nil then
@@ -100,12 +150,18 @@ function CosmeticService.applySkin(player: Player, platform: Part)
 	if color ~= nil then
 		platform.Color = color
 		if cap ~= nil then
-			cap.Color = color:Lerp(Color3.new(1, 1, 1), 0.35)
+			local top = item.top
+			cap.Color = if top ~= nil then Color3.fromRGB(top[1], top[2], top[3]) else color:Lerp(Color3.new(1, 1, 1), 0.35)
 		end
 	end
 	platform.Material = material
 	if cap ~= nil then
-		cap.Material = material
+		-- Studs only render on Plastic, so plastic-look skins keep the cap's studded top.
+		if material == Enum.Material.Plastic or material == Enum.Material.SmoothPlastic then
+			cap.Material = Enum.Material.Plastic
+		else
+			cap.Material = material
+		end
 	end
 end
 
@@ -142,6 +198,8 @@ function CosmeticService.start()
 		player.CharacterAdded:Connect(function(character)
 			character:WaitForChild("Head", 5)
 			applyTitle(player)
+			character:WaitForChild("HumanoidRootPart", 5)
+			applyTrail(player)
 		end)
 	end
 	for _, player in Players:GetPlayers() do

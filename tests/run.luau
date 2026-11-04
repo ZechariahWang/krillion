@@ -23,6 +23,19 @@ local suites = {
 	require("./Economy.test"),
 	require("./ArenaLayout.test"),
 	require("./Shop.test"),
+	require("./Signal.test"),
+	require("./Currency.test"),
+	require("./Depth.test"),
+	require("./Boosts.test"),
+	require("./AnswerGate.test"),
+	require("./LateJoin.test"),
+	require("./Schooling.test"),
+	require("./Quests.test"),
+	require("./Rewards.test"),
+	require("./Cosmetics.test"),
+	require("./Tide.test"),
+	require("./AnswerStats.test"),
+	require("./BotBrain.test"),
 }
 
 for _, suite in suites do

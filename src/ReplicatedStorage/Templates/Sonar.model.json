@@ -1,0 +1,1847 @@
+{
+  "className": "Model",
+  "attributes": {
+    "Rojo_Target_PrimaryPart": "SonarCore",
+    "Note": "Floating prompt screen over the ring (W13). Sonar.luau clones it into Workspace on each client, where it shows the prompt and timer during Prompt and Reveal and follows the water and pillars locally. Centred on the origin like the ring; Gui.Enabled starts false."
+  },
+  "children": [
+    {
+      "name": "Core",
+      "className": "Part",
+      "attributes": {
+        "Rojo_Id": "SonarCore"
+      },
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": false,
+        "Locked": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          9.8,
+          5.4,
+          9.8
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0,
+              0,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.051,
+          0.11,
+          0.235
+        ]
+      }
+    },
+    {
+      "name": "Screen1",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": false,
+        "Locked": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          10,
+          5.6,
+          0.3
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0,
+              0,
+              -5.05
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.102,
+          0.204,
+          0.384
+        ]
+      },
+      "children": [
+        {
+          "name": "Gui",
+          "className": "SurfaceGui",
+          "properties": {
+            "Face": "Front",
+            "SizingMode": "PixelsPerStud",
+            "PixelsPerStud": 40,
+            "LightInfluence": 0,
+            "Brightness": 1.2,
+            "ZIndexBehavior": "Sibling",
+            "ClipsDescendants": true,
+            "Enabled": false
+          },
+          "children": [
+            {
+              "name": "Panel",
+              "className": "Frame",
+              "properties": {
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BorderSizePixel": 0
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        0,
+                        18
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "UIGradient",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              0.102,
+                              0.204,
+                              0.384
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.051,
+                              0.11,
+                              0.235
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "Thickness": 6,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Header",
+                  "className": "Frame",
+                  "properties": {
+                    "AnchorPoint": [
+                      0.5,
+                      0
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          12
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          40
+                        ]
+                      ]
+                    },
+                    "BackgroundColor3": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "BorderSizePixel": 0
+                  },
+                  "children": [
+                    {
+                      "name": "UICorner",
+                      "className": "UICorner",
+                      "properties": {
+                        "CornerRadius": {
+                          "UDim": [
+                            0.5,
+                            0
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Round",
+                      "className": "TextLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "FontFace": {
+                          "family": "rbxasset://fonts/families/FredokaOne.json",
+                          "weight": "Bold",
+                          "style": "Normal"
+                        },
+                        "TextScaled": true,
+                        "TextWrapped": true,
+                        "AnchorPoint": [
+                          0.5,
+                          0.5
+                        ],
+                        "Position": {
+                          "UDim2": [
+                            [
+                              0.5,
+                              0
+                            ],
+                            [
+                              0.5,
+                              0
+                            ]
+                          ]
+                        },
+                        "Size": {
+                          "UDim2": [
+                            [
+                              1,
+                              -20
+                            ],
+                            [
+                              1,
+                              -8
+                            ]
+                          ]
+                        },
+                        "Text": "SONAR",
+                        "TextColor3": [
+                          1,
+                          1,
+                          1
+                        ]
+                      },
+                      "children": [
+                        {
+                          "name": "Outline",
+                          "className": "UIStroke",
+                          "properties": {
+                            "ApplyStrokeMode": "Contextual",
+                            "Color": [
+                              0.039,
+                              0.078,
+                              0.157
+                            ],
+                            "Thickness": 2,
+                            "LineJoinMode": "Round"
+                          }
+                        },
+                        {
+                          "name": "UITextSizeConstraint",
+                          "className": "UITextSizeConstraint",
+                          "properties": {
+                            "MaxTextSize": 32,
+                            "MinTextSize": 12
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Prompt",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      0.5
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0.53,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.92,
+                          0
+                        ],
+                        [
+                          0,
+                          96
+                        ]
+                      ]
+                    },
+                    "Text": "WAITING FOR DIVERS",
+                    "TextColor3": [
+                      1.0,
+                      0.961,
+                      0.863
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 3,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 56,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Timer",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      1
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          1,
+                          -10
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          38
+                        ]
+                      ]
+                    },
+                    "Text": "",
+                    "TextColor3": [
+                      1.0,
+                      0.761,
+                      0.294
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 2.5,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 36,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Screen2",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": false,
+        "Locked": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          0.3,
+          5.6,
+          10
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              -5.05,
+              0,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.102,
+          0.204,
+          0.384
+        ]
+      },
+      "children": [
+        {
+          "name": "Gui",
+          "className": "SurfaceGui",
+          "properties": {
+            "Face": "Left",
+            "SizingMode": "PixelsPerStud",
+            "PixelsPerStud": 40,
+            "LightInfluence": 0,
+            "Brightness": 1.2,
+            "ZIndexBehavior": "Sibling",
+            "ClipsDescendants": true,
+            "Enabled": false
+          },
+          "children": [
+            {
+              "name": "Panel",
+              "className": "Frame",
+              "properties": {
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BorderSizePixel": 0
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        0,
+                        18
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "UIGradient",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              0.102,
+                              0.204,
+                              0.384
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.051,
+                              0.11,
+                              0.235
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "Thickness": 6,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Header",
+                  "className": "Frame",
+                  "properties": {
+                    "AnchorPoint": [
+                      0.5,
+                      0
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          12
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          40
+                        ]
+                      ]
+                    },
+                    "BackgroundColor3": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "BorderSizePixel": 0
+                  },
+                  "children": [
+                    {
+                      "name": "UICorner",
+                      "className": "UICorner",
+                      "properties": {
+                        "CornerRadius": {
+                          "UDim": [
+                            0.5,
+                            0
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Round",
+                      "className": "TextLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "FontFace": {
+                          "family": "rbxasset://fonts/families/FredokaOne.json",
+                          "weight": "Bold",
+                          "style": "Normal"
+                        },
+                        "TextScaled": true,
+                        "TextWrapped": true,
+                        "AnchorPoint": [
+                          0.5,
+                          0.5
+                        ],
+                        "Position": {
+                          "UDim2": [
+                            [
+                              0.5,
+                              0
+                            ],
+                            [
+                              0.5,
+                              0
+                            ]
+                          ]
+                        },
+                        "Size": {
+                          "UDim2": [
+                            [
+                              1,
+                              -20
+                            ],
+                            [
+                              1,
+                              -8
+                            ]
+                          ]
+                        },
+                        "Text": "SONAR",
+                        "TextColor3": [
+                          1,
+                          1,
+                          1
+                        ]
+                      },
+                      "children": [
+                        {
+                          "name": "Outline",
+                          "className": "UIStroke",
+                          "properties": {
+                            "ApplyStrokeMode": "Contextual",
+                            "Color": [
+                              0.039,
+                              0.078,
+                              0.157
+                            ],
+                            "Thickness": 2,
+                            "LineJoinMode": "Round"
+                          }
+                        },
+                        {
+                          "name": "UITextSizeConstraint",
+                          "className": "UITextSizeConstraint",
+                          "properties": {
+                            "MaxTextSize": 32,
+                            "MinTextSize": 12
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Prompt",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      0.5
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0.53,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.92,
+                          0
+                        ],
+                        [
+                          0,
+                          96
+                        ]
+                      ]
+                    },
+                    "Text": "WAITING FOR DIVERS",
+                    "TextColor3": [
+                      1.0,
+                      0.961,
+                      0.863
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 3,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 56,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Timer",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      1
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          1,
+                          -10
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          38
+                        ]
+                      ]
+                    },
+                    "Text": "",
+                    "TextColor3": [
+                      1.0,
+                      0.761,
+                      0.294
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 2.5,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 36,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Screen3",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": false,
+        "Locked": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          10,
+          5.6,
+          0.3
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0,
+              0,
+              5.05
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.102,
+          0.204,
+          0.384
+        ]
+      },
+      "children": [
+        {
+          "name": "Gui",
+          "className": "SurfaceGui",
+          "properties": {
+            "Face": "Back",
+            "SizingMode": "PixelsPerStud",
+            "PixelsPerStud": 40,
+            "LightInfluence": 0,
+            "Brightness": 1.2,
+            "ZIndexBehavior": "Sibling",
+            "ClipsDescendants": true,
+            "Enabled": false
+          },
+          "children": [
+            {
+              "name": "Panel",
+              "className": "Frame",
+              "properties": {
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BorderSizePixel": 0
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        0,
+                        18
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "UIGradient",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              0.102,
+                              0.204,
+                              0.384
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.051,
+                              0.11,
+                              0.235
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "Thickness": 6,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Header",
+                  "className": "Frame",
+                  "properties": {
+                    "AnchorPoint": [
+                      0.5,
+                      0
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          12
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          40
+                        ]
+                      ]
+                    },
+                    "BackgroundColor3": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "BorderSizePixel": 0
+                  },
+                  "children": [
+                    {
+                      "name": "UICorner",
+                      "className": "UICorner",
+                      "properties": {
+                        "CornerRadius": {
+                          "UDim": [
+                            0.5,
+                            0
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Round",
+                      "className": "TextLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "FontFace": {
+                          "family": "rbxasset://fonts/families/FredokaOne.json",
+                          "weight": "Bold",
+                          "style": "Normal"
+                        },
+                        "TextScaled": true,
+                        "TextWrapped": true,
+                        "AnchorPoint": [
+                          0.5,
+                          0.5
+                        ],
+                        "Position": {
+                          "UDim2": [
+                            [
+                              0.5,
+                              0
+                            ],
+                            [
+                              0.5,
+                              0
+                            ]
+                          ]
+                        },
+                        "Size": {
+                          "UDim2": [
+                            [
+                              1,
+                              -20
+                            ],
+                            [
+                              1,
+                              -8
+                            ]
+                          ]
+                        },
+                        "Text": "SONAR",
+                        "TextColor3": [
+                          1,
+                          1,
+                          1
+                        ]
+                      },
+                      "children": [
+                        {
+                          "name": "Outline",
+                          "className": "UIStroke",
+                          "properties": {
+                            "ApplyStrokeMode": "Contextual",
+                            "Color": [
+                              0.039,
+                              0.078,
+                              0.157
+                            ],
+                            "Thickness": 2,
+                            "LineJoinMode": "Round"
+                          }
+                        },
+                        {
+                          "name": "UITextSizeConstraint",
+                          "className": "UITextSizeConstraint",
+                          "properties": {
+                            "MaxTextSize": 32,
+                            "MinTextSize": 12
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Prompt",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      0.5
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0.53,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.92,
+                          0
+                        ],
+                        [
+                          0,
+                          96
+                        ]
+                      ]
+                    },
+                    "Text": "WAITING FOR DIVERS",
+                    "TextColor3": [
+                      1.0,
+                      0.961,
+                      0.863
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 3,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 56,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Timer",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      1
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          1,
+                          -10
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          38
+                        ]
+                      ]
+                    },
+                    "Text": "",
+                    "TextColor3": [
+                      1.0,
+                      0.761,
+                      0.294
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 2.5,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 36,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Screen4",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": false,
+        "Locked": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          0.3,
+          5.6,
+          10
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              5.05,
+              0,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.102,
+          0.204,
+          0.384
+        ]
+      },
+      "children": [
+        {
+          "name": "Gui",
+          "className": "SurfaceGui",
+          "properties": {
+            "Face": "Right",
+            "SizingMode": "PixelsPerStud",
+            "PixelsPerStud": 40,
+            "LightInfluence": 0,
+            "Brightness": 1.2,
+            "ZIndexBehavior": "Sibling",
+            "ClipsDescendants": true,
+            "Enabled": false
+          },
+          "children": [
+            {
+              "name": "Panel",
+              "className": "Frame",
+              "properties": {
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      1,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BorderSizePixel": 0
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        0,
+                        18
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "UIGradient",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              0.102,
+                              0.204,
+                              0.384
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.051,
+                              0.11,
+                              0.235
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "Thickness": 6,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Header",
+                  "className": "Frame",
+                  "properties": {
+                    "AnchorPoint": [
+                      0.5,
+                      0
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          12
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          40
+                        ]
+                      ]
+                    },
+                    "BackgroundColor3": [
+                      0.149,
+                      0.776,
+                      0.769
+                    ],
+                    "BorderSizePixel": 0
+                  },
+                  "children": [
+                    {
+                      "name": "UICorner",
+                      "className": "UICorner",
+                      "properties": {
+                        "CornerRadius": {
+                          "UDim": [
+                            0.5,
+                            0
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Round",
+                      "className": "TextLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "FontFace": {
+                          "family": "rbxasset://fonts/families/FredokaOne.json",
+                          "weight": "Bold",
+                          "style": "Normal"
+                        },
+                        "TextScaled": true,
+                        "TextWrapped": true,
+                        "AnchorPoint": [
+                          0.5,
+                          0.5
+                        ],
+                        "Position": {
+                          "UDim2": [
+                            [
+                              0.5,
+                              0
+                            ],
+                            [
+                              0.5,
+                              0
+                            ]
+                          ]
+                        },
+                        "Size": {
+                          "UDim2": [
+                            [
+                              1,
+                              -20
+                            ],
+                            [
+                              1,
+                              -8
+                            ]
+                          ]
+                        },
+                        "Text": "SONAR",
+                        "TextColor3": [
+                          1,
+                          1,
+                          1
+                        ]
+                      },
+                      "children": [
+                        {
+                          "name": "Outline",
+                          "className": "UIStroke",
+                          "properties": {
+                            "ApplyStrokeMode": "Contextual",
+                            "Color": [
+                              0.039,
+                              0.078,
+                              0.157
+                            ],
+                            "Thickness": 2,
+                            "LineJoinMode": "Round"
+                          }
+                        },
+                        {
+                          "name": "UITextSizeConstraint",
+                          "className": "UITextSizeConstraint",
+                          "properties": {
+                            "MaxTextSize": 32,
+                            "MinTextSize": 12
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Prompt",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      0.5
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0.53,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.92,
+                          0
+                        ],
+                        [
+                          0,
+                          96
+                        ]
+                      ]
+                    },
+                    "Text": "WAITING FOR DIVERS",
+                    "TextColor3": [
+                      1.0,
+                      0.961,
+                      0.863
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 3,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 56,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Timer",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Bold",
+                      "style": "Normal"
+                    },
+                    "TextScaled": true,
+                    "TextWrapped": true,
+                    "AnchorPoint": [
+                      0.5,
+                      1
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          1,
+                          -10
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.5,
+                          0
+                        ],
+                        [
+                          0,
+                          38
+                        ]
+                      ]
+                    },
+                    "Text": "",
+                    "TextColor3": [
+                      1.0,
+                      0.761,
+                      0.294
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.039,
+                          0.078,
+                          0.157
+                        ],
+                        "Thickness": 2.5,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "UITextSizeConstraint",
+                      "className": "UITextSizeConstraint",
+                      "properties": {
+                        "MaxTextSize": 36,
+                        "MinTextSize": 12
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CapTop",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": false,
+        "Locked": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          0.5,
+          15,
+          15
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0,
+              3.05,
+              0
+            ],
+            "orientation": [
+              [
+                0,
+                -1,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.149,
+          0.776,
+          0.769
+        ],
+        "Shape": "Cylinder"
+      }
+    },
+    {
+      "name": "CapBottom",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": false,
+        "Locked": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          0.5,
+          15,
+          15
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0,
+              -3.05,
+              0
+            ],
+            "orientation": [
+              [
+                0,
+                -1,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.149,
+          0.776,
+          0.769
+        ],
+        "Shape": "Cylinder"
+      }
+    }
+  ]
+}

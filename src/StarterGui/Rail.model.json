@@ -1,0 +1,1369 @@
+{
+  "className": "ScreenGui",
+  "properties": {
+    "ResetOnSpawn": false,
+    "DisplayOrder": 4,
+    "Enabled": false,
+    "IgnoreGuiInset": true,
+    "ZIndexBehavior": "Sibling"
+  },
+  "attributes": {
+    "Note": "Lobby side rail at the left edge: chunky square QUESTS / REWARDS / HELP keys with a red '!' badge. Rail.luau shows it only off-pillar with the shop closed and scales RailFrame.Fit to short screens; Quests, Rewards and Tutorial bind their own keys."
+  },
+  "children": [
+    {
+      "name": "RailFrame",
+      "className": "Frame",
+      "properties": {
+        "AnchorPoint": [
+          0,
+          0.5
+        ],
+        "Position": {
+          "UDim2": [
+            [
+              0,
+              16
+            ],
+            [
+              0.5,
+              0
+            ]
+          ]
+        },
+        "Size": {
+          "UDim2": [
+            [
+              0,
+              108
+            ],
+            [
+              0,
+              320
+            ]
+          ]
+        },
+        "BackgroundTransparency": 1,
+        "BorderSizePixel": 0
+      },
+      "children": [
+        {
+          "name": "UIListLayout",
+          "className": "UIListLayout",
+          "properties": {
+            "FillDirection": "Vertical",
+            "Padding": {
+              "UDim": [
+                0,
+                16
+              ]
+            },
+            "HorizontalAlignment": "Left",
+            "VerticalAlignment": "Center",
+            "SortOrder": "LayoutOrder"
+          }
+        },
+        {
+          "name": "Fit",
+          "className": "UIScale",
+          "attributes": {
+            "Note": "Rail.luau shrinks the rail on short screens (landscape phones)."
+          }
+        },
+        {
+          "name": "QuestsButton",
+          "className": "TextButton",
+          "properties": {
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "Size": {
+              "UDim2": [
+                [
+                  0,
+                  96
+                ],
+                [
+                  0,
+                  96
+                ]
+              ]
+            },
+            "BackgroundColor3": [
+              1,
+              1,
+              1
+            ],
+            "BorderSizePixel": 0,
+            "AutoButtonColor": false,
+            "Text": "",
+            "Visible": true,
+            "LayoutOrder": 1
+          },
+          "attributes": {
+            "Chunky": true
+          },
+          "children": [
+            {
+              "name": "UICorner",
+              "className": "UICorner",
+              "properties": {
+                "CornerRadius": {
+                  "UDim": [
+                    0.22,
+                    0
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Border",
+              "className": "UIStroke",
+              "properties": {
+                "ApplyStrokeMode": "Border",
+                "Color": [
+                  0.0941,
+                  0.0588,
+                  0.2039
+                ],
+                "Thickness": 4,
+                "LineJoinMode": "Round"
+              }
+            },
+            {
+              "name": "Lip",
+              "className": "UIGradient",
+              "properties": {
+                "Rotation": 90,
+                "Color": {
+                  "ColorSequence": {
+                    "keypoints": [
+                      {
+                        "time": 0,
+                        "color": [
+                          0.6431,
+                          0.4824,
+                          1.0
+                        ]
+                      },
+                      {
+                        "time": 0.928,
+                        "color": [
+                          0.4235,
+                          0.2471,
+                          0.902
+                        ]
+                      },
+                      {
+                        "time": 0.938,
+                        "color": [
+                          0.2667,
+                          0.1373,
+                          0.6392
+                        ]
+                      },
+                      {
+                        "time": 1,
+                        "color": [
+                          0.2667,
+                          0.1373,
+                          0.6392
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "name": "UIScale",
+              "className": "UIScale"
+            },
+            {
+              "name": "Shine",
+              "className": "Frame",
+              "properties": {
+                "Position": {
+                  "UDim2": [
+                    [
+                      0,
+                      10
+                    ],
+                    [
+                      0,
+                      5
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      -20
+                    ],
+                    [
+                      0.18,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BackgroundTransparency": 0.78,
+                "BorderSizePixel": 0,
+                "ZIndex": 1
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        1,
+                        0
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Icon",
+              "className": "TextLabel",
+              "properties": {
+                "BackgroundTransparency": 1,
+                "BorderSizePixel": 0,
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.5,
+                      0
+                    ],
+                    [
+                      0,
+                      7
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0,
+                      50
+                    ],
+                    [
+                      0,
+                      46
+                    ]
+                  ]
+                },
+                "Text": "\ud83d\udcdc",
+                "TextScaled": true,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                },
+                "AnchorPoint": [
+                  0.5,
+                  0
+                ],
+                "ZIndex": 2
+              }
+            },
+            {
+              "name": "Label",
+              "className": "TextLabel",
+              "properties": {
+                "BackgroundTransparency": 1,
+                "BorderSizePixel": 0,
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.5,
+                      0
+                    ],
+                    [
+                      0.938,
+                      -3
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      -8
+                    ],
+                    [
+                      0,
+                      26
+                    ]
+                  ]
+                },
+                "Text": "QUESTS",
+                "TextSize": 22,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                },
+                "TextXAlignment": "Center",
+                "TextYAlignment": "Center",
+                "AnchorPoint": [
+                  0.5,
+                  1
+                ],
+                "ZIndex": 3,
+                "TextScaled": true
+              },
+              "children": [
+                {
+                  "name": "UITextSizeConstraint",
+                  "className": "UITextSizeConstraint",
+                  "properties": {
+                    "MaxTextSize": 23,
+                    "MinTextSize": 8
+                  }
+                },
+                {
+                  "name": "Outline",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Contextual",
+                    "Color": [
+                      0.0941,
+                      0.0588,
+                      0.2039
+                    ],
+                    "Thickness": 3.5,
+                    "LineJoinMode": "Round"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Badge",
+              "className": "TextLabel",
+              "properties": {
+                "Visible": false,
+                "AnchorPoint": [
+                  0.5,
+                  0.5
+                ],
+                "Position": {
+                  "UDim2": [
+                    [
+                      1,
+                      -6
+                    ],
+                    [
+                      0,
+                      6
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0,
+                      30
+                    ],
+                    [
+                      0,
+                      30
+                    ]
+                  ]
+                },
+                "AutomaticSize": "X",
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BorderSizePixel": 0,
+                "ZIndex": 5,
+                "Text": "!",
+                "TextSize": 22,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                }
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        1,
+                        0
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.0941,
+                      0.0588,
+                      0.2039
+                    ],
+                    "Thickness": 3,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Gloss",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              1.0,
+                              0.5098,
+                              0.4392
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.9098,
+                              0.2314,
+                              0.2314
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "UIPadding",
+                  "className": "UIPadding",
+                  "properties": {
+                    "PaddingLeft": {
+                      "UDim": [
+                        0,
+                        7
+                      ]
+                    },
+                    "PaddingRight": {
+                      "UDim": [
+                        0,
+                        7
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "UIScale",
+                  "className": "UIScale"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RewardsButton",
+          "className": "TextButton",
+          "properties": {
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "Size": {
+              "UDim2": [
+                [
+                  0,
+                  96
+                ],
+                [
+                  0,
+                  96
+                ]
+              ]
+            },
+            "BackgroundColor3": [
+              1,
+              1,
+              1
+            ],
+            "BorderSizePixel": 0,
+            "AutoButtonColor": false,
+            "Text": "",
+            "Visible": true,
+            "LayoutOrder": 2
+          },
+          "attributes": {
+            "Chunky": true
+          },
+          "children": [
+            {
+              "name": "UICorner",
+              "className": "UICorner",
+              "properties": {
+                "CornerRadius": {
+                  "UDim": [
+                    0.22,
+                    0
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Border",
+              "className": "UIStroke",
+              "properties": {
+                "ApplyStrokeMode": "Border",
+                "Color": [
+                  0.0941,
+                  0.0588,
+                  0.2039
+                ],
+                "Thickness": 4,
+                "LineJoinMode": "Round"
+              }
+            },
+            {
+              "name": "Lip",
+              "className": "UIGradient",
+              "properties": {
+                "Rotation": 90,
+                "Color": {
+                  "ColorSequence": {
+                    "keypoints": [
+                      {
+                        "time": 0,
+                        "color": [
+                          1.0,
+                          0.4863,
+                          0.7529
+                        ]
+                      },
+                      {
+                        "time": 0.928,
+                        "color": [
+                          0.9098,
+                          0.2157,
+                          0.5608
+                        ]
+                      },
+                      {
+                        "time": 0.938,
+                        "color": [
+                          0.6588,
+                          0.1176,
+                          0.3882
+                        ]
+                      },
+                      {
+                        "time": 1,
+                        "color": [
+                          0.6588,
+                          0.1176,
+                          0.3882
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "name": "UIScale",
+              "className": "UIScale"
+            },
+            {
+              "name": "Shine",
+              "className": "Frame",
+              "properties": {
+                "Position": {
+                  "UDim2": [
+                    [
+                      0,
+                      10
+                    ],
+                    [
+                      0,
+                      5
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      -20
+                    ],
+                    [
+                      0.18,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BackgroundTransparency": 0.78,
+                "BorderSizePixel": 0,
+                "ZIndex": 1
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        1,
+                        0
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Icon",
+              "className": "TextLabel",
+              "properties": {
+                "BackgroundTransparency": 1,
+                "BorderSizePixel": 0,
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.5,
+                      0
+                    ],
+                    [
+                      0,
+                      7
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0,
+                      50
+                    ],
+                    [
+                      0,
+                      46
+                    ]
+                  ]
+                },
+                "Text": "\ud83c\udf81",
+                "TextScaled": true,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                },
+                "AnchorPoint": [
+                  0.5,
+                  0
+                ],
+                "ZIndex": 2
+              }
+            },
+            {
+              "name": "Label",
+              "className": "TextLabel",
+              "properties": {
+                "BackgroundTransparency": 1,
+                "BorderSizePixel": 0,
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.5,
+                      0
+                    ],
+                    [
+                      0.938,
+                      -3
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      -8
+                    ],
+                    [
+                      0,
+                      26
+                    ]
+                  ]
+                },
+                "Text": "REWARDS",
+                "TextSize": 22,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                },
+                "TextXAlignment": "Center",
+                "TextYAlignment": "Center",
+                "AnchorPoint": [
+                  0.5,
+                  1
+                ],
+                "ZIndex": 3,
+                "TextScaled": true
+              },
+              "children": [
+                {
+                  "name": "UITextSizeConstraint",
+                  "className": "UITextSizeConstraint",
+                  "properties": {
+                    "MaxTextSize": 23,
+                    "MinTextSize": 8
+                  }
+                },
+                {
+                  "name": "Outline",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Contextual",
+                    "Color": [
+                      0.0941,
+                      0.0588,
+                      0.2039
+                    ],
+                    "Thickness": 3.5,
+                    "LineJoinMode": "Round"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Badge",
+              "className": "TextLabel",
+              "properties": {
+                "Visible": false,
+                "AnchorPoint": [
+                  0.5,
+                  0.5
+                ],
+                "Position": {
+                  "UDim2": [
+                    [
+                      1,
+                      -6
+                    ],
+                    [
+                      0,
+                      6
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0,
+                      30
+                    ],
+                    [
+                      0,
+                      30
+                    ]
+                  ]
+                },
+                "AutomaticSize": "X",
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BorderSizePixel": 0,
+                "ZIndex": 5,
+                "Text": "!",
+                "TextSize": 22,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                }
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        1,
+                        0
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.0941,
+                      0.0588,
+                      0.2039
+                    ],
+                    "Thickness": 3,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Gloss",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              1.0,
+                              0.5098,
+                              0.4392
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.9098,
+                              0.2314,
+                              0.2314
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "UIPadding",
+                  "className": "UIPadding",
+                  "properties": {
+                    "PaddingLeft": {
+                      "UDim": [
+                        0,
+                        7
+                      ]
+                    },
+                    "PaddingRight": {
+                      "UDim": [
+                        0,
+                        7
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "UIScale",
+                  "className": "UIScale"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HelpButton",
+          "className": "TextButton",
+          "properties": {
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "Size": {
+              "UDim2": [
+                [
+                  0,
+                  96
+                ],
+                [
+                  0,
+                  96
+                ]
+              ]
+            },
+            "BackgroundColor3": [
+              1,
+              1,
+              1
+            ],
+            "BorderSizePixel": 0,
+            "AutoButtonColor": false,
+            "Text": "",
+            "Visible": true,
+            "LayoutOrder": 3
+          },
+          "attributes": {
+            "Chunky": true
+          },
+          "children": [
+            {
+              "name": "UICorner",
+              "className": "UICorner",
+              "properties": {
+                "CornerRadius": {
+                  "UDim": [
+                    0.22,
+                    0
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Border",
+              "className": "UIStroke",
+              "properties": {
+                "ApplyStrokeMode": "Border",
+                "Color": [
+                  0.0941,
+                  0.0588,
+                  0.2039
+                ],
+                "Thickness": 4,
+                "LineJoinMode": "Round"
+              }
+            },
+            {
+              "name": "Lip",
+              "className": "UIGradient",
+              "properties": {
+                "Rotation": 90,
+                "Color": {
+                  "ColorSequence": {
+                    "keypoints": [
+                      {
+                        "time": 0,
+                        "color": [
+                          0.4549,
+                          0.8314,
+                          1.0
+                        ]
+                      },
+                      {
+                        "time": 0.928,
+                        "color": [
+                          0.1804,
+                          0.6078,
+                          1.0
+                        ]
+                      },
+                      {
+                        "time": 0.938,
+                        "color": [
+                          0.1098,
+                          0.3843,
+                          0.7098
+                        ]
+                      },
+                      {
+                        "time": 1,
+                        "color": [
+                          0.1098,
+                          0.3843,
+                          0.7098
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "name": "UIScale",
+              "className": "UIScale"
+            },
+            {
+              "name": "Shine",
+              "className": "Frame",
+              "properties": {
+                "Position": {
+                  "UDim2": [
+                    [
+                      0,
+                      10
+                    ],
+                    [
+                      0,
+                      5
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      -20
+                    ],
+                    [
+                      0.18,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BackgroundTransparency": 0.78,
+                "BorderSizePixel": 0,
+                "ZIndex": 1
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        1,
+                        0
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Icon",
+              "className": "TextLabel",
+              "properties": {
+                "BackgroundTransparency": 1,
+                "BorderSizePixel": 0,
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.5,
+                      0
+                    ],
+                    [
+                      0,
+                      7
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0,
+                      50
+                    ],
+                    [
+                      0,
+                      46
+                    ]
+                  ]
+                },
+                "Text": "\u2753",
+                "TextScaled": true,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                },
+                "AnchorPoint": [
+                  0.5,
+                  0
+                ],
+                "ZIndex": 2
+              }
+            },
+            {
+              "name": "Label",
+              "className": "TextLabel",
+              "properties": {
+                "BackgroundTransparency": 1,
+                "BorderSizePixel": 0,
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.5,
+                      0
+                    ],
+                    [
+                      0.938,
+                      -3
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      -8
+                    ],
+                    [
+                      0,
+                      26
+                    ]
+                  ]
+                },
+                "Text": "HELP",
+                "TextSize": 22,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                },
+                "TextXAlignment": "Center",
+                "TextYAlignment": "Center",
+                "AnchorPoint": [
+                  0.5,
+                  1
+                ],
+                "ZIndex": 3,
+                "TextScaled": true
+              },
+              "children": [
+                {
+                  "name": "UITextSizeConstraint",
+                  "className": "UITextSizeConstraint",
+                  "properties": {
+                    "MaxTextSize": 23,
+                    "MinTextSize": 8
+                  }
+                },
+                {
+                  "name": "Outline",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Contextual",
+                    "Color": [
+                      0.0941,
+                      0.0588,
+                      0.2039
+                    ],
+                    "Thickness": 3.5,
+                    "LineJoinMode": "Round"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Badge",
+              "className": "TextLabel",
+              "properties": {
+                "Visible": false,
+                "AnchorPoint": [
+                  0.5,
+                  0.5
+                ],
+                "Position": {
+                  "UDim2": [
+                    [
+                      1,
+                      -6
+                    ],
+                    [
+                      0,
+                      6
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0,
+                      30
+                    ],
+                    [
+                      0,
+                      30
+                    ]
+                  ]
+                },
+                "AutomaticSize": "X",
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "BorderSizePixel": 0,
+                "ZIndex": 5,
+                "Text": "!",
+                "TextSize": 22,
+                "TextColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "FontFace": {
+                  "family": "rbxasset://fonts/families/FredokaOne.json",
+                  "weight": "Regular",
+                  "style": "Normal"
+                }
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        1,
+                        0
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.0941,
+                      0.0588,
+                      0.2039
+                    ],
+                    "Thickness": 3,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Gloss",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              1.0,
+                              0.5098,
+                              0.4392
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.9098,
+                              0.2314,
+                              0.2314
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "UIPadding",
+                  "className": "UIPadding",
+                  "properties": {
+                    "PaddingLeft": {
+                      "UDim": [
+                        0,
+                        7
+                      ]
+                    },
+                    "PaddingRight": {
+                      "UDim": [
+                        0,
+                        7
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "UIScale",
+                  "className": "UIScale"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

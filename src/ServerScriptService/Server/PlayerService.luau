@@ -59,7 +59,8 @@ function PlayerService.hasCharacter(player: Player): boolean
 	return character:FindFirstChild("HumanoidRootPart") ~= nil
 end
 
--- On a pillar you cannot walk or jump, so nobody falls off by accident or hops onto a neighbour's pillar.
+-- On a pillar you can stroll around its top (invisible walls from MapService hold you on) but not jump,
+-- so nobody falls off by accident or hops onto a neighbour's pillar.
 local function setMovement(player: Player, onPillar: boolean)
 	local character = player.Character
 	if character == nil then
@@ -70,7 +71,7 @@ local function setMovement(player: Player, onPillar: boolean)
 		return
 	end
 	if onPillar then
-		humanoid.WalkSpeed = 0
+		humanoid.WalkSpeed = GameConfig.Platform.WalkSpeed
 		humanoid.JumpHeight = 0
 		humanoid.JumpPower = 0
 	else

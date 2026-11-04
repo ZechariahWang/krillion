@@ -1,0 +1,163 @@
+{
+  "className": "BillboardGui",
+  "properties": {
+    "Size": {
+      "UDim2": [
+        [
+          0,
+          280
+        ],
+        [
+          0,
+          40
+        ]
+      ]
+    },
+    "MaxDistance": 320,
+    "LightInfluence": 0,
+    "AlwaysOnTop": false,
+    "ClipsDescendants": false
+  },
+  "attributes": {
+    "Note": "Pillar answer tag. Standings.luau clones it onto each pillar after the reveal, just above the NameTag, and hides it when the next prompt starts."
+  },
+  "children": [
+    {
+      "name": "Pill",
+      "className": "Frame",
+      "properties": {
+        "AnchorPoint": [
+          0.5,
+          0.5
+        ],
+        "Position": {
+          "UDim2": [
+            [
+              0.5,
+              0
+            ],
+            [
+              0.5,
+              0
+            ]
+          ]
+        },
+        "Size": {
+          "UDim2": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              32
+            ]
+          ]
+        },
+        "AutomaticSize": "X",
+        "BackgroundColor3": [
+          0.051,
+          0.1098,
+          0.2353
+        ],
+        "BackgroundTransparency": 0.15,
+        "BorderSizePixel": 0
+      },
+      "children": [
+        {
+          "name": "UICorner",
+          "className": "UICorner",
+          "properties": {
+            "CornerRadius": {
+              "UDim": [
+                1,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "name": "Border",
+          "className": "UIStroke",
+          "properties": {
+            "ApplyStrokeMode": "Border",
+            "Color": [
+              1,
+              1,
+              1
+            ],
+            "Thickness": 2.5,
+            "LineJoinMode": "Round"
+          }
+        },
+        {
+          "name": "UIPadding",
+          "className": "UIPadding",
+          "properties": {
+            "PaddingLeft": {
+              "UDim": [
+                0,
+                12
+              ]
+            },
+            "PaddingRight": {
+              "UDim": [
+                0,
+                12
+              ]
+            }
+          }
+        },
+        {
+          "name": "AnswerText",
+          "className": "TextLabel",
+          "properties": {
+            "BackgroundTransparency": 1,
+            "BorderSizePixel": 0,
+            "Size": {
+              "UDim2": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ]
+            },
+            "AutomaticSize": "X",
+            "Text": "",
+            "TextSize": 22,
+            "FontFace": {
+              "family": "rbxasset://fonts/families/FredokaOne.json",
+              "weight": "Regular",
+              "style": "Normal"
+            },
+            "TextColor3": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Outline",
+              "className": "UIStroke",
+              "properties": {
+                "ApplyStrokeMode": "Contextual",
+                "Color": [
+                  0.0392,
+                  0.0784,
+                  0.1569
+                ],
+                "Thickness": 2.5,
+                "LineJoinMode": "Round"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "className": "Folder",
+  "children": [
+    {
+      "name": "Wins",
+      "className": "IntValue"
+    },
+    {
+      "name": "Shells",
+      "className": "IntValue"
+    },
+    {
+      "name": "Best",
+      "className": "IntValue"
+    }
+  ]
+}

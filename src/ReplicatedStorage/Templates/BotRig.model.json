@@ -1,0 +1,466 @@
+{
+  "className": "Model",
+  "attributes": {
+    "Rojo_Target_PrimaryPart": "BotRigTorso",
+    "Note": "Bot stand-in (W17). BotService clones it onto a bot's pillar, feet on the cap and facing the middle of the ring, welds every part to the pillar (unanchored, massless, no collisions) and tints the part marked Shirt with the pillar's colour. Built with its feet at y = 0, front facing -Z. No Humanoid and no scripts."
+  },
+  "children": [
+    {
+      "name": "LeftLeg",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          1,
+          2,
+          1
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              -0.5,
+              1,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.16,
+          0.2,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "RightLeg",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          1,
+          2,
+          1
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0.5,
+              1,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.16,
+          0.2,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "Torso",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          2,
+          2,
+          1
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0,
+              3,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.275,
+          0.588,
+          1
+        ]
+      },
+      "attributes": {
+        "Shirt": true,
+        "Rojo_Id": "BotRigTorso"
+      },
+      "children": [
+        {
+          "name": "BotChip",
+          "className": "SurfaceGui",
+          "properties": {
+            "Face": "Front",
+            "SizingMode": "PixelsPerStud",
+            "PixelsPerStud": 50,
+            "LightInfluence": 0,
+            "ClipsDescendants": true
+          },
+          "children": [
+            {
+              "name": "Chip",
+              "className": "Frame",
+              "properties": {
+                "AnchorPoint": [
+                  0.5,
+                  0.5
+                ],
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.5,
+                      0
+                    ],
+                    [
+                      0.5,
+                      0
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0,
+                      84
+                    ],
+                    [
+                      0,
+                      40
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  0.051,
+                  0.1098,
+                  0.2353
+                ],
+                "BorderSizePixel": 0
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        1,
+                        0
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      1,
+                      0.298,
+                      0.478
+                    ],
+                    "Thickness": 3,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "Label",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "BorderSizePixel": 0,
+                    "Size": {
+                      "UDim2": [
+                        [
+                          1,
+                          0
+                        ],
+                        [
+                          1,
+                          0
+                        ]
+                      ]
+                    },
+                    "Text": "BOT",
+                    "TextSize": 28,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Regular",
+                      "style": "Normal"
+                    },
+                    "TextColor3": [
+                      1,
+                      1,
+                      1
+                    ]
+                  },
+                  "children": [
+                    {
+                      "name": "Outline",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Contextual",
+                        "Color": [
+                          0.0392,
+                          0.0784,
+                          0.1569
+                        ],
+                        "Thickness": 2.5,
+                        "LineJoinMode": "Round"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LeftArm",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          1,
+          2,
+          1
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              -1.5,
+              3,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.961,
+          0.804,
+          0.188
+        ]
+      }
+    },
+    {
+      "name": "RightArm",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          1,
+          2,
+          1
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              1.5,
+              3,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.961,
+          0.804,
+          0.188
+        ]
+      }
+    },
+    {
+      "name": "Head",
+      "className": "Part",
+      "properties": {
+        "Anchored": true,
+        "CanCollide": false,
+        "CanQuery": false,
+        "CanTouch": false,
+        "CastShadow": true,
+        "Material": "SmoothPlastic",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "Size": [
+          2,
+          1,
+          1
+        ],
+        "CFrame": {
+          "CFrame": {
+            "position": [
+              0,
+              4.5,
+              0
+            ],
+            "orientation": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          }
+        },
+        "Color": [
+          0.961,
+          0.804,
+          0.188
+        ]
+      },
+      "children": [
+        {
+          "name": "Mesh",
+          "className": "SpecialMesh",
+          "properties": {
+            "MeshType": "Head",
+            "Scale": [
+              1.25,
+              1.25,
+              1.25
+            ]
+          }
+        },
+        {
+          "name": "face",
+          "className": "Decal",
+          "properties": {
+            "Face": "Front",
+            "Texture": "rbxasset://textures/face.png"
+          }
+        }
+      ]
+    }
+  ]
+}

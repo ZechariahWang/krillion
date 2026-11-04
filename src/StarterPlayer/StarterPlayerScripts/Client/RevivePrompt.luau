@@ -5,6 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Net = require(ReplicatedStorage.Shared.Net)
+local Lobby = require(script.Parent.Lobby)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
@@ -16,8 +17,12 @@ local token = 0
 
 local RevivePrompt = {}
 
-local function hide()
+local function hide(revived: boolean)
+	if not gui.Enabled then
+		return
+	end
 	gui.Enabled = false
+	Lobby.setReviveOpen(false, revived)
 end
 
 function RevivePrompt.init(playerGui: PlayerGui)
@@ -32,7 +37,7 @@ function RevivePrompt.init(playerGui: PlayerGui)
 			return
 		end
 		token += 1
-		hide()
+		hide(true)
 		Sfx.play("Fanfare", 0.5)
 		Net.event("ReviveUse"):FireServer()
 	end)
@@ -44,12 +49,13 @@ function RevivePrompt.onPrompt(payload)
 	count.Text = payload.revives .. " LEFT"
 	fill.Size = UDim2.fromScale(1, 1)
 	gui.Enabled = true
-	Ui.pop(card)
+	Lobby.setReviveOpen(true)
+	Ui.pop(card, 0.6)
 	Sfx.play("Tick", 0.5, 1.3)
 	TweenService:Create(fill, TweenInfo.new(payload.seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) }):Play()
 	task.delay(payload.seconds, function()
 		if token == mine then
-			hide()
+			hide(false)
 		end
 	end)
 end

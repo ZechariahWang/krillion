@@ -30,6 +30,25 @@ function MatchState.addPlayer(state: State, id: any)
 	state.points[id] = 0
 end
 
+-- A late joiner: alive on a pillar at `height` (not the start height), with no points yet.
+function MatchState.addPlayerAt(state: State, id: any, height: number)
+	state.alive[id] = true
+	state.heights[id] = height
+	state.points[id] = 0
+end
+
+-- The lowest pillar still in the match, or nil when nobody is alive.
+function MatchState.lowestAlive(state: State): number?
+	local lowest: number? = nil
+	for id in state.alive do
+		local height = state.heights[id]
+		if height ~= nil and (lowest == nil or height < lowest) then
+			lowest = height
+		end
+	end
+	return lowest
+end
+
 function MatchState.removePlayer(state: State, id: any)
 	state.alive[id] = nil
 	state.heights[id] = nil

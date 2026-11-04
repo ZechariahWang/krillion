@@ -1,0 +1,45 @@
+{
+  "className": "Frame",
+  "properties": {
+    "BorderSizePixel": 0,
+    "AnchorPoint": [
+      0.5,
+      0.5
+    ],
+    "Size": {
+      "UDim2": [
+        [
+          0,
+          10
+        ],
+        [
+          0,
+          16
+        ]
+      ]
+    },
+    "BackgroundColor3": [
+      1,
+      1,
+      1
+    ],
+    "ZIndex": 20
+  },
+  "attributes": {
+    "Note": "One confetti piece. Fx.confetti and the dive card clone it and tint it from Theme.Confetti."
+  },
+  "children": [
+    {
+      "name": "UICorner",
+      "className": "UICorner",
+      "properties": {
+        "CornerRadius": {
+          "UDim": [
+            0,
+            3
+          ]
+        }
+      }
+    }
+  ]
+}

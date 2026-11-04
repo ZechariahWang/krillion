@@ -94,4 +94,131 @@ return function(test)
 		assert(Profile.hasReceipt(profile, "r" .. (Profile.MAX_RECEIPTS + 10)))
 		assert(not Profile.hasReceipt(profile, "r1"))
 	end)
+
+	test("a save from before the port loads every new field with its default", function()
+		local profile = Profile.fromStored({ cash = 50, wins = 1, owned = {}, equipped = { Skin = "skin_coral" } })
+		assert(profile.cash == 50 and profile.equipped.Skin == "skin_coral")
+		assert(profile.hints == 0 and profile.extraTimes == 0 and profile.tutorialDone == false)
+		assert(next(profile.claimed) == nil and profile.referrals == 0 and profile.referredBy == 0)
+		assert(profile.quests.day == 0 and next(profile.quests.progress) == nil)
+		assert(profile.lobby.day == 0 and profile.lobby.earned == 0)
+		assert(profile.krillions == 0 and profile.games == 0)
+		assert(profile.equipped.Trail == nil)
+	end)
+
+	test("boost inventory adds as deltas and never goes below zero", function()
+		local stored = Profile.fromStored({ hints = 1, extraTimes = 0 })
+		local session = Profile.newSession()
+		session.hints = -3
+		session.extraTimes = 2
+		local merged = Profile.merge(stored, session)
+		assert(merged.hints == 0 and merged.extraTimes == 2)
+		local first = Profile.newSession()
+		first.hints = 1
+		local second = Profile.newSession()
+		second.hints = 2
+		assert(Profile.combine(first, second).hints == 3)
+	end)
+
+	test("the tutorial stays done once any server marks it", function()
+		local stored = Profile.fromStored({ tutorialDone = true })
+		assert(Profile.merge(stored, Profile.newSession()).tutorialDone)
+		local session = Profile.newSession()
+		session.tutorialDone = true
+		assert(Profile.merge(Profile.fromStored(nil), session).tutorialDone)
+	end)
+
+	test("claimed rewards are a union and survive a round trip", function()
+		local stored = Profile.fromStored({ claimed = { Starter = true } })
+		local session = Profile.newSession()
+		session.claimed.Group = true
+		local merged = Profile.merge(stored, session)
+		assert(merged.claimed.Starter and merged.claimed.Group)
+		local again = Profile.fromStored(merged)
+		assert(again.claimed.Starter and again.claimed.Group)
+	end)
+
+	test("referrals add up and the first friend to refer keeps the credit", function()
+		local stored = Profile.fromStored({ referrals = 2, referredBy = 111 })
+		local session = Profile.newSession()
+		session.referrals = 1
+		session.referredBy = 222
+		local merged = Profile.merge(stored, session)
+		assert(merged.referrals == 3 and merged.referredBy == 111)
+		local fresh = Profile.merge(Profile.fromStored(nil), session)
+		assert(fresh.referredBy == 222)
+		local first = Profile.newSession()
+		first.referredBy = 333
+		assert(Profile.combine(first, session).referredBy == 333)
+		assert(Profile.combine(Profile.newSession(), session).referredBy == 222)
+	end)
+
+	test("quests: a newer day replaces, the same day keeps the most progress, an older day is ignored", function()
+		local stored = Profile.fromStored({ quests = { day = 10, progress = { play_3 = 2, rare_2 = 1 }, done = { deep_1 = true } } })
+		local same = Profile.newSession()
+		same.quests = { day = 10, progress = { play_3 = 1, rare_2 = 2 }, done = { rare_2 = true } }
+		local merged = Profile.merge(stored, same)
+		assert(merged.quests.progress.play_3 == 2 and merged.quests.progress.rare_2 == 2)
+		assert(merged.quests.done.deep_1 and merged.quests.done.rare_2)
+
+		local newer = Profile.newSession()
+		newer.quests = { day = 11, progress = { win_1 = 1 }, done = {} }
+		merged = Profile.merge(stored, newer)
+		assert(merged.quests.day == 11 and merged.quests.progress.win_1 == 1 and merged.quests.progress.play_3 == nil)
+
+		local older = Profile.newSession()
+		older.quests = { day = 9, progress = { play_3 = 3 }, done = { play_3 = true } }
+		merged = Profile.merge(stored, older)
+		assert(merged.quests.day == 10 and merged.quests.progress.play_3 == 2 and not merged.quests.done.play_3)
+
+		assert(Profile.merge(stored, Profile.newSession()).quests.progress.play_3 == 2)
+	end)
+
+	test("warm-up earnings add up within a day and start over on a new day", function()
+		local stored = Profile.fromStored({ lobby = { day = 10, earned = 300 } })
+		local same = Profile.newSession()
+		same.lobby = { day = 10, earned = 50 }
+		assert(Profile.merge(stored, same).lobby.earned == 350)
+		assert(Profile.lobbyEarned(Profile.merge(stored, same), 10) == 350)
+		assert(Profile.lobbyEarned(stored, 11) == 0)
+
+		local newer = Profile.newSession()
+		newer.lobby = { day = 11, earned = 20 }
+		local merged = Profile.merge(stored, newer)
+		assert(merged.lobby.day == 11 and merged.lobby.earned == 20)
+
+		local older = Profile.newSession()
+		older.lobby = { day = 9, earned = 999 }
+		merged = Profile.merge(stored, older)
+		assert(merged.lobby.day == 10 and merged.lobby.earned == 300)
+
+		local first = Profile.newSession()
+		first.lobby = { day = 10, earned = 5 }
+		assert(Profile.combine(first, same).lobby.earned == 55)
+		assert(Profile.combine(first, newer).lobby.day == 11)
+		assert(Profile.combine(first, Profile.newSession()).lobby.earned == 5)
+	end)
+
+	test("the equipped trail round-trips and later equips win", function()
+		local session = Profile.newSession()
+		session.equipped.Trail = "trail_bubbles"
+		local merged = Profile.merge(Profile.fromStored(nil), session)
+		assert(Profile.fromStored(merged).equipped.Trail == "trail_bubbles")
+		local later = Profile.newSession()
+		later.equipped.Trail = "trail_seafoam"
+		assert(Profile.combine(session, later).equipped.Trail == "trail_seafoam")
+		local unequip = Profile.newSession()
+		unequip.equipped.Trail = ""
+		assert(Profile.merge(merged, unequip).equipped.Trail == "")
+	end)
+
+	test("lifetime krillions and games add up", function()
+		local stored = Profile.fromStored({ krillions = 2, games = 10 })
+		local session = Profile.newSession()
+		session.krillions = 1
+		session.games = 1
+		local merged = Profile.merge(stored, session)
+		assert(merged.krillions == 3 and merged.games == 11)
+		assert(Profile.combine(session, session).games == 2)
+	end)
 end

@@ -5,6 +5,7 @@ local Profile = require("./Profile")
 
 local Shop = {}
 
+-- Reward items count only once RewardService has put them in profile.owned; there is no other way in.
 function Shop.owns(profile: Profile.Profile, item: Cosmetics.Item, passes: { [string]: boolean }): boolean
 	if profile.owned[item.id] == true then
 		return true
@@ -16,7 +17,7 @@ function Shop.owns(profile: Profile.Profile, item: Cosmetics.Item, passes: { [st
 end
 
 function Shop.canBuyWithCash(profile: Profile.Profile, item: Cosmetics.Item): boolean
-	if item.robuxProductId ~= nil or item.pass ~= nil then
+	if item.robuxProductId ~= nil or item.pass ~= nil or item.reward ~= nil then
 		return false
 	end
 	if profile.owned[item.id] == true then

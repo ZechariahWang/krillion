@@ -1,0 +1,68 @@
+{
+  "className": "Folder",
+  "attributes": {
+    "Note": "Sounds added for the Sink or Niche port. Sfx.play looks in SoundService.Krillion first, then here. Swap SoundIds to retheme."
+  },
+  "children": [
+    {
+      "name": "Thud",
+      "className": "Sound",
+      "properties": {
+        "SoundId": "rbxasset://sounds/bass.mp3",
+        "Volume": 0.5
+      }
+    },
+    {
+      "name": "Ping",
+      "className": "Sound",
+      "properties": {
+        "SoundId": "rbxasset://sounds/electronicpingshort.wav",
+        "Volume": 0.5,
+        "PlaybackSpeed": 1.3
+      }
+    },
+    {
+      "name": "Heartbeat",
+      "className": "Sound",
+      "properties": {
+        "SoundId": "rbxasset://sounds/bass.mp3",
+        "Volume": 0.5,
+        "PlaybackSpeed": 0.7
+      }
+    },
+    {
+      "name": "Uhh",
+      "className": "Sound",
+      "properties": {
+        "SoundId": "rbxasset://sounds/uuhhh.mp3",
+        "Volume": 0.5
+      }
+    },
+    {
+      "name": "Whoosh",
+      "className": "Sound",
+      "properties": {
+        "SoundId": "rbxasset://sounds/action_swim.mp3",
+        "Volume": 0.5
+      }
+    },
+    {
+      "name": "Coin",
+      "className": "Sound",
+      "properties": {
+        "SoundId": "rbxasset://sounds/button.wav",
+        "Volume": 0.5,
+        "PlaybackSpeed": 1.5
+      }
+    },
+    {
+      "name": "Deny",
+      "className": "Sound",
+      "properties": {
+        "SoundId": "rbxasset://sounds/switch.wav",
+        "Volume": 0.5,
+        "PlaybackSpeed": 0.8
+      }
+    }
+  ]
+}

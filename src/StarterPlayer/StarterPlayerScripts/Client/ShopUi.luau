@@ -1,6 +1,7 @@
 --!strict
 -- Drives StarterGui.Shop: the lobby SHOP button and the tabbed window for cosmetics, passes and packs.
 -- The server checks every buy and equip; this only shows the state and sends requests.
+-- Shells buys take a second click within CONFIRM_SECONDS; reward items open the Rewards panel instead.
 
 local Lighting = game:GetService("Lighting")
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -9,17 +10,20 @@ local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
+local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Products = require(ReplicatedStorage.Config.Products)
 local Theme = require(ReplicatedStorage.Config.Theme)
+local Currency = require(ReplicatedStorage.Shared.Currency)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local Tween = require(ReplicatedStorage.Shared.Tween)
+local Rewards = require(script.Parent.Rewards)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
-local TABS = { "Skins", "Titles", "Splashes", "Passes" }
-local TAB_SLOT = { Skins = "Skin", Titles = "Title", Splashes = "Splash" }
+local TABS = { "Skins", "Titles", "Splashes", "Trails", "Passes" }
+local TAB_SLOT = { Skins = "Skin", Titles = "Title", Splashes = "Splash", Trails = "Trail" }
 local BLUR_SIZE = 12
 local GOLD = Color3.fromRGB(255, 194, 75)
 local CREAM = Color3.fromRGB(255, 245, 220)
@@ -28,16 +32,21 @@ local CARD_SHADOW_REST = UDim2.fromOffset(0, 6)
 local CARD_SHADOW_HOVER = UDim2.fromOffset(0, 12)
 local SHINE_EVERY = 4 -- seconds between light sweeps across the SHOP button
 local SHINE_INFO = TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+local CONFIRM_SECONDS = 3 -- a Shells buy needs a second click within this long
+local SOON = "COMING SOON" -- Robux entries whose id is still the 0 placeholder
+local LONG_PRICE = 18 -- longer price lines (the VIP perks) shrink to fit their label
+local LONG_ACTION = 8
 
 type Entry = {
-	kind: string, -- "Skin" | "Title" | "Splash" | "Shop" (passes and products)
+	kind: string, -- "Skin" | "Title" | "Splash" | "Trail" | "Shop" (passes and products)
 	name: string,
 	price: string,
-	currency: string?, -- "Cash" shows the coin mark; nil shows the price text alone
-	badge: string?, -- "EQUIPPED" | "OWNED" | nil
+	currency: string?, -- "Cash" (Shells) shows the coin mark; nil shows the price text alone
+	badge: string?, -- "EQUIPPED" | "OWNED" | "FREE" | "n OWNED" | nil
 	action: string,
 	enabled: boolean,
 	color: Color3,
+	stripe: ColorSequence?, -- trails: the colours along the trail, for the preview stripe
 	onClick: () -> (),
 }
 
@@ -56,8 +65,12 @@ local current = "Skins"
 local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
 local playing = false
+local pendingBuy: { id: string, at: number }? = nil -- the Shells item waiting for its CONFIRM? click
 
 local ShopUi = {}
+
+local render: () -> ()
+local setOpen: (boolean) -> ()
 
 local function colorOf(item: Cosmetics.Item): Color3
 	local rgb = item.color
@@ -74,6 +87,45 @@ local function promptProduct(productId: number)
 	MarketplaceService:PromptProductPurchase(player, productId)
 end
 
+-- The trail's own colours from its template, so the shop stripe always matches what plays in game.
+local function trailColors(item: Cosmetics.Item): ColorSequence
+	local templates = ReplicatedStorage:FindFirstChild("Templates")
+	local folder = if templates ~= nil then templates:FindFirstChild("Trails") else nil
+	local name = item.trail
+	local trailFolder = if folder ~= nil and name ~= nil then folder:FindFirstChild(name) else nil
+	local trail = if trailFolder ~= nil then trailFolder:FindFirstChild("KrillionTrail") else nil
+	if trail ~= nil and trail:IsA("Trail") then
+		return trail.Color
+	end
+	return ColorSequence.new(colorOf(item))
+end
+
+local function isConfirming(id: string): boolean
+	local pending = pendingBuy
+	return pending ~= nil and pending.id == id and os.clock() - pending.at < CONFIRM_SECONDS
+end
+
+-- The first click arms the buy and shows CONFIRM?; a second click inside the window sends it.
+local function buyWithShells(item: Cosmetics.Item)
+	if isConfirming(item.id) then
+		pendingBuy = nil
+		Net.event("ShopBuy"):FireServer(item.id)
+		render()
+		return
+	end
+	local mine = { id = item.id, at = os.clock() }
+	pendingBuy = mine
+	render()
+	task.delay(CONFIRM_SECONDS, function()
+		if pendingBuy == mine then
+			pendingBuy = nil
+			if panel.Visible then
+				render()
+			end
+		end
+	end)
+end
+
 local function cosmeticEntry(item: Cosmetics.Item): Entry
 	local owned = Shop.owns(profile, item, passes)
 	local equipped = (profile.equipped :: any)[item.slot] == item.id
@@ -86,6 +138,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 		action = "",
 		enabled = true,
 		color = colorOf(item),
+		stripe = if item.trail ~= nil then trailColors(item) else nil,
 		onClick = function() end,
 	}
 	if owned then
@@ -104,24 +157,36 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 				Net.event("ShopEquip"):FireServer(item.slot, item.id)
 			end
 		end
+	elseif item.reward ~= nil then
+		-- Never sold: RewardService grants it, so GET opens the panel that says how.
+		entry.badge = "FREE"
+		entry.price = Cosmetics.RewardHow[item.reward] or "Free reward"
+		entry.action = "GET"
+		entry.onClick = function()
+			setOpen(false)
+			Rewards.open()
+		end
 	elseif item.pass ~= nil then
 		entry.price = "With the " .. string.upper(item.pass) .. " pass"
-		entry.action = "LOCKED"
-		entry.enabled = false
+		entry.action = "VIEW"
+		entry.onClick = function()
+			current = "Passes"
+			render()
+		end
 	elseif item.robuxProductId ~= nil then
 		entry.price = "R$ " .. tostring(item.robux or 0)
-		entry.action = "BUY"
 		entry.enabled = item.robuxProductId ~= 0
+		entry.action = if entry.enabled then "BUY" else SOON
 		entry.onClick = function()
 			promptProduct(item.robuxProductId :: number)
 		end
 	else
-		entry.price = tostring(item.price)
+		entry.price = Currency.digits(item.price)
 		entry.currency = "Cash"
-		entry.action = "BUY"
+		entry.action = if isConfirming(item.id) then "CONFIRM?" else "BUY"
 		entry.enabled = Shop.canBuyWithCash(profile, item)
 		entry.onClick = function()
-			Net.event("ShopBuy"):FireServer(item.id)
+			buyWithShells(item)
 		end
 	end
 	return entry
@@ -148,6 +213,8 @@ local function passEntry(name: string, key: string): Entry
 	if owned then
 		entry.badge = "OWNED"
 		entry.action = "OWNED"
+	elseif passId == 0 then
+		entry.action = SOON
 	end
 	return entry
 end
@@ -159,13 +226,54 @@ local function productEntry(name: string, robux: number, productId: number): Ent
 		price = "R$ " .. robux,
 		currency = nil,
 		badge = nil,
-		action = "BUY",
+		action = if productId ~= 0 then "BUY" else SOON,
 		enabled = productId ~= 0,
 		color = GOLD,
 		onClick = function()
 			promptProduct(productId)
 		end,
 	}
+end
+
+-- What a boost costs when used from its in-match button; there is nothing to buy here.
+local function boostShellsEntry(name: string, shells: number): Entry
+	return {
+		kind = "Shop",
+		name = name,
+		price = Currency.digits(shells) .. " each",
+		currency = "Cash",
+		badge = nil,
+		action = "IN MATCH",
+		enabled = false,
+		color = GOLD,
+		onClick = function() end,
+	}
+end
+
+local function vipPerks(): string
+	local bonus = math.floor(GameConfig.Cash.VipBonus * 100 + 0.5)
+	return "+" .. bonus .. "% " .. Currency.Upper .. "  |  AURORA PILLAR  |  GOLD WAKE TRAIL  |  VIP TITLE"
+end
+
+local function boostEntries(entries: { Entry })
+	if GameConfig.Boosts.Enabled ~= 1 then
+		return
+	end
+	-- In a match the boost buttons use held boosts first, then Shells; Robux only stocks up.
+	local hintName = Theme.Icon.Hint .. " HINT"
+	local timeName = Theme.Icon.Time .. " +" .. GameConfig.Boosts.ExtraTimeSeconds .. "s"
+	table.insert(entries, boostShellsEntry(hintName, GameConfig.Boosts.HintShells))
+	local hint = productEntry(hintName .. " x1", Products.Boosts.Hint.robux, Products.Boosts.Hint.productId)
+	if profile.hints > 0 then
+		hint.badge = profile.hints .. " OWNED"
+	end
+	table.insert(entries, hint)
+	table.insert(entries, boostShellsEntry(timeName, GameConfig.Boosts.ExtraTimeShells))
+	local extra = productEntry(timeName .. " x1", Products.Boosts.ExtraTime.robux, Products.Boosts.ExtraTime.productId)
+	if profile.extraTimes > 0 then
+		extra.badge = profile.extraTimes .. " OWNED"
+	end
+	table.insert(entries, extra)
 end
 
 local function entriesFor(tab: string): { Entry }
@@ -179,28 +287,37 @@ local function entriesFor(tab: string): { Entry }
 		end
 		return entries
 	end
-	table.insert(entries, passEntry("VIP", "Vip"))
-	table.insert(entries, passEntry("2X CASH", "DoubleCash"))
+	local vip = passEntry("VIP", "Vip")
+	vip.price = vipPerks()
+	table.insert(entries, vip)
+	table.insert(entries, passEntry("2X " .. Currency.Upper, "DoubleCash"))
 	local revive = productEntry("REVIVE", Products.Revive.robux, Products.Revive.productId)
 	if profile.revives > 0 then
 		revive.badge = profile.revives .. " OWNED"
 	end
 	table.insert(entries, revive)
+	boostEntries(entries)
 	for _, pack in Products.CashPacks do
-		table.insert(entries, productEntry(pack.cash .. " CASH", pack.robux, pack.productId))
+		table.insert(entries, productEntry(Currency.format(pack.cash), pack.robux, pack.productId))
 	end
 	return entries
 end
 
 -- Shows the preview that fits the item: a shaded disc for skins and shop items, the title as it would
--- float over a head, or a burst for splashes.
+-- float over a head, a burst for splashes, or the trail's colours as a stripe (an authored Stripe frame
+-- if the template has one, else the disc).
 local function fillPreview(preview: Frame, entry: Entry)
 	local disc = preview:FindFirstChild("Disc") :: Frame
 	local pill = preview:FindFirstChild("TitlePill") :: TextLabel
 	local burst = preview:FindFirstChild("Burst") :: Frame
-	disc.Visible = entry.kind == "Skin" or entry.kind == "Shop"
+	local stripe = preview:FindFirstChild("Stripe") :: Frame?
+	local isTrail = entry.kind == "Trail"
+	disc.Visible = entry.kind == "Skin" or entry.kind == "Shop" or (isTrail and stripe == nil)
 	pill.Visible = entry.kind == "Title"
 	burst.Visible = entry.kind == "Splash"
+	if stripe ~= nil then
+		stripe.Visible = isTrail
+	end
 	disc.BackgroundColor3 = entry.color
 	pill.Text = entry.name
 	pill.TextColor3 = entry.color
@@ -208,6 +325,20 @@ local function fillPreview(preview: Frame, entry: Entry)
 		if part:IsA("Frame") then
 			part.BackgroundColor3 = entry.color
 		end
+	end
+	local colors = entry.stripe
+	if isTrail and colors ~= nil then
+		local target: Frame = stripe or disc
+		target.BackgroundColor3 = Color3.new(1, 1, 1)
+		local gradient = target:FindFirstChildOfClass("UIGradient")
+		if gradient == nil then
+			local made = Instance.new("UIGradient")
+			made.Parent = target
+			gradient = made
+		end
+		local trailGradient = gradient :: UIGradient
+		trailGradient.Color = colors
+		trailGradient.Rotation = 0
 	end
 end
 
@@ -254,6 +385,73 @@ local function startShine()
 	end)
 end
 
+local function scaleUDim(value: UDim, by: number): UDim
+	return UDim.new(value.Scale * by, value.Offset * by)
+end
+
+-- Splits a row `total` wide into `count` equal tabs with `gap` between them.
+local function share(total: UDim, gap: UDim, count: number): UDim
+	return UDim.new((total.Scale - gap.Scale * (count - 1)) / count, math.floor((total.Offset - gap.Offset * (count - 1)) / count))
+end
+
+-- The Studio window may not have a TRAILS tab yet. Until one is authored, SPLASHES is cloned and the
+-- five tabs share the row the four filled (through the tabs' layout if they have one, else by position).
+local function ensureTrailsTab(tabs: Instance)
+	if tabs:FindFirstChild("Trails") ~= nil then
+		return
+	end
+	local row: { GuiObject } = {}
+	for _, name in TABS do
+		if name ~= "Trails" then
+			table.insert(row, tabs:WaitForChild(name) :: GuiObject)
+		end
+	end
+	local splashes = tabs:WaitForChild("Splashes") :: TextButton
+	local trails = splashes:Clone()
+	trails.Name = "Trails"
+	trails.Text = if splashes.Text == string.upper(splashes.Text) then "TRAILS" else "Trails"
+	trails.Parent = tabs
+	local ordered: { GuiObject } = {}
+	for index, name in TABS do
+		local button = tabs:FindFirstChild(name) :: GuiObject
+		button.LayoutOrder = index
+		table.insert(ordered, button)
+	end
+	local count = #ordered
+	local was = #row
+	local list = tabs:FindFirstChildOfClass("UIListLayout")
+	local cells = tabs:FindFirstChildOfClass("UIGridLayout")
+	if cells ~= nil then
+		cells.SortOrder = Enum.SortOrder.LayoutOrder
+		local pad = cells.CellPadding.X
+		local total = scaleUDim(cells.CellSize.X, was) + scaleUDim(pad, was - 1)
+		cells.CellSize = UDim2.new(share(total, pad, count), cells.CellSize.Y)
+	elseif list ~= nil then
+		list.SortOrder = Enum.SortOrder.LayoutOrder
+		if list.FillDirection == Enum.FillDirection.Horizontal then
+			local total = scaleUDim(row[1].Size.X, was) + scaleUDim(list.Padding, was - 1)
+			local width = share(total, list.Padding, count)
+			for _, button in ordered do
+				button.Size = UDim2.new(width, button.Size.Y)
+			end
+		end
+	else
+		local function left(button: GuiObject): UDim
+			return button.Position.X - scaleUDim(button.Size.X, button.AnchorPoint.X)
+		end
+		local first, last = row[1], row[was]
+		local start = left(first)
+		local total = left(last) + last.Size.X - start
+		local gap = left(row[2]) - (start + first.Size.X)
+		local width = share(total, gap, count)
+		for index, button in ordered do
+			local edge = start + scaleUDim(width + gap, index - 1)
+			button.Size = UDim2.new(width, button.Size.Y)
+			button.Position = UDim2.new(edge + scaleUDim(width, button.AnchorPoint.X), button.Position.Y)
+		end
+	end
+end
+
 local function renderTabs()
 	for name, button in tabButtons do
 		local selected = name == current
@@ -271,8 +469,8 @@ local function renderTabs()
 	end
 end
 
-local function render()
-	cashText.Text = profile.cash .. " CASH"
+function render()
+	cashText.Text = Currency.format(profile.cash)
 	renderTabs()
 	Ui.clearClones(grid, template.Name, "Item")
 	for index, entry in entriesFor(current) do
@@ -287,6 +485,7 @@ local function render()
 		fillPreview(card:FindFirstChild("Preview") :: Frame, entry)
 		nameLabel.Text = entry.name
 		priceLabel.Text = entry.price
+		priceLabel.TextScaled = #entry.price > LONG_PRICE
 		coin.Visible = entry.currency == "Cash"
 		if entry.currency == "Cash" then
 			priceLabel.Position = UDim2.fromOffset(84, 40)
@@ -304,6 +503,7 @@ local function render()
 			badge.Text = entry.badge
 		end
 		action.Text = entry.action
+		action.TextScaled = #entry.action > LONG_ACTION
 		action.Active = entry.enabled
 		if entry.enabled then
 			action.BackgroundTransparency = 0
@@ -337,12 +537,13 @@ local function setBackdrop(shown: boolean)
 	end
 end
 
-local function setOpen(open: boolean)
+function setOpen(open: boolean)
 	if open then
 		render()
 		setBackdrop(true)
 		Ui.pop(panel)
 	else
+		pendingBuy = nil
 		panel.Visible = false
 		setBackdrop(false)
 	end
@@ -367,6 +568,7 @@ function ShopUi.init(playerGui: PlayerGui)
 	grid = panel:WaitForChild("Grid") :: ScrollingFrame
 	template = grid:WaitForChild("ItemTemplate") :: Frame
 	local tabs = panel:WaitForChild("Tabs")
+	ensureTrailsTab(tabs)
 	for _, name in TABS do
 		local button = tabs:WaitForChild(name) :: TextButton
 		tabButtons[name] = button

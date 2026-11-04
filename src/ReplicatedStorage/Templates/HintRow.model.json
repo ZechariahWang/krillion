@@ -1,0 +1,218 @@
+{
+  "className": "Frame",
+  "properties": {
+    "Visible": false,
+    "AnchorPoint": [
+      0.5,
+      1
+    ],
+    "Position": {
+      "UDim2": [
+        [
+          0.5,
+          0
+        ],
+        [
+          0,
+          -48
+        ]
+      ]
+    },
+    "Size": {
+      "UDim2": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          30
+        ]
+      ]
+    },
+    "BackgroundColor3": [
+      0.102,
+      0.2039,
+      0.3843
+    ],
+    "BackgroundTransparency": 0.05,
+    "BorderSizePixel": 0,
+    "ZIndex": 3
+  },
+  "attributes": {
+    "Note": "The bought hint for this prompt, above Hud.AnswerBar (and above the lock-in chip). Hud.luau clones it into the bar."
+  },
+  "children": [
+    {
+      "name": "UICorner",
+      "className": "UICorner",
+      "properties": {
+        "CornerRadius": {
+          "UDim": [
+            0,
+            10
+          ]
+        }
+      }
+    },
+    {
+      "name": "UIStroke",
+      "className": "UIStroke",
+      "properties": {
+        "ApplyStrokeMode": "Border",
+        "Color": [
+          1.0,
+          0.7843,
+          0.2392
+        ],
+        "Thickness": 2.5,
+        "LineJoinMode": "Round"
+      }
+    },
+    {
+      "name": "UIGradient",
+      "className": "UIGradient",
+      "properties": {
+        "Rotation": 90,
+        "Color": {
+          "ColorSequence": {
+            "keypoints": [
+              {
+                "time": 0,
+                "color": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              {
+                "time": 1,
+                "color": [
+                  0.5,
+                  0.5385,
+                  0.6123
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "UIScale",
+      "className": "UIScale"
+    },
+    {
+      "name": "Icon",
+      "className": "TextLabel",
+      "properties": {
+        "BackgroundTransparency": 1,
+        "Text": "💡",
+        "TextScaled": true,
+        "FontFace": {
+          "family": "rbxasset://fonts/families/FredokaOne.json",
+          "weight": "Regular",
+          "style": "Normal"
+        },
+        "TextColor3": [
+          1,
+          1,
+          1
+        ],
+        "Position": {
+          "UDim2": [
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        },
+        "Size": {
+          "UDim2": [
+            [
+              0,
+              24
+            ],
+            [
+              1,
+              -6
+            ]
+          ]
+        },
+        "ZIndex": 3
+      },
+      "children": []
+    },
+    {
+      "name": "Text",
+      "className": "TextLabel",
+      "properties": {
+        "BackgroundTransparency": 1,
+        "Text": "A DEEP CUT  |  M _ _ _ _ _ _ _ E (9 letters)",
+        "TextScaled": true,
+        "FontFace": {
+          "family": "rbxasset://fonts/families/FredokaOne.json",
+          "weight": "Regular",
+          "style": "Normal"
+        },
+        "TextColor3": [
+          1.0,
+          0.8392,
+          0.4
+        ],
+        "Position": {
+          "UDim2": [
+            [
+              0,
+              34
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        "Size": {
+          "UDim2": [
+            [
+              1,
+              -42
+            ],
+            [
+              1,
+              -8
+            ]
+          ]
+        },
+        "ZIndex": 3
+      },
+      "children": [
+        {
+          "name": "Outline",
+          "className": "UIStroke",
+          "properties": {
+            "ApplyStrokeMode": "Contextual",
+            "Color": [
+              0.0392,
+              0.0784,
+              0.1569
+            ],
+            "Thickness": 2,
+            "LineJoinMode": "Round"
+          }
+        },
+        {
+          "name": "UITextSizeConstraint",
+          "className": "UITextSizeConstraint",
+          "properties": {
+            "MaxTextSize": 18
+          }
+        }
+      ]
+    }
+  ]
+}

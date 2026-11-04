@@ -1,11 +1,15 @@
 --!strict
 -- Drives StarterGui.Status: the top status line (with accent underline), the time | alive bar under it,
--- and the tide chip that says how far the water rises this round. Shown in every phase.
+-- and the tide chip that says how far the water rises this round and, while you play, what tier keeps you
+-- afloat. Tide.luau flashes SAFE on the chip after a surge. Shown in every phase.
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
+local Tiers = require(ReplicatedStorage.Config.Tiers)
+local TideRules = require(ReplicatedStorage.Shared.Tide)
 local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
@@ -21,6 +25,20 @@ local tideText: TextLabel
 local lastStatus = ""
 local lastPrompt = ""
 local lastRound = 0
+local lastTick = "" -- round and second of the last danger tick, so extra broadcasts never double-tick
+local lastNeed = "" -- the need hint last shown, so the chip only bumps when it changes
+local lastPayload: any = nil
+local flashToken = 0
+local flashUntil = 0
+local flashText = ""
+local flashColor = Theme.Color.Green
+
+local TIDE_WIDTH = 0.26 -- wider than authored so the need hint fits beside a special-round prefix
+local PLATE_PAD_X = 28 -- pixels of plate either side of the status text
+-- The plate is centred on the status line and a little shorter than its box (the box includes the font's
+-- empty ascender and descender room), so the letters sit in the middle and its border clears the timer row.
+local PLATE_HEIGHT = 0.9 -- of the status line's height
+local PLATE_BORDER_PER_PIXEL = 1 / 200 -- border thickness per pixel of screen height, up to the chunky border
 
 local SPECIAL_NAMES = {
 	TidalWave = "TIDAL WAVE",
@@ -55,25 +73,157 @@ function Status.init(playerGui: PlayerGui)
 	tide = gui:WaitForChild("Tide") :: Frame
 	tideAccent = tide:WaitForChild("Accent") :: Frame
 	tideText = tide:WaitForChild("Text") :: TextLabel
+	-- The need hint is coloured inline so the accent keeps the special round's colour.
+	tideText.RichText = true
+	tide.Size = UDim2.new(math.max(tide.Size.X.Scale, TIDE_WIDTH), tide.Size.X.Offset, tide.Size.Y.Scale, tide.Size.Y.Offset)
+
+	-- The prompt sits on a solid chunky plate so it reads over the busy arena (name tags, signs) behind it.
+	-- The plate hugs the text and replaces the thin accent underline.
+	local accent = statusFrame:FindFirstChild("Accent")
+	if accent ~= nil and accent:IsA("GuiObject") then
+		accent.Visible = false
+	end
+	local line = statusText.Size.Y
+	local plate = Instance.new("Frame")
+	plate.Name = "Plate"
+	plate.AnchorPoint = Vector2.new(0.5, 0.5)
+	plate.Position = UDim2.new(
+		0.5,
+		0,
+		statusText.Position.Y.Scale + line.Scale / 2,
+		statusText.Position.Y.Offset + line.Offset / 2
+	)
+	plate.ZIndex = statusText.ZIndex - 1
+	plate.Parent = statusFrame
+	Ui.plate(plate, "Grape")
+	local border = plate:FindFirstChildOfClass("UIStroke")
+	local screen = statusFrame:FindFirstAncestorWhichIsA("LayerCollector") :: LayerCollector?
+	local function fitPlate()
+		plate.Size = UDim2.new(0, statusText.TextBounds.X + PLATE_PAD_X * 2, line.Scale * PLATE_HEIGHT, line.Offset * PLATE_HEIGHT)
+		plate.Visible = statusText.Text ~= ""
+		-- A phone's short screen leaves only a few pixels to the timer row, so the border thins there.
+		if border ~= nil and screen ~= nil and screen.AbsoluteSize.Y > 0 then
+			border.Thickness = math.clamp(screen.AbsoluteSize.Y * PLATE_BORDER_PER_PIXEL, 2, Theme.Chunky.Border)
+		end
+	end
+	statusText:GetPropertyChangedSignal("TextBounds"):Connect(fitPlate)
+	if screen ~= nil then
+		screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitPlate)
+	end
+	fitPlate()
+end
+
+local function tinted(text: string, color: Color3): string
+	return '<font color="#' .. color:ToHex() .. '">' .. text .. "</font>"
+end
+
+-- "RARE+ TO SURVIVE" in the tier colour, "SAFE THIS ROUND" in green, "GO FOR A KRILLION" when nothing is enough.
+local function needHint(payload): string
+	local need = TideRules.needTier(payload.height, payload.waterY, payload.surge, payload.special)
+	if need == "safe" then
+		return tinted("SAFE THIS ROUND", Theme.Color.Green)
+	elseif need == "none" then
+		return tinted("GO FOR A KRILLION", Theme.Color.Red)
+	elseif Tiers.index(need) == 1 then
+		return tinted("ANY ANSWER SURVIVES", Theme.Tier.Plankton)
+	end
+	local tierColors: { [string]: Color3 } = Theme.Tier :: any
+	return tinted(string.upper(Tiers.ByName[need].label) .. "+ TO SURVIVE", tierColors[need] or Theme.Color.Cream)
 end
 
 local function updateTide(payload)
+	if os.clock() < flashUntil then
+		tide.Visible = true
+		tideAccent.BackgroundColor3 = flashColor
+		tideText.Text = tinted(flashText, flashColor)
+		return
+	end
 	local inRound = payload.phase == "Prompt" or payload.phase == "Reveal"
 	tide.Visible = inRound
 	if not inRound then
+		lastNeed = ""
 		return
 	end
-	local rise = "WATER +" .. string.format("%.1f", payload.surge)
+	local text = "WATER +" .. string.format("%.1f", payload.surge)
 	local special = payload.special
 	if special == "TidalWave" then
 		tideAccent.BackgroundColor3 = Theme.Color.Red
-		tideText.Text = "TIDAL WAVE  |  " .. rise
+		text = "TIDAL WAVE  |  " .. text
 	elseif special == "DoubleLift" then
 		tideAccent.BackgroundColor3 = Theme.Color.Green
-		tideText.Text = "DOUBLE LIFT  |  " .. rise
+		text = "DOUBLE LIFT  |  " .. text
 	else
 		tideAccent.BackgroundColor3 = Theme.Color.Water
-		tideText.Text = rise
+	end
+	-- Answers are graded by the reveal, so the hint only helps while the prompt is open.
+	if payload.phase == "Prompt" and payload.playing then
+		local need = needHint(payload)
+		text ..= "  |  " .. need
+		if need ~= lastNeed then
+			lastNeed = need
+			Ui.bump(tide, 1.06)
+		end
+	else
+		lastNeed = ""
+	end
+	tideText.Text = text
+end
+
+-- Shows `text` on the tide chip for `seconds` (over the need hint or a hidden chip), then puts it back.
+function Status.flashTide(text: string, color: Color3, seconds: number)
+	flashToken += 1
+	local token = flashToken
+	flashUntil = os.clock() + seconds
+	flashText = text
+	flashColor = color
+	lastNeed = ""
+	if tide == nil then
+		return
+	end
+	updateTide(lastPayload or { phase = "Surge" })
+	Ui.bump(tide, 1.08)
+	task.delay(seconds, function()
+		if token ~= flashToken then
+			return
+		end
+		flashUntil = 0
+		if lastPayload ~= nil then
+			updateTide(lastPayload)
+		else
+			tide.Visible = false
+		end
+	end)
+end
+
+local function isLocked(payload): boolean
+	local me = Players.LocalPlayer.UserId
+	for _, id in payload.lockedUserIds or {} do
+		if id == me then
+			return true
+		end
+	end
+	return false
+end
+
+-- The pill's left half during a prompt: your own time (a +10s boost) or the shared countdown, and
+-- OVERTIME while the prompt only stays open for someone else's extra time.
+local function promptTimer(payload)
+	local mine = payload.yourSecondsLeft
+	local outOfTime = mine == nil or mine <= 0 or not payload.playing or isLocked(payload)
+	if payload.overtime and outOfTime then
+		secondaryText.Text = "OVERTIME"
+		return
+	end
+	local shown = if mine ~= nil then mine else payload.secondsLeft
+	secondaryText.Text = Status.formatTime(shown)
+	if shown <= GameConfig.Round.DangerSeconds then
+		secondaryText.TextColor3 = Theme.Color.Red
+		local key = payload.round .. ":" .. shown
+		if key ~= lastTick then
+			lastTick = key
+			Ui.bump(secondaryText, 1.08)
+			Sfx.play("Tick", 0.5)
+		end
 	end
 end
 
@@ -97,6 +247,7 @@ end
 
 function Status.onState(payload)
 	local phase = payload.phase
+	lastPayload = payload
 	secondaryText.TextColor3 = Theme.Color.Cream
 	updateTide(payload)
 	announceSpecial(payload)
@@ -117,12 +268,12 @@ function Status.onState(payload)
 			lastPrompt = string.upper(payload.prompt)
 		end
 		setStatus(lastPrompt)
-		secondaryText.Text = Status.formatTime(payload.secondsLeft)
+		promptTimer(payload)
 		aliveText.Text = "ALIVE " .. payload.alive .. "/" .. payload.starting
-		if payload.secondsLeft <= GameConfig.Round.DangerSeconds then
-			secondaryText.TextColor3 = Theme.Color.Red
-			Ui.bump(secondaryText, 1.08)
-			Sfx.play("Tick", 0.5)
+		-- How many have locked in, once anyone has: the compact stand-in for the old lock counter.
+		local locked = #(payload.lockedUserIds or {})
+		if locked > 0 then
+			aliveText.Text ..= "  " .. Theme.Icon.Lock .. locked
 		end
 	elseif phase == "Reveal" then
 		setStatus("ROUND " .. payload.round .. " RESULTS")
