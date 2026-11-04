@@ -5,6 +5,7 @@
 local Lighting = game:GetService("Lighting")
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
@@ -25,6 +26,8 @@ local CREAM = Color3.fromRGB(255, 245, 220)
 local MUTED = Color3.fromRGB(122, 140, 160)
 local CARD_SHADOW_REST = UDim2.fromOffset(0, 6)
 local CARD_SHADOW_HOVER = UDim2.fromOffset(0, 12)
+local SHINE_EVERY = 4 -- seconds between light sweeps across the SHOP button
+local SHINE_INFO = TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 
 type Entry = {
 	kind: string, -- "Skin" | "Title" | "Splash" | "Shop" (passes and products)
@@ -208,24 +211,45 @@ local function fillPreview(preview: Frame, entry: Entry)
 	end
 end
 
--- Lifts the card a little and deepens its shadow while the mouse is over it.
-local function addHover(card: Frame)
-	local scale = card:FindFirstChildOfClass("UIScale")
-	local shadow = card:FindFirstChildOfClass("UIShadow") :: any
-	card.MouseEnter:Connect(function()
+-- Lifts the object a little and deepens its shadow while the mouse is over it.
+local function addHover(object: GuiObject, lift: number, restShadow: UDim2, hoverShadow: UDim2)
+	local scale = object:FindFirstChildOfClass("UIScale")
+	local shadow = object:FindFirstChildOfClass("UIShadow") :: any
+	object.MouseEnter:Connect(function()
 		if scale ~= nil then
-			Tween.play(scale, Theme.Tween.Hover, { Scale = 1.03 })
+			Tween.play(scale, Theme.Tween.Hover, { Scale = lift })
 		end
 		if shadow ~= nil then
-			shadow.Offset = CARD_SHADOW_HOVER
+			shadow.Offset = hoverShadow
 		end
 	end)
-	card.MouseLeave:Connect(function()
+	object.MouseLeave:Connect(function()
 		if scale ~= nil then
 			Tween.play(scale, Theme.Tween.Hover, { Scale = 1 })
 		end
 		if shadow ~= nil then
-			shadow.Offset = CARD_SHADOW_REST
+			shadow.Offset = restShadow
+		end
+	end)
+end
+
+-- A soft light band sweeps across the SHOP button every few seconds while it is showing.
+local function startShine()
+	local shine = openButton:FindFirstChild("Shine")
+	local gradient = nil
+	if shine ~= nil then
+		gradient = shine:FindFirstChildOfClass("UIGradient")
+	end
+	if gradient == nil then
+		return
+	end
+	task.spawn(function()
+		while true do
+			task.wait(SHINE_EVERY)
+			if openButton.Visible then
+				gradient.Offset = Vector2.new(-1, 0)
+				TweenService:Create(gradient, SHINE_INFO, { Offset = Vector2.new(1, 0) }):Play()
+			end
 		end
 	end)
 end
@@ -294,7 +318,7 @@ local function render()
 			entry.onClick()
 		end)
 		Ui.pressable(action)
-		addHover(card)
+		addHover(card, 1.03, CARD_SHADOW_REST, CARD_SHADOW_HOVER)
 		card.Visible = true
 		card.Parent = grid
 	end
@@ -322,13 +346,15 @@ local function setOpen(open: boolean)
 		panel.Visible = false
 		setBackdrop(false)
 	end
+	-- The button hides while the window is open, and only shows in the lobby.
+	openButton.Visible = not open and not playing
 end
 
 local function refreshButton()
-	openButton.Visible = not playing
 	if playing and panel.Visible then
 		setOpen(false)
 	end
+	openButton.Visible = not playing and not panel.Visible
 end
 
 function ShopUi.init(playerGui: PlayerGui)
@@ -362,10 +388,12 @@ function ShopUi.init(playerGui: PlayerGui)
 		end
 	end)
 	Ui.pressable(openButton)
+	addHover(openButton, 1.04, UDim2.fromOffset(0, 6), UDim2.fromOffset(0, 10))
 	openButton.MouseButton1Click:Connect(function()
 		Sfx.play("Pop", 0.5)
-		setOpen(not panel.Visible)
+		setOpen(true)
 	end)
+	startShine()
 end
 
 function ShopUi.onProfile(payload)
