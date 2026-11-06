@@ -6,7 +6,6 @@
 local Lighting = game:GetService("Lighting")
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
@@ -18,6 +17,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local Tween = require(ReplicatedStorage.Shared.Tween)
+local Rail = require(script.Parent.Rail)
 local Rewards = require(script.Parent.Rewards)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
@@ -26,12 +26,9 @@ local TABS = { "Skins", "Titles", "Splashes", "Trails", "Passes" }
 local TAB_SLOT = { Skins = "Skin", Titles = "Title", Splashes = "Splash", Trails = "Trail" }
 local BLUR_SIZE = 12
 local GOLD = Color3.fromRGB(255, 194, 75)
-local CREAM = Color3.fromRGB(255, 245, 220)
 local MUTED = Color3.fromRGB(122, 140, 160)
 local CARD_SHADOW_REST = UDim2.fromOffset(0, 6)
 local CARD_SHADOW_HOVER = UDim2.fromOffset(0, 12)
-local SHINE_EVERY = 4 -- seconds between light sweeps across the SHOP button
-local SHINE_INFO = TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 local CONFIRM_SECONDS = 3 -- a Shells buy needs a second click within this long
 local SOON = "COMING SOON" -- Robux entries whose id is still the 0 placeholder
 local LONG_PRICE = 18 -- longer price lines (the VIP perks) shrink to fit their label
@@ -52,7 +49,6 @@ type Entry = {
 
 local player = Players.LocalPlayer
 local gui: Frame
-local openButton: TextButton
 local panel: Frame
 local scrim: Frame
 local blur: BlurEffect?
@@ -360,108 +356,15 @@ local function addHover(object: GuiObject, lift: number, restShadow: UDim2, hove
 	end)
 end
 
--- A soft light band sweeps across the SHOP button every few seconds while it is showing.
-local function startShine()
-	local shine = openButton:FindFirstChild("Shine")
-	local gradient = nil
-	if shine ~= nil then
-		gradient = shine:FindFirstChildOfClass("UIGradient")
-	end
-	if gradient == nil then
-		return
-	end
-	task.spawn(function()
-		while true do
-			task.wait(SHINE_EVERY)
-			if openButton.Visible then
-				gradient.Offset = Vector2.new(-1, 0)
-				TweenService:Create(gradient, SHINE_INFO, { Offset = Vector2.new(1, 0) }):Play()
-			end
-		end
-	end)
-end
-
-local function scaleUDim(value: UDim, by: number): UDim
-	return UDim.new(value.Scale * by, value.Offset * by)
-end
-
--- Splits a row `total` wide into `count` equal tabs with `gap` between them.
-local function share(total: UDim, gap: UDim, count: number): UDim
-	return UDim.new((total.Scale - gap.Scale * (count - 1)) / count, math.floor((total.Offset - gap.Offset * (count - 1)) / count))
-end
-
--- The Studio window may not have a TRAILS tab yet. Until one is authored, SPLASHES is cloned and the
--- five tabs share the row the four filled (through the tabs' layout if they have one, else by position).
-local function ensureTrailsTab(tabs: Instance)
-	if tabs:FindFirstChild("Trails") ~= nil then
-		return
-	end
-	local row: { GuiObject } = {}
-	for _, name in TABS do
-		if name ~= "Trails" then
-			table.insert(row, tabs:WaitForChild(name) :: GuiObject)
-		end
-	end
-	local splashes = tabs:WaitForChild("Splashes") :: TextButton
-	local trails = splashes:Clone()
-	trails.Name = "Trails"
-	trails.Text = if splashes.Text == string.upper(splashes.Text) then "TRAILS" else "Trails"
-	trails.Parent = tabs
-	local ordered: { GuiObject } = {}
-	for index, name in TABS do
-		local button = tabs:FindFirstChild(name) :: GuiObject
-		button.LayoutOrder = index
-		table.insert(ordered, button)
-	end
-	local count = #ordered
-	local was = #row
-	local list = tabs:FindFirstChildOfClass("UIListLayout")
-	local cells = tabs:FindFirstChildOfClass("UIGridLayout")
-	if cells ~= nil then
-		cells.SortOrder = Enum.SortOrder.LayoutOrder
-		local pad = cells.CellPadding.X
-		local total = scaleUDim(cells.CellSize.X, was) + scaleUDim(pad, was - 1)
-		cells.CellSize = UDim2.new(share(total, pad, count), cells.CellSize.Y)
-	elseif list ~= nil then
-		list.SortOrder = Enum.SortOrder.LayoutOrder
-		if list.FillDirection == Enum.FillDirection.Horizontal then
-			local total = scaleUDim(row[1].Size.X, was) + scaleUDim(list.Padding, was - 1)
-			local width = share(total, list.Padding, count)
-			for _, button in ordered do
-				button.Size = UDim2.new(width, button.Size.Y)
-			end
-		end
-	else
-		local function left(button: GuiObject): UDim
-			return button.Position.X - scaleUDim(button.Size.X, button.AnchorPoint.X)
-		end
-		local first, last = row[1], row[was]
-		local start = left(first)
-		local total = left(last) + last.Size.X - start
-		local gap = left(row[2]) - (start + first.Size.X)
-		local width = share(total, gap, count)
-		for index, button in ordered do
-			local edge = start + scaleUDim(width + gap, index - 1)
-			button.Size = UDim2.new(width, button.Size.Y)
-			button.Position = UDim2.new(edge + scaleUDim(width, button.AnchorPoint.X), button.Position.Y)
-		end
-	end
-end
-
+-- The selected tab shows its authored Lime key face; the others are a faint glass key.
 local function renderTabs()
 	for name, button in tabButtons do
 		local selected = name == current
-		local underline = button:FindFirstChild("Underline") :: Frame?
-		if underline ~= nil then
-			underline.Visible = selected
+		local face = button:FindFirstChild("Lip")
+		if face ~= nil and face:IsA("UIGradient") then
+			face.Enabled = selected
 		end
-		if selected then
-			button.TextColor3 = CREAM
-			button.BackgroundTransparency = 0.3
-		else
-			button.TextColor3 = MUTED
-			button.BackgroundTransparency = 0.55
-		end
+		button.BackgroundTransparency = if selected then 0 else 0.75
 	end
 end
 
@@ -543,20 +446,16 @@ function setOpen(open: boolean)
 		panel.Visible = false
 		setBackdrop(false)
 	end
-	-- The button hides while the window is open, and only shows in the lobby.
-	openButton.Visible = not open and not playing
 end
 
 local function refreshButton()
 	if playing and panel.Visible then
 		setOpen(false)
 	end
-	openButton.Visible = not playing and not panel.Visible
 end
 
 function ShopUi.init(playerGui: PlayerGui)
 	gui = Ui.screen(playerGui, "Shop") :: Frame
-	openButton = gui:WaitForChild("OpenButton") :: TextButton
 	panel = gui:WaitForChild("Panel") :: Frame
 	scrim = gui:WaitForChild("Scrim") :: Frame
 	blur = Lighting:FindFirstChild("ShopBlur") :: BlurEffect?
@@ -564,7 +463,6 @@ function ShopUi.init(playerGui: PlayerGui)
 	grid = panel:WaitForChild("Grid") :: ScrollingFrame
 	template = grid:WaitForChild("ItemTemplate") :: Frame
 	local tabs = panel:WaitForChild("Tabs")
-	ensureTrailsTab(tabs)
 	for _, name in TABS do
 		local button = tabs:WaitForChild(name) :: TextButton
 		tabButtons[name] = button
@@ -585,13 +483,14 @@ function ShopUi.init(playerGui: PlayerGui)
 			setOpen(false)
 		end
 	end)
-	Ui.pressable(openButton)
-	addHover(openButton, 1.04, UDim2.fromOffset(0, 6), UDim2.fromOffset(0, 10))
-	openButton.MouseButton1Click:Connect(function()
-		Sfx.play("Pop", 0.5)
-		setOpen(true)
-	end)
-	startShine()
+	-- The SHOP key lives on the lobby rail (Rail hides it in a match and while this window is open).
+	local railButton = Rail.button("ShopButton")
+	if railButton ~= nil then
+		railButton.Activated:Connect(function()
+			Sfx.play("Pop", 0.5)
+			setOpen(true)
+		end)
+	end
 end
 
 function ShopUi.onProfile(payload)

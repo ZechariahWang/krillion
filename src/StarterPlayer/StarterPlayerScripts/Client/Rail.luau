@@ -1,13 +1,13 @@
 --!strict
--- Drives StarterGui.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, HELP), each
+-- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, SHOP, HELP), each
 -- with an icon, a label and a "!" badge. It shows only in the lobby, off a pillar, and hides while the shop
 -- window is open. On short screens (landscape phones) RailFrame.Fit shrinks the whole column to fit.
--- Each button belongs to its own controller: Quests, Rewards and Tutorial call Rail.button(name) to connect
+-- Each button belongs to its own controller: Quests, Rewards, ShopUi and Tutorial call Rail.button(name) to connect
 -- it and Rail.setBadge(name, text) to mark it, so this module never needs to know them.
 
 local Ui = require(script.Parent.Ui)
 
-local BUTTONS = { "QuestsButton", "RewardsButton", "HelpButton" }
+local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "HelpButton" }
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
 local MIN_FIT = 0.45
