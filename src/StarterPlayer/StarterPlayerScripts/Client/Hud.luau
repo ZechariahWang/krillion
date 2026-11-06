@@ -27,8 +27,8 @@ local FEEDBACK_SECONDS = 1.5
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
 local TEMPLATE_WAIT = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
-local BOOST_GAP = 10 -- pixels between the boost buttons and the answer bar
-local BOOST_MARGIN = 8 -- pixels kept clear right of the water meter
+local BOOST_GAP = 8 -- pixels between the answer bar's GO button and the boost buttons
+local BOOST_MARGIN = 16 -- pixels kept clear left of the Shells chip and the Standings tab above it
 local BOOST_MIN_SCALE = 0.6 -- the smallest the boost buttons shrink to beside the bar
 local BOOST_ABOVE = 86 -- pixels above the bar's top when the buttons move over it (clears HintRow at -48, 30 tall)
 local PRICE_SHELLS = Color3.fromRGB(255, 217, 94) -- shell gold
@@ -195,9 +195,28 @@ local function boostsShown(): boolean
 	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
 end
 
--- The boost buttons sit left of the answer bar. On a narrow screen they shrink to fit between the water
--- meter and the bar; when even the smallest size would not fit, they stand above the bar's left end,
--- clear of the hint row and lock-in chip that sit over the bar.
+-- The left edge of whatever of the Standings tab and its list shows above the Shells chip, or nil.
+local function standingsLeft(): number?
+	local screen = Ui.findScreen(playerGui, "Standings")
+	local root = if screen ~= nil then screen:FindFirstChild("Root") else nil
+	if screen == nil or not screen.Visible or root == nil then
+		return nil
+	end
+	local left: number? = nil
+	for _, child in root:GetChildren() do
+		if child:IsA("GuiObject") and child.Visible and child.AbsoluteSize.X > 0 then
+			local x = child.AbsolutePosition.X
+			if left == nil or x < left then
+				left = x
+			end
+		end
+	end
+	return left
+end
+
+-- The boost buttons sit right of the answer bar's GO button. On a narrow screen they shrink to fit between
+-- the bar and the bottom-right corner (Shells chip and Standings tab); when even the smallest size would not fit, they stand above the bar's right
+-- end, clear of the hint row and lock-in chip that sit over the bar.
 local function fitBoostBar()
 	local bar = boostBar
 	if bar == nil then
@@ -208,17 +227,23 @@ local function fitBoostBar()
 		return
 	end
 	local fit = scale
-	local left = meter.AbsolutePosition.X + meter.AbsoluteSize.X + BOOST_MARGIN
-	local room = answerBar.AbsolutePosition.X - BOOST_GAP - left
+	local left = answerBar.AbsolutePosition.X + answerBar.AbsoluteSize.X + BOOST_GAP
+	local right = coinChip.AbsolutePosition.X
+	local standings = standingsLeft()
+	if standings ~= nil then
+		right = math.min(right, standings)
+	end
+	right -= BOOST_MARGIN
+	local room = right - left
 	local width = math.max(bar.Size.X.Offset, 1)
 	local share = room / width
 	if share >= BOOST_MIN_SCALE then
-		bar.AnchorPoint = Vector2.new(1, 1)
-		bar.Position = UDim2.new(0, -BOOST_GAP, 1, 0)
+		bar.AnchorPoint = Vector2.new(0, 1)
+		bar.Position = UDim2.new(1, BOOST_GAP, 1, 0)
 		fit.Scale = math.min(1, share)
 	else
-		bar.AnchorPoint = Vector2.new(0, 1)
-		bar.Position = UDim2.new(0, 0, 0, -BOOST_ABOVE)
+		bar.AnchorPoint = Vector2.new(1, 1)
+		bar.Position = UDim2.new(1, 0, 0, -BOOST_ABOVE)
 		fit.Scale = BOOST_MIN_SCALE
 	end
 end
@@ -476,7 +501,7 @@ end
 
 -- Setup ---------------------------------------------------------------------------------------------------
 
--- An element authored under AnswerBar in the place wins; otherwise the git template is cloned in.
+-- An element authored under AnswerBar wins; otherwise the ReplicatedStorage.Templates one is cloned in.
 -- Waits for the template, so call it off the init thread.
 local function adopt(name: string): Frame?
 	local existing = answerBar:FindFirstChild(name)
@@ -542,7 +567,13 @@ local function bindExtras()
 		bindChip(bar, "Hint", "HintButton")
 		bindChip(bar, "ExtraTime", "TimeButton")
 		answerBar:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
-		meter:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
+		coinChip:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
+		local standings = Ui.screen(playerGui, "Standings", TEMPLATE_WAIT)
+		local root = if standings ~= nil then standings:WaitForChild("Root", TEMPLATE_WAIT) else nil
+		if root ~= nil and root:IsA("GuiObject") then
+			root:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
+			root:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
+		end
 		refreshBoosts()
 	end
 end
