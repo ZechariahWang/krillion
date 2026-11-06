@@ -13,6 +13,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Do not author an instance in Studio while a `model.json` still owns it: Rojo reverts it on a later sync. Delete the
   `model.json` first, with Rojo disconnected. Remaining ones: `ReplicatedStorage/Remotes/*`, `Templates/{BotRig,Confetti,DiveCard,HowRareBoard,HowToBoard,Trails,leaderstats}`, `Sounds`.
 - `ServerStorage.UIArchive` keeps the UI as it was before the style bake (2026-11-05). Reference only.
+  `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
+- Declaring a new node in `default.project.json` while Rojo is connected makes Rojo create an empty placeholder
+  next to an instance you already moved there. Check for duplicates and delete the empty one.
 - After Studio edits, remind the user to save the place.
 
 ## UI layout
@@ -30,6 +33,8 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
+- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, HELP keys. Each controller connects
+  its key with `Rail.button(name)`; the rail hides in a match and while the shop is open.
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. Bottom-right holds the Shells chip
   (`Hud.CoinChip`, mirrored by `Wallet.Chip`), the Standings tab docked above it (list opens upward) and the
   Wallet pop-ups above that. The Hint and +10 SEC boosts sit right of GO and shrink to fit before that corner.
