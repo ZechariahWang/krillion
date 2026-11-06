@@ -1,7 +1,7 @@
 --!strict
--- Drives StarterGui.Wallet: the chunky gold Shells chip that counts up, and the "+25 🐚 ANSWER" pills that
--- bounce in for every payout or spend (ShellsEarned). The chip shows whenever the Hud coin chip is hidden
--- (lobby, results) and sits at its anchor, so the two read as one chip; pills land under whichever one shows.
+-- Drives SharedUi.Wallet: the chunky gold Shells chip in the bottom-right corner, always on screen (lobby and
+-- match), that counts up, and the "+25 🐚 ANSWER" pills that bounce in above the corner column for every
+-- payout or spend (ShellsEarned).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -57,8 +57,6 @@ local amountLabel: TextLabel? = nil
 local pops: Frame? = nil
 local popsFit: UIScale? = nil
 local popTemplate: Frame? = nil
-local hudGui: Frame? = nil
-local hudChip: GuiObject? = nil
 local playerGuiRef: PlayerGui? = nil
 
 -- Tweened for the count-up; the label follows it.
@@ -77,22 +75,8 @@ local function setAmount(value: number)
 	end
 end
 
-local function hudChipShowing(): boolean
-	local hud = hudGui
-	local coin = hudChip
-	return hud ~= nil and coin ~= nil and hud.Visible and coin.Visible
-end
-
--- The chip the player can see right now (the Hud one in a match).
-local function anchor(): GuiObject?
-	if hudChipShowing() then
-		return hudChip
-	end
-	return chip
-end
-
--- What else stacks in the bottom-right column above the chip: the Standings tab (with its list when open),
--- returned only while it is on screen.
+-- What else stacks in the bottom-right column above the chip, each only while it is on screen: the Standings
+-- tab (with its list when open) and, in a match, the Hint and +10 SEC boosts docked above the tab.
 local function columnParts(): { GuiObject }
 	local parts: { GuiObject } = {}
 	local root = playerGuiRef
@@ -104,15 +88,20 @@ local function columnParts(): { GuiObject }
 	if standings ~= nil and standings.Visible and frame ~= nil and frame:IsA("GuiObject") then
 		table.insert(parts, frame)
 	end
+	local hud = Ui.findScreen(root, "Hud")
+	local boosts = if hud ~= nil then hud:FindFirstChild("BoostBar") else nil
+	if hud ~= nil and hud.Visible and boosts ~= nil and boosts:IsA("GuiObject") and boosts.Visible then
+		table.insert(parts, boosts)
+	end
 	return parts
 end
 
--- Puts the popup column just above the visible chip's right edge, above the Standings tab or list when it
--- shows, so a pill never covers it. Pills stack upward from the column's bottom.
+-- Puts the popup column just above the chip's right edge, above everything else in the column, so a pill
+-- never covers it. Pills stack upward from the column's bottom.
 local function placePops()
 	local layer = pops
 	local screen = gui
-	local target = anchor()
+	local target = chip
 	if layer == nil or screen == nil or target == nil or target.AbsoluteSize.X <= 0 then
 		return
 	end
@@ -137,7 +126,7 @@ local function refresh()
 	if own == nil then
 		return
 	end
-	own.Visible = shown ~= nil and not hudChipShowing()
+	own.Visible = true
 	placePops()
 end
 
@@ -235,30 +224,6 @@ local function spawnPop(text: string, caption: string?, swatchName: string)
 	task.delay(POP_HOLD, fadePop, pop)
 end
 
--- Keeps the lobby chip in exactly the Hud chip's spot, and swaps between them as the Hud turns on and off.
-local function bindHud(playerGui: PlayerGui)
-	local hud = Ui.screen(playerGui, "Hud", WAIT_SECONDS)
-	if hud == nil or not hud:IsA("Frame") then
-		return
-	end
-	local coin = hud:WaitForChild("CoinChip", WAIT_SECONDS)
-	if coin == nil or not coin:IsA("GuiObject") then
-		return
-	end
-	hudGui = hud
-	hudChip = coin
-	local screen = gui
-	local own = chip
-	if screen ~= nil and own ~= nil then
-		-- Same corner as the Hud chip; the lobby chip keeps its own, chunkier size.
-		own.AnchorPoint = coin.AnchorPoint
-		own.Position = coin.Position
-	end
-	hud:GetPropertyChangedSignal("Visible"):Connect(refresh)
-	coin:GetPropertyChangedSignal("Visible"):Connect(refresh)
-	refresh()
-end
-
 -- Live pills move with their layer, so the column re-places itself (after layout) whenever the Standings
 -- tab or list moves, resizes, shows or hides.
 local function bindColumn(playerGui: PlayerGui)
@@ -307,11 +272,9 @@ function Wallet.init(playerGui: PlayerGui)
 			template.Visible = false
 			popTemplate = template
 		end
-		if shown ~= nil then
-			setAmount(counter.Value)
-		end
+		-- Always on screen; it reads 0 until the first profile arrives.
+		setAmount(counter.Value)
 		refresh()
-		bindHud(playerGui)
 	end)
 end
 
@@ -348,7 +311,7 @@ function Wallet.onShells(payload)
 	end
 	local reason = if type(payload.reason) == "string" then payload.reason else nil
 	local caption = if reason ~= nil then CAPTIONS[reason] else nil
-	local target = anchor()
+	local target = chip
 	if amount > 0 then
 		spawnPop("+" .. Currency.digits(amount) .. " " .. Theme.Icon.Shell, caption, "Gold")
 		-- Bigger payouts ring a little higher.

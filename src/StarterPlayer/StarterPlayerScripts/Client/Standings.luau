@@ -1,7 +1,7 @@
 --!strict
 -- Drives SharedUi.Standings (authored in Studio): a small STANDINGS tab that is always on screen,
--- docked bottom-right just above whichever Shells chip shows (the Hud one in a match, the Wallet one in the
--- lobby). Click or tap it to open the list upward (rank, name, pillar height, lock dot), or hold Q to peek.
+-- docked bottom-right just above the Shells chip (SharedUi.Wallet). Click or tap it to open the list to its
+-- left (rank, name, pillar height, lock dot), or hold Q to peek.
 -- Between matches the list keeps the last match until the next one starts. The list closes itself when a
 -- prompt starts unless it is pinned, and stays shut while the Reveal list is up.
 -- It also tags every other pillar with its answer once the pillars rise (ReplicatedStorage.Templates.AnswerTag,
@@ -77,8 +77,6 @@ local revealGui: Frame? = nil
 local revealList: GuiObject? = nil
 local rootFrame: GuiObject? = nil
 local emptyLabel: TextLabel? = nil
-local hudGui: Frame? = nil
-local hudChip: GuiObject? = nil
 local walletGui: Frame? = nil
 local walletChip: GuiObject? = nil
 local shopPanel: GuiObject? = nil
@@ -183,13 +181,8 @@ local function revealShowing(): boolean
 	return revealRows == nil or revealRows.Visible
 end
 
--- The Shells chip the player can see right now: the Hud one in a match, otherwise the Wallet one.
+-- The Shells chip in the bottom-right corner (SharedUi.Wallet), while it shows.
 local function visibleChip(): GuiObject?
-	local hud = hudGui
-	local coin = hudChip
-	if hud ~= nil and coin ~= nil and hud.Visible and coin.Visible then
-		return coin
-	end
 	local wallet = walletGui
 	local own = walletChip
 	if wallet ~= nil and own ~= nil and wallet.Visible and own.Visible then
@@ -207,7 +200,7 @@ local function restingTop(object: GuiObject): number
 	return bottom - object.AbsoluteSize.Y / factor
 end
 
--- Docks the tab right above the visible Shells chip, right edges lined up; the list opens upward from it.
+-- Docks the tab right above the Shells chip, right edges lined up; the list opens to the tab's left.
 -- Positions are offsets from the screen frame's own origin.
 local function dock()
 	local screen = gui
@@ -252,7 +245,7 @@ local function refreshVisibility()
 	end
 	local arrowLabel = arrow
 	if arrowLabel ~= nil then
-		arrowLabel.Text = if open then "▴" else "▸"
+		arrowLabel.Text = if open then "▸" else "◂"
 	end
 	local pin = pinButton
 	if pin ~= nil then
@@ -569,19 +562,10 @@ local function bindReveal(playerGui: PlayerGui)
 	dock()
 end
 
--- Finds both Shells chips and re-docks whenever either one shows, hides or the screen changes size.
+-- Finds the Shells chip and re-docks whenever it shows, hides, moves or the screen changes size.
 local function bindDock(playerGui: PlayerGui)
 	local function later()
 		task.defer(dock)
-	end
-	local hud = Ui.screen(playerGui, "Hud", WAIT_SECONDS)
-	local coin = if hud ~= nil then hud:WaitForChild("CoinChip", WAIT_SECONDS) else nil
-	if hud ~= nil and hud:IsA("Frame") and coin ~= nil and coin:IsA("GuiObject") then
-		hudGui = hud
-		hudChip = coin
-		hud:GetPropertyChangedSignal("Visible"):Connect(later)
-		coin:GetPropertyChangedSignal("Visible"):Connect(later)
-		hud:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
 	end
 	local wallet = Ui.screen(playerGui, "Wallet", WAIT_SECONDS)
 	local own = if wallet ~= nil then wallet:WaitForChild("Chip", WAIT_SECONDS) else nil
@@ -591,6 +575,7 @@ local function bindDock(playerGui: PlayerGui)
 		wallet:GetPropertyChangedSignal("Visible"):Connect(later)
 		own:GetPropertyChangedSignal("Visible"):Connect(later)
 		own:GetPropertyChangedSignal("Position"):Connect(later)
+		wallet:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
 	end
 	later()
 	-- The shop is bound by ShopUi; this only watches whether its window is open.

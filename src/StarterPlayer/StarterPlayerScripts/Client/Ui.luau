@@ -537,7 +537,6 @@ end
 local ROOT_OF: { [string]: string } = {
 	Rail = "LobbyUi",
 	Shop = "LobbyUi",
-	Wallet = "LobbyUi",
 	LobbyQuiz = "LobbyUi",
 	Quests = "LobbyUi",
 	Rewards = "LobbyUi",
@@ -552,6 +551,7 @@ local ROOT_OF: { [string]: string } = {
 	Toasts = "SharedUi",
 	Fx = "SharedUi",
 	Standings = "SharedUi",
+	Wallet = "SharedUi",
 	DiveCards = "SharedUi",
 }
 local ROOTS = { "LobbyUi", "GameUi", "SharedUi" }
@@ -620,12 +620,9 @@ local function isClock(text: string): boolean
 	return string.match(text, "^%d+:%d%d$") ~= nil
 end
 
--- Emoji beside existing labels: the coin chip and shop counter, the tide chip, the timer, the results title.
+-- Emoji beside existing labels: the shop counter, the tide chip, the timer, the results title.
 local ICONS: { [string]: { { path: string, icon: string, when: ((string) -> boolean)? } } } = {
-	GameUi = {
-		{ path = "Hud.CoinChip.CoinText", icon = "Shell" },
-		{ path = "Results.Panel.Title", icon = "Trophy" },
-	},
+	GameUi = { { path = "Results.Panel.Title", icon = "Trophy" } },
 	LobbyUi = { { path = "Shop.Panel.CashText", icon = "Shell" } },
 	SharedUi = {
 		{ path = "Status.Tide.Text", icon = "Wave" },
