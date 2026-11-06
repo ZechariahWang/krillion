@@ -1,5 +1,5 @@
 --!strict
--- Drives StarterGui.Standings (src/StarterGui/Standings.model.json): a small STANDINGS tab that is always on
+-- Drives StarterGui.Standings (authored in Studio): a small STANDINGS tab that is always on
 -- screen, docked right under whichever Shells chip shows (the Hud one in a match, the Wallet one in the
 -- lobby). Click or tap it to open the list (rank, name, pillar height, lock dot), or hold Q to peek. Between
 -- matches the list keeps the last match until the next one starts. The list closes itself when a prompt
@@ -35,7 +35,6 @@ local TAG_GAP = 4 -- pixels between a pillar's name tag and its answer tag
 local TAG_STUDS = 2.5 -- fallback lift when the name tag is sized in studs
 local MATCH_PHASES: { [string]: boolean } = { Prompt = true, Reveal = true, Surge = true }
 local DOCK_GAP = 6 -- pixels between the Shells chip and the tab, and between the tab and the Reveal list
-local EMPTY_TEXT = "PLAY A MATCH TO SEE STANDINGS"
 
 type Entry = {
 	userId: number,
@@ -509,7 +508,7 @@ local function tagFor(platform: BasePart): Tag?
 	clone.Enabled = false
 	placeAbove(clone, nameTag)
 	clone.Parent = platform
-	Ui.restyleGui(clone)
+	Ui.bindGui(clone)
 	local stroke = if pill ~= nil then pill:FindFirstChild("Border") else nil
 	local tag: Tag = {
 		label = label,
@@ -626,24 +625,6 @@ local function bindDock(playerGui: PlayerGui)
 	end
 end
 
--- A line in the list for before the first match, when there is nobody to rank yet.
-local function makeEmptyLabel(panel: Frame)
-	local label = Instance.new("TextLabel")
-	label.Name = "Empty"
-	label.BackgroundTransparency = 1
-	label.BorderSizePixel = 0
-	label.Size = UDim2.new(1, 0, 0, 44)
-	label.LayoutOrder = 100000
-	label.Text = EMPTY_TEXT
-	label.TextWrapped = true
-	label.TextSize = 16
-	label.FontFace = Theme.Font.Display
-	label.TextColor3 = Theme.Color.White
-	label.Visible = false
-	label.Parent = panel
-	emptyLabel = label
-end
-
 local function bindInput()
 	UserInputService.InputBegan:Connect(function(input, processed)
 		-- processed is true while typing in the answer box, so a Q in an answer never opens the list.
@@ -687,7 +668,7 @@ function Standings.init(playerGui: PlayerGui)
 		if root:IsA("GuiObject") then
 			rootFrame = root
 		end
-		makeEmptyLabel(panel)
+		emptyLabel = childOf(panel, "Empty", "TextLabel")
 		arrow = childOf(tabButton, "Arrow", "TextLabel")
 		place = childOf(tabButton, "Place", "TextLabel")
 		rowTemplate = childOf(panel, "RowTemplate", "Frame")

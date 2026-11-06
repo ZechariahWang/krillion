@@ -78,24 +78,9 @@ function Status.init(playerGui: PlayerGui)
 	tide.Size = UDim2.new(math.max(tide.Size.X.Scale, TIDE_WIDTH), tide.Size.X.Offset, tide.Size.Y.Scale, tide.Size.Y.Offset)
 
 	-- The prompt sits on a solid chunky plate so it reads over the busy arena (name tags, signs) behind it.
-	-- The plate hugs the text and replaces the thin accent underline.
-	local accent = statusFrame:FindFirstChild("Accent")
-	if accent ~= nil and accent:IsA("GuiObject") then
-		accent.Visible = false
-	end
+	-- The authored Plate hugs the text.
 	local line = statusText.Size.Y
-	local plate = Instance.new("Frame")
-	plate.Name = "Plate"
-	plate.AnchorPoint = Vector2.new(0.5, 0.5)
-	plate.Position = UDim2.new(
-		0.5,
-		0,
-		statusText.Position.Y.Scale + line.Scale / 2,
-		statusText.Position.Y.Offset + line.Offset / 2
-	)
-	plate.ZIndex = statusText.ZIndex - 1
-	plate.Parent = statusFrame
-	Ui.plate(plate, "Grape")
+	local plate = statusFrame:WaitForChild("Plate") :: Frame
 	local border = plate:FindFirstChildOfClass("UIStroke")
 	local screen = statusFrame:FindFirstAncestorWhichIsA("LayerCollector") :: LayerCollector?
 	local function fitPlate()

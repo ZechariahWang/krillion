@@ -52,35 +52,11 @@ local random = Random.new()
 
 local Fx = {}
 
--- The callout as a big sticker: display face, thick dark outline, a gradient fill tinted per callout, and
--- shown up to Theme.Chunky.Grow.Callout times its authored size (fitted to the screen).
-local function styleCallout()
-	callout.FontFace = Theme.Font.Display
-	Ui.setOutline(callout, Theme.Chunky.CalloutStroke)
-	local existing = callout:FindFirstChild("Fill")
-	if existing ~= nil and existing:IsA("UIGradient") then
-		calloutFill = existing
-	else
-		calloutFill = Instance.new("UIGradient")
-		calloutFill.Name = "Fill"
-		calloutFill.Parent = callout
-	end
-	calloutFill.Rotation = 90
+-- The callout is a big sticker authored in Studio (outline, "Fill" gradient tinted per callout), shown up
+-- to Theme.Chunky.Grow.Callout times its authored size (fitted to the screen).
+local function bindCallout()
+	calloutFill = callout:WaitForChild("Fill") :: UIGradient
 	Ui.grow(callout, Theme.Chunky.Grow.Callout)
-end
-
--- Clones carry the template's outline, shade and resting scale.
-local function styleCoinPop()
-	coinPop.FontFace = Theme.Font.Display
-	Ui.setOutline(coinPop, Theme.Chunky.TextStroke)
-	if coinPop:FindFirstChildOfClass("UIGradient") == nil then
-		local shade = Instance.new("UIGradient")
-		shade.Name = "Fill"
-		shade.Rotation = 90
-		shade.Color = ColorSequence.new(WHITE, Color3.fromRGB(196, 196, 196))
-		shade.Parent = coinPop
-	end
-	Ui.ensureScale(coinPop):SetAttribute("Rest", Theme.Chunky.Grow.CoinPop)
 end
 
 function Fx.init(playerGui: PlayerGui)
@@ -94,8 +70,7 @@ function Fx.init(playerGui: PlayerGui)
 	flash = gui:WaitForChild("Flash") :: Frame
 	callout = gui:WaitForChild("Callout") :: TextLabel
 	coinPop = gui:WaitForChild("CoinPop") :: TextLabel
-	styleCallout()
-	styleCoinPop()
+	bindCallout()
 
 	RunService:BindToRenderStep("KrillionShake", Enum.RenderPriority.Camera.Value + 1, function()
 		if os.clock() >= shakeUntil then

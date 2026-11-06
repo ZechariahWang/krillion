@@ -25,7 +25,7 @@ local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.O
 type Swatch = { Top: Color3, Bottom: Color3, Lip: Color3 }
 
 -- Repaints a chunky face (white, coloured by its gradient) with a Theme.Chunky swatch, keeping the height
--- of the lip band the model.json authored.
+-- of the lip band authored in Studio.
 local function paint(gradient: UIGradient, swatch: Swatch)
 	local points = gradient.Color.Keypoints
 	local edge = if #points >= 4 then points[3].Time else 0.9

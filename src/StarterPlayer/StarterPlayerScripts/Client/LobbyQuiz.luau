@@ -2,7 +2,7 @@
 -- Drives StarterGui.LobbyQuiz: the warm-up prompt stream that pays Shells while you wait, up to a daily cap.
 -- Enter checks the answer, Enter again locks it in (like a match). A wrong answer is rejected right away and
 -- the same prompt stays up for another try. A locked answer plays a mini dive card, then NEXT counts down.
--- ConfirmChip and LobbyQuizExtras (ResultCard, CollapseButton) are model.json templates cloned in, unless
+-- ConfirmChip and LobbyQuizExtras (ResultCard, CollapseButton) are Studio templates cloned in, unless
 -- the place already has them authored.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

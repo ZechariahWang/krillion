@@ -1,7 +1,7 @@
 --!strict
 -- Drives StarterGui.Lobby for anyone not on a platform: eliminated card, spectating, the late-join card
 -- and the spectate button for players who are off a pillar mid-match. JoinCard and WatchButton are
--- model.json templates (ReplicatedStorage.Templates) cloned in here, unless the place authors its own.
+-- Studio templates (ReplicatedStorage.Templates) cloned in here, unless the place authors its own.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

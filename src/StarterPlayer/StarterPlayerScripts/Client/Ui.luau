@@ -1,9 +1,8 @@
 --!strict
--- Micro-interactions shared by the controllers, plus the party-game style pass. Everything about the UI
--- layout is set in Studio (or in a model.json); the style pass only adds fonts, outlines, corners, gradients
--- and header colour to what is already there, and never moves or resizes a panel, button or label. The big
--- pop-ups (eliminated, revive, results, callouts) get the chunky toy look and show bigger through their
--- UIScale only, fitted to the screen, so the HUD between pop-ups stays as small as authored.
+-- Micro-interactions shared by the controllers, plus the live parts of the Studio-authored UI. Every
+-- outline, gradient, corner and caption is authored in Studio; this module only animates and tracks them.
+-- The big pop-ups (eliminated, revive, results, callouts) show bigger through their UIScale only, fitted to
+-- the screen, so the HUD between pop-ups stays as small as authored.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -14,11 +13,9 @@ local Ui = {}
 
 type TextObject = TextLabel | TextButton
 
-local WHITE = Color3.new(1, 1, 1)
 local DARK_TEXT = 0.3 -- text darker than this needs no dark outline (it would only blur it)
 local WAIT_SECONDS = 10 -- how long the style pass waits for a ScreenGui before giving up quietly
 local PATH_WAIT = 5
-local HEADER_PAD = 6 -- pixels of header bar under a panel's title
 local LIP_PRESS = 3 -- pixels the lip shrinks while a button is held
 
 -- Every animated element has a UIScale authored in Studio; without one, scale animations are skipped.
@@ -39,34 +36,10 @@ local function luminance(color: Color3): number
 	return 0.299 * color.R + 0.587 * color.G + 0.114 * color.B
 end
 
--- Multiplied over a button's face: a soft top-to-bottom shade, then a hard band 40% darker along the
--- bottom edge, so a flat button reads as a chunky key sitting on its lip. Model.json buttons can author
--- the same thing as a UIGradient named "Lip" (Rotation 90) to get the press animation.
-local LIP_COLORS = ColorSequence.new({
-	ColorSequenceKeypoint.new(0, WHITE),
-	ColorSequenceKeypoint.new(0.84, Color3.fromRGB(222, 222, 222)),
-	ColorSequenceKeypoint.new(0.86, Color3.fromRGB(153, 153, 153)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(153, 153, 153)),
-})
--- A light gloss for coloured header bars and bright panels.
-local GLOSS_COLORS = ColorSequence.new(WHITE, Color3.fromRGB(205, 205, 205))
-local PANEL_COLORS = ColorSequence.new(Theme.Panel.Top, Theme.Panel.Bottom)
-
 -- The resting scale of an element (see restOf), for controllers that run their own scale tweens.
 function Ui.rest(object: GuiObject): number
 	local scale = scaleOf(object)
 	return if scale ~= nil then restOf(scale) else 1
-end
-
--- The element's UIScale, added if Studio did not author one, so pop-ups restyled in code still animate.
-function Ui.ensureScale(object: GuiObject): UIScale
-	local scale = scaleOf(object)
-	if scale ~= nil then
-		return scale
-	end
-	local created = Instance.new("UIScale")
-	created.Parent = object
-	return created
 end
 
 -- Hover brightens the panel slightly (chunky buttons lift instead, since they are opaque); press dips the
@@ -227,7 +200,7 @@ function Ui.timerColor(fraction: number): Color3
 	return Theme.Color.Red
 end
 
--- Style pass ---------------------------------------------------------------------------------------------
+-- Live text ------------------------------------------------------------------------------------------------
 
 -- Theme.Icon glyph for a name ("Shell", "Trophy"...), or the text itself if it is not a known icon.
 function Ui.icon(name: string): string
@@ -253,34 +226,10 @@ function Ui.prefixIcon(label: TextObject, name: string, when: ((string) -> boole
 	apply()
 end
 
-local function isFamily(font: Font, family: string): boolean
-	return string.find(font.Family, family, 1, true) ~= nil
-end
-
--- Labels whose job is reading rather than shouting use the body face and no outline.
-local BODY_NAMES: { [string]: boolean } = {
-	Subtitle = true,
-	YourAnswer = true,
-	Answer = true,
-	Name = true,
-	Watching = true,
-	NextText = true,
-}
--- Big display text gets the thickest outline.
-local TITLE_NAMES: { [string]: boolean } = {
-	Title = true,
-	Status = true,
-	Callout = true,
-	BannerText = true,
-	WinnerText = true,
-	PointsText = true,
-}
-
--- A UIGradient tints everything its object draws, text included, so white text on a gradient face came out
--- in the face colour (and a white "!" on a red badge vanished). A text object with a face gradient draws its
--- text through a child "LiftedText" label instead, since a gradient never reaches children; the object's own
--- glyphs are hidden with MaxVisibleGraphemes. Code keeps setting Text, TextColor3 and the rest on the
--- object as before, and every change is mirrored onto the caption.
+-- A UIGradient tints everything its object draws, text included, so a text object with a face gradient
+-- draws its text through an authored child "LiftedText" label, and its own glyphs are hidden with
+-- MaxVisibleGraphemes = 0. Code keeps setting Text, TextColor3 and the rest on the object; every change
+-- is mirrored onto the caption.
 local MIRRORED = {
 	"Text",
 	"TextColor3",
@@ -297,62 +246,19 @@ local MIRRORED = {
 	"TextStrokeColor3",
 	"TextStrokeTransparency",
 }
--- Gradients that colour a face. Others (the gold text gradient on callouts) are meant to colour the text.
-local FACE_GRADIENTS: { [string]: boolean } = { Lip = true, Fill = true, Gloss = true, Face = true }
-local captions: { [Instance]: TextLabel } = setmetatable({}, { __mode = "k" }) :: any
+local mirrored: { [Instance]: boolean } = setmetatable({}, { __mode = "k" }) :: any
 
--- The label that actually draws this object's text: its caption once lifted, otherwise itself.
-local function textOf(label: TextObject): TextObject
-	return captions[label] or label
-end
-
-local function liftText(object: Instance)
-	if captions[object] ~= nil or object.Name == "LiftedText" then
+local function mirrorCaption(source: TextObject, caption: TextLabel)
+	if mirrored[caption] then
 		return
 	end
-	if not (object:IsA("TextLabel") or object:IsA("TextButton")) then
-		return
-	end
-	local source = object :: TextObject
-	-- A clone of an already lifted template brings its caption (and the moved outline) along, but not the
-	-- mirroring, so that caption is adopted and wired up instead of drawing a second one over it.
-	local cloned = source:FindFirstChild("LiftedText")
-	local caption: TextLabel
-	if cloned ~= nil and cloned:IsA("TextLabel") then
-		caption = cloned
-	else
-		caption = Instance.new("TextLabel")
-		caption.Name = "LiftedText"
-		caption.BackgroundTransparency = 1
-		caption.BorderSizePixel = 0
-		caption.Size = UDim2.fromScale(1, 1)
-	end
-	caption.ZIndex = source.ZIndex
+	mirrored[caption] = true
 	for _, property in MIRRORED do
 		(caption :: any)[property] = (source :: any)[property]
 		source:GetPropertyChangedSignal(property :: any):Connect(function()
 			(caption :: any)[property] = (source :: any)[property]
 		end)
 	end
-	for _, child in source:GetChildren() do
-		if child:IsA("UIStroke") and child.ApplyStrokeMode == Enum.ApplyStrokeMode.Contextual then
-			child.Parent = caption
-		elseif child:IsA("UITextSizeConstraint") then
-			child:Clone().Parent = caption
-		end
-	end
-	source.MaxVisibleGraphemes = 0
-	captions[object] = caption
-	caption.Parent = source
-end
-
-local function hasFaceGradient(object: Instance): boolean
-	for _, child in object:GetChildren() do
-		if child:IsA("UIGradient") and FACE_GRADIENTS[child.Name] then
-			return true
-		end
-	end
-	return false
 end
 
 local boundStrokes: { [UIStroke]: boolean } = setmetatable({}, { __mode = "k" }) :: any
@@ -373,9 +279,8 @@ local function outlineWidth(label: TextObject, cap: number): number
 	return math.clamp(height / 12, 1, cap)
 end
 
--- Makes an outline stroke track its label: it fades with TextTransparency, switches off on dark text and
--- thins on small text. Clones of a styled template carry the stroke but not these connections, which is
--- why the style pass rebinds anything added later.
+-- Makes an authored "Outline" stroke track its label: it fades with TextTransparency, switches off on
+-- dark text and thins on small text. The stroke's "Cap" attribute is its full thickness.
 local function bindOutline(label: TextObject, stroke: UIStroke)
 	if boundStrokes[stroke] then
 		return
@@ -396,7 +301,6 @@ local function bindOutline(label: TextObject, stroke: UIStroke)
 		stroke.Enabled = luminance(label.TextColor3) >= DARK_TEXT
 		stroke.Transparency = math.max(baseTransparency, label.TextTransparency)
 	end
-	-- The cap is read each time, so Ui.setOutline can thicken an outline that is already bound.
 	local function resize()
 		local current = stroke:GetAttribute("Cap")
 		stroke.Thickness = outlineWidth(label, if type(current) == "number" then current else stroke.Thickness)
@@ -409,398 +313,25 @@ local function bindOutline(label: TextObject, stroke: UIStroke)
 	resize()
 end
 
--- Adds (or adopts) the dark Contextual outline on a label or button text. Model.json UIs that author
--- their own UIStroke named "Outline" get the same tracking from Ui.restyleGui.
-function Ui.outline(target: TextObject, thickness: number?)
-	local label = textOf(target)
-	local existing = label:FindFirstChild("Outline")
-	if existing ~= nil and existing:IsA("UIStroke") then
-		bindOutline(label, existing)
-		return
-	end
-	local stroke = Instance.new("UIStroke")
-	stroke.Name = "Outline"
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual
-	stroke.Color = Theme.Outline
-	stroke.LineJoinMode = Enum.LineJoinMode.Round
-	stroke.Thickness = thickness or Theme.Stroke.Label
-	stroke.Parent = label
-	bindOutline(label, stroke)
+local function isText(object: Instance?): boolean
+	return object ~= nil and (object:IsA("TextLabel") or object:IsA("TextButton"))
 end
 
--- The thick pop-up outline in the chunky colour. Adopts whatever stroke the label already has, so it
--- never ends up with two.
-function Ui.setOutline(target: TextObject, cap: number)
-	local label = textOf(target)
-	local named = label:FindFirstChild("Outline")
-	local stroke: UIStroke? = if named ~= nil and named:IsA("UIStroke") then named else label:FindFirstChildOfClass("UIStroke")
-	if stroke == nil then
-		local created = Instance.new("UIStroke")
-		created.Parent = label
-		stroke = created
-	end
-	local outline = stroke :: UIStroke
-	outline.Name = "Outline"
-	outline.ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual
-	outline.Color = Theme.Chunky.Outline
-	outline.LineJoinMode = Enum.LineJoinMode.Round
-	outline:SetAttribute("Cap", cap)
-	outline.Thickness = cap
-	bindOutline(label, outline)
-end
-
--- Chunky display text with an outline, or the body face for reading text. Fonts that are already
--- Fredoka or Builder Sans were chosen on purpose and are left alone; only the old Roboto look changes.
-function Ui.styleText(object: TextObject)
-	local font = object.FontFace
-	local styled = isFamily(font, "FredokaOne") or isFamily(font, "BuilderSans")
-	if not styled then
-		object.FontFace = if BODY_NAMES[object.Name] then Theme.Font.Body else Theme.Font.Display
-	end
-	if hasFaceGradient(object) then
-		liftText(object)
-	end
-	if object.Name == "Icon" or object.TextStrokeTransparency < 1 then
-		return
-	end
-	-- The outline goes on whatever draws the text; the caption sits inside the object's own Border stroke.
-	local label = textOf(object)
-	local own = label:FindFirstChild("Outline")
-	if own ~= nil and own:IsA("UIStroke") then
-		bindOutline(label, own)
-		return
-	end
-	-- One stroke per object: a Border stroke someone authored (badges, chips) stays the only one.
-	if label:FindFirstChildOfClass("UIStroke") ~= nil then
-		return
-	end
-	if not isFamily(label.FontFace, "FredokaOne") then
-		return
-	end
-	local cap = if TITLE_NAMES[object.Name] then Theme.Stroke.Title else Theme.Stroke.Label
-	if object:IsA("TextButton") then
-		cap = Theme.Stroke.Button
-	end
-	Ui.outline(label, cap)
-end
-
-local function setCorner(object: GuiObject, radius: number)
-	local corner = object:FindFirstChildOfClass("UICorner")
-	if corner == nil then
-		corner = Instance.new("UICorner")
-		corner.Parent = object
-	elseif corner.CornerRadius.Scale > 0 then
-		return -- pills and circles keep their shape
-	end
-	(corner :: UICorner).CornerRadius = UDim.new(0, radius)
-end
-
-local function addGradient(object: GuiObject, name: string, colors: ColorSequence)
-	if object:FindFirstChildOfClass("UIGradient") ~= nil then
-		return
-	end
-	liftText(object)
-	local gradient = Instance.new("UIGradient")
-	gradient.Name = name
-	gradient.Rotation = 90
-	gradient.Color = colors
-	gradient.Parent = object
-end
-
-local function addBorder(object: GuiObject, thickness: number)
-	if object:FindFirstChildOfClass("UIStroke") ~= nil then
-		return
-	end
-	local stroke = Instance.new("UIStroke")
-	stroke.Name = "Border"
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	stroke.Color = Theme.Outline
-	stroke.LineJoinMode = Enum.LineJoinMode.Round
-	stroke.Thickness = thickness
-	stroke.Parent = object
-end
-
--- Chunky style --------------------------------------------------------------------------------------------
-
-type Swatch = { Top: Color3, Bottom: Color3, Lip: Color3 }
-
-local SWATCHES: { [string]: Swatch } = Theme.Chunky.Color :: any
--- The navy chip fill (timer pill, coin chip, tide chip) with a thin darker lip, so the HUD chips match the
--- pop-ups without growing.
-local NAVY: Swatch = { Top = Theme.Panel.Top, Bottom = Theme.Panel.Bottom, Lip = Theme.Panel.Lip }
-local CHIP_LIP = 3
-
--- Top-to-bottom shade, then a hard band `lip` pixels tall along the bottom edge: a slab sitting on its lip.
-local function lipColors(swatch: Swatch, height: number, lip: number): ColorSequence
-	local edge = math.clamp(1 - lip / math.max(height, 1), 0.5, 0.97)
-	return ColorSequence.new({
-		ColorSequenceKeypoint.new(0, swatch.Top),
-		ColorSequenceKeypoint.new(edge - 0.01, swatch.Bottom),
-		ColorSequenceKeypoint.new(edge, swatch.Lip),
-		ColorSequenceKeypoint.new(1, swatch.Lip),
-	})
-end
-
-type Shade = { swatch: Swatch, lip: number }
-local shades: { [UIGradient]: Shade } = setmetatable({}, { __mode = "k" }) :: any
-
--- Paints a white face with the swatch through a UIGradient (adopting one the object already has), keeping
--- the lip band the same height in pixels as the object resizes.
-local function shade(object: GuiObject, name: string, swatch: Swatch, lip: number)
-	liftText(object)
-	local existing = object:FindFirstChildOfClass("UIGradient")
-	local gradient: UIGradient
-	if existing ~= nil then
-		gradient = existing
-	else
-		gradient = Instance.new("UIGradient")
-		gradient.Parent = object
-	end
-	gradient.Name = name
-	gradient.Rotation = 90
-	gradient.Offset = Vector2.zero
-	gradient.Transparency = NumberSequence.new(0)
-	object.BackgroundColor3 = WHITE
-	local bound = shades[gradient] ~= nil
-	shades[gradient] = { swatch = swatch, lip = lip }
-	local function refresh()
-		local current = shades[gradient]
-		if current ~= nil then
-			gradient.Color = lipColors(current.swatch, object.AbsoluteSize.Y, current.lip)
-		end
-	end
-	refresh()
-	if not bound then
-		object:GetPropertyChangedSignal("AbsoluteSize"):Connect(refresh)
+-- Binds the authored outline (on the label, or on its LiftedText caption) of one text object.
+function Ui.trackOutline(target: TextObject)
+	local caption = target:FindFirstChild("LiftedText")
+	local label: TextObject = if caption ~= nil and caption:IsA("TextLabel") then caption else target
+	local stroke = label:FindFirstChild("Outline")
+	if stroke ~= nil and stroke:IsA("UIStroke") then
+		bindOutline(label, stroke)
 	end
 end
 
--- A dark border in the chunky colour, adopting an existing stroke on a frame (frames have no text).
-local function chunkyBorder(object: GuiObject, thickness: number)
-	local existing = object:FindFirstChildOfClass("UIStroke")
-	local border: UIStroke
-	if existing ~= nil then
-		border = existing
-	else
-		border = Instance.new("UIStroke")
-		border.Parent = object
-	end
-	border.Name = "Border"
-	border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	border.Color = Theme.Chunky.Outline
-	border.LineJoinMode = Enum.LineJoinMode.Round
-	border.Thickness = thickness
-end
-
--- A saturated toy key: the swatch shaded top to bottom over a darker lip, big corners, white display text
--- with a thick dark outline. A button shows one stroke, so the outlined text wins over a border; the lip
--- carries the shape. Hover lifts it (Ui.pressable checks the Chunky attribute).
-function Ui.chunkyButton(button: TextButton, swatchName: string)
-	local swatch = SWATCHES[swatchName]
-	if swatch == nil or button:GetAttribute("NoRestyle") == true then
-		return
-	end
-	button:SetAttribute("Chunky", true)
-	Ui.ensureScale(button)
-	button.AutoButtonColor = false
-	button.BackgroundTransparency = 0
-	shade(button, "Lip", swatch, Theme.Chunky.ButtonLip)
-	setCorner(button, Theme.Chunky.ButtonCorner)
-	button.FontFace = Theme.Font.Display
-	button.TextColor3 = WHITE
-	Ui.setOutline(button, Theme.Chunky.TextStroke)
-end
-
--- A chunky backing plate for a frame: the swatch face over its lip, big corners and the thick dark border.
-function Ui.plate(object: GuiObject, swatchName: string)
-	local swatch = SWATCHES[swatchName]
-	if swatch == nil then
-		return
-	end
-	object.BackgroundTransparency = 0
-	object.BorderSizePixel = 0
-	shade(object, "Fill", swatch, Theme.Chunky.Lip)
-	setCorner(object, Theme.Chunky.Corner)
-	chunkyBorder(object, Theme.Chunky.Border)
-end
-
--- A lipped key: rounded corners, the darker lip band, and one stroke. Light text gets the text outline
--- (from Ui.styleText); dark text on a bright face gets a border instead, since an object shows one stroke.
--- Translucent buttons (tabs, ghost buttons) only get their text styled.
-function Ui.styleButton(button: TextButton)
-	local parent = button.Parent
-	if button.BackgroundTransparency > 0.2 or (parent ~= nil and parent.Name == "Tabs") then
-		return
-	end
-	-- A coloured stripe child has square ends; a bigger corner would make them poke out.
-	if button:FindFirstChild("Accent") == nil then
-		setCorner(button, 12)
-	end
-	addGradient(button, "Lip", LIP_COLORS)
-	if luminance(button.TextColor3) < DARK_TEXT or button.Text == "" then
-		addBorder(button, Theme.Stroke.Button)
-	end
-end
-
-local function styleBox(box: TextBox)
-	if not (isFamily(box.FontFace, "FredokaOne") or isFamily(box.FontFace, "BuilderSans")) then
-		box.FontFace = Theme.Font.Body
-	end
-	addBorder(box, 2)
-end
-
-local function skipped(object: Instance, root: Instance): boolean
-	local current: Instance? = object
-	while current ~= nil and current ~= root do
-		if current:GetAttribute("NoRestyle") == true then
-			return true
-		end
-		current = current.Parent
-	end
-	return false
-end
-
-local function styleOne(object: Instance, root: Instance)
-	if object.Parent == nil or skipped(object, root) then
-		return
-	end
-	if object:IsA("TextButton") then
-		Ui.styleButton(object)
-		Ui.styleText(object)
-	elseif object:IsA("TextLabel") then
-		Ui.styleText(object)
-	elseif object:IsA("TextBox") then
-		styleBox(object)
-	end
-end
-
--- Sends a decoration behind its siblings so the labels it sits under stay on top.
-local function sendToBack(object: GuiObject)
-	local parent = object.Parent
-	if parent == nil then
-		return
-	end
-	local lowest = math.huge
-	for _, sibling in parent:GetChildren() do
-		if sibling ~= object and sibling:IsA("GuiObject") then
-			lowest = math.min(lowest, sibling.ZIndex)
-		end
-	end
-	if lowest ~= math.huge and object.ZIndex >= lowest then
-		object.ZIndex = lowest - 1
-	end
-end
-
--- The height a header needs to sit behind the title, or nil if the title is not along the top edge.
-local function headerHeight(title: GuiObject): UDim?
-	local y = title.Position.Y
-	local size = title.Size.Y
-	local anchor = title.AnchorPoint.Y
-	local topScale = y.Scale - size.Scale * anchor
-	local topOffset = y.Offset - size.Offset * anchor
-	if topScale > 0.12 or topOffset > 24 then
-		return nil
-	end
-	local bottomScale = topScale + size.Scale
-	if bottomScale > 0.3 then
-		return nil
-	end
-	return UDim.new(bottomScale, topOffset + size.Offset + HEADER_PAD)
-end
-
-local function isTopBar(accent: GuiObject): boolean
-	local size = accent.Size
-	local position = accent.Position
-	return size.X.Scale >= 0.9
-		and size.Y.Scale == 0
-		and size.Y.Offset <= 6
-		and position.Y.Scale == 0
-		and position.Y.Offset <= 4
-		and accent.AnchorPoint.Y == 0
-end
-
--- White title text on its header, unless the authored colour already stands out from the bar.
-local function contrastTitle(title: Instance, bar: Color3)
-	if not (title:IsA("TextLabel") or title:IsA("TextButton")) then
-		return
-	end
-	local color = title.TextColor3
-	local distance = math.abs(color.R - bar.R) + math.abs(color.G - bar.G) + math.abs(color.B - bar.B)
-	if distance < 0.9 then
-		title.TextColor3 = WHITE
-	end
-end
-
--- Turns a panel's thin top Accent bar into a coloured header bar behind its Title. Code that tints the
--- Accent (tier, status) now tints the whole header. Only for panels without a list layout, where the
--- Accent can sit under the Title by ZIndex; side stripes stay stripes.
-local function makeHeader(panel: GuiObject, accent: GuiObject, radius: number): boolean
-	local title = panel:FindFirstChild("Title")
-	if title == nil or not title:IsA("GuiObject") or not isTopBar(accent) then
-		return false
-	end
-	if panel:FindFirstChildOfClass("UIListLayout") ~= nil or panel:FindFirstChildOfClass("UIGridLayout") ~= nil then
-		return false
-	end
-	local height = headerHeight(title)
-	if height == nil then
-		return false
-	end
-	accent.Position = UDim2.new(accent.Position.X.Scale, accent.Position.X.Offset, 0, 0)
-	accent.Size = UDim2.new(accent.Size.X.Scale, accent.Size.X.Offset, height.Scale, height.Offset)
-	accent.BackgroundTransparency = 0
-	setCorner(accent, radius)
-	addGradient(accent, "Gloss", GLOSS_COLORS)
-	sendToBack(accent)
-	contrastTitle(title, accent.BackgroundColor3)
-	return true
-end
-
--- Panel kinds: "panel" (big card: header bar, 14 px corners, 3 px outline), "chip" (small pill or toast:
--- 2.5 px outline), "frame" (outline only, e.g. the water meter). Dark fills become the navy gradient;
--- bright fills get a gloss. Sizes and positions are never touched.
-function Ui.stylePanel(panel: GuiObject, kind: string?)
-	local style = kind or "panel"
-	if panel.BackgroundTransparency >= 1 then
-		return
-	end
-	local accentObject = panel:FindFirstChild("Accent")
-	local accent = if accentObject ~= nil and accentObject:IsA("GuiObject") then accentObject else nil
-	local radius = if style == "panel" then 14 else 10
-	local header = false
-	if style == "panel" and accent ~= nil then
-		header = makeHeader(panel, accent, radius)
-	end
-	if accent == nil or header then
-		setCorner(panel, radius)
-	end
-	addBorder(panel, if style == "panel" then Theme.Stroke.Title elseif style == "chip" then 2.5 else 2)
-	if style == "frame" then
-		return
-	end
-	if luminance(panel.BackgroundColor3) < 0.25 and panel:FindFirstChildOfClass("UIGradient") == nil then
-		if style == "chip" then
-			shade(panel, "Fill", NAVY, CHIP_LIP)
-		else
-			panel.BackgroundColor3 = WHITE
-			addGradient(panel, "Fill", PANEL_COLORS)
-		end
-	else
-		addGradient(panel, "Gloss", GLOSS_COLORS)
-	end
-end
-
--- A frame that holds a panel's title (LobbyQuiz's HeaderBar) becomes a solid coloured bar.
-local function styleHeaderBar(bar: GuiObject)
-	local panel = bar.Parent
-	local accent = if panel ~= nil then panel:FindFirstChild("Accent") else nil
-	local color = if accent ~= nil and accent:IsA("GuiObject") then accent.BackgroundColor3 else Theme.Header.Quest
-	bar.BackgroundColor3 = color
-	bar.BackgroundTransparency = 0
-	setCorner(bar, 8)
-	addGradient(bar, "Gloss", GLOSS_COLORS)
-	for _, child in bar:GetChildren() do
-		contrastTitle(child, color)
+local function bindOne(object: Instance)
+	if object:IsA("UIStroke") and object.Name == "Outline" and isText(object.Parent) then
+		bindOutline(object.Parent :: TextObject, object)
+	elseif object:IsA("TextLabel") and object.Name == "LiftedText" and isText(object.Parent) then
+		mirrorCaption(object.Parent :: TextObject, object)
 	end
 end
 
@@ -895,7 +426,11 @@ local grown: { [GuiObject]: boolean } = setmetatable({}, { __mode = "k" }) :: an
 -- every Ui animation settles at), shrunk to fit the screen. Refits when the screen turns or children are
 -- added. Sizes and positions are never written, so the Studio layout stays as authored.
 function Ui.grow(object: GuiObject, desired: number)
-	local scale = Ui.ensureScale(object)
+	local found = scaleOf(object)
+	if found == nil then
+		return
+	end
+	local scale = found :: UIScale
 	local function refit()
 		local rest = fitScale(object, desired)
 		if scale:GetAttribute("Rest") ~= nil and math.abs(rest - restOf(scale)) < 0.005 then
@@ -1004,83 +539,13 @@ function Ui.fitPanel(
 	fit.Scale = math.clamp(scaleFor(panel.Size), minScale, 1)
 end
 
--- Pop-up restyle -----------------------------------------------------------------------------------------
+-- Live binding -------------------------------------------------------------------------------------------
 
-type Popup = {
-	fill: string, -- Theme.Chunky.Color swatch for the panel face
-	header: string, -- swatch for the header bar made from the panel's top Accent
-	button: string, -- swatch for every button in the panel
-	buttons: { [string]: string }?, -- per-button overrides by name
-	grow: number?, -- Theme.Chunky.Grow factor, or nil to keep the authored size
-}
-
--- Turns a Studio panel into a chunky toy pop-up: opaque swatch face over a lip band, a thick dark border,
--- big corners, a saturated header bar behind a white outlined title, and chunky buttons. Nothing moves;
--- `grow` makes it bigger through its UIScale only.
-function Ui.stylePopup(panel: GuiObject, spec: Popup)
-	local fill = SWATCHES[spec.fill]
-	if fill == nil or panel:GetAttribute("NoRestyle") == true then
-		return
-	end
-	local radius = Theme.Chunky.Corner
-	local accentObject = panel:FindFirstChild("Accent")
-	if accentObject ~= nil and accentObject:IsA("GuiObject") then
-		if makeHeader(panel, accentObject, radius) then
-			local header = SWATCHES[spec.header]
-			if header ~= nil then
-				shade(accentObject, "Gloss", header, 4)
-			end
-		else
-			-- A thin stripe that cannot become a header would poke out of the big corners; the face and
-			-- border carry the colour now.
-			accentObject.Visible = false
-		end
-	end
-	panel.BackgroundTransparency = 0
-	shade(panel, "Fill", fill, Theme.Chunky.Lip)
-	setCorner(panel, radius)
-	chunkyBorder(panel, Theme.Chunky.Border)
-	local title = panel:FindFirstChild("Title")
-	if title ~= nil and (title:IsA("TextLabel") or title:IsA("TextButton")) then
-		title.FontFace = Theme.Font.Display
-		title.TextColor3 = WHITE
-		Ui.setOutline(title, Theme.Chunky.TextStroke)
-	end
-	local overrides = spec.buttons or {}
-	for _, object in panel:GetDescendants() do
-		if object:IsA("TextButton") and not skipped(object, panel) then
-			Ui.chunkyButton(object, overrides[object.Name] or spec.button)
-		end
-	end
-	if spec.grow ~= nil then
-		Ui.grow(panel, spec.grow)
-	end
-end
-
--- Studio pop-ups that get the chunky look, by ScreenGui and dotted path. Everything in the match HUD stays
--- small (see PANELS); only these grow, and only while they show.
-local POPUPS: { [string]: { [string]: Popup } } = {
-	Lobby = {
-		EliminatedCard = { fill = "Sea", header = "Red", button = "Lime", grow = Theme.Chunky.Grow.Card },
-		SpectateBar = { fill = "Sea", header = "Sky", button = "Sky", buttons = { BackButton = "Pink" } },
-	},
-	Revive = { Card = { fill = "Berry", header = "Lime", button = "Lime", grow = Theme.Chunky.Grow.Card } },
-	Results = { Panel = { fill = "Grape", header = "Gold", button = "Lime", grow = Theme.Chunky.Grow.Results } },
-}
-
--- Studio-authored panels to restyle, by ScreenGui and dotted path. "header" is a title bar frame.
-local PANELS: { [string]: { [string]: string } } = {
-	Status = { SecondaryStatus = "chip", Tide = "chip" },
-	Hud = {
-		CoinChip = "chip",
-		["AnswerBar.LockedText"] = "chip",
-		["AnswerBar.Feedback"] = "chip",
-		Banner = "chip",
-		WaterMeter = "frame",
-	},
-	LobbyQuiz = { Panel = "panel", ["Panel.HeaderBar"] = "header", Result = "chip" },
-	Shop = { Panel = "panel" },
-	Reveal = { Badge = "panel", List = "panel" },
+-- Pop-ups shown bigger than authored (through their UIScale), by ScreenGui and dotted path.
+local GROWS: { [string]: { [string]: number } } = {
+	Lobby = { EliminatedCard = Theme.Chunky.Grow.Card },
+	Revive = { Card = Theme.Chunky.Grow.Card },
+	Results = { Panel = Theme.Chunky.Grow.Results },
 }
 
 local function isClock(text: string): boolean
@@ -1109,61 +574,48 @@ local function find(root: Instance, path: string): Instance?
 	return current
 end
 
-local styledRoots: { [Instance]: boolean } = setmetatable({}, { __mode = "k" }) :: any
+local boundRoots: { [Instance]: boolean } = setmetatable({}, { __mode = "k" }) :: any
 
--- Restyles one ScreenGui, BillboardGui or SurfaceGui and everything later added to it (cloned rows keep
--- their outlines tracking). Safe to call twice. Model.json UIs authored in the style just get their
--- "Outline" strokes bound; put attribute NoRestyle=true on anything that must keep its look.
-function Ui.restyleGui(root: LayerCollector)
-	if styledRoots[root] then
+-- Wires up the live parts of one ScreenGui, BillboardGui or SurfaceGui authored in Studio, and of
+-- everything later cloned into it: outlines track their text, lifted captions mirror it, pop-ups fit the
+-- screen and icons stay in front of the text. Nothing is created or restyled. Safe to call twice.
+function Ui.bindGui(root: LayerCollector)
+	if boundRoots[root] then
 		return
 	end
-	styledRoots[root] = true
+	boundRoots[root] = true
 	for _, object in root:GetDescendants() do
-		styleOne(object, root)
+		bindOne(object)
 	end
 	root.DescendantAdded:Connect(function(object)
-		task.defer(styleOne, object, root)
+		task.defer(bindOne, object)
 	end)
-	local panels = PANELS[root.Name]
-	local popups = POPUPS[root.Name]
+	local grows = GROWS[root.Name]
 	local icons = ICONS[root.Name]
-	if panels == nil and popups == nil and icons == nil then
+	if grows == nil and icons == nil then
 		return
 	end
 	task.spawn(function()
-		if popups ~= nil then
-			for path, spec in popups do
+		if grows ~= nil then
+			for path, desired in grows do
 				local found = find(root, path)
 				if found ~= nil and found:IsA("GuiObject") then
-					Ui.stylePopup(found, spec)
-				end
-			end
-		end
-		if panels ~= nil then
-			for path, kind in panels do
-				local found = find(root, path)
-				if found ~= nil and found:IsA("GuiObject") then
-					if kind == "header" then
-						styleHeaderBar(found)
-					else
-						Ui.stylePanel(found, kind)
-					end
+					Ui.grow(found, desired)
 				end
 			end
 		end
 		if icons ~= nil then
 			for _, entry in icons do
 				local found = find(root, entry.path)
-				if found ~= nil and (found:IsA("TextLabel") or found:IsA("TextButton")) then
-					Ui.prefixIcon(found, entry.icon, entry.when)
+				if found ~= nil and isText(found) then
+					Ui.prefixIcon(found :: TextObject, entry.icon, entry.when)
 				end
 			end
 		end
 	end)
 end
 
--- Every ScreenGui in the game, old (Studio) and new (model.json). Missing ones are skipped quietly.
+-- Every ScreenGui with live text. Missing ones are skipped quietly.
 local SCREEN_GUIS = {
 	"Status",
 	"Hud",
@@ -1194,25 +646,25 @@ local function isWorldText(object: Instance): boolean
 	return false
 end
 
--- The style pass for the whole client. Call once from Main.client with the PlayerGui; it never yields.
-function Ui.restyle(playerGui: PlayerGui)
+-- Binds every ScreenGui and the world text. Call once from Main.client with the PlayerGui; it never yields.
+function Ui.bindAll(playerGui: PlayerGui)
 	for _, name in SCREEN_GUIS do
 		task.spawn(function()
 			local gui = playerGui:WaitForChild(name, WAIT_SECONDS)
 			if gui ~= nil and gui:IsA("LayerCollector") then
-				Ui.restyleGui(gui)
+				Ui.bindGui(gui)
 			end
 		end)
 	end
 	task.spawn(function()
 		for _, object in workspace:GetDescendants() do
 			if isWorldText(object) then
-				Ui.restyleGui(object :: LayerCollector)
+				Ui.bindGui(object :: LayerCollector)
 			end
 		end
 		workspace.DescendantAdded:Connect(function(object)
 			if isWorldText(object) then
-				task.defer(Ui.restyleGui, object :: LayerCollector)
+				task.defer(Ui.bindGui, object :: LayerCollector)
 			end
 		end)
 	end)

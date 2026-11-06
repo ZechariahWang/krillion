@@ -27,8 +27,8 @@ local Sonar = require(Client.Sonar)
 local AnimationReset = require(Client.AnimationReset)
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
--- Style pass (fonts, outlines, icons) over the Studio GUIs and world text; it never yields.
-Ui.restyle(playerGui)
+-- Live outlines, captions, pop-up fit and icons on the Studio GUIs and world text; it never yields.
+Ui.bindAll(playerGui)
 -- Controllers added for the Sink or Niche port wait at most 10 s for their GUI and then do nothing,
 -- so one missing ScreenGui never stops the others.
 Fx.init(playerGui)

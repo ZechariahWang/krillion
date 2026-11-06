@@ -12,6 +12,10 @@
       "Maps": {
         "$className": "Folder",
         "$ignoreUnknownInstances": true
+      },
+      "UIArchive": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true
       }
     },
     "ReplicatedStorage": {

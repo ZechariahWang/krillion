@@ -107,7 +107,7 @@ local function collect(sonar: Model)
 				table.insert(list, object)
 			end
 			-- The authored outline follows TextTransparency, so it fades with its text.
-			Ui.outline(object, Theme.Stroke.Label)
+			Ui.trackOutline(object)
 		elseif object:IsA("Frame") then
 			table.insert(fadeables, { instance = object, property = "BackgroundTransparency", shown = object.BackgroundTransparency })
 			object.BackgroundTransparency = 1
