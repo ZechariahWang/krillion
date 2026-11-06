@@ -1,10 +1,9 @@
 --!strict
--- Drives StarterGui.Standings (authored in Studio): a small STANDINGS tab that is always on
--- screen, docked right under whichever Shells chip shows (the Hud one in a match, the Wallet one in the
--- lobby). Click or tap it to open the list (rank, name, pillar height, lock dot), or hold Q to peek. Between
--- matches the list keeps the last match until the next one starts. The list closes itself when a prompt
--- starts unless it is pinned, and stays shut while the Reveal list is up; that list is pushed below the tab
--- if the two would meet, since both use the right-hand column.
+-- Drives SharedUi.Standings (authored in Studio): a small STANDINGS tab that is always on screen,
+-- docked bottom-right just above whichever Shells chip shows (the Hud one in a match, the Wallet one in the
+-- lobby). Click or tap it to open the list upward (rank, name, pillar height, lock dot), or hold Q to peek.
+-- Between matches the list keeps the last match until the next one starts. The list closes itself when a
+-- prompt starts unless it is pinned, and stays shut while the Reveal list is up.
 -- It also tags every other pillar with its answer once the pillars rise (ReplicatedStorage.Templates.AnswerTag,
 -- or a Studio-authored NameTag.AnswerText if the template ever gains one), and hides your own pillar's name
 -- tag locally so it never blocks your view.
@@ -34,7 +33,8 @@ local MIN_SCALE = 0.55
 local TAG_GAP = 4 -- pixels between a pillar's name tag and its answer tag
 local TAG_STUDS = 2.5 -- fallback lift when the name tag is sized in studs
 local MATCH_PHASES: { [string]: boolean } = { Prompt = true, Reveal = true, Surge = true }
-local DOCK_GAP = 6 -- pixels between the Shells chip and the tab, and between the tab and the Reveal list
+local DOCK_GAP = 8 -- pixels between the Shells chip and the tab above it
+local CORNER_EDGE = 16 -- pixels from the screen edges when the tab has the corner to itself
 
 type Entry = {
 	userId: number,
@@ -68,7 +68,6 @@ type Tag = {
 
 local gui: Frame? = nil
 local rootScale: UIScale? = nil
-local tab: TextButton? = nil
 local arrow: TextLabel? = nil
 local place: TextLabel? = nil
 local list: Frame? = nil
@@ -76,7 +75,6 @@ local pinButton: TextButton? = nil
 local rowTemplate: Frame? = nil
 local revealGui: Frame? = nil
 local revealList: GuiObject? = nil
-local revealListPosition: UDim2? = nil -- as authored, so a nudge below the tab is never compounded
 local rootFrame: GuiObject? = nil
 local emptyLabel: TextLabel? = nil
 local hudGui: Frame? = nil
@@ -200,47 +198,34 @@ local function visibleChip(): GuiObject?
 	return nil
 end
 
--- The bottom edge of an object without the bump its UIScale may be playing, in screen pixels.
-local function restingBottom(object: GuiObject): number
+-- The top edge of an object without the bump its UIScale may be playing, in screen pixels. The chip is
+-- anchored at its bottom, so a bump only moves its top.
+local function restingTop(object: GuiObject): number
 	local scale = object:FindFirstChildOfClass("UIScale")
 	local factor = if scale ~= nil and scale.Scale > 0 then scale.Scale / Ui.rest(object) else 1
-	return object.AbsolutePosition.Y + object.AbsoluteSize.Y / factor
+	local bottom = object.AbsolutePosition.Y + object.AbsoluteSize.Y
+	return bottom - object.AbsoluteSize.Y / factor
 end
 
--- Docks the tab right under the visible Shells chip, right edges lined up, and pushes the Reveal list down
--- when it would start above the tab's bottom. Positions are offsets from each screen frame's own origin.
+-- Docks the tab right above the visible Shells chip, right edges lined up; the list opens upward from it.
+-- Positions are offsets from the screen frame's own origin.
 local function dock()
 	local screen = gui
 	local root = rootFrame
 	local chip = visibleChip()
-	if screen == nil or root == nil or chip == nil or chip.AbsoluteSize.Y <= 0 then
+	if screen == nil or root == nil then
+		return
+	end
+	root.AnchorPoint = Vector2.new(1, 1)
+	-- No chip yet (the lobby one shows once there are Shells to count): the tab takes the corner itself.
+	if chip == nil or chip.AbsoluteSize.Y <= 0 then
+		root.Position = UDim2.new(1, -CORNER_EDGE, 1, -CORNER_EDGE)
 		return
 	end
 	local origin = screen.AbsolutePosition
 	local right = chip.AbsolutePosition.X + chip.AbsoluteSize.X - origin.X
-	local top = restingBottom(chip) - origin.Y + DOCK_GAP
-	root.AnchorPoint = Vector2.new(1, 0)
-	root.Position = UDim2.fromOffset(math.floor(right + 0.5), math.floor(top + 0.5))
-
-	local reveal = revealGui
-	local revealRows = revealList
-	local authored = revealListPosition
-	local button = tab
-	if reveal == nil or revealRows == nil or authored == nil or button == nil then
-		return
-	end
-	local revealOrigin = reveal.AbsolutePosition
-	local revealHeight = reveal.AbsoluteSize.Y
-	local naturalTop = authored.Y.Scale * revealHeight + authored.Y.Offset
-	-- The tab's bottom, from where it is docked now (its UIScale shrinks it on short screens).
-	local tabScale = rootScale
-	local tabHeight = button.AbsoluteSize.Y
-	if tabHeight <= 0 then
-		tabHeight = button.Size.Y.Offset * (if tabScale ~= nil then tabScale.Scale else 1)
-	end
-	local tabBottom = origin.Y + top + tabHeight - revealOrigin.Y
-	local wanted = math.max(naturalTop, tabBottom + DOCK_GAP)
-	revealRows.Position = UDim2.new(authored.X.Scale, authored.X.Offset, 0, math.floor(wanted + 0.5))
+	local bottom = restingTop(chip) - origin.Y - DOCK_GAP
+	root.Position = UDim2.fromOffset(math.floor(right + 0.5), math.floor(bottom + 0.5))
 end
 
 local function refreshVisibility()
@@ -267,7 +252,7 @@ local function refreshVisibility()
 	end
 	local arrowLabel = arrow
 	if arrowLabel ~= nil then
-		arrowLabel.Text = if open then "▾" else "▸"
+		arrowLabel.Text = if open then "▴" else "▸"
 	end
 	local pin = pinButton
 	if pin ~= nil then
@@ -578,7 +563,6 @@ local function bindReveal(playerGui: PlayerGui)
 	local revealRows = found:FindFirstChild("List")
 	if revealRows ~= nil and revealRows:IsA("GuiObject") then
 		revealList = revealRows
-		revealListPosition = revealRows.Position
 		revealRows:GetPropertyChangedSignal("Visible"):Connect(refreshVisibility)
 	end
 	refreshVisibility()
@@ -657,7 +641,6 @@ function Standings.init(playerGui: PlayerGui)
 			return
 		end
 		gui = found
-		tab = tabButton
 		list = panel
 		if root:IsA("GuiObject") then
 			rootFrame = root

@@ -17,7 +17,7 @@ local POP_SLOT = 64 -- pixels between stacked pills; the newest sits closest to 
 local POP_GAP = 12 -- pixels between the chip and the first pill
 local POP_HOLD = 1.4
 local POP_FADE = 0.3
-local POP_DRIFT = 18 -- pixels a pill sinks while it fades
+local POP_DRIFT = 18 -- pixels a pill rises (away from the chip) while it fades
 local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter screens scale them down
 local MIN_FIT = 0.65
 local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
@@ -91,8 +91,8 @@ local function anchor(): GuiObject?
 	return chip
 end
 
--- What else stacks in the right-hand column under the chip: the Standings tab (with its list when open) and
--- the Reveal answer list. Each is returned only while it is on screen.
+-- What else stacks in the bottom-right column above the chip: the Standings tab (with its list when open),
+-- returned only while it is on screen.
 local function columnParts(): { GuiObject }
 	local parts: { GuiObject } = {}
 	local root = playerGuiRef
@@ -101,19 +101,14 @@ local function columnParts(): { GuiObject }
 	end
 	local standings = Ui.findScreen(root, "Standings")
 	local frame = if standings ~= nil then standings:FindFirstChild("Root") else nil
-	if standings ~= nil and standings:IsA("Frame") and standings.Visible and frame ~= nil and frame:IsA("GuiObject") then
+	if standings ~= nil and standings.Visible and frame ~= nil and frame:IsA("GuiObject") then
 		table.insert(parts, frame)
-	end
-	local reveal = Ui.findScreen(root, "Reveal")
-	local list = if reveal ~= nil then reveal:FindFirstChild("List") else nil
-	if reveal ~= nil and reveal:IsA("Frame") and reveal.Visible and list ~= nil and list:IsA("GuiObject") and list.Visible then
-		table.insert(parts, list)
 	end
 	return parts
 end
 
--- Puts the popup column just under the visible chip's right edge, below the Standings tab or list and the
--- Reveal list when they show, so a pill never covers them.
+-- Puts the popup column just above the visible chip's right edge, above the Standings tab or list when it
+-- shows, so a pill never covers it. Pills stack upward from the column's bottom.
 local function placePops()
 	local layer = pops
 	local screen = gui
@@ -123,14 +118,14 @@ local function placePops()
 	end
 	local origin = screen.AbsolutePosition
 	local right = target.AbsolutePosition.X + target.AbsoluteSize.X - origin.X
-	local bottom = target.AbsolutePosition.Y + target.AbsoluteSize.Y - origin.Y
+	local top = target.AbsolutePosition.Y - origin.Y
 	for _, part in columnParts() do
 		if part.AbsoluteSize.Y > 0 then
-			bottom = math.max(bottom, part.AbsolutePosition.Y + part.AbsoluteSize.Y - origin.Y)
+			top = math.min(top, part.AbsolutePosition.Y - origin.Y)
 		end
 	end
-	layer.AnchorPoint = Vector2.new(1, 0)
-	layer.Position = UDim2.fromOffset(right, bottom + POP_GAP)
+	layer.AnchorPoint = Vector2.new(1, 1)
+	layer.Position = UDim2.fromOffset(right, top - POP_GAP)
 	local scale = popsFit
 	if scale ~= nil and screen.AbsoluteSize.Y > 0 then
 		scale.Scale = math.clamp(screen.AbsoluteSize.Y / DESIGN_HEIGHT, MIN_FIT, 1)
@@ -147,7 +142,7 @@ local function refresh()
 end
 
 local function slot(index: number): UDim2
-	return UDim2.new(1, 0, 0, (index - 1) * POP_SLOT)
+	return UDim2.new(1, 0, 1, -(index - 1) * POP_SLOT)
 end
 
 local function destroyPop(pop: Frame)
@@ -180,7 +175,7 @@ local function fadePop(pop: Frame)
 			Tween.play(object, info, { Transparency = 1 })
 		end
 	end
-	Tween.play(pop, info, { Position = pop.Position + UDim2.fromOffset(0, POP_DRIFT), BackgroundTransparency = 1 })
+	Tween.play(pop, info, { Position = pop.Position + UDim2.fromOffset(0, -POP_DRIFT), BackgroundTransparency = 1 })
 	task.delay(POP_FADE + 0.02, function()
 		if pop.Parent ~= nil then
 			destroyPop(pop)
@@ -220,7 +215,7 @@ local function spawnPop(text: string, caption: string?, swatchName: string)
 		local older = live[index]
 		if fading[older] then
 			Tween.play(older, TweenInfo.new(POP_FADE, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-				Position = slot(index) + UDim2.fromOffset(0, POP_DRIFT),
+				Position = slot(index) + UDim2.fromOffset(0, -POP_DRIFT),
 				BackgroundTransparency = 1,
 			})
 		else
@@ -265,25 +260,17 @@ local function bindHud(playerGui: PlayerGui)
 end
 
 -- Live pills move with their layer, so the column re-places itself (after layout) whenever the Standings
--- tab or list or the Reveal list moves, resizes, shows or hides.
+-- tab or list moves, resizes, shows or hides.
 local function bindColumn(playerGui: PlayerGui)
 	local function later()
 		task.defer(placePops)
 	end
 	local standings = Ui.screen(playerGui, "Standings", WAIT_SECONDS)
 	local frame = if standings ~= nil then standings:WaitForChild("Root", WAIT_SECONDS) else nil
-	if standings ~= nil and standings:IsA("Frame") and frame ~= nil and frame:IsA("GuiObject") then
+	if standings ~= nil and frame ~= nil and frame:IsA("GuiObject") then
 		standings:GetPropertyChangedSignal("Visible"):Connect(later)
 		frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(later)
 		frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
-	end
-	local reveal = Ui.screen(playerGui, "Reveal", WAIT_SECONDS)
-	local list = if reveal ~= nil then reveal:WaitForChild("List", WAIT_SECONDS) else nil
-	if reveal ~= nil and reveal:IsA("Frame") and list ~= nil and list:IsA("GuiObject") then
-		reveal:GetPropertyChangedSignal("Visible"):Connect(later)
-		list:GetPropertyChangedSignal("Visible"):Connect(later)
-		list:GetPropertyChangedSignal("AbsolutePosition"):Connect(later)
-		list:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
 	end
 end
 
