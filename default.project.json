@@ -16,6 +16,10 @@
       "UIArchive": {
         "$className": "Folder",
         "$ignoreUnknownInstances": true
+      },
+      "Sonar": {
+        "$className": "Model",
+        "$ignoreUnknownInstances": true
       }
     },
     "ReplicatedStorage": {

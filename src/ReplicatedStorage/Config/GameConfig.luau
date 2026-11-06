@@ -126,10 +126,6 @@ local GameConfig = {
 		MaxMetres = 620, -- bottom of the depth scale
 		ViewMetres = 230, -- how much of the scale the dive window shows at once
 	},
-	Sonar = {
-		AboveWater = 18, -- the floating prompt screen never sits lower than this above the water
-		AbovePlayers = 12, -- and floats this far above the average alive pillar
-	},
 	Bots = {
 		FillTo = 4, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
 		MinSkill = 0.15,
@@ -174,7 +170,6 @@ table.freeze(GameConfig.Quests)
 table.freeze(GameConfig.Rewards)
 table.freeze(GameConfig.Reveal)
 table.freeze(GameConfig.Depth)
-table.freeze(GameConfig.Sonar)
 table.freeze(GameConfig.Bots)
 table.freeze(GameConfig.Revive)
 table.freeze(GameConfig.Leaderboard)

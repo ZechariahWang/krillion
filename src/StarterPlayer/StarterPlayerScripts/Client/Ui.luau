@@ -318,16 +318,6 @@ local function isText(object: Instance?): boolean
 	return object ~= nil and (object:IsA("TextLabel") or object:IsA("TextButton"))
 end
 
--- Binds the authored outline (on the label, or on its LiftedText caption) of one text object.
-function Ui.trackOutline(target: TextObject)
-	local caption = target:FindFirstChild("LiftedText")
-	local label: TextObject = if caption ~= nil and caption:IsA("TextLabel") then caption else target
-	local stroke = label:FindFirstChild("Outline")
-	if stroke ~= nil and stroke:IsA("UIStroke") then
-		bindOutline(label, stroke)
-	end
-end
-
 local function bindOne(object: Instance)
 	if object:IsA("UIStroke") and object.Name == "Outline" and isText(object.Parent) then
 		bindOutline(object.Parent :: TextObject, object)
