@@ -18,7 +18,6 @@ local WHITE = Color3.new(1, 1, 1)
 local BLACK = Color3.new(0, 0, 0)
 local MAX_CONFETTI = 120 -- pieces alive at once, across every burst
 local TEMPLATE_WAIT = 10
-local FX_DISPLAY_ORDER = 7
 
 type Piece = {
 	frame: Frame,
@@ -60,13 +59,7 @@ local function bindCallout()
 end
 
 function Fx.init(playerGui: PlayerGui)
-	gui = playerGui:WaitForChild("Fx")
-	-- Above the full-screen dive card (DiveCards, 6) so a krillion's confetti and flash and the streak
-	-- callout play over it, and still under Tutorial (8) and Toasts (9).
-	if gui:IsA("ScreenGui") then
-		local screen = gui :: ScreenGui
-		screen.DisplayOrder = math.max(screen.DisplayOrder, FX_DISPLAY_ORDER)
-	end
+	gui = Ui.screen(playerGui, "Fx") :: Frame
 	flash = gui:WaitForChild("Flash") :: Frame
 	callout = gui:WaitForChild("Callout") :: TextLabel
 	coinPop = gui:WaitForChild("CoinPop") :: TextLabel

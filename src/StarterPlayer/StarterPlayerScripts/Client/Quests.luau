@@ -52,7 +52,7 @@ type Row = {
 
 local player = Players.LocalPlayer
 
-local gui: ScreenGui? = nil
+local gui: Frame? = nil
 local panel: GuiObject? = nil
 local fit: UIScale? = nil
 local layout: Ui.PhoneLayout? = nil
@@ -211,7 +211,7 @@ local function close()
 		return
 	end
 	isOpen = false
-	screen.Enabled = false
+	screen.Visible = false
 	Rail.panelClosed(close)
 end
 
@@ -223,7 +223,7 @@ function Quests.open()
 	end
 	render(false)
 	fitToScreen()
-	screen.Enabled = true
+	screen.Visible = true
 	if not isOpen then
 		isOpen = true
 		Sfx.play("Pop", 0.5)
@@ -264,7 +264,7 @@ local function bindRow(frame: GuiObject): Row
 	}
 end
 
-local function bind(screen: ScreenGui, playerGui: PlayerGui)
+local function bind(screen: Frame, playerGui: PlayerGui)
 	local holder = screen:WaitForChild("Holder", WAIT_SECONDS)
 	local frame = if holder ~= nil then holder:WaitForChild("Panel", WAIT_SECONDS) else nil
 	if holder == nil or frame == nil or not frame:IsA("GuiObject") then
@@ -307,7 +307,7 @@ local function bind(screen: ScreenGui, playerGui: PlayerGui)
 	render(false)
 	-- The shop window covers the same corner, and the rail hides under it: close along with it.
 	task.spawn(function()
-		local shop = playerGui:WaitForChild("Shop", WAIT_SECONDS)
+		local shop = Ui.screen(playerGui, "Shop", WAIT_SECONDS)
 		local shopPanel = if shop ~= nil then shop:WaitForChild("Panel", WAIT_SECONDS) else nil
 		if shopPanel ~= nil and shopPanel:IsA("GuiObject") then
 			local watched: GuiObject = shopPanel
@@ -327,8 +327,8 @@ function Quests.init(playerGui: PlayerGui)
 		end
 	end)
 	task.spawn(function()
-		local found = playerGui:WaitForChild("Quests", WAIT_SECONDS)
-		if found == nil or not found:IsA("ScreenGui") then
+		local found = Ui.screen(playerGui, "Quests", WAIT_SECONDS)
+		if found == nil or not found:IsA("Frame") then
 			warn("Quests: StarterGui.Quests is missing; the quests panel stays closed")
 			return
 		end

@@ -71,7 +71,7 @@ type Row = {
 	colors: ColorSequence?, -- the face's authored colours, restored when it is clickable again
 }
 
-local gui: ScreenGui? = nil
+local gui: Frame? = nil
 local fit: UIScale? = nil
 local panel: Frame? = nil
 local layout: Ui.PhoneLayout? = nil
@@ -360,7 +360,7 @@ local function close()
 		return
 	end
 	isOpen = false
-	screen.Enabled = false
+	screen.Visible = false
 	Rail.panelClosed(close)
 end
 
@@ -400,7 +400,7 @@ local function bindRow(container: Instance, key: string, name: string, onClick: 
 	end
 end
 
-local function bind(screen: ScreenGui)
+local function bind(screen: Frame)
 	local holder = screen:WaitForChild("Holder", WAIT_SECONDS)
 	local found = if holder ~= nil then holder:WaitForChild("Panel", WAIT_SECONDS) else nil
 	if holder == nil or found == nil or not found:IsA("Frame") then
@@ -451,8 +451,8 @@ function Rewards.init(playerGui: PlayerGui)
 	end)
 	render()
 	task.spawn(function()
-		local found = playerGui:WaitForChild("Rewards", WAIT_SECONDS)
-		if found == nil or not found:IsA("ScreenGui") then
+		local found = Ui.screen(playerGui, "Rewards", WAIT_SECONDS)
+		if found == nil or not found:IsA("Frame") then
 			warn("Rewards: StarterGui.Rewards is missing; the rewards panel stays closed")
 			return
 		end
@@ -500,7 +500,7 @@ function Rewards.open()
 	end
 	render()
 	fitToScreen()
-	screen.Enabled = true
+	screen.Visible = true
 	if not isOpen then
 		isOpen = true
 		Sfx.play("Pop", 0.5)

@@ -4,6 +4,7 @@
 -- The big pop-ups (eliminated, revive, results, callouts) show bigger through their UIScale only, fitted to
 -- the screen, so the HUD between pop-ups stays as small as authored.
 
+local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
@@ -14,7 +15,7 @@ local Ui = {}
 type TextObject = TextLabel | TextButton
 
 local DARK_TEXT = 0.3 -- text darker than this needs no dark outline (it would only blur it)
-local WAIT_SECONDS = 10 -- how long the style pass waits for a ScreenGui before giving up quietly
+local WAIT_SECONDS = 10 -- how long binding waits for a root ScreenGui before warning
 local PATH_WAIT = 5
 local LIP_PRESS = 3 -- pixels the lip shrinks while a button is held
 
@@ -539,13 +540,90 @@ function Ui.fitPanel(
 	fit.Scale = math.clamp(scaleFor(panel.Size), minScale, 1)
 end
 
+-- Screens --------------------------------------------------------------------------------------------------
+
+-- Each screen is a full-screen Frame under one of three ScreenGuis authored in Studio: LobbyUi (only in the
+-- lobby), GameUi (only in a match) and SharedUi (both). Controllers show a screen with Visible.
+local ROOT_OF: { [string]: string } = {
+	Rail = "LobbyUi",
+	Shop = "LobbyUi",
+	Wallet = "LobbyUi",
+	LobbyQuiz = "LobbyUi",
+	Quests = "LobbyUi",
+	Rewards = "LobbyUi",
+	Tutorial = "LobbyUi",
+	Hud = "GameUi",
+	Reveal = "GameUi",
+	Results = "GameUi",
+	Revive = "GameUi",
+	Spectate = "GameUi",
+	Vignette = "GameUi",
+	Status = "SharedUi",
+	Toasts = "SharedUi",
+	Fx = "SharedUi",
+	Standings = "SharedUi",
+	DiveCards = "SharedUi",
+}
+local ROOTS = { "LobbyUi", "GameUi", "SharedUi" }
+
+-- The screen frame by name, waiting up to `timeout` seconds (forever without one), or nil.
+function Ui.screen(playerGui: PlayerGui, name: string, timeout: number?): Frame?
+	local rootName = ROOT_OF[name]
+	if rootName == nil then
+		return nil
+	end
+	local root: Instance?
+	local found: Instance?
+	if timeout == nil then
+		root = playerGui:WaitForChild(rootName)
+		found = (root :: Instance):WaitForChild(name)
+	else
+		root = playerGui:WaitForChild(rootName, timeout)
+		found = if root ~= nil then root:WaitForChild(name, timeout) else nil
+	end
+	if found ~= nil and found:IsA("Frame") then
+		return found
+	end
+	return nil
+end
+
+-- The screen frame by name if it is already there, without waiting.
+function Ui.findScreen(playerGui: PlayerGui, name: string): Frame?
+	local rootName = ROOT_OF[name]
+	local root = if rootName ~= nil then playerGui:FindFirstChild(rootName) else nil
+	local found = if root ~= nil then root:FindFirstChild(name) else nil
+	if found ~= nil and found:IsA("Frame") then
+		return found
+	end
+	return nil
+end
+
+-- Screens with the "BelowTopbar" attribute keep clear of the Roblox top bar. Studio has no top bar, so they
+-- are authored flush with the top and moved down here by the real inset, again whenever the top bar changes
+-- (it is still 0 while the top bar loads).
+local function placeBelowTopbar(root: Instance)
+	local function apply()
+		local inset = GuiService:GetGuiInset()
+		for _, child in root:GetChildren() do
+			if child:IsA("GuiObject") and child:GetAttribute("BelowTopbar") == true then
+				child.Position = UDim2.new(0, 0, 0, inset.Y)
+				child.Size = UDim2.new(1, 0, 1, -inset.Y)
+			end
+		end
+	end
+	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(apply)
+	apply()
+end
+
 -- Live binding -------------------------------------------------------------------------------------------
 
--- Pop-ups shown bigger than authored (through their UIScale), by ScreenGui and dotted path.
+-- Pop-ups shown bigger than authored (through their UIScale), by root and dotted path.
 local GROWS: { [string]: { [string]: number } } = {
-	Lobby = { EliminatedCard = Theme.Chunky.Grow.Card },
-	Revive = { Card = Theme.Chunky.Grow.Card },
-	Results = { Panel = Theme.Chunky.Grow.Results },
+	GameUi = {
+		["Spectate.EliminatedCard"] = Theme.Chunky.Grow.Card,
+		["Revive.Card"] = Theme.Chunky.Grow.Card,
+		["Results.Panel"] = Theme.Chunky.Grow.Results,
+	},
 }
 
 local function isClock(text: string): boolean
@@ -554,12 +632,14 @@ end
 
 -- Emoji beside existing labels: the coin chip and shop counter, the tide chip, the timer, the results title.
 local ICONS: { [string]: { { path: string, icon: string, when: ((string) -> boolean)? } } } = {
-	Hud = { { path = "CoinChip.CoinText", icon = "Shell" } },
-	Shop = { { path = "Panel.CashText", icon = "Shell" } },
-	Results = { { path = "Panel.Title", icon = "Trophy" } },
-	Status = {
-		{ path = "Tide.Text", icon = "Wave" },
-		{ path = "SecondaryStatus.Secondary", icon = "Time", when = isClock },
+	GameUi = {
+		{ path = "Hud.CoinChip.CoinText", icon = "Shell" },
+		{ path = "Results.Panel.Title", icon = "Trophy" },
+	},
+	LobbyUi = { { path = "Shop.Panel.CashText", icon = "Shell" } },
+	SharedUi = {
+		{ path = "Status.Tide.Text", icon = "Wave" },
+		{ path = "Status.SecondaryStatus.Secondary", icon = "Time", when = isClock },
 	},
 }
 
@@ -576,9 +656,9 @@ end
 
 local boundRoots: { [Instance]: boolean } = setmetatable({}, { __mode = "k" }) :: any
 
--- Wires up the live parts of one ScreenGui, BillboardGui or SurfaceGui authored in Studio, and of
--- everything later cloned into it: outlines track their text, lifted captions mirror it, pop-ups fit the
--- screen and icons stay in front of the text. Nothing is created or restyled. Safe to call twice.
+-- Wires up the live parts of a ScreenGui, BillboardGui or SurfaceGui authored in Studio, and of everything
+-- later cloned into it: outlines track their text, lifted captions mirror it, pop-ups fit the screen and
+-- icons stay in front of the text. Nothing is created or restyled. Safe to call twice.
 function Ui.bindGui(root: LayerCollector)
 	if boundRoots[root] then
 		return
@@ -615,26 +695,6 @@ function Ui.bindGui(root: LayerCollector)
 	end)
 end
 
--- Every ScreenGui with live text. Missing ones are skipped quietly.
-local SCREEN_GUIS = {
-	"Status",
-	"Hud",
-	"Lobby",
-	"LobbyQuiz",
-	"Results",
-	"Shop",
-	"Revive",
-	"Fx",
-	"Reveal",
-	"Rail",
-	"Wallet",
-	"Toasts",
-	"Rewards",
-	"Quests",
-	"Tutorial",
-	"Standings",
-}
-
 -- World text players see all the time: pillar name tags, head titles and the lobby leaderboard.
 local function isWorldText(object: Instance): boolean
 	if object:IsA("BillboardGui") then
@@ -646,14 +706,19 @@ local function isWorldText(object: Instance): boolean
 	return false
 end
 
--- Binds every ScreenGui and the world text. Call once from Main.client with the PlayerGui; it never yields.
+-- Binds the three roots and the world text. Call once from Main.client with the PlayerGui; it never yields.
 function Ui.bindAll(playerGui: PlayerGui)
-	for _, name in SCREEN_GUIS do
+	for _, name in ROOTS do
 		task.spawn(function()
 			local gui = playerGui:WaitForChild(name, WAIT_SECONDS)
-			if gui ~= nil and gui:IsA("LayerCollector") then
-				Ui.bindGui(gui)
+			if gui == nil or not gui:IsA("ScreenGui") then
+				warn(`Ui: StarterGui.{name} is missing`)
+				return
 			end
+			placeBelowTopbar(gui)
+			-- GameUi is off in Studio so the lobby is what opens; its screens show through Visible.
+			gui.Enabled = true
+			Ui.bindGui(gui)
 		end)
 	end
 	task.spawn(function()

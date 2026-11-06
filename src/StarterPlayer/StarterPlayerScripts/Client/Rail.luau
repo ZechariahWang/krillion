@@ -12,7 +12,7 @@ local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
 local MIN_FIT = 0.45
 
-local gui: ScreenGui? = nil
+local gui: Frame? = nil
 local shopPanel: GuiObject? = nil
 local railFrame: GuiObject? = nil
 local fit: UIScale? = nil
@@ -42,15 +42,15 @@ local function refresh()
 		return
 	end
 	local shopOpen = shopPanel ~= nil and (shopPanel :: GuiObject).Visible
-	screen.Enabled = not playing and not shopOpen
-	if screen.Enabled then
+	screen.Visible = not playing and not shopOpen
+	if screen.Visible then
 		fitToScreen()
 	end
 end
 
 function Rail.init(playerGui: PlayerGui)
-	local found = playerGui:WaitForChild("Rail", WAIT_SECONDS)
-	if found == nil or not found:IsA("ScreenGui") then
+	local found = Ui.screen(playerGui, "Rail", WAIT_SECONDS)
+	if found == nil or not found:IsA("Frame") then
 		warn("Rail: StarterGui.Rail is missing; the side rail stays hidden")
 		return
 	end
@@ -72,7 +72,7 @@ function Rail.init(playerGui: PlayerGui)
 	end
 	-- The shop is bound by ShopUi; this only watches whether its window is open.
 	task.spawn(function()
-		local shop = playerGui:WaitForChild("Shop", WAIT_SECONDS)
+		local shop = Ui.screen(playerGui, "Shop", WAIT_SECONDS)
 		local panel = if shop ~= nil then shop:WaitForChild("Panel", WAIT_SECONDS) else nil
 		if panel ~= nil and panel:IsA("GuiObject") then
 			shopPanel = panel

@@ -64,7 +64,7 @@ local function setStatus(text: string)
 end
 
 function Status.init(playerGui: PlayerGui)
-	local gui = playerGui:WaitForChild("Status")
+	local gui = Ui.screen(playerGui, "Status")
 	statusFrame = gui:WaitForChild("StatusFrame") :: Frame
 	statusText = statusFrame:WaitForChild("Status") :: TextLabel
 	local secondary = gui:WaitForChild("SecondaryStatus")

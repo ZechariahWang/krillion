@@ -53,7 +53,7 @@ type BoostChip = {
 }
 
 local playerGui: PlayerGui
-local gui: ScreenGui
+local gui: Frame
 local coinChip: Frame
 local coinText: TextLabel
 local meter: Frame
@@ -308,7 +308,7 @@ end
 -- The +10s pops under the Status timer, where the player is already looking.
 local function showExtraTime()
 	local from: GuiObject? = nil
-	local status = playerGui:FindFirstChild("Status")
+	local status = Ui.findScreen(playerGui, "Status")
 	local secondary = if status ~= nil then status:FindFirstChild("SecondaryStatus") else nil
 	local timer = if secondary ~= nil then secondary:FindFirstChild("Secondary") else nil
 	if timer ~= nil and timer:IsA("GuiObject") then
@@ -549,7 +549,7 @@ end
 
 function Hud.init(newPlayerGui: PlayerGui)
 	playerGui = newPlayerGui
-	gui = playerGui:WaitForChild("Hud") :: ScreenGui
+	gui = Ui.screen(playerGui, "Hud") :: Frame
 	coinChip = gui:WaitForChild("CoinChip") :: Frame
 	coinText = coinChip:WaitForChild("CoinText") :: TextLabel
 	meter = gui:WaitForChild("WaterMeter") :: Frame
@@ -650,7 +650,7 @@ function Hud.onState(payload)
 	local mine = payload.yourSecondsLeft
 	outOfTime = phase == "Prompt" and mine ~= nil and mine <= 0
 	local inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
-	gui.Enabled = inMatch
+	gui.Visible = inMatch
 	if not inMatch then
 		lastPhase = phase
 		refreshBoosts()

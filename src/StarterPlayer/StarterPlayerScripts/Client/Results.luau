@@ -19,7 +19,7 @@ local TEMPLATE_WAIT = 10
 local EARNED_COUNT_SECONDS = 1.1
 local WIN_CONFETTI = 110
 
-local gui: ScreenGui
+local gui: Frame
 local panel: Frame
 local titleText: TextLabel
 local winnerText: TextLabel
@@ -35,7 +35,7 @@ local earnedToken = 0
 local Results = {}
 
 function Results.init(playerGui: PlayerGui)
-	gui = playerGui:WaitForChild("Results") :: ScreenGui
+	gui = Ui.screen(playerGui, "Results") :: Frame
 	panel = gui:WaitForChild("Panel") :: Frame
 	titleText = panel:WaitForChild("Title") :: TextLabel
 	winnerText = panel:WaitForChild("WinnerText") :: TextLabel
@@ -167,7 +167,7 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 	end
 	nextText.Text = "NEXT DIVE IN " .. payload.seconds
 	showExtras(payload, won)
-	gui.Enabled = true
+	gui.Visible = true
 	-- A win lands with the big bounce; any other ending still pops, the panel is the moment.
 	if won then
 		Ui.bounce(panel)
@@ -194,7 +194,7 @@ function Results.onState(payload: Net.RoundStatePayload)
 	if payload.phase == "Results" then
 		nextText.Text = "NEXT DIVE IN " .. payload.secondsLeft
 	else
-		gui.Enabled = false
+		gui.Visible = false
 	end
 end
 

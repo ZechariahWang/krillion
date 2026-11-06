@@ -11,6 +11,7 @@ local Theme = require(ReplicatedStorage.Config.Theme)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Sfx = require(script.Parent.Sfx)
+local Ui = require(script.Parent.Ui)
 
 local WAIT_SECONDS = 10
 local MAX_TOASTS = 3
@@ -75,12 +76,12 @@ local SWATCHES: { [string]: Swatch } = Theme.Chunky.Color :: any
 -- A "good" toast about an unlock or a gift reads as a reward, one about Shells as a payout.
 local REWARD_WORDS = { "UNLOCKED", "REWARD", "WELCOME", "THANKS" }
 
--- Bottom-centre elements (ScreenGui, child path) the stack floats above while they show.
+-- Bottom-centre elements (screen frame, child path) the stack floats above while they show.
 local AVOID: { { string } } = {
 	{ "Hud", "AnswerBar" },
-	{ "Lobby", "SpectateBar" },
-	{ "Lobby", "JoinCard" },
-	{ "Lobby", "WatchButton" },
+	{ "Spectate", "SpectateBar" },
+	{ "Spectate", "JoinCard" },
+	{ "Spectate", "WatchButton" },
 }
 
 local root: PlayerGui? = nil
@@ -318,14 +319,14 @@ local function wantedGap(): number
 	local left = box.AbsolutePosition.X
 	local right = left + box.AbsoluteSize.X
 	for _, entry in AVOID do
-		local holder = playerGui:FindFirstChild(entry[1])
+		local holder = Ui.findScreen(playerGui, entry[1])
 		local object = if holder ~= nil then holder:FindFirstChild(entry[2]) else nil
 		if object ~= nil and object:IsA("GuiObject") and isShowing(object) then
 			local x = object.AbsolutePosition.X
 			local overlaps = x < right and x + object.AbsoluteSize.X > left
 			local owner = object:FindFirstAncestorWhichIsA("LayerCollector")
 			if overlaps and owner ~= nil and owner:IsA("LayerCollector") then
-				-- Measured from each ScreenGui's own bottom edge, so a different top inset does not matter.
+				-- Measured from the root ScreenGui's bottom edge, which every screen frame shares.
 				local bottom = owner.AbsolutePosition.Y + owner.AbsoluteSize.Y
 				local lift = bottom - topOf(object) + CLEARANCE
 				if lift <= height * MAX_LIFT then
@@ -387,8 +388,8 @@ function Toasts.init(playerGui: PlayerGui)
 		Net.event("RoundState").OnClientEvent:Connect(onState)
 	end)
 	task.spawn(function()
-		local found = playerGui:WaitForChild("Toasts", WAIT_SECONDS)
-		if found == nil or not found:IsA("ScreenGui") then
+		local found = Ui.screen(playerGui, "Toasts", WAIT_SECONDS)
+		if found == nil or not found:IsA("Frame") then
 			warn("Toasts: StarterGui.Toasts is missing; toasts are not shown")
 			return
 		end

@@ -31,11 +31,11 @@ local CARD_EXIT = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirectio
 local EXIT_MARGIN = 0.1 -- the card is fully gone this long before the rise starts
 local KRILLION_GLOW = TweenInfo.new(0.45, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 
-local gui: ScreenGui
+local gui: Frame
 local badge: Frame
 local list: Frame
 local rowTemplate: Frame
-local cardsGui: ScreenGui? = nil
+local cardsGui: Frame? = nil
 local stage: Frame? = nil
 local backdrop: Frame? = nil
 local backdropTransparency = 0.35 -- replaced by the authored Backdrop's value
@@ -50,7 +50,7 @@ local passes: { [string]: boolean } = {} -- from ProfileChanged, for the Shells 
 local Reveal = {}
 
 function Reveal.init(playerGui: PlayerGui)
-	gui = playerGui:WaitForChild("Reveal") :: ScreenGui
+	gui = Ui.screen(playerGui, "Reveal") :: Frame
 	-- The dive card replaces the old badge; the instance stays so nothing waiting on it hangs.
 	badge = gui:WaitForChild("Badge") :: Frame
 	badge.Visible = false
@@ -58,9 +58,9 @@ function Reveal.init(playerGui: PlayerGui)
 	rowTemplate = list:WaitForChild("RowTemplate") :: Frame
 
 	task.spawn(function()
-		local found = playerGui:WaitForChild("DiveCards", CARDS_WAIT)
+		local found = Ui.screen(playerGui, "DiveCards", CARDS_WAIT)
 		local area = if found ~= nil then found:WaitForChild("Stage", CARDS_WAIT) else nil
-		if found == nil or not found:IsA("ScreenGui") or area == nil or not area:IsA("Frame") then
+		if found == nil or not found:IsA("Frame") or area == nil or not area:IsA("Frame") then
 			warn("[Reveal] StarterGui.DiveCards.Stage is missing; the reveal shows the answer list only")
 			return
 		end
@@ -105,7 +105,7 @@ local function hideCard(instant: boolean)
 	local holder = cardsGui
 	local function closeHolder()
 		if card == nil and holder ~= nil then
-			holder.Enabled = false
+			holder.Visible = false
 		end
 	end
 	if leaving == nil then
@@ -137,7 +137,7 @@ local function showCard(row: RevealRow): DiveCard.Handle?
 	if holder == nil or area == nil then
 		return nil
 	end
-	holder.Enabled = true
+	holder.Visible = true
 	fadeBackdrop(1)
 	fadeBackdrop(backdropTransparency, CARD_ENTER)
 	local handle = DiveCard.play(area, {
@@ -153,7 +153,7 @@ local function showCard(row: RevealRow): DiveCard.Handle?
 		budget = GameConfig.Reveal.CardBudgetSeconds,
 	})
 	if handle.frame == nil then
-		holder.Enabled = false
+		holder.Visible = false
 		return nil
 	end
 	card = handle
@@ -318,7 +318,7 @@ function Reveal.onReveal(payload: Net.RevealPayload)
 	if payload.round == 1 then
 		streak = 0
 	end
-	gui.Enabled = true
+	gui.Visible = true
 	badge.Visible = false
 
 	local me = Players.LocalPlayer.UserId
@@ -345,7 +345,7 @@ function Reveal.onReveal(payload: Net.RevealPayload)
 	-- Pillars start rising RaiseDelaySeconds after the reveal, once your card is out of the way.
 	if myRow == nil or myRow.lift > 0 then
 		task.delay(GameConfig.Reveal.RaiseDelaySeconds, function()
-			if token == revealToken and gui.Enabled then
+			if token == revealToken and gui.Visible then
 				Sfx.play("Rise", if myRow ~= nil then 0.45 else 0.4)
 			end
 		end)
@@ -359,12 +359,12 @@ function Reveal.onState(payload: Net.RoundStatePayload)
 		hideCard(false)
 		local rows = pendingRows
 		pendingRows = nil
-		if rows ~= nil and gui.Enabled then
+		if rows ~= nil and gui.Visible then
 			showRows(rows)
 		end
 	end
 	if phase ~= "Reveal" and phase ~= "Surge" then
-		gui.Enabled = false
+		gui.Visible = false
 		pendingRows = nil
 		hideCard(true)
 	end

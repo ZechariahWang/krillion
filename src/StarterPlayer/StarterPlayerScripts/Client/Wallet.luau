@@ -51,13 +51,13 @@ local CAPTIONS: { [string]: string } = {
 	spend = "SPENT",
 }
 
-local gui: ScreenGui? = nil
+local gui: Frame? = nil
 local chip: Frame? = nil
 local amountLabel: TextLabel? = nil
 local pops: Frame? = nil
 local popsFit: UIScale? = nil
 local popTemplate: Frame? = nil
-local hudGui: ScreenGui? = nil
+local hudGui: Frame? = nil
 local hudChip: GuiObject? = nil
 local playerGuiRef: PlayerGui? = nil
 
@@ -80,7 +80,7 @@ end
 local function hudChipShowing(): boolean
 	local hud = hudGui
 	local coin = hudChip
-	return hud ~= nil and coin ~= nil and hud.Enabled and coin.Visible
+	return hud ~= nil and coin ~= nil and hud.Visible and coin.Visible
 end
 
 -- The chip the player can see right now (the Hud one in a match).
@@ -99,14 +99,14 @@ local function columnParts(): { GuiObject }
 	if root == nil then
 		return parts
 	end
-	local standings = root:FindFirstChild("Standings")
+	local standings = Ui.findScreen(root, "Standings")
 	local frame = if standings ~= nil then standings:FindFirstChild("Root") else nil
-	if standings ~= nil and standings:IsA("ScreenGui") and standings.Enabled and frame ~= nil and frame:IsA("GuiObject") then
+	if standings ~= nil and standings:IsA("Frame") and standings.Visible and frame ~= nil and frame:IsA("GuiObject") then
 		table.insert(parts, frame)
 	end
-	local reveal = root:FindFirstChild("Reveal")
+	local reveal = Ui.findScreen(root, "Reveal")
 	local list = if reveal ~= nil then reveal:FindFirstChild("List") else nil
-	if reveal ~= nil and reveal:IsA("ScreenGui") and reveal.Enabled and list ~= nil and list:IsA("GuiObject") and list.Visible then
+	if reveal ~= nil and reveal:IsA("Frame") and reveal.Visible and list ~= nil and list:IsA("GuiObject") and list.Visible then
 		table.insert(parts, list)
 	end
 	return parts
@@ -242,8 +242,8 @@ end
 
 -- Keeps the lobby chip in exactly the Hud chip's spot, and swaps between them as the Hud turns on and off.
 local function bindHud(playerGui: PlayerGui)
-	local hud = playerGui:WaitForChild("Hud", WAIT_SECONDS)
-	if hud == nil or not hud:IsA("ScreenGui") then
+	local hud = Ui.screen(playerGui, "Hud", WAIT_SECONDS)
+	if hud == nil or not hud:IsA("Frame") then
 		return
 	end
 	local coin = hud:WaitForChild("CoinChip", WAIT_SECONDS)
@@ -256,12 +256,10 @@ local function bindHud(playerGui: PlayerGui)
 	local own = chip
 	if screen ~= nil and own ~= nil then
 		-- Same corner as the Hud chip; the lobby chip keeps its own, chunkier size.
-		screen.IgnoreGuiInset = hud.IgnoreGuiInset
-		screen.ScreenInsets = hud.ScreenInsets
 		own.AnchorPoint = coin.AnchorPoint
 		own.Position = coin.Position
 	end
-	hud:GetPropertyChangedSignal("Enabled"):Connect(refresh)
+	hud:GetPropertyChangedSignal("Visible"):Connect(refresh)
 	coin:GetPropertyChangedSignal("Visible"):Connect(refresh)
 	refresh()
 end
@@ -272,17 +270,17 @@ local function bindColumn(playerGui: PlayerGui)
 	local function later()
 		task.defer(placePops)
 	end
-	local standings = playerGui:WaitForChild("Standings", WAIT_SECONDS)
+	local standings = Ui.screen(playerGui, "Standings", WAIT_SECONDS)
 	local frame = if standings ~= nil then standings:WaitForChild("Root", WAIT_SECONDS) else nil
-	if standings ~= nil and standings:IsA("ScreenGui") and frame ~= nil and frame:IsA("GuiObject") then
-		standings:GetPropertyChangedSignal("Enabled"):Connect(later)
+	if standings ~= nil and standings:IsA("Frame") and frame ~= nil and frame:IsA("GuiObject") then
+		standings:GetPropertyChangedSignal("Visible"):Connect(later)
 		frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(later)
 		frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
 	end
-	local reveal = playerGui:WaitForChild("Reveal", WAIT_SECONDS)
+	local reveal = Ui.screen(playerGui, "Reveal", WAIT_SECONDS)
 	local list = if reveal ~= nil then reveal:WaitForChild("List", WAIT_SECONDS) else nil
-	if reveal ~= nil and reveal:IsA("ScreenGui") and list ~= nil and list:IsA("GuiObject") then
-		reveal:GetPropertyChangedSignal("Enabled"):Connect(later)
+	if reveal ~= nil and reveal:IsA("Frame") and list ~= nil and list:IsA("GuiObject") then
+		reveal:GetPropertyChangedSignal("Visible"):Connect(later)
 		list:GetPropertyChangedSignal("Visible"):Connect(later)
 		list:GetPropertyChangedSignal("AbsolutePosition"):Connect(later)
 		list:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
@@ -296,8 +294,8 @@ function Wallet.init(playerGui: PlayerGui)
 		setAmount(counter.Value)
 	end)
 	task.spawn(function()
-		local found = playerGui:WaitForChild("Wallet", WAIT_SECONDS)
-		if found == nil or not found:IsA("ScreenGui") then
+		local found = Ui.screen(playerGui, "Wallet", WAIT_SECONDS)
+		if found == nil or not found:IsA("Frame") then
 			warn("Wallet: StarterGui.Wallet is missing; no lobby Shells chip or popups")
 			return
 		end

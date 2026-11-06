@@ -15,6 +15,7 @@ local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Status = require(script.Parent.Status)
 local Toasts = require(script.Parent.Toasts)
+local Ui = require(script.Parent.Ui)
 
 local GUI_WAIT = 10
 local SUNK_NAMES = 4 -- names listed in the sunk toast before "AND N MORE"
@@ -180,7 +181,7 @@ end
 -- Binds StarterGui.Vignette without blocking the other controllers; with it missing the heartbeat is sound only.
 function Tide.init(playerGui: PlayerGui)
 	task.spawn(function()
-		local gui = playerGui:WaitForChild("Vignette", GUI_WAIT)
+		local gui = Ui.screen(playerGui, "Vignette", GUI_WAIT)
 		local found = if gui ~= nil then gui:WaitForChild("Edges", GUI_WAIT) else nil
 		if found == nil or not found:IsA("Frame") then
 			warn("[Tide] StarterGui.Vignette.Edges is missing; the close-call heartbeat has no red edges")

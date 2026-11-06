@@ -9,7 +9,7 @@ local Lobby = require(script.Parent.Lobby)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
-local gui: ScreenGui
+local gui: Frame
 local card: Frame
 local count: TextLabel
 local fill: Frame
@@ -18,22 +18,22 @@ local token = 0
 local RevivePrompt = {}
 
 local function hide(revived: boolean)
-	if not gui.Enabled then
+	if not gui.Visible then
 		return
 	end
-	gui.Enabled = false
+	gui.Visible = false
 	Lobby.setReviveOpen(false, revived)
 end
 
 function RevivePrompt.init(playerGui: PlayerGui)
-	gui = playerGui:WaitForChild("Revive") :: ScreenGui
+	gui = Ui.screen(playerGui, "Revive") :: Frame
 	card = gui:WaitForChild("Card") :: Frame
 	count = card:WaitForChild("Count") :: TextLabel
 	fill = card:WaitForChild("TimerTrack"):WaitForChild("TimerFill") :: Frame
 	local use = card:WaitForChild("UseButton") :: TextButton
 	Ui.pressable(use)
 	use.MouseButton1Click:Connect(function()
-		if not gui.Enabled then
+		if not gui.Visible then
 			return
 		end
 		token += 1
@@ -48,7 +48,7 @@ function RevivePrompt.onPrompt(payload)
 	local mine = token
 	count.Text = payload.revives .. " LEFT"
 	fill.Size = UDim2.fromScale(1, 1)
-	gui.Enabled = true
+	gui.Visible = true
 	Lobby.setReviveOpen(true)
 	Ui.pop(card, 0.6)
 	Sfx.play("Tick", 0.5, 1.3)

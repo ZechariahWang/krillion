@@ -26,7 +26,7 @@ local TEMPLATE_WAIT = 10
 local CAP_PROMPT_TEXT = "THAT'S TODAY'S WARM-UP LIMIT: MATCHES STILL PAY!"
 local CAP_RESULT_TEXT = "WARM-UP SHELLS MAXED TODAY: MATCHES STILL PAY!"
 
-local gui: ScreenGui
+local gui: Frame
 local panel: Frame
 local headerBar: Frame
 local header: TextLabel
@@ -78,7 +78,7 @@ end
 -- Deferred so it runs after the TextBox has finished losing focus from the Enter press.
 local function keepFocus()
 	task.defer(function()
-		if gui.Enabled and not collapsed and not locked then
+		if gui.Visible and not collapsed and not locked then
 			answerBox:CaptureFocus()
 		end
 	end)
@@ -256,7 +256,7 @@ local function startNextCountdown(token: number)
 			skipButton.Text = "NEXT ▶ " .. left
 			task.wait(1)
 		end
-		if token == promptToken and locked and gui.Enabled and not collapsed then
+		if token == promptToken and locked and gui.Visible and not collapsed then
 			skip()
 		end
 	end)
@@ -368,7 +368,7 @@ local function setCollapsed(value: boolean)
 	end
 	Tween.play(panel, Theme.Tween.Enter, { Position = basePosition })
 	-- A prompt that ran out (or was answered) while tucked away is replaced as the panel opens.
-	if gui.Enabled and (locked or os.clock() >= promptEndsAt) then
+	if gui.Visible and (locked or os.clock() >= promptEndsAt) then
 		skip()
 	else
 		keepFocus()
@@ -433,7 +433,7 @@ local function bindExtras()
 end
 
 function LobbyQuiz.init(playerGui: PlayerGui)
-	gui = playerGui:WaitForChild("LobbyQuiz") :: ScreenGui
+	gui = Ui.screen(playerGui, "LobbyQuiz") :: Frame
 	panel = gui:WaitForChild("Panel") :: Frame
 	headerBar = panel:WaitForChild("HeaderBar") :: Frame
 	header = headerBar:WaitForChild("Header") :: TextLabel
@@ -485,10 +485,10 @@ function LobbyQuiz.onPrompt(payload)
 	hideConfirm()
 	clearCard()
 	if payload == nil then
-		gui.Enabled = false
+		gui.Visible = false
 		return
 	end
-	gui.Enabled = true
+	gui.Visible = true
 	setProgress(payload)
 	if payload.capped then
 		showCapNotice(CAP_PROMPT_TEXT)
@@ -504,7 +504,7 @@ function LobbyQuiz.onPrompt(payload)
 	Tween.play(timerFill, TweenInfo.new(payload.seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) })
 	task.delay(payload.seconds, function()
 		-- Tucked away, the prompt waits; opening the panel asks for a fresh one.
-		if token == promptToken and gui.Enabled and not locked and not collapsed then
+		if token == promptToken and gui.Visible and not locked and not collapsed then
 			skip()
 		end
 	end)

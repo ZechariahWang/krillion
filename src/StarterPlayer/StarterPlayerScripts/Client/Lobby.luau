@@ -20,7 +20,7 @@ local JOIN_TIMEOUT = 4 -- seconds before a JUMP IN press with no answer can be p
 local BAR_GAP = 12 -- pixels between the join card and the bar under it
 local BOTTOM_GAP = 20 -- pixels from the screen bottom when nothing is under the join card
 
-local gui: ScreenGui
+local gui: Frame
 local eliminatedCard: Frame
 local eliminatedSubtitle: TextLabel
 local spectateButton: TextButton
@@ -210,7 +210,7 @@ local function bindExtras()
 end
 
 function Lobby.init(playerGui: PlayerGui)
-	gui = playerGui:WaitForChild("Lobby") :: ScreenGui
+	gui = Ui.screen(playerGui, "Spectate") :: Frame
 	eliminatedCard = gui:WaitForChild("EliminatedCard") :: Frame
 	eliminatedSubtitle = eliminatedCard:WaitForChild("Subtitle") :: TextLabel
 	spectateButton = eliminatedCard:WaitForChild("SpectateButton") :: TextButton
@@ -297,7 +297,7 @@ function Lobby.onState(payload)
 	playing = payload.playing == true
 	joinOpen = payload.lateJoinOpen == true
 	joinRound = if type(payload.round) == "number" then payload.round else 0
-	gui.Enabled = not payload.playing
+	gui.Visible = not payload.playing
 	if payload.playing then
 		eliminatedWaiting = false
 		stopSpectating()

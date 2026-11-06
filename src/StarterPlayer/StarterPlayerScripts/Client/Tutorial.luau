@@ -31,7 +31,7 @@ local CALM_PHASES: { [string]: boolean } = { Waiting = true, Intermission = true
 
 local player = Players.LocalPlayer
 
-local gui: ScreenGui? = nil
+local gui: Frame? = nil
 local fit: UIScale? = nil
 local modal: Frame? = nil
 local layout: Ui.PhoneLayout? = nil
@@ -170,7 +170,7 @@ local function close(finished: boolean)
 		return
 	end
 	isOpen = false
-	screen.Enabled = false
+	screen.Visible = false
 	if finished then
 		pending = false
 		Rail.setBadge("HelpButton", nil)
@@ -249,7 +249,7 @@ local function bindButton(button: TextButton?, onClick: () -> ())
 	button.Activated:Connect(onClick)
 end
 
-local function bind(screen: ScreenGui)
+local function bind(screen: Frame)
 	local holder = screen:WaitForChild("Holder", WAIT_SECONDS)
 	local panel = if holder ~= nil then holder:WaitForChild("Modal", WAIT_SECONDS) else nil
 	if holder == nil or panel == nil or not panel:IsA("Frame") then
@@ -362,8 +362,8 @@ function Tutorial.init(playerGui: PlayerGui)
 	end)
 	task.spawn(placeBoards)
 	task.spawn(function()
-		local found = playerGui:WaitForChild("Tutorial", WAIT_SECONDS)
-		if found == nil or not found:IsA("ScreenGui") then
+		local found = Ui.screen(playerGui, "Tutorial", WAIT_SECONDS)
+		if found == nil or not found:IsA("Frame") then
 			warn("Tutorial: StarterGui.Tutorial is missing; the tutorial stays closed")
 			return
 		end
@@ -398,7 +398,7 @@ function Tutorial.open()
 	end
 	showStep(1, false)
 	fitToScreen()
-	screen.Enabled = true
+	screen.Visible = true
 	if not isOpen then
 		isOpen = true
 		Sfx.play("Pop", 0.5)

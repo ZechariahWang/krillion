@@ -66,7 +66,7 @@ type Tag = {
 	border: UIStroke?,
 }
 
-local gui: ScreenGui? = nil
+local gui: Frame? = nil
 local rootScale: UIScale? = nil
 local tab: TextButton? = nil
 local arrow: TextLabel? = nil
@@ -74,14 +74,14 @@ local place: TextLabel? = nil
 local list: Frame? = nil
 local pinButton: TextButton? = nil
 local rowTemplate: Frame? = nil
-local revealGui: ScreenGui? = nil
+local revealGui: Frame? = nil
 local revealList: GuiObject? = nil
 local revealListPosition: UDim2? = nil -- as authored, so a nudge below the tab is never compounded
 local rootFrame: GuiObject? = nil
 local emptyLabel: TextLabel? = nil
-local hudGui: ScreenGui? = nil
+local hudGui: Frame? = nil
 local hudChip: GuiObject? = nil
-local walletGui: ScreenGui? = nil
+local walletGui: Frame? = nil
 local walletChip: GuiObject? = nil
 local shopPanel: GuiObject? = nil
 
@@ -178,7 +178,7 @@ end
 
 local function revealShowing(): boolean
 	local reveal = revealGui
-	if reveal == nil or not reveal.Enabled then
+	if reveal == nil or not reveal.Visible then
 		return false
 	end
 	local revealRows = revealList
@@ -189,12 +189,12 @@ end
 local function visibleChip(): GuiObject?
 	local hud = hudGui
 	local coin = hudChip
-	if hud ~= nil and coin ~= nil and hud.Enabled and coin.Visible then
+	if hud ~= nil and coin ~= nil and hud.Visible and coin.Visible then
 		return coin
 	end
 	local wallet = walletGui
 	local own = walletChip
-	if wallet ~= nil and own ~= nil and wallet.Enabled and own.Visible then
+	if wallet ~= nil and own ~= nil and wallet.Visible and own.Visible then
 		return own
 	end
 	return nil
@@ -208,7 +208,7 @@ local function restingBottom(object: GuiObject): number
 end
 
 -- Docks the tab right under the visible Shells chip, right edges lined up, and pushes the Reveal list down
--- when it would start above the tab's bottom. Positions are offsets from each ScreenGui's own origin.
+-- when it would start above the tab's bottom. Positions are offsets from each screen frame's own origin.
 local function dock()
 	local screen = gui
 	local root = rootFrame
@@ -250,7 +250,7 @@ local function refreshVisibility()
 	end
 	-- Always up, except behind the open shop window, which it would poke into.
 	local shop = shopPanel
-	screen.Enabled = not (shop ~= nil and shop.Visible)
+	screen.Visible = not (shop ~= nil and shop.Visible)
 	local empty = emptyLabel
 	if empty ~= nil then
 		empty.Visible = next(entries) == nil
@@ -569,12 +569,12 @@ end
 -- Binding -----------------------------------------------------------------------------------------------
 
 local function bindReveal(playerGui: PlayerGui)
-	local found = playerGui:WaitForChild("Reveal", WAIT_SECONDS)
-	if found == nil or not found:IsA("ScreenGui") then
+	local found = Ui.screen(playerGui, "Reveal", WAIT_SECONDS)
+	if found == nil or not found:IsA("Frame") then
 		return
 	end
 	revealGui = found
-	found:GetPropertyChangedSignal("Enabled"):Connect(refreshVisibility)
+	found:GetPropertyChangedSignal("Visible"):Connect(refreshVisibility)
 	local revealRows = found:FindFirstChild("List")
 	if revealRows ~= nil and revealRows:IsA("GuiObject") then
 		revealList = revealRows
@@ -590,33 +590,27 @@ local function bindDock(playerGui: PlayerGui)
 	local function later()
 		task.defer(dock)
 	end
-	local hud = playerGui:WaitForChild("Hud", WAIT_SECONDS)
+	local hud = Ui.screen(playerGui, "Hud", WAIT_SECONDS)
 	local coin = if hud ~= nil then hud:WaitForChild("CoinChip", WAIT_SECONDS) else nil
-	if hud ~= nil and hud:IsA("ScreenGui") and coin ~= nil and coin:IsA("GuiObject") then
+	if hud ~= nil and hud:IsA("Frame") and coin ~= nil and coin:IsA("GuiObject") then
 		hudGui = hud
 		hudChip = coin
-		-- Same screen space as the chips, so offsets measured from them line up.
-		local screen = gui
-		if screen ~= nil then
-			screen.IgnoreGuiInset = hud.IgnoreGuiInset
-			screen.ScreenInsets = hud.ScreenInsets
-		end
-		hud:GetPropertyChangedSignal("Enabled"):Connect(later)
+		hud:GetPropertyChangedSignal("Visible"):Connect(later)
 		coin:GetPropertyChangedSignal("Visible"):Connect(later)
 		hud:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
 	end
-	local wallet = playerGui:WaitForChild("Wallet", WAIT_SECONDS)
+	local wallet = Ui.screen(playerGui, "Wallet", WAIT_SECONDS)
 	local own = if wallet ~= nil then wallet:WaitForChild("Chip", WAIT_SECONDS) else nil
-	if wallet ~= nil and wallet:IsA("ScreenGui") and own ~= nil and own:IsA("GuiObject") then
+	if wallet ~= nil and wallet:IsA("Frame") and own ~= nil and own:IsA("GuiObject") then
 		walletGui = wallet
 		walletChip = own
-		wallet:GetPropertyChangedSignal("Enabled"):Connect(later)
+		wallet:GetPropertyChangedSignal("Visible"):Connect(later)
 		own:GetPropertyChangedSignal("Visible"):Connect(later)
 		own:GetPropertyChangedSignal("Position"):Connect(later)
 	end
 	later()
 	-- The shop is bound by ShopUi; this only watches whether its window is open.
-	local shop = playerGui:WaitForChild("Shop", WAIT_SECONDS)
+	local shop = Ui.screen(playerGui, "Shop", WAIT_SECONDS)
 	local panel = if shop ~= nil then shop:WaitForChild("Panel", WAIT_SECONDS) else nil
 	if panel ~= nil and panel:IsA("GuiObject") then
 		shopPanel = panel
@@ -645,8 +639,8 @@ end
 
 function Standings.init(playerGui: PlayerGui)
 	task.spawn(function()
-		local found = playerGui:WaitForChild("Standings", WAIT_SECONDS)
-		if found == nil or not found:IsA("ScreenGui") then
+		local found = Ui.screen(playerGui, "Standings", WAIT_SECONDS)
+		if found == nil or not found:IsA("Frame") then
 			warn("Standings: StarterGui.Standings is missing; the standings tab stays hidden")
 			return
 		end

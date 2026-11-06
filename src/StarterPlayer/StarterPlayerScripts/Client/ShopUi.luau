@@ -51,7 +51,7 @@ type Entry = {
 }
 
 local player = Players.LocalPlayer
-local gui: ScreenGui
+local gui: Frame
 local openButton: TextButton
 local panel: Frame
 local scrim: Frame
@@ -555,7 +555,7 @@ local function refreshButton()
 end
 
 function ShopUi.init(playerGui: PlayerGui)
-	gui = playerGui:WaitForChild("Shop") :: ScreenGui
+	gui = Ui.screen(playerGui, "Shop") :: Frame
 	openButton = gui:WaitForChild("OpenButton") :: TextButton
 	panel = gui:WaitForChild("Panel") :: Frame
 	scrim = gui:WaitForChild("Scrim") :: Frame
