@@ -2,7 +2,7 @@
 -- Drives StarterGui.Hud during a match: the answer box (Enter checks the answer, Enter again locks it in),
 -- the Hint and +10s boost chips, Shells, water meter, sudden-death card.
 -- The prompt, timer and alive count live in StarterGui.Status (see Status.luau); surge feedback in Tide.luau.
--- ConfirmChip, HintRow and BoostBar are model.json templates (ReplicatedStorage.Templates) cloned into
+-- ConfirmChip, HintRow and BoostBar are Studio templates (ReplicatedStorage.Templates) cloned into
 -- Hud.AnswerBar, unless the place already has them authored there.
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -204,13 +204,10 @@ local function fitBoostBar()
 		return
 	end
 	local scale = bar:FindFirstChild("Fit")
-	if scale == nil then
-		local created = Instance.new("UIScale")
-		created.Name = "Fit"
-		created.Parent = bar
-		scale = created
+	if scale == nil or not scale:IsA("UIScale") then
+		return
 	end
-	local fit = scale :: UIScale
+	local fit = scale
 	local left = meter.AbsolutePosition.X + meter.AbsoluteSize.X + BOOST_MARGIN
 	local room = answerBar.AbsolutePosition.X - BOOST_GAP - left
 	local width = math.max(bar.Size.X.Offset, 1)

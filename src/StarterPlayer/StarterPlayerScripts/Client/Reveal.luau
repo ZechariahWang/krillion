@@ -215,19 +215,13 @@ local function countRow(label: TextLabel, answerLabel: TextLabel, row: RevealRow
 	end)
 end
 
--- A pulsing gold outline on a One in a Krillion row.
+-- Pulses the row's authored gold "Glow" outline on a One in a Krillion row.
 local function glow(row: Frame)
-	local stroke = row:FindFirstChildOfClass("UIStroke")
-	if stroke == nil then
-		local created = Instance.new("UIStroke")
-		created.Name = "Glow"
-		created.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-		created.Parent = row
-		stroke = created
+	local outline = row:FindFirstChild("Glow")
+	if outline == nil or not outline:IsA("UIStroke") then
+		return
 	end
-	local outline = stroke :: UIStroke
-	outline.Color = Theme.Tier.OneInAKrillion
-	outline.Thickness = 1.5
+	outline.Enabled = true
 	TweenService:Create(outline, KRILLION_GLOW, { Thickness = 3.5 }):Play()
 end
 

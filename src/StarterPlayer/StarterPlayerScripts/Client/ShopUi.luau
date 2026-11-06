@@ -331,14 +331,10 @@ local function fillPreview(preview: Frame, entry: Entry)
 		local target: Frame = stripe or disc
 		target.BackgroundColor3 = Color3.new(1, 1, 1)
 		local gradient = target:FindFirstChildOfClass("UIGradient")
-		if gradient == nil then
-			local made = Instance.new("UIGradient")
-			made.Parent = target
-			gradient = made
+		if gradient ~= nil then
+			gradient.Color = colors
+			gradient.Rotation = 0
 		end
-		local trailGradient = gradient :: UIGradient
-		trailGradient.Color = colors
-		trailGradient.Rotation = 0
 	end
 end
 
