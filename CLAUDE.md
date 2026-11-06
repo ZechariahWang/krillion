@@ -30,5 +30,10 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
+- Screen corners: the Roblox player list owns the top-right, so keep it clear. Bottom-right holds the Shells chip
+  (`Hud.CoinChip`, mirrored by `Wallet.Chip`), the Standings tab docked above it (list opens upward) and the
+  Wallet pop-ups above that. The Hint and +10 SEC boosts sit right of GO and shrink to fit before that corner.
+- Spacing: 16 px from screen edges, 8 px between stacked pieces, text at least 12 px from a button or pill's
+  sides.
 - The look (outlines, gradients, corners, `LiftedText` captions) is authored. `Ui.bindAll` only binds live
   behaviour: outlines tracking text, captions mirroring their label, pop-up fit (`GROWS`) and icon prefixes (`ICONS`).
