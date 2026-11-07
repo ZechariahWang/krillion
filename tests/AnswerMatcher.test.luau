@@ -83,6 +83,12 @@ return function(test)
 		},
 	}
 
+	test("normalize spells out + and # so C++ and C# keep their names", function()
+		assert(AnswerMatcher.normalize("C++") == "c plus plus")
+		assert(AnswerMatcher.normalize("c#") == "c sharp")
+		assert(AnswerMatcher.normalize("C Sharp") == "c sharp")
+	end)
+
 	test("normalize folds accents and turns & into and before stripping punctuation", function()
 		assert(AnswerMatcher.normalize("Jalapeño") == "jalapeno")
 		assert(AnswerMatcher.normalize("CRÈME BRÛLÉE") == "creme brulee")

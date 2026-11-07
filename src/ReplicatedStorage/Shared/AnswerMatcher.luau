@@ -68,6 +68,8 @@ end
 function AnswerMatcher.normalize(text: string): string
 	local result = string.lower(foldAccents(text))
 	result = string.gsub(result, "&", " and ")
+	result = string.gsub(result, "%+", " plus ")
+	result = string.gsub(result, "#", " sharp ")
 	result = string.gsub(result, "[%p]", "")
 	result = string.gsub(result, "%s+", " ")
 	result = string.match(result, "^%s*(.-)%s*$") :: string
