@@ -22,8 +22,10 @@ local GameConfig = {
 	},
 	Water = {
 		StartHeight = 6, -- platform top above the starting water line
-		SurgeBase = 2,
-		SurgeStep = 0.6, -- added per round
+		-- Round r surges SurgeBase + SurgeGrowth * (r - 1) ^ SurgePower; tests/WaterCurve pins the survival targets.
+		SurgeBase = 0.5,
+		SurgeGrowth = 0.4,
+		SurgePower = 1.5,
 		LiftPerPoint = 0.1,
 		CullHz = 10,
 		CreepFraction = 0.7, -- slow part of the surge
