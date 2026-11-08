@@ -9,7 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local FOLDER_NAME = "Remotes"
 
 export type RoundStatePayload = {
-	phase: string, -- "Waiting" | "Intermission" | "Prompt" | "Reveal" | "Surge" | "Results"
+	phase: string, -- "Waiting" | "Intermission" | "Starting" | "Prompt" | "Reveal" | "Surge" | "Results"
 	round: number,
 	secondsLeft: number,
 	yourSecondsLeft: number?, -- this player's own time when it differs from secondsLeft (a +10s boost, overtime)
@@ -84,8 +84,6 @@ export type MatchEndedPayload = {
 	winnerName: string,
 	podium: { { name: string, points: number } },
 	seconds: number,
-	rarest: { name: string, answer: string, tier: string, prompt: string, depth: number }?,
-	earned: { [string]: number }, -- tostring(userId) -> Shells from answers, survival and the win this match
 }
 
 export type BoostUses = { Hint: number, ExtraTime: number }

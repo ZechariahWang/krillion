@@ -15,7 +15,6 @@ local LINE_TRANSPARENCY = 0.15
 local GLIDE_RATE = 6 -- higher catches up faster; the line eases toward its target every frame
 
 local nextLevel: Model? = nil
-local lines: { BasePart } = {}
 local currentY: number? = nil
 local targetY = 0
 local waterMarker: BasePart? = nil
@@ -28,15 +27,22 @@ local WaterFx = {}
 local function collect(arena: Instance)
 	waterMarker = arena:WaitForChild("Water") :: BasePart
 	waterSurface = arena:WaitForChild("WaterSurface") :: BasePart
-	local model = arena:FindFirstChild("NextLevel")
-	if model ~= nil and model:IsA("Model") then
+	local model = arena:WaitForChild("NextLevel")
+	if model:IsA("Model") then
 		nextLevel = model
-		for _, child in model:GetChildren() do
-			if child:IsA("BasePart") then
-				table.insert(lines, child)
-			end
+	end
+end
+
+-- The ring's segments as they are on this client right now. Not cached: a segment that streams in late or
+-- streams back in arrives as a new part, and a cached list would leave it hidden (the ring showed an arc).
+local function linesOf(model: Model): { BasePart }
+	local lines = {}
+	for _, child in model:GetChildren() do
+		if child:IsA("BasePart") then
+			table.insert(lines, child)
 		end
 	end
+	return lines
 end
 
 -- Eases the line toward targetY with frame-rate independent smoothing, so it glides instead of jumping.
@@ -99,7 +105,7 @@ function WaterFx.onState(payload)
 	end
 	local showing = payload.phase == "Prompt" or payload.phase == "Reveal"
 	if not showing then
-		for _, line in lines do
+		for _, line in linesOf(model) do
 			Tween.play(line, Theme.Tween.Exit, { Transparency = 1 })
 		end
 		currentY = nil
@@ -116,7 +122,7 @@ function WaterFx.onState(payload)
 		local pivot = model:GetPivot()
 		model:PivotTo(CFrame.new(pivot.Position.X, payload.waterY, pivot.Position.Z))
 	end
-	for _, line in lines do
+	for _, line in linesOf(model) do
 		line.Color = color
 		Tween.play(line, Theme.Tween.Enter, { Transparency = LINE_TRANSPARENCY })
 	end

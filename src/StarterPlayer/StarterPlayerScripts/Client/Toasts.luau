@@ -9,7 +9,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
-local Net = require(ReplicatedStorage.Shared.Net)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
@@ -96,8 +95,6 @@ local live: { Frame } = {}
 local queue: { { text: string, kind: string } } = {}
 local pumping = false
 local order = 0
-local prompting = false -- the local player is answering a prompt right now
-local goShown = false
 
 local Toasts = {}
 
@@ -393,24 +390,8 @@ local function followBars(box: Frame)
 	end
 end
 
-local function onState(payload)
-	if type(payload) ~= "table" then
-		return
-	end
-	prompting = payload.phase == "Prompt" and payload.playing == true
-	-- The match's first prompt, once, for players on a pillar.
-	local go = prompting and payload.round == 1
-	if go and not goShown then
-		Toasts.show("ROUND 1  |  GO NICHE!", "info")
-	end
-	goShown = go
-end
-
 function Toasts.init(playerGui: PlayerGui)
 	root = playerGui
-	task.spawn(function()
-		Net.event("RoundState").OnClientEvent:Connect(onState)
-	end)
 	task.spawn(function()
 		local found = Ui.screen(playerGui, "Toasts", WAIT_SECONDS)
 		if found == nil or not found:IsA("Frame") then

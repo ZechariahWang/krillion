@@ -55,6 +55,9 @@ local splat: Frame? = nil
 local aimingUntil = 0
 local nudgedStarter = false
 local nudgedDouble = false
+-- Shells paid for answers, survival and the win since the last match ended, for the 2x Shells nudge.
+local MATCH_REASONS = { answer = true, survive = true, win = true }
+local matchEarned = 0
 
 local Market = {}
 
@@ -376,9 +379,15 @@ end
 
 -- Nudges ----------------------------------------------------------------------------------------------------
 
-local function onMatchEnded(payload)
-	local earnedMap = if type(payload) == "table" then payload.earned else nil
-	local earned = if type(earnedMap) == "table" then earnedMap[tostring(player.UserId)] else nil
+local function onShellsEarned(payload)
+	if type(payload) == "table" and MATCH_REASONS[payload.reason] and type(payload.amount) == "number" then
+		matchEarned += payload.amount
+	end
+end
+
+local function onMatchEnded()
+	local earned = matchEarned
+	matchEarned = 0
 	task.delay(NUDGE_DELAY, function()
 		if not nudgedStarter and profile.claimed.StarterPack ~= true and Products.StarterPack.productId ~= 0 then
 			nudgedStarter = true
@@ -398,7 +407,7 @@ local function onMatchEnded(payload)
 		if nudgedDouble or passes.DoubleCash == true or Products.Passes.DoubleCash == 0 then
 			return
 		end
-		if type(earned) ~= "number" or earned <= 0 then
+		if earned <= 0 then
 			return
 		end
 		-- What the same match pays with 2x Shells on top of everything you already have.
@@ -471,6 +480,7 @@ function Market.init(playerGui: PlayerGui)
 	Net.event("ProfileChanged").OnClientEvent:Connect(onProfile)
 	Net.event("RoundState").OnClientEvent:Connect(onState)
 	Net.event("MatchEnded").OnClientEvent:Connect(onMatchEnded)
+	Net.event("ShellsEarned").OnClientEvent:Connect(onShellsEarned)
 end
 
 return Market

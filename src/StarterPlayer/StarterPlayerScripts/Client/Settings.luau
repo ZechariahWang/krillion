@@ -1,11 +1,13 @@
 --!strict
 -- Drives SharedUi.Settings: the gear in the Roblox top bar (placed right of Roblox's own buttons through
--- GuiService.TopbarInset) and the window it opens, with a MUSIC and an AFK toggle. Music is saved with the
--- profile (SetSetting "MusicOn"); AFK lasts for the session and the server's Afk attribute is the truth.
+-- GuiService.TopbarInset) and the window it opens: a MUSIC toggle, a VOLUME bar and an AFK toggle. Music and
+-- volume are saved with the profile (SetSetting "MusicOn" / "MusicVolume"); AFK lasts for the session and the
+-- server's Afk attribute is the truth.
 
 local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Net = require(ReplicatedStorage.Shared.Net)
@@ -30,6 +32,11 @@ local fit: UIScale? = nil
 local scrim: GuiObject? = nil
 local musicToggle: GuiButton? = nil
 local afkToggle: GuiButton? = nil
+local slider: GuiObject? = nil
+local sliderFill: GuiObject? = nil
+local sliderKnob: GuiObject? = nil
+local sliderText: TextLabel? = nil
+local dragging = false
 local isOpen = false
 
 local Settings = {}
@@ -68,9 +75,73 @@ local function showToggle(button: GuiButton?, on: boolean)
 	end
 end
 
+local function showVolume(level: number)
+	if sliderFill ~= nil then
+		sliderFill.Size = UDim2.fromScale(level, 1)
+	end
+	if sliderKnob ~= nil then
+		sliderKnob.Position = UDim2.fromScale(level, 0.5)
+	end
+	if sliderText ~= nil then
+		sliderText.Text = math.floor(level * 100 + 0.5) .. "%"
+	end
+end
+
 local function refresh()
 	showToggle(musicToggle, Music.isEnabled())
 	showToggle(afkToggle, player:GetAttribute("Afk") == true)
+	if not dragging then
+		showVolume(Music.getVolume())
+	end
+end
+
+-- The bar under the pointer's x position sets the volume at once; it is saved when the drag ends.
+local function volumeAt(x: number)
+	local bar = slider
+	if bar == nil or bar.AbsoluteSize.X <= 0 then
+		return
+	end
+	local level = math.clamp((x - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
+	Music.setVolume(level)
+	showVolume(level)
+end
+
+local function isPress(input: InputObject): boolean
+	return input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch
+end
+
+local function bindSlider(bar: GuiObject)
+	slider = bar
+	local fill = bar:FindFirstChild("Fill")
+	sliderFill = if fill ~= nil and fill:IsA("GuiObject") then fill else nil
+	local knob = bar:FindFirstChild("Knob")
+	sliderKnob = if knob ~= nil and knob:IsA("GuiObject") then knob else nil
+	local count = bar:FindFirstChild("Count")
+	sliderText = if count ~= nil and count:IsA("TextLabel") then count else nil
+	local function begin(input: InputObject)
+		if isPress(input) then
+			dragging = true
+			volumeAt(input.Position.X)
+		end
+	end
+	bar.InputBegan:Connect(begin)
+	if sliderKnob ~= nil then
+		sliderKnob.InputBegan:Connect(begin)
+	end
+	UserInputService.InputChanged:Connect(function(input)
+		local moving = input.UserInputType == Enum.UserInputType.MouseMovement
+			or input.UserInputType == Enum.UserInputType.Touch
+		if dragging and moving then
+			volumeAt(input.Position.X)
+		end
+	end)
+	UserInputService.InputEnded:Connect(function(input)
+		if dragging and isPress(input) then
+			dragging = false
+			Net.event("SetSetting"):FireServer("MusicVolume", Music.getVolume())
+			Sfx.play("Tick", 0.5)
+		end
+	end)
 end
 
 -- Puts the gear just right of Roblox's own top bar buttons, on the same line as them.
@@ -186,6 +257,11 @@ local function bind(found: Frame)
 		scrim.Activated:Connect(close)
 	end
 
+	local volumeRow = window:FindFirstChild("VolumeRow")
+	local bar = if volumeRow ~= nil then volumeRow:FindFirstChild("Slider") else nil
+	if bar ~= nil and bar:IsA("GuiObject") then
+		bindSlider(bar)
+	end
 	musicToggle = buttonIn(window, "MusicRow")
 	afkToggle = buttonIn(window, "AfkRow")
 	local music = musicToggle

@@ -167,6 +167,7 @@ function DataService.changed(player: Player)
 	payload.krillions = profile.krillions
 	payload.games = profile.games
 	payload.musicOff = profile.musicOff
+	payload.musicVolume = profile.musicVolume
 	Net.event("ProfileChanged"):FireClient(player, payload)
 end
 
@@ -398,6 +399,16 @@ function DataService.setMusicOff(player: Player, off: boolean)
 		return
 	end
 	current.musicOff = off
+	DataService.changed(player)
+end
+
+-- The Settings volume bar (0..1); saved with the profile.
+function DataService.setMusicVolume(player: Player, volume: number)
+	local current = session(player)
+	if current == nil then
+		return
+	end
+	current.musicVolume = math.clamp(volume, 0, 1)
 	DataService.changed(player)
 end
 

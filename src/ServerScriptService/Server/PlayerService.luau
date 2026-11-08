@@ -11,7 +11,15 @@ local MapService = require(script.Parent.MapService)
 
 local PlayerService = {}
 
-local function pivotCharacter(player: Player, cframe: CFrame)
+local HOLD_TIMEOUT = 3 -- most seconds to wait for the destination to stream in before letting go anyway
+local SETTLE_SECONDS = 0.25 -- extra beat after streaming, so the client has the pillar under its feet
+
+local holdTokens: { [Player]: number } = {}
+
+-- Moves the character with its root anchored, then lets go once the destination has streamed in to the
+-- player. A freshly spawned pillar can otherwise be missing on the client (which simulates its own
+-- character), so the character fell through it or slid off at its old speed.
+local function placeAndHold(player: Player, cframe: CFrame)
 	local character = player.Character
 	if character == nil then
 		return
@@ -20,8 +28,23 @@ local function pivotCharacter(player: Player, cframe: CFrame)
 	if root == nil then
 		return
 	end
+	local token = (holdTokens[player] or 0) + 1
+	holdTokens[player] = token
+	root.Anchored = true
 	root.AssemblyLinearVelocity = Vector3.zero
-	character:PivotTo(cframe)
+	root.AssemblyAngularVelocity = Vector3.zero
+	root.CFrame = cframe
+	task.spawn(function()
+		pcall(function()
+			player:RequestStreamAroundAsync(cframe.Position, HOLD_TIMEOUT)
+		end)
+		task.wait(SETTLE_SECONDS)
+		if holdTokens[player] ~= token or root.Parent == nil then
+			return
+		end
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.Anchored = false
+	end)
 end
 
 function PlayerService.start()
@@ -45,6 +68,9 @@ function PlayerService.start()
 		onPlayer(player)
 	end
 	Players.PlayerAdded:Connect(onPlayer)
+	Players.PlayerRemoving:Connect(function(player)
+		holdTokens[player] = nil
+	end)
 end
 
 function PlayerService.isPlaying(player: Player): boolean
@@ -84,13 +110,13 @@ end
 function PlayerService.sendToPlatform(player: Player, platform: Part)
 	player:SetAttribute("Playing", true)
 	setMovement(player, true)
-	pivotCharacter(player, MapService.platformStandCFrame(platform))
+	placeAndHold(player, MapService.platformStandCFrame(platform))
 end
 
 function PlayerService.sendToLobby(player: Player)
 	player:SetAttribute("Playing", false)
 	setMovement(player, false)
-	pivotCharacter(player, MapService.getLobbySpawnCFrame())
+	placeAndHold(player, MapService.getLobbySpawnCFrame())
 end
 
 return PlayerService

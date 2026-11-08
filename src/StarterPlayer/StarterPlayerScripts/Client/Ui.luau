@@ -552,6 +552,7 @@ local ROOT_OF: { [string]: string } = {
 	Fx = "SharedUi",
 	Wallet = "SharedUi",
 	Settings = "SharedUi",
+	Transition = "SharedUi",
 	DiveCards = "SharedUi",
 }
 local ROOTS = { "LobbyUi", "GameUi", "SharedUi" }
