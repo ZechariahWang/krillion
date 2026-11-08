@@ -1,7 +1,7 @@
 --!strict
 -- Drives StarterGui.Results: winner, podium, countdown to the next dive, plus a strip under the panel
--- (cloned from ReplicatedStorage.Templates.ResultsExtras) with why the match ended, the rarest dive and
--- the Shells you earned this match.
+-- (cloned from ReplicatedStorage.Templates.ResultsExtras) with the rarest dive and the Shells you earned
+-- this match.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -25,7 +25,6 @@ local titleText: TextLabel
 local winnerText: TextLabel
 local podium: Frame
 local nextText: TextLabel
-local reasonText: TextLabel? = nil
 local rarestText: TextLabel? = nil
 local earnedText: TextLabel? = nil
 
@@ -57,7 +56,6 @@ function Results.init(playerGui: PlayerGui)
 			local found = extras:FindFirstChild(name)
 			return if found ~= nil and found:IsA("TextLabel") then found else nil
 		end
-		reasonText = text("Reason")
 		rarestText = text("Rarest")
 		earnedText = text("Earned")
 	end)
@@ -88,28 +86,7 @@ local function countEarned(label: TextLabel, amount: number)
 	end)
 end
 
-local function reasonLine(payload: Net.MatchEndedPayload, won: boolean): string
-	local line: string
-	if payload.solo then
-		line = "The tide caught up with you."
-	elseif payload.winnerName == "Nobody" then
-		line = "The tide got everyone this time."
-	elseif won then
-		line = "Last diver above the tide!"
-	else
-		line = payload.winnerName .. " was the last diver above the tide."
-	end
-	if not payload.solo and reachedRound > 0 then
-		line ..= "  |  You reached round " .. reachedRound
-	end
-	return line
-end
-
-local function showExtras(payload: Net.MatchEndedPayload, won: boolean)
-	local reason = reasonText
-	if reason ~= nil then
-		reason.Text = reasonLine(payload, won)
-	end
+local function showExtras(payload: Net.MatchEndedPayload)
 	local rarestLabel = rarestText
 	if rarestLabel ~= nil then
 		local rarest = payload.rarest
@@ -166,7 +143,7 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 		end
 	end
 	nextText.Text = "NEXT DIVE IN " .. payload.seconds
-	showExtras(payload, won)
+	showExtras(payload)
 	gui.Visible = true
 	-- A win lands with the big bounce; any other ending still pops, the panel is the moment.
 	if won then
