@@ -300,7 +300,7 @@ local function bind(screen: Frame)
 		close(true)
 	end)
 	bindButton(buttonNamed("CloseButton"), function()
-		Sfx.play("Tick", 0.4)
+		Sfx.play("Close", 0.5)
 		close(true)
 	end)
 	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
@@ -401,7 +401,7 @@ function Tutorial.open()
 	screen.Visible = true
 	if not isOpen then
 		isOpen = true
-		Sfx.play("Pop", 0.5)
+		Sfx.play("Open", 0.5)
 		Ui.pop(panel, 0.7)
 	end
 	Rail.panelOpened(closeForRail)
