@@ -52,6 +52,7 @@ return {
 			"sagittarius dwarf", "sagittarius dwarf galaxy", "andromeda i", "andromeda ii", "andromeda iii",
 		},
 		DeepCut = {
+			"wolf 359", "ross 128", "kepler 22", "kepler 186", "kepler 452", "kepler 16", "kepler 11", "gliese 581", "gliese 667c", "gliese 876", "gliese 1061", "hd 209458",
 			"upsilon andromedae", "tau bootis", "47 ursae majoris", "16 cygni", "70 virginis", "14 herculis",
 			"55 cnc", "epsilon indi", "gamma cephei", "beta canum venaticorum", "chara", "y canum venaticorum",
 			"la superba", "cor caroli", "alpha canum venaticorum", "asellus australis", "asellus borealis",
