@@ -4,8 +4,8 @@
 -- stepping out closes it, and a match closes it from the server side.
 -- Enter checks the answer, Enter again locks it in (like a match). A wrong answer is rejected right away and
 -- the same prompt stays up for another try. A locked answer plays a mini dive card, then NEXT counts down.
--- ConfirmChip and LobbyQuizExtras (ResultCard, CollapseButton) are Studio templates cloned in, unless
--- the place already has them authored.
+-- ConfirmChip and LobbyQuizExtras.ResultCard are Studio templates cloned in, unless the place already has them
+-- authored.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -363,9 +363,6 @@ local function onSubmitResult(payload)
 	end
 end
 
--- Collapse ------------------------------------------------------------------------------------------------
-
--- Collapsed, the panel slides down until only its header bar shows above the bottom edge.
 -- Setup ---------------------------------------------------------------------------------------------------
 
 local function findTemplate(name: string): Instance?
@@ -498,7 +495,6 @@ function LobbyQuiz.onPrompt(payload)
 	timerFill.Size = UDim2.fromScale(1, 1)
 	Tween.play(timerFill, TweenInfo.new(payload.seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) })
 	task.delay(payload.seconds, function()
-		-- Tucked away, the prompt waits; opening the panel asks for a fresh one.
 		if token == promptToken and gui.Visible and not locked then
 			skip()
 		end
