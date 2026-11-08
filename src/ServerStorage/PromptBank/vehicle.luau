@@ -24,6 +24,7 @@ return {
 			"party bus", "sedan", "hatchback", "coupe", "station wagon", "lorry", "horse and carriage", "stagecoach",
 			"chariot", "toboggan", "bobsled", "dog sled", "lunar rover", "mars rover", "rocket ship", "locomotive",
 			"freight train",
+			"rollerblades",
 		},
 		Rare = {
 			"catamaran", "trimaran", "schooner", "galleon", "frigate", "destroyer", "aircraft carrier", "battleship",
@@ -51,6 +52,8 @@ return {
 			"motor yacht", "cabin cruiser", "fishing boat", "lobster boat", "shrimp boat", "whaling ship",
 			"research vessel", "hospital ship", "ocean liner", "steamship", "tall ship", "clipper ship", "pirate ship",
 			"man o war", "ship of the line", "ironclad", "u boat",
+			"steam locomotive", "caboose", "vespa", "side by side", "horse and buggy", "crossover", "crane truck", "indy car",
+			"nascar", "drift car", "concorde", "quadcopter", "space station", "capsule", "probe",
 		},
 		DeepCut = {
 			"velocipede", "draisine", "boneshaker", "quadricycle", "cyclecar", "microcar", "bubble car", "kei car",
@@ -67,6 +70,8 @@ return {
 			"sounding rocket", "launch vehicle", "lander", "orbiter", "rover", "ingenuity", "sojourner", "spirit rover",
 			"opportunity rover", "curiosity rover", "perseverance rover", "lunokhod", "yutu", "pragyan", "zhurong",
 			"longtail boat",
+			"outrigger", "clipper", "windjammer", "whaler", "liner", "supertanker", "bulk carrier", "torpedo boat", "rov",
+			"auv", "mini sub", "hydroplane", "powerboat", "jet boat", "swamp boat", "glass bottom boat", "drakkar",
 		},
 		OneInAKrillion = {
 			"monowheel", "dicycle", "sinclair c5", "amphicar", "gyrocar", "aerocar", "flying platform", "rocket belt",
@@ -74,6 +79,13 @@ return {
 			"telega", "araba", "tonga", "ekka", "shikara", "kettuvallam", "dahabeah", "jangada", "trajinera",
 			"bucentaur", "gharry", "calesa", "tartana", "vis a vis", "berline", "clarence", "victoria carriage",
 			"rockaway", "stanhope", "tilbury", "spider phaeton",
+			"victoria", "calash", "chaise", "post chaise", "tachanka", "litter", "howdah", "ox wagon", "chuckwagon",
+			"hearse horse drawn", "hackney", "growler", "hansom", "fiacre", "jaunting car", "outside car", "dos a dos",
+			"sociable", "wagonette", "break", "shooting brake", "dog trap", "governess cart", "pony trap", "rickshaw cycle",
+			"samlor", "becak", "cyclo", "bajaj", "tricycle philippine", "danfo", "collectivo", "chiva", "camioncito",
+			"chicken bus", "camion", "trufi", "micro", "combi", "kombi", "peseros", "tuk tuk thai",
+			"messerschmitt kabinenroller", "isetta", "bond bug", "reliant robin", "peel p50", "citicar", "hoverbike",
+			"electric unicycle", "batmobile", "delorean", "mystery machine", "general lee", "herbie", "kitt", "ecto 1",
 		},
 	},
 	aliases = {
@@ -133,5 +145,12 @@ return {
 		["quad bike"] = "atv", ["streetcar"] = "tram", ["moon buggy"] = "lunar rover",
 		["lunar roving vehicle"] = "lunar rover", ["mars helicopter"] = "ingenuity", ["kalesa"] = "calesa",
 		["jumbo"] = "jumbo jet", ["dogsled"] = "dog sled",
+		["motorcar"] = "car", ["copter"] = "helicopter",
+		["el train"] = "train", ["cablecar"] = "cable car", ["maglev train"] = "maglev", ["tgv"] = "bullet train",
+		["hotair balloon"] = "hot air balloon", ["air balloon"] = "hot air balloon", ["rubber dinghy"] = "dinghy",
+		["power boat"] = "powerboat", ["atv quad"] = "atv", ["four wheeler"] = "atv", ["quad"] = "atv",
+		["golfcart"] = "golf cart", ["bulldoser"] = "bulldozer", ["caravan"] = "rv", ["winnebago"] = "rv",
+		["dustcart"] = "garbage truck", ["shuttle"] = "space shuttle", ["uav"] = "drone",
+		["quad copter"] = "quadcopter", ["multicopter"] = "quadcopter",
 	},
 }

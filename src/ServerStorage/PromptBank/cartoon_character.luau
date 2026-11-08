@@ -42,6 +42,7 @@ return {
 			"chase", "marshall", "skye", "rubble", "ryder", "caillou", "clifford", "franklin", "daniel tiger",
 			"thomas the tank engine", "bob the builder", "pingu", "shaun the sheep", "wallace", "gromit",
 			"oswald the lucky rabbit", "mr magoo",
+			"pepe le pew",
 		},
 		Rare = {
 			"pete", "launchpad mcquack", "gizmoduck", "kit cloudkicker", "olive oyl", "bluto", "wimpy", "sweet pea",
@@ -75,6 +76,9 @@ return {
 			"christopher robin", "gopher", "lumpy", "heffalump", "flounder", "scuttle", "king triton", "eric",
 			"flotsam", "jetsam", "chef louis", "ernesto de la cruz", "dante", "pepita", "abuela", "isabela", "luisa",
 			"camilo", "antonio", "dolores", "pepa", "felix madrigal", "julieta", "agustin",
+			"dee dee", "samurai jack", "rocko", "heffer", "ren", "stimpy", "gir", "appa", "momo", "bojack horseman",
+			"rick sanchez", "bob belcher", "hank hill", "stan marsh", "eric cartman", "kenny", "kyle", "peter griffin",
+			"stewie", "brian griffin", "cleveland brown",
 		},
 		DeepCut = {
 			"gnorm", "wade duck", "orson pig", "roy rooster", "sheldon", "lanolin", "riff raff",
@@ -91,6 +95,7 @@ return {
 			"zummi", "sunni", "tummi", "grammi", "duke igthorn", "toadie", "goliath", "demona", "elisa maza", "xanatos",
 			"brooklyn", "lexington", "broadway", "owen burnett", "honker muddlefoot",
 			"herb muddlefoot", "tank muddlefoot", "steelbeak", "taurus bulba", "colonel spigot", "dumptruck", "mad dog",
+			"baba looey", "jabberjaw", "captain caveman", "the great gazoo", "dudley doright", "gumby", "pokey", "fat albert",
 		},
 		OneInAKrillion = {
 			"bosko", "goopy geer", "cubby bear", "flip the frog", "willie whopper",
@@ -100,6 +105,11 @@ return {
 			"mighty manfred", "crusader rabbit", "cecil the seasick sea serpent", "colonel bleep",
 			"clutch cargo", "spinner", "paddlefoot", "space angel", "roger ramjet", "tennessee tuxedo", "chumley",
 			"king leonardo", "odie colognie", "commander mcbragg", "klondike kat",
+			"ickis", "oblina", "krumm", "fanboy", "chum chum", "grim", "slappy squirrel", "skippy squirrel", "hello nurse",
+			"dot warner", "rita and runt", "katie kaboom", "flapjack", "captain knuckles", "gwen tennyson", "grandpa max",
+			"vlad plasmius", "aku", "the scotsman", "otto rocket", "reggie rocket", "twister rodriguez", "plucky duck",
+			"hamton j pig", "buster bunny", "babs bunny", "montana max", "elmyra duff", "fifi la fume", "gogo dodo",
+			"eustace bagge", "muriel bagge",
 		},
 	},
 	aliases = {
@@ -151,5 +161,12 @@ return {
 		["jiminy"] = "jiminy cricket", ["triton"] = "king triton", ["prince eric"] = "eric",
 		["mrs potato head"] = "mr potato head", ["lightyear"] = "buzz lightyear", ["scooby"] = "scooby doo",
 		["experiment 626"] = "stitch", ["fenton crackshell"] = "gizmoduck", ["peg leg"] = "peg leg pete",
+		["tweetie"] = "tweety", ["wile e"] = "wile e coyote", ["rick"] = "rick sanchez", ["cartman"] = "eric cartman",
+		["tom cat"] = "tom", ["jerry mouse"] = "jerry", ["sam"] = "yosemite sam", ["pepe"] = "pepe le pew",
+		["snagglepuss cat"] = "snagglepuss", ["ren and stimpy"] = "ren", ["johnny"] = "johnny bravo",
+		["aang avatar"] = "aang", ["avatar"] = "aang", ["jimmy"] = "jimmy neutron", ["bojack"] = "bojack horseman",
+		["ice king adventure time"] = "ice king", ["pb"] = "princess bubblegum", ["hank"] = "hank hill",
+		["peter"] = "peter griffin", ["brian"] = "brian griffin", ["cleveland"] = "cleveland brown",
+		["stan"] = "stan marsh",
 	},
 }

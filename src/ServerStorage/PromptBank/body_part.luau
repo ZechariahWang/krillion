@@ -46,6 +46,9 @@ return {
 			"incisor", "canine tooth", "wisdom tooth", "premolar", "baby tooth", "taste bud", "adenoids", "midriff",
 			"flank", "back of the knee", "ankle bone", "shin bone", "thigh bone", "breastbone", "jaw bone", "hip bone",
 			"wrist bone", "spinal column", "backbone",
+			"quadricep", "groin",
+			"iliac crest", "gluteus medius", "pectoralis major", "biceps brachii", "triceps brachii", "psoas",
+			"plantar fascia", "iliotibial band", "perineum", "prostate", "urethra", "rectum",
 		},
 		DeepCut = {
 			"myocardium", "pericardium", "endocardium", "sinoatrial node", "mitral valve", "tricuspid valve",
@@ -70,6 +73,10 @@ return {
 			"thoracic vertebra", "cervical vertebra", "intervertebral disc", "ilium", "ischium", "pubis", "acetabulum",
 			"greater trochanter", "lesser trochanter", "malleolus", "calcaneus", "talus", "navicular", "cuboid",
 			"cuneiform", "scaphoid", "lunate", "triquetrum", "pisiform", "trapezium", "trapezoid", "capitate", "hamate",
+			"hyoid", "occipital", "sphenoid", "ethmoid", "zygomatic", "popliteal",
+			"vomer", "lacrimal bone", "nasal bone", "palatine bone", "alveolar ridge", "saphenous vein", "bronchiole",
+			"linea alba", "iliacus", "flexor carpi", "sesamoid", "calcaneal tendon", "coronoid process", "condyle",
+			"trochanter", "epicondyle", "glenoid",
 		},
 		OneInAKrillion = {
 			"interstitium", "fabella", "os trigonum", "palmaris longus", "plantaris", "pyramidalis", "auricularis",
@@ -85,6 +92,11 @@ return {
 			"tibialis anterior", "peroneus longus", "flexor hallucis longus", "extensor digitorum", "philtral columns",
 			"glabella", "nasion", "inion", "lambda", "bregma", "pterion", "vertex", "occiput", "mastoid process",
 			"styloid process", "zygomatic arch", "sella turcica", "foramen magnum",
+			"antitragus", "canthus", "columella", "acromion", "olecranon",
+			"tuber cinereum", "philtral ridge", "glabella ridge", "gonion", "pogonion", "menton", "asterion", "opisthion",
+			"basion", "prosthion", "infraorbital foramen", "mental foramen", "ampulla of vater", "sphincter of oddi",
+			"circle of willis", "optic disc", "tarsal plate", "meibomian gland", "lacrimal punctum", "caruncle",
+			"plica semilunaris",
 		},
 	},
 	aliases = {
@@ -130,5 +142,8 @@ return {
 		["teeth"] = "tooth", ["bum"] = "bottom", ["butt"] = "bottom", ["navel"] = "belly button",
 		["umbilicus"] = "belly button", ["incus"] = "anvil", ["malleus"] = "hammer", ["stapes"] = "stirrup",
 		["knee cap"] = "kneecap",
+		["eye lash"] = "eyelash", ["eye brow"] = "eyebrow", ["finger nail"] = "fingernail", ["toe nail"] = "toenail",
+		["gullet"] = "esophagus", ["heel bone"] = "calcaneus", ["collarbones"] = "clavicle", ["thighbone"] = "femur",
+		["shinbone"] = "tibia", ["jawbone"] = "mandible", ["skullcap"] = "cranium",
 	},
 }

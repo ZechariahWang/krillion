@@ -33,6 +33,7 @@ return {
 			"maxi skirt", "cocktail dress", "little black dress", "shift dress", "wrap dress", "henley",
 			"long sleeve shirt", "short sleeve shirt", "flannel shirt", "hawaiian shirt", "button up shirt",
 			"jean jacket", "sweater vest", "ugly christmas sweater", "sleepwear", "loungewear",
+			"cufflinks",
 		},
 		Rare = {
 			"salwar kameez", "kurta", "lehenga", "dhoti", "lungi", "sherwani", "cheongsam", "hanbok", "hanfu", "ao dai",
@@ -60,6 +61,7 @@ return {
 			"trapper hat", "bobble hat", "pom pom hat", "tuque", "toque", "chullo", "snapback", "trucker hat",
 			"dad hat", "sun hat", "straw hat", "rain hat", "sou wester", "beekeeper suit", "hazmat suit", "space suit",
 			"diving suit", "dry suit", "flight suit", "hospital gown", "graduation gown", "mortarboard", "judges robe",
+			"corduroys",
 		},
 		DeepCut = {
 			"doublet", "hose", "jerkin", "ruff", "farthingale", "stomacher", "chemise", "kirtle", "surcoat", "tabard",
@@ -78,6 +80,9 @@ return {
 			"amauti", "mukluks", "kamik", "ruana", "pollera", "chola dress", "montera", "sombrero vueltiao",
 			"poncho chileno", "bombachas", "alpargatas", "huaraches", "quechquemitl", "charro suit", "china poblana",
 			"tehuana dress", "jarocho dress",
+			"abaya", "kaffiyeh", "burqa", "hijab", "keffiyeh", "kente", "gele", "kikoi", "shuka", "kufi",
+			"tagelmust", "jilbab", "chador", "kokoshnik", "sarafan", "shapka", "glengarry", "pith helmet", "jabot",
+			"codpiece", "pantaloons",
 		},
 		OneInAKrillion = {
 			"pourpoint", "tabi", "geta", "zori", "waraji", "jika tabi", "haori", "juban", "montsuki", "furisode",
@@ -85,6 +90,10 @@ return {
 			"sugegasa", "eboshi", "kanmuri", "sokutai", "kariginu", "suikan", "junihitoe", "kosode", "kataginu",
 			"kamishimo", "dobuku", "sodenashi", "chanchanko", "hanten", "dotera", "monpe", "tattsuke bakama",
 			"nagajuban",
+			"tang suit", "changshan", "dopo", "jeogori", "chima", "norigae", "gat", "jellaba", "ihram", "angavastram",
+			"gagra", "dupatta", "odhni", "bolo tie", "string tie", "dickey", "mantilla",
+			"peineta", "barretina", "txapela", "phrygian cap", "liberty cap", "tricorne", "bicorne", "mitre", "zucchetto",
+			"biretta", "cassock", "surplice", "alb", "chasuble", "stole vestment", "habit", "wimple",
 		},
 	},
 	aliases = {
@@ -150,5 +159,9 @@ return {
 		["cap and gown"] = "graduation gown", ["polo"] = "polo shirt", ["tee"] = "t shirt",
 		["miniskirt"] = "mini skirt", ["flannel"] = "flannel shirt", ["flannels"] = "flannel shirt",
 		["christmas jumper"] = "ugly christmas sweater", ["waistcoat"] = "vest", ["gi"] = "karate gi",
+		["hoodie sweatshirt"] = "hoodie", ["sweat pants"] = "sweatpants", ["trackpants"] = "sweatpants",
+		["ao dai vietnam"] = "ao dai", ["cardi"] = "cardigan",
+		["jeans pants"] = "jeans", ["trouser"] = "pants", ["skivvies"] = "underwear", ["jeggings"] = "leggings",
+		["pinny"] = "pinafore",
 	},
 }

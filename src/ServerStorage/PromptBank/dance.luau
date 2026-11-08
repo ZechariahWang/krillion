@@ -22,6 +22,7 @@ return {
 			"roger rabbit", "tutting", "gliding", "house dance", "melbourne shuffle", "milly rock", "crank that",
 			"wobble", "ketchup song", "bunny hop", "time warp", "thriller dance", "k pop dance", "tiktok dance",
 			"freestyle", "slow dance", "two step", "folk dance", "interpretive dance", "lyrical dance", "street dance",
+			"twerk",
 		},
 		Rare = {
 			"hora", "kolo", "horo", "sirtaki", "syrtos", "kalamatianos", "tsamiko", "hasapiko", "zeibekiko", "dabke",
@@ -49,6 +50,7 @@ return {
 			"apache dance", "java", "bal musette", "an dro", "hanter dro", "plinn", "farandole", "paloteo", "aurresku",
 			"verdiales", "zambra", "alegrias", "bulerias", "soleares", "tientos", "farruca", "garrotin", "guajira",
 			"tangos flamencos", "rumba flamenca",
+			"watusi", "buck dancing", "shag", "contredanse",
 		},
 		DeepCut = {
 			"lyrical hip hop", "contemporary jazz", "neoclassical ballet", "romantic ballet", "classical ballet",
@@ -59,11 +61,19 @@ return {
 			"vogue new way", "waacking", "punking", "clowning", "chicago stepping", "detroit ballroom", "hand dancing",
 			"bop", "carolina shag", "collegiate shag", "solo charleston", "authentic jazz", "tranky doo", "shim sham",
 			"big apple", "suzie q", "truckin", "boogie back", "apple jacks", "fishtail", "scarecrow", "shorty george",
+			"malaguena", "seguidilla", "muneira", "zamacueca", "milonga", "candombe", "lundu", "maracatu", "jarana",
+			"son cubano", "guaguanco", "rumba columbia", "plena", "bomba", "gwo ka", "kompa", "soca", "calypso dance",
+			"dancehall", "wining", "dutty wine", "gumboot", "adowa", "agbadza", "sabar", "kalbelia", "yakshagana", "sattriya",
+			"kamarinskaya", "hajdutanc",
 		},
 		OneInAKrillion = {
 			"bergamasca", "canario", "passacaglia", "chaconne", "forlana", "siciliana", "morisca", "matachin",
 			"bouffons", "tourdion", "basse danse", "estampie", "carole", "ductia", "rotta", "trotto", "piva", "calata",
 			"spagnoletta", "villano", "folia", "jacara", "guineo", "cumbe", "paracumbe", "zambapalo",
+			"jota moncadena", "barong dance", "reog", "jaipongan", "bedhaya", "srimpi", "ronggeng", "joget", "zapin",
+			"mak yong", "kabuki dance", "nihon buyo", "bugaku", "sanjo", "salpuri", "nongak", "seungmu", "kuthu",
+			"theyyam", "pulikali", "karakattam", "mayilattam", "oyilattam", "tippani", "bagurumba",
+			"jhumur", "nati", "gaur dance", "cham", "tsam", "ahidous", "whirling dervish", "sema",
 		},
 	},
 	aliases = {
@@ -112,5 +122,12 @@ return {
 		["shimsham"] = "shim sham", ["shim sham shimmy"] = "shim sham", ["line dance"] = "line dancing",
 		["tap dance"] = "tap", ["jazz dance"] = "jazz", ["ballet dance"] = "ballet", ["hip hop dance"] = "hip hop",
 		["pasodoble"] = "paso doble", ["b boying"] = "breakdance",
+		["break dancing"] = "breakdance", ["hiphop"] = "hip hop", ["chachacha"] = "cha cha", ["salsa dancing"] = "salsa",
+		["nenae"] = "nae nae", ["kaylee"] = "ceilidh",
+		["swing dancing"] = "swing", ["salsa dance"] = "salsa", ["mambo dance"] = "mambo", ["lambada dance"] = "lambada",
+		["bellydance"] = "belly dance", ["haka dance"] = "haka", ["maori haka"] = "haka", ["moon walk"] = "moonwalk",
+		["twerking"] = "twerk", ["locking and popping"] = "popping", ["cancan"] = "can can", ["kick line"] = "can can",
+		["tango dance"] = "tango", ["the twist dance"] = "twist", ["the whip"] = "whip", ["the macarena"] = "macarena",
+		["ring a ring o roses"] = "maypole dance",
 	},
 }
