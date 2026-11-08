@@ -56,7 +56,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 |------|--------------|----------------|---------|
 | `GameUi` | 1 | Enabled off (code turns it on) | Hud, Reveal, Results, Revive, Spectate, Vignette |
 | `LobbyUi` | 2 | on | Rail, Shop, LobbyQuiz, Quests, Rewards, Tutorial |
-| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings |
+| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings, Transition |
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
   The name-to-root map is `ROOT_OF` in `Client/Ui.luau`; update it when a screen moves.
