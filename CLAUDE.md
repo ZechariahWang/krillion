@@ -35,11 +35,15 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `Client/BillboardScale` keeps it at authored size within 45 studs and shrinks it beyond. Give new labels one.
 - Loading screen: `ReplicatedFirst.LoadingScreen` (authored), with `ScreenInsets = None` and
   `ClipToDeviceSafeArea` off so it covers the phone notch area.
-- StreamingEnabled is on: models a client animates far away (`Arena.SeaLife`) use `ModelStreamingMode = Atomic`
-  and are picked up with `ChildAdded` as they stream in.
+- StreamingEnabled is on. Client code must not cache streamed parts: a part that streams back in is a new instance
+  (the next-level ring once showed only an arc). Read children when you use them, or watch `ChildAdded`.
+  `Arena.SeaLife` swimmers are `Atomic`; `Arena.NextLevel` is `Persistent` (always on every client).
 - Day and night: Lighting's properties and linear fog are the day look; its `NightAmbient` / `NightOutdoorAmbient`
   attributes and the `Lighting.Atmosphere` haze are the night look. `Client/DayNight` blends them at dusk and dawn
-  (fog out, then haze in) and lights parts tagged `NightLight` (the torches) only at night.
+  (fog out, then haze in) and lights parts tagged `NightLight` (lobby and beach torches, `Arena.TankLights`)
+  only at night.
+- `Arena.Reef` (OuterRim rocks, Ledges, Coral) stays clear of the tank glass (radius 41.0..41.6): rocks outside,
+  ledges inside.
 - Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
   `LobbySpawn`, `HowToBoard` and `HowRareBoard` stay direct children: code looks them up by name. `Lobby.WestStairs`
   and `EastStairs` lead off the side rails to the beach. The How to Play / How Rare boards and the Top 10 stand
@@ -49,6 +53,17 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
   `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start.
 - After Studio edits, remind the user to save the place.
+
+## Match flow
+
+- Phases: Waiting, Intermission, Starting, Prompt, Reveal, Surge, Results. Before Starting, `MatchIntro` fades the
+  starters' screens to black and the server teleports them; Starting is the 3-2-1 on the pillars
+  (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
+  `StartCountdownSeconds`.
+- Every teleport goes through `PlayerService.sendToPlatform` / `sendToLobby`: they anchor the root, move it, and
+  release it once the spot has streamed in, so nobody falls through a pillar their client does not have yet.
+- Dying or respawning while alive in a match eliminates the player (RoundService), like sinking.
+- Settings: music on/off and volume are saved in the profile (`musicOff`, `musicVolume`); AFK is session only.
 
 ## UI layout
 
