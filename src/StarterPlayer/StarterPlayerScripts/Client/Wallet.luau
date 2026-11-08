@@ -78,7 +78,7 @@ local function setAmount(value: number)
 end
 
 -- What else stacks in the bottom-right column above the chip while it is on screen: in a match, the Hint and
--- +10 SEC boosts docked on the chip.
+-- +10 SEC boosts docked on the chip; in the lobby, the THROW key when a toy is equipped.
 local function columnParts(): { GuiObject }
 	local parts: { GuiObject } = {}
 	local root = playerGuiRef
@@ -89,6 +89,11 @@ local function columnParts(): { GuiObject }
 	local boosts = if hud ~= nil then hud:FindFirstChild("BoostBar") else nil
 	if hud ~= nil and hud.Visible and boosts ~= nil and boosts:IsA("GuiObject") and boosts.Visible then
 		table.insert(parts, boosts)
+	end
+	local rail = Ui.findScreen(root, "Rail")
+	local toy = if rail ~= nil then rail:FindFirstChild("ToyButton") else nil
+	if rail ~= nil and rail.Visible and toy ~= nil and toy:IsA("GuiObject") and toy.Visible then
+		table.insert(parts, toy)
 	end
 	return parts
 end
