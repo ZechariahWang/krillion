@@ -958,6 +958,29 @@ function RoundService.start()
 			end
 		end
 	end)
+	-- Resetting (or any death) on a pillar is a sink: the respawn lands in the lobby, above the water, so the
+	-- water poll alone would never catch it.
+	local function watchCharacter(player: Player, character: Model)
+		local humanoid = character:WaitForChild("Humanoid", 10)
+		if humanoid ~= nil and humanoid:IsA("Humanoid") then
+			humanoid.Died:Connect(function()
+				eliminate(player)
+			end)
+		end
+	end
+	local function watchPlayer(player: Player)
+		if player.Character ~= nil then
+			task.spawn(watchCharacter, player, player.Character)
+		end
+		player.CharacterAdded:Connect(function(character)
+			eliminate(player)
+			watchCharacter(player, character)
+		end)
+	end
+	for _, player in Players:GetPlayers() do
+		watchPlayer(player)
+	end
+	Players.PlayerAdded:Connect(watchPlayer)
 	WaterService.startCullLoop(function()
 		if phase == "Prompt" or phase == "Reveal" or phase == "Surge" then
 			return alivePlayers()
