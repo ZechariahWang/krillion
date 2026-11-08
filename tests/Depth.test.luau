@@ -61,7 +61,28 @@ return function(test)
 			assert(seconds >= previous, "not monotonic at " .. metres)
 			previous = seconds
 		end
-		assert(Depth.ease(0) == 0 and Depth.ease(1) == 1)
-		assert(Depth.ease(0.5) > 0.5, "ease-out runs ahead of linear")
+	end)
+
+	test("a dive creeps, bursts past its depth, then settles exactly on it", function()
+		for _, intensity in { 0, 0.4, 1 } do
+			local shape = Depth.diveShape(intensity)
+			assert(Depth.dive(0, intensity) == 0)
+			assert(math.abs(Depth.dive(1, intensity) - 1) < 1e-9, "ends on the depth")
+			assert(Depth.dive(shape.hold, intensity) <= 0.1, "the wind-up stays shallow")
+			assert(Depth.dive(shape.hold / 2, intensity) < shape.creep / 2, "the wind-up starts slow")
+			local previous = -1
+			for step = 0, 100 do
+				local t = shape.impact * step / 100
+				local value = Depth.dive(t, intensity)
+				assert(value >= previous, "sinks without stopping until impact")
+				previous = value
+			end
+			assert(Depth.dive(shape.impact, intensity) > 1, "overshoots at impact")
+		end
+		local small = Depth.diveShape(0)
+		local big = Depth.diveShape(1)
+		assert(big.hold > small.hold, "better answers wind up longer")
+		assert(big.impact - big.hold < small.impact - small.hold, "and burst faster")
+		assert(big.overshoot > small.overshoot, "and overshoot further")
 	end)
 end

@@ -58,16 +58,43 @@ function Depth.diveSeconds(metres: number, quick: boolean): number
 		return 0.9
 	end
 	local fraction = math.clamp(metres / 500, 0, 1)
-	local seconds = 1.1 + 1.9 * fraction ^ 0.85
+	local seconds = 1.3 + 2.5 * fraction ^ 0.85
 	if quick then
 		seconds /= 2
 	end
 	return seconds
 end
 
--- Ease-out used for the sinking tag.
-function Depth.ease(t: number): number
-	return 1 - (1 - math.clamp(t, 0, 1)) ^ 2.4
+-- The shape of a dive for an answer of `intensity` (0 for the commonest tier, 1 for One in a Krillion):
+-- `hold` is when the slow wind-up ends and the burst starts, `impact` is when the tag first reaches its depth
+-- (the stamp lands here), and `creep` and `overshoot` are fractions of the depth. Better answers wind up
+-- longer, burst faster and overshoot further before springing back.
+export type DiveShape = { hold: number, impact: number, creep: number, overshoot: number }
+
+function Depth.diveShape(intensity: number): DiveShape
+	local k = math.clamp(intensity, 0, 1)
+	return {
+		hold = 0.3 + 0.15 * k,
+		impact = 0.86 - 0.04 * k,
+		creep = 0.05 + 0.03 * k,
+		overshoot = 0.015 + 0.055 * k,
+	}
+end
+
+-- Fraction of the depth reached at time `t` (0..1 of the dive): a slow creep that gathers speed, a burst
+-- that is still accelerating when it overshoots the depth, then a damped spring back onto it.
+function Depth.dive(t: number, intensity: number): number
+	local shape = Depth.diveShape(intensity)
+	local u = math.clamp(t, 0, 1)
+	if u < shape.hold then
+		return shape.creep * (u / shape.hold) ^ 1.6
+	end
+	if u < shape.impact then
+		local burst = (u - shape.hold) / (shape.impact - shape.hold)
+		return shape.creep + (1 + shape.overshoot - shape.creep) * burst ^ 2.6
+	end
+	local settle = (u - shape.impact) / (1 - shape.impact)
+	return 1 + shape.overshoot * (1 - settle) ^ 2 * math.cos(settle * 2.5 * math.pi)
 end
 
 -- The full scale the dive window scrolls over.

@@ -136,6 +136,9 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local tierIndex = Tiers.index(tierName)
 	local isKrillion = tierName == "OneInAKrillion"
 	local tierColor = Ui.tierColor(tierName)
+	-- 0 for the commonest tier up to 1 for One in a Krillion: drives how hard the dive winds up and hits.
+	local intensity = if hasAnswer then math.clamp((tierIndex - 1) / math.max(#Tiers.List - 1, 1), 0, 1) else 0
+	local shape = Depth.diveShape(intensity)
 	local shells = if hasAnswer then options.shells or 0 else 0
 	local random = Random.new()
 
@@ -467,8 +470,15 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		counter.TextColor3 = lighten(tierColor, 0.3)
 		footer.TextColor3 = WHITE
 		tagStroke.Color = tierColor:Lerp(BLACK, 0.35)
-		sound("Thud", 0.7, 1.1)
+		sound("Thud", 0.7 + 0.3 * intensity, 1.1 - 0.25 * intensity)
 		sound("Ping", 1, 0.8 + 0.12 * tierIndex)
+		if not isKrillion then
+			-- The slam: every answer thuds, rarer ones hit harder and flash their colour.
+			Fx.shakeOffset(frame, (3 + 9 * intensity) * (if quick then 0.5 else 1), 0.35 + 0.2 * intensity)
+		end
+		if options.isYou and not quick and tierIndex >= Tiers.index("Rare") then
+			Fx.flash(tierColor)
+		end
 		if shells > 0 then
 			task.delay(SHELLS_DELAY * speed, function()
 				if destroyed then
@@ -537,7 +547,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	-- Per-frame dive -------------------------------------------------------------------------------------
 	-- `pace` squeezes the whole dive when it would land after the caller's budget.
 	local diveTime = Depth.diveSeconds(depth, quick)
-	local natural = DROP_TIME * speed + diveTime
+	local natural = DROP_TIME * speed + diveTime * shape.impact
 	local budget = options.budget
 	local pace = if budget ~= nil and budget > 0 and natural > budget then budget / natural else 1
 	local dropTime = DROP_TIME * speed * pace
@@ -549,6 +559,8 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local splashed = false
 	local landed = false
 	local nextZone = 2
+	local bursting = false
+	local rumble = 0 -- sideways jitter of the tag during the wind-up, in window widths
 
 	local function step(dt: number)
 		local now = os.clock()
@@ -558,8 +570,27 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			local u = elapsed / dropTime
 			current = (-SKY - 20) * (1 - u * u)
 		elseif hasAnswer and elapsed < dropTime + diveTime then
-			current = depth * Depth.ease((elapsed - dropTime) / diveTime)
+			local t = (elapsed - dropTime) / diveTime
+			current = depth * Depth.dive(t, intensity)
+			if t < shape.hold then
+				-- Winding up: the tag shivers harder the longer it holds.
+				local strength = (t / shape.hold) ^ 2 * (0.004 + 0.012 * intensity)
+				rumble = math.sin(now * 70) * strength
+			else
+				rumble = 0
+				if not bursting then
+					bursting = true
+					sound("Splash", 0.5 + 0.4 * intensity, 0.75 - 0.2 * intensity)
+					Fx.shakeOffset(frame, (2 + 6 * intensity) * (if quick then 0.5 else 1), 0.25)
+					local tagScale = tag:FindFirstChildOfClass("UIScale")
+					if tagScale ~= nil then
+						tagScale.Scale = 1.15 + 0.2 * intensity
+						play(tagScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 })
+					end
+				end
+			end
 		elseif hasAnswer then
+			rumble = 0
 			current = depth
 		else
 			-- No answer: the tag bobs at the surface.
@@ -576,12 +607,17 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			end
 		end
 
-		while hasAnswer and nextZone <= #Tiers.List and current >= Tiers.List[nextZone].depthMin do
+		while
+			hasAnswer
+			and nextZone <= #Tiers.List
+			and Tiers.List[nextZone].depthMin <= depth
+			and current >= Tiers.List[nextZone].depthMin
+		do
 			flashZone(nextZone)
 			nextZone += 1
 		end
 
-		if not landed and elapsed >= dropTime + diveTime then
+		if not landed and elapsed >= dropTime + diveTime * (if hasAnswer then shape.impact else 1) then
 			landed = true
 			task.spawn(land)
 			task.delay(settleTime, fire)
@@ -590,7 +626,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		local top = math.clamp(current - TAG_Y * VIEW, -SKY, BOTTOM - VIEW)
 		content.Position = UDim2.fromScale(0, -(top + SKY) / VIEW)
 		local tagY = (current - top) / VIEW
-		tag.Position = UDim2.fromScale(0.5, tagY)
+		tag.Position = UDim2.fromScale(0.5 + rumble, tagY)
 		local ropeTop = math.max((0 - top) / VIEW, 0)
 		if tagY > ropeTop + 0.01 then
 			rope.Visible = true
@@ -600,7 +636,8 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			rope.Visible = false
 		end
 
-		local metres = math.max(0, math.floor(current + 0.5))
+		-- The counter never reads past the real depth while the tag overshoots and springs back.
+		local metres = math.max(0, math.floor(math.min(current, if hasAnswer then depth else current) + 0.5))
 		if metres ~= shownMetres then
 			shownMetres = metres
 			counter.Text = Currency.digits(metres) .. " m"
