@@ -346,34 +346,14 @@ local CHEST_MESSAGES: { [string]: string } = {
 	no_shells = "NOT ENOUGH " .. Currency.Upper .. " FOR THAT CHEST",
 	limit = "THAT'S A LOT OF CHESTS  |  TAKE A BREAK",
 	restricted = "CHESTS AREN'T AVAILABLE WHERE YOU LIVE",
+	cooldown = "ONE CHEST AT A TIME",
 }
 
+-- ChestReveal shows a prize; this only explains a refusal.
 local function onChestResult(payload: Net.ChestResultPayload)
-	if payload.status ~= "ok" then
-		local message = CHEST_MESSAGES[payload.status]
-		if message ~= nil then
-			Toasts.show(message, "bad")
-		end
-		return
-	end
-	local item = if payload.item ~= nil then Cosmetics.ById[payload.item] else nil
-	if item == nil then
-		return
-	end
-	local name = string.upper(item.name) .. "  (" .. string.upper(item.rarity) .. ")"
-	if payload.duplicate then
-		Toasts.show("DUPLICATE " .. name .. "  |  +" .. Currency.digits(payload.refund or 0) .. " " .. Theme.Icon.Shell .. " BACK", "info")
-		Sfx.play("Coin", 0.5)
-		return
-	end
-	Toasts.show(Theme.Icon.Chest .. " YOU GOT " .. name .. "!", "good")
-	local rank = Cosmetics.RarityRank[item.rarity] or 1
-	if rank >= Cosmetics.RarityRank.Legendary then
-		Fx.confetti(if rank >= Cosmetics.RarityRank.Mythic then 120 else 70)
-		Fx.flash(Theme.Rarity[item.rarity] or Theme.Color.Yellow)
-		Sfx.play("Fanfare", 0.7)
-	else
-		Sfx.play("Ping", 0.6, 1 + rank * 0.1)
+	local message = CHEST_MESSAGES[payload.status]
+	if message ~= nil then
+		Toasts.show(message, "bad")
 	end
 end
 

@@ -1,7 +1,7 @@
 --!strict
 -- Drives LobbyUi.Shop: the tabbed shop window for cosmetics, pets, toys, chests, passes and packs.
 -- The server checks every buy, equip and chest; this only shows the state and sends requests.
--- Shells buys and chest openings take a second click within CONFIRM_SECONDS; reward items open the Rewards
+-- Shells buys take a second click within CONFIRM_SECONDS; a chest opens on one click into ChestReveal; reward items open the Rewards
 -- panel; chest-only items jump to CHESTS; a Shells item you cannot afford offers GET SHELLS (the STORE tab).
 --
 -- Tabs are authored in Studio under Panel.Tabs. The current set is TABS; when a place still has only the
@@ -25,6 +25,8 @@ local Shop = require(ReplicatedStorage.Shared.Shop)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Rail = require(script.Parent.Rail)
 local Rewards = require(script.Parent.Rewards)
+local ChestReveal = require(script.Parent.ChestReveal)
+local ItemEmoji = require(script.Parent.ItemEmoji)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
@@ -55,41 +57,6 @@ local SOON = "COMING SOON" -- Robux entries whose id is still the 0 placeholder
 local LONG_PRICE = 18 -- longer price lines (the pass perks) shrink to fit their label
 local LONG_ACTION = 8
 
--- The emoji drawn in a card's Preview.Emoji label (when the template has one), by slot or item.
-local SLOT_EMOJI: { [string]: string } = {
-	Aura = "✨",
-	CardTheme = "🃏",
-	NameTag = "🏷️",
-	Toy = "🍅",
-	Pet = "🐟",
-}
-local ITEM_EMOJI: { [string]: string } = {
-	pet_clownfish = "🐠",
-	pet_crab = "🦀",
-	pet_turtle = "🐢",
-	pet_jelly = "🎐",
-	pet_puffer = "🐡",
-	pet_octopus = "🐙",
-	pet_seahorse = "🐎",
-	pet_axolotl = "🦎",
-	pet_narwhal = "🦄",
-	pet_shark = "🦈",
-	pet_whale = "🐋",
-	pet_krill = "🦐",
-	toy_tomato = "🍅",
-	toy_snowball = "❄️",
-	toy_pie = "🥧",
-	toy_balloon = "🎈",
-	toy_fish = "🐟",
-	toy_confetti = "🎉",
-	aura_frost = "❄️",
-	aura_flame = "🔥",
-	aura_electric = "⚡",
-	aura_halo = "😇",
-	aura_bubbles = "🫧",
-	aura_void = "🌑",
-	aura_rainbow = "🌈",
-}
 local PASS_EMOJI: { [string]: string } = { Vip = "👑", DoubleCash = "💰", SecondChance = "❤️", BoostPlus = "⚡" }
 
 type Entry = {
@@ -232,7 +199,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 	local equipped = (profile.equipped :: any)[item.slot] == item.id
 	local entry = emptyEntry(item.slot, string.upper(item.name), colorOf(item))
 	entry.rarity = item.rarity
-	entry.emoji = ITEM_EMOJI[item.id] or SLOT_EMOJI[item.slot]
+	entry.emoji = ItemEmoji.of(item)
 	entry.stripe = if item.trail ~= nil then trailColors(item) else nil
 	entry.badge = item.label
 	local bonus = if item.shellBonus ~= nil then "+" .. math.floor(item.shellBonus * 100 + 0.5) .. "% " .. Currency.Upper else nil
@@ -476,11 +443,9 @@ local function chestEntries(entries: { Entry })
 		entry.price = Currency.digits(chest.price)
 		entry.currency = "Cash"
 		if profile.cash >= chest.price then
-			entry.action = if isConfirming(chest.id) then "CONFIRM?" else "OPEN"
+			entry.action = "OPEN"
 			entry.onClick = function()
-				confirmThen(chest.id, function()
-					Net.event("ChestOpen"):FireServer(chest.id)
-				end)
+				ChestReveal.open(chest.id)
 			end
 		else
 			entry.action = "GET " .. Theme.Icon.Shell
@@ -497,7 +462,7 @@ local function chestEntries(entries: { Entry })
 			if item ~= nil then
 				local entry = emptyEntry("Odds", string.upper(item.name), colorOf(item))
 				entry.rarity = item.rarity
-				entry.emoji = ITEM_EMOJI[item.id] or SLOT_EMOJI[item.slot]
+				entry.emoji = ItemEmoji.of(item)
 				entry.price = chest.name .. "  |  " .. Chests.percent(drop.chance)
 				entry.priceColor = Theme.Rarity[item.rarity] or MUTED
 				entry.action = string.upper(item.rarity)

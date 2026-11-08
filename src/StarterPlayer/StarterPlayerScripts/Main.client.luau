@@ -31,6 +31,7 @@ local BillboardScale = require(Client.BillboardScale)
 local Transition = require(Client.Transition)
 local AnimationReset = require(Client.AnimationReset)
 local Market = require(Client.Market)
+local ChestReveal = require(Client.ChestReveal)
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
 -- Live outlines, captions, pop-up fit and icons on the Studio GUIs and world text; it never yields.
@@ -62,6 +63,7 @@ Rewards.init(playerGui)
 Tutorial.init(playerGui)
 AnimationReset.init()
 Market.init(playerGui)
+ChestReveal.init(playerGui)
 
 Net.event("RoundState").OnClientEvent:Connect(function(payload)
 	Hud.onState(payload)
