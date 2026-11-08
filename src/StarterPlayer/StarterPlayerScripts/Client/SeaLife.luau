@@ -17,22 +17,32 @@ type Swimmer = {
 }
 
 local swimmers: { Swimmer } = {}
+local known: { [Instance]: boolean } = {}
 
 local SeaLife = {}
 
-local function collect(sea: Instance)
-	for index, child in sea:GetChildren() do
-		local speed = child:GetAttribute("Speed")
-		if child:IsA("Model") and typeof(speed) == "number" then
-			local start = child:GetPivot()
-			local radius = Vector2.new(start.Position.X, start.Position.Z).Magnitude
-			if radius > 1 then
-				-- CFrame.Angles turns clockwise seen from above, the opposite way to the authored facing.
-				local turnRate = -speed / radius
-				table.insert(swimmers, { model = child, start = start, turnRate = turnRate, phase = index })
-			end
-		end
+local function add(child: Instance)
+	local speed = child:GetAttribute("Speed")
+	if known[child] or not child:IsA("Model") or typeof(speed) ~= "number" then
+		return
 	end
+	local start = child:GetPivot()
+	local radius = Vector2.new(start.Position.X, start.Position.Z).Magnitude
+	if radius <= 1 then
+		return
+	end
+	known[child] = true
+	-- CFrame.Angles turns clockwise seen from above, the opposite way to the authored facing.
+	local turnRate = -speed / radius
+	table.insert(swimmers, { model = child, start = start, turnRate = turnRate, phase = #swimmers })
+end
+
+-- The map is in the place from the start, so fish can still be arriving when this runs.
+local function collect(sea: Instance)
+	for _, child in sea:GetChildren() do
+		add(child)
+	end
+	sea.ChildAdded:Connect(add)
 end
 
 local function step()

@@ -1,6 +1,6 @@
 --!strict
--- Puts the Studio-built map (ServerStorage.PhysicalAssets: Arena, Lobby, Mountains) into Workspace and spawns
--- per-player pillars (the starting ring, late joiners in the gaps, slate for a sunk pillar).
+-- Finds the Studio-built map placed in Workspace (Arena, Lobby, Mountains) and spawns per-player pillars from
+-- ServerStorage.PhysicalAssets.PlatformTemplate (the starting ring, late joiners in the gaps, slate for a sunk pillar).
 
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -28,24 +28,9 @@ local MapService = {}
 
 function MapService.start()
 	local assets = ServerStorage:WaitForChild("PhysicalAssets")
-	arena = (assets:WaitForChild("Arena") :: Model):Clone()
-	template = arena:WaitForChild("PlatformTemplate") :: Part
-	template.Parent = nil
-	arena.Parent = workspace
-	-- A lobby already placed in Workspace (being edited in Studio) is used as-is; otherwise clone the stored one.
-	local placed = workspace:FindFirstChild("Lobby")
-	if placed ~= nil and placed:IsA("Model") then
-		lobby = placed
-	else
-		lobby = (assets:WaitForChild("Lobby") :: Model):Clone()
-		lobby.Parent = workspace
-	end
-	if workspace:FindFirstChild("Mountains") == nil then
-		local mountains = assets:FindFirstChild("Mountains")
-		if mountains ~= nil then
-			mountains:Clone().Parent = workspace
-		end
-	end
+	template = assets:WaitForChild("PlatformTemplate") :: Part
+	arena = workspace:WaitForChild("Arena") :: Model
+	lobby = workspace:WaitForChild("Lobby") :: Model
 	platformFolder = workspace:WaitForChild("Platforms") :: Folder
 end
 

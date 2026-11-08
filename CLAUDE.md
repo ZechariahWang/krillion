@@ -14,9 +14,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `model.json` first, with Rojo disconnected. Remaining ones: `ReplicatedStorage/Remotes/*`, `Templates/{BotRig,Confetti,DiveCard,HowRareBoard,HowToBoard,Trails,leaderstats}`, `Sounds`.
 - `ServerStorage.UIArchive` keeps the UI as it was before the style bake (2026-11-05). Reference only.
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
-- Map: every physical asset lives in `ServerStorage.PhysicalAssets` (Arena, Lobby, Mountains, TerrainBackup);
-  MapService clones them into Workspace and builds nothing itself. Pillar walls are authored on
-  `Arena.PlatformTemplate`, and the tank hole (radius 40, from y -20 up) is carved into the terrain.
+- Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
+  `ServerStorage.PhysicalAssets` holds `PlatformTemplate` (cloned per pillar, walls authored on it) and
+  `TerrainBackup`. The tank hole (radius 40, from y -20 up) is carved into the terrain.
   `Arena.Beach` holds the beach decor; `Arena.SeaLife` holds fish and schools that `Client/SeaLife` swims round
   the island (each child model's `Speed` attribute is studs per second, sign = direction).
 - Beach: the island top (y 0, x -96..96, z -96..80) slopes as a smoothstep from 16 studs inside its edge to the
