@@ -124,10 +124,7 @@ local function allowedTypos(answer: string): number
 	if #answer < GameConfig.Answer.FuzzyLongLength then
 		return 1
 	end
-	if #answer < GameConfig.Answer.FuzzyVeryLongLength then
-		return 2
-	end
-	return 3
+	return 2
 end
 
 local function findExact(prompt: Prompt, answer: string): string?
@@ -144,7 +141,8 @@ local function findExact(prompt: Prompt, answer: string): string?
 	return nil
 end
 
--- The bank answer with the fewest typos, if any is within the allowance.
+-- The bank answer with the fewest typos, if any is within the allowance. A typo never fixes the first
+-- letter: "bpple" is not "apple", so autocorrect cannot turn a guess into a different word.
 local function findClosest(prompt: Prompt, answer: string): (string?, string?)
 	local bestTier = nil
 	local bestAnswer = nil
@@ -156,7 +154,7 @@ local function findClosest(prompt: Prompt, answer: string): (string?, string?)
 				-- The edit distance is at least the length gap, so far-off lengths skip the full comparison.
 				local lengthGap = math.abs(#candidate - #answer)
 				local distance = bestDistance
-				if lengthGap < bestDistance then
+				if lengthGap < bestDistance and string.byte(candidate, 1) == string.byte(answer, 1) then
 					distance = AnswerMatcher.distance(candidate, answer)
 				end
 				if distance < bestDistance then
