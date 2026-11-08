@@ -57,8 +57,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   ledges inside.
 - Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
   `LobbySpawn`, `HowToBoard`, `HowRareBoard`, `QuizZone` and `QuizArc` stay direct children: code looks them up
-  by name. `QuizZone` is the invisible box over the glowing semicircle (`QuizArc`) in front of the shack:
-  LobbyQuizService serves warm-up prompts to whoever stands in it (`LobbyUi.LobbyQuiz`, a centred window with
+  by name. `QuizZone` carries `ArcCenter`, `Outward` and `Radius` attributes describing the glowing semicircle
+  (`QuizArc`) in front of the shack: LobbyQuizService serves warm-up prompts to whoever stands on it (`LobbyUi.LobbyQuiz`, a centred window with
   an X; a match closes it). `Lobby.WestStairs`
   and `EastStairs` lead off the side rails to the beach. The How to Play / How Rare boards and the Top 10 stand
   along the back of the deck, facing the front. Players roam the whole island: invisible `Arena.BeachBorder` walls

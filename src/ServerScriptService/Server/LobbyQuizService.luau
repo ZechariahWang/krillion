@@ -1,5 +1,6 @@
 --!strict
--- A personal prompt stream for anyone standing in Lobby.QuizZone, the semicircle in front of the snack shack.
+-- A personal prompt stream for anyone standing on the semicircle in front of the snack shack (Lobby.QuizZone's
+-- ArcCenter, Outward and Radius attributes describe it).
 -- Stepping in starts it, stepping out or the X (LobbyQuizStop) ends it, and a match pulls the player out of it
 -- whatever they were doing. Answering is two steps like a match: LobbyQuizCheck
 -- (Enter once) says whether the text is in the bank, LobbyQuizAnswer (Enter again) locks it in and pays
@@ -236,25 +237,27 @@ function LobbyQuizService.setLivePromptId(id: string?)
 	end
 end
 
--- The players whose character stands inside the zone part right now.
+-- The players whose character stands on the semicircle: within `Radius` of the zone's `ArcCenter`, on its
+-- `Outward` side (the flat edge runs along the shack front), and not far above or below the deck.
+local ZONE_HEIGHT = 6
+
 local function playersInZone(zone: BasePart): { [Player]: boolean }
 	local inside: { [Player]: boolean } = {}
-	local params = OverlapParams.new()
-	params.FilterType = Enum.RaycastFilterType.Include
-	local characters = {}
-	for _, player in Players:GetPlayers() do
-		if player.Character ~= nil then
-			table.insert(characters, player.Character)
-		end
-	end
-	if #characters == 0 then
+	local center = zone:GetAttribute("ArcCenter")
+	local outward = zone:GetAttribute("Outward")
+	local radius = zone:GetAttribute("Radius")
+	if typeof(center) ~= "Vector3" or typeof(outward) ~= "Vector3" or typeof(radius) ~= "number" then
 		return inside
 	end
-	params.FilterDescendantsInstances = characters
-	for _, part in workspace:GetPartBoundsInBox(zone.CFrame, zone.Size, params) do
-		local character = part:FindFirstAncestorOfClass("Model")
-		local player = if character ~= nil then Players:GetPlayerFromCharacter(character) else nil
-		if player ~= nil then
+	for _, player in Players:GetPlayers() do
+		local character = player.Character
+		local root = if character ~= nil then character:FindFirstChild("HumanoidRootPart") else nil
+		if root == nil or not root:IsA("BasePart") then
+			continue
+		end
+		local offset = root.Position - center
+		local flat = Vector3.new(offset.X, 0, offset.Z)
+		if math.abs(offset.Y) <= ZONE_HEIGHT and flat.Magnitude <= radius and flat:Dot(outward) >= 0 then
 			inside[player] = true
 		end
 	end
