@@ -1,7 +1,8 @@
 --!strict
 -- Shells lying around the island to pick up between rounds: clones of ReplicatedStorage.Templates.ShellPickup
--- dropped on the sand and the deck (never in the tank), one every GameConfig.Pickups.SpawnSeconds up to Max.
--- Walking into one takes it and pays Pickups.Shells, up to Pickups.SessionCap per visit.
+-- (a Model: the Hitbox the server watches, and the Visual scallop that Client/Pickups floats and spins) dropped
+-- on the sand and the deck (never in the tank), one every GameConfig.Pickups.SpawnSeconds up to Max. Walking
+-- into one takes it and pays Pickups.Shells, up to Pickups.SessionCap per visit.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -11,7 +12,7 @@ local StoreService = require(script.Parent.StoreService)
 
 local FOLDER_NAME = "ShellPickups"
 local DROP_HEIGHT = 40 -- the ray down onto the island starts this high
-local LIFT = 0.9 -- studs the shell sits above the ground
+local LIFT = 0 -- the template's Visual sits above its own origin
 local ISLAND_X = 92 -- half-width of the island top (CLAUDE.md: x -96..96, z -96..80)
 local ISLAND_Z_MIN = -92
 local ISLAND_Z_MAX = 76
@@ -25,10 +26,10 @@ local rng = Random.new()
 
 local PickupService = {}
 
-local function template(): BasePart?
+local function template(): Model?
 	local templates = ReplicatedStorage:FindFirstChild("Templates")
 	local found = if templates ~= nil then templates:FindFirstChild("ShellPickup") else nil
-	return if found ~= nil and found:IsA("BasePart") then found else nil
+	return if found ~= nil and found:IsA("Model") then found else nil
 end
 
 -- A random standing spot on the island: sand or the lobby deck, out of the water and clear of the tank.
@@ -60,7 +61,7 @@ local function findSpot(): Vector3?
 	return nil
 end
 
-local function collect(shell: BasePart, player: Player)
+local function collect(shell: Model, player: Player)
 	if shell.Parent == nil then
 		return
 	end
@@ -81,8 +82,12 @@ local function spawnOne()
 		return
 	end
 	local shell = proto:Clone()
-	shell.CFrame = CFrame.new(spot) * CFrame.Angles(0, rng:NextNumber(0, math.pi * 2), 0)
-	shell.Touched:Connect(function(other)
+	shell:PivotTo(CFrame.new(spot) * CFrame.Angles(0, rng:NextNumber(0, math.pi * 2), 0))
+	local hitbox = shell:FindFirstChild("Hitbox")
+	if hitbox == nil or not hitbox:IsA("BasePart") then
+		return
+	end
+	hitbox.Touched:Connect(function(other)
 		local character = other:FindFirstAncestorOfClass("Model")
 		local player = if character ~= nil then Players:GetPlayerFromCharacter(character) else nil
 		if player ~= nil then
