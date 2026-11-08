@@ -44,6 +44,41 @@ function Shop.petBonus(profile: Profile.Profile, passes: { [string]: boolean }):
 	return item.shellBonus or 0
 end
 
+export type Filterable = {
+	name: string,
+	currency: string?, -- "Cash" | "Robux" | "Free" | nil (passes, chest-only items, info rows)
+	rarity: string?,
+	owned: boolean,
+}
+
+export type Filter = {
+	query: string,
+	price: string, -- "All" | "Shells" | "Robux" | "Free"
+	rarity: string, -- "All" | a Cosmetics rarity
+	hideOwned: boolean,
+}
+
+local PRICE_CURRENCY: { [string]: string } = { Shells = "Cash", Robux = "Robux", Free = "Free" }
+
+-- Whether a shop card passes the toolbar's search and filters.
+function Shop.matches(entry: Filterable, filter: Filter): boolean
+	local query = string.lower((string.gsub(filter.query, "^%s+", "")):gsub("%s+$", ""))
+	if query ~= "" and string.find(string.lower(entry.name), query, 1, true) == nil then
+		return false
+	end
+	local wanted = PRICE_CURRENCY[filter.price]
+	if wanted ~= nil and entry.currency ~= wanted then
+		return false
+	end
+	if filter.rarity ~= "All" and entry.rarity ~= filter.rarity then
+		return false
+	end
+	if filter.hideOwned and entry.owned then
+		return false
+	end
+	return true
+end
+
 -- Today's featured items: FEATURED_COUNT Shells or Robux items picked from the UTC day number, so every
 -- player and server shows the same four, and they change at midnight UTC.
 function Shop.featured(day: number, count: number?): { Cosmetics.Item }

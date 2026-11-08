@@ -319,4 +319,18 @@ return function(test)
 			assert(known[slot], slot .. " is a cosmetic slot that Profile would not save")
 		end
 	end)
+
+	test("every sales badge names a real product", function()
+		for key in Products.PassBadges do
+			assert(Products.Passes[key] ~= nil, "PassBadges." .. key .. " is not a pass")
+		end
+		local valueBadges = 0
+		for _, pack in Products.CashPacks do
+			if pack.badge ~= nil then
+				valueBadges += 1
+			end
+		end
+		assert(valueBadges >= 1, "no cash pack carries a badge")
+		assert(type(Products.StarterPack.badge) == "string")
+	end)
 end

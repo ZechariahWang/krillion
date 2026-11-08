@@ -21,12 +21,14 @@ local Products = {
 		BoostPlus = 149,
 	},
 	PassOrder = { "Vip", "DoubleCash", "SecondChance", "BoostPlus" },
+	-- Sales badges on the shop cards. Picked by hand: there are no sales numbers behind them yet.
+	PassBadges = { DoubleCash = "MOST POPULAR" },
 	-- Developer products: what each one grants when bought.
 	CashPacks = {
 		{ productId = 0, cash = 500, robux = 25 },
-		{ productId = 0, cash = 1500, robux = 65 },
+		{ productId = 0, cash = 1500, robux = 65, badge = "MOST POPULAR" },
 		{ productId = 0, cash = 5000, robux = 199 },
-		{ productId = 0, cash = 12000, robux = 449 },
+		{ productId = 0, cash = 12000, robux = 449, badge = "BEST VALUE" },
 	},
 	-- Adds one revive to the stock you can use when you sink.
 	Revive = { productId = 0, robux = 25 },
@@ -42,11 +44,12 @@ local Products = {
 		{ productId = 0, kind = "ExtraTime", count = 3, robux = 25 },
 	},
 	-- One time per player (profile.claimed.StarterPack): Shells plus a pet and a skin.
-	StarterPack = { productId = 0, robux = 49, cash = 1000, items = { "pet_turtle", "skin_sunset" } },
+	StarterPack = { productId = 0, robux = 49, cash = 1000, items = { "pet_turtle", "skin_sunset" }, badge = "ONCE" },
 }
 
 table.freeze(Products.Passes)
 table.freeze(Products.PassPrices)
+table.freeze(Products.PassBadges)
 table.freeze(Products.PassOrder)
 table.freeze(Products.Boosts)
 table.freeze(Products.BoostPacks)

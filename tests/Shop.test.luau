@@ -112,4 +112,50 @@ return function(test)
 			assert(not Shop.canBuyWithCash(profile, item), id)
 		end
 	end)
+
+	local function entry(overrides)
+		local base = { name = "SEA TURTLE", currency = "Cash", rarity = "Rare", owned = false }
+		for key, value in overrides do
+			base[key] = value
+		end
+		return base
+	end
+
+	local function filter(overrides)
+		local base = { query = "", price = "All", rarity = "All", hideOwned = false }
+		for key, value in overrides do
+			base[key] = value
+		end
+		return base
+	end
+
+	test("the empty filter matches everything", function()
+		assert(Shop.matches(entry({}), filter({})))
+		assert(Shop.matches(entry({ currency = nil, rarity = nil, owned = true }), filter({})))
+	end)
+
+	test("search matches part of the name, ignoring case", function()
+		assert(Shop.matches(entry({}), filter({ query = "turt" })))
+		assert(Shop.matches(entry({}), filter({ query = "  Sea " })))
+		assert(not Shop.matches(entry({}), filter({ query = "shark" })))
+	end)
+
+	test("the price filter keeps only that kind", function()
+		assert(Shop.matches(entry({ currency = "Cash" }), filter({ price = "Shells" })))
+		assert(not Shop.matches(entry({ currency = "Robux" }), filter({ price = "Shells" })))
+		assert(Shop.matches(entry({ currency = "Robux" }), filter({ price = "Robux" })))
+		assert(Shop.matches(entry({ currency = "Free" }), filter({ price = "Free" })))
+		assert(not Shop.matches(entry({ currency = nil }), filter({ price = "Free" })))
+	end)
+
+	test("the rarity filter keeps only that rarity", function()
+		assert(Shop.matches(entry({ rarity = "Epic" }), filter({ rarity = "Epic" })))
+		assert(not Shop.matches(entry({ rarity = "Rare" }), filter({ rarity = "Epic" })))
+		assert(not Shop.matches(entry({ rarity = nil }), filter({ rarity = "Epic" })))
+	end)
+
+	test("hide owned drops owned entries only", function()
+		assert(not Shop.matches(entry({ owned = true }), filter({ hideOwned = true })))
+		assert(Shop.matches(entry({ owned = false }), filter({ hideOwned = true })))
+	end)
 end
