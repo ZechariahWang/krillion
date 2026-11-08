@@ -12,8 +12,7 @@ local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local DataService = require(script.Parent.DataService)
 
-local TITLE_NAME = "KrillionTitle"
-local NAME_TAG = "KrillionName" -- the over-head name, coloured by the equipped NameTag
+local NAME_TAG = "KrillionName" -- the over-head billboard: the name, coloured by the equipped NameTag, with the title above
 local TRAIL_PREFIX = "KrillionTrail" -- every trail clone in the root part is named with this, for removal
 local TRAIL_NAME = "KrillionTrail"
 local AURA_PREFIX = "KrillionAura"
@@ -67,34 +66,25 @@ local function colorOf(item: Cosmetics.Item): Color3?
 	return Color3.fromRGB(rgb[1], rgb[2], rgb[3])
 end
 
+-- The title line of the head billboard (applyName puts the billboard there first).
 local function applyTitle(player: Player)
 	local character = player.Character
-	if character == nil then
+	local head = if character ~= nil then character:FindFirstChild("Head") else nil
+	local tag = if head ~= nil then head:FindFirstChild(NAME_TAG) else nil
+	local label = if tag ~= nil then tag:FindFirstChild("TitleText", true) else nil
+	if label == nil or not label:IsA("TextLabel") then
 		return
-	end
-	local head = character:FindFirstChild("Head")
-	if head == nil then
-		return
-	end
-	local old = head:FindFirstChild(TITLE_NAME)
-	if old ~= nil then
-		old:Destroy()
 	end
 	local item = CosmeticService.equipped(player, "Title")
+	label.Visible = item ~= nil
 	if item == nil then
 		return
 	end
-	local title = (templates():WaitForChild("Title") :: BillboardGui):Clone()
-	title.Name = TITLE_NAME
-	local label = title:FindFirstChild("Text") :: TextLabel?
-	if label ~= nil then
-		label.Text = string.upper(item.name)
-		local color = colorOf(item)
-		if color ~= nil then
-			label.TextColor3 = color
-		end
+	label.Text = string.upper(item.name)
+	local color = colorOf(item)
+	if color ~= nil then
+		label.TextColor3 = color
 	end
-	title.Parent = head
 end
 
 -- Swaps the trail in the HumanoidRootPart for the equipped one: Templates.Trails.<trail> holds two
@@ -242,7 +232,7 @@ local function applyName(player: Player)
 	end
 	local tag = template:Clone()
 	tag.Name = NAME_TAG
-	local text = tag:FindFirstChild("NameText")
+	local text = tag:FindFirstChild("NameText", true)
 	if text ~= nil and text:IsA("TextLabel") then
 		text.Text = player.DisplayName
 		colourName(player, text)

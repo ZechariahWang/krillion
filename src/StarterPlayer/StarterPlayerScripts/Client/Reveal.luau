@@ -352,6 +352,14 @@ function Reveal.onReveal(payload: Net.RevealPayload)
 	end
 end
 
+-- You sank or reset: your card and the answers list go at once, whatever the round is doing.
+function Reveal.onEliminated()
+	revealToken += 1
+	pendingRows = nil
+	hideCard(true)
+	gui.Visible = false
+end
+
 function Reveal.onState(payload: Net.RoundStatePayload)
 	local phase = payload.phase
 	if phase == "Surge" and lastPhase ~= "Surge" then

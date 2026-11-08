@@ -32,6 +32,7 @@ local Transition = require(Client.Transition)
 local AnimationReset = require(Client.AnimationReset)
 local Market = require(Client.Market)
 local ChestReveal = require(Client.ChestReveal)
+local Windows = require(Client.Windows)
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
 -- Live outlines, captions, pop-up fit and icons on the Studio GUIs and world text; it never yields.
@@ -87,7 +88,14 @@ Net.event("Reveal").OnClientEvent:Connect(function(payload)
 	PillarTags.onReveal(payload)
 	Tide.onReveal(payload)
 end)
-Net.event("Eliminated").OnClientEvent:Connect(Lobby.onEliminated)
+-- Sinking or resetting, at any point in the round: every match overlay and window goes, the lobby shows.
+Net.event("Eliminated").OnClientEvent:Connect(function(payload)
+	Reveal.onEliminated()
+	Hud.onEliminated()
+	Windows.closeAll()
+	Rail.onEliminated()
+	Lobby.onEliminated(payload)
+end)
 Net.event("MatchIntro").OnClientEvent:Connect(Transition.onIntro)
 Net.event("MatchEnded").OnClientEvent:Connect(Results.onMatchEnded)
 Net.event("LobbyQuizPrompt").OnClientEvent:Connect(LobbyQuiz.onPrompt)

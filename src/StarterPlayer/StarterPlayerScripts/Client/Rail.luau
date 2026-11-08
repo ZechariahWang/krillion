@@ -1,6 +1,7 @@
 --!strict
 -- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, SHOP, ITEMS), each
--- with an icon, a label and a "!" badge, and the HELP circle on the top bar next to the Settings gear. It
+-- with an icon, a label and a "!" badge, the HELP circle on the top bar next to the Settings gear, and the
+-- small THROW key at the right edge. It
 -- shows only in the lobby, off a pillar, and hides while any window is open. On short screens (landscape
 -- phones) the keys wrap into two columns and RailFrame.Fit shrinks them to fit.
 -- Each button belongs to its own controller: Quests, Rewards, ShopUi and Tutorial call Rail.button(name) to connect
@@ -11,7 +12,7 @@ local GuiService = game:GetService("GuiService")
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "InventoryButton", "ToyButton" }
+local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "InventoryButton" }
 local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
@@ -117,6 +118,12 @@ function Rail.init(playerGui: PlayerGui)
 			end
 		end
 	end
+	-- The THROW key (Market shows it with a toy equipped) sits at the right edge, above the Shells chip.
+	local toy = found:FindFirstChild("ToyButton")
+	if toy ~= nil and toy:IsA("TextButton") then
+		buttons.ToyButton = toy
+		Ui.pressable(toy)
+	end
 	-- The HELP circle sits on the top bar line, right of the Settings gear.
 	local help = found:FindFirstChild("HelpButton")
 	if help ~= nil and help:IsA("TextButton") then
@@ -160,6 +167,11 @@ end
 
 function Rail.onState(payload)
 	playing = payload.playing == true
+	refresh()
+end
+
+function Rail.onEliminated()
+	playing = false
 	refresh()
 end
 

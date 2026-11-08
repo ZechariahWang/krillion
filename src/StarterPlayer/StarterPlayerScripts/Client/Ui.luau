@@ -640,7 +640,6 @@ end
 
 -- Emoji beside existing labels: the shop counter, the tide chip, the timer, the results title.
 local ICONS: { [string]: { { path: string, icon: string, when: ((string) -> boolean)? } } } = {
-	GameUi = { { path = "Results.Panel.Title", icon = "Trophy" } },
 	LobbyUi = { { path = "Shop.Holder.Panel.CashText", icon = "Shell" } },
 	SharedUi = {
 		{ path = "Status.Tide.Text", icon = "Wave" },
@@ -703,7 +702,7 @@ end
 -- World text players see all the time: pillar name tags, head titles and the lobby leaderboard.
 local function isWorldText(object: Instance): boolean
 	if object:IsA("BillboardGui") then
-		return object.Name == "NameTag" or object.Name == "KrillionTitle"
+		return object.Name == "NameTag" or object.Name == "KrillionName"
 	end
 	if object:IsA("SurfaceGui") then
 		return object:FindFirstAncestor("Leaderboard") ~= nil

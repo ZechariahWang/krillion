@@ -28,6 +28,15 @@ function Windows.opened(close: () -> ())
 	end
 end
 
+-- Closes whatever is open (a death, a match starting).
+function Windows.closeAll()
+	local close = openClose
+	if close ~= nil then
+		close()
+		Windows.closed(close)
+	end
+end
+
 function Windows.closed(close: () -> ())
 	if openClose == close then
 		openClose = nil

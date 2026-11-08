@@ -660,6 +660,14 @@ function Hud.onBoostResult(payload)
 	refreshBoosts()
 end
 
+-- You sank or reset: your meter and answer bar go now, not on the next state tick.
+function Hud.onEliminated()
+	playing = false
+	meter.Visible = false
+	answerBar.Visible = false
+	banner.Visible = false
+end
+
 function Hud.onState(payload)
 	phase = payload.phase
 	playing = payload.playing == true

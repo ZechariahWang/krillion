@@ -53,7 +53,7 @@ local PORTRAIT_BELOW = 0.7 -- the wide layout shows smaller than this: use the t
 local PORTRAIT_SIZE = UDim2.fromOffset(520, 880)
 local PRICE_X_WITH_COIN = 142
 local PRICE_X_PLAIN = 120
-local INVENTORY_TITLE = "🎒 INVENTORY"
+local INVENTORY_TITLE = "INVENTORY"
 local LOCKED = "🔒"
 local DIM = 0.45 -- text and preview transparency of an item you do not own, in the inventory
 
