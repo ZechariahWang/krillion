@@ -23,6 +23,6 @@ return {
 		},
 	},
 	aliases = {
-		["antigua"] = "antigua and barbuda",
+		["antigua"] = "antigua and barbuda", ["barbuda"] = "antigua and barbuda",
 	},
 }
