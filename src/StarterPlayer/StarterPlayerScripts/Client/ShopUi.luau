@@ -377,14 +377,15 @@ local function starterEntry(): Entry?
 	local entry = productEntry("STARTER PACK", pack.robux, pack.productId, Theme.Icon.Gift)
 	entry.rarity = "Epic"
 	entry.badge = "ONCE"
-	local names = {}
+	-- Short enough to read on the card: the Shells and what kinds of items come with them.
+	local kinds = {}
 	for _, id in pack.items do
 		local item = Cosmetics.ById[id]
 		if item ~= nil then
-			table.insert(names, string.upper(item.name))
+			table.insert(kinds, string.upper(item.slot))
 		end
 	end
-	entry.price = Currency.digits(pack.cash) .. " " .. Currency.Upper .. " + " .. table.concat(names, " + ")
+	entry.price = Currency.digits(pack.cash) .. " " .. Theme.Icon.Shell .. " + " .. table.concat(kinds, " + ")
 	entry.priceColor = GOLD
 	entry.action = if pack.productId ~= 0 then "R$ " .. pack.robux else SOON
 	return entry
