@@ -308,7 +308,8 @@ local function bind(screen: Frame, playerGui: PlayerGui)
 	-- The shop window covers the same corner, and the rail hides under it: close along with it.
 	task.spawn(function()
 		local shop = Ui.screen(playerGui, "Shop", WAIT_SECONDS)
-		local shopPanel = if shop ~= nil then shop:WaitForChild("Panel", WAIT_SECONDS) else nil
+		local shopHolder = if shop ~= nil then shop:WaitForChild("Holder", WAIT_SECONDS) else nil
+		local shopPanel = if shopHolder ~= nil then shopHolder:WaitForChild("Panel", WAIT_SECONDS) else nil
 		if shopPanel ~= nil and shopPanel:IsA("GuiObject") then
 			local watched: GuiObject = shopPanel
 			watched:GetPropertyChangedSignal("Visible"):Connect(function()

@@ -119,7 +119,8 @@ function Rail.init(playerGui: PlayerGui)
 	-- The shop is bound by ShopUi; this only watches whether its window is open.
 	task.spawn(function()
 		local shop = Ui.screen(playerGui, "Shop", WAIT_SECONDS)
-		local panel = if shop ~= nil then shop:WaitForChild("Panel", WAIT_SECONDS) else nil
+		local holder = if shop ~= nil then shop:WaitForChild("Holder", WAIT_SECONDS) else nil
+		local panel = if holder ~= nil then holder:WaitForChild("Panel", WAIT_SECONDS) else nil
 		if panel ~= nil and panel:IsA("GuiObject") then
 			shopPanel = panel
 			panel:GetPropertyChangedSignal("Visible"):Connect(refresh)

@@ -625,7 +625,7 @@ end
 -- Emoji beside existing labels: the shop counter, the tide chip, the timer, the results title.
 local ICONS: { [string]: { { path: string, icon: string, when: ((string) -> boolean)? } } } = {
 	GameUi = { { path = "Results.Panel.Title", icon = "Trophy" } },
-	LobbyUi = { { path = "Shop.Panel.CashText", icon = "Shell" } },
+	LobbyUi = { { path = "Shop.Holder.Panel.CashText", icon = "Shell" } },
 	SharedUi = {
 		{ path = "Status.Tide.Text", icon = "Wave" },
 		{ path = "Status.SecondaryStatus.Secondary", icon = "Time", when = isClock },
