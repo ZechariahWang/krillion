@@ -1,28 +1,30 @@
 --!strict
--- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, SHOP, HELP), each
--- with an icon, a label and a "!" badge. It shows only in the lobby, off a pillar, and hides while the shop
--- window is open. On short screens (landscape phones) the keys wrap into two columns and RailFrame.Fit
--- shrinks them to fit.
+-- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, SHOP, ITEMS), each
+-- with an icon, a label and a "!" badge, and the HELP circle on the top bar next to the Settings gear. It
+-- shows only in the lobby, off a pillar, and hides while any window is open. On short screens (landscape
+-- phones) the keys wrap into two columns and RailFrame.Fit shrinks them to fit.
 -- Each button belongs to its own controller: Quests, Rewards, ShopUi and Tutorial call Rail.button(name) to connect
 -- it and Rail.setBadge(name, text) to mark it, so this module never needs to know them.
 
-local Ui = require(script.Parent.Ui)
+local GuiService = game:GetService("GuiService")
 
-local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "HelpButton", "ToyButton" }
+local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
+
+local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "InventoryButton", "ToyButton" }
+local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
 local MIN_FIT = 0.45
 local TWO_COLUMNS_BELOW = 0.7 -- a single column shrunk below this wraps into two columns instead
 
 local gui: Frame? = nil
-local shopPanel: GuiObject? = nil
 local railFrame: GuiObject? = nil
 local layout: UIListLayout? = nil
 local fit: UIScale? = nil
 local edgeWidth = 0 -- authored frame width beyond one key (room for the badge)
 local buttons: { [string]: TextButton } = {}
 local playing = false
-local openPanel: (() -> ())? = nil -- closes the rail panel that is open now
 
 local Rail = {}
 
@@ -78,8 +80,7 @@ local function refresh()
 	if screen == nil then
 		return
 	end
-	local shopOpen = shopPanel ~= nil and (shopPanel :: GuiObject).Visible
-	screen.Visible = not playing and not shopOpen
+	screen.Visible = not playing and not Windows.anyOpen()
 	if screen.Visible then
 		fitToScreen()
 	end
@@ -116,21 +117,23 @@ function Rail.init(playerGui: PlayerGui)
 			end
 		end
 	end
-	-- The shop is bound by ShopUi; this only watches whether its window is open.
-	task.spawn(function()
-		local shop = Ui.screen(playerGui, "Shop", WAIT_SECONDS)
-		local holder = if shop ~= nil then shop:WaitForChild("Holder", WAIT_SECONDS) else nil
-		local panel = if holder ~= nil then holder:WaitForChild("Panel", WAIT_SECONDS) else nil
-		if panel ~= nil and panel:IsA("GuiObject") then
-			shopPanel = panel
-			panel:GetPropertyChangedSignal("Visible"):Connect(refresh)
+	-- The HELP circle sits on the top bar line, right of the Settings gear.
+	local help = found:FindFirstChild("HelpButton")
+	if help ~= nil and help:IsA("TextButton") then
+		buttons.HelpButton = help
+		Ui.pressable(help)
+		local function placeHelp()
+			Ui.placeTopButton(help, HELP_SLOT)
 		end
-		refresh()
-	end)
+		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeHelp)
+		help:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
+		placeHelp()
+	end
+	Windows.Changed.connect(refresh)
 	refresh()
 end
 
--- The rail button with this name ("QuestsButton" | "RewardsButton" | "HelpButton"), or nil if not authored.
+-- The button with this name ("QuestsButton", "InventoryButton", "HelpButton", ...), or nil if not authored.
 function Rail.button(name: string): TextButton?
 	return buttons[name]
 end
@@ -152,22 +155,6 @@ function Rail.setBadge(name: string, text: string?)
 	badge.Text = text
 	if not badge.Visible then
 		Ui.pop(badge)
-	end
-end
-
--- One rail panel open at a time: a controller opening its panel passes its close function, and the
--- panel that was open before is closed. Rail.panelClosed(close) forgets it again.
-function Rail.panelOpened(close: () -> ())
-	local previous = openPanel
-	openPanel = close
-	if previous ~= nil and previous ~= close then
-		previous()
-	end
-end
-
-function Rail.panelClosed(close: () -> ())
-	if openPanel == close then
-		openPanel = nil
 	end
 end
 

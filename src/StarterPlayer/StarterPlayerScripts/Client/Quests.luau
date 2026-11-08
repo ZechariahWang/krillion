@@ -13,6 +13,7 @@ local Tween = require(ReplicatedStorage.Shared.Tween)
 local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local ROWS = 3
@@ -212,7 +213,7 @@ local function close()
 	end
 	isOpen = false
 	screen.Visible = false
-	Rail.panelClosed(close)
+	Windows.closed(close)
 end
 
 -- Opens the panel. Never over a pillar: the match comes first.
@@ -232,7 +233,7 @@ function Quests.open()
 			Ui.pop(frame, 0.7)
 		end
 	end
-	Rail.panelOpened(close)
+	Windows.opened(close)
 end
 
 local function toggle()
@@ -305,20 +306,6 @@ local function bind(screen: Frame, playerGui: PlayerGui)
 	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
 	gui = screen
 	render(false)
-	-- The shop window covers the same corner, and the rail hides under it: close along with it.
-	task.spawn(function()
-		local shop = Ui.screen(playerGui, "Shop", WAIT_SECONDS)
-		local shopHolder = if shop ~= nil then shop:WaitForChild("Holder", WAIT_SECONDS) else nil
-		local shopPanel = if shopHolder ~= nil then shopHolder:WaitForChild("Panel", WAIT_SECONDS) else nil
-		if shopPanel ~= nil and shopPanel:IsA("GuiObject") then
-			local watched: GuiObject = shopPanel
-			watched:GetPropertyChangedSignal("Visible"):Connect(function()
-				if watched.Visible then
-					close()
-				end
-			end)
-		end
-	end)
 end
 
 function Quests.init(playerGui: PlayerGui)

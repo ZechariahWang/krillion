@@ -12,13 +12,11 @@ local UserInputService = game:GetService("UserInputService")
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Music = require(script.Parent.Music)
-local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
-local TOPBAR_GAP = 8 -- pixels between Roblox's last top bar button and the gear (Roblox's own spacing)
-local TOPBAR_BOTTOM = 2 -- Roblox's buttons end this far above the bottom of GuiService.TopbarInset
 local MARGIN = 16
 local MIN_FIT = 0.5
 
@@ -147,15 +145,17 @@ end
 -- Puts the gear just right of Roblox's own top bar buttons, on the same line as them.
 local function placeGear()
 	local button = gear
-	if button == nil then
-		return
+	if button ~= nil then
+		Ui.placeTopButton(button, 0)
 	end
-	local inset = GuiService.TopbarInset
-	local size = button.AbsoluteSize
-	local x = inset.Min.X + TOPBAR_GAP
-	local y = inset.Max.Y - TOPBAR_BOTTOM - size.Y
-	button.AnchorPoint = Vector2.zero
-	button.Position = UDim2.fromOffset(math.floor(x + 0.5), math.floor(y + 0.5))
+end
+
+-- The gear hides while any window is open (its own included), so nothing stacks on top.
+local function showGear()
+	local button = gear
+	if button ~= nil then
+		button.Visible = not Windows.anyOpen()
+	end
 end
 
 local function fitToScreen()
@@ -179,7 +179,7 @@ local function close()
 	if scrim ~= nil then
 		scrim.Visible = false
 	end
-	Rail.panelClosed(close)
+	Windows.closed(close)
 end
 
 function Settings.open()
@@ -197,7 +197,7 @@ function Settings.open()
 	if panel ~= nil then
 		Ui.pop(panel, 0.7)
 	end
-	Rail.panelOpened(close)
+	Windows.opened(close)
 end
 
 local function toggleWindow()
@@ -244,6 +244,8 @@ local function bind(found: Frame)
 	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeGear)
 	top:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeGear)
 	placeGear()
+	Windows.Changed.connect(showGear)
+	showGear()
 
 	local closeButton = window:FindFirstChild("CloseButton")
 	if closeButton ~= nil and closeButton:IsA("GuiButton") then

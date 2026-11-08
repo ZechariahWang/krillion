@@ -12,6 +12,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local FIRST_SHOW_DELAY = 1.5 -- let the lobby settle before the first-time popup
@@ -181,7 +182,7 @@ local function close(finished: boolean)
 	end
 end
 
--- Another rail panel opening (one at a time) counts as skipping, like the close button.
+-- Another window opening (one at a time) counts as skipping, like the close button.
 local function closeForRail()
 	close(true)
 end
@@ -404,7 +405,7 @@ function Tutorial.open()
 		Sfx.play("Open", 0.5)
 		Ui.pop(panel, 0.7)
 	end
-	Rail.panelOpened(closeForRail)
+	Windows.opened(closeForRail)
 end
 
 return Tutorial

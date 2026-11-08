@@ -10,6 +10,7 @@ local Currency = require(ReplicatedStorage.Shared.Currency)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local MAX_POPS = 4
@@ -121,7 +122,7 @@ local function refresh()
 	if own == nil then
 		return
 	end
-	own.Visible = true
+	own.Visible = not Windows.anyOpen()
 	placePops()
 end
 
@@ -221,6 +222,7 @@ end
 
 function Wallet.init(playerGui: PlayerGui)
 	playerGuiRef = playerGui
+	Windows.Changed.connect(refresh)
 	counter:GetPropertyChangedSignal("Value"):Connect(function()
 		setAmount(counter.Value)
 	end)
