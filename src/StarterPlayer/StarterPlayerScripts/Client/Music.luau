@@ -15,12 +15,13 @@ local volumes: { [Sound]: number } = {}
 local current: Sound? = nil
 local index = 0
 local enabled = true
+local volume = 1 -- the Settings volume bar, applied on top of each track's authored volume
 local decided = false -- the profile (or the wait) has said whether music is on
 
 local Music = {}
 
-local function fade(sound: Sound, volume: number)
-	local tween = TweenService:Create(sound, TweenInfo.new(FADE_SECONDS), { Volume = volume })
+local function fade(sound: Sound, target: number)
+	local tween = TweenService:Create(sound, TweenInfo.new(FADE_SECONDS), { Volume = target })
 	tween:Play()
 	return tween
 end
@@ -32,7 +33,7 @@ local function playNext()
 	index = (index % #tracks) + 1
 	local sound = tracks[index]
 	current = sound
-	sound.Volume = volumes[sound]
+	sound.Volume = volumes[sound] * volume
 	sound.TimePosition = 0
 	sound:Play()
 end
@@ -45,7 +46,7 @@ local function start()
 	if sound ~= nil and sound.IsPaused then
 		sound.Volume = 0
 		sound:Resume()
-		fade(sound, volumes[sound])
+		fade(sound, volumes[sound] * volume)
 		return
 	end
 	if sound == nil or not sound.IsPlaying then
@@ -82,10 +83,26 @@ function Music.isEnabled(): boolean
 	return enabled
 end
 
+-- 0..1 from the Settings volume bar; the playing track follows at once.
+function Music.setVolume(level: number)
+	volume = math.clamp(level, 0, 1)
+	local sound = current
+	if sound ~= nil and enabled then
+		sound.Volume = volumes[sound] * volume
+	end
+end
+
+function Music.getVolume(): number
+	return volume
+end
+
 -- ProfileChanged payload: the saved music choice.
 function Music.onProfile(profile)
 	if typeof(profile) ~= "table" then
 		return
+	end
+	if typeof(profile.musicVolume) == "number" then
+		Music.setVolume(profile.musicVolume)
 	end
 	local on = profile.musicOff ~= true
 	if not decided then

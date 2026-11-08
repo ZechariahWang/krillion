@@ -151,6 +151,26 @@ return function(test)
 		assert(Profile.combine(first, second).musicOff == false)
 	end)
 
+	test("music volume defaults to full, survives a round trip and stays between 0 and 1", function()
+		assert(Profile.new().musicVolume == 1)
+		assert(Profile.fromStored({ musicVolume = 0.4 }).musicVolume == 0.4)
+		assert(Profile.fromStored({ musicVolume = 3 }).musicVolume == 1)
+		assert(Profile.fromStored({ musicVolume = -1 }).musicVolume == 0)
+		assert(Profile.fromStored({ musicVolume = "loud" }).musicVolume == 1)
+	end)
+
+	test("a volume set this session replaces the saved one; none keeps it", function()
+		local stored = Profile.fromStored({ musicVolume = 0.3 })
+		assert(Profile.merge(stored, Profile.newSession()).musicVolume == 0.3)
+		local session = Profile.newSession()
+		session.musicVolume = 0.8
+		assert(Profile.merge(stored, session).musicVolume == 0.8)
+		local later = Profile.newSession()
+		later.musicVolume = 0.5
+		assert(Profile.combine(session, later).musicVolume == 0.5)
+		assert(Profile.combine(session, Profile.newSession()).musicVolume == 0.8)
+	end)
+
 	test("claimed rewards are a union and survive a round trip", function()
 		local stored = Profile.fromStored({ claimed = { Starter = true } })
 		local session = Profile.newSession()

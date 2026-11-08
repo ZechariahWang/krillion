@@ -44,6 +44,7 @@ export type Profile = {
 	krillions: number, -- One in a Krillion answers ever given in matches
 	games: number, -- matches played to the end
 	musicOff: boolean, -- the player turned background music off in Settings
+	musicVolume: number, -- 0..1, the Settings volume bar
 }
 
 export type Session = {
@@ -65,6 +66,7 @@ export type Session = {
 	krillions: number, -- delta
 	games: number, -- delta
 	musicOff: boolean?, -- nil unless the player changed the music setting this session
+	musicVolume: number?, -- nil unless the player moved the volume bar this session
 }
 
 local Profile = {}
@@ -99,6 +101,7 @@ function Profile.new(): Profile
 		krillions = 0,
 		games = 0,
 		musicOff = false,
+		musicVolume = 1,
 	}
 end
 
@@ -209,6 +212,9 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	profile.krillions = numberOr(stored.krillions, 0)
 	profile.games = numberOr(stored.games, 0)
 	profile.musicOff = stored.musicOff == true
+	if typeof(stored.musicVolume) == "number" then
+		profile.musicVolume = math.clamp(stored.musicVolume, 0, 1)
+	end
 	return profile
 end
 
@@ -288,6 +294,11 @@ function Profile.combine(first: Session, second: Session): Session
 	else
 		combined.musicOff = first.musicOff
 	end
+	if second.musicVolume ~= nil then
+		combined.musicVolume = second.musicVolume
+	else
+		combined.musicVolume = first.musicVolume
+	end
 	return combined
 end
 
@@ -349,6 +360,9 @@ function Profile.merge(stored: Profile, session: Session): Profile
 	merged.games = merged.games + session.games
 	if session.musicOff ~= nil then
 		merged.musicOff = session.musicOff
+	end
+	if session.musicVolume ~= nil then
+		merged.musicVolume = session.musicVolume
 	end
 	return merged
 end
