@@ -3,9 +3,9 @@
 -- the snack shack and pays Shells while you wait, up to a daily cap. It is a window (Client/Windows): the X or
 -- stepping out closes it, and a match closes it from the server side.
 -- Enter checks the answer, Enter again locks it in (like a match). A wrong answer is rejected right away and
--- the same prompt stays up for another try. A locked answer plays a mini dive card, then NEXT counts down.
--- ConfirmChip and LobbyQuizExtras.ResultCard are Studio templates cloned in, unless the place already has them
--- authored.
+-- the same prompt stays up for another try. A locked answer plays your dive full screen (the match's own
+-- DiveCards stage, through Reveal), then NEXT counts down. ConfirmChip is a Studio template cloned in, unless
+-- the place already has it authored.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -18,6 +18,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local DiveCard = require(script.Parent.DiveCard)
 local Fx = require(script.Parent.Fx)
+local Reveal = require(script.Parent.Reveal)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
@@ -43,7 +44,6 @@ local resultTier: TextLabel
 local resultCoins: TextLabel
 local confirmChip: Frame? = nil
 local confirmText: TextLabel? = nil
-local cardHolder: Frame? = nil
 
 local submitText = ""
 local skipText = ""
@@ -170,11 +170,8 @@ end
 
 local function clearCard()
 	if card ~= nil then
-		card.destroy()
 		card = nil
-	end
-	if cardHolder ~= nil then
-		cardHolder.Visible = false
+		Reveal.hideOwnCard(true)
 	end
 end
 
@@ -283,34 +280,35 @@ end
 
 local function playCard(payload, token: number)
 	clearCard()
-	local holder = cardHolder
-	if holder == nil then
-		-- No holder: fall back to the text result.
-		local info = Tiers.ByName[payload.tier]
-		local label = if info ~= nil then string.upper(info.label) else ""
-		showMessage(label .. "  |  " .. string.upper(payload.corrected or ""), "+" .. Currency.format(payload.cash), Ui.tierColor(payload.tier))
-		return
-	end
-	local anchor: Frame = holder
-	anchor.Visible = true
-	local handle = DiveCard.play(anchor, {
+	local handle = Reveal.showOwnCard({
 		title = "YOUR DIVE",
 		isYou = true,
 		answer = payload.corrected,
 		tier = payload.tier,
 		depth = if typeof(payload.depth) == "number" then payload.depth else 0,
-		quick = false,
-		scale = 1,
+		shells = payload.cash,
 	})
+	if handle == nil then
+		-- No stage: fall back to the text result.
+		local info = Tiers.ByName[payload.tier]
+		local label = if info ~= nil then string.upper(info.label) else ""
+		showMessage(label .. "  |  " .. string.upper(payload.corrected or ""), "+" .. Currency.format(payload.cash), Ui.tierColor(payload.tier))
+		return
+	end
 	card = handle
 	task.spawn(function()
 		handle.finished()
 		if token ~= promptToken or card ~= handle then
 			return
 		end
-		local from: GuiObject = handle.frame or anchor
-		if payload.cash > 0 then
-			Fx.coinPop("+" .. Currency.digits(payload.cash) .. " " .. Theme.Icon.Shell, from)
+		if payload.cash > 0 and handle.frame ~= nil then
+			Fx.coinPop("+" .. Currency.digits(payload.cash) .. " " .. Theme.Icon.Shell, handle.frame)
+		end
+		-- Held like a match card, then it shrinks away and the panel is back for NEXT.
+		task.wait(GameConfig.Reveal.CardHoldSeconds)
+		if token == promptToken and card == handle then
+			card = nil
+			Reveal.hideOwnCard(false)
 		end
 	end)
 end
@@ -398,16 +396,12 @@ local function bindExtras()
 			confirmText = label
 		end
 	end
-	local extras = findTemplate("LobbyQuizExtras")
-	local holder = adopt(panel, "ResultCard", if extras ~= nil then extras:FindFirstChild("ResultCard") else nil)
-	if holder ~= nil and holder:IsA("Frame") then
-		holder.Visible = false
-		cardHolder = holder
-	end
-	-- The window pops up whole; the old tuck-away CollapseButton is not adopted.
-	local tucked = headerBar:FindFirstChild("CollapseButton")
-	if tucked ~= nil then
-		tucked:Destroy()
+	-- The window pops up whole and the dive plays full screen: the old in-panel ResultCard and tuck-away
+	-- CollapseButton are not adopted.
+	for _, old in { panel:FindFirstChild("ResultCard"), headerBar:FindFirstChild("CollapseButton") } do
+		if old ~= nil then
+			old:Destroy()
+		end
 	end
 end
 
