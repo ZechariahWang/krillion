@@ -49,6 +49,7 @@ local CAPTIONS: { [string]: string } = {
 	quest = "QUEST",
 	reward = "REWARD",
 	purchase = "PURCHASE",
+	pickup = "FOUND",
 	spend = "SPENT",
 }
 
