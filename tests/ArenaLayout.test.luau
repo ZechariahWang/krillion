@@ -11,7 +11,7 @@ return function(test)
 		assert(x == 0 and z == 0)
 	end)
 
-	test("platforms never sit closer than the minimum spacing", function()
+	test("platforms never sit closer than the minimum spacing, even with a full server", function()
 		for count = 2, GameConfig.Server.MaxPlayers do
 			local points = {}
 			for index = 1, count do
@@ -21,7 +21,7 @@ return function(test)
 			for a = 1, count do
 				for b = a + 1, count do
 					local gap = distance(points[a][1], points[a][2], points[b][1], points[b][2])
-					assert(gap >= GameConfig.Platform.Spacing - 1e-6, count .. " players: gap " .. gap)
+					assert(gap >= GameConfig.Platform.MinSpacing - 1e-6, count .. " players: gap " .. gap)
 				end
 			end
 		end

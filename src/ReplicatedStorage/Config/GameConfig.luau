@@ -11,7 +11,7 @@ local GameConfig = {
 		PromptSeconds = 20,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
 		PromptSecondsMin = 10,
-		RevealSeconds = 7, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
+		RevealSeconds = 7.5, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
 		SurgeSeconds = 3,
 		ResultsSeconds = 10,
 		MaxRounds = 0, -- 0 means no cap: last player standing
@@ -36,7 +36,8 @@ local GameConfig = {
 	},
 	Platform = {
 		Height = 140, -- tall enough to reach the tank floor at any height
-		Spacing = 16, -- minimum distance between pillar centres
+		Spacing = 16, -- preferred distance between pillar centres
+		MinSpacing = 13, -- a full ring (16 players) squeezes down to this to stay inside RingMaxRadius
 		RingMaxRadius = 34, -- outermost pillar centre; the reef rim sits outside this
 		RiseSeconds = 1.1, -- one eased glide with a soft overshoot at the top
 		ConfettiMinPoints = 60,
@@ -44,9 +45,8 @@ local GameConfig = {
 	},
 	Answer = {
 		MaxLength = 40,
-		FuzzyMinLength = 4, -- shorter answers must be spelled exactly
-		FuzzyLongLength = 7, -- answers this long or longer forgive two typos instead of one
-		FuzzyVeryLongLength = 11, -- answers this long or longer forgive three typos
+		FuzzyMinLength = 5, -- shorter answers must be spelled exactly
+		FuzzyLongLength = 10, -- answers this long or longer forgive two typos instead of one (never more)
 		RetryCooldown = 1, -- seconds between guesses, so a wrong answer can be retried but not spammed
 		CheckMinInterval = 0.35, -- seconds between Enter-to-check presses after a valid check
 		MaxChecksPerRound = 40, -- per player per prompt (and per lobby prompt)
@@ -127,11 +127,12 @@ local GameConfig = {
 	Reveal = {
 		-- Your full-screen dive card: stamp lands by CardBudgetSeconds (deep dives play a little faster), the
 		-- card holds CardHoldSeconds after the stamp settles (~0.3 s), then shrinks away (0.25 s). That is
-		-- at most ~3.9 s, so it is gone before the rise at RaiseDelaySeconds.
-		CardBudgetSeconds = 2.85,
+		-- at most ~4.3 s, so it is gone before the rise at RaiseDelaySeconds. The dive winds up slowly, then
+		-- bursts (Depth.dive), so it needs a little longer than a plain ease.
+		CardBudgetSeconds = 3.3,
 		CardHoldSeconds = 0.45,
-		RaiseDelaySeconds = 4, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 4, -- answer Shells and Krillion announcements land with the rise
+		RaiseDelaySeconds = 4.5, -- pillars start rising this long after the reveal, once your card is out of the way
+		PayoutDelaySeconds = 4.5, -- answer Shells and Krillion announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},
@@ -173,7 +174,7 @@ local GameConfig = {
 		DoubleLiftMultiplier = 2, -- pillars rise this many times further
 	},
 	Server = {
-		MaxPlayers = 12,
+		MaxPlayers = 16, -- also set Server Size to 16 in the Creator Hub (Places > Configure)
 	},
 }
 
