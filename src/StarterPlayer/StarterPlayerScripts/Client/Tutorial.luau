@@ -165,6 +165,8 @@ end
 
 -- `finished` is GOT IT or the close button (a skip counts as done); false when a match pulls the player away,
 -- which keeps the tutorial pending so it comes back after the match.
+local closeForRail: () -> ()
+
 local function close(finished: boolean)
 	local screen = gui
 	if screen == nil or not isOpen then
@@ -172,6 +174,7 @@ local function close(finished: boolean)
 	end
 	isOpen = false
 	screen.Visible = false
+	Windows.closed(closeForRail)
 	if finished then
 		pending = false
 		Rail.setBadge("HelpButton", nil)
@@ -183,7 +186,7 @@ local function close(finished: boolean)
 end
 
 -- Another window opening (one at a time) counts as skipping, like the close button.
-local function closeForRail()
+function closeForRail()
 	close(true)
 end
 
