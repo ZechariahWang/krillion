@@ -553,6 +553,7 @@ end
 local ROOT_OF: { [string]: string } = {
 	Rail = "LobbyUi",
 	Shop = "LobbyUi",
+	Inventory = "LobbyUi",
 	LobbyQuiz = "LobbyUi",
 	Quests = "LobbyUi",
 	Rewards = "LobbyUi",

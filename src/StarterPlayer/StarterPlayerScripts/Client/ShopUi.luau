@@ -1,7 +1,7 @@
 --!strict
--- Drives LobbyUi.Shop: the shop window for cosmetics, pets, toys, chests, passes and packs. The same window
--- opened as the INVENTORY (ShopUi.openInventory) shows only the cosmetic sections, what you own first and the
--- rest dimmed behind a lock, with how much of the collection you have in the title.
+-- Drives LobbyUi.Shop (the shop window for cosmetics, pets, toys, chests, passes and packs) and
+-- LobbyUi.Inventory (the same kind of window, authored with the cosmetic sections only, listing what you own
+-- first and the rest dimmed behind a lock, with how much of the collection you have in the title).
 -- The server checks every buy, equip and chest; this only shows the state and sends requests.
 -- Shells buys take a second click within CONFIRM_SECONDS; a chest opens on one click into ChestReveal; reward items open the Rewards
 -- panel; chest-only items jump to CHESTS; a Shells item you cannot afford offers GET SHELLS (the SHELLS section).
@@ -53,7 +53,6 @@ local PORTRAIT_BELOW = 0.7 -- the wide layout shows smaller than this: use the t
 local PORTRAIT_SIZE = UDim2.fromOffset(520, 880)
 local PRICE_X_WITH_COIN = 142
 local PRICE_X_PLAIN = 120
-local INVENTORY_TITLE = "INVENTORY"
 local LOCKED = "🔒"
 local DIM = 0.45 -- text and preview transparency of an item you do not own, in the inventory
 
@@ -110,28 +109,36 @@ type Entry = {
 
 type Section = { name: string, kind: string, slots: { string }, button: TextButton }
 
-local player = Players.LocalPlayer
-local gui: Frame
-local panel: Frame
-local scrim: Frame
-local fit: UIScale
-local layout: Ui.PhoneLayout? = nil
-local blur: BlurEffect?
-local cashText: TextLabel
-local titleLabel: TextLabel?
-local shopTitle = ""
-local getShells: TextButton?
-local getMore: GuiObject?
-local grid: ScrollingFrame
-local template: Frame
-local emptyLabel: TextLabel?
-local sections: { Section } = {}
-local sectionByName: { [string]: Section } = {}
-local filterKeys: { [string]: TextButton } = {}
 
-local current: Section? = nil
-local inventory = false -- open as the inventory: cosmetic sections only, owned items only
-local filter: Shop.Filter = { query = "", price = "All", rarity = "All", hideOwned = false }
+-- One window record per authored screen: LobbyUi.Shop and LobbyUi.Inventory share every card and section
+-- mechanic; the inventory one lists the whole collection, owned first, the rest behind a lock.
+type Window = {
+	name: string,
+	inventory: boolean,
+	gui: Frame,
+	panel: Frame,
+	scrim: Frame,
+	fit: UIScale,
+	layout: Ui.PhoneLayout?,
+	cashText: TextLabel,
+	titleLabel: TextLabel?,
+	title: string,
+	grid: ScrollingFrame,
+	template: Frame,
+	emptyLabel: TextLabel?,
+	sections: { Section },
+	sectionByName: { [string]: Section },
+	filterKeys: { [string]: TextButton },
+	current: Section?,
+	filter: Shop.Filter,
+	close: () -> (),
+}
+
+local player = Players.LocalPlayer
+local blur: BlurEffect?
+local windows: { Window } = {}
+local shopWindow: Window? = nil
+local active: Window? = nil -- the window being rendered or shown; card callbacks act on it
 local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
 local chestsAllowed = false
@@ -140,8 +147,20 @@ local pendingBuy: { id: string, at: number }? = nil -- the Shells buy or chest w
 
 local ShopUi = {}
 
-local render: () -> ()
-local setOpen: (boolean) -> ()
+local renderWindow: (Window) -> ()
+local openWindow: (Window, boolean) -> ()
+
+local function render()
+	if active ~= nil then
+		renderWindow(active)
+	end
+end
+
+local function setOpen(open: boolean)
+	if active ~= nil then
+		openWindow(active, open)
+	end
+end
 
 local function rgb(values: { number }?, fallback: Color3): Color3
 	if values == nil then
@@ -161,24 +180,39 @@ local function promptProduct(productId: number)
 	MarketplaceService:PromptProductPurchase(player, productId)
 end
 
-local function goTo(name: string)
-	local section = sectionByName[name]
+local function goToIn(w: Window, name: string): boolean
+	local section = w.sectionByName[name]
 	if section == nil then
-		return
+		return false
 	end
-	current = section
-	render()
+	w.current = section
+	renderWindow(w)
+	return true
 end
 
--- The first section of a kind, for jumps from a card ("GET SHELLS" wants the Shells section).
-local function goToKind(kind: string)
-	for _, section in sections do
+local function goToKindIn(w: Window, kind: string): boolean
+	for _, section in w.sections do
 		if section.kind == kind then
-			goTo(section.name)
-			return
+			return goToIn(w, section.name)
 		end
 	end
+	return false
 end
+
+-- A card's jump ("GET SHELLS", "VIEW", "CHESTS"): this window if it has the section, else the shop.
+local function goToKind(kind: string)
+	local w = active
+	if w == nil or goToKindIn(w, kind) then
+		return
+	end
+	local shop = shopWindow
+	if shop ~= nil and shop ~= w then
+		openWindow(w, false)
+		openWindow(shop, true)
+		goToKindIn(shop, kind)
+	end
+end
+
 
 -- The trail's own colours from its template, so the shop stripe always matches what plays in game.
 local function trailColors(item: Cosmetics.Item): ColorSequence
@@ -212,7 +246,7 @@ local function confirmThen(id: string, send: () -> ())
 	task.delay(CONFIRM_SECONDS, function()
 		if pendingBuy == mine then
 			pendingBuy = nil
-			if panel.Visible then
+			if active ~= nil and active.panel.Visible then
 				render()
 			end
 		end
@@ -677,30 +711,31 @@ local function setKeyLit(button: TextButton, lit: boolean)
 	button.BackgroundTransparency = if lit then 0 else 0.75
 end
 
-local function renderSections()
-	for _, section in sections do
-		setKeyLit(section.button, section == current)
+local function renderSections(w: Window)
+	for _, section in w.sections do
+		setKeyLit(section.button, section == w.current)
 	end
 end
 
-local function renderFilters()
-	local price = filterKeys.PriceFilter
+local function renderFilters(w: Window)
+	local filter = w.filter
+	local price = w.filterKeys.PriceFilter
 	if price ~= nil then
 		price.Text = "PRICE: " .. string.upper(filter.price)
 		setKeyLit(price, filter.price ~= "All")
 	end
-	local rarity = filterKeys.RarityFilter
+	local rarity = w.filterKeys.RarityFilter
 	if rarity ~= nil then
 		rarity.Text = "RARITY: " .. string.upper(filter.rarity)
 		setKeyLit(rarity, filter.rarity ~= "All")
 	end
-	local owned = filterKeys.OwnedFilter
+	local owned = w.filterKeys.OwnedFilter
 	if owned ~= nil then
 		setKeyLit(owned, filter.hideOwned)
 	end
 end
 
-local function fillCard(card: Frame, entry: Entry)
+local function fillCard(w: Window, card: Frame, entry: Entry)
 	local nameLabel = card:FindFirstChild("ItemName") :: TextLabel
 	local subLabel = card:FindFirstChild("Sub") :: TextLabel?
 	local priceLabel = card:FindFirstChild("Price") :: TextLabel
@@ -725,7 +760,7 @@ local function fillCard(card: Frame, entry: Entry)
 			border.Color = rarityColor
 		end
 	end
-	local locked = inventory and not entry.owned
+	local locked = w.inventory and not entry.owned
 	fillBadge(badge, if locked and entry.badge == nil then LOCKED else entry.badge)
 	local dim = if locked then DIM else 0
 	nameLabel.TextTransparency = dim
@@ -754,6 +789,7 @@ local function fillCard(card: Frame, entry: Entry)
 			return
 		end
 		Sfx.play("LockIn", 0.5)
+		active = w
 		entry.onClick()
 	end)
 	Ui.pressable(action)
@@ -771,37 +807,21 @@ local function collectionText(): string
 	return owned .. "/" .. #Cosmetics.List
 end
 
-local function renderMode()
-	if titleLabel ~= nil then
-		titleLabel.Text = if inventory then INVENTORY_TITLE .. "  " .. collectionText() else shopTitle
+function renderWindow(w: Window)
+	active = w
+	w.cashText.Text = Currency.format(profile.cash)
+	if w.titleLabel ~= nil then
+		w.titleLabel.Text = if w.inventory then w.title .. "  " .. collectionText() else w.title
 	end
-	if getShells ~= nil then
-		getShells.Visible = not inventory
-	end
-	if getMore ~= nil then
-		getMore.Visible = not inventory
-	end
-	local owned = filterKeys.OwnedFilter
-	if owned ~= nil then
-		owned.Visible = not inventory
-	end
-	for _, section in sections do
-		section.button.Visible = not inventory or section.kind == "Slots"
-	end
-end
-
-function render()
-	cashText.Text = Currency.format(profile.cash)
-	renderMode()
-	renderSections()
-	renderFilters()
-	Ui.clearClones(grid, template.Name, "Item")
-	local section = current
+	renderSections(w)
+	renderFilters(w)
+	Ui.clearClones(w.grid, w.template.Name, "Item")
+	local section = w.current
 	if section == nil then
 		return
 	end
 	local entries = entriesFor(section)
-	if inventory then
+	if w.inventory then
 		-- What you own comes first; the rest follows in catalogue order.
 		local owned: { Entry } = {}
 		local rest: { Entry } = {}
@@ -813,25 +833,25 @@ function render()
 	end
 	local shown = 0
 	for _, entry in entries do
-		if not Shop.matches(entry, filter) then
+		if not Shop.matches(entry, w.filter) then
 			continue
 		end
 		shown += 1
-		local card = template:Clone()
+		local card = w.template:Clone()
 		card.Name = "Item" .. shown
 		card.LayoutOrder = shown
-		fillCard(card, entry)
+		fillCard(w, card, entry)
 		card.Visible = true
-		card.Parent = grid
+		card.Parent = w.grid
 	end
-	if emptyLabel ~= nil then
-		emptyLabel.Visible = shown == 0
+	if w.emptyLabel ~= nil then
+		w.emptyLabel.Visible = shown == 0
 	end
-	grid.CanvasPosition = Vector2.zero
+	w.grid.CanvasPosition = Vector2.zero
 end
 
-local function setBackdrop(shown: boolean)
-	scrim.Visible = shown
+local function setBackdrop(w: Window, shown: boolean)
+	w.scrim.Visible = shown
 	local effect = blur
 	if effect == nil then
 		return
@@ -843,42 +863,26 @@ local function setBackdrop(shown: boolean)
 	end
 end
 
-local function closeWindow()
-	pendingBuy = nil
-	panel.Visible = false
-	setBackdrop(false)
-	Windows.closed(closeWindow)
-end
-
-function setOpen(open: boolean)
+function openWindow(w: Window, open: boolean)
 	if open then
 		-- A pass bought on the website while playing shows up without a rejoin.
 		Net.event("PassCheck"):FireServer()
-		local section = current
-		if inventory and (section == nil or section.kind ~= "Slots") then
-			goToKind("Slots")
-		end
-		render()
-		setBackdrop(true)
-		Ui.pop(panel)
-		Windows.opened(closeWindow)
+		active = w
+		renderWindow(w)
+		setBackdrop(w, true)
+		Ui.pop(w.panel)
+		Windows.opened(w.close)
 	else
-		closeWindow()
+		w.close()
 	end
 end
 
-local function refreshButton()
-	if playing and panel.Visible then
-		setOpen(false)
-	end
-end
-
-local function fitToScreen()
-	Ui.fitPanel(gui.AbsoluteSize, panel, fit, layout, MARGIN, MIN_FIT, PORTRAIT_BELOW)
+local function fitToScreen(w: Window)
+	Ui.fitPanel(w.gui.AbsoluteSize, w.panel, w.fit, w.layout, MARGIN, MIN_FIT, PORTRAIT_BELOW)
 end
 
 -- Portrait phone layout: the section keys wrap into rows above the toolbar, and the grid takes the rest.
-local function portraitOverrides(): Ui.Overrides
+local function portraitOverrides(w: Window): Ui.Overrides
 	local overrides: Ui.Overrides = {
 		Sections = { Position = UDim2.fromOffset(24, 104), Size = UDim2.new(1, -48, 0, 92) },
 		["Sections/UIListLayout"] = { FillDirection = Enum.FillDirection.Horizontal, Wraps = true },
@@ -890,13 +894,13 @@ local function portraitOverrides(): Ui.Overrides
 		["Tools/OwnedFilter"] = { Size = UDim2.fromOffset(96, 40) },
 		Grid = { Position = UDim2.fromOffset(24, 256), Size = UDim2.new(1, -48, 1, -280) },
 	}
-	for _, section in sections do
+	for _, section in w.sections do
 		overrides["Sections/" .. section.name] = { Size = UDim2.fromOffset(110, 34) }
 	end
 	return overrides
 end
 
-local function bindSections(frame: Instance)
+local function bindSections(w: Window, frame: Instance)
 	local buttons: { TextButton } = {}
 	for _, child in frame:GetChildren() do
 		if child:IsA("TextButton") then
@@ -914,15 +918,15 @@ local function bindSections(frame: Instance)
 		local slotList = button:GetAttribute("Slots")
 		local slots = if typeof(slotList) == "string" then string.split(slotList, ",") else {}
 		local section: Section = { name = button.Name, kind = kind, slots = slots, button = button }
-		table.insert(sections, section)
-		sectionByName[button.Name] = section
+		table.insert(w.sections, section)
+		w.sectionByName[button.Name] = section
 		Ui.pressable(button)
 		button.MouseButton1Click:Connect(function()
 			Sfx.play("Pop", 0.4)
-			goTo(button.Name)
+			goToIn(w, button.Name)
 		end)
 	end
-	current = sections[1]
+	w.current = w.sections[1]
 end
 
 local function cycle(list: { string }, value: string): string
@@ -930,76 +934,101 @@ local function cycle(list: { string }, value: string): string
 	return list[index % #list + 1]
 end
 
-local function bindTools(frame: Instance)
+local function bindTools(w: Window, frame: Instance)
 	for _, name in { "PriceFilter", "RarityFilter", "OwnedFilter" } do
 		local button = frame:FindFirstChild(name)
 		if button ~= nil and button:IsA("TextButton") then
-			filterKeys[name] = button
+			w.filterKeys[name] = button
 			Ui.pressable(button)
 		end
 	end
-	local price = filterKeys.PriceFilter
+	local price = w.filterKeys.PriceFilter
 	if price ~= nil then
 		price.MouseButton1Click:Connect(function()
-			filter.price = cycle(PRICES, filter.price)
+			w.filter.price = cycle(PRICES, w.filter.price)
 			Sfx.play("Pop", 0.4)
-			render()
+			renderWindow(w)
 		end)
 	end
-	local rarity = filterKeys.RarityFilter
+	local rarity = w.filterKeys.RarityFilter
 	if rarity ~= nil then
 		rarity.MouseButton1Click:Connect(function()
-			filter.rarity = cycle(RARITIES, filter.rarity)
+			w.filter.rarity = cycle(RARITIES, w.filter.rarity)
 			Sfx.play("Pop", 0.4)
-			render()
+			renderWindow(w)
 		end)
 	end
-	local owned = filterKeys.OwnedFilter
+	local owned = w.filterKeys.OwnedFilter
 	if owned ~= nil then
 		owned.MouseButton1Click:Connect(function()
-			filter.hideOwned = not filter.hideOwned
+			w.filter.hideOwned = not w.filter.hideOwned
 			Sfx.play("Pop", 0.4)
-			render()
+			renderWindow(w)
 		end)
 	end
 	local search = frame:FindFirstChild("Search")
 	if search ~= nil and search:IsA("TextBox") then
 		search:GetPropertyChangedSignal("Text"):Connect(function()
-			filter.query = search.Text
-			render()
+			w.filter.query = search.Text
+			renderWindow(w)
 		end)
 	end
 end
 
-function ShopUi.init(playerGui: PlayerGui)
-	gui = Ui.screen(playerGui, "Shop") :: Frame
+-- Binds one authored screen (Scrim, Holder.Fit, Holder.Panel with Sections, Tools, Grid, CashText, Title,
+-- CloseButton, an optional GetShells key) to a window record.
+local function bindWindow(playerGui: PlayerGui, name: string, inventory: boolean): Window?
+	local gui = Ui.screen(playerGui, name, 10)
+	if gui == nil then
+		warn("ShopUi: LobbyUi." .. name .. " is missing; that window stays closed")
+		return nil
+	end
 	local holder = gui:WaitForChild("Holder") :: Frame
-	fit = holder:WaitForChild("Fit") :: UIScale
-	panel = holder:WaitForChild("Panel") :: Frame
-	scrim = gui:WaitForChild("Scrim") :: Frame
-	blur = Lighting:FindFirstChild("ShopBlur") :: BlurEffect?
-	cashText = panel:WaitForChild("CashText") :: TextLabel
+	local panel = holder:WaitForChild("Panel") :: Frame
+	local grid = panel:WaitForChild("Grid") :: ScrollingFrame
 	local title = panel:FindFirstChild("Title")
-	titleLabel = if title ~= nil and title:IsA("TextLabel") then title else nil
-	shopTitle = if titleLabel ~= nil then titleLabel.Text else ""
-	grid = panel:WaitForChild("Grid") :: ScrollingFrame
-	template = grid:WaitForChild("ItemTemplate") :: Frame
+	local titleLabel = if title ~= nil and title:IsA("TextLabel") then title else nil
 	local empty = grid:FindFirstChild("Empty")
-	emptyLabel = if empty ~= nil and empty:IsA("TextLabel") then empty else nil
-	local sectionFrame = panel:WaitForChild("Sections")
-	bindSections(sectionFrame)
-	local divider = sectionFrame:FindFirstChild("GetMore")
-	getMore = if divider ~= nil and divider:IsA("GuiObject") then divider else nil
-	bindTools(panel:WaitForChild("Tools"))
-	layout = Ui.phoneLayout(panel, PORTRAIT_SIZE, portraitOverrides())
-	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
-	fitToScreen()
+	local w: Window = {
+		name = name,
+		inventory = inventory,
+		gui = gui,
+		panel = panel,
+		scrim = gui:WaitForChild("Scrim") :: Frame,
+		fit = holder:WaitForChild("Fit") :: UIScale,
+		layout = nil,
+		cashText = panel:WaitForChild("CashText") :: TextLabel,
+		titleLabel = titleLabel,
+		title = if titleLabel ~= nil then titleLabel.Text else "",
+		grid = grid,
+		template = grid:WaitForChild("ItemTemplate") :: Frame,
+		emptyLabel = if empty ~= nil and empty:IsA("TextLabel") then empty else nil,
+		sections = {},
+		sectionByName = {},
+		filterKeys = {},
+		current = nil,
+		filter = { query = "", price = "All", rarity = "All", hideOwned = false },
+		close = function() end,
+	}
+	w.close = function()
+		pendingBuy = nil
+		panel.Visible = false
+		setBackdrop(w, false)
+		Windows.closed(w.close)
+	end
+	bindSections(w, panel:WaitForChild("Sections"))
+	bindTools(w, panel:WaitForChild("Tools"))
+	w.layout = Ui.phoneLayout(panel, PORTRAIT_SIZE, portraitOverrides(w))
+	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+		fitToScreen(w)
+	end)
+	fitToScreen(w)
 	local plus = panel:FindFirstChild("GetShells")
 	if plus ~= nil and plus:IsA("TextButton") then
-		getShells = plus
 		Ui.pressable(plus)
 		plus.MouseButton1Click:Connect(function()
 			Sfx.play("Pop", 0.4)
+			active = w
 			goToKind("Shells")
 		end)
 	end
@@ -1007,62 +1036,69 @@ function ShopUi.init(playerGui: PlayerGui)
 	Ui.pressable(close)
 	close.MouseButton1Click:Connect(function()
 		Sfx.play("Close", 0.5)
-		setOpen(false)
+		openWindow(w, false)
 	end)
-	scrim.InputBegan:Connect(function(input)
+	w.scrim.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			setOpen(false)
+			openWindow(w, false)
 		end
 	end)
-	-- The SHOP key lives on the lobby rail (Rail hides it in a match and while this window is open).
-	local railButton = Rail.button("ShopButton")
-	if railButton ~= nil then
-		railButton.Activated:Connect(function()
-			Sfx.play("Open", 0.5)
-			inventory = false
-			setOpen(true)
-		end)
-	end
-	local itemsButton = Rail.button("InventoryButton")
-	if itemsButton ~= nil then
-		itemsButton.Activated:Connect(function()
-			Sfx.play("Open", 0.5)
-			ShopUi.openInventory()
-		end)
-	end
+	table.insert(windows, w)
+	return w
 end
 
--- Opens the window as the inventory: cosmetic sections only, owned items only, equip and unequip.
-function ShopUi.openInventory()
-	if playing then
+local function bindRailKey(keyName: string, w: Window?)
+	local button = Rail.button(keyName)
+	if button == nil or w == nil then
 		return
 	end
-	inventory = true
-	setOpen(true)
+	button.Activated:Connect(function()
+		if playing then
+			return
+		end
+		Sfx.play("Open", 0.5)
+		openWindow(w, true)
+	end)
+end
+
+-- Binds LobbyUi.Shop (rail SHOP key) and LobbyUi.Inventory (rail ITEMS key).
+function ShopUi.init(playerGui: PlayerGui)
+	blur = Lighting:FindFirstChild("ShopBlur") :: BlurEffect?
+	shopWindow = bindWindow(playerGui, "Shop", false)
+	bindRailKey("ShopButton", shopWindow)
+	bindRailKey("InventoryButton", bindWindow(playerGui, "Inventory", true))
 end
 
 -- Opens the shop on one section by name ("Shells", "Chests"...), e.g. from a Starter Pack nudge.
 function ShopUi.openTab(name: string)
-	if playing then
+	local shop = shopWindow
+	if playing or shop == nil then
 		return
 	end
-	inventory = false
-	setOpen(true)
-	goTo(name)
+	openWindow(shop, true)
+	goToIn(shop, name)
 end
 
 function ShopUi.onProfile(payload)
 	profile = Profile.fromStored(payload)
 	passes = payload.passes or {}
 	chestsAllowed = payload.chestsAllowed == true
-	if panel.Visible then
-		render()
+	for _, w in windows do
+		if w.panel.Visible then
+			renderWindow(w)
+		end
 	end
 end
 
 function ShopUi.onState(payload)
 	playing = payload.playing == true
-	refreshButton()
+	if playing then
+		for _, w in windows do
+			if w.panel.Visible then
+				openWindow(w, false)
+			end
+		end
+	end
 end
 
 return ShopUi

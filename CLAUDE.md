@@ -79,7 +79,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 | Root | DisplayOrder | Studio default | Screens |
 |------|--------------|----------------|---------|
 | `GameUi` | 1 | Enabled off (code turns it on) | Hud, Reveal, Results, Revive, Spectate, Vignette |
-| `LobbyUi` | 2 | on | Rail, Shop, LobbyQuiz, Quests, Rewards, Tutorial |
+| `LobbyUi` | 2 | on | Rail, Shop, Inventory, LobbyQuiz, Quests, Rewards, Tutorial |
 | `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings, Transition |
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
@@ -94,9 +94,10 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Pop-up windows (Quests, Rewards, Help, Shop, Settings) and the match countdown sit dead centre: anchor
   (0.5, 0.5) at Position (0.5, 0.5). One window at a time: each reports to `Client/Windows`, and while any is
   open the rail, the top buttons, the status chips and the Shells chip hide. Window titles carry no emoji.
-- Shop (`LobbyUi.Shop.Holder.Panel`): the section keys under `Sections` carry `Kind` (Featured | Slots | Chests |
-  Shells | Passes | Specials) and, for Slots, a comma list in `Slots`; `Tools` holds the search box and filter
-  keys; the rail ITEMS key opens the same window as the inventory.
+- Shop (`LobbyUi.Shop.Holder.Panel`) and Inventory (`LobbyUi.Inventory`, the same tree with only the cosmetic
+  sections): the section keys under `Sections` carry `Kind` (Featured | Slots | Chests | Shells | Passes |
+  Specials) and, for Slots, a comma list in `Slots`; `Tools` holds the search box and filter keys. `ShopUi`
+  drives both; the rail SHOP and ITEMS keys open them.
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
   gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. Toasts stack in the bottom-left
