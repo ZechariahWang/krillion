@@ -8,6 +8,7 @@
 -- it and Rail.setBadge(name, text) to mark it, so this module never needs to know them.
 
 local GuiService = game:GetService("GuiService")
+local UserInputService = game:GetService("UserInputService")
 
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
@@ -22,6 +23,7 @@ local MIN_FIT = 0.45
 local TWO_COLUMNS_BELOW = 0.62
 local ONE_COLUMN_ABOVE = 0.85
 local JITTER = 4 -- pixels of screen height change that do not count as a resize
+local TOUCH_FIT = 0.58 -- phones: the keys at this scale, always two columns, laid out once
 
 local gui: Frame? = nil
 local railFrame: GuiObject? = nil
@@ -68,13 +70,25 @@ local function fitToScreen()
 	if screenHeight <= 0 or count == 0 then
 		return
 	end
+	local gap = list.Padding.Offset
+	if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+		if count == lastCount then
+			return
+		end
+		lastCount = count
+		columns = 2
+		local rows = math.ceil(count / 2)
+		list.Wraps = true
+		frame.Size = UDim2.fromOffset(stackHeight(2, keySize, gap) + edgeWidth, stackHeight(rows, keySize, gap))
+		scale.Scale = TOUCH_FIT
+		return
+	end
 	if math.abs(screenHeight - lastHeight) < JITTER and count == lastCount then
 		return
 	end
 	lastHeight = screenHeight
 	lastCount = count
 	local available = screenHeight * HEIGHT_SHARE
-	local gap = list.Padding.Offset
 	local oneColumn = available / stackHeight(count, keySize, gap)
 	if count < 2 then
 		columns = 1

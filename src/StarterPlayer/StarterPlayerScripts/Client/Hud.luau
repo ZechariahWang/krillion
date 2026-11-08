@@ -18,6 +18,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
+local Status = require(script.Parent.Status)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
 
@@ -125,24 +126,63 @@ local barRest: UDim2? = nil
 local promptText = ""
 
 local refreshBoosts: () -> ()
+local meterRest: { position: UDim2, size: UDim2 }? = nil
 
 local function placeForKeyboard()
 	local echo = answerBar:FindFirstChild("PromptEcho")
 	if barRest == nil then
 		barRest = answerBar.Position
 	end
+	if meterRest == nil then
+		meterRest = { position = meter.Position, size = meter.Size }
+	end
 	local shown = UserInputService.OnScreenKeyboardVisible
 	if shown then
 		local keyboardTop = UserInputService.OnScreenKeyboardPosition.Y - gui.AbsolutePosition.Y
 		answerBar.Position = UDim2.new(barRest.X.Scale, barRest.X.Offset, 0, keyboardTop - KEYBOARD_GAP)
+		-- The water meter shrinks into the strip above the keyboard, bottom edge level with the bar.
+		local barTop = keyboardTop - KEYBOARD_GAP - answerBar.AbsoluteSize.Y
+		meter.AnchorPoint = Vector2.new(0, 1)
+		meter.Position = UDim2.new(0, meterRest.position.X.Offset, 0, keyboardTop - KEYBOARD_GAP)
+		meter.Size = UDim2.new(0, meterRest.size.X.Offset, 0, math.max(barTop - 40, 60))
+		Status.dock(barTop)
 	else
 		answerBar.Position = barRest
+		meter.AnchorPoint = Vector2.new(0, 0.5)
+		meter.Position = meterRest.position
+		meter.Size = meterRest.size
+		Status.dock(nil)
 	end
 	-- The boosts sit under the keyboard; they come back with the chip when it goes.
 	refreshBoosts()
+	-- The status chips carry the prompt once docked, so the echo stays off.
 	if echo ~= nil and echo:IsA("TextLabel") then
 		echo.Text = promptText
-		echo.Visible = shown and promptText ~= ""
+		echo.Visible = false
+	end
+end
+
+-- Phones: no walking in a match. The pillar top is small, the thumbstick would sit under the keyboard, and
+-- a stray drag must never walk a player off the edge.
+local function setTouchControls(enabled: boolean)
+	if not isTouch() then
+		return
+	end
+	local scripts = Players.LocalPlayer:FindFirstChild("PlayerScripts")
+	local module = if scripts ~= nil then scripts:FindFirstChild("PlayerModule") else nil
+	if module == nil or not module:IsA("ModuleScript") then
+		return
+	end
+	local ok, controls = pcall(function()
+		return (require(module) :: any):GetControls()
+	end)
+	if not ok or controls == nil then
+		return
+	end
+	if enabled then
+		controls:Enable()
+	else
+		controls:Disable()
 	end
 end
 
@@ -706,6 +746,9 @@ function Hud.onState(payload)
 	phase = payload.phase
 	if type(payload.prompt) == "string" then
 		promptText = string.upper(payload.prompt)
+	end
+	if (payload.playing == true) ~= playing then
+		setTouchControls(payload.playing ~= true)
 	end
 	playing = payload.playing == true
 	local mine = payload.yourSecondsLeft

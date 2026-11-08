@@ -16,7 +16,10 @@ local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
+local statusGui: Frame
 local statusFrame: Frame
+local authoredChips: { [GuiObject]: { position: UDim2, anchor: Vector2 } } = {}
+local DOCK_GAP = 6 -- pixels between docked chips, and between the lowest chip and the answer bar
 local statusText: TextLabel
 local secondaryText: TextLabel
 local aliveText: TextLabel
@@ -67,13 +70,11 @@ end
 
 function Status.init(playerGui: PlayerGui)
 	local gui = Ui.screen(playerGui, "Status") :: Frame
-	-- The chips hide under any open window (its header carries what matters) and under a phone's keyboard
-	-- (the HUD echoes the prompt above the answer bar).
-	local function showChips()
-		gui.Visible = not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
-	end
-	Windows.Changed.connect(showChips)
-	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(showChips)
+	-- The chips hide under any open window: its header carries what matters.
+	Windows.Changed.connect(function()
+		gui.Visible = not Windows.anyOpen()
+	end)
+	statusGui = gui
 	statusFrame = gui:WaitForChild("StatusFrame") :: Frame
 	statusText = statusFrame:WaitForChild("Status") :: TextLabel
 	local secondary = gui:WaitForChild("SecondaryStatus")
@@ -237,6 +238,38 @@ local function announceSpecial(payload)
 	end
 	Fx.callout(SPECIAL_NAMES[special] or special, color)
 	Sfx.play("Fanfare", 0.5)
+end
+
+-- A phone's keyboard covers the bottom of the screen and the answer bar moves up over it: the chips stack
+-- just above the bar (`top` is the bar's top edge in screen pixels) so the prompt, timer, alive count and
+-- tide stay in view while typing. nil puts them back where they were authored.
+function Status.dock(top: number?)
+	local chips = { tide, statusGui:FindFirstChild("SecondaryStatus"), statusFrame }
+	if top == nil then
+		for _, chip in chips do
+			local saved = if chip ~= nil then authoredChips[chip] else nil
+			if chip ~= nil and saved ~= nil then
+				chip.AnchorPoint = saved.anchor
+				chip.Position = saved.position
+			end
+		end
+		return
+	end
+	-- Bottom up: tide nearest the bar, then timer and alive, then the prompt.
+	local bottom = top - DOCK_GAP
+	for _, chip in chips do
+		if chip == nil or not chip:IsA("GuiObject") then
+			continue
+		end
+		if authoredChips[chip] == nil then
+			authoredChips[chip] = { position = chip.Position, anchor = chip.AnchorPoint }
+		end
+		if chip.Visible then
+			chip.AnchorPoint = Vector2.new(0.5, 1)
+			chip.Position = UDim2.new(0.5, 0, 0, bottom)
+			bottom -= chip.AbsoluteSize.Y + DOCK_GAP
+		end
+	end
 end
 
 function Status.onState(payload)

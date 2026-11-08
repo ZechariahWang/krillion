@@ -339,6 +339,13 @@ local function wantedGap(): number
 			end
 		end
 	end
+	-- A phone's keyboard: the stack sits just above it, whatever else is in the corner.
+	if UserInputService.OnScreenKeyboardVisible and root ~= nil then
+		local screen = Ui.findScreen(root, "Toasts")
+		local bottom = if screen ~= nil then screen.AbsolutePosition.Y + screen.AbsoluteSize.Y else height
+		local lift = bottom - UserInputService.OnScreenKeyboardPosition.Y + CLEARANCE
+		return math.max(gap, math.min(lift, height * 0.75))
+	end
 	return math.min(gap, height * MAX_LIFT)
 end
 
