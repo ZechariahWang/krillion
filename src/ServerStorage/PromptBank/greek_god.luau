@@ -4,23 +4,34 @@ return {
 	prompt = "Name a Greek god or goddess",
 	answers = {
 		Plankton = {
-			"zeus", "poseidon", "athena", "hades",
+			"zeus", "poseidon", "athena", "hades", "apollo",
 		},
 		TooClever = {
-			"percy jackson",
+			"hercules",
 		},
 		Schooler = {
-			"apollo", "aphrodite", "ares", "hermes", "hera", "artemis",
+			"aphrodite", "ares", "hermes", "hera", "artemis", "demeter", "dionysus", "hephaestus", "persephone", "hestia",
+			"eros", "nike", "pan", "hecate", "cronus", "gaia", "helios",
 		},
 		Rare = {
-			"demeter", "dionysus", "hephaestus", "persephone", "hestia",
+			"iris", "nemesis", "hypnos", "thanatos", "morpheus", "eos", "selene", "uranus", "atlas", "prometheus", "rhea",
+			"eris", "nyx", "asclepius", "triton", "hebe", "tyche", "oceanus", "themis", "hyperion", "chaos", "hygieia",
+			"amphitrite", "leto", "epimetheus", "tethys",
 		},
 		DeepCut = {
-			"nike", "eros", "hecate", "pan", "iris", "nemesis",
+			"theia", "coeus", "phoebe", "crius", "iapetus", "mnemosyne", "metis", "dione", "erebus", "tartarus", "aether",
+			"hemera", "pontus", "nereus", "proteus", "thetis", "enyo", "phobos", "deimos", "harmonia", "eileithyia", "hymen",
+			"momus", "moros", "ker", "geras", "apate", "bia", "kratos", "zelus", "boreas", "zephyrus", "notus", "eurus",
+			"aeolus", "aristaeus", "priapus", "plutus", "pheme", "ananke", "panacea", "aceso", "iaso", "astraea", "aura",
 		},
 		OneInAKrillion = {
-			"hypnos", "morpheus", "thanatos", "eos", "selene",
+			"oizys", "philotes", "ate", "adrasteia", "comus", "thalassa", "phanes", "menoetius", "asteria", "pallas",
+			"achelous", "alpheus", "hesperus", "eosphorus",
 		},
 	},
-	aliases = {},
+	aliases = {
+		["heracles"] = "hercules", ["herakles"] = "hercules", ["dionysos"] = "dionysus", ["kronos"] = "cronus",
+		["ouranos"] = "uranus", ["gaea"] = "gaia", ["hephaistos"] = "hephaestus", ["asklepios"] = "asclepius",
+		["kore"] = "persephone", ["hekate"] = "hecate", ["ilithyia"] = "eileithyia",
+	},
 }
