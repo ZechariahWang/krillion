@@ -27,8 +27,8 @@ local FEEDBACK_SECONDS = 1.5
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
 local TEMPLATE_WAIT = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
-local BOOST_GAP = 8 -- pixels between the Standings tab and the boost buttons above it
-local BOOST_EDGE = 16 -- pixels from the screen edges when there is no Standings tab to stand on
+local BOOST_GAP = 8 -- pixels between the Shells chip and the boost buttons above it
+local BOOST_EDGE = 16 -- pixels from the screen edges when there is no Shells chip to stand on
 local BOOST_MIN_SCALE = 0.6 -- the smallest the boost buttons shrink to on a short screen
 local BOOST_DESIGN_HEIGHT = 820 -- screen height the boost buttons are drawn for
 local PRICE_SHELLS = Color3.fromRGB(255, 217, 94) -- shell gold
@@ -118,9 +118,9 @@ local function isTouch(): boolean
 	return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 end
 
--- Deferred so it runs after the TextBox has finished losing focus from the Enter press.
+-- One frame later: a focus grab in the same frame as the Enter press that released the box is dropped.
 local function keepFocus()
-	task.defer(function()
+	task.delay(0, function()
 		if answerBox.Visible and answerBar.Visible then
 			answerBox:CaptureFocus()
 		end
@@ -193,19 +193,27 @@ local function boostsShown(): boolean
 	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
 end
 
--- The Standings tab docked above the Shells chip in the bottom-right corner, while it shows.
-local function standingsTab(): GuiObject?
-	local screen = Ui.findScreen(playerGui, "Standings")
-	local root = if screen ~= nil then screen:FindFirstChild("Root") else nil
-	local tab = if root ~= nil then root:FindFirstChild("Tab") else nil
-	if screen ~= nil and screen.Visible and tab ~= nil and tab:IsA("GuiObject") and tab.AbsoluteSize.X > 0 then
-		return tab
+-- The Shells chip in the bottom-right corner (SharedUi.Wallet.Chip), while it shows.
+local function shellsChip(): GuiObject?
+	local screen = Ui.findScreen(playerGui, "Wallet")
+	local chip = if screen ~= nil then screen:FindFirstChild("Chip") else nil
+	if screen ~= nil and screen.Visible and chip ~= nil and chip:IsA("GuiObject") and chip.Visible and chip.AbsoluteSize.X > 0 then
+		return chip
 	end
 	return nil
 end
 
--- The boost buttons stand in the bottom-right column, right above the Standings tab (which sits on the
--- Shells chip), right edges lined up, and shrink with the screen height like the rest of the column.
+-- The chip's top edge without the bump its UIScale may be playing, so the boosts never jiggle with it.
+-- The chip is anchored at its bottom, so a bump only moves its top.
+local function restingTop(object: GuiObject): number
+	local scale = object:FindFirstChildOfClass("UIScale")
+	local factor = if scale ~= nil and scale.Scale > 0 then scale.Scale / Ui.rest(object) else 1
+	local bottom = object.AbsolutePosition.Y + object.AbsoluteSize.Y
+	return bottom - object.AbsoluteSize.Y / factor
+end
+
+-- The boost buttons stand in the bottom-right column, right above the Shells chip, right edges lined up,
+-- and shrink with the screen height like the rest of the column.
 local function fitBoostBar()
 	local bar = boostBar
 	if bar == nil then
@@ -218,10 +226,10 @@ local function fitBoostBar()
 	local origin = gui.AbsolutePosition
 	local right = gui.AbsoluteSize.X - BOOST_EDGE
 	local bottom = gui.AbsoluteSize.Y - BOOST_EDGE
-	local tab = standingsTab()
-	if tab ~= nil then
-		right = tab.AbsolutePosition.X + tab.AbsoluteSize.X - origin.X
-		bottom = tab.AbsolutePosition.Y - origin.Y - BOOST_GAP
+	local chip = shellsChip()
+	if chip ~= nil then
+		right = chip.AbsolutePosition.X + chip.AbsoluteSize.X - origin.X
+		bottom = restingTop(chip) - origin.Y - BOOST_GAP
 	end
 	bar.AnchorPoint = Vector2.new(1, 1)
 	bar.Position = UDim2.fromOffset(math.floor(right + 0.5), math.floor(bottom + 0.5))
@@ -546,17 +554,17 @@ local function bindExtras()
 	end
 	local bar = adopt("BoostBar")
 	if bar ~= nil then
-		-- Out of the answer bar and into the bottom-right column above the Standings tab.
+		-- Out of the answer bar and into the bottom-right column above the Shells chip.
 		bar.Parent = gui
 		boostBar = bar
 		bindChip(bar, "Hint", "HintButton")
 		bindChip(bar, "ExtraTime", "TimeButton")
 		gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
-		local standings = Ui.screen(playerGui, "Standings", TEMPLATE_WAIT)
-		local root = if standings ~= nil then standings:WaitForChild("Root", TEMPLATE_WAIT) else nil
-		if root ~= nil and root:IsA("GuiObject") then
-			root:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
-			root:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
+		local wallet = Ui.screen(playerGui, "Wallet", TEMPLATE_WAIT)
+		local chip = if wallet ~= nil then wallet:WaitForChild("Chip", TEMPLATE_WAIT) else nil
+		if chip ~= nil and chip:IsA("GuiObject") then
+			chip:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
+			chip:GetPropertyChangedSignal("Visible"):Connect(fitBoostBar)
 		end
 		refreshBoosts()
 	end

@@ -226,7 +226,7 @@ function Quests.open()
 	screen.Visible = true
 	if not isOpen then
 		isOpen = true
-		Sfx.play("Pop", 0.5)
+		Sfx.play("Open", 0.5)
 		local frame = panel
 		if frame ~= nil then
 			Ui.pop(frame, 0.7)
@@ -237,7 +237,7 @@ end
 
 local function toggle()
 	if isOpen then
-		Sfx.play("Tick", 0.4)
+		Sfx.play("Close", 0.5)
 		close()
 	else
 		Quests.open()
@@ -287,7 +287,7 @@ local function bind(screen: Frame, playerGui: PlayerGui)
 	if closeButton ~= nil and closeButton:IsA("TextButton") then
 		Ui.pressable(closeButton)
 		closeButton.Activated:Connect(function()
-			Sfx.play("Tick", 0.4)
+			Sfx.play("Close", 0.5)
 			close()
 		end)
 	end

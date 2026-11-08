@@ -166,6 +166,7 @@ function DataService.changed(player: Player)
 	payload.lobbyEarnedToday = Profile.lobbyEarned(profile, today())
 	payload.krillions = profile.krillions
 	payload.games = profile.games
+	payload.musicOff = profile.musicOff
 	Net.event("ProfileChanged"):FireClient(player, payload)
 end
 
@@ -387,6 +388,16 @@ function DataService.setTutorialDone(player: Player)
 		return
 	end
 	current.tutorialDone = true
+	DataService.changed(player)
+end
+
+-- The player's background music choice from Settings; saved with the profile.
+function DataService.setMusicOff(player: Player, off: boolean)
+	local current = session(player)
+	if current == nil then
+		return
+	end
+	current.musicOff = off
 	DataService.changed(player)
 end
 

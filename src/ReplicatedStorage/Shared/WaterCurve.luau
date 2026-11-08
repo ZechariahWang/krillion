@@ -9,7 +9,9 @@ function WaterCurve.promptSeconds(round: number): number
 end
 
 function WaterCurve.surge(round: number): number
-	return GameConfig.Water.SurgeBase + GameConfig.Water.SurgeStep * round
+	local water = GameConfig.Water
+	local growth = water.SurgeGrowth * (round - 1) ^ water.SurgePower
+	return water.SurgeBase + growth
 end
 
 function WaterCurve.lift(points: number): number

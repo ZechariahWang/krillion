@@ -1,11 +1,12 @@
 --!strict
--- Drives StarterGui.Toasts: a short stack of big chunky banners at the bottom centre (server Notify and local
--- ones). Kinds: "info" | "good" | "bad" | "krillion" | "hint", plus "shells" and "reward" (a "good" toast about
+-- Drives StarterGui.Toasts: a short stack of big chunky banners in the bottom-left corner (server Notify and
+-- local ones). Kinds: "info" | "good" | "bad" | "krillion" | "hint", plus "shells" and "reward" (a "good" toast about
 -- Shells or an unlock gets those looks on its own). "HEADLINE  |  details" splits into a big line and a sub line.
--- The stack lifts above whatever bottom-centre bar is showing (the answer bar during a prompt, the spectate bar,
--- the join card) so a toast never covers input. Toasts pop in with an overshoot and slide out quickly.
+-- The stack lifts above any bottom bar it overlaps (the answer bar during a prompt, the spectate bar, the join
+-- card) and above the touch thumbstick, so a toast never covers input. Toasts pop in and slide out to the left.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Net = require(ReplicatedStorage.Shared.Net)
@@ -21,13 +22,15 @@ local DESIGN_HEIGHT = 820 -- screen height the banners are drawn for; shorter sc
 local MIN_FIT = 0.62
 local MAX_QUEUED = 6 -- a burst longer than this drops its oldest waiting toasts
 local SPACING_SECONDS = 0.4 -- a burst of toasts arrives one at a time, this far apart
-local BASE_GAP = 110 -- pixels from the bottom edge to the bottom of the stack
-local PROMPT_GAP = 170 -- while answering: clears the answer bar and the hint row above it
+local EDGE = 16 -- pixels from the screen edges
+local STACK_GAP = 8 -- pixels between the stack and a piece beside it
+local BASE_GAP = EDGE -- pixels from the bottom edge to the bottom of the stack
+local TOUCH_GAP = 190 -- on touch screens: clears the movement thumbstick in the same corner
 local CLEARANCE = 10 -- pixels kept above a bar the stack lifts over
 local MAX_LIFT = 0.45 -- never lift the stack past this fraction of the screen height
 local PLACE_INTERVAL = 0.25
 local EXIT_SECONDS = 0.22
-local EXIT_SLIDE = 90 -- pixels a banner slides right as it leaves
+local EXIT_SLIDE = -90 -- pixels a banner slides as it leaves (left, off the corner)
 local MAX_CHARS = 160
 local SPLIT = "  |  "
 local POP_IN = TweenInfo.new(0.42, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
@@ -82,6 +85,7 @@ local AVOID: { { string } } = {
 	{ "Spectate", "SpectateBar" },
 	{ "Spectate", "JoinCard" },
 	{ "Spectate", "WatchButton" },
+	{ "LobbyQuiz", "Panel" },
 }
 
 local root: PlayerGui? = nil
@@ -159,7 +163,7 @@ local function textOf(parent: Instance?, name: string): TextLabel?
 	return if found ~= nil and found:IsA("TextLabel") then found else nil
 end
 
--- Slides the banner's card out to the right and fades it, then frees its slot.
+-- Slides the banner's card out to the left and fades it, then frees its slot.
 local function dismiss(toast: Frame)
 	local index = table.find(live, toast)
 	if index == nil then
@@ -299,10 +303,13 @@ local function topOf(object: GuiObject): number
 	return top
 end
 
--- Pixels from the bottom edge the stack should sit at: clear of the answer bar while answering and of any
--- bottom-centre bar it overlaps, but never past MAX_LIFT of the screen.
+-- Pixels from the bottom edge the stack should sit at: clear of the thumbstick on touch screens and of any
+-- bottom bar it overlaps, but never past MAX_LIFT of the screen.
 local function wantedGap(): number
-	local gap = if prompting then PROMPT_GAP else BASE_GAP
+	local gap = BASE_GAP
+	if UserInputService.TouchEnabled then
+		gap = TOUCH_GAP
+	end
 	local playerGui = root
 	local box = stack
 	if playerGui == nil or box == nil then
@@ -351,19 +358,36 @@ local function fitStack(box: Frame)
 	end
 end
 
+-- Pixels from the left edge: past the match's water meter when it shows along that edge.
+local function wantedLeft(): number
+	local left = EDGE
+	local playerGui = root
+	local hud = if playerGui ~= nil then Ui.findScreen(playerGui, "Hud") else nil
+	local meter = if hud ~= nil then hud:FindFirstChild("WaterMeter") else nil
+	if meter ~= nil and meter:IsA("GuiObject") and isShowing(meter) then
+		local owner = meter:FindFirstAncestorWhichIsA("LayerCollector")
+		local origin = if owner ~= nil and owner:IsA("LayerCollector") then owner.AbsolutePosition.X else 0
+		left = math.max(left, meter.AbsolutePosition.X + meter.AbsoluteSize.X - origin + STACK_GAP)
+	end
+	return left
+end
+
 local function followBars(box: Frame)
-	local current = -1
+	local currentGap = -1
+	local currentLeft = -1
 	while box.Parent ~= nil do
 		fitStack(box)
 		local gap = math.floor(wantedGap() + 0.5)
-		if gap ~= current then
-			local goal = UDim2.new(box.Position.X.Scale, box.Position.X.Offset, 1, -gap)
-			if current < 0 then
+		local left = math.floor(wantedLeft() + 0.5)
+		if gap ~= currentGap or left ~= currentLeft then
+			local goal = UDim2.new(0, left, 1, -gap)
+			if currentGap < 0 then
 				box.Position = goal
 			else
 				Tween.play(box, Theme.Tween.Enter, { Position = goal })
 			end
-			current = gap
+			currentGap = gap
+			currentLeft = left
 		end
 		task.wait(PLACE_INTERVAL)
 	end
