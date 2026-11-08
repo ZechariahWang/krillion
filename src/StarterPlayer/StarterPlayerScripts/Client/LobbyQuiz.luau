@@ -1,9 +1,11 @@
 --!strict
--- Drives StarterGui.LobbyQuiz: the warm-up prompt stream that pays Shells while you wait, up to a daily cap.
+-- Drives LobbyUi.LobbyQuiz: the warm-up prompt window that opens when you step into the semicircle in front of
+-- the snack shack and pays Shells while you wait, up to a daily cap. It is a window (Client/Windows): the X or
+-- stepping out closes it, and a match closes it from the server side.
 -- Enter checks the answer, Enter again locks it in (like a match). A wrong answer is rejected right away and
--- the same prompt stays up for another try. A locked answer plays a mini dive card, then NEXT counts down.
--- ConfirmChip and LobbyQuizExtras (ResultCard, CollapseButton) are Studio templates cloned in, unless
--- the place already has them authored.
+-- the same prompt stays up for another try. A locked answer plays your dive full screen (the match's own
+-- DiveCards stage, through Reveal), then NEXT counts down. ConfirmChip is a Studio template cloned in, unless
+-- the place already has it authored.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -16,9 +18,11 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local DiveCard = require(script.Parent.DiveCard)
 local Fx = require(script.Parent.Fx)
+local Reveal = require(script.Parent.Reveal)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local RESULT_SECONDS = 1.6
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
@@ -40,8 +44,6 @@ local resultTier: TextLabel
 local resultCoins: TextLabel
 local confirmChip: Frame? = nil
 local confirmText: TextLabel? = nil
-local cardHolder: Frame? = nil
-local collapseButton: TextButton? = nil
 
 local submitText = ""
 local skipText = ""
@@ -50,7 +52,6 @@ local basePosition: UDim2
 local earnedToday = 0
 local dailyCap = GameConfig.Lobby.DailyShellCap
 local capNoticeShown = false -- the cap message shows once a session
-local collapsed = false
 
 local promptToken = 0
 local resultToken = 0
@@ -66,6 +67,24 @@ local card: DiveCard.Handle? = nil
 
 local LobbyQuiz = {}
 
+local closeQuiz: () -> ()
+
+-- Takes the window down without telling the server (it already stopped, or is about to).
+local function hideQuiz()
+	if not gui.Visible then
+		return
+	end
+	gui.Visible = false
+	result.Visible = false
+	Windows.closed(closeQuiz)
+end
+
+-- The X, or another window opening over this one: the server stops the stream until you step out and back.
+function closeQuiz()
+	hideQuiz()
+	Net.event("LobbyQuizStop"):FireServer()
+end
+
 local function trim(text: string): string
 	return string.match(text, "^%s*(.-)%s*$") or ""
 end
@@ -78,7 +97,7 @@ end
 -- One frame later: a focus grab in the same frame as the Enter press that released the box is dropped.
 local function keepFocus()
 	task.delay(0, function()
-		if gui.Visible and not collapsed and not locked then
+		if gui.Visible and not locked then
 			answerBox:CaptureFocus()
 		end
 	end)
@@ -142,7 +161,7 @@ local function showConfirm(text: string, corrected: string)
 	if confirmText ~= nil then
 		confirmText.Text = Theme.Icon.Lock .. " LOCK IN  " .. string.upper(corrected) .. "?  " .. action
 	end
-	if confirmChip ~= nil and not collapsed then
+	if confirmChip ~= nil then
 		Ui.pop(confirmChip)
 	end
 	submitButton.Text = "LOCK IN"
@@ -151,11 +170,8 @@ end
 
 local function clearCard()
 	if card ~= nil then
-		card.destroy()
 		card = nil
-	end
-	if cardHolder ~= nil then
-		cardHolder.Visible = false
+		Reveal.hideOwnCard(true)
 	end
 end
 
@@ -256,7 +272,7 @@ local function startNextCountdown(token: number)
 			skipButton.Text = "NEXT ▶ " .. left
 			task.wait(1)
 		end
-		if token == promptToken and locked and gui.Visible and not collapsed then
+		if token == promptToken and locked and gui.Visible then
 			skip()
 		end
 	end)
@@ -264,34 +280,35 @@ end
 
 local function playCard(payload, token: number)
 	clearCard()
-	local holder = cardHolder
-	if holder == nil or collapsed then
-		-- No holder: fall back to the text result.
-		local info = Tiers.ByName[payload.tier]
-		local label = if info ~= nil then string.upper(info.label) else ""
-		showMessage(label .. "  |  " .. string.upper(payload.corrected or ""), "+" .. Currency.format(payload.cash), Ui.tierColor(payload.tier))
-		return
-	end
-	local anchor: Frame = holder
-	anchor.Visible = true
-	local handle = DiveCard.play(anchor, {
+	local handle = Reveal.showOwnCard({
 		title = "YOUR DIVE",
 		isYou = true,
 		answer = payload.corrected,
 		tier = payload.tier,
 		depth = if typeof(payload.depth) == "number" then payload.depth else 0,
-		quick = false,
-		scale = 1,
+		shells = payload.cash,
 	})
+	if handle == nil then
+		-- No stage: fall back to the text result.
+		local info = Tiers.ByName[payload.tier]
+		local label = if info ~= nil then string.upper(info.label) else ""
+		showMessage(label .. "  |  " .. string.upper(payload.corrected or ""), "+" .. Currency.format(payload.cash), Ui.tierColor(payload.tier))
+		return
+	end
 	card = handle
 	task.spawn(function()
 		handle.finished()
 		if token ~= promptToken or card ~= handle then
 			return
 		end
-		local from: GuiObject = handle.frame or anchor
-		if payload.cash > 0 then
-			Fx.coinPop("+" .. Currency.digits(payload.cash) .. " " .. Theme.Icon.Shell, from)
+		if payload.cash > 0 and handle.frame ~= nil then
+			Fx.coinPop("+" .. Currency.digits(payload.cash) .. " " .. Theme.Icon.Shell, handle.frame)
+		end
+		-- Held like a match card, then it shrinks away and the panel is back for NEXT.
+		task.wait(GameConfig.Reveal.CardHoldSeconds)
+		if token == promptToken and card == handle then
+			card = nil
+			Reveal.hideOwnCard(false)
 		end
 	end)
 end
@@ -344,37 +361,6 @@ local function onSubmitResult(payload)
 	end
 end
 
--- Collapse ------------------------------------------------------------------------------------------------
-
--- Collapsed, the panel slides down until only its header bar shows above the bottom edge.
-local function collapsedPosition(): UDim2
-	local shown = headerBar.AbsolutePosition.Y - panel.AbsolutePosition.Y + headerBar.AbsoluteSize.Y
-	local drop = math.max(0, panel.AbsoluteSize.Y - shown)
-	return basePosition + UDim2.fromOffset(0, drop)
-end
-
-local function setCollapsed(value: boolean)
-	collapsed = value
-	if collapseButton ~= nil then
-		collapseButton.Text = if value then "+" else "-"
-	end
-	if value then
-		answerBox:ReleaseFocus()
-		hideConfirm()
-		clearCard()
-		result.Visible = false
-		Tween.play(panel, Theme.Tween.Enter, { Position = collapsedPosition() })
-		return
-	end
-	Tween.play(panel, Theme.Tween.Enter, { Position = basePosition })
-	-- A prompt that ran out (or was answered) while tucked away is replaced as the panel opens.
-	if gui.Visible and (locked or os.clock() >= promptEndsAt) then
-		skip()
-	else
-		keepFocus()
-	end
-end
-
 -- Setup ---------------------------------------------------------------------------------------------------
 
 local function findTemplate(name: string): Instance?
@@ -410,26 +396,13 @@ local function bindExtras()
 			confirmText = label
 		end
 	end
-	local extras = findTemplate("LobbyQuizExtras")
-	local holder = adopt(panel, "ResultCard", if extras ~= nil then extras:FindFirstChild("ResultCard") else nil)
-	if holder ~= nil and holder:IsA("Frame") then
-		holder.Visible = false
-		cardHolder = holder
-	end
-	local button = adopt(headerBar, "CollapseButton", if extras ~= nil then extras:FindFirstChild("CollapseButton") else nil)
-	if button ~= nil and button:IsA("TextButton") then
-		collapseButton = button
-		Ui.pressable(button)
-		button.Activated:Connect(function()
-			setCollapsed(not collapsed)
-		end)
-	end
-	-- A resize while tucked away would leave the header off screen or the body showing.
-	panel:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		if collapsed then
-			panel.Position = collapsedPosition()
+	-- The window pops up whole and the dive plays full screen: the old in-panel ResultCard and tuck-away
+	-- CollapseButton are not adopted.
+	for _, old in { panel:FindFirstChild("ResultCard"), headerBar:FindFirstChild("CollapseButton") } do
+		if old ~= nil then
+			old:Destroy()
 		end
-	end)
+	end
 end
 
 function LobbyQuiz.init(playerGui: PlayerGui)
@@ -448,6 +421,14 @@ function LobbyQuiz.init(playerGui: PlayerGui)
 	submitText = submitButton.Text
 	skipText = skipButton.Text
 	basePosition = panel.Position
+	local close = panel:FindFirstChild("CloseButton")
+	if close ~= nil and close:IsA("GuiButton") then
+		Ui.pressable(close)
+		close.Activated:Connect(function()
+			Sfx.play("Close", 0.5)
+			closeQuiz()
+		end)
+	end
 
 	Ui.pressable(submitButton)
 	Ui.pressable(skipButton)
@@ -485,10 +466,15 @@ function LobbyQuiz.onPrompt(payload)
 	hideConfirm()
 	clearCard()
 	if payload == nil then
-		gui.Visible = false
+		hideQuiz()
 		return
 	end
-	gui.Visible = true
+	if not gui.Visible then
+		gui.Visible = true
+		Sfx.play("Open", 0.5)
+		Ui.pop(panel, 0.8)
+		Windows.opened(closeQuiz)
+	end
 	setProgress(payload)
 	if payload.capped then
 		showCapNotice(CAP_PROMPT_TEXT)
@@ -503,8 +489,7 @@ function LobbyQuiz.onPrompt(payload)
 	timerFill.Size = UDim2.fromScale(1, 1)
 	Tween.play(timerFill, TweenInfo.new(payload.seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) })
 	task.delay(payload.seconds, function()
-		-- Tucked away, the prompt waits; opening the panel asks for a fresh one.
-		if token == promptToken and gui.Visible and not locked and not collapsed then
+		if token == promptToken and gui.Visible and not locked then
 			skip()
 		end
 	end)
