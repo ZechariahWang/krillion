@@ -12,6 +12,9 @@ return {
 		Schooler = {
 			"purple", "orange", "pink", "brown", "gray", "gold", "silver", "cyan", "lime", "violet", "turquoise", "magenta",
 			"crimson", "scarlet", "lavender", "tan", "aqua", "peach", "maroon", "navy", "indigo", "teal", "beige",
+			"light red", "light blue", "light green", "light yellow", "light pink", "light purple", "light orange",
+			"light brown", "light gray", "dark red", "dark blue", "dark green", "dark yellow", "dark pink", "dark purple",
+			"dark orange", "dark brown", "dark gray",
 		},
 		Rare = {
 			"burgundy", "lilac", "coral", "salmon", "cream", "ivory", "khaki", "olive", "aquamarine", "amber", "azure",
@@ -19,7 +22,22 @@ return {
 			"hot pink", "bronze", "copper", "rust", "tangerine", "apricot", "cobalt", "ultramarine", "sienna", "umber",
 			"sepia", "charcoal", "slate", "sapphire", "lemon", "ochre", "mauve", "taupe", "vermilion", "cerulean",
 			"brick red", "sand", "rosewood", "orchid", "mahogany", "chocolate", "coffee", "caramel", "honey", "denim",
-			"midnight blue", "baby blue", "baby pink", "neon green",
+			"midnight blue", "baby blue", "baby pink", "neon green", "pale red", "pale blue", "pale green", "pale yellow",
+			"pale pink", "pale purple", "pale orange", "pale brown", "pale gray", "deep red", "deep blue", "deep green",
+			"deep yellow", "deep pink", "deep purple", "deep orange", "deep brown", "deep gray", "bright red", "bright blue",
+			"bright green", "bright yellow", "bright pink", "bright purple", "bright orange", "bright brown", "bright gray",
+			"pastel red", "pastel blue", "pastel green", "pastel yellow", "pastel pink", "pastel purple", "pastel orange",
+			"pastel brown", "pastel gray", "neon red", "neon blue", "neon yellow", "neon pink", "neon purple", "neon orange",
+			"neon brown", "neon gray", "salmon pink", "coral pink", "rose gold", "rose pink", "rose red", "ruby red",
+			"cherry red", "blood red", "wine red", "wine", "tomato red", "candy apple red", "fire engine red",
+			"bubblegum pink", "blush pink", "blush", "dusty rose", "ocean blue", "sea blue", "sea green", "electric blue",
+			"steel blue", "powder blue", "ice blue", "teal blue", "turquoise blue", "aqua blue", "lime green", "mint green",
+			"olive green", "emerald green", "kelly green", "hunter green", "army green", "grass green", "apple green",
+			"sage green", "jade green", "seafoam green", "lemon yellow", "canary yellow", "butter yellow", "mustard yellow",
+			"golden yellow", "sunflower yellow", "royal purple", "lavender purple", "plum purple", "grape", "off white",
+			"snow white", "eggshell", "jet black", "pitch black", "ash gray", "silver gray", "chocolate brown",
+			"coffee brown", "golden brown", "rust orange", "pumpkin", "pumpkin orange", "mango", "peach orange", "champagne",
+			"mocha", "cinnamon", "ginger", "cocoa", "espresso", "latte", "nude", "lemon lime",
 		},
 		DeepCut = {
 			"puce", "russet", "ecru", "fawn", "aubergine", "auburn", "carmine", "cinnabar", "saffron", "viridian",
@@ -29,6 +47,9 @@ return {
 			"burnt orange", "camel", "chestnut", "eggplant", "flax", "gunmetal", "moss green", "oxblood", "pewter",
 			"pine green", "raspberry", "sangria", "seafoam", "shamrock", "tea green", "vanilla", "xanthic", "zinnober",
 			"kobicha", "lapis lazuli", "pearl", "platinum", "topaz", "alabaster", "bone", "buff", "dun", "isabelline",
+			"millennial pink", "tiffany blue", "robin egg blue", "duck egg blue", "electric purple", "electric lime",
+			"dodger blue", "midnight green", "ash blonde", "strawberry blonde", "dusty blue", "dusty pink", "terracotta",
+			"cranberry", "marigold", "canary", "periwinkle blue", "cotton candy", "baby yellow",
 		},
 		OneInAKrillion = {
 			"gamboge", "glaucous", "feldgrau", "smaragdine", "zaffre", "falu red", "xanadu", "tyrian purple", "eigengrau",
@@ -39,5 +60,9 @@ return {
 	},
 	aliases = {
 		["grey"] = "gray", ["golden"] = "gold", ["navy blue"] = "navy", ["aqua marine"] = "aquamarine",
+		["dark grey"] = "dark gray", ["light grey"] = "light gray", ["pale grey"] = "pale gray",
+		["deep grey"] = "deep gray", ["bright grey"] = "bright gray", ["pastel grey"] = "pastel gray",
+		["neon grey"] = "neon gray", ["ash grey"] = "ash gray", ["silver grey"] = "silver gray",
+		["offwhite"] = "off white", ["robins egg blue"] = "robin egg blue", ["terra cotta"] = "terracotta",
 	},
 }
