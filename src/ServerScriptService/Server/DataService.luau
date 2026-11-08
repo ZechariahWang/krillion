@@ -576,6 +576,13 @@ function DataService.start()
 	end
 	Players.PlayerAdded:Connect(load)
 	Players.PlayerRemoving:Connect(unload)
+	-- The client asks once its listeners are connected: the first ProfileChanged often goes out before that.
+	-- A profile still loading pushes itself when it lands.
+	Net.event("ProfileRequest").OnServerEvent:Connect(function(player)
+		if DataService.isLoaded(player) then
+			DataService.changed(player)
+		end
+	end)
 	-- The client fires this when the first-time tutorial is finished (or skipped).
 	Net.event("TutorialDone").OnServerEvent:Connect(function(player)
 		DataService.setTutorialDone(player)

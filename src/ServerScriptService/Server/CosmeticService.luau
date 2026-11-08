@@ -1,6 +1,6 @@
 --!strict
--- Applies equipped cosmetics: the title over a player's head, their pillar skin and name tag colour, their
--- elimination splash, the trail behind them and their aura. Titles, splashes, trails and auras are clones
+-- Applies equipped cosmetics: the name and title over a player's head (Roblox's own name display is off),
+-- their pillar skin and sign colour, their elimination splash, the trail behind them and their aura. Titles, splashes, trails and auras are clones
 -- of templates under ReplicatedStorage.Templates. Pets are drawn by clients from the KrillionPet attribute;
 -- card themes are read by the client from its own profile.
 
@@ -12,7 +12,7 @@ local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local DataService = require(script.Parent.DataService)
 
-local TITLE_NAME = "KrillionTitle"
+local NAME_TAG = "KrillionName" -- the over-head billboard: the name, coloured by the equipped NameTag, with the title above
 local TRAIL_PREFIX = "KrillionTrail" -- every trail clone in the root part is named with this, for removal
 local TRAIL_NAME = "KrillionTrail"
 local AURA_PREFIX = "KrillionAura"
@@ -66,34 +66,25 @@ local function colorOf(item: Cosmetics.Item): Color3?
 	return Color3.fromRGB(rgb[1], rgb[2], rgb[3])
 end
 
+-- The title line of the head billboard (applyName puts the billboard there first).
 local function applyTitle(player: Player)
 	local character = player.Character
-	if character == nil then
+	local head = if character ~= nil then character:FindFirstChild("Head") else nil
+	local tag = if head ~= nil then head:FindFirstChild(NAME_TAG) else nil
+	local label = if tag ~= nil then tag:FindFirstChild("TitleText", true) else nil
+	if label == nil or not label:IsA("TextLabel") then
 		return
-	end
-	local head = character:FindFirstChild("Head")
-	if head == nil then
-		return
-	end
-	local old = head:FindFirstChild(TITLE_NAME)
-	if old ~= nil then
-		old:Destroy()
 	end
 	local item = CosmeticService.equipped(player, "Title")
+	label.Visible = item ~= nil
 	if item == nil then
 		return
 	end
-	local title = (templates():WaitForChild("Title") :: BillboardGui):Clone()
-	title.Name = TITLE_NAME
-	local label = title:FindFirstChild("Text") :: TextLabel?
-	if label ~= nil then
-		label.Text = string.upper(item.name)
-		local color = colorOf(item)
-		if color ~= nil then
-			label.TextColor3 = color
-		end
+	label.Text = string.upper(item.name)
+	local color = colorOf(item)
+	if color ~= nil then
+		label.TextColor3 = color
 	end
-	title.Parent = head
 end
 
 -- Swaps the trail in the HumanoidRootPart for the equipped one: Templates.Trails.<trail> holds two
@@ -181,13 +172,9 @@ local function applyPet(player: Player)
 	player:SetAttribute(PET_ATTRIBUTE, if item ~= nil then item.pet else nil)
 end
 
--- Colours a pillar's name tag with the equipped NameTag: one colour, or a left-to-right gradient.
-local function applyNameTag(player: Player, platform: Instance)
-	local tag = platform:FindFirstChild("NameTag")
-	local text = if tag ~= nil then tag:FindFirstChild("NameText") else nil
-	if text == nil or not text:IsA("TextLabel") then
-		return
-	end
+-- Colours a name label with the player's equipped NameTag: one colour, or a left-to-right gradient; none
+-- restores the label's authored colour.
+local function colourName(player: Player, text: TextLabel)
 	local old = text:FindFirstChild(TAG_GRADIENT)
 	if old ~= nil then
 		old:Destroy()
@@ -218,6 +205,41 @@ local function applyNameTag(player: Player, platform: Instance)
 	gradient.Parent = text
 end
 
+-- The pillar's sign.
+local function applyNameTag(player: Player, platform: Instance)
+	local tag = platform:FindFirstChild("NameTag")
+	local text = if tag ~= nil then tag:FindFirstChild("NameText") else nil
+	if text ~= nil and text:IsA("TextLabel") then
+		colourName(player, text)
+	end
+end
+
+-- The name over the head (Templates.NameTag), in place of Roblox's own display name.
+local function applyName(player: Player)
+	local character = player.Character
+	local head = if character ~= nil then character:FindFirstChild("Head") else nil
+	if head == nil then
+		return
+	end
+	local old = head:FindFirstChild(NAME_TAG)
+	if old ~= nil then
+		old:Destroy()
+	end
+	local template = templates():FindFirstChild("NameTag")
+	if template == nil or not template:IsA("BillboardGui") then
+		warnOnce("name tag")
+		return
+	end
+	local tag = template:Clone()
+	tag.Name = NAME_TAG
+	local text = tag:FindFirstChild("NameText", true)
+	if text ~= nil and text:IsA("TextLabel") then
+		text.Text = player.DisplayName
+		colourName(player, text)
+	end
+	tag.Parent = head
+end
+
 -- The player's own pillar this match, if they have one standing.
 local function platformOf(player: Player): Instance?
 	local folder = workspace:FindFirstChild("Platforms")
@@ -233,6 +255,7 @@ local function platformOf(player: Player): Instance?
 end
 
 function CosmeticService.refresh(player: Player)
+	applyName(player)
 	applyTitle(player)
 	applyTrail(player)
 	applyAura(player)
@@ -306,7 +329,12 @@ end
 function CosmeticService.start()
 	local function onPlayer(player: Player)
 		player.CharacterAdded:Connect(function(character)
+			local humanoid = character:WaitForChild("Humanoid", 5)
+			if humanoid ~= nil and humanoid:IsA("Humanoid") then
+				humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+			end
 			character:WaitForChild("Head", 5)
+			applyName(player)
 			applyTitle(player)
 			character:WaitForChild("HumanoidRootPart", 5)
 			applyTrail(player)

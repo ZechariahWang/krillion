@@ -22,6 +22,7 @@ local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local MARGIN = 16 -- pixels kept clear around the panel when it is scaled down for a small screen
@@ -361,7 +362,7 @@ local function close()
 	end
 	isOpen = false
 	screen.Visible = false
-	Rail.panelClosed(close)
+	Windows.closed(close)
 end
 
 local function bindRow(container: Instance, key: string, name: string, onClick: () -> ())
@@ -506,7 +507,7 @@ function Rewards.open()
 		Sfx.play("Open", 0.5)
 		Ui.pop(frame, 0.7)
 	end
-	Rail.panelOpened(close)
+	Windows.opened(close)
 end
 
 return Rewards

@@ -53,6 +53,11 @@ function PlayerService.start()
 		local root = character:WaitForChild("HumanoidRootPart", 5)
 		if root ~= nil then
 			character:PivotTo(MapService.getLobbySpawnCFrame())
+			-- Roblox places a fresh character on the spawn point after CharacterAdded, so once more a frame later.
+			task.wait()
+			if root.Parent ~= nil and player:GetAttribute("Playing") ~= true then
+				character:PivotTo(MapService.getLobbySpawnCFrame())
+			end
 		end
 	end
 	local function onPlayer(player: Player)

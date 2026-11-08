@@ -1,11 +1,14 @@
 --!strict
--- Drives LobbyUi.Shop: the tabbed shop window for cosmetics, pets, toys, chests, passes and packs.
+-- Drives LobbyUi.Shop (the shop window for cosmetics, pets, toys, chests, passes and packs) and
+-- LobbyUi.Inventory (the same kind of window, authored with the cosmetic sections only, listing what you own
+-- first and the rest dimmed behind a lock, with how much of the collection you have in the title).
 -- The server checks every buy, equip and chest; this only shows the state and sends requests.
 -- Shells buys take a second click within CONFIRM_SECONDS; a chest opens on one click into ChestReveal; reward items open the Rewards
--- panel; chest-only items jump to CHESTS; a Shells item you cannot afford offers GET SHELLS (the STORE tab).
+-- panel; chest-only items jump to CHESTS; a Shells item you cannot afford offers GET SHELLS (the SHELLS section).
 --
--- Tabs are authored in Studio under Panel.Tabs. The current set is TABS; when a place still has only the
--- older five (Skins, Titles, Splashes, Trails, Passes) the shop falls back to OLD_TABS so it keeps working.
+-- The sections are the TextButtons authored under Holder.Panel.Sections, in LayoutOrder. Each carries a `Kind`
+-- attribute (Featured | Slots | Chests | Shells | Passes | Specials) and, for Slots, a comma list of cosmetic slots
+-- in `Slots`. The toolbar (Panel.Tools) holds the search box and the Price, Rarity and Hide-owned filters.
 
 local Lighting = game:GetService("Lighting")
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -29,45 +32,74 @@ local ChestReveal = require(script.Parent.ChestReveal)
 local ItemEmoji = require(script.Parent.ItemEmoji)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
-
--- Tab name -> what it lists: cosmetic slots, or a special page.
-local TABS = { "Hot", "Pets", "Skins", "Effects", "Style", "Toys", "Chests", "Store" }
-local TAB_SLOTS: { [string]: { string } } = {
-	Pets = { "Pet" },
-	Skins = { "Skin" },
-	Effects = { "Trail", "Aura", "Splash" },
-	Style = { "Title", "NameTag", "CardTheme" },
-	Toys = { "Toy" },
-	-- The older authored tabs.
-	Titles = { "Title" },
-	Splashes = { "Splash" },
-	Trails = { "Trail" },
-}
-local OLD_TABS = { "Skins", "Titles", "Splashes", "Trails", "Passes" }
-local STORE_TABS: { [string]: boolean } = { Store = true, Passes = true }
+local Windows = require(script.Parent.Windows)
 
 local BLUR_SIZE = 12
 local GOLD = Color3.fromRGB(255, 194, 75)
-local MUTED = Color3.fromRGB(122, 140, 160)
+local MUTED = Color3.fromRGB(185, 211, 240)
 local GREEN = Color3.fromRGB(120, 235, 140)
+local NAVY = Color3.fromRGB(10, 20, 32)
+local WHITE = Color3.fromRGB(255, 255, 255)
+local RED = Color3.fromRGB(255, 92, 92)
+local PURPLE = Color3.fromRGB(180, 107, 255)
 local CARD_SHADOW_REST = UDim2.fromOffset(0, 6)
 local CARD_SHADOW_HOVER = UDim2.fromOffset(0, 12)
 local CONFIRM_SECONDS = 3 -- a Shells buy or chest needs a second click within this long
 local SOON = "COMING SOON" -- Robux entries whose id is still the 0 placeholder
-local LONG_PRICE = 18 -- longer price lines (the pass perks) shrink to fit their label
 local LONG_ACTION = 8
+local MARGIN = 16 -- pixels kept clear around the window when it is scaled down for a small screen
+local MIN_FIT = 0.4
+local PORTRAIT_BELOW = 0.7 -- the wide layout shows smaller than this: use the tall phone one if it shows bigger
+local PORTRAIT_SIZE = UDim2.fromOffset(520, 880)
+local PRICE_X_WITH_COIN = 142
+local PRICE_X_PLAIN = 120
+local LOCKED = "🔒"
+local DIM = 0.45 -- text and preview transparency of an item you do not own, in the inventory
+
+local PRICES = { "All", "Shells", "Robux", "Free" }
+local RARITIES = { "All", table.unpack(Cosmetics.Rarities) }
+
+-- Badge face colour and whether its text is light.
+local BADGE_LOOK: { [string]: { color: Color3, light: boolean } } = {
+	["BEST VALUE"] = { color = GOLD, light = false },
+	["MOST POPULAR"] = { color = GOLD, light = false },
+	ONCE = { color = PURPLE, light = true },
+	TODAY = { color = RED, light = true },
+	NEW = { color = RED, light = true },
+	HOT = { color = RED, light = true },
+	LIMITED = { color = RED, light = true },
+}
 
 local PASS_EMOJI: { [string]: string } = { Vip = "👑", DoubleCash = "💰", SecondChance = "❤️", BoostPlus = "⚡" }
+local PASS_NAMES: { [string]: string } = {
+	Vip = "VIP",
+	DoubleCash = "2X " .. Currency.Upper,
+	SecondChance = "SECOND CHANCE",
+	BoostPlus = "BOOST PLUS",
+}
+local SLOT_NAMES: { [string]: string } = {
+	Skin = "pillar skin",
+	Title = "title",
+	Splash = "splash",
+	Trail = "trail",
+	Pet = "pet",
+	Aura = "aura",
+	CardTheme = "dive card theme",
+	NameTag = "name tag",
+	Toy = "toy",
+}
 
 type Entry = {
 	kind: string, -- a cosmetic slot, "Shop" (passes and products), "Chest" or "Odds"
 	name: string,
+	sub: string, -- the small line under the name: rarity and kind, a perk, a pack's rate
 	price: string,
-	currency: string?, -- "Cash" (Shells) shows the coin mark; nil shows the price text alone
+	currency: string?, -- "Cash" (shows the coin), "Robux", "Free", or nil (passes, chest-only, info rows)
 	priceColor: Color3?,
-	badge: string?, -- "EQUIPPED" | "OWNED" | "FREE" | "NEW" | "HOT" | "n OWNED" | nil
+	badge: string?,
 	action: string,
 	enabled: boolean,
+	owned: boolean,
 	color: Color3,
 	rarity: string?, -- colours the card border
 	emoji: string?,
@@ -75,18 +107,38 @@ type Entry = {
 	onClick: () -> (),
 }
 
-local player = Players.LocalPlayer
-local gui: Frame
-local panel: Frame
-local scrim: Frame
-local blur: BlurEffect?
-local cashText: TextLabel
-local grid: ScrollingFrame
-local template: Frame
-local tabButtons: { [string]: TextButton } = {}
-local tabs: { string } = TABS
+type Section = { name: string, kind: string, slots: { string }, button: TextButton }
 
-local current = "Hot"
+
+-- One window record per authored screen: LobbyUi.Shop and LobbyUi.Inventory share every card and section
+-- mechanic; the inventory one lists the whole collection, owned first, the rest behind a lock.
+type Window = {
+	name: string,
+	inventory: boolean,
+	gui: Frame,
+	panel: Frame,
+	scrim: Frame,
+	fit: UIScale,
+	layout: Ui.PhoneLayout?,
+	cashText: TextLabel,
+	titleLabel: TextLabel?,
+	title: string,
+	grid: ScrollingFrame,
+	template: Frame,
+	emptyLabel: TextLabel?,
+	sections: { Section },
+	sectionByName: { [string]: Section },
+	filterKeys: { [string]: TextButton },
+	current: Section?,
+	filter: Shop.Filter,
+	close: () -> (),
+}
+
+local player = Players.LocalPlayer
+local blur: BlurEffect?
+local windows: { Window } = {}
+local shopWindow: Window? = nil
+local active: Window? = nil -- the window being rendered or shown; card callbacks act on it
 local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
 local chestsAllowed = false
@@ -95,8 +147,20 @@ local pendingBuy: { id: string, at: number }? = nil -- the Shells buy or chest w
 
 local ShopUi = {}
 
-local render: () -> ()
-local setOpen: (boolean) -> ()
+local renderWindow: (Window) -> ()
+local openWindow: (Window, boolean) -> ()
+
+local function render()
+	if active ~= nil then
+		renderWindow(active)
+	end
+end
+
+local function setOpen(open: boolean)
+	if active ~= nil then
+		openWindow(active, open)
+	end
+end
 
 local function rgb(values: { number }?, fallback: Color3): Color3
 	if values == nil then
@@ -116,14 +180,39 @@ local function promptProduct(productId: number)
 	MarketplaceService:PromptProductPurchase(player, productId)
 end
 
-local function goTo(tab: string)
-	if tabButtons[tab] == nil then
-		-- The older authored tabs have no CHESTS or STORE; PASSES is the store there.
-		tab = if STORE_TABS[tab] then "Passes" else current
+local function goToIn(w: Window, name: string): boolean
+	local section = w.sectionByName[name]
+	if section == nil then
+		return false
 	end
-	current = tab
-	render()
+	w.current = section
+	renderWindow(w)
+	return true
 end
+
+local function goToKindIn(w: Window, kind: string): boolean
+	for _, section in w.sections do
+		if section.kind == kind then
+			return goToIn(w, section.name)
+		end
+	end
+	return false
+end
+
+-- A card's jump ("GET SHELLS", "VIEW", "CHESTS"): this window if it has the section, else the shop.
+local function goToKind(kind: string)
+	local w = active
+	if w == nil or goToKindIn(w, kind) then
+		return
+	end
+	local shop = shopWindow
+	if shop ~= nil and shop ~= w then
+		openWindow(w, false)
+		openWindow(shop, true)
+		goToKindIn(shop, kind)
+	end
+end
+
 
 -- The trail's own colours from its template, so the shop stripe always matches what plays in game.
 local function trailColors(item: Cosmetics.Item): ColorSequence
@@ -157,7 +246,7 @@ local function confirmThen(id: string, send: () -> ())
 	task.delay(CONFIRM_SECONDS, function()
 		if pendingBuy == mine then
 			pendingBuy = nil
-			if panel.Visible then
+			if active ~= nil and active.panel.Visible then
 				render()
 			end
 		end
@@ -180,18 +269,27 @@ local function emptyEntry(kind: string, name: string, color: Color3): Entry
 	return {
 		kind = kind,
 		name = name,
+		sub = "",
 		price = "",
 		currency = nil,
 		priceColor = nil,
 		badge = nil,
 		action = "",
 		enabled = true,
+		owned = false,
 		color = color,
 		rarity = nil,
 		emoji = nil,
 		stripe = nil,
 		onClick = function() end,
 	}
+end
+
+local function bonusText(item: Cosmetics.Item): string?
+	if item.shellBonus == nil then
+		return nil
+	end
+	return "+" .. math.floor(item.shellBonus * 100 + 0.5) .. "% " .. Currency.Upper
 end
 
 local function cosmeticEntry(item: Cosmetics.Item): Entry
@@ -202,32 +300,36 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 	entry.emoji = ItemEmoji.of(item)
 	entry.stripe = if item.trail ~= nil then trailColors(item) else nil
 	entry.badge = item.label
-	local bonus = if item.shellBonus ~= nil then "+" .. math.floor(item.shellBonus * 100 + 0.5) .. "% " .. Currency.Upper else nil
+	entry.owned = owned
+	local bonus = bonusText(item)
+	entry.sub = item.rarity .. " " .. (SLOT_NAMES[item.slot] or string.lower(item.slot))
+	if bonus ~= nil then
+		entry.sub ..= ", " .. bonus
+	end
 	if owned then
 		if equipped then
 			entry.badge = "EQUIPPED"
-			entry.price = bonus or "In use"
+			entry.price = "In use"
 			entry.action = "UNEQUIP"
 			entry.onClick = function()
 				Net.event("ShopEquip"):FireServer(item.slot, "")
 			end
 		else
 			entry.badge = "OWNED"
-			entry.price = bonus or "Ready to equip"
+			entry.price = "Ready to equip"
 			entry.action = "EQUIP"
 			entry.onClick = function()
 				Net.event("ShopEquip"):FireServer(item.slot, item.id)
 			end
 		end
-		if bonus ~= nil then
-			entry.priceColor = GREEN
-		end
+		entry.priceColor = GREEN
 		return entry
 	end
 	local source = Cosmetics.source(item)
 	if source == "reward" then
 		-- Never sold: RewardService grants it, so GET opens the panel that says how.
 		entry.badge = "FREE"
+		entry.currency = "Free"
 		entry.price = Cosmetics.RewardHow[item.reward :: string] or "Free reward"
 		entry.action = "GET"
 		entry.onClick = function()
@@ -238,7 +340,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 		entry.price = "With the " .. string.upper(item.pass :: string) .. " pass"
 		entry.action = "VIEW"
 		entry.onClick = function()
-			goTo("Store")
+			goToKind("Passes")
 		end
 	elseif source == "chest" then
 		local chest = chestFor(item.id)
@@ -246,9 +348,10 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 		entry.action = "CHESTS"
 		entry.enabled = chestsAllowed
 		entry.onClick = function()
-			goTo("Chests")
+			goToKind("Chests")
 		end
 	elseif source == "robux" then
+		entry.currency = "Robux"
 		entry.price = "R$ " .. tostring(item.robux or 0)
 		entry.priceColor = GOLD
 		entry.enabled = item.robuxProductId ~= 0
@@ -257,7 +360,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 			promptProduct(item.robuxProductId :: number)
 		end
 	else
-		entry.price = Currency.digits(item.price) .. (if bonus ~= nil then "  |  " .. bonus else "")
+		entry.price = Currency.digits(item.price)
 		entry.currency = "Cash"
 		if Shop.canBuyWithCash(profile, item) then
 			entry.action = if isConfirming(item.id) then "CONFIRM?" else "BUY"
@@ -270,7 +373,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 			-- Short of Shells: the button sells Shells instead of greying out.
 			entry.action = "GET " .. Theme.Icon.Shell
 			entry.onClick = function()
-				goTo("Store")
+				goToKind("Shells")
 			end
 		end
 	end
@@ -280,9 +383,9 @@ end
 local function passPerks(key: string): string
 	if key == "Vip" then
 		local bonus = math.floor(GameConfig.Cash.VipBonus * 100 + 0.5)
-		return "+" .. bonus .. "% " .. Currency.Upper .. "  |  AURORA PILLAR  |  GOLD WAKE  |  VIP TITLE AND TAG"
+		return "+" .. bonus .. "% " .. Currency.Upper .. ", Aurora pillar, Gold Wake, VIP title and tag"
 	elseif key == "DoubleCash" then
-		return "Double every " .. Currency.Upper .. " you earn"
+		return "Double every " .. Currency.Upper .. " you earn, forever"
 	elseif key == "SecondChance" then
 		return "One free revive every match"
 	elseif key == "BoostPlus" then
@@ -291,13 +394,6 @@ local function passPerks(key: string): string
 	return "Game pass"
 end
 
-local PASS_NAMES: { [string]: string } = {
-	Vip = "VIP",
-	DoubleCash = "2X " .. Currency.Upper,
-	SecondChance = "SECOND CHANCE",
-	BoostPlus = "BOOST PLUS",
-}
-
 local function passEntry(key: string): Entry
 	local passId = (Products.Passes :: any)[key] :: number
 	local robux = (Products.PassPrices :: any)[key] :: number?
@@ -305,10 +401,14 @@ local function passEntry(key: string): Entry
 	local entry = emptyEntry("Shop", PASS_NAMES[key] or string.upper(key), GOLD)
 	entry.rarity = "Legendary"
 	entry.emoji = PASS_EMOJI[key]
-	entry.price = passPerks(key)
-	entry.priceColor = MUTED
+	entry.sub = passPerks(key)
+	entry.currency = "Robux"
+	entry.price = if robux ~= nil then "R$ " .. robux else "Game pass"
+	entry.priceColor = GOLD
+	entry.badge = (Products.PassBadges :: any)[key]
 	entry.enabled = passId ~= 0 and not owned
-	entry.action = if robux ~= nil then "R$ " .. robux else "BUY"
+	entry.owned = owned
+	entry.action = "BUY"
 	entry.onClick = function()
 		if passId ~= 0 then
 			MarketplaceService:PromptGamePassPurchase(player, passId)
@@ -326,6 +426,7 @@ end
 local function productEntry(name: string, robux: number, productId: number, emoji: string?): Entry
 	local entry = emptyEntry("Shop", name, GOLD)
 	entry.emoji = emoji
+	entry.currency = "Robux"
 	entry.price = "R$ " .. robux
 	entry.priceColor = GOLD
 	entry.action = if productId ~= 0 then "BUY" else SOON
@@ -343,29 +444,30 @@ local function starterEntry(): Entry?
 	local pack = Products.StarterPack
 	local entry = productEntry("STARTER PACK", pack.robux, pack.productId, Theme.Icon.Gift)
 	entry.rarity = "Epic"
-	entry.badge = "ONCE"
+	entry.badge = pack.badge
 	-- Short enough to read on the card: the Shells and what kinds of items come with them.
 	local kinds = {}
 	for _, id in pack.items do
 		local item = Cosmetics.ById[id]
 		if item ~= nil then
-			table.insert(kinds, string.upper(item.slot))
+			table.insert(kinds, string.lower(item.slot))
 		end
 	end
-	entry.price = Currency.digits(pack.cash) .. " " .. Theme.Icon.Shell .. " + " .. table.concat(kinds, " + ")
-	entry.priceColor = GOLD
-	entry.action = if pack.productId ~= 0 then "R$ " .. pack.robux else SOON
+	entry.sub = Currency.digits(pack.cash) .. " " .. Theme.Icon.Shell .. " + " .. table.concat(kinds, " + ") .. ", one time only"
+	return entry
+end
+
+local function packEntry(pack: { productId: number, cash: number, robux: number, badge: string? }, rarity: string): Entry
+	local entry = productEntry(Currency.format(pack.cash), pack.robux, pack.productId, Theme.Icon.Shell)
+	entry.rarity = rarity
+	entry.badge = pack.badge
+	entry.sub = math.floor(pack.cash / pack.robux + 0.5) .. " " .. Currency.Upper .. " per R$"
 	return entry
 end
 
 local function packEntries(entries: { Entry })
 	for index, pack in Products.CashPacks do
-		local entry = productEntry(Currency.format(pack.cash), pack.robux, pack.productId, Theme.Icon.Shell)
-		entry.rarity = Cosmetics.Rarities[math.min(index, #Cosmetics.Rarities)]
-		if index == #Products.CashPacks then
-			entry.badge = "BEST VALUE"
-		end
-		table.insert(entries, entry)
+		table.insert(entries, packEntry(pack, Cosmetics.Rarities[math.min(index, #Cosmetics.Rarities)]))
 	end
 end
 
@@ -373,6 +475,7 @@ end
 local function boostShellsEntry(name: string, shells: number, emoji: string): Entry
 	local entry = emptyEntry("Shop", name, GOLD)
 	entry.emoji = emoji
+	entry.sub = "Buy it from the match button when you need it"
 	entry.price = Currency.digits(shells) .. " each"
 	entry.currency = "Cash"
 	entry.action = "IN MATCH"
@@ -389,12 +492,14 @@ local function boostEntries(entries: { Entry })
 	local timeName = "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
 	table.insert(entries, boostShellsEntry(hintName, GameConfig.Boosts.HintShells, Theme.Icon.Hint))
 	local hint = productEntry(hintName .. " x1", Products.Boosts.Hint.robux, Products.Boosts.Hint.productId, Theme.Icon.Hint)
+	hint.sub = "One hint in your stock"
 	if profile.hints > 0 then
 		hint.badge = profile.hints .. " OWNED"
 	end
 	table.insert(entries, hint)
 	table.insert(entries, boostShellsEntry(timeName, GameConfig.Boosts.ExtraTimeShells, Theme.Icon.Time))
 	local extra = productEntry(timeName .. " x1", Products.Boosts.ExtraTime.robux, Products.Boosts.ExtraTime.productId, Theme.Icon.Time)
+	extra.sub = "One +time in your stock"
 	if profile.extraTimes > 0 then
 		extra.badge = profile.extraTimes .. " OWNED"
 	end
@@ -403,34 +508,37 @@ local function boostEntries(entries: { Entry })
 		local name = (if pack.kind == "Hint" then hintName else timeName) .. " x" .. pack.count
 		local emoji = if pack.kind == "Hint" then Theme.Icon.Hint else Theme.Icon.Time
 		local entry = productEntry(name, pack.robux, pack.productId, emoji)
+		entry.sub = pack.count .. " in your stock, cheaper than one at a time"
 		entry.badge = "SAVE"
 		table.insert(entries, entry)
 	end
 end
 
-local function storeEntries(entries: { Entry })
+local function specialEntries(entries: { Entry })
 	local starter = starterEntry()
 	if starter ~= nil then
 		table.insert(entries, starter)
 	end
-	for _, key in Products.PassOrder do
-		table.insert(entries, passEntry(key))
-	end
 	local revive = productEntry("REVIVE", Products.Revive.robux, Products.Revive.productId, "❤️")
+	revive.sub = "Jump back in the next time you sink"
 	if profile.revives > 0 then
 		revive.badge = profile.revives .. " OWNED"
 	end
 	table.insert(entries, revive)
 	boostEntries(entries)
-	packEntries(entries)
+end
+
+local function passEntries(entries: { Entry })
+	for _, key in Products.PassOrder do
+		table.insert(entries, passEntry(key))
+	end
 end
 
 local function chestEntries(entries: { Entry })
 	if not chestsAllowed then
 		local blocked = emptyEntry("Shop", "CHESTS", MUTED)
 		blocked.emoji = Theme.Icon.Chest
-		blocked.price = "Not available where you live"
-		blocked.priceColor = MUTED
+		blocked.sub = "Not available where you live"
 		blocked.action = "LOCKED"
 		blocked.enabled = false
 		table.insert(entries, blocked)
@@ -440,6 +548,7 @@ local function chestEntries(entries: { Entry })
 		local entry = emptyEntry("Chest", string.upper(chest.name), rgb(chest.color, GOLD))
 		entry.emoji = Theme.Icon.Chest
 		entry.rarity = if chest.price >= 1000 then "Epic" else "Rare"
+		entry.sub = "One random prize, odds below"
 		entry.price = Currency.digits(chest.price)
 		entry.currency = "Cash"
 		if profile.cash >= chest.price then
@@ -450,7 +559,7 @@ local function chestEntries(entries: { Entry })
 		else
 			entry.action = "GET " .. Theme.Icon.Shell
 			entry.onClick = function()
-				goTo("Store")
+				goToKind("Shells")
 			end
 		end
 		table.insert(entries, entry)
@@ -463,11 +572,13 @@ local function chestEntries(entries: { Entry })
 				local entry = emptyEntry("Odds", string.upper(item.name), colorOf(item))
 				entry.rarity = item.rarity
 				entry.emoji = ItemEmoji.of(item)
-				entry.price = chest.name .. "  |  " .. Chests.percent(drop.chance)
+				entry.sub = "In the " .. chest.name
+				entry.price = Chests.percent(drop.chance) .. " chance"
 				entry.priceColor = Theme.Rarity[item.rarity] or MUTED
 				entry.action = string.upper(item.rarity)
 				entry.enabled = false
-				if Shop.owns(profile, item, passes) then
+				entry.owned = Shop.owns(profile, item, passes)
+				if entry.owned then
 					entry.badge = "OWNED"
 				end
 				table.insert(entries, entry)
@@ -476,7 +587,7 @@ local function chestEntries(entries: { Entry })
 	end
 end
 
-local function hotEntries(entries: { Entry })
+local function featuredEntries(entries: { Entry })
 	local starter = starterEntry()
 	if starter ~= nil then
 		table.insert(entries, starter)
@@ -488,31 +599,31 @@ local function hotEntries(entries: { Entry })
 		end
 		table.insert(entries, entry)
 	end
-	local best = Products.CashPacks[#Products.CashPacks]
-	local pack = productEntry(Currency.format(best.cash), best.robux, best.productId, Theme.Icon.Shell)
-	pack.rarity = "Legendary"
-	pack.badge = "BEST VALUE"
-	table.insert(entries, pack)
+	local best = #Products.CashPacks
+	table.insert(entries, packEntry(Products.CashPacks[best], "Legendary"))
 	if passes.DoubleCash ~= true then
 		table.insert(entries, passEntry("DoubleCash"))
 	end
 end
 
-local function entriesFor(tab: string): { Entry }
+local function entriesFor(section: Section): { Entry }
 	local entries: { Entry } = {}
-	local slots = TAB_SLOTS[tab]
-	if slots ~= nil then
-		for _, slot in slots do
+	if section.kind == "Slots" then
+		for _, slot in section.slots do
 			for _, item in Cosmetics.inSlot(slot) do
 				table.insert(entries, cosmeticEntry(item))
 			end
 		end
-	elseif tab == "Hot" then
-		hotEntries(entries)
-	elseif tab == "Chests" then
+	elseif section.kind == "Featured" then
+		featuredEntries(entries)
+	elseif section.kind == "Chests" then
 		chestEntries(entries)
-	elseif STORE_TABS[tab] then
-		storeEntries(entries)
+	elseif section.kind == "Shells" then
+		packEntries(entries)
+	elseif section.kind == "Passes" then
+		passEntries(entries)
+	elseif section.kind == "Specials" then
+		specialEntries(entries)
 	end
 	return entries
 end
@@ -558,6 +669,17 @@ local function fillPreview(preview: Frame, entry: Entry)
 	end
 end
 
+local function fillBadge(badge: TextLabel, text: string?)
+	badge.Visible = text ~= nil
+	if text == nil then
+		return
+	end
+	badge.Text = text
+	local look = BADGE_LOOK[text]
+	badge.BackgroundColor3 = if look ~= nil then look.color else WHITE
+	badge.TextColor3 = if look ~= nil and look.light then WHITE else NAVY
+end
+
 -- Lifts the object a little and deepens its shadow while the mouse is over it.
 local function addHover(object: GuiObject, lift: number, restShadow: UDim2, hoverShadow: UDim2)
 	local scale = object:FindFirstChildOfClass("UIScale")
@@ -580,79 +702,156 @@ local function addHover(object: GuiObject, lift: number, restShadow: UDim2, hove
 	end)
 end
 
--- The selected tab shows its authored Lime key face; the others are a faint glass key.
-local function renderTabs()
-	for name, button in tabButtons do
-		local selected = name == current
-		local face = button:FindFirstChild("Lip")
-		if face ~= nil and face:IsA("UIGradient") then
-			face.Enabled = selected
-		end
-		button.BackgroundTransparency = if selected then 0 else 0.75
+-- A lime key shows its authored Lime face when selected (or its filter is on); otherwise a faint glass key.
+local function setKeyLit(button: TextButton, lit: boolean)
+	local face = button:FindFirstChild("Lip")
+	if face ~= nil and face:IsA("UIGradient") then
+		face.Enabled = lit
+	end
+	button.BackgroundTransparency = if lit then 0 else 0.75
+end
+
+local function renderSections(w: Window)
+	for _, section in w.sections do
+		setKeyLit(section.button, section == w.current)
 	end
 end
 
-function render()
-	cashText.Text = Currency.format(profile.cash)
-	renderTabs()
-	Ui.clearClones(grid, template.Name, "Item")
-	for index, entry in entriesFor(current) do
-		local card = template:Clone()
-		card.Name = "Item" .. index
-		card.LayoutOrder = index
-		local nameLabel = card:FindFirstChild("ItemName") :: TextLabel
-		local priceLabel = card:FindFirstChild("Price") :: TextLabel
-		local coin = card:FindFirstChild("CoinIcon") :: Frame
-		local badge = card:FindFirstChild("Badge") :: TextLabel
-		local action = card:FindFirstChild("Action") :: TextButton
-		local border = card:FindFirstChild("Border")
-		fillPreview(card:FindFirstChild("Preview") :: Frame, entry)
-		nameLabel.Text = entry.name
-		priceLabel.Text = entry.price
-		priceLabel.TextScaled = #entry.price > LONG_PRICE
-		coin.Visible = entry.currency == "Cash"
-		if entry.currency == "Cash" then
-			priceLabel.Position = UDim2.fromOffset(84, 40)
-			priceLabel.TextColor3 = GOLD
-		else
-			priceLabel.Position = UDim2.fromOffset(68, 40)
-			priceLabel.TextColor3 = entry.priceColor or MUTED
+local function renderFilters(w: Window)
+	local filter = w.filter
+	local price = w.filterKeys.PriceFilter
+	if price ~= nil then
+		price.Text = "PRICE: " .. string.upper(filter.price)
+		setKeyLit(price, filter.price ~= "All")
+	end
+	local rarity = w.filterKeys.RarityFilter
+	if rarity ~= nil then
+		rarity.Text = "RARITY: " .. string.upper(filter.rarity)
+		setKeyLit(rarity, filter.rarity ~= "All")
+	end
+	local owned = w.filterKeys.OwnedFilter
+	if owned ~= nil then
+		setKeyLit(owned, filter.hideOwned)
+	end
+end
+
+local function fillCard(w: Window, card: Frame, entry: Entry)
+	local nameLabel = card:FindFirstChild("ItemName") :: TextLabel
+	local subLabel = card:FindFirstChild("Sub") :: TextLabel?
+	local priceLabel = card:FindFirstChild("Price") :: TextLabel
+	local coin = card:FindFirstChild("CoinIcon") :: Frame
+	local badge = card:FindFirstChild("Badge") :: TextLabel
+	local action = card:FindFirstChild("Action") :: TextButton
+	local border = card:FindFirstChild("Border")
+	fillPreview(card:FindFirstChild("Preview") :: Frame, entry)
+	nameLabel.Text = entry.name
+	if subLabel ~= nil then
+		subLabel.Text = entry.sub
+	end
+	priceLabel.Text = entry.price
+	local showCoin = entry.currency == "Cash"
+	coin.Visible = showCoin
+	priceLabel.Position = UDim2.fromOffset(if showCoin then PRICE_X_WITH_COIN else PRICE_X_PLAIN, priceLabel.Position.Y.Offset)
+	priceLabel.TextColor3 = if showCoin then GOLD else (entry.priceColor or MUTED)
+	-- Rarity colours the card's border; cards with no rarity keep the authored one.
+	if border ~= nil and border:IsA("UIStroke") then
+		local rarityColor = if entry.rarity ~= nil then Theme.Rarity[entry.rarity] else nil
+		if rarityColor ~= nil then
+			border.Color = rarityColor
 		end
-		-- Rarity colours the card's border; cards with no rarity keep the authored one.
-		if border ~= nil and border:IsA("UIStroke") then
-			local rarityColor = if entry.rarity ~= nil then Theme.Rarity[entry.rarity] else nil
-			if rarityColor ~= nil then
-				border.Color = rarityColor
+	end
+	local locked = w.inventory and not entry.owned
+	fillBadge(badge, if locked and entry.badge == nil then LOCKED else entry.badge)
+	local dim = if locked then DIM else 0
+	nameLabel.TextTransparency = dim
+	if subLabel ~= nil then
+		subLabel.TextTransparency = dim
+	end
+	priceLabel.TextTransparency = dim
+	if locked then
+		local preview = card:FindFirstChild("Preview")
+		if preview ~= nil then
+			for _, part in preview:GetChildren() do
+				if part:IsA("TextLabel") then
+					part.TextTransparency = DIM
+				elseif part:IsA("GuiObject") then
+					part.BackgroundTransparency = math.max(part.BackgroundTransparency, DIM)
+				end
 			end
 		end
-		badge.Visible = entry.badge ~= nil
-		if entry.badge ~= nil then
-			badge.Text = entry.badge
+	end
+	action.Text = entry.action
+	action.TextScaled = #entry.action > LONG_ACTION
+	action.Active = entry.enabled
+	action.BackgroundTransparency = if entry.enabled then 0 else 0.65
+	action.MouseButton1Click:Connect(function()
+		if not entry.enabled then
+			return
 		end
-		action.Text = entry.action
-		action.TextScaled = #entry.action > LONG_ACTION
-		action.Active = entry.enabled
-		if entry.enabled then
-			action.BackgroundTransparency = 0
-		else
-			action.BackgroundTransparency = 0.65
+		Sfx.play("LockIn", 0.5)
+		active = w
+		entry.onClick()
+	end)
+	Ui.pressable(action)
+	addHover(card, 1.03, CARD_SHADOW_REST, CARD_SHADOW_HOVER)
+end
+
+-- How much of the whole catalogue is owned, for the inventory title.
+local function collectionText(): string
+	local owned = 0
+	for _, item in Cosmetics.List do
+		if Shop.owns(profile, item, passes) then
+			owned += 1
 		end
-		action.MouseButton1Click:Connect(function()
-			if not entry.enabled then
-				return
-			end
-			Sfx.play("LockIn", 0.5)
-			entry.onClick()
-		end)
-		Ui.pressable(action)
-		addHover(card, 1.03, CARD_SHADOW_REST, CARD_SHADOW_HOVER)
+	end
+	return owned .. "/" .. #Cosmetics.List
+end
+
+function renderWindow(w: Window)
+	active = w
+	w.cashText.Text = Currency.format(profile.cash)
+	if w.titleLabel ~= nil then
+		w.titleLabel.Text = if w.inventory then w.title .. "  " .. collectionText() else w.title
+	end
+	renderSections(w)
+	renderFilters(w)
+	Ui.clearClones(w.grid, w.template.Name, "Item")
+	local section = w.current
+	if section == nil then
+		return
+	end
+	local entries = entriesFor(section)
+	if w.inventory then
+		-- What you own comes first; the rest follows in catalogue order.
+		local owned: { Entry } = {}
+		local rest: { Entry } = {}
+		for _, entry in entries do
+			table.insert(if entry.owned then owned else rest, entry)
+		end
+		table.move(rest, 1, #rest, #owned + 1, owned)
+		entries = owned
+	end
+	local shown = 0
+	for _, entry in entries do
+		if not Shop.matches(entry, w.filter) then
+			continue
+		end
+		shown += 1
+		local card = w.template:Clone()
+		card.Name = "Item" .. shown
+		card.LayoutOrder = shown
+		fillCard(w, card, entry)
 		card.Visible = true
-		card.Parent = grid
+		card.Parent = w.grid
 	end
+	if w.emptyLabel ~= nil then
+		w.emptyLabel.Visible = shown == 0
+	end
+	w.grid.CanvasPosition = Vector2.zero
 end
 
-local function setBackdrop(shown: boolean)
-	scrim.Visible = shown
+local function setBackdrop(w: Window, shown: boolean)
+	w.scrim.Visible = shown
 	local effect = blur
 	if effect == nil then
 		return
@@ -664,116 +863,242 @@ local function setBackdrop(shown: boolean)
 	end
 end
 
-function setOpen(open: boolean)
+function openWindow(w: Window, open: boolean)
 	if open then
 		-- A pass bought on the website while playing shows up without a rejoin.
 		Net.event("PassCheck"):FireServer()
-		render()
-		setBackdrop(true)
-		Ui.pop(panel)
+		active = w
+		renderWindow(w)
+		setBackdrop(w, true)
+		Ui.pop(w.panel)
+		Windows.opened(w.close)
 	else
-		pendingBuy = nil
-		panel.Visible = false
-		setBackdrop(false)
+		w.close()
 	end
 end
 
-local function refreshButton()
-	if playing and panel.Visible then
-		setOpen(false)
-	end
+local function fitToScreen(w: Window)
+	Ui.fitPanel(w.gui.AbsoluteSize, w.panel, w.fit, w.layout, MARGIN, MIN_FIT, PORTRAIT_BELOW)
 end
 
--- Uses the current tab set when the place has every one of its buttons, else the older five. Buttons of
--- the set not in use are hidden so the authored row lays out only the live tabs.
-local function bindTabs(row: Instance)
-	local useNew = true
-	for _, name in TABS do
-		local button = row:FindFirstChild(name)
-		if button == nil or not button:IsA("TextButton") then
-			useNew = false
-		end
+-- Portrait phone layout: the section keys wrap into rows above the toolbar, and the grid takes the rest.
+local function portraitOverrides(w: Window): Ui.Overrides
+	local overrides: Ui.Overrides = {
+		Sections = { Position = UDim2.fromOffset(24, 104), Size = UDim2.new(1, -48, 0, 92) },
+		["Sections/UIListLayout"] = { FillDirection = Enum.FillDirection.Horizontal, Wraps = true },
+		["Sections/GetMore"] = { Visible = false },
+		Tools = { Position = UDim2.fromOffset(24, 204), Size = UDim2.new(1, -48, 0, 40) },
+		["Tools/Search"] = { Size = UDim2.new(1, -3 * 96 - 24, 1, 0) },
+		["Tools/PriceFilter"] = { Size = UDim2.fromOffset(96, 40) },
+		["Tools/RarityFilter"] = { Size = UDim2.fromOffset(96, 40) },
+		["Tools/OwnedFilter"] = { Size = UDim2.fromOffset(96, 40) },
+		Grid = { Position = UDim2.fromOffset(24, 256), Size = UDim2.new(1, -48, 1, -280) },
+	}
+	for _, section in w.sections do
+		overrides["Sections/" .. section.name] = { Size = UDim2.fromOffset(110, 34) }
 	end
-	tabs = if useNew then TABS else OLD_TABS
-	local live: { [string]: boolean } = {}
-	for _, name in tabs do
-		live[name] = true
-	end
-	for _, child in row:GetChildren() do
+	return overrides
+end
+
+local function bindSections(w: Window, frame: Instance)
+	local buttons: { TextButton } = {}
+	for _, child in frame:GetChildren() do
 		if child:IsA("TextButton") then
-			child.Visible = live[child.Name] == true
+			table.insert(buttons, child)
 		end
 	end
-	-- The live tabs share the row evenly (the authored widths are for the older five).
-	local layout = row:FindFirstChildOfClass("UIListLayout")
-	local gap = if layout ~= nil then layout.Padding.Offset else 8
-	for _, name in tabs do
-		local button = row:WaitForChild(name) :: TextButton
-		if useNew then
-			button.Size = UDim2.new(1 / #tabs, -math.ceil(gap * (#tabs - 1) / #tabs), 1, 0)
+	table.sort(buttons, function(a, b)
+		return a.LayoutOrder < b.LayoutOrder
+	end)
+	for _, button in buttons do
+		local kind = button:GetAttribute("Kind")
+		if typeof(kind) ~= "string" then
+			continue
 		end
-		tabButtons[name] = button
+		local slotList = button:GetAttribute("Slots")
+		local slots = if typeof(slotList) == "string" then string.split(slotList, ",") else {}
+		local section: Section = { name = button.Name, kind = kind, slots = slots, button = button }
+		table.insert(w.sections, section)
+		w.sectionByName[button.Name] = section
 		Ui.pressable(button)
 		button.MouseButton1Click:Connect(function()
-			current = name
 			Sfx.play("Pop", 0.4)
-			render()
+			goToIn(w, button.Name)
 		end)
 	end
-	current = tabs[1]
+	w.current = w.sections[1]
 end
 
-function ShopUi.init(playerGui: PlayerGui)
-	gui = Ui.screen(playerGui, "Shop") :: Frame
-	panel = gui:WaitForChild("Panel") :: Frame
-	scrim = gui:WaitForChild("Scrim") :: Frame
-	blur = Lighting:FindFirstChild("ShopBlur") :: BlurEffect?
-	cashText = panel:WaitForChild("CashText") :: TextLabel
-	grid = panel:WaitForChild("Grid") :: ScrollingFrame
-	template = grid:WaitForChild("ItemTemplate") :: Frame
-	bindTabs(panel:WaitForChild("Tabs"))
+local function cycle(list: { string }, value: string): string
+	local index = table.find(list, value) or 1
+	return list[index % #list + 1]
+end
+
+local function bindTools(w: Window, frame: Instance)
+	for _, name in { "PriceFilter", "RarityFilter", "OwnedFilter" } do
+		local button = frame:FindFirstChild(name)
+		if button ~= nil and button:IsA("TextButton") then
+			w.filterKeys[name] = button
+			Ui.pressable(button)
+		end
+	end
+	local price = w.filterKeys.PriceFilter
+	if price ~= nil then
+		price.MouseButton1Click:Connect(function()
+			w.filter.price = cycle(PRICES, w.filter.price)
+			Sfx.play("Pop", 0.4)
+			renderWindow(w)
+		end)
+	end
+	local rarity = w.filterKeys.RarityFilter
+	if rarity ~= nil then
+		rarity.MouseButton1Click:Connect(function()
+			w.filter.rarity = cycle(RARITIES, w.filter.rarity)
+			Sfx.play("Pop", 0.4)
+			renderWindow(w)
+		end)
+	end
+	local owned = w.filterKeys.OwnedFilter
+	if owned ~= nil then
+		owned.MouseButton1Click:Connect(function()
+			w.filter.hideOwned = not w.filter.hideOwned
+			Sfx.play("Pop", 0.4)
+			renderWindow(w)
+		end)
+	end
+	local search = frame:FindFirstChild("Search")
+	if search ~= nil and search:IsA("TextBox") then
+		search:GetPropertyChangedSignal("Text"):Connect(function()
+			w.filter.query = search.Text
+			renderWindow(w)
+		end)
+	end
+end
+
+-- Binds one authored screen (Scrim, Holder.Fit, Holder.Panel with Sections, Tools, Grid, CashText, Title,
+-- CloseButton, an optional GetShells key) to a window record.
+local function bindWindow(playerGui: PlayerGui, name: string, inventory: boolean): Window?
+	local gui = Ui.screen(playerGui, name, 10)
+	if gui == nil then
+		warn("ShopUi: LobbyUi." .. name .. " is missing; that window stays closed")
+		return nil
+	end
+	local holder = gui:WaitForChild("Holder") :: Frame
+	local panel = holder:WaitForChild("Panel") :: Frame
+	local grid = panel:WaitForChild("Grid") :: ScrollingFrame
+	local title = panel:FindFirstChild("Title")
+	local titleLabel = if title ~= nil and title:IsA("TextLabel") then title else nil
+	local empty = grid:FindFirstChild("Empty")
+	local w: Window = {
+		name = name,
+		inventory = inventory,
+		gui = gui,
+		panel = panel,
+		scrim = gui:WaitForChild("Scrim") :: Frame,
+		fit = holder:WaitForChild("Fit") :: UIScale,
+		layout = nil,
+		cashText = panel:WaitForChild("CashText") :: TextLabel,
+		titleLabel = titleLabel,
+		title = if titleLabel ~= nil then titleLabel.Text else "",
+		grid = grid,
+		template = grid:WaitForChild("ItemTemplate") :: Frame,
+		emptyLabel = if empty ~= nil and empty:IsA("TextLabel") then empty else nil,
+		sections = {},
+		sectionByName = {},
+		filterKeys = {},
+		current = nil,
+		filter = { query = "", price = "All", rarity = "All", hideOwned = false },
+		close = function() end,
+	}
+	w.close = function()
+		pendingBuy = nil
+		panel.Visible = false
+		setBackdrop(w, false)
+		Windows.closed(w.close)
+	end
+	bindSections(w, panel:WaitForChild("Sections"))
+	bindTools(w, panel:WaitForChild("Tools"))
+	w.layout = Ui.phoneLayout(panel, PORTRAIT_SIZE, portraitOverrides(w))
+	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+		fitToScreen(w)
+	end)
+	fitToScreen(w)
+	local plus = panel:FindFirstChild("GetShells")
+	if plus ~= nil and plus:IsA("TextButton") then
+		Ui.pressable(plus)
+		plus.MouseButton1Click:Connect(function()
+			Sfx.play("Pop", 0.4)
+			active = w
+			goToKind("Shells")
+		end)
+	end
 	local close = panel:WaitForChild("CloseButton") :: TextButton
 	Ui.pressable(close)
 	close.MouseButton1Click:Connect(function()
 		Sfx.play("Close", 0.5)
-		setOpen(false)
+		openWindow(w, false)
 	end)
-	scrim.InputBegan:Connect(function(input)
+	w.scrim.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			setOpen(false)
+			openWindow(w, false)
 		end
 	end)
-	-- The SHOP key lives on the lobby rail (Rail hides it in a match and while this window is open).
-	local railButton = Rail.button("ShopButton")
-	if railButton ~= nil then
-		railButton.Activated:Connect(function()
-			Sfx.play("Open", 0.5)
-			setOpen(true)
-		end)
-	end
+	table.insert(windows, w)
+	return w
 end
 
--- Opens the shop on one tab ("Store", "Chests"...), e.g. from a Starter Pack nudge.
-function ShopUi.openTab(tab: string)
-	if playing then
+local function bindRailKey(keyName: string, w: Window?)
+	local button = Rail.button(keyName)
+	if button == nil or w == nil then
 		return
 	end
-	setOpen(true)
-	goTo(tab)
+	button.Activated:Connect(function()
+		if playing then
+			return
+		end
+		Sfx.play("Open", 0.5)
+		openWindow(w, true)
+	end)
+end
+
+-- Binds LobbyUi.Shop (rail SHOP key) and LobbyUi.Inventory (rail ITEMS key).
+function ShopUi.init(playerGui: PlayerGui)
+	blur = Lighting:FindFirstChild("ShopBlur") :: BlurEffect?
+	shopWindow = bindWindow(playerGui, "Shop", false)
+	bindRailKey("ShopButton", shopWindow)
+	bindRailKey("InventoryButton", bindWindow(playerGui, "Inventory", true))
+end
+
+-- Opens the shop on one section by name ("Shells", "Chests"...), e.g. from a Starter Pack nudge.
+function ShopUi.openTab(name: string)
+	local shop = shopWindow
+	if playing or shop == nil then
+		return
+	end
+	openWindow(shop, true)
+	goToIn(shop, name)
 end
 
 function ShopUi.onProfile(payload)
 	profile = Profile.fromStored(payload)
 	passes = payload.passes or {}
 	chestsAllowed = payload.chestsAllowed == true
-	if panel.Visible then
-		render()
+	for _, w in windows do
+		if w.panel.Visible then
+			renderWindow(w)
+		end
 	end
 end
 
 function ShopUi.onState(payload)
 	playing = payload.playing == true
-	refreshButton()
+	if playing then
+		for _, w in windows do
+			if w.panel.Visible then
+				openWindow(w, false)
+			end
+		end
+	end
 end
 
 return ShopUi

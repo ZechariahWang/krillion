@@ -13,6 +13,7 @@ local TideRules = require(ReplicatedStorage.Shared.Tide)
 local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local statusFrame: Frame
 local statusText: TextLabel
@@ -64,7 +65,11 @@ local function setStatus(text: string)
 end
 
 function Status.init(playerGui: PlayerGui)
-	local gui = Ui.screen(playerGui, "Status")
+	local gui = Ui.screen(playerGui, "Status") :: Frame
+	-- The chips hide under any open window; the window's own header carries what matters there.
+	Windows.Changed.connect(function()
+		gui.Visible = not Windows.anyOpen()
+	end)
 	statusFrame = gui:WaitForChild("StatusFrame") :: Frame
 	statusText = statusFrame:WaitForChild("Status") :: TextLabel
 	local secondary = gui:WaitForChild("SecondaryStatus")

@@ -530,6 +530,22 @@ function Ui.fitPanel(
 	fit.Scale = math.clamp(scaleFor(panel.Size), minScale, 1)
 end
 
+-- Top bar --------------------------------------------------------------------------------------------------
+
+local TOPBAR_GAP = 8 -- pixels between Roblox's last top bar button and ours (Roblox's own spacing)
+local TOPBAR_BOTTOM = 2 -- Roblox's buttons end this far above the bottom of GuiService.TopbarInset
+
+-- Puts a 44 px circle button on the line of Roblox's own top bar buttons, `slot` places right of them
+-- (0 is next to them). Call again when GuiService.TopbarInset or the button's size changes.
+function Ui.placeTopButton(button: GuiObject, slot: number)
+	local inset = GuiService.TopbarInset
+	local size = button.AbsoluteSize
+	local x = inset.Min.X + TOPBAR_GAP + slot * (size.X + TOPBAR_GAP)
+	local y = inset.Max.Y - TOPBAR_BOTTOM - size.Y
+	button.AnchorPoint = Vector2.zero
+	button.Position = UDim2.fromOffset(math.floor(x + 0.5), math.floor(y + 0.5))
+end
+
 -- Screens --------------------------------------------------------------------------------------------------
 
 -- Each screen is a full-screen Frame under one of three ScreenGuis authored in Studio: LobbyUi (only in the
@@ -537,6 +553,7 @@ end
 local ROOT_OF: { [string]: string } = {
 	Rail = "LobbyUi",
 	Shop = "LobbyUi",
+	Inventory = "LobbyUi",
 	LobbyQuiz = "LobbyUi",
 	Quests = "LobbyUi",
 	Rewards = "LobbyUi",
@@ -624,8 +641,7 @@ end
 
 -- Emoji beside existing labels: the shop counter, the tide chip, the timer, the results title.
 local ICONS: { [string]: { { path: string, icon: string, when: ((string) -> boolean)? } } } = {
-	GameUi = { { path = "Results.Panel.Title", icon = "Trophy" } },
-	LobbyUi = { { path = "Shop.Panel.CashText", icon = "Shell" } },
+	LobbyUi = { { path = "Shop.Holder.Panel.CashText", icon = "Shell" } },
 	SharedUi = {
 		{ path = "Status.Tide.Text", icon = "Wave" },
 		{ path = "Status.SecondaryStatus.Secondary", icon = "Time", when = isClock },
@@ -687,7 +703,7 @@ end
 -- World text players see all the time: pillar name tags, head titles and the lobby leaderboard.
 local function isWorldText(object: Instance): boolean
 	if object:IsA("BillboardGui") then
-		return object.Name == "NameTag" or object.Name == "KrillionTitle"
+		return object.Name == "NameTag" or object.Name == "KrillionName"
 	end
 	if object:IsA("SurfaceGui") then
 		return object:FindFirstAncestor("Leaderboard") ~= nil

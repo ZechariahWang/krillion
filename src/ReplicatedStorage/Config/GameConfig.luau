@@ -156,6 +156,14 @@ local GameConfig = {
 		MinOthersAlive = 2, -- fewer than this and the match is already decided
 		HeightAboveWater = 4,
 	},
+	-- Shells lying on the island between rounds (PickupService). SessionCap is per visit.
+	Pickups = {
+		Enabled = 1,
+		Max = 10, -- on the island at once
+		SpawnSeconds = 8,
+		Shells = 1, -- per shell picked up
+		SessionCap = 100,
+	},
 	-- Lobby throwables (Cosmetics slot Toy): owned forever, never usable on a pillar.
 	Toys = {
 		Cooldown = 2.5, -- seconds between throws

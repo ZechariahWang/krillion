@@ -118,6 +118,30 @@ local function isTouch(): boolean
 	return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 end
 
+-- A phone's on-screen keyboard covers the bottom of the screen: the bar moves up to sit just over it, and
+-- PromptEcho (authored above the bar) repeats the prompt there, since the top may be hidden too.
+local KEYBOARD_GAP = 8
+local barRest: UDim2? = nil
+local promptText = ""
+
+local function placeForKeyboard()
+	local echo = answerBar:FindFirstChild("PromptEcho")
+	if barRest == nil then
+		barRest = answerBar.Position
+	end
+	local shown = UserInputService.OnScreenKeyboardVisible
+	if shown then
+		local keyboardTop = UserInputService.OnScreenKeyboardPosition.Y - gui.AbsolutePosition.Y
+		answerBar.Position = UDim2.new(barRest.X.Scale, barRest.X.Offset, 0, keyboardTop - KEYBOARD_GAP)
+	else
+		answerBar.Position = barRest
+	end
+	if echo ~= nil and echo:IsA("TextLabel") then
+		echo.Text = promptText
+		echo.Visible = shown and promptText ~= ""
+	end
+end
+
 -- One frame later: a focus grab in the same frame as the Enter press that released the box is dropped.
 local function keepFocus()
 	task.delay(0, function()
@@ -589,6 +613,8 @@ function Hud.init(newPlayerGui: PlayerGui)
 	banner = gui:WaitForChild("Banner") :: Frame
 	buttonText = submitButton.Text
 
+	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(placeForKeyboard)
+	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardPosition"):Connect(placeForKeyboard)
 	Ui.pressable(submitButton)
 	submitButton.Activated:Connect(onEnter)
 	answerBox.FocusLost:Connect(function(enterPressed)
@@ -660,8 +686,19 @@ function Hud.onBoostResult(payload)
 	refreshBoosts()
 end
 
+-- You sank or reset: your meter and answer bar go now, not on the next state tick.
+function Hud.onEliminated()
+	playing = false
+	meter.Visible = false
+	answerBar.Visible = false
+	banner.Visible = false
+end
+
 function Hud.onState(payload)
 	phase = payload.phase
+	if type(payload.prompt) == "string" then
+		promptText = string.upper(payload.prompt)
+	end
 	playing = payload.playing == true
 	local mine = payload.yourSecondsLeft
 	outOfTime = phase == "Prompt" and mine ~= nil and mine <= 0

@@ -12,6 +12,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local FIRST_SHOW_DELAY = 1.5 -- let the lobby settle before the first-time popup
@@ -164,6 +165,8 @@ end
 
 -- `finished` is GOT IT or the close button (a skip counts as done); false when a match pulls the player away,
 -- which keeps the tutorial pending so it comes back after the match.
+local closeForRail: () -> ()
+
 local function close(finished: boolean)
 	local screen = gui
 	if screen == nil or not isOpen then
@@ -171,6 +174,7 @@ local function close(finished: boolean)
 	end
 	isOpen = false
 	screen.Visible = false
+	Windows.closed(closeForRail)
 	if finished then
 		pending = false
 		Rail.setBadge("HelpButton", nil)
@@ -181,8 +185,8 @@ local function close(finished: boolean)
 	end
 end
 
--- Another rail panel opening (one at a time) counts as skipping, like the close button.
-local function closeForRail()
+-- Another window opening (one at a time) counts as skipping, like the close button.
+function closeForRail()
 	close(true)
 end
 
@@ -404,7 +408,7 @@ function Tutorial.open()
 		Sfx.play("Open", 0.5)
 		Ui.pop(panel, 0.7)
 	end
-	Rail.panelOpened(closeForRail)
+	Windows.opened(closeForRail)
 end
 
 return Tutorial

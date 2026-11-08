@@ -10,6 +10,7 @@ local Currency = require(ReplicatedStorage.Shared.Currency)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local MAX_POPS = 4
@@ -48,6 +49,7 @@ local CAPTIONS: { [string]: string } = {
 	quest = "QUEST",
 	reward = "REWARD",
 	purchase = "PURCHASE",
+	pickup = "FOUND",
 	spend = "SPENT",
 }
 
@@ -76,7 +78,7 @@ local function setAmount(value: number)
 end
 
 -- What else stacks in the bottom-right column above the chip while it is on screen: in a match, the Hint and
--- +10 SEC boosts docked on the chip.
+-- +10 SEC boosts docked on the chip; in the lobby, the THROW key when a toy is equipped.
 local function columnParts(): { GuiObject }
 	local parts: { GuiObject } = {}
 	local root = playerGuiRef
@@ -87,6 +89,11 @@ local function columnParts(): { GuiObject }
 	local boosts = if hud ~= nil then hud:FindFirstChild("BoostBar") else nil
 	if hud ~= nil and hud.Visible and boosts ~= nil and boosts:IsA("GuiObject") and boosts.Visible then
 		table.insert(parts, boosts)
+	end
+	local rail = Ui.findScreen(root, "Rail")
+	local toy = if rail ~= nil then rail:FindFirstChild("ToyButton") else nil
+	if rail ~= nil and rail.Visible and toy ~= nil and toy:IsA("GuiObject") and toy.Visible then
+		table.insert(parts, toy)
 	end
 	return parts
 end
@@ -121,7 +128,7 @@ local function refresh()
 	if own == nil then
 		return
 	end
-	own.Visible = true
+	own.Visible = not Windows.anyOpen()
 	placePops()
 end
 
@@ -221,6 +228,7 @@ end
 
 function Wallet.init(playerGui: PlayerGui)
 	playerGuiRef = playerGui
+	Windows.Changed.connect(refresh)
 	counter:GetPropertyChangedSignal("Value"):Connect(function()
 		setAmount(counter.Value)
 	end)

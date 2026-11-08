@@ -12,13 +12,11 @@ local UserInputService = game:GetService("UserInputService")
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Music = require(script.Parent.Music)
-local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
-local TOPBAR_GAP = 8 -- pixels between Roblox's last top bar button and the gear (Roblox's own spacing)
-local TOPBAR_BOTTOM = 2 -- Roblox's buttons end this far above the bottom of GuiService.TopbarInset
 local MARGIN = 16
 local MIN_FIT = 0.5
 
@@ -37,6 +35,8 @@ local sliderFill: GuiObject? = nil
 local sliderKnob: GuiObject? = nil
 local sliderText: TextLabel? = nil
 local dragging = false
+local dragEndedAt = -math.huge -- os.clock() of the last slider release
+local DRAG_GRACE = 0.25 -- seconds after a slider release in which a Scrim tap is ignored
 local isOpen = false
 
 local Settings = {}
@@ -112,10 +112,15 @@ end
 
 local function bindSlider(bar: GuiObject)
 	slider = bar
+	-- Sinks the press: otherwise it reaches the Scrim behind, whose release closes the window.
+	bar.Active = true
 	local fill = bar:FindFirstChild("Fill")
 	sliderFill = if fill ~= nil and fill:IsA("GuiObject") then fill else nil
 	local knob = bar:FindFirstChild("Knob")
 	sliderKnob = if knob ~= nil and knob:IsA("GuiObject") then knob else nil
+	if sliderKnob ~= nil then
+		sliderKnob.Active = true
+	end
 	local count = bar:FindFirstChild("Count")
 	sliderText = if count ~= nil and count:IsA("TextLabel") then count else nil
 	local function begin(input: InputObject)
@@ -138,6 +143,7 @@ local function bindSlider(bar: GuiObject)
 	UserInputService.InputEnded:Connect(function(input)
 		if dragging and isPress(input) then
 			dragging = false
+			dragEndedAt = os.clock()
 			Net.event("SetSetting"):FireServer("MusicVolume", Music.getVolume())
 			Sfx.play("Tick", 0.5)
 		end
@@ -147,15 +153,17 @@ end
 -- Puts the gear just right of Roblox's own top bar buttons, on the same line as them.
 local function placeGear()
 	local button = gear
-	if button == nil then
-		return
+	if button ~= nil then
+		Ui.placeTopButton(button, 0)
 	end
-	local inset = GuiService.TopbarInset
-	local size = button.AbsoluteSize
-	local x = inset.Min.X + TOPBAR_GAP
-	local y = inset.Max.Y - TOPBAR_BOTTOM - size.Y
-	button.AnchorPoint = Vector2.zero
-	button.Position = UDim2.fromOffset(math.floor(x + 0.5), math.floor(y + 0.5))
+end
+
+-- The gear hides while any window is open (its own included), so nothing stacks on top.
+local function showGear()
+	local button = gear
+	if button ~= nil then
+		button.Visible = not Windows.anyOpen()
+	end
 end
 
 local function fitToScreen()
@@ -179,7 +187,7 @@ local function close()
 	if scrim ~= nil then
 		scrim.Visible = false
 	end
-	Rail.panelClosed(close)
+	Windows.closed(close)
 end
 
 function Settings.open()
@@ -197,7 +205,7 @@ function Settings.open()
 	if panel ~= nil then
 		Ui.pop(panel, 0.7)
 	end
-	Rail.panelOpened(close)
+	Windows.opened(close)
 end
 
 local function toggleWindow()
@@ -244,6 +252,8 @@ local function bind(found: Frame)
 	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeGear)
 	top:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeGear)
 	placeGear()
+	Windows.Changed.connect(showGear)
+	showGear()
 
 	local closeButton = window:FindFirstChild("CloseButton")
 	if closeButton ~= nil and closeButton:IsA("GuiButton") then
@@ -254,7 +264,13 @@ local function bind(found: Frame)
 		end)
 	end
 	if scrim ~= nil and scrim:IsA("GuiButton") then
-		scrim.Activated:Connect(close)
+		-- A slider drag released over the Scrim must not count as a tap outside the window.
+		scrim.Activated:Connect(function()
+			if dragging or os.clock() - dragEndedAt < DRAG_GRACE then
+				return
+			end
+			close()
+		end)
 	end
 
 	local volumeRow = window:FindFirstChild("VolumeRow")
