@@ -4,23 +4,23 @@ return {
 	prompt = "Name a chess piece",
 	answers = {
 		Plankton = {
-			"king", "queen", "pawn",
-		},
-		TooClever = {
-			"horse",
+			"king", "queen", "pawn", "knight",
 		},
 		Schooler = {
-			"knight", "rook", "bishop",
+			"rook", "bishop",
 		},
 		Rare = {
-			"castle",
+			"chancellor", "archbishop", "amazon", "ferz", "alfil",
 		},
 		DeepCut = {
-			"ferz", "alfil",
+			"wazir", "nightrider", "grasshopper", "camel", "zebra", "giraffe", "centaur",
 		},
 		OneInAKrillion = {
-			"chancellor", "archbishop", "amazon",
+			"dabbaba", "threeleaper", "berolina pawn",
 		},
 	},
-	aliases = {},
+	aliases = {
+		["castle"] = "rook", ["horse"] = "knight", ["marshal"] = "chancellor", ["cardinal"] = "archbishop",
+		["fers"] = "ferz", ["elephant"] = "alfil",
+	},
 }
