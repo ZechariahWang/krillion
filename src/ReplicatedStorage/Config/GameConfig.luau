@@ -43,8 +43,9 @@ local GameConfig = {
 	},
 	Answer = {
 		MaxLength = 40,
-		FuzzyMinLength = 5, -- shorter answers must be spelled exactly
-		FuzzyLongLength = 10, -- answers this long or longer forgive two typos instead of one
+		FuzzyMinLength = 4, -- shorter answers must be spelled exactly
+		FuzzyLongLength = 7, -- answers this long or longer forgive two typos instead of one
+		FuzzyVeryLongLength = 11, -- answers this long or longer forgive three typos
 		RetryCooldown = 1, -- seconds between guesses, so a wrong answer can be retried but not spammed
 		CheckMinInterval = 0.35, -- seconds between Enter-to-check presses after a valid check
 		MaxChecksPerRound = 40, -- per player per prompt (and per lobby prompt)

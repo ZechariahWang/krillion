@@ -124,7 +124,10 @@ local function allowedTypos(answer: string): number
 	if #answer < GameConfig.Answer.FuzzyLongLength then
 		return 1
 	end
-	return 2
+	if #answer < GameConfig.Answer.FuzzyVeryLongLength then
+		return 2
+	end
+	return 3
 end
 
 local function findExact(prompt: Prompt, answer: string): string?

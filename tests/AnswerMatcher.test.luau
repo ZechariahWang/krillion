@@ -50,6 +50,15 @@ return function(test)
 		assert(corrected == "antigua and barbuda")
 	end)
 
+	test("typo allowance grows with length: 1 from 4 letters, 2 from 7, 3 from 11", function()
+		local animals = { id = "a", prompt = "x", answers = { Plankton = { "duck", "penguin", "velociraptor" } }, aliases = {} }
+		assert(AnswerMatcher.match("dukc", animals) == "Plankton", "4 letters, one swap")
+		assert(AnswerMatcher.match("pengwen", animals) == "Plankton", "7 letters, two typos")
+		assert(AnswerMatcher.match("volosirapter", animals) == "Plankton", "12 letters, three typos")
+		assert(AnswerMatcher.match("dkk", animals) == nil, "3 letters must be exact")
+		assert(AnswerMatcher.match("pxngwxn", animals) == nil, "7 letters, three typos is too far")
+	end)
+
 	test("autocorrect picks the closest bank answer, not the first one in tier order", function()
 		local berries = { id = "b", prompt = "x", answers = { Plankton = { "blackberries" }, Rare = { "blackberried" } }, aliases = {} }
 		local tier, corrected = AnswerMatcher.resolve("blackberrid", berries)
