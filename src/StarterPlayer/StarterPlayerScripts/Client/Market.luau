@@ -35,6 +35,8 @@ local Ui = require(script.Parent.Ui)
 
 local PET_ATTRIBUTE = "KrillionPet"
 local PET_OFFSET = CFrame.new(2.6, 1.2, 2.2) -- beside and a little behind the owner's root part
+-- Pet models are built nose along +X; this turns them to swim the way their owner faces (-Z).
+local PET_FACING = CFrame.Angles(0, math.pi / 2, 0)
 local PET_FOLLOW = 8 -- how quickly a pet catches up (higher is snappier)
 local PET_BOB = 0.35 -- studs up and down
 local AIM_SECONDS = 6 -- how long the THROW key waits for you to pick a player
@@ -104,7 +106,7 @@ local function updatePet(owner: Player)
 	end
 	local root = rootOf(owner)
 	if root ~= nil then
-		model:PivotTo(root.CFrame * PET_OFFSET)
+		model:PivotTo(root.CFrame * PET_OFFSET * PET_FACING)
 	end
 	model.Parent = petFolder
 	pets[owner] = { model = model, name = name }
@@ -126,7 +128,7 @@ local function stepPets(dt: number)
 			continue
 		end
 		local bob = math.sin(now * 2 + owner.UserId % 7) * PET_BOB
-		local goal = root.CFrame * PET_OFFSET * CFrame.new(0, bob, 0)
+		local goal = root.CFrame * PET_OFFSET * CFrame.new(0, bob, 0) * PET_FACING
 		local here = pet.model:GetPivot()
 		-- Too far behind (a teleport to a pillar or the lobby): jump straight there.
 		if (here.Position - goal.Position).Magnitude > 40 then

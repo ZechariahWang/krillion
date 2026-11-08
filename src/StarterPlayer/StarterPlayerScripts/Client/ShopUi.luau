@@ -738,8 +738,14 @@ local function bindTabs(row: Instance)
 			child.Visible = live[child.Name] == true
 		end
 	end
+	-- The live tabs share the row evenly (the authored widths are for the older five).
+	local layout = row:FindFirstChildOfClass("UIListLayout")
+	local gap = if layout ~= nil then layout.Padding.Offset else 8
 	for _, name in tabs do
 		local button = row:WaitForChild(name) :: TextButton
+		if useNew then
+			button.Size = UDim2.new(1 / #tabs, -math.ceil(gap * (#tabs - 1) / #tabs), 1, 0)
+		end
 		tabButtons[name] = button
 		Ui.pressable(button)
 		button.MouseButton1Click:Connect(function()
