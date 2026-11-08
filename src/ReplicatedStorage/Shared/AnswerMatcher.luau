@@ -79,6 +79,8 @@ end
 -- Edit distance where inserting, deleting or changing a letter costs 1, and so does swapping two
 -- neighbouring letters (the most common typo).
 function AnswerMatcher.distance(a: string, b: string): number
+	local aBytes = { string.byte(a, 1, -1) }
+	local bBytes = { string.byte(b, 1, -1) }
 	local rows: { { number } } = {}
 	for i = 0, #a do
 		local row = {}
@@ -94,7 +96,7 @@ function AnswerMatcher.distance(a: string, b: string): number
 	for i = 1, #a do
 		for j = 1, #b do
 			local cost = 1
-			if string.sub(a, i, i) == string.sub(b, j, j) then
+			if aBytes[i] == bBytes[j] then
 				cost = 0
 			end
 			local deletion = rows[i - 1][j] + 1
@@ -103,8 +105,8 @@ function AnswerMatcher.distance(a: string, b: string): number
 			local best = math.min(deletion, insertion, substitution)
 			local swapped = i > 1
 				and j > 1
-				and string.sub(a, i, i) == string.sub(b, j - 1, j - 1)
-				and string.sub(a, i - 1, i - 1) == string.sub(b, j, j)
+				and aBytes[i] == bBytes[j - 1]
+				and aBytes[i - 1] == bBytes[j]
 			if swapped then
 				best = math.min(best, rows[i - 2][j - 2] + 1)
 			end
@@ -148,7 +150,12 @@ local function findClosest(prompt: Prompt, answer: string): (string?, string?)
 		local accepted = prompt.answers[tier.name]
 		if accepted ~= nil then
 			for _, candidate in accepted do
-				local distance = AnswerMatcher.distance(candidate, answer)
+				-- The edit distance is at least the length gap, so far-off lengths skip the full comparison.
+				local lengthGap = math.abs(#candidate - #answer)
+				local distance = bestDistance
+				if lengthGap < bestDistance then
+					distance = AnswerMatcher.distance(candidate, answer)
+				end
 				if distance < bestDistance then
 					bestDistance = distance
 					bestTier = tier.name
