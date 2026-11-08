@@ -37,6 +37,7 @@ local suites = {
 	require("./AnswerStats.test"),
 	require("./BotBrain.test"),
 	require("./PromptBank.test"),
+	require("./DayCycle.test"),
 }
 
 for _, suite in suites do

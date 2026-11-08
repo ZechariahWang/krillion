@@ -50,6 +50,12 @@ local GameConfig = {
 		MaxChecksPerRound = 40, -- per player per prompt (and per lobby prompt)
 		DeadlineGrace = 0.5, -- network slack after a player's deadline before answers are refused
 	},
+	DayCycle = {
+		CycleSeconds = 720, -- one full day and night
+		NightShare = 0.25, -- of the cycle spent between dusk and dawn
+		DawnClock = 5.5, -- Lighting.ClockTime where night ends
+		DuskClock = 18.5, -- Lighting.ClockTime where night begins
+	},
 	Lobby = {
 		QuizEnabled = 0, -- 1 serves warm-up prompts in the lobby between matches; 0 keeps prompts to real matches
 		QuizSeconds = 20,
