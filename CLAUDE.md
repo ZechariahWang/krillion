@@ -41,8 +41,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   attributes and the `Lighting.Atmosphere` haze are the night look. `Client/DayNight` blends them at dusk and dawn
   (fog out, then haze in) and lights parts tagged `NightLight` (the torches) only at night.
 - Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
-  `LobbySpawn`, `HowToBoard` and `HowRareBoard` stay direct children: code looks them up by name. The
-  `Railing.RailBlocker` walls rise 70 studs so nobody jumps off the deck.
+  `LobbySpawn`, `HowToBoard` and `HowRareBoard` stay direct children: code looks them up by name. `Lobby.Stairs`
+  lead off the west rail down to the beach. Players roam the whole island: invisible `Arena.BeachBorder` walls
+  stand just short of the waterline (and behind the deck) so nobody swims out.
 - `PhysicalAssets.TerrainBeforeDunes` is the terrain before the beach dunes were added.
 - Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
   `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start.
@@ -66,8 +67,8 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, HELP keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while the shop is open. On short screens it
   wraps into two columns and sizes itself to its visible keys.
-- Pop-up windows (Quests, Rewards, Help, Shop, Settings) share the Quests panel's top edge: centre-anchored at
-  `Position.Y = (0.5 + heightScale / 2, -248 + heightOffset / 2)`.
+- Pop-up windows (Quests, Rewards, Help, Shop, Settings) and the match countdown sit dead centre: anchor
+  (0.5, 0.5) at Position (0.5, 0.5).
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
   gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. Toasts stack in the bottom-left
