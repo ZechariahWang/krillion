@@ -124,12 +124,58 @@ local function placePops()
 	end
 end
 
+local JUMP_GAP = 8 -- pixels between Roblox's touch jump button and the chip above it
+local chipRest: UDim2? = nil
+local toyRest: UDim2? = nil
+
+-- Roblox's own jump button, once the touch controls exist.
+local function jumpButton(): GuiObject?
+	local root = playerGuiRef
+	local touch = if root ~= nil then root:FindFirstChild("TouchGui") else nil
+	local frame = if touch ~= nil then touch:FindFirstChild("TouchControlFrame") else nil
+	local button = if frame ~= nil then frame:FindFirstChild("JumpButton") else nil
+	return if button ~= nil and button:IsA("GuiObject") then button else nil
+end
+
+-- Phones: the jump button owns the bottom-right corner, so the chip (and the THROW key on it) sit just above
+-- it. Without one, both stay where they were authored.
+local function dodgeJumpButton()
+	local own = chip
+	local screen = gui
+	if own == nil or screen == nil then
+		return
+	end
+	if chipRest == nil then
+		chipRest = own.Position
+	end
+	local root = playerGuiRef
+	local rail = if root ~= nil then Ui.findScreen(root, "Rail") else nil
+	local toy = if rail ~= nil then rail:FindFirstChild("ToyButton") else nil
+	if toy ~= nil and toy:IsA("GuiObject") and toyRest == nil then
+		toyRest = toy.Position
+	end
+	local jump = jumpButton()
+	if jump == nil or not jump.Visible then
+		own.Position = chipRest
+		if toy ~= nil and toy:IsA("GuiObject") and toyRest ~= nil then
+			toy.Position = toyRest
+		end
+		return
+	end
+	local bottom = jump.AbsolutePosition.Y - screen.AbsolutePosition.Y - JUMP_GAP
+	own.Position = UDim2.new(1, chipRest.X.Offset, 0, bottom)
+	if toy ~= nil and toy:IsA("GuiObject") then
+		toy.Position = UDim2.new(1, -16, 0, bottom - own.AbsoluteSize.Y - JUMP_GAP)
+	end
+end
+
 local function refresh()
 	local own = chip
 	if own == nil then
 		return
 	end
 	own.Visible = not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
+	dodgeJumpButton()
 	placePops()
 end
 
@@ -249,6 +295,16 @@ function Wallet.init(playerGui: PlayerGui)
 		end
 		gui = found
 		chip = ownChip
+		-- The touch controls appear with the character and move with the screen: follow them.
+		if UserInputService.TouchEnabled then
+			task.spawn(function()
+				while true do
+					dodgeJumpButton()
+					placePops()
+					task.wait(0.5)
+				end
+			end)
+		end
 		pops = layer
 		local fit = layer:FindFirstChild("Fit")
 		popsFit = if fit ~= nil and fit:IsA("UIScale") then fit else nil
