@@ -5,6 +5,7 @@
 -- The stack lifts above any bottom bar it overlaps (the answer bar during a prompt, the spectate bar, the join
 -- card) and above the touch thumbstick, so a toast never covers input. Toasts pop in and slide out to the left.
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
@@ -433,6 +434,10 @@ end
 -- Toasts that arrive together are shown SPACING_SECONDS apart; until the GUI is bound they wait.
 function Toasts.show(text: string, kind: string?)
 	if type(text) ~= "string" then
+		return
+	end
+	-- Phones, on a pillar: the prompt, the box and the timer are all that shows.
+	if UserInputService.TouchEnabled and Players.LocalPlayer:GetAttribute("Playing") == true then
 		return
 	end
 	local message = clip(string.match(text, "^%s*(.-)%s*$") or "")

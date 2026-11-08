@@ -126,40 +126,31 @@ local barRest: UDim2? = nil
 local promptText = ""
 
 local refreshBoosts: () -> ()
-local meterRest: { position: UDim2, size: UDim2 }? = nil
+local TOUCH_BAR_TOP = 0.17 -- phones: the answer bar's top, as a fraction of the screen height (under the chips)
+local TOUCH_BAR_WIDTH = 0.6
 
-local function placeForKeyboard()
-	local echo = answerBar:FindFirstChild("PromptEcho")
+-- Phones: the answer bar sits high on the screen, under the prompt and timer, where the keyboard (which
+-- covers the bottom half) never reaches it. Desktop keeps the authored bottom position.
+local function placeAnswerBar()
 	if barRest == nil then
 		barRest = answerBar.Position
 	end
-	if meterRest == nil then
-		meterRest = { position = meter.Position, size = meter.Size }
-	end
-	local shown = UserInputService.OnScreenKeyboardVisible
-	if shown then
-		local keyboardTop = UserInputService.OnScreenKeyboardPosition.Y - gui.AbsolutePosition.Y
-		answerBar.Position = UDim2.new(barRest.X.Scale, barRest.X.Offset, 0, keyboardTop - KEYBOARD_GAP)
-		-- The water meter shrinks into the strip above the keyboard, bottom edge level with the bar.
-		local barTop = keyboardTop - KEYBOARD_GAP - answerBar.AbsoluteSize.Y
-		meter.AnchorPoint = Vector2.new(0, 1)
-		meter.Position = UDim2.new(0, meterRest.position.X.Offset, 0, keyboardTop - KEYBOARD_GAP)
-		meter.Size = UDim2.new(0, meterRest.size.X.Offset, 0, math.max(barTop - 40, 60))
-		Status.dock(barTop)
-	else
-		answerBar.Position = barRest
-		meter.AnchorPoint = Vector2.new(0, 0.5)
-		meter.Position = meterRest.position
-		meter.Size = meterRest.size
-		Status.dock(nil)
-	end
-	-- The boosts sit under the keyboard; they come back with the chip when it goes.
-	refreshBoosts()
-	-- The status chips carry the prompt once docked, so the echo stays off.
-	if echo ~= nil and echo:IsA("TextLabel") then
-		echo.Text = promptText
+	local echo = answerBar:FindFirstChild("PromptEcho")
+	if echo ~= nil and echo:IsA("GuiObject") then
 		echo.Visible = false
 	end
+	if isTouch() then
+		answerBar.AnchorPoint = Vector2.new(0.5, 0)
+		answerBar.Position = UDim2.new(0.5, 0, TOUCH_BAR_TOP, 0)
+		answerBar.Size = UDim2.new(TOUCH_BAR_WIDTH, 0, answerBar.Size.Y.Scale, answerBar.Size.Y.Offset)
+	else
+		answerBar.Position = barRest
+	end
+	refreshBoosts()
+end
+
+local function placeForKeyboard()
+	placeAnswerBar()
 end
 
 -- Phones: no walking in a match. The pillar top is small, the thumbstick would sit under the keyboard, and
@@ -258,10 +249,6 @@ end
 -- Boosts --------------------------------------------------------------------------------------------------
 
 local function boostsShown(): boolean
-	-- Under a phone's keyboard the boosts would be covered; they come back with the chip when it goes.
-	if UserInputService.OnScreenKeyboardVisible then
-		return false
-	end
 	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
 end
 
@@ -296,6 +283,15 @@ local function fitBoostBar()
 		return
 	end
 	local origin = gui.AbsolutePosition
+	local height = gui.AbsoluteSize.Y
+	if isTouch() then
+		-- Phones: beside the answer bar at the top, clear of the keyboard.
+		bar.AnchorPoint = Vector2.new(0, 0)
+		local barRight = answerBar.AbsolutePosition.X + answerBar.AbsoluteSize.X - origin.X
+		bar.Position = UDim2.fromOffset(math.floor(barRight + BOOST_GAP + 0.5), math.floor(answerBar.AbsolutePosition.Y - origin.Y + 0.5))
+		scale.Scale = BOOST_MIN_SCALE
+		return
+	end
 	local right = gui.AbsoluteSize.X - BOOST_EDGE
 	local bottom = gui.AbsoluteSize.Y - BOOST_EDGE
 	local chip = shellsChip()
@@ -305,7 +301,6 @@ local function fitBoostBar()
 	end
 	bar.AnchorPoint = Vector2.new(1, 1)
 	bar.Position = UDim2.fromOffset(math.floor(right + 0.5), math.floor(bottom + 0.5))
-	local height = gui.AbsoluteSize.Y
 	if height > 0 then
 		scale.Scale = math.clamp(height / BOOST_DESIGN_HEIGHT, BOOST_MIN_SCALE, 1)
 	end
@@ -662,7 +657,8 @@ function Hud.init(newPlayerGui: PlayerGui)
 	buttonText = submitButton.Text
 
 	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(placeForKeyboard)
-	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardPosition"):Connect(placeForKeyboard)
+	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeAnswerBar)
+	placeAnswerBar()
 	Ui.pressable(submitButton)
 	submitButton.Activated:Connect(onEnter)
 	answerBox.FocusLost:Connect(function(enterPressed)
@@ -761,7 +757,7 @@ function Hud.onState(payload)
 		return
 	end
 
-	meter.Visible = payload.playing
+	meter.Visible = payload.playing and not isTouch()
 	if payload.playing then
 		updateMeter(payload)
 	end

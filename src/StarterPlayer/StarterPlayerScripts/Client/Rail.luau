@@ -71,18 +71,30 @@ local function fitToScreen()
 		return
 	end
 	local gap = list.Padding.Offset
-	if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+	if UserInputService.TouchEnabled then
+		-- Phones: the list layout is off and every key gets a fixed slot in two columns, so nothing can
+		-- re-wrap. Laid out again only when the set of visible keys changes.
 		if count == lastCount then
 			return
 		end
 		lastCount = count
 		columns = 2
+		list.Parent = nil -- a UIListLayout has no off switch; out of the frame it lays out nothing
+		local index = 0
+		for _, child in frame:GetChildren() do
+			if child:IsA("TextButton") and child.Visible then
+				local column = index % 2
+				local row = math.floor(index / 2)
+				child.Position = UDim2.fromOffset(column * (keySize + gap), row * (keySize + gap))
+				index += 1
+			end
+		end
 		local rows = math.ceil(count / 2)
-		list.Wraps = true
 		frame.Size = UDim2.fromOffset(stackHeight(2, keySize, gap) + edgeWidth, stackHeight(rows, keySize, gap))
 		scale.Scale = TOUCH_FIT
 		return
 	end
+	list.Parent = frame
 	if math.abs(screenHeight - lastHeight) < JITTER and count == lastCount then
 		return
 	end
