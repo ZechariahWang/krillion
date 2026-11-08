@@ -1,5 +1,6 @@
 --!strict
--- Drives LobbyUi.Shop: the shop window for cosmetics, pets, toys, chests, passes and packs.
+-- Drives LobbyUi.Shop: the shop window for cosmetics, pets, toys, chests, passes and packs. The same window
+-- opened as the INVENTORY (ShopUi.openInventory) shows only the cosmetic sections and only what you own.
 -- The server checks every buy, equip and chest; this only shows the state and sends requests.
 -- Shells buys take a second click within CONFIRM_SECONDS; a chest opens on one click into ChestReveal; reward items open the Rewards
 -- panel; chest-only items jump to CHESTS; a Shells item you cannot afford offers GET SHELLS (the SHELLS section).
@@ -30,6 +31,7 @@ local ChestReveal = require(script.Parent.ChestReveal)
 local ItemEmoji = require(script.Parent.ItemEmoji)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local BLUR_SIZE = 12
 local GOLD = Color3.fromRGB(255, 194, 75)
@@ -50,6 +52,8 @@ local PORTRAIT_BELOW = 0.7 -- the wide layout shows smaller than this: use the t
 local PORTRAIT_SIZE = UDim2.fromOffset(520, 880)
 local PRICE_X_WITH_COIN = 142
 local PRICE_X_PLAIN = 120
+local INVENTORY_TITLE = "🎒 INVENTORY"
+local INVENTORY_EMPTY = "NOTHING OWNED HERE YET"
 
 local PRICES = { "All", "Shells", "Robux", "Free" }
 local RARITIES = { "All", table.unpack(Cosmetics.Rarities) }
@@ -112,6 +116,11 @@ local fit: UIScale
 local layout: Ui.PhoneLayout? = nil
 local blur: BlurEffect?
 local cashText: TextLabel
+local titleLabel: TextLabel?
+local shopTitle = ""
+local shopEmpty = ""
+local getShells: TextButton?
+local getMore: GuiObject?
 local grid: ScrollingFrame
 local template: Frame
 local emptyLabel: TextLabel?
@@ -120,6 +129,7 @@ local sectionByName: { [string]: Section } = {}
 local filterKeys: { [string]: TextButton } = {}
 
 local current: Section? = nil
+local inventory = false -- open as the inventory: cosmetic sections only, owned items only
 local filter: Shop.Filter = { query = "", price = "All", rarity = "All", hideOwned = false }
 local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
@@ -730,8 +740,31 @@ local function fillCard(card: Frame, entry: Entry)
 	addHover(card, 1.03, CARD_SHADOW_REST, CARD_SHADOW_HOVER)
 end
 
+local function renderMode()
+	if titleLabel ~= nil then
+		titleLabel.Text = if inventory then INVENTORY_TITLE else shopTitle
+	end
+	if emptyLabel ~= nil then
+		emptyLabel.Text = if inventory then INVENTORY_EMPTY else shopEmpty
+	end
+	if getShells ~= nil then
+		getShells.Visible = not inventory
+	end
+	if getMore ~= nil then
+		getMore.Visible = not inventory
+	end
+	local owned = filterKeys.OwnedFilter
+	if owned ~= nil then
+		owned.Visible = not inventory
+	end
+	for _, section in sections do
+		section.button.Visible = not inventory or section.kind == "Slots"
+	end
+end
+
 function render()
 	cashText.Text = Currency.format(profile.cash)
+	renderMode()
 	renderSections()
 	renderFilters()
 	Ui.clearClones(grid, template.Name, "Item")
@@ -741,6 +774,9 @@ function render()
 	end
 	local shown = 0
 	for _, entry in entriesFor(section) do
+		if inventory and not entry.owned then
+			continue
+		end
 		if not Shop.matches(entry, filter) then
 			continue
 		end
@@ -771,17 +807,27 @@ local function setBackdrop(shown: boolean)
 	end
 end
 
+local function closeWindow()
+	pendingBuy = nil
+	panel.Visible = false
+	setBackdrop(false)
+	Windows.closed(closeWindow)
+end
+
 function setOpen(open: boolean)
 	if open then
 		-- A pass bought on the website while playing shows up without a rejoin.
 		Net.event("PassCheck"):FireServer()
+		local section = current
+		if inventory and (section == nil or section.kind ~= "Slots") then
+			goToKind("Slots")
+		end
 		render()
 		setBackdrop(true)
 		Ui.pop(panel)
+		Windows.opened(closeWindow)
 	else
-		pendingBuy = nil
-		panel.Visible = false
-		setBackdrop(false)
+		closeWindow()
 	end
 end
 
@@ -897,19 +943,27 @@ function ShopUi.init(playerGui: PlayerGui)
 	scrim = gui:WaitForChild("Scrim") :: Frame
 	blur = Lighting:FindFirstChild("ShopBlur") :: BlurEffect?
 	cashText = panel:WaitForChild("CashText") :: TextLabel
+	local title = panel:FindFirstChild("Title")
+	titleLabel = if title ~= nil and title:IsA("TextLabel") then title else nil
+	shopTitle = if titleLabel ~= nil then titleLabel.Text else ""
 	grid = panel:WaitForChild("Grid") :: ScrollingFrame
 	template = grid:WaitForChild("ItemTemplate") :: Frame
 	local empty = grid:FindFirstChild("Empty")
 	emptyLabel = if empty ~= nil and empty:IsA("TextLabel") then empty else nil
-	bindSections(panel:WaitForChild("Sections"))
+	shopEmpty = if emptyLabel ~= nil then emptyLabel.Text else ""
+	local sectionFrame = panel:WaitForChild("Sections")
+	bindSections(sectionFrame)
+	local divider = sectionFrame:FindFirstChild("GetMore")
+	getMore = if divider ~= nil and divider:IsA("GuiObject") then divider else nil
 	bindTools(panel:WaitForChild("Tools"))
 	layout = Ui.phoneLayout(panel, PORTRAIT_SIZE, portraitOverrides())
 	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
 	fitToScreen()
-	local getShells = panel:FindFirstChild("GetShells")
-	if getShells ~= nil and getShells:IsA("TextButton") then
-		Ui.pressable(getShells)
-		getShells.MouseButton1Click:Connect(function()
+	local plus = panel:FindFirstChild("GetShells")
+	if plus ~= nil and plus:IsA("TextButton") then
+		getShells = plus
+		Ui.pressable(plus)
+		plus.MouseButton1Click:Connect(function()
 			Sfx.play("Pop", 0.4)
 			goToKind("Shells")
 		end)
@@ -930,9 +984,26 @@ function ShopUi.init(playerGui: PlayerGui)
 	if railButton ~= nil then
 		railButton.Activated:Connect(function()
 			Sfx.play("Open", 0.5)
+			inventory = false
 			setOpen(true)
 		end)
 	end
+	local itemsButton = Rail.button("InventoryButton")
+	if itemsButton ~= nil then
+		itemsButton.Activated:Connect(function()
+			Sfx.play("Open", 0.5)
+			ShopUi.openInventory()
+		end)
+	end
+end
+
+-- Opens the window as the inventory: cosmetic sections only, owned items only, equip and unequip.
+function ShopUi.openInventory()
+	if playing then
+		return
+	end
+	inventory = true
+	setOpen(true)
 end
 
 -- Opens the shop on one section by name ("Shells", "Chests"...), e.g. from a Starter Pack nudge.
@@ -940,6 +1011,7 @@ function ShopUi.openTab(name: string)
 	if playing then
 		return
 	end
+	inventory = false
 	setOpen(true)
 	goTo(name)
 end
