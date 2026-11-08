@@ -14,10 +14,10 @@ return {
 			"life", "chutes and ladders", "guess who", "mouse trap", "trivial pursuit", "pictionary", "catan",
 		},
 		Rare = {
-			"ticket to ride", "pandemic", "mancala", "othello", "parcheesi", "ludo", "hungry hungry hippos", "cranium",
-			"mastermind", "sequence", "chinese checkers", "hi ho cherryo", "kerplunk", "payday", "careers", "blokus",
-			"stratego", "carcassonne", "azul", "codenames", "splendor", "dixit", "king of tokyo", "forbidden island",
-			"shogi", "xiangqi",
+			"dutch blitz", "ticket to ride", "pandemic", "mancala", "othello", "parcheesi", "ludo", "hungry hungry hippos",
+			"cranium", "mastermind", "sequence", "chinese checkers", "hi ho cherryo", "kerplunk", "payday", "careers",
+			"blokus", "stratego", "carcassonne", "azul", "codenames", "splendor", "dixit", "king of tokyo",
+			"forbidden island", "shogi", "xiangqi",
 		},
 		DeepCut = {
 			"dominion", "7 wonders", "sagrada", "patchwork", "betrayal at house on the hill", "small world", "scythe",
