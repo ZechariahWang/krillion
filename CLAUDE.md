@@ -35,7 +35,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title` is
   unused.
 - Sea dressing: `Arena.Reef.Coral.Extra` and `Arena.Beach.GrassExtra` hold the extra kelp, coral and tufts;
-  `Arena.Beach.Foam` the shoreline foam, `Arena.Beach.Clutter` the towels, buckets, driftwood, net and
+  `Arena.Beach.Foam` the shoreline foam, `Arena.Beach.Shallows` the seagrass, kelp, coral and shells on the
+  underwater slope (kept under the surface), `Arena.Beach.Clutter` the towels, buckets, driftwood, net and
   lifeguard chair; `Arena.Beach.Palm` models are built from parts (trunk segments, fronds, coconuts).
   `Arena.SeaLife` also holds `Sailboat`, `Seagull` and `Buoy` models (Persistent, `Speed` attribute) that
   SeaLife moves round the island.
