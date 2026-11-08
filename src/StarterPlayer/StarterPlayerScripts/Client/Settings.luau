@@ -15,7 +15,8 @@ local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
 local WAIT_SECONDS = 10
-local TOPBAR_GAP = 12 -- pixels between Roblox's last top bar button and the gear
+local TOPBAR_GAP = 8 -- pixels between Roblox's last top bar button and the gear (Roblox's own spacing)
+local TOPBAR_BOTTOM = 2 -- Roblox's buttons end this far above the bottom of GuiService.TopbarInset
 local MARGIN = 16
 local MIN_FIT = 0.5
 
@@ -72,7 +73,7 @@ local function refresh()
 	showToggle(afkToggle, player:GetAttribute("Afk") == true)
 end
 
--- Puts the gear just right of Roblox's own top bar buttons, centred in the bar's height.
+-- Puts the gear just right of Roblox's own top bar buttons, on the same line as them.
 local function placeGear()
 	local button = gear
 	if button == nil then
@@ -81,7 +82,7 @@ local function placeGear()
 	local inset = GuiService.TopbarInset
 	local size = button.AbsoluteSize
 	local x = inset.Min.X + TOPBAR_GAP
-	local y = inset.Min.Y + math.max((inset.Height - size.Y) / 2, 0)
+	local y = inset.Max.Y - TOPBAR_BOTTOM - size.Y
 	button.AnchorPoint = Vector2.zero
 	button.Position = UDim2.fromOffset(math.floor(x + 0.5), math.floor(y + 0.5))
 end
