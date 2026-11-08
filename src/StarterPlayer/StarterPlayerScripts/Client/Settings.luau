@@ -35,6 +35,8 @@ local sliderFill: GuiObject? = nil
 local sliderKnob: GuiObject? = nil
 local sliderText: TextLabel? = nil
 local dragging = false
+local dragEndedAt = -math.huge -- os.clock() of the last slider release
+local DRAG_GRACE = 0.25 -- seconds after a slider release in which a Scrim tap is ignored
 local isOpen = false
 
 local Settings = {}
@@ -110,10 +112,15 @@ end
 
 local function bindSlider(bar: GuiObject)
 	slider = bar
+	-- Sinks the press: otherwise it reaches the Scrim behind, whose release closes the window.
+	bar.Active = true
 	local fill = bar:FindFirstChild("Fill")
 	sliderFill = if fill ~= nil and fill:IsA("GuiObject") then fill else nil
 	local knob = bar:FindFirstChild("Knob")
 	sliderKnob = if knob ~= nil and knob:IsA("GuiObject") then knob else nil
+	if sliderKnob ~= nil then
+		sliderKnob.Active = true
+	end
 	local count = bar:FindFirstChild("Count")
 	sliderText = if count ~= nil and count:IsA("TextLabel") then count else nil
 	local function begin(input: InputObject)
@@ -136,6 +143,7 @@ local function bindSlider(bar: GuiObject)
 	UserInputService.InputEnded:Connect(function(input)
 		if dragging and isPress(input) then
 			dragging = false
+			dragEndedAt = os.clock()
 			Net.event("SetSetting"):FireServer("MusicVolume", Music.getVolume())
 			Sfx.play("Tick", 0.5)
 		end
@@ -256,7 +264,13 @@ local function bind(found: Frame)
 		end)
 	end
 	if scrim ~= nil and scrim:IsA("GuiButton") then
-		scrim.Activated:Connect(close)
+		-- A slider drag released over the Scrim must not count as a tap outside the window.
+		scrim.Activated:Connect(function()
+			if dragging or os.clock() - dragEndedAt < DRAG_GRACE then
+				return
+			end
+			close()
+		end)
 	end
 
 	local volumeRow = window:FindFirstChild("VolumeRow")
