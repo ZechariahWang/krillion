@@ -6,6 +6,8 @@
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 
+local Toasts = require(script.Parent.Toasts)
+
 local WAIT_SECONDS = 10
 local PROFILE_WAIT_SECONDS = 6 -- start anyway (music on) if the profile is slow to arrive
 local FADE_SECONDS = 0.8
@@ -19,6 +21,17 @@ local volume = 1 -- the Settings volume bar, applied on top of each track's auth
 local decided = false -- the profile (or the wait) has said whether music is on
 
 local Music = {}
+
+-- Credits the track as it starts: the Title and Artist attributes authored on each Sound (DistroKid music
+-- on the Creator Store names its artist; the attribute carries it into the game).
+local function announce(sound: Sound)
+	local title = sound:GetAttribute("Title")
+	local artist = sound:GetAttribute("Artist")
+	if typeof(title) ~= "string" or typeof(artist) ~= "string" then
+		return
+	end
+	Toasts.show("♪ " .. string.upper(title) .. "  |  " .. string.upper(artist), "info")
+end
 
 local function fade(sound: Sound, target: number)
 	local tween = TweenService:Create(sound, TweenInfo.new(FADE_SECONDS), { Volume = target })
@@ -36,6 +49,7 @@ local function playNext()
 	sound.Volume = volumes[sound] * volume
 	sound.TimePosition = 0
 	sound:Play()
+	announce(sound)
 end
 
 local function start()

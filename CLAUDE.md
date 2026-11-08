@@ -58,7 +58,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   stand just short of the waterline (and behind the deck) so nobody swims out.
 - `PhysicalAssets.TerrainBeforeDunes` is the terrain before the beach dunes were added.
 - Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
-  `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start.
+  `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start. Every track is DistroKid
+  music from the Creator Store (Roblox-only licence) and carries `Title`, `Artist` and `Source` attributes that
+  `Client/Music` shows as a toast when it starts; `docs/music-credits.md` lists them.
 - After Studio edits, remind the user to save the place.
 
 ## Match flow
