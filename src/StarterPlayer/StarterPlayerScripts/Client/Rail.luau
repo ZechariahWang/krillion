@@ -7,7 +7,7 @@
 
 local Ui = require(script.Parent.Ui)
 
-local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "HelpButton" }
+local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "HelpButton", "ToyButton" }
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
 local MIN_FIT = 0.45

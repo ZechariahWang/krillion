@@ -7,6 +7,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
+local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local Currency = require(ReplicatedStorage.Shared.Currency)
 local Depth = require(ReplicatedStorage.Shared.Depth)
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
@@ -59,6 +60,16 @@ local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
 local DiveCard = {}
 
 local warned = false
+local cardTheme: Cosmetics.CardColors? = nil -- the local player's equipped CardTheme, set by Market
+
+local function fromRgb(values: { number }): Color3
+	return Color3.fromRGB(values[1], values[2], values[3])
+end
+
+-- Your own cards (isYou) use these colours from now on; nil puts the default look back.
+function DiveCard.setTheme(colors: Cosmetics.CardColors?)
+	cardTheme = colors
+end
 
 local function findTemplate(name: string): Instance?
 	local folder = ReplicatedStorage:FindFirstChild("Templates")
@@ -184,6 +195,16 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local confettiLayer = body:FindFirstChild("ConfettiLayer") :: Frame
 
 	local headerColor = if options.isYou then Theme.Header.You else Theme.Header.Other
+	-- Your equipped card theme (DiveCard.setTheme) recolours the header, the card face and the answer tag.
+	local themed = if options.isYou then cardTheme else nil
+	if themed ~= nil then
+		headerColor = fromRgb(themed.header)
+		local face = body:FindFirstChild("Fill")
+		if face ~= nil and face:IsA("UIGradient") then
+			local frameColor = fromRgb(themed.frame)
+			face.Color = ColorSequence.new(lighten(frameColor, 0.18), frameColor)
+		end
+	end
 	header.BackgroundColor3 = headerColor
 	headerLip.BackgroundColor3 = headerColor:Lerp(BLACK, LIP_SHADE)
 	titleLabel.Text = string.upper(options.title)
@@ -253,6 +274,9 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 
 	if hasAnswer then
 		tagText.Text = string.upper(options.answer or "ACCEPTED")
+		if themed ~= nil then
+			tag.BackgroundColor3 = fromRgb(themed.tag)
+		end
 	else
 		tag.BackgroundColor3 = Color3.fromRGB(200, 208, 222)
 		tagText.Text = "NO ANSWER"

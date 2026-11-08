@@ -1,6 +1,10 @@
 --!strict
--- Drives StarterGui.Revive: the short "use a revive?" card shown after sinking, only to players holding one.
+-- Drives GameUi.Revive: the short card shown after sinking when a revive is on offer (Economy.reviveOffer).
+-- kind "free" is the Second Chance pass's free revive, "stock" uses one you own, "buy" is Revive Now for
+-- Robux (the server revives on the receipt). The card says which in its Count line and button.
 
+local MarketplaceService = game:GetService("MarketplaceService")
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
@@ -13,7 +17,10 @@ local gui: Frame
 local card: Frame
 local count: TextLabel
 local fill: Frame
+local use: TextButton
+local useText = "USE" -- the authored button text, for a stocked revive
 local token = 0
+local offer: Net.RevivePromptPayload? = nil
 
 local RevivePrompt = {}
 
@@ -22,6 +29,7 @@ local function hide(revived: boolean)
 		return
 	end
 	gui.Visible = false
+	offer = nil
 	Lobby.setReviveOpen(false, revived)
 end
 
@@ -30,10 +38,20 @@ function RevivePrompt.init(playerGui: PlayerGui)
 	card = gui:WaitForChild("Card") :: Frame
 	count = card:WaitForChild("Count") :: TextLabel
 	fill = card:WaitForChild("TimerTrack"):WaitForChild("TimerFill") :: Frame
-	local use = card:WaitForChild("UseButton") :: TextButton
+	use = card:WaitForChild("UseButton") :: TextButton
+	useText = use.Text
 	Ui.pressable(use)
 	use.MouseButton1Click:Connect(function()
-		if not gui.Visible then
+		local current = offer
+		if not gui.Visible or current == nil then
+			return
+		end
+		if current.kind == "buy" then
+			-- The card stays up until the receipt revives you (or the window runs out).
+			local productId = current.productId or 0
+			if productId ~= 0 then
+				MarketplaceService:PromptProductPurchase(Players.LocalPlayer, productId)
+			end
 			return
 		end
 		token += 1
@@ -41,12 +59,35 @@ function RevivePrompt.init(playerGui: PlayerGui)
 		Sfx.play("Fanfare", 0.5)
 		Net.event("ReviveUse"):FireServer()
 	end)
+	-- A finished Revive Now purchase: the server puts you back, so the card can go.
+	MarketplaceService.PromptProductPurchaseFinished:Connect(function(userId, productId, purchased)
+		local current = offer
+		if userId ~= Players.LocalPlayer.UserId or not purchased or current == nil or current.kind ~= "buy" then
+			return
+		end
+		if productId == current.productId then
+			token += 1
+			hide(true)
+			Sfx.play("Fanfare", 0.5)
+		end
+	end)
 end
 
-function RevivePrompt.onPrompt(payload)
+function RevivePrompt.onPrompt(payload: Net.RevivePromptPayload)
 	token += 1
 	local mine = token
-	count.Text = payload.revives .. " LEFT"
+	offer = payload
+	local kind = payload.kind or "stock"
+	if kind == "free" then
+		count.Text = "SECOND CHANCE"
+		use.Text = "FREE REVIVE"
+	elseif kind == "buy" then
+		count.Text = "JUMP BACK IN"
+		use.Text = "REVIVE  R$ " .. tostring(payload.robux or 0)
+	else
+		count.Text = payload.revives .. " LEFT"
+		use.Text = useText
+	end
 	fill.Size = UDim2.fromScale(1, 1)
 	gui.Visible = true
 	Lobby.setReviveOpen(true)

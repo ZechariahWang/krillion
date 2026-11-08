@@ -24,6 +24,7 @@ local Rewards = require(Client.Rewards)
 local Tutorial = require(Client.Tutorial)
 local Standings = require(Client.Standings)
 local AnimationReset = require(Client.AnimationReset)
+local Market = require(Client.Market)
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
 -- Live outlines, captions, pop-up fit and icons on the Studio GUIs and world text; it never yields.
@@ -49,6 +50,7 @@ Rewards.init(playerGui)
 Tutorial.init(playerGui)
 Standings.init(playerGui)
 AnimationReset.init()
+Market.init(playerGui)
 
 Net.event("RoundState").OnClientEvent:Connect(function(payload)
 	Hud.onState(payload)
