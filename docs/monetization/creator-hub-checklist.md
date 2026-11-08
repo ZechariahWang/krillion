@@ -1,6 +1,27 @@
 # Creator Hub checklist: passes and products
 
-Until these exist on Roblox, every Robux button in the game says COMING SOON. Everything paid with Shells already works.
+**Status (2026-11-08):** all 25 below were created through Open Cloud under the krillion universe (10774453756), with
+the icons in `assets/store-icons/`, and their ids are in the config. They were created **off sale**. To sell them, open
+the Creator Hub, then krillion, then Monetization, and switch each pass and product on sale. Until then Roblox's
+purchase window says the item is not for sale.
+
+| Item | Id | Item | Id |
+|---|---|---|---|
+| VIP (pass) | 2074210408 | Hint | 3729794185 |
+| 2x Shells (pass) | 2074618471 | +10 SEC | 3729794199 |
+| Second Chance (pass) | 2075800451 | Hint x3 | 3729794218 |
+| Boost Plus (pass) | 2074618472 | +10 SEC x3 | 3729794235 |
+| 500 Shells | 3729793872 | Molten Pillar | 3729794371 |
+| 1,500 Shells | 3729793985 | Gold Pillar | 3729794381 |
+| 5,000 Shells | 3729793992 | Galaxy Pillar | 3729794393 |
+| 12,000 Shells | 3729794005 | Starfall Splash | 3729794407 |
+| Starter Pack | 3729794015 | Axolotl Pet | 3729794417 |
+| Revive | 3729794156 | Blue Whale Pet | 3729794543 |
+| Revive Now | 3729794171 | Halo Aura | 3729794556 |
+| Gold Card Theme | 3729794569 | Rainbow Tag | 3729794585 |
+| Confetti Bomb Toy | 3729794609 | | |
+
+Everything paid with Shells works without any of this.
 
 ## How to add one
 
