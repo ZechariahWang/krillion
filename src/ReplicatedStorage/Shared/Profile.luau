@@ -10,7 +10,15 @@ export type Equipped = {
 	Title: string?,
 	Splash: string?,
 	Trail: string?,
+	Pet: string?,
+	Aura: string?,
+	CardTheme: string?,
+	NameTag: string?,
+	Toy: string?,
 }
+
+-- Every equip slot (Config/Cosmetics slots). Kept here so Profile stays free of config requires.
+local EQUIP_SLOTS = { "Skin", "Title", "Splash", "Trail", "Pet", "Aura", "CardTheme", "NameTag", "Toy" }
 
 -- Daily quests: absolute values for one UTC day (Quests.day). day 0 means untouched.
 export type QuestDay = {
@@ -68,6 +76,7 @@ export type Session = {
 local Profile = {}
 
 Profile.MAX_RECEIPTS = 50
+Profile.EQUIP_SLOTS = EQUIP_SLOTS
 
 local function newQuests(): QuestDay
 	return { day = 0, progress = {}, done = {} }
@@ -179,10 +188,12 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 		end
 	end
 	if typeof(stored.equipped) == "table" then
-		profile.equipped.Skin = stored.equipped.Skin
-		profile.equipped.Title = stored.equipped.Title
-		profile.equipped.Splash = stored.equipped.Splash
-		profile.equipped.Trail = stored.equipped.Trail
+		for _, slot in EQUIP_SLOTS do
+			local id = stored.equipped[slot]
+			if typeof(id) == "string" then
+				(profile.equipped :: any)[slot] = id
+			end
+		end
 	end
 	if typeof(stored.receipts) == "table" then
 		for _, receipt in stored.receipts do
@@ -243,10 +254,9 @@ function Profile.combine(first: Session, second: Session): Session
 	for id in second.owned do
 		combined.owned[id] = true
 	end
-	combined.equipped.Skin = second.equipped.Skin or first.equipped.Skin
-	combined.equipped.Title = second.equipped.Title or first.equipped.Title
-	combined.equipped.Splash = second.equipped.Splash or first.equipped.Splash
-	combined.equipped.Trail = second.equipped.Trail or first.equipped.Trail
+	for _, slot in EQUIP_SLOTS do
+		(combined.equipped :: any)[slot] = (second.equipped :: any)[slot] or (first.equipped :: any)[slot]
+	end
 	for _, receipt in first.receipts do
 		table.insert(combined.receipts, receipt)
 	end
@@ -300,17 +310,11 @@ function Profile.merge(stored: Profile, session: Session): Profile
 	for id in session.owned do
 		merged.owned[id] = true
 	end
-	if session.equipped.Skin ~= nil then
-		merged.equipped.Skin = session.equipped.Skin
-	end
-	if session.equipped.Title ~= nil then
-		merged.equipped.Title = session.equipped.Title
-	end
-	if session.equipped.Splash ~= nil then
-		merged.equipped.Splash = session.equipped.Splash
-	end
-	if session.equipped.Trail ~= nil then
-		merged.equipped.Trail = session.equipped.Trail
+	for _, slot in EQUIP_SLOTS do
+		local id = (session.equipped :: any)[slot]
+		if id ~= nil then
+			(merged.equipped :: any)[slot] = id
+		end
 	end
 	for _, receipt in session.receipts do
 		table.insert(merged.receipts, receipt)

@@ -2,7 +2,7 @@ local Cosmetics = require("../src/ReplicatedStorage/Config/Cosmetics")
 local Products = require("../src/ReplicatedStorage/Config/Products")
 
 -- Templates authored in src/ReplicatedStorage/Templates/Trails.model.json.
-local TRAIL_TEMPLATES = { Bubbles = true, Seafoam = true, Sunset = true, Abyssal = true, Rainbow = true, GoldWake = true, Pod = true }
+local TRAIL_TEMPLATES = { Bubbles = true, Seafoam = true, Sunset = true, Abyssal = true, Rainbow = true, GoldWake = true, Pod = true, Neon = true, Fire = true, Galaxy = true }
 
 return function(test)
 	test("cosmetic ids are unique and ById finds each one", function()

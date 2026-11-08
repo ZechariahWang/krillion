@@ -4,7 +4,8 @@ local GameConfig = require("../Config/GameConfig")
 
 local Economy = {}
 
-function Economy.multiplier(hasVip: boolean, hasDouble: boolean): number
+-- Bonuses add: VIP + 2x Shells + the equipped pet's bonus (Shop.petBonus). Earned Shells only.
+function Economy.multiplier(hasVip: boolean, hasDouble: boolean, petBonus: number?): number
 	local total = 1
 	if hasVip then
 		total += GameConfig.Cash.VipBonus
@@ -12,6 +13,7 @@ function Economy.multiplier(hasVip: boolean, hasDouble: boolean): number
 	if hasDouble then
 		total += GameConfig.Cash.DoubleBonus
 	end
+	total += math.clamp(petBonus or 0, 0, GameConfig.Cash.MaxPetBonus)
 	return total
 end
 
@@ -62,6 +64,34 @@ function Economy.canOfferRevive(revivesOwned: number, usedThisMatch: boolean, ot
 		return false
 	end
 	return othersAlive >= GameConfig.Revive.MinOthersAlive
+end
+
+export type ReviveState = {
+	revivesOwned: number,
+	usedThisMatch: boolean, -- any revive this match: one per player per match, whatever paid for it
+	othersAlive: number,
+	secondChance: boolean, -- holds the Second Chance pass
+	secondChanceUsed: boolean, -- its free revive was already used this match
+	canBuy: boolean, -- the Revive Now product exists (a real product id)
+}
+
+-- How a sinking player may come back, best first: "free" (Second Chance), "stock" (a revive they own),
+-- "buy" (Revive Now, Robux), or nil. Never in a 1v1 or with fewer than Revive.MinOthersAlive others still
+-- up, and only once per match.
+function Economy.reviveOffer(state: ReviveState): string?
+	if state.usedThisMatch or state.othersAlive < GameConfig.Revive.MinOthersAlive then
+		return nil
+	end
+	if state.secondChance and not state.secondChanceUsed then
+		return "free"
+	end
+	if state.revivesOwned > 0 then
+		return "stock"
+	end
+	if state.canBuy then
+		return "buy"
+	end
+	return nil
 end
 
 return Economy

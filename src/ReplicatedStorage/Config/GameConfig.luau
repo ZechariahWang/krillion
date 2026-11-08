@@ -63,6 +63,9 @@ local GameConfig = {
 		WinBonus = 100,
 		VipBonus = 0.1, -- multiplier bonuses add: VIP + 2x Shells = 2.1x (0.25 is proposed, not agreed)
 		DoubleBonus = 1,
+		MaxPetBonus = 0.25, -- the best pet's bonus; a bad config can never pay more than this
+		ChestSessionLimit = 50, -- chest openings per player per server visit, a guard against runaway spending
+		ChestCooldown = 1.2, -- seconds between chest openings (the open animation's length)
 		StartingShells = 100, -- one-time gift to a brand-new profile
 		-- Paid per graded match answer, after the dive card lands (Reveal.PayoutDelaySeconds).
 		AnswerByTier = {
@@ -81,6 +84,7 @@ local GameConfig = {
 		ExtraTimeSeconds = 10,
 		PerRound = 1, -- of each kind
 		PerMatch = 3, -- of each kind
+		PerMatchPlus = 5, -- of each kind, for holders of the Boost Plus game pass
 		HintMinTier = 4, -- Tiers.List index: Rare
 		HintMaxTier = 5, -- DeepCut; a hint never gives away the best tier
 		Cooldown = 0.5, -- seconds between UseBoost requests
@@ -140,6 +144,13 @@ local GameConfig = {
 		MinOthersAlive = 2, -- fewer than this and the match is already decided
 		HeightAboveWater = 4,
 	},
+	-- Lobby throwables (Cosmetics slot Toy): owned forever, never usable on a pillar.
+	Toys = {
+		Cooldown = 2.5, -- seconds between throws
+		Range = 90, -- studs; a target further away is refused
+		FlightSeconds = 0.45, -- how long the toy is in the air (the hit lands when it arrives)
+		SplatSeconds = 2.2, -- how long the splat covers the hit player's screen
+	},
 	Leaderboard = {
 		RefreshSeconds = 60,
 		Size = 10,
@@ -172,6 +183,7 @@ table.freeze(GameConfig.Reveal)
 table.freeze(GameConfig.Depth)
 table.freeze(GameConfig.Bots)
 table.freeze(GameConfig.Revive)
+table.freeze(GameConfig.Toys)
 table.freeze(GameConfig.Leaderboard)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)

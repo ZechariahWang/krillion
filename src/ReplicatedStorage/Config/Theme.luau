@@ -25,6 +25,14 @@ local Theme = {
 		DeepCut = Color3.fromHex("FF9F50"),
 		OneInAKrillion = Color3.fromHex("FFC24B"),
 	},
+	-- Shop item rarity (Config/Cosmetics `rarity`): the card frame and the rarity line.
+	Rarity = {
+		Common = Color3.fromHex("9AA5B1"),
+		Rare = Color3.fromHex("4FA8FF"),
+		Epic = Color3.fromHex("B46BFF"),
+		Legendary = Color3.fromHex("FFB52E"),
+		Mythic = Color3.fromHex("FF4FA3"),
+	},
 	Pillars = {
 		Color3.fromHex("FF4D5E"),
 		Color3.fromHex("FF8C42"),
@@ -133,6 +141,10 @@ local Theme = {
 		Wave = "🌊",
 		Crown = "👑",
 		Sparkle = "✨",
+		Chest = "🧰",
+		Paw = "🐾",
+		Tomato = "🍅",
+		Robux = "R$",
 	},
 	-- Short ease-outs. Only Pop (and its Bounce/Stamp variants) overshoot, and those are kept for
 	-- reward moments: the reveal, rare tiers, wins.

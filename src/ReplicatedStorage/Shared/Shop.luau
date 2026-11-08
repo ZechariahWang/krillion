@@ -3,9 +3,12 @@
 local Cosmetics = require("../Config/Cosmetics")
 local Profile = require("./Profile")
 
+local FEATURED_COUNT = 4
+
 local Shop = {}
 
--- Reward items count only once RewardService has put them in profile.owned; there is no other way in.
+-- Reward items count only once RewardService has put them in profile.owned; chest items once ChestService
+-- has; there is no other way in.
 function Shop.owns(profile: Profile.Profile, item: Cosmetics.Item, passes: { [string]: boolean }): boolean
 	if profile.owned[item.id] == true then
 		return true
@@ -16,8 +19,9 @@ function Shop.owns(profile: Profile.Profile, item: Cosmetics.Item, passes: { [st
 	return false
 end
 
+-- Only plain Shells items: never Robux, pass, reward or chest-only ones.
 function Shop.canBuyWithCash(profile: Profile.Profile, item: Cosmetics.Item): boolean
-	if item.robuxProductId ~= nil or item.pass ~= nil or item.reward ~= nil then
+	if Cosmetics.source(item) ~= "shells" then
 		return false
 	end
 	if profile.owned[item.id] == true then
@@ -28,6 +32,42 @@ end
 
 function Shop.canEquip(profile: Profile.Profile, item: Cosmetics.Item, passes: { [string]: boolean }): boolean
 	return Shop.owns(profile, item, passes)
+end
+
+-- The Shells bonus of the equipped pet (0 with none, or one the player no longer owns).
+function Shop.petBonus(profile: Profile.Profile, passes: { [string]: boolean }): number
+	local id = profile.equipped.Pet
+	local item = if id ~= nil then Cosmetics.ById[id] else nil
+	if item == nil or item.slot ~= "Pet" or not Shop.owns(profile, item, passes) then
+		return 0
+	end
+	return item.shellBonus or 0
+end
+
+-- Today's featured items: FEATURED_COUNT Shells or Robux items picked from the UTC day number, so every
+-- player and server shows the same four, and they change at midnight UTC.
+function Shop.featured(day: number, count: number?): { Cosmetics.Item }
+	local pool: { Cosmetics.Item } = {}
+	for _, item in Cosmetics.List do
+		local source = Cosmetics.source(item)
+		if source == "shells" or source == "robux" then
+			table.insert(pool, item)
+		end
+	end
+	table.sort(pool, function(a, b)
+		return a.id < b.id
+	end)
+	local wanted = math.min(count or FEATURED_COUNT, #pool)
+	local picked: { Cosmetics.Item } = {}
+	-- MINSTD seeded by the day: every product stays below 2^53, so it is exact and the same in Lune and Roblox.
+	local state = (math.floor(day) % 2147483646) + 1
+	while #picked < wanted do
+		state = (state * 48271) % 2147483647
+		local index = (state % #pool) + 1
+		local item = table.remove(pool, index) :: Cosmetics.Item
+		table.insert(picked, item)
+	end
+	return picked
 end
 
 return Shop

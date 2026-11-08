@@ -101,6 +101,16 @@ function Boosts.hintText(tierLabel: string, display: string): string
 	return "A " .. string.upper(tierLabel) .. "  |  " .. Boosts.mask(display)
 end
 
+-- The limits for one player: Boost Plus holders get PerMatchPlus uses of each boost per match.
+function Boosts.limitsFor(hasBoostPlus: boolean): Limits
+	local base = GameConfig.Boosts
+	return {
+		Enabled = base.Enabled,
+		PerRound = base.PerRound,
+		PerMatch = if hasBoostPlus then base.PerMatchPlus else base.PerMatch,
+	}
+end
+
 -- "ok" | "disabled" | "limit" for one more boost of `kind`.
 function Boosts.canUse(usage: Usage, kind: string, cfg: Limits?): string
 	local limits: Limits = cfg or GameConfig.Boosts
