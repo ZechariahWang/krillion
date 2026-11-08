@@ -37,6 +37,15 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `ClipToDeviceSafeArea` off so it covers the phone notch area.
 - StreamingEnabled is on: models a client animates far away (`Arena.SeaLife`) use `ModelStreamingMode = Atomic`
   and are picked up with `ChildAdded` as they stream in.
+- Day and night: Lighting's properties and linear fog are the day look; its `NightAmbient` / `NightOutdoorAmbient`
+  attributes and the `Lighting.Atmosphere` haze are the night look. `Client/DayNight` blends them at dusk and dawn
+  (fog out, then haze in) and lights parts tagged `NightLight` (the torches) only at night.
+- Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
+  `LobbySpawn`, `HowToBoard` and `HowRareBoard` stay direct children: code looks them up by name. `Lobby.WestStairs`
+  and `EastStairs` lead off the side rails to the beach. The How to Play / How Rare boards and the Top 10 stand
+  along the back of the deck, facing the front. Players roam the whole island: invisible `Arena.BeachBorder` walls
+  stand just short of the waterline (and behind the deck) so nobody swims out.
+- `PhysicalAssets.TerrainBeforeDunes` is the terrain before the beach dunes were added.
 - Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
   `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start.
 - After Studio edits, remind the user to save the place.
@@ -49,7 +58,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 |------|--------------|----------------|---------|
 | `GameUi` | 1 | Enabled off (code turns it on) | Hud, Reveal, Results, Revive, Spectate, Vignette |
 | `LobbyUi` | 2 | on | Rail, Shop, LobbyQuiz, Quests, Rewards, Tutorial |
-| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings |
+| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings, Transition |
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
   The name-to-root map is `ROOT_OF` in `Client/Ui.luau`; update it when a screen moves.
@@ -59,8 +68,8 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, HELP keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while the shop is open. On short screens it
   wraps into two columns and sizes itself to its visible keys.
-- Pop-up windows (Quests, Rewards, Help, Shop, Settings) share the Quests panel's top edge: centre-anchored at
-  `Position.Y = (0.5 + heightScale / 2, -248 + heightOffset / 2)`.
+- Pop-up windows (Quests, Rewards, Help, Shop, Settings) and the match countdown sit dead centre: anchor
+  (0.5, 0.5) at Position (0.5, 0.5).
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
   gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. Toasts stack in the bottom-left

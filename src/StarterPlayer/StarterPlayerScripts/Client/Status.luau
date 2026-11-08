@@ -248,6 +248,10 @@ function Status.onState(payload)
 		setStatus("DIVING IN")
 		secondaryText.Text = Status.formatTime(payload.secondsLeft)
 		aliveText.Text = "PLAYERS " .. payload.playerCount
+	elseif phase == "Starting" then
+		setStatus("GET READY")
+		secondaryText.Text = Status.formatTime(payload.secondsLeft)
+		aliveText.Text = "PLAYERS " .. payload.alive
 	elseif phase == "Prompt" then
 		if payload.prompt ~= nil then
 			lastPrompt = string.upper(payload.prompt)

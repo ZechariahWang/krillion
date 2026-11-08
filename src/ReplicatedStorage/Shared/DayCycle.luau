@@ -22,4 +22,22 @@ function DayCycle.clockAt(serverSeconds: number): number
 	return clock % 24
 end
 
+-- How much it is night at `clock`: 0 by day, 1 from dusk to dawn, blending over the hour before dusk and
+-- the hour after dawn. Drives the night lighting and the torches.
+function DayCycle.nightFactor(clock: number): number
+	local rules = GameConfig.DayCycle
+	local eveningStart = rules.DuskClock - 1
+	local morningEnd = rules.DawnClock + 1
+	if clock >= rules.DuskClock or clock <= rules.DawnClock then
+		return 1
+	end
+	if clock > eveningStart then
+		return clock - eveningStart
+	end
+	if clock < morningEnd then
+		return morningEnd - clock
+	end
+	return 0
+end
+
 return DayCycle
