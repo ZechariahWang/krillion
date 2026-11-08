@@ -42,8 +42,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   (fog out, then haze in) and lights parts tagged `NightLight` (the torches) only at night.
 - Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
   `LobbySpawn`, `HowToBoard` and `HowRareBoard` stay direct children: code looks them up by name. `Lobby.WestStairs`
-  and `EastStairs` lead off the side rails to the beach; the boards and Top 10 stand on the sand below them
-  (still inside `Lobby`, where code finds them). Players roam the whole island: invisible `Arena.BeachBorder` walls
+  and `EastStairs` lead off the side rails to the beach. The How to Play / How Rare boards and the Top 10 stand
+  along the back of the deck, facing the front. Players roam the whole island: invisible `Arena.BeachBorder` walls
   stand just short of the waterline (and behind the deck) so nobody swims out.
 - `PhysicalAssets.TerrainBeforeDunes` is the terrain before the beach dunes were added.
 - Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
