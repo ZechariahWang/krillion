@@ -1,0 +1,60 @@
+--!strict
+return {
+	id = "us_state",
+	prompt = "Name a US state",
+	answers = {
+		Plankton = {
+			"california", "texas", "florida", "new york", "hawaii", "alaska",
+		},
+		TooClever = {
+			"nevada", "arizona", "colorado", "washington", "georgia",
+		},
+		Schooler = {
+			"illinois", "ohio", "michigan", "pennsylvania", "new jersey", "virginia", "north carolina",
+			"south carolina", "tennessee", "louisiana", "oregon", "utah", "massachusetts", "maryland", "indiana",
+			"kentucky", "alabama", "mississippi", "missouri", "wisconsin", "minnesota", "iowa", "oklahoma",
+			"kansas", "nebraska", "new mexico", "idaho", "montana", "wyoming", "maine", "connecticut",
+		},
+		Rare = {
+			"arkansas", "west virginia", "new hampshire", "vermont", "rhode island", "delaware", "north dakota",
+			"south dakota",
+		},
+		DeepCut = {
+			"rhode island and providence plantations", "new york state", "washington state", "state of hawaii",
+			"state of california",
+		},
+		OneInAKrillion = {
+			"commonwealth of massachusetts", "commonwealth of kentucky", "commonwealth of pennsylvania",
+			"commonwealth of virginia",
+		},
+	},
+	aliases = {
+		["ca"] = "california", ["tx"] = "texas", ["fl"] = "florida", ["ny"] = "new york", ["hi"] = "hawaii",
+		["ak"] = "alaska", ["nv"] = "nevada", ["az"] = "arizona", ["co"] = "colorado", ["wa"] = "washington",
+		["ga"] = "georgia", ["il"] = "illinois", ["oh"] = "ohio", ["mi"] = "michigan", ["pa"] = "pennsylvania",
+		["nj"] = "new jersey", ["va"] = "virginia", ["nc"] = "north carolina", ["sc"] = "south carolina",
+		["tn"] = "tennessee", ["la"] = "louisiana", ["or"] = "oregon", ["ut"] = "utah", ["ma"] = "massachusetts",
+		["md"] = "maryland", ["in"] = "indiana", ["ky"] = "kentucky", ["al"] = "alabama", ["ms"] = "mississippi",
+		["mo"] = "missouri", ["wi"] = "wisconsin", ["mn"] = "minnesota", ["ia"] = "iowa", ["ok"] = "oklahoma",
+		["ks"] = "kansas", ["ne"] = "nebraska", ["nm"] = "new mexico", ["id"] = "idaho", ["mt"] = "montana",
+		["wy"] = "wyoming", ["me"] = "maine", ["ct"] = "connecticut", ["ar"] = "arkansas", ["wv"] = "west virginia",
+		["nh"] = "new hampshire", ["vt"] = "vermont", ["ri"] = "rhode island", ["de"] = "delaware",
+		["nd"] = "north dakota", ["sd"] = "south dakota", ["cali"] = "california", ["texus"] = "texas",
+		["flordia"] = "florida", ["florada"] = "florida", ["new yourk"] = "new york", ["hawai"] = "hawaii",
+		["hawaii state"] = "hawaii", ["nevade"] = "nevada", ["arizonia"] = "arizona", ["colorodo"] = "colorado",
+		["georgia usa"] = "georgia", ["ilinois"] = "illinois", ["illinios"] = "illinois", ["michagan"] = "michigan",
+		["pensylvania"] = "pennsylvania", ["pennsilvania"] = "pennsylvania", ["new jersy"] = "new jersey",
+		["virgina"] = "virginia", ["carolina"] = "north carolina", ["tennesee"] = "tennessee",
+		["tenessee"] = "tennessee", ["louisianna"] = "louisiana", ["lousiana"] = "louisiana", ["orgeon"] = "oregon",
+		["massachussetts"] = "massachusetts", ["massachusets"] = "massachusetts", ["maryand"] = "maryland",
+		["indianna"] = "indiana", ["kentuky"] = "kentucky", ["alabamma"] = "alabama",
+		["missisippi"] = "mississippi", ["mississipi"] = "mississippi", ["missourri"] = "missouri",
+		["wisconson"] = "wisconsin", ["wisconsen"] = "wisconsin", ["minesota"] = "minnesota",
+		["minnasota"] = "minnesota", ["oklahomah"] = "oklahoma", ["kansa"] = "kansas",
+		["nebraska state"] = "nebraska", ["nebraskas"] = "nebraska", ["new mexcio"] = "new mexico",
+		["montanna"] = "montana", ["wyomming"] = "wyoming", ["conneticut"] = "connecticut",
+		["conecticut"] = "connecticut", ["arkansaw"] = "arkansas", ["west virgina"] = "west virginia",
+		["new hampshire state"] = "new hampshire", ["new hampsire"] = "new hampshire",
+		["rhode island state"] = "rhode island", ["dakota"] = "north dakota",
+	},
+}
