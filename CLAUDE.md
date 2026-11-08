@@ -27,6 +27,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   with everything in it. Move the contents out first (or undo the "Rojo: Patch" waypoint).
 - Declaring a new node in `default.project.json` while Rojo is connected makes Rojo create an empty placeholder
   next to an instance you already moved there. Check for duplicates and delete the empty one.
+- Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
+  `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start.
 - After Studio edits, remind the user to save the place.
 
 ## UI layout
@@ -37,7 +39,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 |------|--------------|----------------|---------|
 | `GameUi` | 1 | Enabled off (code turns it on) | Hud, Reveal, Results, Revive, Spectate, Vignette |
 | `LobbyUi` | 2 | on | Rail, Shop, LobbyQuiz, Quests, Rewards, Tutorial |
-| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards |
+| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings |
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
   The name-to-root map is `ROOT_OF` in `Client/Ui.luau`; update it when a screen moves.
@@ -46,7 +48,9 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
 - Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, HELP keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while the shop is open.
-- Screen corners: the Roblox player list owns the top-right, so keep it clear. The bottom-right column, from the
+- Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
+  gear, placed right of Roblox's own buttons from `GuiService.TopbarInset`. Toasts stack in the bottom-left
+  (past the match water meter, above the touch thumbstick). The bottom-right column, from the
   bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.
 - Spacing: 16 px from screen edges, 8 px between stacked pieces, text at least 12 px from a button or pill's
