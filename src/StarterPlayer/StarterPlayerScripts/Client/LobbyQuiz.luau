@@ -75,9 +75,9 @@ local function isTouch(): boolean
 	return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 end
 
--- Deferred so it runs after the TextBox has finished losing focus from the Enter press.
+-- One frame later: a focus grab in the same frame as the Enter press that released the box is dropped.
 local function keepFocus()
-	task.defer(function()
+	task.delay(0, function()
 		if gui.Visible and not collapsed and not locked then
 			answerBox:CaptureFocus()
 		end

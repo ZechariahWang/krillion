@@ -22,8 +22,10 @@ local GameConfig = {
 	},
 	Water = {
 		StartHeight = 6, -- platform top above the starting water line
-		SurgeBase = 2,
-		SurgeStep = 0.6, -- added per round
+		-- Round r surges SurgeBase + SurgeGrowth * (r - 1) ^ SurgePower; tests/WaterCurve pins the survival targets.
+		SurgeBase = 0.5,
+		SurgeGrowth = 0.4,
+		SurgePower = 1.5,
 		LiftPerPoint = 0.1,
 		CullHz = 10,
 		CreepFraction = 0.7, -- slow part of the surge
@@ -37,16 +39,22 @@ local GameConfig = {
 		RiseSeconds = 1.1, -- one eased glide with a soft overshoot at the top
 		ConfettiMinPoints = 60,
 		WalkSpeed = 10, -- players stroll around their pillar top during a match; jumping stays off
-		WallHeight = 8, -- invisible walls round the pillar top keep a stroller from walking off
 	},
 	Answer = {
 		MaxLength = 40,
-		FuzzyMinLength = 5, -- shorter answers must be spelled exactly
-		FuzzyLongLength = 10, -- answers this long or longer forgive two typos instead of one
+		FuzzyMinLength = 4, -- shorter answers must be spelled exactly
+		FuzzyLongLength = 7, -- answers this long or longer forgive two typos instead of one
+		FuzzyVeryLongLength = 11, -- answers this long or longer forgive three typos
 		RetryCooldown = 1, -- seconds between guesses, so a wrong answer can be retried but not spammed
 		CheckMinInterval = 0.35, -- seconds between Enter-to-check presses after a valid check
 		MaxChecksPerRound = 40, -- per player per prompt (and per lobby prompt)
 		DeadlineGrace = 0.5, -- network slack after a player's deadline before answers are refused
+	},
+	DayCycle = {
+		CycleSeconds = 720, -- one full day and night
+		NightShare = 0.25, -- of the cycle spent between dusk and dawn
+		DawnClock = 5.5, -- Lighting.ClockTime where night ends
+		DuskClock = 18.5, -- Lighting.ClockTime where night begins
 	},
 	Lobby = {
 		QuizEnabled = 0, -- 1 serves warm-up prompts in the lobby between matches; 0 keeps prompts to real matches

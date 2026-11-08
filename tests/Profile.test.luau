@@ -128,6 +128,29 @@ return function(test)
 		assert(Profile.merge(Profile.fromStored(nil), session).tutorialDone)
 	end)
 
+	test("music is on by default and a saved choice survives a round trip", function()
+		assert(Profile.new().musicOff == false)
+		assert(Profile.fromStored(nil).musicOff == false)
+		assert(Profile.fromStored({ musicOff = true }).musicOff == true)
+	end)
+
+	test("a music choice made this session replaces the saved one; no choice keeps it", function()
+		local stored = Profile.fromStored({ musicOff = true })
+		assert(Profile.merge(stored, Profile.newSession()).musicOff == true)
+		local session = Profile.newSession()
+		session.musicOff = false
+		assert(Profile.merge(stored, session).musicOff == false)
+	end)
+
+	test("combined sessions keep the latest music choice", function()
+		local first = Profile.newSession()
+		first.musicOff = true
+		local second = Profile.newSession()
+		assert(Profile.combine(first, second).musicOff == true)
+		second.musicOff = false
+		assert(Profile.combine(first, second).musicOff == false)
+	end)
+
 	test("claimed rewards are a union and survive a round trip", function()
 		local stored = Profile.fromStored({ claimed = { Starter = true } })
 		local session = Profile.newSession()

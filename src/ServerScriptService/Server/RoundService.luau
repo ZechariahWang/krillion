@@ -157,6 +157,9 @@ end
 
 -- Whether this player may jump into the running match right now (drives the JUMP IN card).
 local function lateJoinOpenFor(player: Player): boolean
+	if player:GetAttribute("Afk") == true then
+		return false
+	end
 	return match ~= nil and lateJoinWindow() and not playedUserIds[player.UserId] and lateJoinRoom()
 end
 
@@ -172,16 +175,12 @@ end
 
 local function broadcastState()
 	local aliveUserIds = {}
-	local heights: { [string]: number } = {}
 	local contestants: { any } = table.clone(alivePlayers())
 	for _, id in aliveBots() do
 		table.insert(contestants, id)
 	end
 	for _, id in contestants do
 		table.insert(aliveUserIds, userIdOf(id))
-		if match ~= nil and match.heights[id] ~= nil then
-			heights[tostring(userIdOf(id))] = match.heights[id]
-		end
 	end
 	local promptText = nil
 	local promptId = nil
@@ -223,7 +222,6 @@ local function broadcastState()
 			alive = #aliveUserIds,
 			aliveUserIds = aliveUserIds,
 			lockedUserIds = lockedUserIds,
-			heights = heights,
 			prompt = promptText,
 			promptId = promptId,
 			playing = playing,
@@ -432,10 +430,12 @@ local function eliminate(player: Player)
 	sinkPlayer(player)
 end
 
+-- Players with a character who are not AFK (Settings): an AFK player is never put on a pillar.
 local function readyPlayers(): { Player }
 	local result = {}
 	for _, player in Players:GetPlayers() do
-		if PlayerService.hasCharacter(player) then
+		local afk = player:GetAttribute("Afk") == true
+		if PlayerService.hasCharacter(player) and not afk then
 			table.insert(result, player)
 		end
 	end
@@ -488,7 +488,7 @@ local function startMatch()
 	for index, player in participants do
 		MatchState.addPlayer(state, player)
 		platforms[player] = parts[index]
-		-- Lets clients find a player's pillar (answer tags, standings) without a lookup remote.
+		-- Lets clients find a player's pillar (answer tags) without a lookup remote.
 		parts[index]:SetAttribute("OwnerUserId", player.UserId)
 		MapService.setPlatformName(parts[index], player.DisplayName)
 		CosmeticService.applySkin(player, parts[index])
@@ -893,6 +893,9 @@ end
 -- ("joined" | "closed" | "full" | "already" | "not_ready") and the message shown to the player.
 -- The debug hook calls this too, so it does all its own checks. Nothing here yields.
 function RoundService.tryJoin(player: Player): (string, string)
+	if player:GetAttribute("Afk") == true then
+		return "closed", LateJoin.Messages.closed
+	end
 	local state = match
 	local status = LateJoin.canJoin({
 		enabled = GameConfig.LateJoin.Enabled == 1,

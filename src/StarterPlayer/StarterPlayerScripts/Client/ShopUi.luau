@@ -769,6 +769,7 @@ function ShopUi.init(playerGui: PlayerGui)
 	local close = panel:WaitForChild("CloseButton") :: TextButton
 	Ui.pressable(close)
 	close.MouseButton1Click:Connect(function()
+		Sfx.play("Close", 0.5)
 		setOpen(false)
 	end)
 	scrim.InputBegan:Connect(function(input)
@@ -780,7 +781,7 @@ function ShopUi.init(playerGui: PlayerGui)
 	local railButton = Rail.button("ShopButton")
 	if railButton ~= nil then
 		railButton.Activated:Connect(function()
-			Sfx.play("Pop", 0.5)
+			Sfx.play("Open", 0.5)
 			setOpen(true)
 		end)
 	end

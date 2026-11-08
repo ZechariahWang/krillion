@@ -421,7 +421,7 @@ local function bind(screen: Frame)
 	if closeButton ~= nil and closeButton:IsA("TextButton") then
 		Ui.pressable(closeButton)
 		closeButton.Activated:Connect(function()
-			Sfx.play("Tick", 0.4)
+			Sfx.play("Close", 0.5)
 			close()
 		end)
 	end
@@ -503,7 +503,7 @@ function Rewards.open()
 	screen.Visible = true
 	if not isOpen then
 		isOpen = true
-		Sfx.play("Pop", 0.5)
+		Sfx.play("Open", 0.5)
 		Ui.pop(frame, 0.7)
 	end
 	Rail.panelOpened(close)

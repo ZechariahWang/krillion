@@ -51,6 +51,7 @@ export type Profile = {
 	lobby: LobbyDay,
 	krillions: number, -- One in a Krillion answers ever given in matches
 	games: number, -- matches played to the end
+	musicOff: boolean, -- the player turned background music off in Settings
 }
 
 export type Session = {
@@ -71,6 +72,7 @@ export type Session = {
 	lobby: LobbyDay,
 	krillions: number, -- delta
 	games: number, -- delta
+	musicOff: boolean?, -- nil unless the player changed the music setting this session
 }
 
 local Profile = {}
@@ -105,6 +107,7 @@ function Profile.new(): Profile
 		lobby = newLobby(),
 		krillions = 0,
 		games = 0,
+		musicOff = false,
 	}
 end
 
@@ -216,6 +219,7 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	profile.lobby = copyLobby(stored.lobby)
 	profile.krillions = numberOr(stored.krillions, 0)
 	profile.games = numberOr(stored.games, 0)
+	profile.musicOff = stored.musicOff == true
 	return profile
 end
 
@@ -289,6 +293,11 @@ function Profile.combine(first: Session, second: Session): Session
 	end
 	combined.krillions = first.krillions + second.krillions
 	combined.games = first.games + second.games
+	if second.musicOff ~= nil then
+		combined.musicOff = second.musicOff
+	else
+		combined.musicOff = first.musicOff
+	end
 	return combined
 end
 
@@ -342,6 +351,9 @@ function Profile.merge(stored: Profile, session: Session): Profile
 	end
 	merged.krillions = merged.krillions + session.krillions
 	merged.games = merged.games + session.games
+	if session.musicOff ~= nil then
+		merged.musicOff = session.musicOff
+	end
 	return merged
 end
 

@@ -1,0 +1,62 @@
+--!strict
+return {
+	id = "instrument",
+	prompt = "Name a musical instrument",
+	answers = {
+		Plankton = {
+			"guitar", "piano", "drums", "violin",
+		},
+		TooClever = {
+			"theremin", "didgeridoo",
+		},
+		Schooler = {
+			"flute", "trumpet", "cello", "saxophone", "clarinet", "harp", "ukulele", "trombone", "xylophone", "tambourine",
+			"triangle", "harmonica", "recorder", "organ", "keyboard", "bass guitar", "electric guitar", "acoustic guitar",
+			"synthesizer", "bongo", "cymbal", "maracas", "french horn", "double bass", "viola", "banjo", "kazoo", "whistle",
+			"accordion", "drum kit", "snare drum", "bass drum", "timpani", "piccolo", "castanets", "bagpipes", "oboe",
+			"bassoon", "tuba", "mandolin",
+		},
+		Rare = {
+			"glockenspiel", "cornet", "euphonium", "flugelhorn", "english horn", "bass clarinet", "contrabassoon", "bugle",
+			"fife", "ocarina", "pan flute", "harmonium", "celesta", "vibraphone", "marimba", "tabla", "conga", "djembe",
+			"cowbell", "gong", "washboard", "jaw harp", "steel drum", "cajon", "kalimba", "autoharp", "dulcimer", "zither",
+			"lute", "balalaika", "bouzouki", "concertina", "melodica", "clavichord", "sousaphone", "mellophone", "sitar",
+			"harpsichord", "oud", "pipe organ", "tin whistle", "slide whistle", "music box", "toy piano", "player piano",
+			"electric piano", "alphorn", "shofar", "rainstick", "guiro", "claves", "agogo", "cabasa", "sleigh bells",
+			"wood block", "bass saxophone", "alto saxophone", "tenor saxophone", "soprano saxophone", "baritone saxophone",
+			"electric bass", "bass trombone", "piccolo trumpet", "alto flute", "bass flute", "hammond organ", "mellotron",
+			"clavinet", "hang drum", "handpan", "taiko", "gamelan", "koto",
+		},
+		DeepCut = {
+			"bodhran", "uilleann pipes", "kantele", "cimbalom", "santoor", "sarod", "veena", "tanpura", "sarangi", "shehnai",
+			"guzheng", "pipa", "guqin", "shakuhachi", "charango", "cuatro", "quena", "bandoneon", "hammered dulcimer",
+			"theorbo", "viol", "viola da gamba", "rebec", "serpent", "ophicleide", "sackbut", "shawm", "crumhorn", "cornett",
+			"glass harmonica", "ondes martenot", "sheng", "suona", "dizi", "xiao", "dombra", "domra", "saz", "rubab",
+			"dutar", "tar", "kemenche", "lyra", "gadulka", "gusle", "bandura", "kobza", "sistrum", "bullroarer", "vibraslap",
+			"shekere", "tabor", "swanee whistle", "steel guitar", "pedal steel guitar", "lap steel guitar", "dobro",
+			"resonator guitar", "twelve string guitar", "classical guitar", "baritone ukulele", "tenor ukulele", "banjolele",
+			"tiple", "bajo sexto", "vihuela", "requinto", "cavaquinho", "berimbau", "quijada", "zabumba", "pandeiro",
+			"surdo", "tamborim", "cuica", "reco reco", "agung", "kulintang", "angklung", "sasando", "rebana", "tanbur",
+			"setar", "kamancheh", "santur", "ney", "daf", "tombak", "doumbek", "riq", "mizmar", "qanun", "ghaita", "rabab",
+			"ngoni", "balafon", "talking drum", "udu", "kpanlogo", "bata", "gankogui", "atabaque",
+		},
+		OneInAKrillion = {
+			"kora", "hurdy gurdy", "nyckelharpa", "shamisen", "erhu", "talharpa", "tromba marina", "morin khuur",
+			"chapman stick", "stroh violin", "octobass", "sarrusophone", "heckelphone", "contrabass flute", "crwth", "igil",
+			"pungi", "bansuri", "dilruba", "esraj", "ektara", "dotara", "rudra veena", "mohan veena", "vichitra veena",
+			"jal tarang", "ghatam", "mridangam", "pakhavaj", "dhol", "dholak", "khartal", "morsing", "nadaswaram", "thavil",
+			"siku", "zampona", "rondador",
+		},
+	},
+	aliases = {
+		["bagpipe"] = "bagpipes", ["drum"] = "drums", ["sax"] = "saxophone", ["fiddle"] = "violin",
+		["violoncello"] = "cello", ["pianoforte"] = "piano", ["uke"] = "ukulele", ["mouth organ"] = "harmonica",
+		["squeezebox"] = "accordion", ["kettle drum"] = "timpani", ["kettledrum"] = "timpani", ["tympani"] = "timpani",
+		["synth"] = "synthesizer", ["horn"] = "french horn", ["upright bass"] = "double bass",
+		["contrabass"] = "double bass", ["drumset"] = "drum kit", ["drum set"] = "drum kit", ["snare"] = "snare drum",
+		["bass"] = "bass guitar", ["steelpan"] = "steel drum", ["steel pan"] = "steel drum", ["panpipes"] = "pan flute",
+		["pan pipes"] = "pan flute", ["thumb piano"] = "kalimba", ["didjeridu"] = "didgeridoo", ["ud"] = "oud",
+		["penny whistle"] = "tin whistle", ["mouth harp"] = "jaw harp", ["zheng"] = "guzheng",
+		["hurdygurdy"] = "hurdy gurdy", ["mbira"] = "kalimba", ["kanun"] = "qanun", ["darbuka"] = "doumbek",
+	},
+}

@@ -75,18 +75,13 @@ local function setAmount(value: number)
 	end
 end
 
--- What else stacks in the bottom-right column above the chip, each only while it is on screen: the Standings
--- tab (with its list when open) and, in a match, the Hint and +10 SEC boosts docked above the tab.
+-- What else stacks in the bottom-right column above the chip while it is on screen: in a match, the Hint and
+-- +10 SEC boosts docked on the chip.
 local function columnParts(): { GuiObject }
 	local parts: { GuiObject } = {}
 	local root = playerGuiRef
 	if root == nil then
 		return parts
-	end
-	local standings = Ui.findScreen(root, "Standings")
-	local frame = if standings ~= nil then standings:FindFirstChild("Root") else nil
-	if standings ~= nil and standings.Visible and frame ~= nil and frame:IsA("GuiObject") then
-		table.insert(parts, frame)
 	end
 	local hud = Ui.findScreen(root, "Hud")
 	local boosts = if hud ~= nil then hud:FindFirstChild("BoostBar") else nil
@@ -224,23 +219,7 @@ local function spawnPop(text: string, caption: string?, swatchName: string)
 	task.delay(POP_HOLD, fadePop, pop)
 end
 
--- Live pills move with their layer, so the column re-places itself (after layout) whenever the Standings
--- tab or list moves, resizes, shows or hides.
-local function bindColumn(playerGui: PlayerGui)
-	local function later()
-		task.defer(placePops)
-	end
-	local standings = Ui.screen(playerGui, "Standings", WAIT_SECONDS)
-	local frame = if standings ~= nil then standings:WaitForChild("Root", WAIT_SECONDS) else nil
-	if standings ~= nil and frame ~= nil and frame:IsA("GuiObject") then
-		standings:GetPropertyChangedSignal("Visible"):Connect(later)
-		frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(later)
-		frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(later)
-	end
-end
-
 function Wallet.init(playerGui: PlayerGui)
-	task.spawn(bindColumn, playerGui)
 	playerGuiRef = playerGui
 	counter:GetPropertyChangedSignal("Value"):Connect(function()
 		setAmount(counter.Value)

@@ -1,6 +1,6 @@
 --!strict
--- Puts the Studio-built Arena and Lobby into Workspace and spawns per-player pillars (the starting ring,
--- late joiners in the gaps, slate for a sunk pillar).
+-- Finds the Studio-built map placed in Workspace (Arena, Lobby, Mountains) and spawns per-player pillars from
+-- ServerStorage.PhysicalAssets.PlatformTemplate (the starting ring, late joiners in the gaps, slate for a sunk pillar).
 
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -27,19 +27,10 @@ local freeZ: number? = nil
 local MapService = {}
 
 function MapService.start()
-	local maps = ServerStorage:WaitForChild("Maps")
-	arena = (maps:WaitForChild("Arena") :: Model):Clone()
-	template = arena:WaitForChild("PlatformTemplate") :: Part
-	template.Parent = nil
-	arena.Parent = workspace
-	-- A lobby already placed in Workspace (being edited in Studio) is used as-is; otherwise clone the stored one.
-	local placed = workspace:FindFirstChild("Lobby")
-	if placed ~= nil and placed:IsA("Model") then
-		lobby = placed
-	else
-		lobby = (maps:WaitForChild("Lobby") :: Model):Clone()
-		lobby.Parent = workspace
-	end
+	local assets = ServerStorage:WaitForChild("PhysicalAssets")
+	template = assets:WaitForChild("PlatformTemplate") :: Part
+	arena = workspace:WaitForChild("Arena") :: Model
+	lobby = workspace:WaitForChild("Lobby") :: Model
 	platformFolder = workspace:WaitForChild("Platforms") :: Folder
 end
 
@@ -61,40 +52,6 @@ local function centerY(topY: number): number
 	return topY - CAP_HEIGHT - GameConfig.Platform.Height / 2
 end
 
-local WALL_THICKNESS = 0.4
-
--- Four invisible walls standing on the cap's edges (inside its footprint, so they never touch a
--- neighbour), welded to the pillar so they ride up and down with it. Raycasts and the camera ignore them.
-local function addWalls(platform: Part, cap: BasePart)
-	local height = GameConfig.Platform.WallHeight
-	local half = cap.Size / 2
-	local y = half.Y + height / 2
-	local sides = {
-		{ Vector3.new(half.X - WALL_THICKNESS / 2, y, 0), Vector3.new(WALL_THICKNESS, height, cap.Size.Z) },
-		{ Vector3.new(-half.X + WALL_THICKNESS / 2, y, 0), Vector3.new(WALL_THICKNESS, height, cap.Size.Z) },
-		{ Vector3.new(0, y, half.Z - WALL_THICKNESS / 2), Vector3.new(cap.Size.X, height, WALL_THICKNESS) },
-		{ Vector3.new(0, y, -half.Z + WALL_THICKNESS / 2), Vector3.new(cap.Size.X, height, WALL_THICKNESS) },
-	}
-	for _, side in sides do
-		local wall = Instance.new("Part")
-		wall.Name = "Wall"
-		wall.Size = side[2]
-		wall.CFrame = cap.CFrame * CFrame.new(side[1])
-		wall.Anchored = false
-		wall.Massless = true
-		wall.CanCollide = true
-		wall.CanQuery = false
-		wall.CanTouch = false
-		wall.CastShadow = false
-		wall.Transparency = 1
-		local weld = Instance.new("WeldConstraint")
-		weld.Part0 = wall
-		weld.Part1 = platform
-		weld.Parent = wall
-		wall.Parent = platform
-	end
-end
-
 -- Builds one pillar whose standing surface sits at `topY`, centred on (x, z). Pillars are unanchored and
 -- held by the template's Lift (AlignPosition) and Upright (AlignOrientation), so physics carries standing
 -- characters when the server moves the Lift target. The default colours are kept as attributes so a sunk
@@ -103,8 +60,20 @@ local function makePlatform(index: number, x: number, z: number, topY: number): 
 	local platform = template:Clone()
 	platform.Name = "Platform" .. index
 	local position = Vector3.new(x, centerY(topY), z)
+	-- Welds do not carry child parts (cap, walls) while the clone is outside Workspace, so each keeps its
+	-- authored offset from the pillar by hand.
+	local offsets: { [BasePart]: CFrame } = {}
+	for _, child in platform:GetChildren() do
+		if child:IsA("BasePart") then
+			offsets[child] = platform.CFrame:ToObjectSpace(child.CFrame)
+		end
+	end
 	platform.CFrame = CFrame.new(position)
 	platform.Anchored = false
+	for child, offset in offsets do
+		child.CFrame = platform.CFrame * offset
+		child.Anchored = false
+	end
 	local color = Theme.Pillars[((index - 1) % #Theme.Pillars) + 1]
 	platform.Color = color
 	platform:SetAttribute("BaseColor", color)
@@ -113,12 +82,9 @@ local function makePlatform(index: number, x: number, z: number, topY: number): 
 	if cap ~= nil then
 		-- Lighter tint of the pillar colour, so you can tell your pillar apart from above.
 		cap.Color = color:Lerp(Theme.Color.White, 0.35)
-		cap.Anchored = false
 		cap.Massless = true
-		cap.CFrame = platform.CFrame * CFrame.new(0, GameConfig.Platform.Height / 2 + CAP_HEIGHT / 2, 0)
 		platform:SetAttribute("CapColor", cap.Color)
 		platform:SetAttribute("CapMaterial", cap.Material.Name)
-		addWalls(platform, cap)
 	end
 
 	local lift = platform:FindFirstChild("Lift") :: AlignPosition

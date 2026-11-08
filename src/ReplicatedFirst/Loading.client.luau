@@ -24,12 +24,17 @@ local fill = root:WaitForChild("Center"):WaitForChild("Track"):WaitForChild("Fil
 local skip = root:WaitForChild("Skip") :: TextButton
 local bubbles = root:WaitForChild("Bubbles") :: Frame
 local logoScale = root:WaitForChild("Center"):WaitForChild("Logo"):WaitForChild("UIScale") :: UIScale
+local status = root:WaitForChild("Center"):FindFirstChild("Status") :: TextLabel?
 
 local finished = false
 
 local function setProgress(fraction: number)
-	local goal = { Size = UDim2.fromScale(math.clamp(fraction, 0, 1), 1) }
+	local clamped = math.clamp(fraction, 0, 1)
+	local goal = { Size = UDim2.fromScale(clamped, 1) }
 	TweenService:Create(fill, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), goal):Play()
+	if status ~= nil then
+		status.Text = "LOADING  " .. math.floor(clamped * 100) .. "%"
+	end
 end
 
 -- Each bubble rises from below the screen to above it, then starts again.
