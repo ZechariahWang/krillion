@@ -20,6 +20,26 @@ local NotifyService = require(script.Parent.NotifyService)
 
 -- Only these count toward "Shells earned this match" on the results screen.
 local MATCH_REASONS = { answer = true, survive = true, win = true }
+-- A Robux item bought again (it can only happen through a stale shop) pays this many Shells per Robux.
+local SHELLS_PER_ROBUX = 20
+local PASS_CHECK_COOLDOWN = 15 -- seconds between pass re-checks a player's shop can ask for
+
+local PASS_MESSAGES: { [string]: string } = {
+	Vip = "VIP UNLOCKED!  |  +"
+		.. math.floor(GameConfig.Cash.VipBonus * 100 + 0.5)
+		.. "% "
+		.. Currency.Upper
+		.. ", AURORA PILLAR, GOLD WAKE TRAIL, VIP TITLE AND TAG",
+	DoubleCash = "2X " .. Currency.Upper .. " UNLOCKED!",
+	SecondChance = "SECOND CHANCE UNLOCKED!  |  ONE FREE REVIVE EVERY MATCH",
+	BoostPlus = "BOOST PLUS UNLOCKED!  |  "
+		.. GameConfig.Boosts.PerMatchPlus
+		.. " HINTS AND "
+		.. GameConfig.Boosts.PerMatchPlus
+		.. " +TIME PER MATCH",
+}
+
+local lastPassCheck: { [Player]: number } = {}
 
 local passes: { [Player]: { [string]: boolean } } = {}
 local productHandlers: { [number]: (Player) -> () } = {}
@@ -35,8 +55,12 @@ function StoreService.ownsPass(player: Player, key: string): boolean
 	return StoreService.passesOf(player)[key] == true
 end
 
+-- VIP + 2x Shells + the equipped pet's bonus. Earned Shells only (payEarned); never packs or rewards.
 function StoreService.cashMultiplier(player: Player): number
-	return Economy.multiplier(StoreService.ownsPass(player, "Vip"), StoreService.ownsPass(player, "DoubleCash"))
+	local owned = StoreService.passesOf(player)
+	local profile = DataService.get(player)
+	local petBonus = if profile ~= nil then Shop.petBonus(profile, owned) else 0
+	return Economy.multiplier(owned.Vip == true, owned.DoubleCash == true, petBonus)
 end
 
 local function tellWallet(player: Player, amount: number, reason: string?)
@@ -83,17 +107,23 @@ function StoreService.earnedTotal(player: Player): number
 	return earned[player] or 0
 end
 
-local function loadPasses(player: Player)
+-- Asks Roblox which passes the player holds. A pass already known stays owned if a lookup fails.
+local function lookupPasses(player: Player): { [string]: boolean }
+	local previous = passes[player] or {}
 	local owned = {}
 	for key, passId in Products.Passes do
 		if passId ~= 0 then
 			local ok, has = pcall(function()
 				return MarketplaceService:UserOwnsGamePassAsync(player.UserId, passId)
 			end)
-			owned[key] = ok and has == true
+			owned[key] = (ok and has == true) or (not ok and previous[key] == true)
 		end
 	end
-	passes[player] = owned
+	return owned
+end
+
+local function loadPasses(player: Player)
+	passes[player] = lookupPasses(player)
 	-- Titles need the profile too, so wait for it before the first refresh.
 	local waited = 0
 	while not DataService.isLoaded(player) and player.Parent ~= nil and waited < 30 do
@@ -115,11 +145,9 @@ local function onPassBought(player: Player, passId: number, bought: boolean)
 	for key, id in Products.Passes do
 		if id == passId and id ~= 0 then
 			owned[key] = true
-			if key == "Vip" then
-				local bonus = math.floor(GameConfig.Cash.VipBonus * 100 + 0.5)
-				NotifyService.send(player, "VIP UNLOCKED!  |  +" .. bonus .. "% " .. Currency.Upper .. ", AURORA PILLAR, GOLD WAKE TRAIL AND VIP TITLE", "good")
-			elseif key == "DoubleCash" then
-				NotifyService.send(player, "2X " .. Currency.Upper .. " UNLOCKED!", "good")
+			local message = PASS_MESSAGES[key]
+			if message ~= nil then
+				NotifyService.send(player, message, "good")
 			end
 		end
 	end
@@ -147,10 +175,30 @@ local function buildProducts()
 	for _, item in Cosmetics.List do
 		if item.robuxProductId ~= nil then
 			StoreService.registerProduct(item.robuxProductId, function(player)
+				local profile = DataService.get(player)
+				if profile ~= nil and profile.owned[item.id] == true then
+					-- Already owned: the Robux is not wasted, it comes back as Shells.
+					StoreService.grantShells(player, (item.robux or 0) * SHELLS_PER_ROBUX, "purchase")
+					return
+				end
 				DataService.grantItem(player, item.id)
+				DataService.equip(player, item.slot, item.id)
+				CosmeticService.refresh(player)
 			end)
 		end
 	end
+	-- One per player: a second purchase (a stale shop) gets only the Shells.
+	local starter = Products.StarterPack
+	StoreService.registerProduct(starter.productId, function(player)
+		StoreService.grantShells(player, starter.cash, "purchase")
+		if not DataService.claim(player, "StarterPack") then
+			return
+		end
+		for _, id in starter.items do
+			DataService.grantItem(player, id)
+		end
+		NotifyService.send(player, "STARTER PACK UNLOCKED!  |  CHECK YOUR SHOP", "good")
+	end)
 end
 
 -- Grants once per receipt: the receipt id is stored with the grant and checked before granting.
@@ -168,7 +216,12 @@ local function processReceipt(info): Enum.ProductPurchaseDecision
 		warn("StoreService: no handler for product " .. tostring(info.ProductId))
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
-	handler(player)
+	-- A handler that errors grants nothing and records nothing, so Roblox retries the receipt later.
+	local ok, err = pcall(handler, player)
+	if not ok then
+		warn("StoreService: product " .. tostring(info.ProductId) .. " handler failed: " .. tostring(err))
+		return Enum.ProductPurchaseDecision.NotProcessedYet
+	end
 	DataService.addReceipt(player, receipt)
 	if DataService.save(player) then
 		return Enum.ProductPurchaseDecision.PurchaseGranted
@@ -227,6 +280,27 @@ function StoreService.start()
 	MarketplaceService.PromptGamePassPurchaseFinished:Connect(onPassBought)
 	Net.event("ShopBuy").OnServerEvent:Connect(onBuy)
 	Net.event("ShopEquip").OnServerEvent:Connect(onEquip)
+	-- The shop asks when it opens, so a pass bought on the website mid-session is picked up.
+	Net.event("PassCheck").OnServerEvent:Connect(function(player)
+		local now = os.clock()
+		if now - (lastPassCheck[player] or -math.huge) < PASS_CHECK_COOLDOWN then
+			return
+		end
+		lastPassCheck[player] = now
+		local before = StoreService.passesOf(player)
+		local after = lookupPasses(player)
+		passes[player] = after
+		for key, has in after do
+			if has and before[key] ~= true then
+				local message = PASS_MESSAGES[key]
+				if message ~= nil then
+					NotifyService.send(player, message, "good")
+				end
+			end
+		end
+		DataService.changed(player)
+		CosmeticService.refresh(player)
+	end)
 	for _, player in Players:GetPlayers() do
 		task.spawn(loadPasses, player)
 	end
@@ -234,6 +308,7 @@ function StoreService.start()
 	Players.PlayerRemoving:Connect(function(player)
 		passes[player] = nil
 		earned[player] = nil
+		lastPassCheck[player] = nil
 	end)
 end
 

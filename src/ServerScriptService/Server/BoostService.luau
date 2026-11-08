@@ -93,7 +93,7 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 	if open ~= "ok" then
 		return reply(player, kind, open)
 	end
-	local allowed = Boosts.canUse(usageOf(player), kind)
+	local allowed = Boosts.canUse(usageOf(player), kind, Boosts.limitsFor(StoreService.ownsPass(player, "BoostPlus")))
 	if allowed ~= "ok" then
 		return reply(player, kind, allowed)
 	end
@@ -127,9 +127,10 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 	return reply(player, kind, "ok", { secondsLeft = secondsLeft })
 end
 
--- A Robux boost adds one to the inventory; if the buyer is waiting on it this prompt, it is used at once.
-local function onBoostBought(player: Player, kind: string)
-	DataService.addBoosts(player, kind, 1)
+-- A Robux boost adds `count` (1, or 3 for a pack) to the inventory; if the buyer is waiting on it this
+-- prompt, one is used at once.
+local function onBoostBought(player: Player, kind: string, count: number?)
+	DataService.addBoosts(player, kind, count or 1)
 	local waiting = pending[player]
 	if waiting == nil or waiting.kind ~= kind then
 		return
@@ -161,6 +162,11 @@ function BoostService.start()
 	StoreService.registerProduct(Products.Boosts.ExtraTime.productId, function(player)
 		onBoostBought(player, "ExtraTime")
 	end)
+	for _, pack in Products.BoostPacks do
+		StoreService.registerProduct(pack.productId, function(player)
+			onBoostBought(player, pack.kind, pack.count)
+		end)
+	end
 
 	-- One of each per round: the round count, hints given and any waiting purchase reset on every prompt.
 	MatchEvents.PromptOpened.connect(function()

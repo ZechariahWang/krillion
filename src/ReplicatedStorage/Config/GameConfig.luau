@@ -141,6 +141,7 @@ local GameConfig = {
 	},
 	Revive = {
 		WindowSeconds = 5,
+		BuyWindowSeconds = 12, -- Revive Now: long enough to get through the Robux purchase dialog
 		MinOthersAlive = 2, -- fewer than this and the match is already decided
 		HeightAboveWater = 4,
 	},

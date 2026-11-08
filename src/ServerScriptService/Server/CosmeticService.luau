@@ -1,6 +1,8 @@
 --!strict
--- Applies equipped cosmetics: the title over a player's head, their pillar skin, their elimination splash
--- and the trail behind them. Titles, splashes and trails are clones of templates under ReplicatedStorage.Templates.
+-- Applies equipped cosmetics: the title over a player's head, their pillar skin and name tag colour, their
+-- elimination splash, the trail behind them and their aura. Titles, splashes, trails and auras are clones
+-- of templates under ReplicatedStorage.Templates. Pets are drawn by clients from the KrillionPet attribute;
+-- card themes are read by the client from its own profile.
 
 local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
@@ -13,6 +15,17 @@ local DataService = require(script.Parent.DataService)
 local TITLE_NAME = "KrillionTitle"
 local TRAIL_PREFIX = "KrillionTrail" -- every trail clone in the root part is named with this, for removal
 local TRAIL_NAME = "KrillionTrail"
+local AURA_PREFIX = "KrillionAura"
+local PET_ATTRIBUTE = "KrillionPet" -- player attribute: the Templates.Pets child to draw beside them
+local TAG_GRADIENT = "KrillionTagGradient"
+
+local warned: { [string]: boolean } = {}
+local function warnOnce(what: string)
+	if not warned[what] then
+		warned[what] = true
+		warn("CosmeticService: no template for " .. what .. " (author it in Studio)")
+	end
+end
 
 local passLookup: (Player) -> { [string]: boolean } = function()
 	return {}
@@ -129,14 +142,111 @@ local function applyTrail(player: Player)
 	trail.Parent = root
 end
 
+-- Swaps the aura on the character: Templates.Auras.<aura> holds Attachments (with ParticleEmitters) or
+-- bare emitters, cloned into the HumanoidRootPart with an AURA_PREFIX name so the next refresh removes them.
+local function applyAura(player: Player)
+	local character = player.Character
+	local root = if character ~= nil then character:FindFirstChild("HumanoidRootPart") else nil
+	if root == nil then
+		return
+	end
+	for _, child in root:GetChildren() do
+		if string.sub(child.Name, 1, #AURA_PREFIX) == AURA_PREFIX then
+			child:Destroy()
+		end
+	end
+	local item = CosmeticService.equipped(player, "Aura")
+	local auraName = if item ~= nil then item.aura else nil
+	if auraName == nil then
+		return
+	end
+	local folder = templates():FindFirstChild("Auras")
+	local template = if folder ~= nil then folder:FindFirstChild(auraName) else nil
+	if template == nil then
+		warnOnce("aura " .. auraName)
+		return
+	end
+	for _, part in template:GetChildren() do
+		if part:IsA("Attachment") or part:IsA("ParticleEmitter") or part:IsA("PointLight") then
+			local clone = part:Clone()
+			clone.Name = AURA_PREFIX .. part.Name
+			clone.Parent = root
+		end
+	end
+end
+
+-- Pets are drawn by every client (Client/Pets) from Templates.Pets.<pet>; the server only names the pet.
+local function applyPet(player: Player)
+	local item = CosmeticService.equipped(player, "Pet")
+	player:SetAttribute(PET_ATTRIBUTE, if item ~= nil then item.pet else nil)
+end
+
+-- Colours a pillar's name tag with the equipped NameTag: one colour, or a left-to-right gradient.
+local function applyNameTag(player: Player, platform: Instance)
+	local tag = platform:FindFirstChild("NameTag")
+	local text = if tag ~= nil then tag:FindFirstChild("NameText") else nil
+	if text == nil or not text:IsA("TextLabel") then
+		return
+	end
+	local old = text:FindFirstChild(TAG_GRADIENT)
+	if old ~= nil then
+		old:Destroy()
+	end
+	local base = text:GetAttribute("BaseColor")
+	if typeof(base) ~= "Color3" then
+		base = text.TextColor3
+		text:SetAttribute("BaseColor", base)
+	end
+	local item = CosmeticService.equipped(player, "NameTag")
+	local colors = if item ~= nil then item.tag else nil
+	if colors == nil or #colors == 0 then
+		text.TextColor3 = base :: Color3
+		return
+	end
+	if #colors == 1 then
+		text.TextColor3 = Color3.fromRGB(colors[1][1], colors[1][2], colors[1][3])
+		return
+	end
+	text.TextColor3 = Color3.new(1, 1, 1)
+	local points = {}
+	for index, rgb in colors do
+		table.insert(points, ColorSequenceKeypoint.new((index - 1) / (#colors - 1), Color3.fromRGB(rgb[1], rgb[2], rgb[3])))
+	end
+	local gradient = Instance.new("UIGradient")
+	gradient.Name = TAG_GRADIENT
+	gradient.Color = ColorSequence.new(points)
+	gradient.Parent = text
+end
+
+-- The player's own pillar this match, if they have one standing.
+local function platformOf(player: Player): Instance?
+	local folder = workspace:FindFirstChild("Platforms")
+	if folder == nil then
+		return nil
+	end
+	for _, child in folder:GetChildren() do
+		if child:GetAttribute("OwnerUserId") == player.UserId then
+			return child
+		end
+	end
+	return nil
+end
+
 function CosmeticService.refresh(player: Player)
 	applyTitle(player)
 	applyTrail(player)
+	applyAura(player)
+	applyPet(player)
+	local platform = platformOf(player)
+	if platform ~= nil then
+		applyNameTag(player, platform)
+	end
 end
 
 -- Recolours a freshly spawned pillar (and its cap) with the player's skin, if they have one equipped.
 -- Skins with a `top` colour give the cap that colour; others get a lightened body colour.
 function CosmeticService.applySkin(player: Player, platform: Part)
+	applyNameTag(player, platform)
 	local item = CosmeticService.equipped(player, "Skin")
 	if item == nil then
 		return
@@ -200,6 +310,8 @@ function CosmeticService.start()
 			applyTitle(player)
 			character:WaitForChild("HumanoidRootPart", 5)
 			applyTrail(player)
+			applyAura(player)
+			applyPet(player)
 		end)
 	end
 	for _, player in Players:GetPlayers() do

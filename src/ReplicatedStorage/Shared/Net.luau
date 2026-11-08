@@ -131,6 +131,32 @@ export type ProfilePayload = {
 	krillions: number,
 	games: number,
 	passes: { [string]: boolean }?,
+	chestsAllowed: boolean?, -- false where paid random items are restricted (ChestService)
+}
+
+-- ChestResult: what a ChestOpen gave. status "ok" carries the item; others say why nothing opened.
+export type ChestResultPayload = {
+	chest: string,
+	status: string, -- "ok" | "no_shells" | "cooldown" | "limit" | "restricted"
+	item: string?,
+	duplicate: boolean?,
+	refund: number?, -- Shells paid back for a duplicate
+}
+
+-- ToyHit (to every client): a lobby throw. `to` is the target's UserId; the toy lands after FlightSeconds.
+export type ToyHitPayload = {
+	from: number,
+	to: number,
+	toy: string, -- Templates.Toys child name
+}
+
+-- RevivePrompt: kind "free" (Second Chance), "stock" (a revive you own) or "buy" (Revive Now, Robux).
+export type RevivePromptPayload = {
+	seconds: number,
+	revives: number,
+	kind: string?,
+	robux: number?, -- Revive Now's price, for kind "buy"
+	productId: number?, -- Revive Now's product, for kind "buy"
 }
 
 local Net = {}

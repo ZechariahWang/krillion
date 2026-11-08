@@ -17,6 +17,7 @@ local Schooling = require(ReplicatedStorage.Shared.Schooling)
 local SpecialRound = require(ReplicatedStorage.Shared.SpecialRound)
 local WaterCurve = require(ReplicatedStorage.Shared.WaterCurve)
 local Economy = require(ReplicatedStorage.Shared.Economy)
+local Products = require(ReplicatedStorage.Config.Products)
 local AnswerService = require(script.Parent.AnswerService)
 local AnswerStatsService = require(script.Parent.AnswerStatsService)
 local BotService = require(script.Parent.BotService)
@@ -52,7 +53,7 @@ local lateUnproven: { [Player]: boolean } = {} -- late joiners who have not had 
 local matchId = 0
 local sunkPlatforms: { [Player]: Part } = {} -- kept so a revive can put the player back on their own pillar
 local reviveUsed: { [Player]: boolean } = {}
-local reviveOffers: { [Player]: { matchId: number, expires: number } } = {}
+local reviveOffers: { [Player]: { matchId: number, expires: number, kind: string } } = {}
 local earnedAtStart: { [Player]: number } = {} -- StoreService.earnedTotal when the match began
 local rarest: Rarest? = nil -- the highest-scoring answer of the match, for the results screen
 local broadcastQueued = false
@@ -284,20 +285,38 @@ local function sinkPosition(player: Player): Vector3?
 	return root.Position
 end
 
+-- One revive per player per match, whatever pays for it (Economy.reviveOffer): the Second Chance pass's
+-- free one, a revive from stock, or Revive Now bought on the spot. Never in a 1v1.
 local function offerRevive(player: Player)
 	local profile = DataService.get(player)
 	if profile == nil then
 		return
 	end
-	if not Economy.canOfferRevive(profile.revives, reviveUsed[player] == true, RoundService.aliveCount()) then
+	local kind = Economy.reviveOffer({
+		revivesOwned = profile.revives,
+		usedThisMatch = reviveUsed[player] == true,
+		othersAlive = RoundService.aliveCount(),
+		secondChance = StoreService.ownsPass(player, "SecondChance"),
+		secondChanceUsed = false, -- the one-per-match rule already covers it
+		canBuy = Products.ReviveNow.productId ~= 0,
+	})
+	if kind == nil then
 		return
 	end
 	-- With no player left afloat the match ends now, however many bots are still up.
 	if #bots > 0 and #alivePlayers() == 0 then
 		return
 	end
-	reviveOffers[player] = { matchId = matchId, expires = os.clock() + GameConfig.Revive.WindowSeconds }
-	Net.event("RevivePrompt"):FireClient(player, { seconds = GameConfig.Revive.WindowSeconds, revives = profile.revives })
+	-- A purchase takes longer than a tap, so Revive Now gets the longer window.
+	local seconds = if kind == "buy" then GameConfig.Revive.BuyWindowSeconds else GameConfig.Revive.WindowSeconds
+	reviveOffers[player] = { matchId = matchId, expires = os.clock() + seconds, kind = kind }
+	Net.event("RevivePrompt"):FireClient(player, {
+		seconds = seconds,
+		revives = profile.revives,
+		kind = kind,
+		robux = Products.ReviveNow.robux,
+		productId = Products.ReviveNow.productId,
+	})
 end
 
 local function sinkPlayer(player: Player)
@@ -330,23 +349,27 @@ local function sinkBot(id: number)
 	setServerAttributes()
 end
 
-local function onReviveUse(player: Player)
+-- Whether the player's revive offer is still good: this match, in time, their pillar still there.
+local function liveOffer(player: Player): boolean
 	local offer = reviveOffers[player]
-	reviveOffers[player] = nil
-	local state = match
-	if offer == nil or state == nil or offer.matchId ~= matchId or os.clock() > offer.expires then
-		return
-	end
 	local platform = sunkPlatforms[player]
-	if platform == nil or platform.Parent == nil or not PlayerService.hasCharacter(player) then
-		return
-	end
-	local profile = DataService.get(player)
-	if profile == nil or profile.revives <= 0 or reviveUsed[player] then
-		return
-	end
+	return offer ~= nil
+		and match ~= nil
+		and offer.matchId == matchId
+		and os.clock() <= offer.expires
+		and not reviveUsed[player]
+		and platform ~= nil
+		and platform.Parent ~= nil
+		and PlayerService.hasCharacter(player)
+end
+
+-- Puts a sunk player back on their own pillar just above the water. The caller has checked liveOffer and
+-- taken payment.
+local function restore(player: Player)
+	reviveOffers[player] = nil
 	reviveUsed[player] = true
-	DataService.addRevives(player, -1)
+	local state = match :: MatchState.State
+	local platform = sunkPlatforms[player] :: Part
 	local top = state.waterY + GameConfig.Revive.HeightAboveWater
 	-- Back to its own colours, skin and name, then the pillar glides out of the water before the player
 	-- is put back on it.
@@ -365,6 +388,39 @@ local function onReviveUse(player: Player)
 	MapService.riseBurst(platform)
 	broadcastState()
 	setServerAttributes()
+end
+
+-- ReviveUse: a free (Second Chance) or stocked revive. Revive Now goes through its receipt instead.
+local function onReviveUse(player: Player)
+	local offer = reviveOffers[player]
+	if offer == nil or not liveOffer(player) then
+		reviveOffers[player] = nil
+		return
+	end
+	if offer.kind == "stock" then
+		local profile = DataService.get(player)
+		if profile == nil or profile.revives <= 0 then
+			return
+		end
+		DataService.addRevives(player, -1)
+	elseif offer.kind == "free" then
+		NotifyService.send(player, "SECOND CHANCE!", "good")
+	else
+		return
+	end
+	restore(player)
+end
+
+-- Revive Now's receipt: revives at once while the offer is live; a late receipt is never lost, it becomes
+-- a revive in stock for a later match.
+local function onReviveBought(player: Player)
+	local offer = reviveOffers[player]
+	if offer ~= nil and offer.kind == "buy" and liveOffer(player) then
+		task.spawn(restore, player)
+		return
+	end
+	DataService.addRevives(player, 1)
+	NotifyService.send(player, "REVIVE SAVED FOR YOUR NEXT MATCH", "info")
 end
 
 -- Used by the water poll: a player fell in or lost their character mid-round.
@@ -933,6 +989,7 @@ end
 
 function RoundService.start()
 	Net.event("ReviveUse").OnServerEvent:Connect(onReviveUse)
+	StoreService.registerProduct(Products.ReviveNow.productId, onReviveBought)
 	Net.event("JoinMatch").OnServerEvent:Connect(function(player)
 		local status, message = RoundService.tryJoin(player)
 		Net.event("JoinResult"):FireClient(player, { status = status, message = message })
