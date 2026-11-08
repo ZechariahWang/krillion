@@ -37,6 +37,13 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `ClipToDeviceSafeArea` off so it covers the phone notch area.
 - StreamingEnabled is on: models a client animates far away (`Arena.SeaLife`) use `ModelStreamingMode = Atomic`
   and are picked up with `ChildAdded` as they stream in.
+- Day and night: Lighting's properties and linear fog are the day look; its `NightAmbient` / `NightOutdoorAmbient`
+  attributes and the `Lighting.Atmosphere` haze are the night look. `Client/DayNight` blends them at dusk and dawn
+  (fog out, then haze in) and lights parts tagged `NightLight` (the torches) only at night.
+- Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
+  `LobbySpawn`, `HowToBoard` and `HowRareBoard` stay direct children: code looks them up by name. The
+  `Railing.RailBlocker` walls rise 70 studs so nobody jumps off the deck.
+- `PhysicalAssets.TerrainBeforeDunes` is the terrain before the beach dunes were added.
 - Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
   `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start.
 - After Studio edits, remind the user to save the place.
