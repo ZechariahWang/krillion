@@ -84,8 +84,6 @@ export type MatchEndedPayload = {
 	winnerName: string,
 	podium: { { name: string, points: number } },
 	seconds: number,
-	rarest: { name: string, answer: string, tier: string, prompt: string, depth: number }?,
-	earned: { [string]: number }, -- tostring(userId) -> Shells from answers, survival and the win this match
 }
 
 export type BoostUses = { Hint: number, ExtraTime: number }

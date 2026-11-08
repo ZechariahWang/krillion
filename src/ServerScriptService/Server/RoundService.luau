@@ -30,8 +30,6 @@ local PlayerService = require(script.Parent.PlayerService)
 local StoreService = require(script.Parent.StoreService)
 local WaterService = require(script.Parent.WaterService)
 
-type Rarest = { name: string, answer: string, tier: string, prompt: string, depth: number, points: number }
-
 local PROMPT_POLL_SECONDS = 0.1 -- how often the prompt clock looks for everyone having locked in
 
 local phase = "Waiting"
@@ -53,8 +51,6 @@ local matchId = 0
 local sunkPlatforms: { [Player]: Part } = {} -- kept so a revive can put the player back on their own pillar
 local reviveUsed: { [Player]: boolean } = {}
 local reviveOffers: { [Player]: { matchId: number, expires: number } } = {}
-local earnedAtStart: { [Player]: number } = {} -- StoreService.earnedTotal when the match began
-local rarest: Rarest? = nil -- the highest-scoring answer of the match, for the results screen
 local broadcastQueued = false
 -- Bots (negative number ids, see BotService) live in the match state but never in `platforms` or
 -- alivePlayers(), so the water cull, payouts and MatchEvents only ever see real players.
@@ -414,8 +410,6 @@ local function startMatch()
 	sunkPlatforms = {}
 	reviveUsed = {}
 	reviveOffers = {}
-	earnedAtStart = {}
-	rarest = nil
 	overtime = false
 	matchId += 1
 	WaterService.reset()
@@ -437,7 +431,6 @@ local function startMatch()
 		MapService.setPlatformName(parts[index], player.DisplayName)
 		CosmeticService.applySkin(player, parts[index])
 		PlayerService.sendToPlatform(player, parts[index])
-		earnedAtStart[player] = StoreService.earnedTotal(player)
 	end
 	for index, id in bots do
 		local part = parts[#participants + index]
@@ -586,10 +579,8 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 	local state = match :: MatchState.State
 	local prompt = currentPrompt
 	local promptId = ""
-	local promptText = ""
 	if prompt ~= nil then
 		promptId = prompt.id
-		promptText = prompt.prompt
 	end
 	local rows = {}
 	local graded: { { player: Player, tier: string?, points: number, answer: string? } } = {}
@@ -656,17 +647,6 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 		})
 		if player ~= nil then
 			table.insert(graded, { player = player, tier = tier, points = points, answer = shownAnswer })
-		end
-		local best = rarest
-		if tier ~= nil and shownAnswer ~= nil and (best == nil or points > best.points) then
-			rarest = {
-				name = nameOf(id),
-				answer = shownAnswer,
-				tier = tier,
-				prompt = promptText,
-				depth = depth,
-				points = points,
-			}
 		end
 		if lift > 0 then
 			-- The dive card lands first; seeing the pillar rise before it would spoil the tier.
@@ -764,11 +744,9 @@ local function endMatch()
 	reviveOffers = {}
 	match = nil
 	local present = {}
-	local earned: { [string]: number } = {}
 	for _, player in participantsList do
 		if player.Parent ~= nil then
 			table.insert(present, player)
-			earned[tostring(player.UserId)] = StoreService.earnedTotal(player) - (earnedAtStart[player] or 0)
 		end
 	end
 	local winnerHere = winner
@@ -776,11 +754,6 @@ local function endMatch()
 		winnerHere = nil
 	end
 	MatchEvents.MatchFinished.fire(present, winnerHere, countsAsWin and winnerHere ~= nil, round)
-	local best = rarest
-	local rarestPayload: { [string]: any }? = nil
-	if best ~= nil then
-		rarestPayload = { name = best.name, answer = best.answer, tier = best.tier, prompt = best.prompt, depth = best.depth }
-	end
 	secondsLeft = GameConfig.Round.ResultsSeconds
 	setPhase("Results")
 	Net.event("MatchEnded"):FireAllClients({
@@ -789,11 +762,8 @@ local function endMatch()
 		winnerName = winnerName,
 		podium = top,
 		seconds = GameConfig.Round.ResultsSeconds,
-		rarest = rarestPayload,
-		earned = earned,
 	})
 	participantsList = {}
-	earnedAtStart = {}
 	playedUserIds = {}
 	lateUnproven = {}
 	slotCount = 0
@@ -885,7 +855,6 @@ function RoundService.tryJoin(player: Player): (string, string)
 	-- Added after the teleport, so the water poll never sees them still standing in the lobby.
 	MatchState.addPlayerAt(state, player, height)
 	platforms[player] = platform
-	earnedAtStart[player] = StoreService.earnedTotal(player)
 	-- Mid-prompt they answer this prompt (with at least LateJoin.MinSecondsLeft); otherwise the next one.
 	if phase == "Prompt" then
 		AnswerService.allow(player)

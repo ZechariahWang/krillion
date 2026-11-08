@@ -18,12 +18,8 @@ local CosmeticService = require(script.Parent.CosmeticService)
 local DataService = require(script.Parent.DataService)
 local NotifyService = require(script.Parent.NotifyService)
 
--- Only these count toward "Shells earned this match" on the results screen.
-local MATCH_REASONS = { answer = true, survive = true, win = true }
-
 local passes: { [Player]: { [string]: boolean } } = {}
 local productHandlers: { [number]: (Player) -> () } = {}
-local earned: { [Player]: number } = {}
 
 local StoreService = {}
 
@@ -51,9 +47,6 @@ function StoreService.payEarned(player: Player, cash: number, reason: string?): 
 	local amount = Economy.apply(cash, StoreService.cashMultiplier(player))
 	if amount > 0 then
 		DataService.addCash(player, amount)
-		if reason ~= nil and MATCH_REASONS[reason] then
-			earned[player] = (earned[player] or 0) + amount
-		end
 		tellWallet(player, amount, reason)
 	end
 	return amount
@@ -75,12 +68,6 @@ function StoreService.spendShells(player: Player, amount: number, reason: string
 	end
 	tellWallet(player, -amount, reason or "spend")
 	return true
-end
-
--- Running total of match Shells (answers, survival, wins) paid to the player while in this server.
--- RoundService diffs it across a match for the results screen.
-function StoreService.earnedTotal(player: Player): number
-	return earned[player] or 0
 end
 
 local function loadPasses(player: Player)
@@ -233,7 +220,6 @@ function StoreService.start()
 	Players.PlayerAdded:Connect(loadPasses)
 	Players.PlayerRemoving:Connect(function(player)
 		passes[player] = nil
-		earned[player] = nil
 	end)
 end
 
