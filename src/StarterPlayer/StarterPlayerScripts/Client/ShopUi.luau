@@ -110,8 +110,9 @@ type Entry = {
 type Section = { name: string, kind: string, slots: { string }, button: TextButton }
 
 
--- One window record per authored screen: LobbyUi.Shop and LobbyUi.Inventory share every card and section
--- mechanic; the inventory one lists the whole collection, owned first, the rest behind a lock.
+-- One window record per authored screen: LobbyUi.Shop (Shells items), LobbyUi.Store (everything bought with
+-- Robux: specials, passes, Shells packs) and LobbyUi.Inventory share every card and section mechanic; the
+-- inventory one lists the whole collection, owned first, the rest behind a lock.
 type Window = {
 	name: string,
 	inventory: boolean,
@@ -131,6 +132,7 @@ type Window = {
 	filterKeys: { [string]: TextButton },
 	current: Section?,
 	filter: Shop.Filter,
+	scrollToken: number, -- bumped by scrollToTop, so a re-render's deferred scroll restore stands down
 	close: () -> (),
 }
 
@@ -180,6 +182,11 @@ local function promptProduct(productId: number)
 	MarketplaceService:PromptProductPurchase(player, productId)
 end
 
+local function scrollToTop(w: Window)
+	w.scrollToken += 1
+	w.grid.CanvasPosition = Vector2.zero
+end
+
 local function goToIn(w: Window, name: string): boolean
 	local section = w.sectionByName[name]
 	if section == nil then
@@ -187,6 +194,7 @@ local function goToIn(w: Window, name: string): boolean
 	end
 	w.current = section
 	renderWindow(w)
+	scrollToTop(w)
 	return true
 end
 
@@ -199,17 +207,32 @@ local function goToKindIn(w: Window, kind: string): boolean
 	return false
 end
 
--- A card's jump ("GET SHELLS", "VIEW", "CHESTS"): this window if it has the section, else the shop.
+-- The first non-inventory window with a section of this kind: SHELLS and PASSES live in the store, CHESTS
+-- in the shop.
+local function windowWithKind(kind: string): Window?
+	for _, w in windows do
+		if not w.inventory then
+			for _, section in w.sections do
+				if section.kind == kind then
+					return w
+				end
+			end
+		end
+	end
+	return nil
+end
+
+-- A card's jump ("GET SHELLS", "VIEW", "CHESTS"): this window if it has the section, else the window that does.
 local function goToKind(kind: string)
 	local w = active
 	if w == nil or goToKindIn(w, kind) then
 		return
 	end
-	local shop = shopWindow
-	if shop ~= nil and shop ~= w then
+	local target = windowWithKind(kind)
+	if target ~= nil and target ~= w then
 		openWindow(w, false)
-		openWindow(shop, true)
-		goToKindIn(shop, kind)
+		openWindow(target, true)
+		goToKindIn(target, kind)
 	end
 end
 
@@ -599,6 +622,10 @@ local function featuredEntries(entries: { Entry })
 		end
 		table.insert(entries, entry)
 	end
+	-- The best cash pack and the 2x pass are Robux, so they live in the STORE window only.
+	if windowWithKind("Shells") ~= nil then
+		return
+	end
 	local best = #Products.CashPacks
 	table.insert(entries, packEntry(Products.CashPacks[best], "Legendary"))
 	if passes.DoubleCash ~= true then
@@ -807,8 +834,12 @@ local function collectionText(): string
 	return owned .. "/" .. #Cosmetics.List
 end
 
+-- Re-rendering (a buy, an equip, a profile update) keeps the grid where it was scrolled to; only a new
+-- section, a filter change or opening the window goes back to the top (scrollToTop).
 function renderWindow(w: Window)
 	active = w
+	local scroll = w.grid.CanvasPosition
+	local token = w.scrollToken
 	w.cashText.Text = Currency.format(profile.cash)
 	if w.titleLabel ~= nil then
 		w.titleLabel.Text = if w.inventory then w.title .. "  " .. collectionText() else w.title
@@ -847,8 +878,15 @@ function renderWindow(w: Window)
 	if w.emptyLabel ~= nil then
 		w.emptyLabel.Visible = shown == 0
 	end
-	w.grid.CanvasPosition = Vector2.zero
+	w.grid.CanvasPosition = scroll
+	-- The canvas regrows a frame later (AutomaticCanvasSize), which can clamp the position: set it again.
+	task.defer(function()
+		if w.grid.CanvasPosition ~= scroll and w.scrollToken == token then
+			w.grid.CanvasPosition = scroll
+		end
+	end)
 end
+
 
 local function setBackdrop(w: Window, shown: boolean)
 	w.scrim.Visible = shown
@@ -869,6 +907,7 @@ function openWindow(w: Window, open: boolean)
 		Net.event("PassCheck"):FireServer()
 		active = w
 		renderWindow(w)
+		scrollToTop(w)
 		setBackdrop(w, true)
 		Ui.pop(w.panel)
 		Windows.opened(w.close)
@@ -948,6 +987,7 @@ local function bindTools(w: Window, frame: Instance)
 			w.filter.price = cycle(PRICES, w.filter.price)
 			Sfx.play("Pop", 0.4)
 			renderWindow(w)
+			scrollToTop(w)
 		end)
 	end
 	local rarity = w.filterKeys.RarityFilter
@@ -956,6 +996,7 @@ local function bindTools(w: Window, frame: Instance)
 			w.filter.rarity = cycle(RARITIES, w.filter.rarity)
 			Sfx.play("Pop", 0.4)
 			renderWindow(w)
+			scrollToTop(w)
 		end)
 	end
 	local owned = w.filterKeys.OwnedFilter
@@ -964,6 +1005,7 @@ local function bindTools(w: Window, frame: Instance)
 			w.filter.hideOwned = not w.filter.hideOwned
 			Sfx.play("Pop", 0.4)
 			renderWindow(w)
+			scrollToTop(w)
 		end)
 	end
 	local search = frame:FindFirstChild("Search")
@@ -971,6 +1013,7 @@ local function bindTools(w: Window, frame: Instance)
 		search:GetPropertyChangedSignal("Text"):Connect(function()
 			w.filter.query = search.Text
 			renderWindow(w)
+			scrollToTop(w)
 		end)
 	end
 end
@@ -1008,6 +1051,7 @@ local function bindWindow(playerGui: PlayerGui, name: string, inventory: boolean
 		filterKeys = {},
 		current = nil,
 		filter = { query = "", price = "All", rarity = "All", hideOwned = false },
+		scrollToken = 0,
 		close = function() end,
 	}
 	w.close = function()
@@ -1061,22 +1105,27 @@ local function bindRailKey(keyName: string, w: Window?)
 	end)
 end
 
--- Binds LobbyUi.Shop (rail SHOP key) and LobbyUi.Inventory (rail ITEMS key).
+-- Binds LobbyUi.Shop (rail SHOP key), LobbyUi.Store (rail STORE key) and LobbyUi.Inventory (rail ITEMS key).
 function ShopUi.init(playerGui: PlayerGui)
 	blur = Lighting:FindFirstChild("ShopBlur") :: BlurEffect?
 	shopWindow = bindWindow(playerGui, "Shop", false)
 	bindRailKey("ShopButton", shopWindow)
+	bindRailKey("StoreButton", bindWindow(playerGui, "Store", false))
 	bindRailKey("InventoryButton", bindWindow(playerGui, "Inventory", true))
 end
 
--- Opens the shop on one section by name ("Shells", "Chests"...), e.g. from a Starter Pack nudge.
+-- Opens the shop or store on one section by name ("Shells", "Chests"...), e.g. from a Starter Pack nudge.
 function ShopUi.openTab(name: string)
-	local shop = shopWindow
-	if playing or shop == nil then
+	if playing then
 		return
 	end
-	openWindow(shop, true)
-	goToIn(shop, name)
+	for _, w in windows do
+		if not w.inventory and w.sectionByName[name] ~= nil then
+			openWindow(w, true)
+			goToIn(w, name)
+			return
+		end
+	end
 end
 
 function ShopUi.onProfile(payload)
