@@ -17,6 +17,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Map: every physical asset lives in `ServerStorage.PhysicalAssets` (Arena, Lobby, Mountains, TerrainBackup);
   MapService clones them into Workspace and builds nothing itself. Pillar walls are authored on
   `Arena.PlatformTemplate`, and the tank hole (radius 40, from y -20 up) is carved into the terrain.
+  `Arena.Beach` holds the beach decor; `Arena.SeaLife` holds fish and schools that `Client/SeaLife` swims round
+  the island (each child model's `Speed` attribute is studs per second, sign = direction).
 - Beach: the island top (y 0, x -96..96, z -96..80) slopes as a smoothstep from 16 studs inside its edge to the
   sea floor (y -28) 64 studs out, on every side; partial-occupancy sand keeps it smooth under water. Terrain sea
   (sand y -32..-28, water to y -4) reaches 1024 studs out; eight `Arena.FarSea` planes carry it to 3072. The
