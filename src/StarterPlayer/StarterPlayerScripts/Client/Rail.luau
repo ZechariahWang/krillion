@@ -17,7 +17,11 @@ local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
 local MIN_FIT = 0.45
-local TWO_COLUMNS_BELOW = 0.7 -- a single column shrunk below this wraps into two columns instead
+-- One column shrunk below TWO_COLUMNS_BELOW wraps into two; two columns go back to one only above
+-- ONE_COLUMN_ABOVE, so a screen near the threshold never flips back and forth.
+local TWO_COLUMNS_BELOW = 0.62
+local ONE_COLUMN_ABOVE = 0.85
+local JITTER = 4 -- pixels of screen height change that do not count as a resize
 
 local gui: Frame? = nil
 local railFrame: GuiObject? = nil
@@ -26,6 +30,9 @@ local fit: UIScale? = nil
 local edgeWidth = 0 -- authored frame width beyond one key (room for the badge)
 local buttons: { [string]: TextButton } = {}
 local playing = false
+local columns = 1
+local lastHeight = 0
+local lastCount = 0
 
 local Rail = {}
 
@@ -56,20 +63,28 @@ local function fitToScreen()
 	if screen == nil or frame == nil or list == nil or scale == nil then
 		return
 	end
-	local available = screen.AbsoluteSize.Y * HEIGHT_SHARE
+	local screenHeight = screen.AbsoluteSize.Y
 	local count, keySize = visibleKeys(frame)
-	if available <= 0 or count == 0 then
+	if screenHeight <= 0 or count == 0 then
 		return
 	end
-	local gap = list.Padding.Offset
-	local columns = 1
-	local rows = count
-	local height = stackHeight(rows, keySize, gap)
-	if available / height < TWO_COLUMNS_BELOW and count > 1 then
-		columns = 2
-		rows = math.ceil(count / 2)
-		height = stackHeight(rows, keySize, gap)
+	if math.abs(screenHeight - lastHeight) < JITTER and count == lastCount then
+		return
 	end
+	lastHeight = screenHeight
+	lastCount = count
+	local available = screenHeight * HEIGHT_SHARE
+	local gap = list.Padding.Offset
+	local oneColumn = available / stackHeight(count, keySize, gap)
+	if count < 2 then
+		columns = 1
+	elseif columns == 1 and oneColumn < TWO_COLUMNS_BELOW then
+		columns = 2
+	elseif columns == 2 and oneColumn > ONE_COLUMN_ABOVE then
+		columns = 1
+	end
+	local rows = math.ceil(count / columns)
+	local height = stackHeight(rows, keySize, gap)
 	local width = stackHeight(columns, keySize, gap) + edgeWidth
 	list.Wraps = columns > 1
 	frame.Size = UDim2.fromOffset(width, height)

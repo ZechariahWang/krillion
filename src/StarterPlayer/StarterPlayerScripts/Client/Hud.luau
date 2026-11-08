@@ -124,6 +124,8 @@ local KEYBOARD_GAP = 8
 local barRest: UDim2? = nil
 local promptText = ""
 
+local refreshBoosts: () -> ()
+
 local function placeForKeyboard()
 	local echo = answerBar:FindFirstChild("PromptEcho")
 	if barRest == nil then
@@ -136,6 +138,8 @@ local function placeForKeyboard()
 	else
 		answerBar.Position = barRest
 	end
+	-- The boosts sit under the keyboard; they come back with the chip when it goes.
+	refreshBoosts()
 	if echo ~= nil and echo:IsA("TextLabel") then
 		echo.Text = promptText
 		echo.Visible = shown and promptText ~= ""
@@ -214,6 +218,10 @@ end
 -- Boosts --------------------------------------------------------------------------------------------------
 
 local function boostsShown(): boolean
+	-- Under a phone's keyboard the boosts would be covered; they come back with the chip when it goes.
+	if UserInputService.OnScreenKeyboardVisible then
+		return false
+	end
 	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
 end
 
@@ -264,7 +272,7 @@ local function fitBoostBar()
 end
 
 -- Each chip shows what pressing it would spend: the inventory, Shells, Robux, or greyed when none applies.
-local function refreshBoosts()
+function refreshBoosts()
 	local bar = boostBar
 	if bar == nil then
 		return

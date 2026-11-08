@@ -5,6 +5,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
@@ -66,10 +67,13 @@ end
 
 function Status.init(playerGui: PlayerGui)
 	local gui = Ui.screen(playerGui, "Status") :: Frame
-	-- The chips hide under any open window; the window's own header carries what matters there.
-	Windows.Changed.connect(function()
-		gui.Visible = not Windows.anyOpen()
-	end)
+	-- The chips hide under any open window (its header carries what matters) and under a phone's keyboard
+	-- (the HUD echoes the prompt above the answer bar).
+	local function showChips()
+		gui.Visible = not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
+	end
+	Windows.Changed.connect(showChips)
+	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(showChips)
 	statusFrame = gui:WaitForChild("StatusFrame") :: Frame
 	statusText = statusFrame:WaitForChild("Status") :: TextLabel
 	local secondary = gui:WaitForChild("SecondaryStatus")

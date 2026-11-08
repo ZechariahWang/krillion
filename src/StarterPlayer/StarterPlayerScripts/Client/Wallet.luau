@@ -4,6 +4,7 @@
 -- payout or spend (ShellsEarned).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Currency = require(ReplicatedStorage.Shared.Currency)
@@ -128,7 +129,7 @@ local function refresh()
 	if own == nil then
 		return
 	end
-	own.Visible = not Windows.anyOpen()
+	own.Visible = not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
 	placePops()
 end
 
@@ -229,6 +230,7 @@ end
 function Wallet.init(playerGui: PlayerGui)
 	playerGuiRef = playerGui
 	Windows.Changed.connect(refresh)
+	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(refresh)
 	counter:GetPropertyChangedSignal("Value"):Connect(function()
 		setAmount(counter.Value)
 	end)
