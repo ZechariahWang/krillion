@@ -81,8 +81,7 @@ return {
 			"mission san jose", "mission san juan bautista", "mission santa cruz", "mission san francisco de asis",
 		},
 		OneInAKrillion = {
-			"bridge of the gods", "bridge to nowhere", "bridge on the river kwai", "bridge of spies",
-			"glienicke bridge", "remagen bridge", "ludendorff bridge", "arnhem bridge", "john frost bridge",
+			"bridge of the gods", "glienicke bridge", "remagen bridge", "ludendorff bridge", "arnhem bridge", "john frost bridge",
 			"pegasus bridge", "benouville bridge", "horsa bridge", "ranville bridge", "merville battery",
 			"pointe du hoc", "omaha beach", "utah beach", "gold beach", "juno beach", "sword beach", "arromanches",
 			"mulberry harbour", "mulberry harbor", "colleville sur mer", "american cemetery normandy", "la cambe",
