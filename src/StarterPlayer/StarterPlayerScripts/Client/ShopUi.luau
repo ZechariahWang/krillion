@@ -1,6 +1,7 @@
 --!strict
 -- Drives LobbyUi.Shop: the shop window for cosmetics, pets, toys, chests, passes and packs. The same window
--- opened as the INVENTORY (ShopUi.openInventory) shows only the cosmetic sections and only what you own.
+-- opened as the INVENTORY (ShopUi.openInventory) shows only the cosmetic sections, what you own first and the
+-- rest dimmed behind a lock, with how much of the collection you have in the title.
 -- The server checks every buy, equip and chest; this only shows the state and sends requests.
 -- Shells buys take a second click within CONFIRM_SECONDS; a chest opens on one click into ChestReveal; reward items open the Rewards
 -- panel; chest-only items jump to CHESTS; a Shells item you cannot afford offers GET SHELLS (the SHELLS section).
@@ -53,7 +54,8 @@ local PORTRAIT_SIZE = UDim2.fromOffset(520, 880)
 local PRICE_X_WITH_COIN = 142
 local PRICE_X_PLAIN = 120
 local INVENTORY_TITLE = "🎒 INVENTORY"
-local INVENTORY_EMPTY = "NOTHING OWNED HERE YET"
+local LOCKED = "🔒"
+local DIM = 0.45 -- text and preview transparency of an item you do not own, in the inventory
 
 local PRICES = { "All", "Shells", "Robux", "Free" }
 local RARITIES = { "All", table.unpack(Cosmetics.Rarities) }
@@ -118,7 +120,6 @@ local blur: BlurEffect?
 local cashText: TextLabel
 local titleLabel: TextLabel?
 local shopTitle = ""
-local shopEmpty = ""
 local getShells: TextButton?
 local getMore: GuiObject?
 local grid: ScrollingFrame
@@ -724,7 +725,26 @@ local function fillCard(card: Frame, entry: Entry)
 			border.Color = rarityColor
 		end
 	end
-	fillBadge(badge, entry.badge)
+	local locked = inventory and not entry.owned
+	fillBadge(badge, if locked and entry.badge == nil then LOCKED else entry.badge)
+	local dim = if locked then DIM else 0
+	nameLabel.TextTransparency = dim
+	if subLabel ~= nil then
+		subLabel.TextTransparency = dim
+	end
+	priceLabel.TextTransparency = dim
+	if locked then
+		local preview = card:FindFirstChild("Preview")
+		if preview ~= nil then
+			for _, part in preview:GetChildren() do
+				if part:IsA("TextLabel") then
+					part.TextTransparency = DIM
+				elseif part:IsA("GuiObject") then
+					part.BackgroundTransparency = math.max(part.BackgroundTransparency, DIM)
+				end
+			end
+		end
+	end
 	action.Text = entry.action
 	action.TextScaled = #entry.action > LONG_ACTION
 	action.Active = entry.enabled
@@ -740,12 +760,20 @@ local function fillCard(card: Frame, entry: Entry)
 	addHover(card, 1.03, CARD_SHADOW_REST, CARD_SHADOW_HOVER)
 end
 
+-- How much of the whole catalogue is owned, for the inventory title.
+local function collectionText(): string
+	local owned = 0
+	for _, item in Cosmetics.List do
+		if Shop.owns(profile, item, passes) then
+			owned += 1
+		end
+	end
+	return owned .. "/" .. #Cosmetics.List
+end
+
 local function renderMode()
 	if titleLabel ~= nil then
-		titleLabel.Text = if inventory then INVENTORY_TITLE else shopTitle
-	end
-	if emptyLabel ~= nil then
-		emptyLabel.Text = if inventory then INVENTORY_EMPTY else shopEmpty
+		titleLabel.Text = if inventory then INVENTORY_TITLE .. "  " .. collectionText() else shopTitle
 	end
 	if getShells ~= nil then
 		getShells.Visible = not inventory
@@ -772,11 +800,19 @@ function render()
 	if section == nil then
 		return
 	end
-	local shown = 0
-	for _, entry in entriesFor(section) do
-		if inventory and not entry.owned then
-			continue
+	local entries = entriesFor(section)
+	if inventory then
+		-- What you own comes first; the rest follows in catalogue order.
+		local owned: { Entry } = {}
+		local rest: { Entry } = {}
+		for _, entry in entries do
+			table.insert(if entry.owned then owned else rest, entry)
 		end
+		table.move(rest, 1, #rest, #owned + 1, owned)
+		entries = owned
+	end
+	local shown = 0
+	for _, entry in entries do
 		if not Shop.matches(entry, filter) then
 			continue
 		end
@@ -950,7 +986,6 @@ function ShopUi.init(playerGui: PlayerGui)
 	template = grid:WaitForChild("ItemTemplate") :: Frame
 	local empty = grid:FindFirstChild("Empty")
 	emptyLabel = if empty ~= nil and empty:IsA("TextLabel") then empty else nil
-	shopEmpty = if emptyLabel ~= nil then emptyLabel.Text else ""
 	local sectionFrame = panel:WaitForChild("Sections")
 	bindSections(sectionFrame)
 	local divider = sectionFrame:FindFirstChild("GetMore")
