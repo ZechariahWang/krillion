@@ -156,6 +156,9 @@ end
 
 -- Whether this player may jump into the running match right now (drives the JUMP IN card).
 local function lateJoinOpenFor(player: Player): boolean
+	if player:GetAttribute("Afk") == true then
+		return false
+	end
 	return match ~= nil and lateJoinWindow() and not playedUserIds[player.UserId] and lateJoinRoom()
 end
 
@@ -371,10 +374,12 @@ local function eliminate(player: Player)
 	sinkPlayer(player)
 end
 
+-- Players with a character who are not AFK (Settings): an AFK player is never put on a pillar.
 local function readyPlayers(): { Player }
 	local result = {}
 	for _, player in Players:GetPlayers() do
-		if PlayerService.hasCharacter(player) then
+		local afk = player:GetAttribute("Afk") == true
+		if PlayerService.hasCharacter(player) and not afk then
 			table.insert(result, player)
 		end
 	end
@@ -832,6 +837,9 @@ end
 -- ("joined" | "closed" | "full" | "already" | "not_ready") and the message shown to the player.
 -- The debug hook calls this too, so it does all its own checks. Nothing here yields.
 function RoundService.tryJoin(player: Player): (string, string)
+	if player:GetAttribute("Afk") == true then
+		return "closed", LateJoin.Messages.closed
+	end
 	local state = match
 	local status = LateJoin.canJoin({
 		enabled = GameConfig.LateJoin.Enabled == 1,
