@@ -9,7 +9,7 @@
     "ServerStorage": {
       "$className": "ServerStorage",
       "$path": "src/ServerStorage",
-      "Maps": {
+      "PhysicalAssets": {
         "$className": "Folder",
         "$ignoreUnknownInstances": true
       },

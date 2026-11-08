@@ -39,7 +39,6 @@ local GameConfig = {
 		RiseSeconds = 1.1, -- one eased glide with a soft overshoot at the top
 		ConfettiMinPoints = 60,
 		WalkSpeed = 10, -- players stroll around their pillar top during a match; jumping stays off
-		WallHeight = 8, -- invisible walls round the pillar top keep a stroller from walking off
 	},
 	Answer = {
 		MaxLength = 40,

@@ -1,8 +1,8 @@
 --!strict
 -- Owns the tank water: the level, the two-stage surge, and the "who is under water" poll.
 -- The water is the Arena.WaterSurface part (see Shared/WaterSurface); the sea outside stays terrain.
--- The invisible Arena.Water box holds the bubble emitter; its Radius and FloorY attributes give the round
--- tank's footprint and floor.
+-- The invisible Arena.Water box holds the bubble emitter; its FloorY attribute gives the tank's floor.
+-- The tank hole is carved into the authored terrain, so nothing here edits terrain.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -11,8 +11,6 @@ local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local WaterCurve = require(ReplicatedStorage.Shared.WaterCurve)
 local WaterSurface = require(ReplicatedStorage.Shared.WaterSurface)
 local MapService = require(script.Parent.MapService)
-
-local CLEAR_HEIGHT = 120 -- how far above the floor the tank column is cleared on reset
 
 local level = 0 -- the water surface the game uses for eliminations
 
@@ -28,11 +26,7 @@ local function fitMarker(y: number)
 end
 
 function WaterService.reset()
-	local marker = MapService.getWater()
-	local radius = marker:GetAttribute("Radius") :: number
-	local floorY = marker:GetAttribute("FloorY") :: number
-	-- Clears any terrain water left in the tank (the sea outside the tank is untouched).
-	workspace.Terrain:FillCylinder(CFrame.new(0, floorY + CLEAR_HEIGHT / 2, 0), CLEAR_HEIGHT, radius, Enum.Material.Air)
+	local floorY = MapService.getWater():GetAttribute("FloorY") :: number
 	level = 0
 	WaterSurface.place(MapService.getWaterSurface(), floorY, 0)
 	fitMarker(0)
