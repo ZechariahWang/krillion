@@ -9,7 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local FOLDER_NAME = "Remotes"
 
 export type RoundStatePayload = {
-	phase: string, -- "Waiting" | "Intermission" | "Prompt" | "Reveal" | "Surge" | "Results"
+	phase: string, -- "Waiting" | "Intermission" | "Starting" | "Prompt" | "Reveal" | "Surge" | "Results"
 	round: number,
 	secondsLeft: number,
 	yourSecondsLeft: number?, -- this player's own time when it differs from secondsLeft (a +10s boost, overtime)

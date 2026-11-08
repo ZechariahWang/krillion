@@ -800,8 +800,22 @@ local function endMatch()
 	countdown(GameConfig.Round.ResultsSeconds)
 end
 
+-- Fades the starters' screens to black, so the teleport onto the pillars happens out of sight.
+local function introFade()
+	local seconds = GameConfig.Round.IntroFadeSeconds
+	for _, player in readyPlayers() do
+		Net.event("MatchIntro"):FireClient(player, { fadeSeconds = seconds })
+	end
+	task.wait(seconds)
+end
+
 local function runMatch()
+	introFade()
 	startMatch()
+	-- Everyone stands on their pillar for a 3-2-1 before the first prompt.
+	secondsLeft = GameConfig.Round.StartCountdownSeconds
+	setPhase("Starting")
+	countdown(GameConfig.Round.StartCountdownSeconds)
 	while true do
 		local submissions = runPrompt()
 		if matchOver() then
