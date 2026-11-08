@@ -34,7 +34,6 @@ local Market = require(Client.Market)
 local ChestReveal = require(Client.ChestReveal)
 local Windows = require(Client.Windows)
 local Pickups = require(Client.Pickups)
-local Shore = require(Client.Shore)
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
 -- Live outlines, captions, pop-up fit and icons on the Studio GUIs and world text; it never yields.
@@ -50,7 +49,6 @@ Tide.init(playerGui)
 WaterFx.init()
 SeaLife.init()
 Pickups.init()
-Shore.init()
 Music.init()
 DayNight.init()
 BillboardScale.init()

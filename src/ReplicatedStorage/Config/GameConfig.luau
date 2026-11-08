@@ -59,7 +59,7 @@ local GameConfig = {
 		DuskClock = 18.5, -- Lighting.ClockTime where night begins
 	},
 	Lobby = {
-		QuizEnabled = 0, -- 1 serves warm-up prompts in the lobby between matches; 0 keeps prompts to real matches
+		QuizEnabled = 1, -- 1 serves warm-up prompts inside Lobby.QuizZone (in front of the shack); 0 turns the quiz off
 		QuizSeconds = 20,
 		CashPerPoint = 0.2, -- lobby quiz pays clearly less than surviving a match round
 		DailyShellCap = 600, -- warm-up Shells per UTC day, after pass multipliers; matches are not capped

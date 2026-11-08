@@ -35,10 +35,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title` is
   unused.
 - Sea dressing: `Arena.Reef.Coral.Extra` and `Arena.Beach.GrassExtra` hold the extra kelp, coral and tufts;
-  `Arena.Beach.Foam` the shoreline foam (`Client/Shore` washes each disc up the sand along its `Inward`
-  attribute), `Arena.Beach.Shallows` the seagrass, kelp, coral and shells on the
-  underwater slope (kept under the surface), `Arena.Beach.Clutter` the towels, buckets, driftwood, net and
-  lifeguard chair; `Arena.Beach.Palm` models are built from parts (trunk segments, fronds, coconuts).
+  `Arena.Beach.Shallows` the seagrass, kelp, coral and shells on the
+  underwater slope (kept under the surface), `Arena.Beach.Clutter` the towels, buckets, driftwood and net,
+  `Arena.Beach.LifeguardChair` the chair; `Arena.Beach.Palm` models are built from parts (trunk segments, fronds, coconuts).
   `Arena.SeaLife` also holds `Sailboat`, `Seagull` and `Buoy` models (Persistent, `Speed` attribute) that
   SeaLife moves round the island.
 - Phones play landscape only (`StarterGui.ScreenOrientation`); `Hud.AnswerBar` moves above the on-screen keyboard
@@ -57,7 +56,10 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - `Arena.Reef` (OuterRim rocks, Ledges, Coral) stays clear of the tank glass (radius 41.0..41.6): rocks outside,
   ledges inside.
 - Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
-  `LobbySpawn`, `HowToBoard` and `HowRareBoard` stay direct children: code looks them up by name. `Lobby.WestStairs`
+  `LobbySpawn`, `HowToBoard`, `HowRareBoard`, `QuizZone` and `QuizArc` stay direct children: code looks them up
+  by name. `QuizZone` is the invisible box over the glowing semicircle (`QuizArc`) in front of the shack:
+  LobbyQuizService serves warm-up prompts to whoever stands in it (`LobbyUi.LobbyQuiz`, a centred window with
+  an X; a match closes it). `Lobby.WestStairs`
   and `EastStairs` lead off the side rails to the beach. The How to Play / How Rare boards and the Top 10 stand
   along the back of the deck, facing the front. Players roam the whole island: invisible `Arena.BeachBorder` walls
   stand just short of the waterline (and behind the deck) so nobody swims out.
