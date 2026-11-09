@@ -17,6 +17,8 @@ local LEGACY_STORE = "PlayerData_v1"
 local WINS_STORE = "Wins_v1"
 local AUTOSAVE_SECONDS = 120
 local DAY_SECONDS = 86400
+local LEAVE_SAVE_TRIES = 3 -- waits 1 s, then 2 s, between tries
+local SHUTDOWN_WAIT_SECONDS = 28 -- Roblox allows BindToClose 30 s
 
 -- An unpublished place (a local test copy) has no DataStore access and GetDataStore throws. Players then
 -- get a fresh profile that never saves, instead of the error stopping every server script.
@@ -61,6 +63,8 @@ local sessions: { [Player]: Profile.Session } = {}
 local inFlight: { [Player]: Profile.Session } = {} -- changes being written right now
 local loadInfo: { [Player]: LoadInfo } = {}
 local extraPayloads: { (Player) -> { [string]: any } } = {}
+local unloading: { [Player]: boolean } = {}
+local pendingUnloads = 0
 
 local DataService = {}
 
@@ -560,14 +564,31 @@ function DataService.topWins(count: number): { { userId: number, wins: number } 
 	return result
 end
 
+-- The leave-save retries, and the profile stays in memory until it lands or the last try fails.
 local function unload(player: Player)
-	while inFlight[player] ~= nil do
-		task.wait(0.1)
+	if unloading[player] then
+		return
 	end
-	DataService.save(player)
+	unloading[player] = true
+	pendingUnloads += 1
+	if sessions[player] ~= nil then
+		for attempt = 1, LEAVE_SAVE_TRIES do
+			while inFlight[player] ~= nil do
+				task.wait(0.1)
+			end
+			if DataService.save(player) then
+				break
+			end
+			if attempt < LEAVE_SAVE_TRIES then
+				task.wait(attempt)
+			end
+		end
+	end
 	stored[player] = nil
 	sessions[player] = nil
 	loadInfo[player] = nil
+	unloading[player] = nil
+	pendingUnloads -= 1
 end
 
 function DataService.start()
@@ -591,7 +612,10 @@ function DataService.start()
 		for _, player in Players:GetPlayers() do
 			task.spawn(unload, player)
 		end
-		task.wait(3)
+		local waited = 0
+		while pendingUnloads > 0 and waited < SHUTDOWN_WAIT_SECONDS do
+			waited += task.wait(0.1)
+		end
 	end)
 	task.spawn(function()
 		while true do
