@@ -41,8 +41,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `Arena.SeaLife` also holds six `Sailboat` models (part-built yachts floating at the water level, y -4:
   tapered hull, cabin, rails, mast, main and jib hung along the boom so their faces show from the island),
   `Seagull` and `Buoy` models (Persistent, `Speed` attribute) that SeaLife moves round the island.
-- Phones play landscape only (`StarterGui.ScreenOrientation`); `Hud.AnswerBar` moves above the on-screen keyboard
-  and its `PromptEcho` label repeats the prompt there.
+- Phones play landscape only (`StarterGui.ScreenOrientation`). In a match a phone shows only the strip at the
+  top (prompt, timer, `Hud.AnswerBar` at 17% of the height, boosts beside it), above where the on-screen
+  keyboard reaches; `PromptEcho` stays hidden. Walking is off on a pillar (`Hud` disables the touch controls).
 - World labels: each BillboardGui's main child is centred and holds a UIScale named `DistanceScale`;
   `Client/BillboardScale` keeps it at authored size within 45 studs and shrinks it beyond. Give new labels one.
 - Loading screen: `ReplicatedFirst.LoadingScreen` (authored), with `ScreenInsets = None` and
@@ -89,25 +90,27 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 | Root | DisplayOrder | Studio default | Screens |
 |------|--------------|----------------|---------|
 | `GameUi` | 1 | Enabled off (code turns it on) | Hud, Reveal, Results, Revive, Spectate, Vignette |
-| `LobbyUi` | 2 | on | Rail, Shop, Inventory, LobbyQuiz, Quests, Rewards, Tutorial |
-| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings, Transition |
+| `LobbyUi` | 2 | on | Rail, Shop, Inventory, Store, LobbyQuiz, Quests, Rewards, Tutorial |
+| `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings, Transition, ChestReveal |
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
   The name-to-root map is `ROOT_OF` in `Client/Ui.luau`; update it when a screen moves.
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
-- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, ITEMS keys. Each controller connects
+- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
   wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar circle right of
   the Settings gear (`Ui.placeTopButton`); `Rail.ToyButton` is the small THROW key above the Shells chip.
 - Pop-up windows (Quests, Rewards, Help, Shop, Settings) and the match countdown sit dead centre: anchor
   (0.5, 0.5) at Position (0.5, 0.5). One window at a time: each reports to `Client/Windows`, and while any is
-  open the rail, the top buttons, the status chips and the Shells chip hide. Window titles carry no emoji.
+  open the rail, the top buttons, the status chips and the Shells chip hide (the warm-up quiz opens with
+  `keepStatus`, so the phase and countdown chips stay). Window titles carry no emoji.
 - Shop (`LobbyUi.Shop.Holder.Panel`) and Inventory (`LobbyUi.Inventory`, the same tree with only the cosmetic
   sections): the section keys under `Sections` carry `Kind` (Featured | Slots | Chests | Shells | Passes |
   Specials) and, for Slots, a comma list in `Slots`; `Tools` holds the search box and filter keys. `ShopUi`
-  drives both; the rail SHOP and ITEMS keys open them.
+  drives both; the rail SHOP and ITEMS keys open them. Robux items (passes, Shell packs, specials) have their
+  own STORE window (`LobbyUi.Store`).
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
   gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. Toasts stack in the bottom-left
