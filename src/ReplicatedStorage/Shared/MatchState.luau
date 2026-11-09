@@ -143,7 +143,22 @@ local function better(state: State, a: any, b: any): boolean
 	if state.heights[a] ~= state.heights[b] then
 		return state.heights[a] > state.heights[b]
 	end
-	return state.points[a] > state.points[b]
+	if state.points[a] ~= state.points[b] then
+		return state.points[a] > state.points[b]
+	end
+	return tostring(a) < tostring(b)
+end
+
+-- Everyone in the match, best first: the afloat by height and points, then the sunk, last to sink first.
+function MatchState.ranking(state: State): { any }
+	local ranked = MatchState.aliveIds(state)
+	table.sort(ranked, function(a, b)
+		return better(state, a, b)
+	end)
+	for index = #state.sunkOrder, 1, -1 do
+		table.insert(ranked, state.sunkOrder[index])
+	end
+	return ranked
 end
 
 -- The single survivor, or the best of the players sunk in the final cull.

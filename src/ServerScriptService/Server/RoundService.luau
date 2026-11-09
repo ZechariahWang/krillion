@@ -740,19 +740,15 @@ local function runSurge()
 	broadcastState()
 end
 
--- The winner, then the best by points, players and bots alike. Players who left are already out of the
--- state (PlayerRemoving), so everyone listed can be named.
+-- The winner, then the rest of the ranking: the afloat by height, then the sunk, last to sink first.
+-- Players who left are already out of the state (PlayerRemoving), so everyone listed can be named.
 local function podium(state: MatchState.State, winner: any): { { name: string, points: number } }
-	local ids: { any } = {}
-	for id in state.points do
-		if id ~= winner then
-			table.insert(ids, id)
-		end
-	end
-	table.sort(ids, function(a, b)
-		return state.points[a] > state.points[b]
-	end)
+	local ids = MatchState.ranking(state)
 	if winner ~= nil then
+		local index = table.find(ids, winner)
+		if index ~= nil then
+			table.remove(ids, index)
+		end
 		table.insert(ids, 1, winner)
 	end
 	local top = {}
