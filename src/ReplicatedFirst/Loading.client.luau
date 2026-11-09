@@ -11,6 +11,7 @@ local TweenService = game:GetService("TweenService")
 
 local MIN_SECONDS = 1.5 -- never flash past
 local SKIP_AFTER_SECONDS = 10 -- in case preloading stalls
+local GIVE_UP_SECONDS = 20 -- the screen goes by itself even if preloading never returns
 
 local startedAt = os.clock()
 ReplicatedFirst:RemoveDefaultLoadingScreen()
@@ -89,6 +90,8 @@ task.delay(SKIP_AFTER_SECONDS, function()
 	end
 end)
 
+task.delay(GIVE_UP_SECONDS, finish)
+
 setProgress(0.08)
 if not game:IsLoaded() then
 	game.Loaded:Wait()
@@ -99,9 +102,14 @@ local assets: { Instance } = {}
 for _, child in StarterGui:GetChildren() do
 	table.insert(assets, child)
 end
+-- The Music tracks are full songs: they stream in once the lobby shows instead of holding up the screen.
 local sounds = SoundService:FindFirstChild("Krillion")
 if sounds ~= nil then
-	table.insert(assets, sounds)
+	for _, child in sounds:GetChildren() do
+		if child.Name ~= "Music" then
+			table.insert(assets, child)
+		end
+	end
 end
 
 for index, asset in assets do
