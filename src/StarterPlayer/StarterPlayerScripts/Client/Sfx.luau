@@ -7,6 +7,8 @@ local Debris = game:GetService("Debris")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 
+local warned: { [string]: boolean } = {}
+
 local Sfx = {}
 
 -- Looked up on every play rather than waited for at require, so a missing folder never stalls the client.
@@ -31,6 +33,10 @@ end
 function Sfx.play(name: string, volume: number?, pitch: number?)
 	local template = find(name)
 	if template == nil then
+		if not warned[name] then
+			warned[name] = true
+			warn("[Sfx] no sound named " .. name .. " in SoundService.Krillion or ReplicatedStorage.Sounds")
+		end
 		return
 	end
 	local sound = template:Clone()
