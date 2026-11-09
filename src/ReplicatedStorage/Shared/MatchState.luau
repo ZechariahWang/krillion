@@ -8,7 +8,8 @@ export type State = {
 	alive: { [any]: boolean },
 	heights: { [any]: number },
 	points: { [any]: number },
-	lastCulled: { any },
+	lastCulled: { any }, -- everyone the current surge has taken, however it took them
+	sunkOrder: { any }, -- everyone out of the match, first to sink first
 }
 
 local MatchState = {}
@@ -21,6 +22,7 @@ function MatchState.new(startHeight: number): State
 		heights = {},
 		points = {},
 		lastCulled = {},
+		sunkOrder = {},
 	}
 end
 
@@ -49,14 +51,29 @@ function MatchState.lowestAlive(state: State): number?
 	return lowest
 end
 
+local function removeFrom(list: { any }, id: any)
+	local index = table.find(list, id)
+	if index ~= nil then
+		table.remove(list, index)
+	end
+end
+
 function MatchState.removePlayer(state: State, id: any)
 	state.alive[id] = nil
 	state.heights[id] = nil
 	state.points[id] = nil
+	removeFrom(state.lastCulled, id)
+	removeFrom(state.sunkOrder, id)
 end
 
+-- Out of the match by any route: the water poll, a reset, or the state cull.
 function MatchState.eliminate(state: State, id: any)
+	if state.alive[id] == nil then
+		return
+	end
 	state.alive[id] = nil
+	table.insert(state.lastCulled, id)
+	table.insert(state.sunkOrder, id)
 end
 
 function MatchState.applyLift(state: State, id: any, points: number, lift: number)
@@ -67,8 +84,15 @@ function MatchState.applyLift(state: State, id: any, points: number, lift: numbe
 	state.points[id] += points
 end
 
+-- A new surge: whoever it takes, by the poll or the cull below, is this surge's last cull.
 function MatchState.surge(state: State, amount: number)
 	state.waterY += amount
+	state.lastCulled = {}
+end
+
+-- A new prompt: a player who sinks now (a reset) is judged on their own, not with the last surge's victims.
+function MatchState.forgetCull(state: State)
+	state.lastCulled = {}
 end
 
 function MatchState.cull(state: State): { any }
@@ -79,9 +103,8 @@ function MatchState.cull(state: State): { any }
 		end
 	end
 	for _, id in culled do
-		state.alive[id] = nil
+		MatchState.eliminate(state, id)
 	end
-	state.lastCulled = culled
 	return culled
 end
 
@@ -92,6 +115,8 @@ function MatchState.revive(state: State, id: any, above: number)
 	end
 	state.alive[id] = true
 	state.heights[id] = state.waterY + above
+	removeFrom(state.lastCulled, id)
+	removeFrom(state.sunkOrder, id)
 end
 
 function MatchState.aliveCount(state: State): number

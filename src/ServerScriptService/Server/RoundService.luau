@@ -611,6 +611,7 @@ local function runPrompt()
 	round += 1
 	special = SpecialRound.pick(round, special, math.random(), math.random())
 	roundSurge = SpecialRound.surge(round, special)
+	MatchState.forgetCull(match :: MatchState.State)
 	local prompt = AnswerService.randomPrompt(usedPromptIds)
 	usedPromptIds[prompt.id] = true
 	currentPrompt = prompt
