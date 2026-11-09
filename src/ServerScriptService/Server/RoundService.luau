@@ -513,9 +513,14 @@ local function startMatch()
 	MatchEvents.MatchStarted.fire(table.clone(participantsList))
 end
 
--- One eased glide up with a soft overshoot; confetti fires as it nears the top.
-local function risePlatform(platform: Part?, toTop: number, points: number)
+-- One eased glide up with a soft overshoot; confetti fires as it nears the top. Looked up when it runs:
+-- a contestant who sank (or revived at the water line) since the reveal keeps the pillar where it is.
+local function risePlatform(id: any, toTop: number, points: number)
+	local platform = platformOf(id)
 	if platform == nil or platform.Parent == nil then
+		return
+	end
+	if match == nil or match.heights[id] ~= toTop then
 		return
 	end
 	MapService.riseBurst(platform)
@@ -726,7 +731,7 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 		end
 		if lift > 0 then
 			-- The dive card lands first; seeing the pillar rise before it would spoil the tier.
-			task.delay(GameConfig.Reveal.RaiseDelaySeconds, risePlatform, platformOf(id), state.heights[id], points)
+			task.delay(GameConfig.Reveal.RaiseDelaySeconds, risePlatform, id, state.heights[id], points)
 		end
 	end
 	currentPrompt = nil
