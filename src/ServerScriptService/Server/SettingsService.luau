@@ -11,9 +11,6 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local DataService = require(script.Parent.DataService)
 
 local TAG_NAME = "AfkTag"
-local COOLDOWN_SECONDS = 0.5 -- per player, between SetSetting requests
-
-local lastSetAt: { [Player]: number } = {}
 
 local SettingsService = {}
 
@@ -61,12 +58,6 @@ local function setAfk(player: Player, afk: boolean)
 end
 
 local function onSetSetting(player: Player, key: any, value: any)
-	local now = os.clock()
-	local last = lastSetAt[player]
-	if last ~= nil and now - last < COOLDOWN_SECONDS then
-		return
-	end
-	lastSetAt[player] = now
 	if key == "MusicVolume" then
 		if typeof(value) == "number" and value == value then
 			DataService.setMusicVolume(player, value)
@@ -94,9 +85,6 @@ end
 function SettingsService.start()
 	Net.event("SetSetting").OnServerEvent:Connect(onSetSetting)
 	Players.PlayerAdded:Connect(watch)
-	Players.PlayerRemoving:Connect(function(player)
-		lastSetAt[player] = nil
-	end)
 	for _, player in Players:GetPlayers() do
 		watch(player)
 	end
