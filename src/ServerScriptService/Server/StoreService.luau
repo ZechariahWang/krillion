@@ -128,6 +128,13 @@ local function onPassBought(player: Player, passId: number, bought: boolean)
 	if not bought then
 		return
 	end
+	-- The purchase event alone is not proof; a failed check leaves the pass to the next PassCheck.
+	local ok, confirmed = pcall(function()
+		return MarketplaceService:UserOwnsGamePassAsync(player.UserId, passId)
+	end)
+	if not ok or confirmed ~= true then
+		return
+	end
 	local owned = passes[player]
 	if owned == nil then
 		owned = {}
