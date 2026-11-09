@@ -5,7 +5,6 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
@@ -286,7 +285,7 @@ function Status.onState(payload)
 		aliveText.Text = "NEXT DIVE"
 	end
 	-- Phones, on a pillar: only the prompt and the timer. The alive count and the tide chip stay off.
-	if UserInputService.TouchEnabled and payload.playing == true then
+	if Ui.isPhone() and payload.playing == true then
 		aliveText.Visible = false
 		tide.Visible = false
 		secondaryText.Size = UDim2.new(1, 0, 1, 0)

@@ -6,6 +6,7 @@
 
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Tween = require(ReplicatedStorage.Shared.Tween)
@@ -13,6 +14,11 @@ local Tween = require(ReplicatedStorage.Shared.Tween)
 local Ui = {}
 
 type TextObject = TextLabel | TextButton
+
+-- A phone or tablet: touch with no keyboard. A touchscreen laptop keeps the desktop layout.
+function Ui.isPhone(): boolean
+	return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+end
 
 local DARK_TEXT = 0.3 -- text darker than this needs no dark outline (it would only blur it)
 local WAIT_SECONDS = 10 -- how long binding waits for a root ScreenGui before warning

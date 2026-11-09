@@ -116,7 +116,7 @@ end
 
 -- Phones and tablets have no Enter key to press twice.
 local function isTouch(): boolean
-	return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+	return Ui.isPhone()
 end
 
 -- A phone's on-screen keyboard covers the bottom of the screen: the bar moves up to sit just over it, and

@@ -8,7 +8,6 @@
 -- the place already has it authored.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
@@ -91,7 +90,7 @@ end
 
 -- Phones and tablets have no Enter key to press twice.
 local function isTouch(): boolean
-	return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+	return Ui.isPhone()
 end
 
 -- One frame later: a focus grab in the same frame as the Enter press that released the box is dropped.

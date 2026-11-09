@@ -437,7 +437,7 @@ function Toasts.show(text: string, kind: string?)
 		return
 	end
 	-- Phones, on a pillar: the prompt, the box and the timer are all that shows.
-	if UserInputService.TouchEnabled and Players.LocalPlayer:GetAttribute("Playing") == true then
+	if Ui.isPhone() and Players.LocalPlayer:GetAttribute("Playing") == true then
 		return
 	end
 	local message = clip(string.match(text, "^%s*(.-)%s*$") or "")
