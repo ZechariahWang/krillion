@@ -806,6 +806,9 @@ local function endMatch()
 		MatchState.eliminate(state, id)
 	end
 	promptToken += 1
+	-- A match that ends inside a prompt never reaches runReveal, which otherwise clears these.
+	currentPrompt = nil
+	LobbyQuizService.setLivePromptId(nil)
 	BotService.clear()
 	bots = {}
 	botPlatforms = {}
