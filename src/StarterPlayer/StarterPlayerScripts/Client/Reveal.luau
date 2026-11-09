@@ -365,9 +365,6 @@ function Reveal.onReveal(payload: Net.RevealPayload)
 	revealToken += 1
 	local token = revealToken
 	local rows = payload.rows
-	if payload.round == 1 then
-		streak = 0
-	end
 	gui.Visible = true
 	badge.Visible = false
 
@@ -428,6 +425,9 @@ function Reveal.onState(payload: Net.RoundStatePayload)
 		if rows ~= nil and gui.Visible then
 			showRows(rows)
 		end
+	end
+	if phase ~= "Prompt" and phase ~= "Reveal" and phase ~= "Surge" then
+		streak = 0
 	end
 	if phase ~= "Reveal" and phase ~= "Surge" then
 		gui.Visible = false
