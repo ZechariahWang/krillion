@@ -6,6 +6,7 @@
 --          checks it, then every client flies Templates.Toys.<toy> to them and the target gets a splat
 --          (SharedUi.Fx.Splat when authored, a coloured flash otherwise)
 --   Chests what a ChestOpen gave, as a toast (confetti for Legendary and up)
+--   Shop   why the server refused a Shells buy (ShopResult), as a toast
 --   Themes your equipped dive card theme, handed to DiveCard
 --   Nudges a one-time Starter Pack reminder and a "2x Shells would have paid" line after a match, once
 --          per visit each, and only while those products can actually be bought.
@@ -358,6 +359,23 @@ local function onChestResult(payload: Net.ChestResultPayload)
 	end
 end
 
+local SHOP_MESSAGES: { [string]: string } = {
+	cash = "NOT ENOUGH " .. Currency.Upper .. " FOR THAT",
+	owned = "YOU ALREADY OWN THAT",
+	unknown = "THAT CAN'T BE BOUGHT RIGHT NOW",
+}
+
+-- A Shells buy the server refused after CONFIRM.
+local function onShopResult(payload)
+	if type(payload) ~= "table" then
+		return
+	end
+	local message = SHOP_MESSAGES[payload.status]
+	if message ~= nil then
+		Toasts.show(message, "bad")
+	end
+end
+
 -- Nudges ----------------------------------------------------------------------------------------------------
 
 local function onShellsEarned(payload)
@@ -457,6 +475,7 @@ function Market.init(playerGui: PlayerGui)
 	UserInputService.InputBegan:Connect(onInput)
 
 	Net.event("ChestResult").OnClientEvent:Connect(onChestResult)
+	Net.event("ShopResult").OnClientEvent:Connect(onShopResult)
 	Net.event("ToyHit").OnClientEvent:Connect(onToyHit)
 	Net.event("ProfileChanged").OnClientEvent:Connect(onProfile)
 	Net.event("RoundState").OnClientEvent:Connect(onState)

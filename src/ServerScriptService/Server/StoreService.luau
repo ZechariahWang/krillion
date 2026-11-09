@@ -228,23 +228,36 @@ local function processReceipt(info): Enum.ProductPurchaseDecision
 	return Enum.ProductPurchaseDecision.NotProcessedYet
 end
 
+-- status: "ok" | "cash" | "owned" | "unknown"
+local function shopReply(player: Player, status: string)
+	Net.event("ShopResult"):FireClient(player, { status = status })
+end
+
 local function onBuy(player: Player, itemId: any)
 	if typeof(itemId) ~= "string" then
 		return
 	end
 	local item = Cosmetics.ById[itemId]
 	local profile = DataService.get(player)
-	if item == nil or profile == nil then
-		return
+	if item == nil or profile == nil or DataService.isReadOnly(player) then
+		return shopReply(player, "unknown")
+	end
+	if profile.owned[item.id] == true then
+		return shopReply(player, "owned")
 	end
 	if not Shop.canBuyWithCash(profile, item) then
-		return
+		if profile.cash < item.price then
+			return shopReply(player, "cash")
+		end
+		return shopReply(player, "unknown")
 	end
-	if StoreService.spendShells(player, item.price, "spend") then
-		DataService.grantItem(player, item.id)
-		DataService.equip(player, item.slot, item.id)
-		CosmeticService.refresh(player)
+	if not StoreService.spendShells(player, item.price, "spend") then
+		return shopReply(player, "cash")
 	end
+	DataService.grantItem(player, item.id)
+	DataService.equip(player, item.slot, item.id)
+	CosmeticService.refresh(player)
+	shopReply(player, "ok")
 end
 
 local function onEquip(player: Player, slot: any, itemId: any)
