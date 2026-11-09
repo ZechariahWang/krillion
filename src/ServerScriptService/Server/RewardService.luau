@@ -259,7 +259,7 @@ function RewardService.start()
 	end)
 	-- Profiles that finished loading before this service started.
 	for _, player in Players:GetPlayers() do
-		if DataService.isLoaded(player) then
+		if DataService.isLoaded(player) and not DataService.isReadOnly(player) then
 			task.spawn(onLoaded, player)
 		end
 	end
