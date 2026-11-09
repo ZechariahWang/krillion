@@ -75,6 +75,7 @@ local unloading: { [Player]: boolean } = {}
 local pendingUnloads = 0
 local sendQueued: { [Player]: boolean } = {}
 local lastRequest: { [Player]: number } = {}
+local winsPending: { [Player]: boolean } = {} -- a Wins board write failed; the next good save retries it
 
 local DataService = {}
 
@@ -398,10 +399,16 @@ local function write(player: Player, release: boolean): boolean
 	end
 	local result = saved :: Profile.Profile
 	stored[player] = result
-	if session.wins > 0 then
-		pcall(function()
+	if winsStore ~= nil and (session.wins > 0 or winsPending[player]) then
+		local wrote, winsErr = pcall(function()
 			need(winsStore):SetAsync(tostring(player.UserId), result.wins)
 		end)
+		if wrote then
+			winsPending[player] = nil
+		else
+			warn("DataService: wins board write failed for " .. player.Name .. ": " .. tostring(winsErr))
+			winsPending[player] = true
+		end
 	end
 	return true
 end
@@ -752,6 +759,7 @@ local function unload(player: Player)
 	sessions[player] = nil
 	loadInfo[player] = nil
 	lastRequest[player] = nil
+	winsPending[player] = nil
 	unloading[player] = nil
 	pendingUnloads -= 1
 end
