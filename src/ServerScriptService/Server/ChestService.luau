@@ -3,6 +3,7 @@
 -- shown odds and grants it, or pays DuplicateRefund of the price back when it is already owned. ChestResult
 -- tells the client what came out. Players whose PolicyService info says paid random items are restricted
 -- where they live never see chests (the `chestsAllowed` payload flag) and the server refuses to open them.
+-- While the lookup has not answered, `chestsAllowed` is nil and opens are refused with "unknown".
 
 local Players = game:GetService("Players")
 local PolicyService = game:GetService("PolicyService")
@@ -17,23 +18,52 @@ local CosmeticService = require(script.Parent.CosmeticService)
 local DataService = require(script.Parent.DataService)
 local StoreService = require(script.Parent.StoreService)
 
+local POLICY_WAITS = { 10, 20 } -- seconds before the second and third policy lookup
+
 local allowed: { [Player]: boolean } = {} -- nil until the policy lookup answers; false blocks chests
+local lookingUp: { [Player]: boolean } = {}
 local lastOpen: { [Player]: number } = {}
 local opened: { [Player]: number } = {}
 local random = Random.new()
 
 local ChestService = {}
 
--- Paid random items are refused until Roblox says they are fine for this player, and on a failed lookup
--- (except in Studio, where the lookup can fail and testing needs chests).
-local function loadPolicy(player: Player)
+local function lookupPolicy(player: Player): boolean?
 	local ok, info = pcall(function()
 		return PolicyService:GetPolicyInfoForPlayerAsync(player)
 	end)
 	if ok and type(info) == "table" then
-		allowed[player] = info.ArePaidRandomItemsRestricted == false
-	else
-		allowed[player] = RunService:IsStudio()
+		return info.ArePaidRandomItemsRestricted == false
+	end
+	warn("ChestService: policy lookup failed for " .. player.Name .. ": " .. tostring(info))
+	return nil
+end
+
+-- Paid random items are refused until Roblox says they are fine for this player. Failed lookups retry;
+-- if every try fails the answer stays unknown until the player tries a chest again. Studio, where the
+-- lookup can fail, allows chests so testing works.
+local function loadPolicy(player: Player)
+	if lookingUp[player] then
+		return
+	end
+	lookingUp[player] = true
+	local answer = lookupPolicy(player)
+	for _, seconds in POLICY_WAITS do
+		if answer ~= nil or player.Parent == nil then
+			break
+		end
+		task.wait(seconds)
+		answer = lookupPolicy(player)
+	end
+	lookingUp[player] = nil
+	if player.Parent == nil then
+		return
+	end
+	if answer == nil and RunService:IsStudio() then
+		answer = true
+	end
+	if answer ~= nil then
+		allowed[player] = answer
 	end
 	DataService.changed(player)
 end
@@ -53,6 +83,10 @@ local function open(player: Player, chestId: any)
 	local chest = Chests.ById[chestId]
 	if chest == nil then
 		return
+	end
+	if allowed[player] == nil then
+		task.spawn(loadPolicy, player)
+		return reply(player, { chest = chestId, status = "unknown" })
 	end
 	if not ChestService.allowed(player) then
 		return reply(player, { chest = chestId, status = "restricted" })
@@ -91,7 +125,7 @@ end
 
 function ChestService.start()
 	DataService.addExtraPayload(function(player)
-		return { chestsAllowed = ChestService.allowed(player) }
+		return { chestsAllowed = allowed[player] }
 	end)
 	Net.event("ChestOpen").OnServerEvent:Connect(open)
 	for _, player in Players:GetPlayers() do
@@ -100,6 +134,7 @@ function ChestService.start()
 	Players.PlayerAdded:Connect(loadPolicy)
 	Players.PlayerRemoving:Connect(function(player)
 		allowed[player] = nil
+		lookingUp[player] = nil
 		lastOpen[player] = nil
 		opened[player] = nil
 	end)

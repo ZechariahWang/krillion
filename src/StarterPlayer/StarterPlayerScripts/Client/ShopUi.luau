@@ -143,7 +143,7 @@ local shopWindow: Window? = nil
 local active: Window? = nil -- the window being rendered or shown; card callbacks act on it
 local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
-local chestsAllowed = false
+local chestsAllowed: boolean? = nil -- nil while the server's policy lookup has not answered
 local playing = false
 local pendingBuy: { id: string, at: number }? = nil -- the Shells buy or chest waiting for its CONFIRM? click
 
@@ -369,7 +369,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 		local chest = chestFor(item.id)
 		entry.price = if chest ~= nil then "In the " .. chest.name else "In a chest"
 		entry.action = "CHESTS"
-		entry.enabled = chestsAllowed
+		entry.enabled = chestsAllowed == true
 		entry.onClick = function()
 			goToKind("Chests")
 		end
@@ -558,10 +558,10 @@ local function passEntries(entries: { Entry })
 end
 
 local function chestEntries(entries: { Entry })
-	if not chestsAllowed then
+	if chestsAllowed ~= true then
 		local blocked = emptyEntry("Shop", "CHESTS", MUTED)
 		blocked.emoji = Theme.Icon.Chest
-		blocked.sub = "Not available where you live"
+		blocked.sub = if chestsAllowed == false then "Not available where you live" else "Try again shortly"
 		blocked.action = "LOCKED"
 		blocked.enabled = false
 		table.insert(entries, blocked)
@@ -1139,7 +1139,11 @@ end
 function ShopUi.onProfile(payload)
 	profile = Profile.fromStored(payload)
 	passes = payload.passes or {}
-	chestsAllowed = payload.chestsAllowed == true
+	if type(payload.chestsAllowed) == "boolean" then
+		chestsAllowed = payload.chestsAllowed
+	else
+		chestsAllowed = nil
+	end
 	for _, w in windows do
 		if w.panel.Visible then
 			renderWindow(w)

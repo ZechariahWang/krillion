@@ -347,6 +347,7 @@ local CHEST_MESSAGES: { [string]: string } = {
 	limit = "THAT'S A LOT OF CHESTS  |  TAKE A BREAK",
 	restricted = "CHESTS AREN'T AVAILABLE WHERE YOU LIVE",
 	cooldown = "ONE CHEST AT A TIME",
+	unknown = "CHESTS AREN'T READY YET  |  TRY AGAIN SHORTLY",
 }
 
 -- ChestReveal shows a prize; this only explains a refusal.
