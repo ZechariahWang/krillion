@@ -21,6 +21,7 @@ local waterMarker: BasePart? = nil
 local waterSurface: BasePart? = nil
 local lastPhase = ""
 local surgeToken = 0
+local serverSendsSurging = false -- set once any RoundState carries `surging`; until then the phase change decides
 
 local WaterFx = {}
 
@@ -92,8 +93,20 @@ function WaterFx.init()
 	RunService.RenderStepped:Connect(step)
 end
 
+-- Whether this broadcast is the one sent before the water rises. A client whose first state is mid-surge
+-- (a late join) has no rise to show.
+local function isRiseBroadcast(payload): boolean
+	if payload.surging ~= nil then
+		serverSendsSurging = true
+	end
+	if serverSendsSurging then
+		return payload.surging == true
+	end
+	return payload.phase == "Surge" and lastPhase ~= "Surge" and lastPhase ~= ""
+end
+
 function WaterFx.onState(payload)
-	local enteringSurge = payload.phase == "Surge" and lastPhase ~= "Surge"
+	local enteringSurge = isRiseBroadcast(payload)
 	lastPhase = payload.phase
 	-- The Surge broadcast carries the level before the rise and how far it will go.
 	if enteringSurge and payload.surge > 0 then

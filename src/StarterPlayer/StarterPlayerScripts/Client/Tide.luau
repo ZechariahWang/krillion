@@ -28,6 +28,8 @@ local WOBBLE_STUDS = 0.22
 local WOBBLE_SECONDS = 0.5
 
 local lastWaterY = 0
+local lastPhase = ""
+local serverSendsSurging = false -- set once any RoundState carries `surging`; until then the water height decides
 local aliveBefore: { number }? = nil -- alive ids when this surge started
 local wasPlaying = false
 local names: { [number]: string } = {} -- userId -> name from the last reveal, bots included
@@ -148,8 +150,24 @@ local function announceSunk(after: { number })
 	end
 end
 
+-- Whether this Surge broadcast is the one sent before the water rises.
+local function isRiseBroadcast(payload): boolean
+	if payload.surging ~= nil then
+		serverSendsSurging = true
+	end
+	if serverSendsSurging then
+		return payload.surging == true
+	end
+	return payload.waterY == lastWaterY
+end
+
 local function onSurge(payload)
-	if payload.waterY == lastWaterY then
+	local rising = isRiseBroadcast(payload)
+	if rising and lastPhase == "" then
+		-- First state this client has seen: it joined mid-surge, so there is no start of the rise to mark.
+		return
+	end
+	if rising then
 		-- First Surge broadcast: the water is about to move. A faint rumble, then a firmer one on the jump.
 		aliveBefore = payload.aliveUserIds
 		wasPlaying = payload.playing == true
@@ -205,6 +223,7 @@ function Tide.onState(payload)
 	local phase = payload.phase
 	local inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
 	if not inMatch then
+		lastPhase = phase
 		lastWaterY = 0
 		aliveBefore = nil
 		wasPlaying = false
@@ -214,6 +233,7 @@ function Tide.onState(payload)
 	if phase == "Surge" then
 		onSurge(payload)
 	end
+	lastPhase = phase
 	lastWaterY = payload.waterY
 end
 
