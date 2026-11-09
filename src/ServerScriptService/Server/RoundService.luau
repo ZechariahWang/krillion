@@ -37,6 +37,7 @@ local phase = "Waiting"
 local round = 0
 local secondsLeft = 0
 local overtime = false -- the prompt is running past its base time for someone's extra time
+local surging = false -- true only for the Surge broadcast sent before the water starts to rise
 local currentPrompt: AnswerService.Prompt? = nil
 local match: MatchState.State? = nil
 local platforms: { [Player]: Part } = {}
@@ -225,6 +226,7 @@ local function broadcastState()
 			height = height,
 			waterY = waterY,
 			surge = roundSurge,
+			surging = surging,
 			special = special,
 			playerCount = #Players:GetPlayers(),
 			starting = participantCount + #bots,
@@ -746,7 +748,10 @@ end
 
 local function runSurge()
 	local state = match :: MatchState.State
+	-- Clients animate the rise from this one broadcast; a revive or late join mid-surge broadcasts without it.
+	surging = true
 	setPhase("Surge")
+	surging = false
 	MatchState.surge(state, roundSurge)
 	WaterService.surgeTo(state.waterY)
 	local culled = MatchState.cull(state)

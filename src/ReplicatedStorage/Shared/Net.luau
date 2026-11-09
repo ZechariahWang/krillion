@@ -28,6 +28,7 @@ export type RoundStatePayload = {
 	height: number,
 	waterY: number,
 	surge: number, -- how far the water rises at the end of this round
+	surging: boolean, -- the Surge broadcast sent before the water rises; false on the settled one and on mid-surge updates
 	special: string?, -- "TidalWave" | "DoubleLift" | nil
 }
 
