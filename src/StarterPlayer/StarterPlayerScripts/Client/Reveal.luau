@@ -25,7 +25,7 @@ local ROW_STAGGER = 0.15
 local ROW_SPREAD = 1.4 -- every row is in within this, however many players there are
 local COUNT_SECONDS = 0.45
 local SCHOOLED_PAUSE = 0.3
-local CARDS_WAIT = 10
+local WAIT_SECONDS = 10
 local CARD_ENTER = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 local CARD_EXIT = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In)
 local EXIT_MARGIN = 0.1 -- the card is fully gone this long before the rise starts
@@ -47,20 +47,27 @@ local lastPhase = ""
 local revealToken = 0
 local streak = 0
 local passes: { [string]: boolean } = {} -- from ProfileChanged, for the Shells chip
+local ready = false
+local missing: string? = nil
 
 local Reveal = {}
 
-function Reveal.init(playerGui: PlayerGui)
-	gui = Ui.screen(playerGui, "Reveal") :: Frame
-	-- The dive card replaces the old badge; the instance stays so nothing waiting on it hangs.
-	badge = gui:WaitForChild("Badge") :: Frame
-	badge.Visible = false
-	list = gui:WaitForChild("List") :: Frame
-	rowTemplate = list:WaitForChild("RowTemplate") :: Frame
+-- WaitForChild with a timeout. Once one child is missing the rest are skipped, so init gives up quickly.
+local function waitChild(parent: Instance?, name: string): Instance?
+	if parent == nil or missing ~= nil then
+		return nil
+	end
+	local found = parent:WaitForChild(name, WAIT_SECONDS)
+	if found == nil then
+		missing = name
+	end
+	return found
+end
 
+function Reveal.init(playerGui: PlayerGui)
 	task.spawn(function()
-		local found = Ui.screen(playerGui, "DiveCards", CARDS_WAIT)
-		local area = if found ~= nil then found:WaitForChild("Stage", CARDS_WAIT) else nil
+		local found = Ui.screen(playerGui, "DiveCards", WAIT_SECONDS)
+		local area = if found ~= nil then found:WaitForChild("Stage", WAIT_SECONDS) else nil
 		if found == nil or not found:IsA("Frame") or area == nil or not area:IsA("Frame") then
 			warn("[Reveal] StarterGui.DiveCards.Stage is missing; the reveal shows the answer list only")
 			return
@@ -79,6 +86,26 @@ function Reveal.init(playerGui: PlayerGui)
 			passes = profile.passes or {}
 		end)
 	end)
+
+	local screen = Ui.screen(playerGui, "Reveal", WAIT_SECONDS)
+	if screen == nil then
+		warn("[Reveal] GameUi.Reveal is missing; no answer list")
+		return
+	end
+	-- The dive card replaces the old badge; the instance stays so nothing waiting on it hangs.
+	local badgeFound = waitChild(screen, "Badge")
+	local listFound = waitChild(screen, "List")
+	local rowFound = waitChild(listFound, "RowTemplate")
+	if missing ~= nil then
+		warn("[Reveal] GameUi.Reveal has no " .. missing .. "; no answer list")
+		return
+	end
+	gui = screen
+	badge = badgeFound :: Frame
+	badge.Visible = false
+	list = listFound :: Frame
+	rowTemplate = rowFound :: Frame
+	ready = true
 end
 
 -- Mirrors StoreService.payEarned's pass bonuses, so the chip matches the wallet popup at the rise.
@@ -332,6 +359,9 @@ local function celebrate(row: RevealRow, mine: DiveCard.Handle?, token: number)
 end
 
 function Reveal.onReveal(payload: Net.RevealPayload)
+	if not ready then
+		return
+	end
 	revealToken += 1
 	local token = revealToken
 	local rows = payload.rows
@@ -374,6 +404,9 @@ end
 
 -- You sank or reset: your card and the answers list go at once, whatever the round is doing.
 function Reveal.onEliminated()
+	if not ready then
+		return
+	end
 	revealToken += 1
 	pendingRows = nil
 	hideCard(true)
@@ -381,6 +414,9 @@ function Reveal.onEliminated()
 end
 
 function Reveal.onState(payload: Net.RoundStatePayload)
+	if not ready then
+		return
+	end
 	local phase = payload.phase
 	if phase == "Surge" and lastPhase ~= "Surge" then
 		-- The card is normally long gone by now; this catches a short reveal.

@@ -15,7 +15,7 @@ local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
 
-local TEMPLATE_WAIT = 10
+local WAIT_SECONDS = 10
 local JOIN_TIMEOUT = 4 -- seconds before a JUMP IN press with no answer can be pressed again
 local BAR_GAP = 12 -- pixels between the join card and the bar under it
 local BOTTOM_GAP = 20 -- pixels from the screen bottom when nothing is under the join card
@@ -45,6 +45,8 @@ local joinRound = 0
 local joinPendingSince: number? = nil
 local reviveOpen = false -- the revive card is up, so the eliminated card waits behind it
 local eliminatedWaiting = false
+local ready = false
+local missing: string? = nil
 
 local Lobby = {}
 
@@ -171,8 +173,8 @@ local function adopt(name: string, className: string): GuiObject?
 	if existing ~= nil and existing:IsA(className) then
 		return existing :: GuiObject
 	end
-	local templates = ReplicatedStorage:WaitForChild("Templates", TEMPLATE_WAIT)
-	local template = if templates ~= nil then templates:WaitForChild(name, TEMPLATE_WAIT) else nil
+	local templates = ReplicatedStorage:WaitForChild("Templates", WAIT_SECONDS)
+	local template = if templates ~= nil then templates:WaitForChild(name, WAIT_SECONDS) else nil
 	if template == nil or not template:IsA(className) then
 		warn("Lobby: no " .. name .. " template; that part of the lobby is off")
 		return nil
@@ -209,15 +211,44 @@ local function bindExtras()
 	refreshExtras()
 end
 
+-- WaitForChild with a timeout. Once one child is missing the rest are skipped, so init gives up quickly.
+local function waitChild(parent: Instance?, name: string): Instance?
+	if parent == nil or missing ~= nil then
+		return nil
+	end
+	local found = parent:WaitForChild(name, WAIT_SECONDS)
+	if found == nil then
+		missing = name
+	end
+	return found
+end
+
 function Lobby.init(playerGui: PlayerGui)
-	gui = Ui.screen(playerGui, "Spectate") :: Frame
-	eliminatedCard = gui:WaitForChild("EliminatedCard") :: Frame
-	eliminatedSubtitle = eliminatedCard:WaitForChild("Subtitle") :: TextLabel
-	spectateButton = eliminatedCard:WaitForChild("SpectateButton") :: TextButton
-	spectateBar = gui:WaitForChild("SpectateBar") :: Frame
-	watchingText = spectateBar:WaitForChild("Watching") :: TextLabel
-	nextButton = spectateBar:WaitForChild("NextButton") :: TextButton
-	backButton = spectateBar:WaitForChild("BackButton") :: TextButton
+	local screen = Ui.screen(playerGui, "Spectate", WAIT_SECONDS)
+	if screen == nil then
+		warn("[Lobby] GameUi.Spectate is missing; no eliminated card or spectating")
+		return
+	end
+	local cardFound = waitChild(screen, "EliminatedCard")
+	local subtitleFound = waitChild(cardFound, "Subtitle")
+	local spectateFound = waitChild(cardFound, "SpectateButton")
+	local barFound = waitChild(screen, "SpectateBar")
+	local watchingFound = waitChild(barFound, "Watching")
+	local nextFound = waitChild(barFound, "NextButton")
+	local backFound = waitChild(barFound, "BackButton")
+	if missing ~= nil then
+		warn("[Lobby] GameUi.Spectate has no " .. missing .. "; no eliminated card or spectating")
+		return
+	end
+	gui = screen
+	eliminatedCard = cardFound :: Frame
+	eliminatedSubtitle = subtitleFound :: TextLabel
+	spectateButton = spectateFound :: TextButton
+	spectateBar = barFound :: Frame
+	watchingText = watchingFound :: TextLabel
+	nextButton = nextFound :: TextButton
+	backButton = backFound :: TextButton
+	ready = true
 
 	Ui.pressable(spectateButton)
 	Ui.pressable(nextButton)
@@ -236,6 +267,9 @@ function Lobby.isSpectating(): boolean
 end
 
 function Lobby.onEliminated(payload)
+	if not ready then
+		return
+	end
 	local text = "YOU MADE IT TO ROUND " .. payload.round
 	-- The second line only fits a label that scales or wraps its text.
 	if eliminatedSubtitle.TextScaled or eliminatedSubtitle.TextWrapped then
@@ -258,6 +292,9 @@ end
 -- RevivePrompt calls this while its card is up. The eliminated card steps aside and comes back when the
 -- revive card goes, unless the revive was used (the player is going back onto a pillar).
 function Lobby.setReviveOpen(open: boolean, revived: boolean?)
+	if not ready then
+		return
+	end
 	reviveOpen = open
 	if open then
 		if eliminatedCard.Visible then
@@ -275,6 +312,9 @@ end
 
 -- JoinResult {status, message} from the server after a JUMP IN press.
 function Lobby.onJoinResult(payload)
+	if not ready then
+		return
+	end
 	setJoinPending(false)
 	if type(payload) ~= "table" or type(payload.message) ~= "string" then
 		return
@@ -292,6 +332,9 @@ function Lobby.onJoinResult(payload)
 end
 
 function Lobby.onState(payload)
+	if not ready then
+		return
+	end
 	local phase = payload.phase
 	inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
 	playing = payload.playing == true

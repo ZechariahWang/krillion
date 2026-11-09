@@ -26,7 +26,7 @@ local METER_RANGE = 30 -- studs of margin that fills the whole meter
 local METER_WATER = 0.2 -- fraction of the meter the water fill occupies
 local FEEDBACK_SECONDS = 1.5
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
-local TEMPLATE_WAIT = 10
+local WAIT_SECONDS = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
 local BOOST_GAP = 8 -- pixels between the Shells chip and the boost buttons above it
 local BOOST_EDGE = 16 -- pixels from the screen edges when there is no Shells chip to stand on
@@ -91,6 +91,8 @@ local lastPhase = ""
 local inventory = { Hint = 0, ExtraTime = 0 }
 local cash = 0
 local uses: Net.BoostUses = { Hint = 0, ExtraTime = 0 }
+local ready = false -- GameUi.Hud and its children were found; every handler is a no-op until then
+local missing: string? = nil
 
 local Hud = {}
 
@@ -533,6 +535,9 @@ local function onSubmitResult(payload)
 end
 
 function Hud.onAnswerResult(payload)
+	if not ready then
+		return
+	end
 	if payload.stage == "check" then
 		onCheckResult(payload)
 	else
@@ -576,8 +581,8 @@ local function adopt(name: string): Frame?
 	if existing ~= nil and existing:IsA("Frame") then
 		return existing
 	end
-	local templates = ReplicatedStorage:WaitForChild("Templates", TEMPLATE_WAIT)
-	local template = if templates ~= nil then templates:WaitForChild(name, TEMPLATE_WAIT) else nil
+	local templates = ReplicatedStorage:WaitForChild("Templates", WAIT_SECONDS)
+	local template = if templates ~= nil then templates:WaitForChild(name, WAIT_SECONDS) else nil
 	if template == nil or not template:IsA("Frame") then
 		warn("Hud: no " .. name .. " template; that part of the answer bar is off")
 		return nil
@@ -637,8 +642,8 @@ local function bindExtras()
 		bindChip(bar, "Hint", "HintButton")
 		bindChip(bar, "ExtraTime", "TimeButton")
 		gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
-		local wallet = Ui.screen(playerGui, "Wallet", TEMPLATE_WAIT)
-		local chip = if wallet ~= nil then wallet:WaitForChild("Chip", TEMPLATE_WAIT) else nil
+		local wallet = Ui.screen(playerGui, "Wallet", WAIT_SECONDS)
+		local chip = if wallet ~= nil then wallet:WaitForChild("Chip", WAIT_SECONDS) else nil
 		if chip ~= nil and chip:IsA("GuiObject") then
 			chip:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
 			chip:GetPropertyChangedSignal("Visible"):Connect(fitBoostBar)
@@ -647,24 +652,56 @@ local function bindExtras()
 	end
 end
 
+-- WaitForChild with a timeout. Once one child is missing the rest are skipped, so init gives up quickly.
+local function waitChild(parent: Instance?, name: string): Instance?
+	if parent == nil or missing ~= nil then
+		return nil
+	end
+	local found = parent:WaitForChild(name, WAIT_SECONDS)
+	if found == nil then
+		missing = name
+	end
+	return found
+end
+
 function Hud.init(newPlayerGui: PlayerGui)
 	playerGui = newPlayerGui
-	gui = Ui.screen(playerGui, "Hud") :: Frame
-	meter = gui:WaitForChild("WaterMeter") :: Frame
-	marker = meter:WaitForChild("Marker") :: Frame
-	target = meter:WaitForChild("Target") :: Frame
-	answerBar = gui:WaitForChild("AnswerBar") :: Frame
-	answerBox = answerBar:WaitForChild("AnswerBox") :: TextBox
-	submitButton = answerBar:WaitForChild("SubmitButton") :: TextButton
-	lockedCard = answerBar:WaitForChild("LockedText") :: Frame
-	lockedText = lockedCard:WaitForChild("Text") :: TextLabel
-	feedback = answerBar:WaitForChild("Feedback") :: Frame
+	local screen = Ui.screen(playerGui, "Hud", WAIT_SECONDS)
+	if screen == nil then
+		warn("Hud: GameUi.Hud is missing; no answer bar or water meter")
+		return
+	end
+	local meterFound = waitChild(screen, "WaterMeter")
+	local markerFound = waitChild(meterFound, "Marker")
+	local targetFound = waitChild(meterFound, "Target")
+	local barFound = waitChild(screen, "AnswerBar")
+	local boxFound = waitChild(barFound, "AnswerBox")
+	local submitFound = waitChild(barFound, "SubmitButton")
+	local lockedFound = waitChild(barFound, "LockedText")
+	local lockedTextFound = waitChild(lockedFound, "Text")
+	local feedbackFound = waitChild(barFound, "Feedback")
+	local bannerFound = waitChild(screen, "Banner")
+	if missing ~= nil then
+		warn("Hud: GameUi.Hud has no " .. missing .. "; no answer bar or water meter")
+		return
+	end
+	gui = screen
+	meter = meterFound :: Frame
+	marker = markerFound :: Frame
+	target = targetFound :: Frame
+	answerBar = barFound :: Frame
+	answerBox = boxFound :: TextBox
+	submitButton = submitFound :: TextButton
+	lockedCard = lockedFound :: Frame
+	lockedText = lockedTextFound :: TextLabel
+	feedback = feedbackFound :: Frame
 	local label = feedback:FindFirstChild("Text")
 	if label ~= nil and label:IsA("TextLabel") then
 		feedbackText = label
 	end
-	banner = gui:WaitForChild("Banner") :: Frame
+	banner = bannerFound :: Frame
 	buttonText = submitButton.Text
+	ready = true
 
 	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(placeForKeyboard)
 	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeAnswerBar)
@@ -698,6 +735,9 @@ end
 
 -- Keeps the boost inventory and Shells, so each chip shows what pressing it would spend.
 function Hud.onProfile(profile)
+	if not ready then
+		return
+	end
 	if typeof(profile.hints) == "number" then
 		inventory.Hint = profile.hints
 	end
@@ -712,6 +752,9 @@ end
 
 -- Shows the result of a Hint or +10s request: the hint text, the extra time, or why it was refused.
 function Hud.onBoostResult(payload)
+	if not ready then
+		return
+	end
 	local kind = payload.kind
 	if typeof(payload.uses) == "table" then
 		uses = { Hint = payload.uses.Hint or 0, ExtraTime = payload.uses.ExtraTime or 0 }
@@ -742,6 +785,9 @@ end
 
 -- You sank or reset: your meter and answer bar go now, not on the next state tick.
 function Hud.onEliminated()
+	if not ready then
+		return
+	end
 	playing = false
 	applyTouchControls(true)
 	meter.Visible = false
@@ -751,6 +797,9 @@ function Hud.onEliminated()
 end
 
 function Hud.onState(payload)
+	if not ready then
+		return
+	end
 	phase = payload.phase
 	if type(payload.prompt) == "string" then
 		promptText = string.upper(payload.prompt)

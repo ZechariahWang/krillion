@@ -17,7 +17,7 @@ local COIN_FADE_AT = 0.5 -- seconds before a coin pop starts to fade
 local WHITE = Color3.new(1, 1, 1)
 local BLACK = Color3.new(0, 0, 0)
 local MAX_CONFETTI = 120 -- pieces alive at once, across every burst
-local TEMPLATE_WAIT = 10
+local WAIT_SECONDS = 10
 
 type Piece = {
 	frame: Frame,
@@ -51,20 +51,22 @@ local random = Random.new()
 
 local Fx = {}
 
--- The callout is a big sticker authored in Studio (outline, "Fill" gradient tinted per callout), shown up
--- to Theme.Chunky.Grow.Callout times its authored size (fitted to the screen).
-local function bindCallout()
-	calloutFill = callout:WaitForChild("Fill") :: UIGradient
-	Ui.grow(callout, Theme.Chunky.Grow.Callout)
+local ready = false -- the Fx screen and its children were found; the screen effects are off until then
+local missing: string? = nil
+
+-- WaitForChild with a timeout. Once one child is missing the rest are skipped, so init gives up quickly.
+local function waitChild(parent: Instance?, name: string): Instance?
+	if parent == nil or missing ~= nil then
+		return nil
+	end
+	local found = parent:WaitForChild(name, WAIT_SECONDS)
+	if found == nil then
+		missing = name
+	end
+	return found
 end
 
 function Fx.init(playerGui: PlayerGui)
-	gui = Ui.screen(playerGui, "Fx") :: Frame
-	flash = gui:WaitForChild("Flash") :: Frame
-	callout = gui:WaitForChild("Callout") :: TextLabel
-	coinPop = gui:WaitForChild("CoinPop") :: TextLabel
-	bindCallout()
-
 	RunService:BindToRenderStep("KrillionShake", Enum.RenderPriority.Camera.Value + 1, function()
 		if os.clock() >= shakeUntil then
 			return
@@ -79,18 +81,44 @@ function Fx.init(playerGui: PlayerGui)
 	end)
 
 	task.spawn(function()
-		local templates = ReplicatedStorage:WaitForChild("Templates", TEMPLATE_WAIT)
-		local found = if templates ~= nil then templates:WaitForChild("Confetti", TEMPLATE_WAIT) else nil
+		local templates = ReplicatedStorage:WaitForChild("Templates", WAIT_SECONDS)
+		local found = if templates ~= nil then templates:WaitForChild("Confetti", WAIT_SECONDS) else nil
 		if found ~= nil and found:IsA("Frame") then
 			confettiTemplate = found :: Frame
 		else
 			warn("[Fx] ReplicatedStorage.Templates.Confetti is missing; confetti is off")
 		end
 	end)
+
+	local screen = Ui.screen(playerGui, "Fx", WAIT_SECONDS)
+	if screen == nil then
+		warn("[Fx] SharedUi.Fx is missing; flashes, callouts and coin pops are off")
+		return
+	end
+	local flashFound = waitChild(screen, "Flash")
+	local calloutFound = waitChild(screen, "Callout")
+	local coinFound = waitChild(screen, "CoinPop")
+	local fillFound = waitChild(calloutFound, "Fill")
+	if missing ~= nil then
+		warn("[Fx] SharedUi.Fx has no " .. missing .. "; flashes, callouts and coin pops are off")
+		return
+	end
+	gui = screen
+	flash = flashFound :: Frame
+	callout = calloutFound :: TextLabel
+	coinPop = coinFound :: TextLabel
+	-- The callout is a big sticker authored in Studio (outline, "Fill" gradient tinted per callout), shown up
+	-- to Theme.Chunky.Grow.Callout times its authored size (fitted to the screen).
+	calloutFill = fillFound :: UIGradient
+	Ui.grow(callout, Theme.Chunky.Grow.Callout)
+	ready = true
 end
 
 -- A faint tint that fades out, never a full white-out.
 function Fx.flash(color: Color3)
+	if not ready then
+		return
+	end
 	flash.BackgroundColor3 = color
 	flash.BackgroundTransparency = 0.8
 	Tween.play(flash, Theme.Tween.Flash, { BackgroundTransparency = 1 })
@@ -99,6 +127,9 @@ end
 -- Lands big and tilted from 40%, sliding up a few pixels, holds, then shrinks a little as it fades. The
 -- text is white under a gradient in `color` (lighter on top, darker at the bottom) with a thick outline.
 function Fx.callout(text: string, color: Color3)
+	if not ready then
+		return
+	end
 	calloutToken += 1
 	local token = calloutToken
 	if calloutBase == nil then
@@ -144,6 +175,9 @@ end
 -- A big "+50" that springs out of a point on screen with a wobble, drifts up and fades. `color` overrides
 -- the authored gold.
 function Fx.coinPop(text: string, from: GuiObject, color: Color3?)
+	if not ready then
+		return
+	end
 	local pop = coinPop:Clone()
 	pop.Name = "CoinPopLive"
 	pop.Text = text
@@ -247,7 +281,7 @@ end
 -- Confetti rains down the whole screen. Kept for wins and Krillions; capped so bursts never pile up.
 function Fx.confetti(count: number, colors: { Color3 }?)
 	local template = confettiTemplate
-	if template == nil then
+	if template == nil or not ready then
 		return
 	end
 	local palette = colors or Theme.Confetti

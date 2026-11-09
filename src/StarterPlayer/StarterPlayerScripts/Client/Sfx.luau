@@ -7,13 +7,16 @@ local Debris = game:GetService("Debris")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 
-local folder = SoundService:WaitForChild("Krillion")
-local extra = ReplicatedStorage:FindFirstChild("Sounds")
-
 local Sfx = {}
 
+-- Looked up on every play rather than waited for at require, so a missing folder never stalls the client.
 local function find(name: string): Sound?
-	local template = folder:FindFirstChild(name)
+	local folder = SoundService:FindFirstChild("Krillion")
+	local extra = ReplicatedStorage:FindFirstChild("Sounds")
+	local template: Instance? = nil
+	if folder ~= nil then
+		template = folder:FindFirstChild(name)
+	end
 	if template == nil and extra ~= nil then
 		template = extra:FindFirstChild(name)
 	end
@@ -33,7 +36,7 @@ function Sfx.play(name: string, volume: number?, pitch: number?)
 	local sound = template:Clone()
 	sound.Volume = volume or 0.5
 	sound.PlaybackSpeed = (pitch or 1) * template.PlaybackSpeed
-	sound.Parent = folder
+	sound.Parent = SoundService:FindFirstChild("Krillion") or SoundService
 	sound:Play()
 	Debris:AddItem(sound, 4)
 end

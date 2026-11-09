@@ -11,6 +11,7 @@ local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
 local WIN_CONFETTI = 110
+local WAIT_SECONDS = 10
 
 local gui: Frame
 local panel: Frame
@@ -20,19 +21,51 @@ local podium: Frame
 local nextText: TextLabel
 
 local reachedRound = 0 -- the last round this player was on a pillar for, this match
+local ready = false
+local missing: string? = nil
 
 local Results = {}
 
+-- WaitForChild with a timeout. Once one child is missing the rest are skipped, so init gives up quickly.
+local function waitChild(parent: Instance?, name: string): Instance?
+	if parent == nil or missing ~= nil then
+		return nil
+	end
+	local found = parent:WaitForChild(name, WAIT_SECONDS)
+	if found == nil then
+		missing = name
+	end
+	return found
+end
+
 function Results.init(playerGui: PlayerGui)
-	gui = Ui.screen(playerGui, "Results") :: Frame
-	panel = gui:WaitForChild("Panel") :: Frame
-	titleText = panel:WaitForChild("Title") :: TextLabel
-	winnerText = panel:WaitForChild("WinnerText") :: TextLabel
-	podium = panel:WaitForChild("Podium") :: Frame
-	nextText = panel:WaitForChild("NextText") :: TextLabel
+	local screen = Ui.screen(playerGui, "Results", WAIT_SECONDS)
+	if screen == nil then
+		warn("[Results] GameUi.Results is missing; no results card")
+		return
+	end
+	local panelFound = waitChild(screen, "Panel")
+	local titleFound = waitChild(panelFound, "Title")
+	local winnerFound = waitChild(panelFound, "WinnerText")
+	local podiumFound = waitChild(panelFound, "Podium")
+	local nextFound = waitChild(panelFound, "NextText")
+	if missing ~= nil then
+		warn("[Results] GameUi.Results has no " .. missing .. "; no results card")
+		return
+	end
+	gui = screen
+	panel = panelFound :: Frame
+	titleText = titleFound :: TextLabel
+	winnerText = winnerFound :: TextLabel
+	podium = podiumFound :: Frame
+	nextText = nextFound :: TextLabel
+	ready = true
 end
 
 function Results.onMatchEnded(payload: Net.MatchEndedPayload)
+	if not ready then
+		return
+	end
 	local won = false
 	if payload.solo then
 		won = false
@@ -87,6 +120,9 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 end
 
 function Results.onState(payload: Net.RoundStatePayload)
+	if not ready then
+		return
+	end
 	if payload.playing and (payload.phase == "Prompt" or payload.phase == "Reveal" or payload.phase == "Surge") then
 		reachedRound = math.max(reachedRound, payload.round)
 	end
