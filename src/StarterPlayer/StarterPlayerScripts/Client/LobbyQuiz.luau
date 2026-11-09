@@ -64,6 +64,7 @@ local lastCheckAt = -math.huge
 local lastWrongAt = -math.huge
 local card: DiveCard.Handle? = nil
 local engaged = false -- the player clicked the box or pressed Enter this visit; new prompts may take focus
+local held = false -- a prompt arrived while another window was open; ask for a fresh one once it closes
 
 local LobbyQuiz = {}
 
@@ -453,6 +454,12 @@ function LobbyQuiz.init(playerGui: PlayerGui)
 			hideConfirm()
 		end
 	end)
+	Windows.Changed.connect(function()
+		if held and not Windows.anyOpen() then
+			held = false
+			skip()
+		end
+	end)
 	updateHeader()
 	task.spawn(bindExtras)
 end
@@ -462,6 +469,12 @@ end
 function LobbyQuiz.setCash(_value: number) end
 
 function LobbyQuiz.onPrompt(payload)
+	held = false
+	-- Stepping on to the arc never replaces a window that is already up (the tutorial, the shop): wait for it.
+	if payload ~= nil and not gui.Visible and Windows.anyOpen() then
+		held = true
+		return
+	end
 	promptToken += 1
 	local token = promptToken
 	locked = false

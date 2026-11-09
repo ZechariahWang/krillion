@@ -197,7 +197,8 @@ local function tryShow()
 	waiting = true
 	task.delay(FIRST_SHOW_DELAY, function()
 		waiting = false
-		if pending and not isOpen and calm() then
+		-- The first show never replaces an open window: Windows.Changed tries again once it closes.
+		if pending and not isOpen and calm() and not Windows.anyOpen() then
 			Tutorial.open()
 		end
 	end)
@@ -363,6 +364,11 @@ function Tutorial.init(playerGui: PlayerGui)
 			leftMidMatch = false
 		end
 		tryShow()
+	end)
+	Windows.Changed.connect(function()
+		if not Windows.anyOpen() then
+			tryShow()
+		end
 	end)
 	task.spawn(placeBoards)
 	task.spawn(function()
