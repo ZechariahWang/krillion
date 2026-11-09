@@ -1,8 +1,8 @@
 --!strict
 -- The saved player profile and how one server's session changes merge into it.
 -- Cash, wins and revives are deltas so two servers never overwrite each other; best keeps the max.
--- Every field has a merge rule (see merge) so no session locking is needed. Add a new field to Profile,
--- Session, new, newSession, fromStored, combine and merge, or it is silently dropped on save.
+-- Every field has a merge rule (see merge). Add a new field to Profile, Session, new, newSession,
+-- fromStored, combine and merge, or it is silently dropped on save.
 -- No Roblox APIs here, so Lune tests can require it.
 
 export type Equipped = {
@@ -33,6 +33,12 @@ export type LobbyDay = {
 	earned: number,
 }
 
+-- The server (game.JobId) that has the profile loaded, and when it last wrote this (os.time).
+export type ActiveSession = {
+	jobId: string,
+	time: number,
+}
+
 export type Profile = {
 	cash: number,
 	wins: number,
@@ -53,6 +59,7 @@ export type Profile = {
 	games: number, -- matches played to the end
 	musicOff: boolean, -- the player turned background music off in Settings
 	musicVolume: number, -- 0..1, the Settings volume bar
+	activeSession: ActiveSession?, -- nil when no server holds the profile
 }
 
 export type Session = {
@@ -75,6 +82,7 @@ export type Session = {
 	games: number, -- delta
 	musicOff: boolean?, -- nil unless the player changed the music setting this session
 	musicVolume: number?, -- nil unless the player moved the volume bar this session
+	activeSession: ActiveSession?, -- nil leaves the stored marker as it is
 }
 
 local Profile = {}
@@ -142,6 +150,16 @@ local function copyQuests(value: any): QuestDay -- any: stored table or a QuestD
 		end
 	end
 	return quests
+end
+
+local function copyActiveSession(value: any): ActiveSession? -- any: stored table or an ActiveSession
+	if typeof(value) ~= "table" then
+		return nil
+	end
+	if typeof(value.jobId) ~= "string" or typeof(value.time) ~= "number" then
+		return nil
+	end
+	return { jobId = value.jobId, time = value.time }
 end
 
 local function copyLobby(value: any): LobbyDay -- any: stored table or a LobbyDay
@@ -226,6 +244,7 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	if typeof(stored.musicVolume) == "number" then
 		profile.musicVolume = math.clamp(stored.musicVolume, 0, 1)
 	end
+	profile.activeSession = copyActiveSession(stored.activeSession)
 	return profile
 end
 
@@ -309,6 +328,7 @@ function Profile.combine(first: Session, second: Session): Session
 	else
 		combined.musicVolume = first.musicVolume
 	end
+	combined.activeSession = copyActiveSession(second.activeSession) or copyActiveSession(first.activeSession)
 	return combined
 end
 
@@ -367,6 +387,9 @@ function Profile.merge(stored: Profile, session: Session): Profile
 	end
 	if session.musicVolume ~= nil then
 		merged.musicVolume = session.musicVolume
+	end
+	if session.activeSession ~= nil then
+		merged.activeSession = copyActiveSession(session.activeSession)
 	end
 	return merged
 end

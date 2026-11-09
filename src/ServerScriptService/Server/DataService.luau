@@ -1,7 +1,8 @@
 --!strict
 -- Player profiles: Shells (stored as `cash`), Wins, Best, Revives, cosmetics, boosts, quests, rewards.
 -- Each server keeps a session of changes and merges it into the saved profile with UpdateAsync
--- (see Profile.merge), so no session locking is needed.
+-- (see Profile.merge). A light session marker (Profile.activeSession) makes a fast server hop wait for the
+-- previous server's leave-save before loading.
 -- Also owns leaderstats, the Wins OrderedDataStore behind the lobby board, and the TutorialDone remote.
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -22,6 +23,9 @@ local LEAVE_SAVE_TRIES = 3 -- waits 1 s, then 2 s, between tries
 local SHUTDOWN_WAIT_SECONDS = 28 -- Roblox allows BindToClose 30 s
 local LOAD_TRIES = 3 -- waits 1 s, then 2 s, between tries
 local READ_ONLY_RETRY_SECONDS = 60
+local SESSION_FRESH_SECONDS = 90 -- a marker older than this is from a server that died without clearing it
+local SESSION_WAIT_TRIES = 5
+local SESSION_WAIT_SECONDS = 2
 
 -- An unpublished place (a local test copy) has no DataStore access and GetDataStore throws. Players then
 -- get a fresh profile that never saves, instead of the error stopping every server script.
@@ -190,20 +194,67 @@ function DataService.changed(player: Player)
 	Net.event("ProfileChanged"):FireClient(player, payload)
 end
 
-local function readOnce(player: Player): (boolean, any)
-	local ok, value = pcall(function()
-		return need(profileStore):GetAsync(profileKey(player))
+local function sessionMarker(): Profile.ActiveSession
+	return { jobId = game.JobId, time = os.time() }
+end
+
+-- Another server still has this profile loaded (its leave-save has not landed yet).
+local function heldElsewhere(active: Profile.ActiveSession?): boolean
+	if active == nil or active.jobId == game.JobId then
+		return false
+	end
+	return os.time() - active.time < SESSION_FRESH_SECONDS
+end
+
+-- Reads the profile and marks it as held by this server, in one UpdateAsync. Returns whether the read
+-- worked, the stored value, and whether another server held it (then nothing is written; `force` takes it).
+local function readOnce(player: Player, force: boolean): (boolean, any, boolean)
+	local value: any = nil
+	local held = false
+	local ok, err = pcall(function()
+		need(profileStore):UpdateAsync(profileKey(player), function(old)
+			value = old
+			held = false
+			-- A first visit writes nothing: the legacy coins save is still to be read.
+			if old == nil then
+				return nil
+			end
+			local profile = Profile.fromStored(old)
+			if not force and heldElsewhere(profile.activeSession) then
+				held = true
+				return nil
+			end
+			profile.activeSession = sessionMarker()
+			return profile
+		end)
 	end)
 	if not ok then
-		warn("DataService: load failed for " .. player.Name .. ": " .. tostring(value))
+		warn("DataService: load failed for " .. player.Name .. ": " .. tostring(err))
+		return false, nil, false
 	end
+	return true, value, held
+end
+
+-- Like readOnce, but waits a little for another server's leave-save before taking the profile anyway.
+local function readHeld(player: Player): (boolean, any)
+	for _ = 1, SESSION_WAIT_TRIES do
+		local ok, value, held = readOnce(player, false)
+		if not held then
+			return ok, value
+		end
+		task.wait(SESSION_WAIT_SECONDS)
+		if player.Parent == nil then
+			return false, nil
+		end
+	end
+	local ok, value = readOnce(player, true)
 	return ok, value
 end
 
 local function readStored(player: Player): (Profile.Profile, LoadInfo)
 	local ok, value = false, nil
 	for attempt = 1, LOAD_TRIES do
-		ok, value = readOnce(player)
+		ok, value = readHeld(player)
 		if ok or player.Parent == nil or profileStore == nil then
 			break
 		end
@@ -231,11 +282,32 @@ local function readStored(player: Player): (Profile.Profile, LoadInfo)
 	return Profile.new(), { ok = false, existed = false }
 end
 
+-- Clears this server's marker for a player who left before their profile finished loading.
+local function releaseMarker(player: Player)
+	pcall(function()
+		need(profileStore):UpdateAsync(profileKey(player), function(old)
+			if old == nil then
+				return nil
+			end
+			local profile = Profile.fromStored(old)
+			local active = profile.activeSession
+			if active == nil or active.jobId ~= game.JobId then
+				return nil
+			end
+			profile.activeSession = nil
+			return profile
+		end)
+	end)
+end
+
 local function load(player: Player)
 	local stats = (ReplicatedStorage:WaitForChild("Templates"):WaitForChild("leaderstats") :: Folder):Clone()
 	stats.Parent = player
 	local profile, info = readStored(player)
 	if player.Parent == nil then
+		if info.ok then
+			releaseMarker(player)
+		end
 		return
 	end
 	stored[player] = profile
@@ -254,6 +326,9 @@ local function load(player: Player)
 		end
 		local retried, retriedInfo = readStored(player)
 		if player.Parent == nil or unloading[player] then
+			if retriedInfo.ok then
+				releaseMarker(player)
+			end
 			return
 		end
 		if retriedInfo.ok then
@@ -268,7 +343,8 @@ local function load(player: Player)
 end
 
 -- Writes this session's changes and starts a fresh session on top of the result. Returns whether it saved.
-function DataService.save(player: Player): boolean
+-- `release` (the leave-save) clears this server's session marker; other saves refresh it.
+local function write(player: Player, release: boolean): boolean
 	local session = sessions[player]
 	local base = stored[player]
 	if session == nil or base == nil or inFlight[player] ~= nil or DataService.isReadOnly(player) then
@@ -276,6 +352,9 @@ function DataService.save(player: Player): boolean
 	end
 	sessions[player] = Profile.newSession()
 	inFlight[player] = session
+	if not release then
+		session.activeSession = sessionMarker()
+	end
 	local saved: Profile.Profile? = nil
 	local ok, err = pcall(function()
 		need(profileStore):UpdateAsync(profileKey(player), function(old)
@@ -283,8 +362,13 @@ function DataService.save(player: Player): boolean
 			if old ~= nil then
 				current = Profile.fromStored(old)
 			end
-			saved = Profile.merge(current, session)
-			return saved
+			local merged = Profile.merge(current, session)
+			local active = merged.activeSession
+			if release and active ~= nil and active.jobId == game.JobId then
+				merged.activeSession = nil
+			end
+			saved = merged
+			return merged
 		end)
 	end)
 	inFlight[player] = nil
@@ -305,6 +389,10 @@ function DataService.save(player: Player): boolean
 		end)
 	end
 	return true
+end
+
+function DataService.save(player: Player): boolean
+	return write(player, false)
 end
 
 -- The session to record a change in; nil while the profile is read-only, so every change is refused.
@@ -637,7 +725,7 @@ local function unload(player: Player)
 			while inFlight[player] ~= nil do
 				task.wait(0.1)
 			end
-			if DataService.save(player) then
+			if write(player, true) then
 				break
 			end
 			if attempt < LEAVE_SAVE_TRIES then

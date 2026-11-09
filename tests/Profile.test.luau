@@ -264,4 +264,24 @@ return function(test)
 		assert(merged.krillions == 3 and merged.games == 11)
 		assert(Profile.combine(session, session).games == 2)
 	end)
+
+	test("fromStored keeps the server that holds the profile", function()
+		local profile = Profile.fromStored({ activeSession = { jobId = "job-a", time = 1000 } })
+		local active = profile.activeSession
+		assert(active ~= nil and active.jobId == "job-a" and active.time == 1000)
+		assert(Profile.fromStored({ activeSession = "junk" }).activeSession == nil)
+	end)
+
+	test("merge keeps the stored session marker unless the session sets one", function()
+		local stored = Profile.fromStored({ activeSession = { jobId = "job-a", time = 1000 } })
+		local untouched = Profile.merge(stored, Profile.newSession())
+		local kept = untouched.activeSession
+		assert(kept ~= nil and kept.jobId == "job-a")
+		local session = Profile.newSession()
+		session.activeSession = { jobId = "job-b", time = 2000 }
+		local replaced = Profile.merge(stored, session).activeSession
+		assert(replaced ~= nil and replaced.jobId == "job-b" and replaced.time == 2000)
+		local combined = Profile.combine(session, Profile.newSession()).activeSession
+		assert(combined ~= nil and combined.jobId == "job-b")
+	end)
 end
