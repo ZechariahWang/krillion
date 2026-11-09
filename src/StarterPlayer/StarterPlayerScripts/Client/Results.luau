@@ -33,7 +33,14 @@ function Results.init(playerGui: PlayerGui)
 end
 
 function Results.onMatchEnded(payload: Net.MatchEndedPayload)
-	local won = not payload.solo and payload.winnerName == Players.LocalPlayer.DisplayName
+	local won = false
+	if payload.solo then
+		won = false
+	elseif payload.winnerUserId ~= nil then
+		won = payload.winnerUserId == Players.LocalPlayer.UserId
+	else
+		won = payload.winnerName == Players.LocalPlayer.DisplayName
+	end
 	-- A solo dive has no winner to name: show how far the player got instead.
 	if payload.solo then
 		titleText.Text = "SOLO DIVE"
