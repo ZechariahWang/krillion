@@ -38,6 +38,7 @@ local round = 0
 local secondsLeft = 0
 local overtime = false -- the prompt is running past its base time for someone's extra time
 local surging = false -- true only for the Surge broadcast sent before the water starts to rise
+local settled = false -- true only for the Surge broadcast sent once the water has stopped rising
 local currentPrompt: AnswerService.Prompt? = nil
 local match: MatchState.State? = nil
 local platforms: { [Player]: Part } = {}
@@ -227,6 +228,7 @@ local function broadcastState()
 			waterY = waterY,
 			surge = roundSurge,
 			surging = surging,
+			settled = settled,
 			special = special,
 			playerCount = #Players:GetPlayers(),
 			readyCount = #readyPlayers(),
@@ -771,7 +773,9 @@ local function runSurge()
 		StoreService.payEarned(player, Economy.matchCash(1, false), "survive")
 		MatchEvents.RoundSurvived.fire(player, round)
 	end
+	settled = true
 	broadcastState()
+	settled = false
 	task.wait(GameConfig.Round.SettleSeconds)
 end
 

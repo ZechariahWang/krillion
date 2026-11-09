@@ -182,6 +182,10 @@ local function onSurge(payload)
 		end)
 		return
 	end
+	if serverSendsSurging and payload.settled ~= true then
+		-- A revive or late join broadcast mid-surge: the water is still moving.
+		return
+	end
 	-- Second Surge broadcast: the water has settled. A sinking player hears it from Lobby and the toast below.
 	if payload.playing and wasPlaying then
 		local margin = TideRules.margin(payload.height, payload.waterY)
