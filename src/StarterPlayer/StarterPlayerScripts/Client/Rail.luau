@@ -1,5 +1,5 @@
 --!strict
--- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, SHOP, ITEMS), each
+-- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, SHOP, STORE, ITEMS), each
 -- with an icon, a label and a "!" badge, the HELP circle on the top bar next to the Settings gear, and the
 -- small THROW key at the right edge. It
 -- shows only in the lobby, off a pillar, and hides while any window is open. On short screens (landscape
@@ -12,7 +12,7 @@ local GuiService = game:GetService("GuiService")
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "InventoryButton" }
+local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
 local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take

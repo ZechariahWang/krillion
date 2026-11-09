@@ -65,9 +65,9 @@ local list: { Item } = {
 	{ id = "skin_abyss", slot = "Skin", name = "Abyss", rarity = "Epic", price = 1500, color = { 14, 28, 60 }, top = { 80, 170, 255 }, material = "Slate" },
 	{ id = "skin_glacier", slot = "Skin", name = "Glacier", rarity = "Epic", price = 1800, color = { 170, 220, 255 }, top = { 235, 248, 255 }, material = "Ice" },
 	{ id = "skin_volcano", slot = "Skin", name = "Volcano", rarity = "Legendary", price = 2400, color = { 45, 40, 44 }, top = { 255, 110, 40 }, material = "Basalt" },
-	{ id = "skin_lava", slot = "Skin", name = "Molten", rarity = "Epic", price = 0, robuxProductId = 0, robux = 99, label = "HOT", color = { 255, 90, 30 }, top = { 255, 200, 60 }, material = "CrackedLava" },
-	{ id = "skin_gold", slot = "Skin", name = "Gold", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 99, color = { 255, 200, 70 }, material = "Foil" },
-	{ id = "skin_galaxy", slot = "Skin", name = "Galaxy", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 149, label = "NEW", color = { 60, 30, 120 }, top = { 200, 120, 255 }, material = "Glass" },
+	{ id = "skin_lava", slot = "Skin", name = "Molten", rarity = "Epic", price = 0, robuxProductId = 3729794371, robux = 99, label = "HOT", color = { 255, 90, 30 }, top = { 255, 200, 60 }, material = "CrackedLava" },
+	{ id = "skin_gold", slot = "Skin", name = "Gold", rarity = "Legendary", price = 0, robuxProductId = 3729794381, robux = 99, color = { 255, 200, 70 }, material = "Foil" },
+	{ id = "skin_galaxy", slot = "Skin", name = "Galaxy", rarity = "Legendary", price = 0, robuxProductId = 3729794393, robux = 149, label = "NEW", color = { 60, 30, 120 }, top = { 200, 120, 255 }, material = "Glass" },
 	{ id = "skin_aurora", slot = "Skin", name = "Aurora", rarity = "Legendary", price = 0, pass = "Vip", color = { 120, 90, 255 }, top = { 120, 255, 220 }, material = "Glass" },
 	{ id = "skin_kraken", slot = "Skin", name = "Kraken Ink", rarity = "Legendary", price = 0, chestOnly = true, color = { 30, 10, 45 }, top = { 170, 60, 255 }, material = "Neon" },
 	{ id = "skin_prism", slot = "Skin", name = "Prism", rarity = "Mythic", price = 0, chestOnly = true, color = { 255, 255, 255 }, top = { 140, 255, 255 }, material = "Glass" },
@@ -90,7 +90,7 @@ local list: { Item } = {
 	-- Splashes ----------------------------------------------------------------------------------------------
 	{ id = "splash_bubbles", slot = "Splash", name = "Bubble Burst", rarity = "Rare", price = 400, splash = "Bubbles", color = { 170, 225, 255 } },
 	{ id = "splash_ink", slot = "Splash", name = "Ink Cloud", rarity = "Epic", price = 800, splash = "Ink", color = { 150, 110, 210 } },
-	{ id = "splash_stars", slot = "Splash", name = "Starfall", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 79, splash = "Stars", color = { 255, 215, 110 } },
+	{ id = "splash_stars", slot = "Splash", name = "Starfall", rarity = "Legendary", price = 0, robuxProductId = 3729794407, robux = 79, splash = "Stars", color = { 255, 215, 110 } },
 
 	-- Trails (the template's Trail.Color is what shows in game; `color` is the shop preview) ------------------
 	{ id = "trail_bubbles", slot = "Trail", name = "Bubbles", rarity = "Common", price = 300, trail = "Bubbles", color = { 160, 220, 255 } },
@@ -112,10 +112,10 @@ local list: { Item } = {
 	{ id = "pet_puffer", slot = "Pet", name = "Pufferfish", rarity = "Rare", price = 0, chestOnly = true, pet = "Puffer", shellBonus = 0.1, color = { 240, 210, 90 } },
 	{ id = "pet_octopus", slot = "Pet", name = "Octopus", rarity = "Epic", price = 3000, label = "HOT", pet = "Octopus", shellBonus = 0.12, color = { 190, 80, 200 } },
 	{ id = "pet_seahorse", slot = "Pet", name = "Seahorse", rarity = "Epic", price = 0, chestOnly = true, pet = "Seahorse", shellBonus = 0.12, color = { 255, 190, 70 } },
-	{ id = "pet_axolotl", slot = "Pet", name = "Axolotl", rarity = "Epic", price = 0, robuxProductId = 0, robux = 149, pet = "Axolotl", shellBonus = 0.15, color = { 255, 170, 200 } },
+	{ id = "pet_axolotl", slot = "Pet", name = "Axolotl", rarity = "Epic", price = 0, robuxProductId = 3729794417, robux = 149, pet = "Axolotl", shellBonus = 0.15, color = { 255, 170, 200 } },
 	{ id = "pet_narwhal", slot = "Pet", name = "Narwhal", rarity = "Legendary", price = 9000, pet = "Narwhal", shellBonus = 0.18, color = { 170, 210, 240 } },
 	{ id = "pet_shark", slot = "Pet", name = "Great White", rarity = "Legendary", price = 0, chestOnly = true, pet = "Shark", shellBonus = 0.18, color = { 140, 160, 180 } },
-	{ id = "pet_whale", slot = "Pet", name = "Blue Whale", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 299, pet = "Whale", shellBonus = 0.2, color = { 60, 110, 220 } },
+	{ id = "pet_whale", slot = "Pet", name = "Blue Whale", rarity = "Legendary", price = 0, robuxProductId = 3729794543, robux = 299, pet = "Whale", shellBonus = 0.2, color = { 60, 110, 220 } },
 	{ id = "pet_krill", slot = "Pet", name = "Golden Krill", rarity = "Mythic", price = 0, chestOnly = true, pet = "GoldenKrill", shellBonus = 0.25, color = { 255, 210, 60 } },
 
 	-- Auras -------------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ local list: { Item } = {
 	{ id = "aura_frost", slot = "Aura", name = "Frost", rarity = "Rare", price = 900, aura = "Frost", color = { 190, 240, 255 } },
 	{ id = "aura_flame", slot = "Aura", name = "Flame", rarity = "Epic", price = 1600, label = "HOT", aura = "Flame", color = { 255, 120, 40 } },
 	{ id = "aura_electric", slot = "Aura", name = "Electric", rarity = "Epic", price = 2000, aura = "Electric", color = { 120, 200, 255 } },
-	{ id = "aura_halo", slot = "Aura", name = "Halo", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 99, aura = "Halo", color = { 255, 230, 140 } },
+	{ id = "aura_halo", slot = "Aura", name = "Halo", rarity = "Legendary", price = 0, robuxProductId = 3729794556, robux = 99, aura = "Halo", color = { 255, 230, 140 } },
 	{ id = "aura_void", slot = "Aura", name = "Void", rarity = "Legendary", price = 0, chestOnly = true, aura = "Void", color = { 90, 40, 160 } },
 	{ id = "aura_rainbow", slot = "Aura", name = "Rainbow", rarity = "Mythic", price = 0, chestOnly = true, aura = "Rainbow", color = { 255, 120, 200 } },
 
@@ -134,7 +134,7 @@ local list: { Item } = {
 	{ id = "card_neon", slot = "CardTheme", name = "Neon Card", rarity = "Rare", price = 900, label = "NEW", color = { 60, 255, 170 }, card = { header = { 40, 220, 150 }, frame = { 10, 30, 40 }, tag = { 200, 255, 230 } } },
 	{ id = "card_midnight", slot = "CardTheme", name = "Midnight Card", rarity = "Epic", price = 1500, color = { 60, 70, 160 }, card = { header = { 70, 80, 200 }, frame = { 12, 14, 40 }, tag = { 210, 220, 255 } } },
 	{ id = "card_candy", slot = "CardTheme", name = "Candy Card", rarity = "Epic", price = 1500, color = { 255, 150, 220 }, card = { header = { 255, 120, 210 }, frame = { 120, 60, 180 }, tag = { 255, 240, 250 } } },
-	{ id = "card_gold", slot = "CardTheme", name = "Gold Card", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 79, color = { 255, 200, 60 }, card = { header = { 255, 190, 40 }, frame = { 110, 70, 10 }, tag = { 255, 245, 200 } } },
+	{ id = "card_gold", slot = "CardTheme", name = "Gold Card", rarity = "Legendary", price = 0, robuxProductId = 3729794569, robux = 79, color = { 255, 200, 60 }, card = { header = { 255, 190, 40 }, frame = { 110, 70, 10 }, tag = { 255, 245, 200 } } },
 	{ id = "card_galaxy", slot = "CardTheme", name = "Galaxy Card", rarity = "Legendary", price = 0, chestOnly = true, color = { 150, 90, 255 }, card = { header = { 130, 70, 240 }, frame = { 20, 10, 45 }, tag = { 230, 210, 255 } } },
 	{ id = "card_kraken", slot = "CardTheme", name = "Kraken Card", rarity = "Mythic", price = 0, chestOnly = true, color = { 190, 80, 255 }, card = { header = { 170, 40, 220 }, frame = { 30, 5, 40 }, tag = { 255, 200, 255 } } },
 
@@ -145,7 +145,7 @@ local list: { Item } = {
 	{ id = "tag_gold", slot = "NameTag", name = "Gold Tag", rarity = "Epic", price = 1200, color = { 255, 210, 70 }, tag = { { 255, 230, 120 }, { 255, 170, 30 } } },
 	{ id = "tag_fire", slot = "NameTag", name = "Fire Tag", rarity = "Epic", price = 1500, label = "HOT", color = { 255, 110, 40 }, tag = { { 255, 220, 80 }, { 255, 70, 40 } } },
 	{ id = "tag_ice", slot = "NameTag", name = "Ice Tag", rarity = "Legendary", price = 0, chestOnly = true, color = { 180, 240, 255 }, tag = { { 255, 255, 255 }, { 120, 210, 255 } } },
-	{ id = "tag_rainbow", slot = "NameTag", name = "Rainbow Tag", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 49, color = { 255, 120, 200 }, tag = { { 255, 90, 90 }, { 255, 220, 80 }, { 90, 220, 120 }, { 90, 160, 255 }, { 200, 110, 255 } } },
+	{ id = "tag_rainbow", slot = "NameTag", name = "Rainbow Tag", rarity = "Legendary", price = 0, robuxProductId = 3729794585, robux = 49, color = { 255, 120, 200 }, tag = { { 255, 90, 90 }, { 255, 220, 80 }, { 90, 220, 120 }, { 90, 160, 255 }, { 200, 110, 255 } } },
 	{ id = "tag_vip", slot = "NameTag", name = "VIP Tag", rarity = "Legendary", price = 0, pass = "Vip", color = { 255, 210, 80 }, tag = { { 255, 240, 150 }, { 255, 180, 40 } } },
 
 	-- Toys: lobby throwables, owned forever ---------------------------------------------------------------
@@ -154,7 +154,7 @@ local list: { Item } = {
 	{ id = "toy_pie", slot = "Toy", name = "Cream Pie", rarity = "Rare", price = 600, toy = "Pie", color = { 255, 235, 200 } },
 	{ id = "toy_balloon", slot = "Toy", name = "Water Balloon", rarity = "Epic", price = 1200, toy = "Balloon", color = { 80, 170, 255 } },
 	{ id = "toy_fish", slot = "Toy", name = "Fish Slap", rarity = "Epic", price = 1500, label = "NEW", toy = "Fish", color = { 150, 190, 210 } },
-	{ id = "toy_confetti", slot = "Toy", name = "Confetti Bomb", rarity = "Legendary", price = 0, robuxProductId = 0, robux = 49, toy = "Confetti", color = { 255, 120, 200 } },
+	{ id = "toy_confetti", slot = "Toy", name = "Confetti Bomb", rarity = "Legendary", price = 0, robuxProductId = 3729794609, robux = 49, toy = "Confetti", color = { 255, 120, 200 } },
 }
 
 local byId: { [string]: Item } = {}
