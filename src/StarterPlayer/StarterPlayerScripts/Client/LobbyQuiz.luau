@@ -26,6 +26,9 @@ local Windows = require(script.Parent.Windows)
 local RESULT_SECONDS = 1.6
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
 local TEMPLATE_WAIT = 10
+local WAIT_SECONDS = 10 -- most seconds to wait for the authored screen and its children before giving up
+local ready = false
+local missing: string? = nil
 local CAP_PROMPT_TEXT = "THAT'S TODAY'S WARM-UP LIMIT: MATCHES STILL PAY!"
 local CAP_RESULT_TEXT = "WARM-UP SHELLS MAXED TODAY: MATCHES STILL PAY!"
 
@@ -407,19 +410,46 @@ local function bindExtras()
 	end
 end
 
+local function waitChild(parent: Instance?, name: string): Instance?
+	if parent == nil or missing ~= nil then
+		return nil
+	end
+	local found = parent:WaitForChild(name, WAIT_SECONDS)
+	if found == nil then
+		missing = name
+	end
+	return found
+end
+
 function LobbyQuiz.init(playerGui: PlayerGui)
-	gui = Ui.screen(playerGui, "LobbyQuiz") :: Frame
-	panel = gui:WaitForChild("Panel") :: Frame
-	headerBar = panel:WaitForChild("HeaderBar") :: Frame
-	header = headerBar:WaitForChild("Header") :: TextLabel
-	promptText = panel:WaitForChild("PromptText") :: TextLabel
-	timerFill = panel:WaitForChild("TimerTrack"):WaitForChild("TimerFill") :: Frame
-	answerBox = panel:WaitForChild("AnswerBox") :: TextBox
-	submitButton = panel:WaitForChild("SubmitButton") :: TextButton
-	skipButton = panel:WaitForChild("SkipButton") :: TextButton
-	result = gui:WaitForChild("Result") :: Frame
-	resultTier = result:WaitForChild("TierText") :: TextLabel
-	resultCoins = result:WaitForChild("CoinsText") :: TextLabel
+	local guiFound = Ui.screen(playerGui, "LobbyQuiz", WAIT_SECONDS)
+	local panelFound = waitChild(guiFound, "Panel")
+	local headerBarFound = waitChild(panelFound, "HeaderBar")
+	local headerFound = waitChild(headerBarFound, "Header")
+	local promptFound = waitChild(panelFound, "PromptText")
+	local timerFillFound = waitChild(waitChild(panelFound, "TimerTrack"), "TimerFill")
+	local answerBoxFound = waitChild(panelFound, "AnswerBox")
+	local submitFound = waitChild(panelFound, "SubmitButton")
+	local skipFound = waitChild(panelFound, "SkipButton")
+	local resultFound = waitChild(guiFound, "Result")
+	local tierFound = waitChild(resultFound, "TierText")
+	local coinsFound = waitChild(resultFound, "CoinsText")
+	if guiFound == nil or missing ~= nil then
+		warn("LobbyQuiz: LobbyUi.LobbyQuiz is missing " .. (missing or "entirely") .. "; no warm-up quiz")
+		return
+	end
+	gui = guiFound :: Frame
+	panel = panelFound :: Frame
+	headerBar = headerBarFound :: Frame
+	header = headerFound :: TextLabel
+	promptText = promptFound :: TextLabel
+	timerFill = timerFillFound :: Frame
+	answerBox = answerBoxFound :: TextBox
+	submitButton = submitFound :: TextButton
+	skipButton = skipFound :: TextButton
+	result = resultFound :: Frame
+	resultTier = tierFound :: TextLabel
+	resultCoins = coinsFound :: TextLabel
 	submitText = submitButton.Text
 	skipText = skipButton.Text
 	basePosition = panel.Position
@@ -462,6 +492,7 @@ function LobbyQuiz.init(playerGui: PlayerGui)
 	end)
 	updateHeader()
 	task.spawn(bindExtras)
+	ready = true
 end
 
 -- The wallet chip shows the balance; the header shows today's warm-up progress instead, which arrives
@@ -469,6 +500,9 @@ end
 function LobbyQuiz.setCash(_value: number) end
 
 function LobbyQuiz.onPrompt(payload)
+	if not ready then
+		return
+	end
 	held = false
 	-- Stepping on to the arc never replaces a window that is already up (the tutorial, the shop): wait for it.
 	if payload ~= nil and not gui.Visible and Windows.anyOpen() then
@@ -518,6 +552,9 @@ function LobbyQuiz.onPrompt(payload)
 end
 
 function LobbyQuiz.onResult(payload)
+	if not ready then
+		return
+	end
 	if type(payload) ~= "table" then
 		return
 	end

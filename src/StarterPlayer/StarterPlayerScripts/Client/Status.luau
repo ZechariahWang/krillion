@@ -15,6 +15,10 @@ local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
+local WAIT_SECONDS = 10 -- most seconds to wait for the authored screen and its children before giving up
+local ready = false
+local missing: string? = nil
+
 local statusGui: Frame
 local statusFrame: Frame
 local statusText: TextLabel
@@ -65,21 +69,44 @@ local function setStatus(text: string)
 	Ui.appear(statusFrame)
 end
 
+local function waitChild(parent: Instance?, name: string): Instance?
+	if parent == nil or missing ~= nil then
+		return nil
+	end
+	local found = parent:WaitForChild(name, WAIT_SECONDS)
+	if found == nil then
+		missing = name
+	end
+	return found
+end
+
 function Status.init(playerGui: PlayerGui)
-	local gui = Ui.screen(playerGui, "Status") :: Frame
+	local gui = Ui.screen(playerGui, "Status", WAIT_SECONDS)
+	local frameFound = waitChild(gui, "StatusFrame")
+	local statusFound = waitChild(frameFound, "Status")
+	local secondary = waitChild(gui, "SecondaryStatus")
+	local secondaryFound = waitChild(secondary, "Secondary")
+	local aliveFound = waitChild(secondary, "Alive")
+	local tideFound = waitChild(gui, "Tide")
+	local accentFound = waitChild(tideFound, "Accent")
+	local tideTextFound = waitChild(tideFound, "Text")
+	local plateFound = waitChild(frameFound, "Plate")
+	if gui == nil or missing ~= nil then
+		warn("Status: SharedUi.Status is missing " .. (missing or "entirely") .. "; no status chips")
+		return
+	end
 	-- The chips hide under an open window (its header carries what matters), except one that keeps them.
 	Windows.Changed.connect(function()
 		gui.Visible = not Windows.hidesStatus()
 	end)
-	statusGui = gui
-	statusFrame = gui:WaitForChild("StatusFrame") :: Frame
-	statusText = statusFrame:WaitForChild("Status") :: TextLabel
-	local secondary = gui:WaitForChild("SecondaryStatus")
-	secondaryText = secondary:WaitForChild("Secondary") :: TextLabel
-	aliveText = secondary:WaitForChild("Alive") :: TextLabel
-	tide = gui:WaitForChild("Tide") :: Frame
-	tideAccent = tide:WaitForChild("Accent") :: Frame
-	tideText = tide:WaitForChild("Text") :: TextLabel
+	statusGui = gui :: Frame
+	statusFrame = frameFound :: Frame
+	statusText = statusFound :: TextLabel
+	secondaryText = secondaryFound :: TextLabel
+	aliveText = aliveFound :: TextLabel
+	tide = tideFound :: Frame
+	tideAccent = accentFound :: Frame
+	tideText = tideTextFound :: TextLabel
 	-- The need hint is coloured inline so the accent keeps the special round's colour.
 	tideText.RichText = true
 	tide.Size = UDim2.new(math.max(tide.Size.X.Scale, TIDE_WIDTH), tide.Size.X.Offset, tide.Size.Y.Scale, tide.Size.Y.Offset)
@@ -87,7 +114,7 @@ function Status.init(playerGui: PlayerGui)
 	-- The prompt sits on a solid chunky plate so it reads over the busy arena (name tags, signs) behind it.
 	-- The authored Plate hugs the text.
 	local line = statusText.Size.Y
-	local plate = statusFrame:WaitForChild("Plate") :: Frame
+	local plate = plateFound :: Frame
 	local border = plate:FindFirstChildOfClass("UIStroke")
 	local screen = statusFrame:FindFirstAncestorWhichIsA("LayerCollector") :: LayerCollector?
 	local function fitPlate()
@@ -103,6 +130,7 @@ function Status.init(playerGui: PlayerGui)
 		screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitPlate)
 	end
 	fitPlate()
+	ready = true
 end
 
 local function tinted(text: string, color: Color3): string
@@ -163,6 +191,9 @@ end
 
 -- Shows `text` on the tide chip for `seconds` (over the need hint or a hidden chip), then puts it back.
 function Status.flashTide(text: string, color: Color3, seconds: number)
+	if not ready then
+		return
+	end
 	flashToken += 1
 	local token = flashToken
 	flashUntil = os.clock() + seconds
@@ -239,6 +270,9 @@ local function announceSpecial(payload)
 end
 
 function Status.onState(payload)
+	if not ready then
+		return
+	end
 	local phase = payload.phase
 	lastPayload = payload
 	secondaryText.TextColor3 = Theme.Color.Cream
