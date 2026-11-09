@@ -1004,6 +1004,10 @@ function RoundService.start()
 	Players.PlayerRemoving:Connect(function(player)
 		if match ~= nil then
 			MatchState.removePlayer(match, player)
+			local platform = platforms[player]
+			if platform ~= nil and platform.Parent ~= nil then
+				MapService.markSunk(platform)
+			end
 			platforms[player] = nil
 			sunkPlatforms[player] = nil
 			reviveOffers[player] = nil
