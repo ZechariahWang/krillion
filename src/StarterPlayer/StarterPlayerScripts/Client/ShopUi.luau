@@ -468,12 +468,17 @@ local function starterEntry(): Entry?
 	local entry = productEntry("STARTER PACK", pack.robux, pack.productId, Theme.Icon.Gift)
 	entry.rarity = "Epic"
 	entry.badge = pack.badge
-	-- Short enough to read on the card: the Shells and what kinds of items come with them.
+	-- Short enough to read on the card: the Shells and what kinds of items come with them, marking the ones
+	-- already owned (the pack then pays only its Shells for them).
 	local kinds = {}
 	for _, id in pack.items do
 		local item = Cosmetics.ById[id]
 		if item ~= nil then
-			table.insert(kinds, string.lower(item.slot))
+			local kind = string.lower(item.slot)
+			if profile.owned[id] == true then
+				kind = kind .. " (you own it)"
+			end
+			table.insert(kinds, kind)
 		end
 	end
 	entry.sub = Currency.digits(pack.cash) .. " " .. Theme.Icon.Shell .. " + " .. table.concat(kinds, " + ") .. ", one time only"
