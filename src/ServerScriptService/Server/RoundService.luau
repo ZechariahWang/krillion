@@ -229,6 +229,7 @@ local function broadcastState()
 			surging = surging,
 			special = special,
 			playerCount = #Players:GetPlayers(),
+			readyCount = #readyPlayers(),
 			starting = participantCount + #bots,
 			minPlayers = GameConfig.Round.MinPlayers,
 		})

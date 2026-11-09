@@ -23,6 +23,7 @@ export type RoundStatePayload = {
 	playing: boolean, -- is the receiving player on a platform this match
 	lateJoinOpen: boolean, -- the receiving player may jump into the running match now
 	playerCount: number,
+	readyCount: number, -- players with a living character who are not AFK: what the match actually waits on
 	minPlayers: number,
 	starting: number, -- players who started the current match
 	height: number,
