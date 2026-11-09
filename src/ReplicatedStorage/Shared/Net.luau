@@ -17,7 +17,6 @@ export type RoundStatePayload = {
 	alive: number,
 	aliveUserIds: { number },
 	lockedUserIds: { number }, -- who has locked in an answer this prompt
-	heights: { [string]: number }, -- tostring(userId) -> pillar height, alive players only
 	prompt: string?,
 	promptId: string?,
 	playing: boolean, -- is the receiving player on a platform this match
