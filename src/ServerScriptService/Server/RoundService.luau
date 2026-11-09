@@ -846,6 +846,7 @@ local function endMatch()
 		solo = contestants == 1,
 		rounds = round,
 		winnerName = winnerName,
+		winnerUserId = if winnerHere ~= nil then winnerHere.UserId else nil,
 		podium = top,
 		seconds = GameConfig.Round.ResultsSeconds,
 	})

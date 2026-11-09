@@ -83,6 +83,7 @@ export type MatchEndedPayload = {
 	solo: boolean,
 	rounds: number,
 	winnerName: string,
+	winnerUserId: number?, -- nil when nobody won or the winner has left
 	podium: { { name: string, points: number } },
 	seconds: number,
 }
