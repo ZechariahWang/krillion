@@ -138,10 +138,15 @@ export type ProfilePayload = {
 -- ChestResult: what a ChestOpen gave. status "ok" carries the item; others say why nothing opened.
 export type ChestResultPayload = {
 	chest: string,
-	status: string, -- "ok" | "no_shells" | "cooldown" | "limit" | "restricted"
+	status: string, -- "ok" | "no_shells" | "cooldown" | "limit" | "restricted" | "unknown" (policy not answered yet) | "refunded"
 	item: string?,
 	duplicate: boolean?,
 	refund: number?, -- Shells paid back for a duplicate
+}
+
+-- ShopResult: why a Shells buy did or did not go through.
+export type ShopResultPayload = {
+	status: string, -- "ok" | "cash" | "owned" | "unknown"
 }
 
 -- ToyHit (to every client): a lobby throw. `to` is the target's UserId; the toy lands after FlightSeconds.
