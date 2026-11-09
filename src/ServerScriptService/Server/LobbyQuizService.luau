@@ -225,6 +225,17 @@ local function onSkip(player: Player)
 end
 
 -- The match's prompt must not double as anyone's warm-up: its answers would show up in the reveal.
+-- Prompt ids any of these players warmed up on recently, so a match never asks what they just practised.
+function LobbyQuizService.recentPromptIds(players: { Player }): { [string]: boolean }
+	local ids: { [string]: boolean } = {}
+	for _, player in players do
+		for _, id in recent[player] or {} do
+			ids[id] = true
+		end
+	end
+	return ids
+end
+
 -- The match is taking this player: their open prompt closes now, before the screen goes black.
 function LobbyQuizService.stopFor(player: Player)
 	if current[player] ~= nil then

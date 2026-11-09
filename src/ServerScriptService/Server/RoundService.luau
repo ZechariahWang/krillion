@@ -635,7 +635,11 @@ local function runPrompt()
 	special = SpecialRound.pick(round, special, math.random(), math.random())
 	roundSurge = SpecialRound.surge(round, special)
 	MatchState.forgetCull(match :: MatchState.State)
-	local prompt = AnswerService.randomPrompt(usedPromptIds)
+	local exclude = table.clone(usedPromptIds)
+	for id in LobbyQuizService.recentPromptIds(alivePlayers()) do
+		exclude[id] = true
+	end
+	local prompt = AnswerService.randomPrompt(exclude)
 	usedPromptIds[prompt.id] = true
 	currentPrompt = prompt
 	LobbyQuizService.setLivePromptId(prompt.id)
