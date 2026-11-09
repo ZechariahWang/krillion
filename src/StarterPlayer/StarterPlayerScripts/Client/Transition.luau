@@ -87,16 +87,22 @@ function Transition.onState(payload)
 			task.delay(HOLD_SECONDS, fadeOut)
 		end
 		local seconds = payload.secondsLeft
-		if payload.playing and seconds > 0 and seconds ~= lastShown then
+		if not payload.playing then
+			hideText()
+		elseif seconds > 0 and seconds ~= lastShown then
 			lastShown = seconds
 			showText(tostring(seconds))
 			Sfx.play("Tick", 0.6, 1 + 0.1 * (3 - seconds))
 		end
-	elseif phase == "Prompt" and lastPhase == "Starting" and payload.playing then
+	elseif phase == "Prompt" and lastPhase == "Starting" then
 		fadeOut()
-		showText("GO!")
-		Sfx.play("LockIn", 0.8)
-		task.delay(GO_SECONDS, hideText)
+		if payload.playing then
+			showText("GO!")
+			Sfx.play("LockIn", 0.8)
+			task.delay(GO_SECONDS, hideText)
+		else
+			hideText()
+		end
 	elseif phase ~= "Prompt" then
 		hideText()
 		if phase ~= "Intermission" then
