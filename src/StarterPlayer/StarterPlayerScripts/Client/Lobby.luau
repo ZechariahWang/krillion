@@ -340,7 +340,7 @@ function Lobby.onState(payload)
 	playing = payload.playing == true
 	joinOpen = payload.lateJoinOpen == true
 	joinRound = if type(payload.round) == "number" then payload.round else 0
-	gui.Visible = not payload.playing
+	gui.Visible = inMatch and not playing
 	if payload.playing then
 		eliminatedWaiting = false
 		stopSpectating()
