@@ -225,6 +225,13 @@ local function onSkip(player: Player)
 end
 
 -- The match's prompt must not double as anyone's warm-up: its answers would show up in the reveal.
+-- The match is taking this player: their open prompt closes now, before the screen goes black.
+function LobbyQuizService.stopFor(player: Player)
+	if current[player] ~= nil then
+		stop(player)
+	end
+end
+
 function LobbyQuizService.setLivePromptId(id: string?)
 	livePromptId = id
 	if id == nil then

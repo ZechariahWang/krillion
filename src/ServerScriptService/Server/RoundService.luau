@@ -862,6 +862,7 @@ end
 local function introFade()
 	local seconds = GameConfig.Round.IntroFadeSeconds
 	for _, player in readyPlayers() do
+		LobbyQuizService.stopFor(player)
 		Net.event("MatchIntro"):FireClient(player, { fadeSeconds = seconds })
 	end
 	task.wait(seconds)
