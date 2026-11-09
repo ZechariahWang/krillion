@@ -177,6 +177,16 @@ local function setTouchControls(enabled: boolean)
 	end
 end
 
+local touchControlsOn = true
+
+local function applyTouchControls(enabled: boolean)
+	if enabled == touchControlsOn then
+		return
+	end
+	touchControlsOn = enabled
+	setTouchControls(enabled)
+end
+
 -- One frame later: a focus grab in the same frame as the Enter press that released the box is dropped.
 local function keepFocus()
 	task.delay(0, function()
@@ -733,6 +743,7 @@ end
 -- You sank or reset: your meter and answer bar go now, not on the next state tick.
 function Hud.onEliminated()
 	playing = false
+	applyTouchControls(true)
 	meter.Visible = false
 	answerBar.Visible = false
 	banner.Visible = false
@@ -743,10 +754,8 @@ function Hud.onState(payload)
 	if type(payload.prompt) == "string" then
 		promptText = string.upper(payload.prompt)
 	end
-	if (payload.playing == true) ~= playing then
-		setTouchControls(payload.playing ~= true)
-	end
 	playing = payload.playing == true
+	applyTouchControls(not playing)
 	local mine = payload.yourSecondsLeft
 	outOfTime = phase == "Prompt" and mine ~= nil and mine <= 0
 	local inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
