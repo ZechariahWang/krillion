@@ -145,7 +145,7 @@ local function announceSunk(after: { number })
 	local text = TideRules.sunkText(sunkNames, SUNK_NAMES)
 	if text ~= nil then
 		Toasts.show(text, "info")
-	elseif sunkCount == 0 and #after >= 2 then
+	elseif sunkCount == 0 and #after >= 2 and wasPlaying then
 		Toasts.show("EVERYONE STAYED AFLOAT!", "good")
 	end
 end
@@ -171,9 +171,10 @@ local function onSurge(payload)
 		-- First Surge broadcast: the water is about to move. A faint rumble, then a firmer one on the jump.
 		aliveBefore = payload.aliveUserIds
 		wasPlaying = payload.playing == true
-		if wasPlaying then
-			Fx.callout("THE WATER RISES +" .. oneDecimal(payload.surge), Theme.Color.Water)
+		if not wasPlaying then
+			return
 		end
+		Fx.callout("THE WATER RISES +" .. oneDecimal(payload.surge), Theme.Color.Water)
 		Fx.shake(GameConfig.Water.CreepSeconds, 0.06)
 		task.delay(GameConfig.Water.CreepSeconds, function()
 			Fx.shake(GameConfig.Water.JumpSeconds + 0.2, 0.3)
