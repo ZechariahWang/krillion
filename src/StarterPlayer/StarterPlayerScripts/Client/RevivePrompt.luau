@@ -14,6 +14,8 @@ local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
 local WAIT_SECONDS = 10
+local CONFIRM_SECONDS = 3 -- how long USE waits for the server to put you back before giving up
+local CONFIRM_POLL = 0.1
 
 local gui: Frame
 local card: Frame
@@ -47,6 +49,22 @@ local function hide(revived: boolean)
 	gui.Visible = false
 	offer = nil
 	Lobby.setReviveOpen(false, revived)
+end
+
+-- After USE: celebrate only once the server has put you back on a pillar. A refused or late press brings
+-- the eliminated card back instead.
+local function awaitRevive()
+	local player = Players.LocalPlayer
+	local deadline = os.clock() + CONFIRM_SECONDS
+	while os.clock() < deadline do
+		if player:GetAttribute("Playing") == true then
+			Lobby.setReviveOpen(false, true)
+			Sfx.play("Fanfare", 0.5)
+			return
+		end
+		task.wait(CONFIRM_POLL)
+	end
+	Lobby.setReviveOpen(false, false)
 end
 
 function RevivePrompt.init(playerGui: PlayerGui)
@@ -86,9 +104,10 @@ function RevivePrompt.init(playerGui: PlayerGui)
 			return
 		end
 		token += 1
-		hide(true)
-		Sfx.play("Fanfare", 0.5)
+		gui.Visible = false
+		offer = nil
 		Net.event("ReviveUse"):FireServer()
+		task.spawn(awaitRevive)
 	end)
 	-- A finished Revive Now purchase: the server puts you back, so the card can go.
 	MarketplaceService.PromptProductPurchaseFinished:Connect(function(userId, productId, purchased)
