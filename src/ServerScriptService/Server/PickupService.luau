@@ -19,6 +19,8 @@ local ISLAND_Z_MAX = 76
 local TANK_CLEAR = 52 -- no shells within this radius of the tank centre (glass and rim rocks)
 local LOWEST = -1 -- below this the ray hit the slope under water
 local HIGHEST = 25
+local FLAT_NORMAL_Y = 0.7 -- a part's surface counts as floor when its normal points at least this far up
+local LIFETIME_SECONDS = 120 -- an untaken shell goes after this, so the island restocks somewhere else
 
 local folder: Folder
 local taken: { [Player]: number } = {} -- Shells picked up this visit
@@ -32,10 +34,28 @@ local function template(): Model?
 	return if found ~= nil and found:IsA("Model") then found else nil
 end
 
+-- Sand, or the flat top of a solid lobby part (the deck, the stairs), not a lamp, a sign or bunting.
+local function isWalkable(hit: RaycastResult): boolean
+	if hit.Instance == workspace.Terrain then
+		return true
+	end
+	local lobby = workspace:FindFirstChild("Lobby")
+	if lobby == nil or not hit.Instance:IsDescendantOf(lobby) then
+		return false
+	end
+	local part = hit.Instance
+	if not part:IsA("BasePart") or not part.CanCollide then
+		return false
+	end
+	return hit.Normal.Y > FLAT_NORMAL_Y
+end
+
 -- A random standing spot on the island: sand or the lobby deck, out of the water and clear of the tank.
 local function findSpot(): Vector3?
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
+	-- Bunting and other walk-through decor let the ray fall on to what is under it.
+	params.RespectCanCollide = true
 	local ignore: { Instance } = { folder }
 	for _, player in Players:GetPlayers() do
 		if player.Character ~= nil then
@@ -53,8 +73,7 @@ local function findSpot(): Vector3?
 		if hit == nil then
 			continue
 		end
-		local onGround = hit.Instance == workspace.Terrain or hit.Instance:IsDescendantOf(workspace:FindFirstChild("Lobby") or workspace.Terrain)
-		if onGround and hit.Material ~= Enum.Material.Water and hit.Position.Y > LOWEST and hit.Position.Y < HIGHEST then
+		if isWalkable(hit) and hit.Material ~= Enum.Material.Water and hit.Position.Y > LOWEST and hit.Position.Y < HIGHEST then
 			return hit.Position + Vector3.new(0, LIFT, 0)
 		end
 	end
@@ -65,12 +84,13 @@ local function collect(shell: Model, player: Player)
 	if shell.Parent == nil then
 		return
 	end
-	shell:Destroy()
+	-- A player at the cap leaves the shell for someone else.
 	local config = GameConfig.Pickups
 	local soFar = taken[player] or 0
 	if soFar >= config.SessionCap then
 		return
 	end
+	shell:Destroy()
 	taken[player] = soFar + config.Shells
 	StoreService.grantShells(player, config.Shells, "pickup")
 end
@@ -95,6 +115,11 @@ local function spawnOne()
 		end
 	end)
 	shell.Parent = folder
+	task.delay(LIFETIME_SECONDS, function()
+		if shell.Parent ~= nil then
+			shell:Destroy()
+		end
+	end)
 end
 
 function PickupService.start()
