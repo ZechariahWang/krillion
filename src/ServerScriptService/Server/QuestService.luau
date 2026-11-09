@@ -104,6 +104,10 @@ local function creditPlayTime(player: Player, now: number)
 	if last == nil then
 		return
 	end
+	-- AFK time still moves the tick forward, so going back to play does not credit the idle stretch.
+	if player:GetAttribute("Afk") == true then
+		return
+	end
 	local seconds = math.floor(now - last + 0.5)
 	if seconds > 0 then
 		QuestService.advance(player, "play_seconds", seconds)
