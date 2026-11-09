@@ -180,7 +180,7 @@ local function onAnswer(player: Player, text: any)
 	local cap = GameConfig.Lobby.DailyShellCap
 	local earned = DataService.lobbyEarnedToday(player, day)
 	local cash, capped = 0, earned >= cap
-	if DataService.isLoaded(player) then
+	if DataService.isLoaded(player) and not DataService.isReadOnly(player) then
 		cash, capped = Economy.lobbyPayout(graded.points, StoreService.cashMultiplier(player), earned, cap)
 		if cash > 0 then
 			StoreService.grantShells(player, cash, "warmup")
