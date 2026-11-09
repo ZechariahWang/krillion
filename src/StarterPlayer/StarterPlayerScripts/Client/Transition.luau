@@ -79,6 +79,11 @@ function Transition.onIntro(payload)
 	end)
 end
 
+-- Eliminated: a digit still up from the 3-2-1 goes now, not on the next state tick.
+function Transition.onEliminated()
+	hideText()
+end
+
 -- RoundState payload.
 function Transition.onState(payload)
 	local phase = payload.phase
