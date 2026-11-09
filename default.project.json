@@ -4,11 +4,13 @@
     "$className": "DataModel",
     "ServerScriptService": {
       "$className": "ServerScriptService",
-      "$path": "src/ServerScriptService"
+      "$path": "src/ServerScriptService",
+      "$ignoreUnknownInstances": true
     },
     "ServerStorage": {
       "$className": "ServerStorage",
       "$path": "src/ServerStorage",
+      "$ignoreUnknownInstances": true,
       "PhysicalAssets": {
         "$className": "Folder",
         "$ignoreUnknownInstances": true
@@ -36,7 +38,8 @@
       "$className": "StarterPlayer",
       "StarterPlayerScripts": {
         "$className": "StarterPlayerScripts",
-        "$path": "src/StarterPlayer/StarterPlayerScripts"
+        "$path": "src/StarterPlayer/StarterPlayerScripts",
+        "$ignoreUnknownInstances": true
       },
       "StarterCharacterScripts": {
         "$className": "StarterCharacterScripts",
@@ -51,7 +54,8 @@
     },
     "StarterPack": {
       "$className": "StarterPack",
-      "$path": "src/StarterPack"
+      "$path": "src/StarterPack",
+      "$ignoreUnknownInstances": true
     },
     "Workspace": {
       "$className": "Workspace",
