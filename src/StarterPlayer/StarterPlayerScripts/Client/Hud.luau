@@ -190,7 +190,7 @@ end
 -- One frame later: a focus grab in the same frame as the Enter press that released the box is dropped.
 local function keepFocus()
 	task.delay(0, function()
-		if answerBox.Visible and answerBar.Visible then
+		if gui.Visible and answerBox.Visible and answerBar.Visible then
 			answerBox:CaptureFocus()
 		end
 	end)
@@ -746,6 +746,7 @@ function Hud.onEliminated()
 	applyTouchControls(true)
 	meter.Visible = false
 	answerBar.Visible = false
+	answerBox:ReleaseFocus()
 	banner.Visible = false
 end
 
@@ -761,6 +762,7 @@ function Hud.onState(payload)
 	local inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
 	gui.Visible = inMatch
 	if not inMatch then
+		answerBox:ReleaseFocus()
 		lastPhase = phase
 		refreshBoosts()
 		return
