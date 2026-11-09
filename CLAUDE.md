@@ -6,6 +6,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 
 - Tests: `lune run tests/run.luau` (pure modules under `src/ReplicatedStorage/Shared`, plus the prompt bank).
 - Build check: `rojo build default.project.json -o <scratch>.rbxl`.
+- Syntax check of every script, including Roblox-side ones the tests cannot run: `lune run tests/syntax.luau src`
+  (compiles with `@lune/luau`; there is no luau-analyze). Run it after editing client or server code.
 
 ## Studio is the source of truth for instances
 
@@ -23,6 +25,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   sea floor (y -28) 64 studs out, on every side; partial-occupancy sand keeps it smooth under water. Terrain sea
   (sand y -32..-28, water to y -4) reaches 1024 studs out; eight `Arena.FarSea` planes carry it to 3072. The
   pre-slope, pre-carve terrain is `PhysicalAssets.TerrainBackup` (a TerrainRegion; `Terrain:PasteRegion` restores it).
+- Every `default.project.json` node carries `$ignoreUnknownInstances`, so Studio-only children are kept on
+  sync; only renaming or removing a declared node still deletes.
 - Renaming or removing a `default.project.json` node while Rojo is connected makes Rojo delete the old instance
   with everything in it. Move the contents out first (or undo the "Rojo: Patch" waypoint).
 - Declaring a new node in `default.project.json` while Rojo is connected makes Rojo create an empty placeholder
@@ -82,6 +86,10 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   release it once the spot has streamed in, so nobody falls through a pillar their client does not have yet.
 - Dying or respawning while alive in a match eliminates the player (RoundService), like sinking.
 - Settings: music on/off and volume are saved in the profile (`musicOff`, `musicVolume`); AFK is session only.
+- Profiles: a load that fails after retries leaves the player read-only (`DataService.isReadOnly`): no spends,
+  payouts or saves, `loadFailed` in the payload, retried every 60 s. Studio is exempt and gets a throwaway
+  writable profile, so local tests never go read-only. A stored `activeSession` marker makes a second server
+  wait up to 10 s for the first one's leave-save.
 
 ## UI layout
 
@@ -95,6 +103,9 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
   The name-to-root map is `ROOT_OF` in `Client/Ui.luau`; update it when a screen moves.
+- Controllers wait at most 10 s (`WAIT_SECONDS`) for their screen and children, then warn and set a `ready`
+  flag false so their handlers do nothing. Never wait without a timeout in `init`: Main's init chain is
+  synchronous and one missing child would stall every controller after it.
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
@@ -130,3 +141,9 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - A Creator Store decal id does not load in an ImageLabel; `InsertService:LoadAsset(decalId)` gives the Decal
   whose `Texture` is the image id.
 - `user_keyboard_input` with an `instance_path` clicks that instance first; to type into a focused box, omit it.
+- `get_console_output` returns only Edit-context lines. In play, run `game:GetService("LogService"):GetLogHistory()`
+  on the Client or Server datamodel to read the game's output.
+- `ServerStorage.KrillionDebug:Invoke("state")` (Server datamodel, DebugService) returns the match snapshot:
+  phase, round, alive ids, heights, water level, prompt.
+- Screenshots come back at 1596x1080 but the viewport is 1152x779; `user_mouse_input` takes viewport pixels.
+- With `MinPlayers = 1` a solo match starts 15 s after joining. To test the lobby, turn AFK on in Settings first.
