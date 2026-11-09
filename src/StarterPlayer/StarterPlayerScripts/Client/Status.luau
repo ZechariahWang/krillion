@@ -95,11 +95,11 @@ function Status.init(playerGui: PlayerGui)
 		warn("Status: SharedUi.Status is missing " .. (missing or "entirely") .. "; no status chips")
 		return
 	end
+	statusGui = gui :: Frame
 	-- The chips hide under an open window (its header carries what matters), except one that keeps them.
 	Windows.Changed.connect(function()
-		gui.Visible = not Windows.hidesStatus()
+		statusGui.Visible = not Windows.hidesStatus()
 	end)
-	statusGui = gui :: Frame
 	statusFrame = frameFound :: Frame
 	statusText = statusFound :: TextLabel
 	secondaryText = secondaryFound :: TextLabel
