@@ -11,6 +11,9 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local DataService = require(script.Parent.DataService)
 
 local TAG_NAME = "AfkTag"
+local COOLDOWN_SECONDS = 0.5 -- per player, between SetSetting requests
+
+local lastSetAt: { [Player]: number } = {}
 
 local SettingsService = {}
 
@@ -25,12 +28,16 @@ local function removeTag(character: Model?)
 	end
 end
 
-local function addTag(character: Model?)
+local function addTag(player: Player, character: Model?)
 	if character == nil then
 		return
 	end
 	local head = character:WaitForChild("Head", 10)
 	if head == nil or head:FindFirstChild(TAG_NAME) ~= nil then
+		return
+	end
+	-- The wait can be long: AFK may have been switched off meanwhile.
+	if player:GetAttribute("Afk") ~= true then
 		return
 	end
 	local templates = ReplicatedStorage:FindFirstChild("Templates")
@@ -47,13 +54,19 @@ end
 local function setAfk(player: Player, afk: boolean)
 	player:SetAttribute("Afk", afk)
 	if afk then
-		addTag(player.Character)
+		addTag(player, player.Character)
 	else
 		removeTag(player.Character)
 	end
 end
 
 local function onSetSetting(player: Player, key: any, value: any)
+	local now = os.clock()
+	local last = lastSetAt[player]
+	if last ~= nil and now - last < COOLDOWN_SECONDS then
+		return
+	end
+	lastSetAt[player] = now
 	if key == "MusicVolume" then
 		if typeof(value) == "number" and value == value then
 			DataService.setMusicVolume(player, value)
@@ -73,7 +86,7 @@ end
 local function watch(player: Player)
 	player.CharacterAdded:Connect(function(character)
 		if player:GetAttribute("Afk") == true then
-			addTag(character)
+			addTag(player, character)
 		end
 	end)
 end
@@ -81,6 +94,9 @@ end
 function SettingsService.start()
 	Net.event("SetSetting").OnServerEvent:Connect(onSetSetting)
 	Players.PlayerAdded:Connect(watch)
+	Players.PlayerRemoving:Connect(function(player)
+		lastSetAt[player] = nil
+	end)
 	for _, player in Players:GetPlayers() do
 		watch(player)
 	end
