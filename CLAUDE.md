@@ -36,7 +36,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   unused.
 - Sea dressing: `Arena.Reef.Coral.Extra` and `Arena.Beach.GrassExtra` hold the extra kelp, coral and tufts;
   `Arena.SeaLife` also holds six `Sailboat` models (part-built yachts floating at the water level, y -4:
-  tapered hull, cabin, rails, mast with stays, main and jib), `Seagull` and `Buoy` models (Persistent, `Speed`
+  tapered hull, cabin, rails, mast, main and jib hung along the boom so their faces show from the island), `Seagull` and `Buoy` models (Persistent, `Speed`
   attribute) that SeaLife moves round the island.
 - Phones play landscape only (`StarterGui.ScreenOrientation`); `Hud.AnswerBar` moves above the on-screen keyboard
   and its `PromptEcho` label repeats the prompt there.

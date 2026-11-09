@@ -1082,10 +1082,18 @@ local function bindWindow(playerGui: PlayerGui, name: string, inventory: boolean
 		Sfx.play("Close", 0.5)
 		openWindow(w, false)
 	end)
+	-- The Scrim sees every press, including those over the panel on top of it; only a press outside closes.
 	w.scrim.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			openWindow(w, false)
+		if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then
+			return
 		end
+		local corner = panel.AbsolutePosition
+		local size = panel.AbsoluteSize
+		local x, y = input.Position.X, input.Position.Y
+		if x >= corner.X and x <= corner.X + size.X and y >= corner.Y and y <= corner.Y + size.Y then
+			return
+		end
+		openWindow(w, false)
 	end)
 	table.insert(windows, w)
 	return w
