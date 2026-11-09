@@ -26,6 +26,7 @@ local READ_ONLY_RETRY_SECONDS = 60
 local SESSION_FRESH_SECONDS = 90 -- a marker older than this is from a server that died without clearing it
 local SESSION_WAIT_TRIES = 5
 local SESSION_WAIT_SECONDS = 2
+local PROFILE_REQUEST_COOLDOWN = 1
 
 -- An unpublished place (a local test copy) has no DataStore access and GetDataStore throws. Players then
 -- get a fresh profile that never saves, instead of the error stopping every server script.
@@ -72,6 +73,8 @@ local loadInfo: { [Player]: LoadInfo } = {}
 local extraPayloads: { (Player) -> { [string]: any } } = {}
 local unloading: { [Player]: boolean } = {}
 local pendingUnloads = 0
+local sendQueued: { [Player]: boolean } = {}
+local lastRequest: { [Player]: number } = {}
 
 local DataService = {}
 
@@ -154,7 +157,7 @@ local function updateLeaderstats(player: Player, profile: Profile.Profile)
 	end
 end
 
-function DataService.changed(player: Player)
+local function sendProfile(player: Player)
 	local profile = DataService.get(player)
 	if profile == nil then
 		return
@@ -192,6 +195,18 @@ function DataService.changed(player: Player)
 		payload.loadFailed = true
 	end
 	Net.event("ProfileChanged"):FireClient(player, payload)
+end
+
+-- Sends the profile at the end of this frame, once however many changes it had.
+function DataService.changed(player: Player)
+	if sendQueued[player] then
+		return
+	end
+	sendQueued[player] = true
+	task.defer(function()
+		sendQueued[player] = nil
+		sendProfile(player)
+	end)
 end
 
 local function sessionMarker(): Profile.ActiveSession
@@ -736,6 +751,7 @@ local function unload(player: Player)
 	stored[player] = nil
 	sessions[player] = nil
 	loadInfo[player] = nil
+	lastRequest[player] = nil
 	unloading[player] = nil
 	pendingUnloads -= 1
 end
@@ -749,6 +765,11 @@ function DataService.start()
 	-- The client asks once its listeners are connected: the first ProfileChanged often goes out before that.
 	-- A profile still loading pushes itself when it lands.
 	Net.event("ProfileRequest").OnServerEvent:Connect(function(player)
+		local now = os.clock()
+		if now - (lastRequest[player] or -math.huge) < PROFILE_REQUEST_COOLDOWN then
+			return
+		end
+		lastRequest[player] = now
 		if DataService.isLoaded(player) then
 			DataService.changed(player)
 		end
