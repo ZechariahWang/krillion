@@ -349,6 +349,7 @@ local CHEST_MESSAGES: { [string]: string } = {
 	restricted = "CHESTS AREN'T AVAILABLE WHERE YOU LIVE",
 	cooldown = "ONE CHEST AT A TIME",
 	unknown = "CHESTS AREN'T READY YET  |  TRY AGAIN SHORTLY",
+	refunded = "THAT CHEST JAMMED  |  " .. Currency.Upper .. " REFUNDED",
 }
 
 -- ChestReveal shows a prize; this only explains a refusal.

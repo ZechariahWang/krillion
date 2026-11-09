@@ -110,12 +110,17 @@ local function open(player: Player, chestId: any)
 
 	local itemId = Chests.roll(chest, random:NextNumber())
 	local item = Cosmetics.ById[itemId]
+	if item == nil then
+		warn("ChestService: " .. chestId .. " rolled unknown item " .. tostring(itemId) .. "; refunding")
+		StoreService.grantShells(player, chest.price, "refund")
+		return reply(player, { chest = chestId, status = "refunded", refund = chest.price })
+	end
 	local duplicate = profile.owned[itemId] == true
 	local refund = 0
 	if duplicate then
 		refund = Chests.refund(chest)
 		StoreService.grantShells(player, refund, "refund")
-	elseif item ~= nil then
+	else
 		DataService.grantItem(player, itemId)
 		DataService.equip(player, item.slot, itemId)
 		CosmeticService.refresh(player)
