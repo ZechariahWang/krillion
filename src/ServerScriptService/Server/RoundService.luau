@@ -361,9 +361,18 @@ local function liveOffer(player: Player): boolean
 		and PlayerService.hasCharacter(player)
 end
 
+-- A revive the glide could not finish (the match ended under it) goes back where it came from.
+local function refundRevive(player: Player, kind: string)
+	reviveUsed[player] = nil
+	if kind == "stock" or kind == "buy" then
+		DataService.addRevives(player, 1)
+		NotifyService.send(player, "REVIVE SAVED FOR YOUR NEXT MATCH", "info")
+	end
+end
+
 -- Puts a sunk player back on their own pillar just above the water. The caller has checked liveOffer and
--- taken payment.
-local function restore(player: Player)
+-- taken payment; `kind` is the offer's kind (Economy.reviveOffer), so the payment can go back if this fails.
+local function restore(player: Player, kind: string)
 	reviveOffers[player] = nil
 	reviveUsed[player] = true
 	local state = match :: MatchState.State
@@ -376,6 +385,7 @@ local function restore(player: Player)
 	MapService.setPlatformName(platform, player.DisplayName)
 	MapService.glidePlatformTop(platform, top, 0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 	if match ~= state or platform.Parent == nil then
+		refundRevive(player, kind)
 		return
 	end
 	PlayerService.sendToPlatform(player, platform)
@@ -406,7 +416,7 @@ local function onReviveUse(player: Player)
 	else
 		return
 	end
-	restore(player)
+	restore(player, offer.kind)
 end
 
 -- Revive Now's receipt: revives at once while the offer is live; a late receipt is never lost, it becomes
@@ -414,7 +424,7 @@ end
 local function onReviveBought(player: Player)
 	local offer = reviveOffers[player]
 	if offer ~= nil and offer.kind == "buy" and liveOffer(player) then
-		task.spawn(restore, player)
+		task.spawn(restore, player, "buy")
 		return
 	end
 	DataService.addRevives(player, 1)
