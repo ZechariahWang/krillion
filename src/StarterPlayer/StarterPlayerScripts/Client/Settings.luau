@@ -38,6 +38,7 @@ local dragging = false
 local dragEndedAt = -math.huge -- os.clock() of the last slider release
 local DRAG_GRACE = 0.25 -- seconds after a slider release in which a Scrim tap is ignored
 local isOpen = false
+local playing = false
 
 local Settings = {}
 
@@ -158,11 +159,11 @@ local function placeGear()
 	end
 end
 
--- The gear hides while any window is open (its own included), so nothing stacks on top.
+-- The gear hides on a pillar and while any window is open (its own included), so nothing stacks on top.
 local function showGear()
 	local button = gear
 	if button ~= nil then
-		button.Visible = not Windows.anyOpen()
+		button.Visible = not playing and not Windows.anyOpen()
 	end
 end
 
@@ -304,6 +305,15 @@ local function bind(found: Frame)
 	player:GetAttributeChangedSignal("Afk"):Connect(refresh)
 	found:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
 	refresh()
+end
+
+-- RoundState payload: a match takes the window down and hides the gear until the player is off the pillar.
+function Settings.onState(payload)
+	playing = payload.playing == true
+	if playing then
+		close()
+	end
+	showGear()
 end
 
 -- ProfileChanged payload: keeps the MUSIC toggle in step with the saved choice.
