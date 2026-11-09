@@ -32,6 +32,7 @@ local fit: UIScale? = nil
 local edgeWidth = 0 -- authored frame width beyond one key (room for the badge)
 local buttons: { [string]: TextButton } = {}
 local playing = false
+local phase = ""
 local columns = 1
 local lastHeight = 0
 local lastCount = 0
@@ -122,7 +123,7 @@ local function refresh()
 	if screen == nil then
 		return
 	end
-	screen.Visible = not playing and not Windows.anyOpen()
+	screen.Visible = not playing and phase ~= "Results" and not Windows.anyOpen()
 	if screen.Visible then
 		fitToScreen()
 	end
@@ -208,6 +209,7 @@ end
 
 function Rail.onState(payload)
 	playing = payload.playing == true
+	phase = payload.phase
 	refresh()
 end
 

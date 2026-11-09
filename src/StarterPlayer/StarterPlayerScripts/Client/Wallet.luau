@@ -61,6 +61,7 @@ local pops: Frame? = nil
 local popsFit: UIScale? = nil
 local popTemplate: Frame? = nil
 local playerGuiRef: PlayerGui? = nil
+local phase = ""
 
 -- Tweened for the count-up; the label follows it.
 local counter = Instance.new("NumberValue")
@@ -174,7 +175,7 @@ local function refresh()
 	if own == nil then
 		return
 	end
-	own.Visible = not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
+	own.Visible = phase ~= "Results" and not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
 	dodgeJumpButton()
 	placePops()
 end
@@ -373,7 +374,8 @@ function Wallet.onShells(payload)
 	end
 end
 
-function Wallet.onState(_payload)
+function Wallet.onState(payload)
+	phase = payload.phase
 	refresh()
 end
 
