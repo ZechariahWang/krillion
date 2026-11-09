@@ -53,7 +53,8 @@ local function step()
 	end
 	local eye = camera.CFrame.Position
 	for scale, entry in entries do
-		if scale.Parent == nil then
+		-- A streamed-out label keeps its Parent inside a detached model, so check the whole chain.
+		if not scale:IsDescendantOf(workspace) then
 			entries[scale] = nil
 		else
 			local anchor = anchorOf(entry.billboard)

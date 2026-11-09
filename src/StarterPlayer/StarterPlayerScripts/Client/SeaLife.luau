@@ -47,11 +47,17 @@ end
 
 local function step()
 	local t = os.clock()
-	for _, swimmer in swimmers do
-		if swimmer.model.Parent ~= nil then
+	-- Backwards, so removing a swimmer that streamed out never skips the next one. One that streams back in
+	-- is a new instance and arrives through ChildAdded.
+	for i = #swimmers, 1, -1 do
+		local swimmer = swimmers[i]
+		if swimmer.model:IsDescendantOf(workspace) then
 			local turn = CFrame.Angles(0, swimmer.turnRate * t, 0)
 			local bob = Vector3.new(0, math.sin(t * BOB_RATE + swimmer.phase) * BOB_STUDS, 0)
 			swimmer.model:PivotTo((turn * swimmer.start) + bob)
+		else
+			known[swimmer.model] = nil
+			table.remove(swimmers, i)
 		end
 	end
 end
