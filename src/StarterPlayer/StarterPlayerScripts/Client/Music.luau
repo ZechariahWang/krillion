@@ -11,6 +11,7 @@ local Toasts = require(script.Parent.Toasts)
 local WAIT_SECONDS = 10
 local PROFILE_WAIT_SECONDS = 6 -- start anyway (music on) if the profile is slow to arrive
 local FADE_SECONDS = 0.8
+local LOAD_SECONDS = 8 -- a track not loaded by then is skipped
 
 local tracks: { Sound } = {}
 local volumes: { [Sound]: number } = {}
@@ -21,6 +22,8 @@ local volume = 1 -- the Settings volume bar, applied on top of each track's auth
 local decided = false -- the profile (or the wait) has said whether music is on
 local profileApplied = false -- later profile pushes echo our own SetSetting and would undo a fresh change
 local fadeTween: Tween? = nil
+local playToken = 0
+local failedInARow = 0 -- stops skipping once every track has failed, instead of spinning through them
 
 local Music = {}
 
@@ -58,10 +61,33 @@ local function playNext()
 	index = (index % #tracks) + 1
 	local sound = tracks[index]
 	current = sound
+	playToken += 1
+	local token = playToken
+	-- The playlist moves on only when a track ends, so a looped track would play forever.
+	sound.Looped = false
 	sound.Volume = volumes[sound] * volume
 	sound.TimePosition = 0
 	sound:Play()
 	announce(sound)
+	task.spawn(function()
+		local waitedFrom = os.clock()
+		while not sound.IsLoaded and os.clock() - waitedFrom < LOAD_SECONDS do
+			task.wait(0.25)
+		end
+		if token ~= playToken then
+			return
+		end
+		if sound.IsLoaded then
+			failedInARow = 0
+			return
+		end
+		failedInARow += 1
+		warn("Music: " .. sound.Name .. " did not load; skipping it")
+		sound:Stop()
+		if failedInARow < #tracks then
+			playNext()
+		end
+	end)
 end
 
 local function start()
