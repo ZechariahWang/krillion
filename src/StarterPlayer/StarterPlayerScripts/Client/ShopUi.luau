@@ -615,7 +615,7 @@ local function featuredEntries(entries: { Entry })
 	if starter ~= nil then
 		table.insert(entries, starter)
 	end
-	for _, item in Shop.featured(Quests.day(os.time())) do
+	for _, item in Shop.featured(Quests.day(workspace:GetServerTimeNow())) do
 		local entry = cosmeticEntry(item)
 		if entry.badge == nil then
 			entry.badge = "TODAY"
