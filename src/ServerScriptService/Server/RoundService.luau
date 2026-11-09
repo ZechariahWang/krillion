@@ -286,6 +286,10 @@ local function offerRevive(player: Player)
 	if profile == nil then
 		return
 	end
+	-- A player who died (a reset) respawns in the lobby after the window would close: no offer to waste.
+	if not PlayerService.hasCharacter(player) then
+		return
+	end
 	local kind = Economy.reviveOffer({
 		revivesOwned = profile.revives,
 		usedThisMatch = reviveUsed[player] == true,

@@ -82,12 +82,20 @@ function PlayerService.isPlaying(player: Player): boolean
 	return player:GetAttribute("Playing") == true
 end
 
+-- A living character: a dead one keeps its root until the respawn, so the root alone is not enough.
 function PlayerService.hasCharacter(player: Player): boolean
 	local character = player.Character
 	if character == nil then
 		return false
 	end
-	return character:FindFirstChild("HumanoidRootPart") ~= nil
+	if character:FindFirstChild("HumanoidRootPart") == nil then
+		return false
+	end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid == nil then
+		return false
+	end
+	return humanoid.Health > 0
 end
 
 -- On a pillar you can stroll around its top (invisible walls from MapService hold you on) but not jump,
