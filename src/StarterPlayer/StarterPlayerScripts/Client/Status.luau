@@ -210,8 +210,9 @@ local function promptTimer(payload)
 	secondaryText.Text = Status.formatTime(shown)
 	if shown <= GameConfig.Round.DangerSeconds then
 		secondaryText.TextColor3 = Theme.Color.Red
+		-- Only the players on the pillars hear the countdown tick; the lobby just sees it go red.
 		local key = payload.round .. ":" .. shown
-		if key ~= lastTick then
+		if payload.playing == true and key ~= lastTick then
 			lastTick = key
 			Ui.bump(secondaryText, 1.08)
 			Sfx.play("Tick", 0.5)
@@ -250,7 +251,9 @@ function Status.onState(payload)
 	if phase == "Waiting" then
 		setStatus("WAITING FOR PLAYERS")
 		secondaryText.Text = "LOBBY"
-		aliveText.Text = "PLAYERS " .. payload.playerCount .. "/" .. payload.minPlayers
+		-- Ready players (a live character, not AFK) are the ones a match can start with.
+		local ready = if typeof(payload.readyCount) == "number" then payload.readyCount else payload.playerCount
+		aliveText.Text = "PLAYERS " .. ready .. "/" .. payload.minPlayers
 	elseif phase == "Intermission" then
 		setStatus("DIVING IN")
 		secondaryText.Text = Status.formatTime(payload.secondsLeft)
