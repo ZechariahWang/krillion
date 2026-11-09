@@ -757,6 +757,7 @@ local function runSurge()
 		MatchEvents.RoundSurvived.fire(player, round)
 	end
 	broadcastState()
+	task.wait(GameConfig.Round.SettleSeconds)
 end
 
 -- The winner, then the rest of the ranking: the afloat by height, then the sunk, last to sink first.

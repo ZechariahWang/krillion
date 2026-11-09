@@ -13,6 +13,7 @@ local GameConfig = {
 		PromptSecondsMin = 10,
 		RevealSeconds = 7.5, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
 		SurgeSeconds = 3,
+		SettleSeconds = 1.5, -- after the water settles, before the next prompt or the results: room for the callouts
 		ResultsSeconds = 10,
 		MaxRounds = 0, -- 0 means no cap: last player standing
 		SuddenDeathAlive = 2, -- banner only, no rule change
