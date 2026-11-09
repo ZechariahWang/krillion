@@ -21,7 +21,7 @@ local function step()
 		return
 	end
 	local now = os.clock()
-	for index, shell in folder:GetChildren() do
+	for _, shell in folder:GetChildren() do
 		local visual = shell:FindFirstChild("Visual")
 		if not shell:IsA("Model") or visual == nil or not visual:IsA("Model") then
 			continue
@@ -31,7 +31,12 @@ local function step()
 			base = visual:GetPivot()
 			rest[visual] = base
 		end
-		local phase = index * 0.7
+		-- Per shell, so collecting one never makes the others jump.
+		local phase = base.Position.X + base.Position.Z
+		local stored = shell:GetAttribute("Phase")
+		if typeof(stored) == "number" then
+			phase = stored
+		end
 		local lift = HOVER + math.sin(now * BOB_RATE + phase) * BOB
 		visual:PivotTo(base * CFrame.new(0, lift, 0) * CFrame.Angles(0, now * SPIN_RATE + phase, 0))
 	end

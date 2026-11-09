@@ -103,6 +103,8 @@ local function spawnOne()
 	end
 	local shell = proto:Clone()
 	shell:PivotTo(CFrame.new(spot) * CFrame.Angles(0, rng:NextNumber(0, math.pi * 2), 0))
+	-- Client/Pickups offsets each shell's bob and spin by this, so they do not move in step.
+	shell:SetAttribute("Phase", rng:NextNumber(0, math.pi * 2))
 	local hitbox = shell:FindFirstChild("Hitbox")
 	if hitbox == nil or not hitbox:IsA("BasePart") then
 		return
