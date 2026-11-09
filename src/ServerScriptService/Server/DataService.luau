@@ -7,6 +7,7 @@
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
@@ -19,6 +20,8 @@ local AUTOSAVE_SECONDS = 120
 local DAY_SECONDS = 86400
 local LEAVE_SAVE_TRIES = 3 -- waits 1 s, then 2 s, between tries
 local SHUTDOWN_WAIT_SECONDS = 28 -- Roblox allows BindToClose 30 s
+local LOAD_TRIES = 3 -- waits 1 s, then 2 s, between tries
+local READ_ONLY_RETRY_SECONDS = 60
 
 -- An unpublished place (a local test copy) has no DataStore access and GetDataStore throws. Players then
 -- get a fresh profile that never saves, instead of the error stopping every server script.
@@ -109,6 +112,13 @@ function DataService.isLoaded(player: Player): boolean
 	return sessions[player] ~= nil
 end
 
+-- The stored profile could not be read: the player sees a placeholder, every change is refused and nothing
+-- saves, until a later read succeeds.
+function DataService.isReadOnly(player: Player): boolean
+	local info = loadInfo[player]
+	return info ~= nil and not info.ok
+end
+
 -- True only for a first visit: the profile read succeeded and found nothing, not even a legacy save.
 function DataService.isNew(player: Player): boolean
 	local info = loadInfo[player]
@@ -172,15 +182,40 @@ function DataService.changed(player: Player)
 	payload.games = profile.games
 	payload.musicOff = profile.musicOff
 	payload.musicVolume = profile.musicVolume
+	if DataService.isReadOnly(player) then
+		-- The placeholder profile must not replay the first-visit tutorial.
+		payload.tutorialDone = true
+		payload.loadFailed = true
+	end
 	Net.event("ProfileChanged"):FireClient(player, payload)
 end
 
-local function readStored(player: Player): (Profile.Profile, LoadInfo)
+local function readOnce(player: Player): (boolean, any)
 	local ok, value = pcall(function()
 		return need(profileStore):GetAsync(profileKey(player))
 	end)
 	if not ok then
 		warn("DataService: load failed for " .. player.Name .. ": " .. tostring(value))
+	end
+	return ok, value
+end
+
+local function readStored(player: Player): (Profile.Profile, LoadInfo)
+	local ok, value = false, nil
+	for attempt = 1, LOAD_TRIES do
+		ok, value = readOnce(player)
+		if ok or player.Parent == nil or profileStore == nil then
+			break
+		end
+		if attempt < LOAD_TRIES then
+			task.wait(attempt)
+		end
+	end
+	if not ok and (profileStore == nil or RunService:IsStudio()) then
+		-- A test copy (Studio, or no DataStore access) stays playable on a throwaway profile.
+		return Profile.new(), { ok = true, existed = true }
+	end
+	if not ok then
 		return Profile.new(), { ok = false, existed = false }
 	end
 	if value ~= nil then
@@ -207,14 +242,36 @@ local function load(player: Player)
 	sessions[player] = Profile.newSession()
 	loadInfo[player] = info
 	DataService.changed(player)
-	DataService.ProfileLoaded.fire(player)
+	if info.ok then
+		DataService.ProfileLoaded.fire(player)
+		return
+	end
+	-- Read-only until a read succeeds; ProfileLoaded waits for the real profile.
+	while player.Parent ~= nil do
+		task.wait(READ_ONLY_RETRY_SECONDS)
+		if player.Parent == nil or unloading[player] then
+			return
+		end
+		local retried, retriedInfo = readStored(player)
+		if player.Parent == nil or unloading[player] then
+			return
+		end
+		if retriedInfo.ok then
+			stored[player] = retried
+			sessions[player] = Profile.newSession()
+			loadInfo[player] = retriedInfo
+			DataService.changed(player)
+			DataService.ProfileLoaded.fire(player)
+			return
+		end
+	end
 end
 
 -- Writes this session's changes and starts a fresh session on top of the result. Returns whether it saved.
 function DataService.save(player: Player): boolean
 	local session = sessions[player]
 	local base = stored[player]
-	if session == nil or base == nil or inFlight[player] ~= nil then
+	if session == nil or base == nil or inFlight[player] ~= nil or DataService.isReadOnly(player) then
 		return false
 	end
 	sessions[player] = Profile.newSession()
@@ -250,7 +307,11 @@ function DataService.save(player: Player): boolean
 	return true
 end
 
+-- The session to record a change in; nil while the profile is read-only, so every change is refused.
 local function session(player: Player): Profile.Session?
+	if DataService.isReadOnly(player) then
+		return nil
+	end
 	return sessions[player]
 end
 
@@ -490,7 +551,7 @@ end
 function DataService.creditUser(userId: number, apply: (Profile.Session) -> ()): boolean
 	local online = Players:GetPlayerByUserId(userId)
 	if online ~= nil then
-		local current = sessions[online]
+		local current = session(online)
 		if current ~= nil then
 			apply(current)
 			DataService.changed(online)
@@ -571,7 +632,7 @@ local function unload(player: Player)
 	end
 	unloading[player] = true
 	pendingUnloads += 1
-	if sessions[player] ~= nil then
+	if sessions[player] ~= nil and not DataService.isReadOnly(player) then
 		for attempt = 1, LEAVE_SAVE_TRIES do
 			while inFlight[player] ~= nil do
 				task.wait(0.1)

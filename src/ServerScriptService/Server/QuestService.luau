@@ -38,7 +38,7 @@ end
 -- Advances every quest of `kind` the player has today ("match_played", "round_survived", "rare_answer",
 -- "deep_answer", "practice_answer", "play_seconds", "match_won").
 function QuestService.advance(player: Player, kind: string, amount: number)
-	if amount ~= amount or amount <= 0 or not DataService.isLoaded(player) then
+	if amount ~= amount or amount <= 0 or not DataService.isLoaded(player) or DataService.isReadOnly(player) then
 		return
 	end
 	-- The day is read on every event, so the first event after UTC midnight starts the new day's quests.

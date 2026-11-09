@@ -69,6 +69,9 @@ end
 -- Pays earned Shells (never purchased ones) with the player's pass bonuses applied. Returns the amount paid.
 -- reason: "answer" | "survive" | "win" | "warmup" | ... (shown under the wallet popup).
 function StoreService.payEarned(player: Player, cash: number, reason: string?): number
+	if DataService.isReadOnly(player) then
+		return 0
+	end
 	local amount = Economy.apply(cash, StoreService.cashMultiplier(player))
 	if amount > 0 then
 		DataService.addCash(player, amount)
@@ -79,7 +82,7 @@ end
 
 -- Gives Shells exactly as stated, with no pass multiplier (packs, quests, rewards, debug).
 function StoreService.grantShells(player: Player, amount: number, reason: string?)
-	if amount <= 0 then
+	if amount <= 0 or DataService.isReadOnly(player) then
 		return
 	end
 	DataService.addCash(player, amount)
@@ -192,7 +195,7 @@ end
 -- Grants once per receipt: the receipt id is stored with the grant and checked before granting.
 local function processReceipt(info): Enum.ProductPurchaseDecision
 	local player = Players:GetPlayerByUserId(info.PlayerId)
-	if player == nil or not DataService.isLoaded(player) then
+	if player == nil or not DataService.isLoaded(player) or DataService.isReadOnly(player) then
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 	local receipt = tostring(info.PurchaseId)
