@@ -63,6 +63,7 @@ local locked = false -- the current prompt is answered; NEXT is counting down
 local lastCheckAt = -math.huge
 local lastWrongAt = -math.huge
 local card: DiveCard.Handle? = nil
+local engaged = false -- the player clicked the box or pressed Enter this visit; new prompts may take focus
 
 local LobbyQuiz = {}
 
@@ -75,6 +76,7 @@ local function hideQuiz()
 	end
 	gui.Visible = false
 	result.Visible = false
+	engaged = false
 	Windows.closed(closeQuiz)
 end
 
@@ -436,8 +438,12 @@ function LobbyQuiz.init(playerGui: PlayerGui)
 		skip()
 		keepFocus()
 	end)
+	answerBox.Focused:Connect(function()
+		engaged = true
+	end)
 	answerBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
+			engaged = true
 			submit()
 		end
 	end)
@@ -492,7 +498,10 @@ function LobbyQuiz.onPrompt(payload)
 			skip()
 		end
 	end)
-	keepFocus()
+	-- Walking onto the arc must not take the keyboard from movement, and a touch keyboard never pops by itself.
+	if engaged and not Ui.isPhone() then
+		keepFocus()
+	end
 end
 
 function LobbyQuiz.onResult(payload)
