@@ -862,6 +862,10 @@ end
 
 local function runMatch()
 	introFade()
+	-- Everyone can leave or go AFK during the fade: no match of bots for nobody.
+	if #readyPlayers() < GameConfig.Round.MinPlayers then
+		return
+	end
 	startMatch()
 	-- Everyone stands on their pillar for a 3-2-1 before the first prompt.
 	secondsLeft = GameConfig.Round.StartCountdownSeconds
