@@ -41,6 +41,7 @@ local backdrop: Frame? = nil
 local backdropTransparency = 0.35 -- replaced by the authored Backdrop's value
 
 local card: DiveCard.Handle? = nil
+local lobbyCard = false -- the card up now is the lobby warm-up's, not this round's: state ticks leave it alone
 local pendingRows: { RevealRow }? = nil -- shown in the list when the Surge starts
 local lastPhase = ""
 local revealToken = 0
@@ -129,8 +130,8 @@ local function hideCard(instant: boolean)
 	closeHolder()
 end
 
--- Your full-screen card over a dimmed backdrop; nil when DiveCards or the template is missing.
-local function showCard(row: RevealRow): DiveCard.Handle?
+-- A full-screen card over the dimmed backdrop; nil when DiveCards or the template is missing.
+local function showCardWith(options: DiveCard.Options): DiveCard.Handle?
 	hideCard(true)
 	local holder = cardsGui
 	local area = stage
@@ -140,7 +141,21 @@ local function showCard(row: RevealRow): DiveCard.Handle?
 	holder.Visible = true
 	fadeBackdrop(1)
 	fadeBackdrop(backdropTransparency, CARD_ENTER)
-	local handle = DiveCard.play(area, {
+	options.fill = true
+	options.budget = options.budget or GameConfig.Reveal.CardBudgetSeconds
+	local handle = DiveCard.play(area, options)
+	if handle.frame == nil then
+		holder.Visible = false
+		return nil
+	end
+	card = handle
+	return handle
+end
+
+-- Your round's card.
+local function showCard(row: RevealRow): DiveCard.Handle?
+	lobbyCard = false
+	return showCardWith({
 		title = "YOUR DIVE",
 		isYou = true,
 		answer = row.answer,
@@ -149,15 +164,20 @@ local function showCard(row: RevealRow): DiveCard.Handle?
 		oneIn = row.oneIn,
 		schooled = row.schooled,
 		shells = shellsFor(row.tier),
-		fill = true,
-		budget = GameConfig.Reveal.CardBudgetSeconds,
 	})
-	if handle.frame == nil then
-		holder.Visible = false
-		return nil
-	end
-	card = handle
+end
+
+-- The lobby warm-up borrows the same full-screen stage for its answers; nothing else is on it in the lobby.
+function Reveal.showOwnCard(options: DiveCard.Options): DiveCard.Handle?
+	revealToken += 1
+	local handle = showCardWith(options)
+	lobbyCard = handle ~= nil
 	return handle
+end
+
+function Reveal.hideOwnCard(instant: boolean)
+	lobbyCard = false
+	hideCard(instant)
 end
 
 -- The card holds briefly once its stamp settles, then leaves; it is gone before the rise whatever happens.
@@ -374,7 +394,9 @@ function Reveal.onState(payload: Net.RoundStatePayload)
 	if phase ~= "Reveal" and phase ~= "Surge" then
 		gui.Visible = false
 		pendingRows = nil
-		hideCard(true)
+		if not lobbyCard then
+			hideCard(true)
+		end
 	end
 	lastPhase = phase
 end

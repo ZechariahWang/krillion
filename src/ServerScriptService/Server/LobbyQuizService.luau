@@ -1,5 +1,8 @@
 --!strict
--- A personal prompt stream for anyone in the lobby. Answering is two steps like a match: LobbyQuizCheck
+-- A personal prompt stream for anyone standing on the semicircle in front of the snack shack (Lobby.QuizZone's
+-- ArcCenter, Outward and Radius attributes describe it).
+-- Stepping in starts it, stepping out or the X (LobbyQuizStop) ends it, and a match pulls the player out of it
+-- whatever they were doing. Answering is two steps like a match: LobbyQuizCheck
 -- (Enter once) says whether the text is in the bank, LobbyQuizAnswer (Enter again) locks it in and pays
 -- Shells by tier, up to a daily warm-up cap. Wrong answers can be retried until the prompt's time is up.
 -- After a result the client asks for the next prompt (LobbyQuizSkip), no sooner than NextDelaySeconds.
@@ -19,6 +22,7 @@ local PlayerService = require(script.Parent.PlayerService)
 local StoreService = require(script.Parent.StoreService)
 
 local DAY_SECONDS = 86400
+local ZONE_POLL = 0.25 -- seconds between checks of who stands in the zone
 
 -- Match answer pacing, but the lobby's own slack after the prompt's timer.
 local GATE_CONFIG: AnswerGate.Config = table.freeze({
@@ -39,6 +43,8 @@ local current: { [Player]: Quiz } = {}
 local recent: { [Player]: { string } } = {} -- last RecentMemory prompt ids, oldest first
 local serveTokens: { [Player]: number } = {}
 local livePromptId: string? = nil
+local inZone: { [Player]: boolean } = {}
+local dismissed: { [Player]: boolean } = {} -- closed with the X; stays quiet until they leave and come back
 
 local LobbyQuizService = {}
 
@@ -231,6 +237,63 @@ function LobbyQuizService.setLivePromptId(id: string?)
 	end
 end
 
+-- The players whose character stands on the semicircle: within `Radius` of the zone's `ArcCenter`, on its
+-- `Outward` side (the flat edge runs along the shack front), and not far above or below the deck.
+local ZONE_HEIGHT = 6
+
+local function playersInZone(zone: BasePart): { [Player]: boolean }
+	local inside: { [Player]: boolean } = {}
+	local center = zone:GetAttribute("ArcCenter")
+	local outward = zone:GetAttribute("Outward")
+	local radius = zone:GetAttribute("Radius")
+	if typeof(center) ~= "Vector3" or typeof(outward) ~= "Vector3" or typeof(radius) ~= "number" then
+		return inside
+	end
+	for _, player in Players:GetPlayers() do
+		local character = player.Character
+		local root = if character ~= nil then character:FindFirstChild("HumanoidRootPart") else nil
+		if root == nil or not root:IsA("BasePart") then
+			continue
+		end
+		local offset = root.Position - center
+		local flat = Vector3.new(offset.X, 0, offset.Z)
+		if math.abs(offset.Y) <= ZONE_HEIGHT and flat.Magnitude <= radius and flat:Dot(outward) >= 0 then
+			inside[player] = true
+		end
+	end
+	return inside
+end
+
+local function pollZone(zone: BasePart)
+	local inside = playersInZone(zone)
+	for _, player in Players:GetPlayers() do
+		local was = inZone[player] == true
+		local now = inside[player] == true and not PlayerService.isPlaying(player)
+		if now and not was then
+			inZone[player] = true
+			if not dismissed[player] then
+				serve(player)
+			end
+		elseif was and not now then
+			inZone[player] = nil
+			dismissed[player] = nil
+			if current[player] ~= nil then
+				stop(player)
+			end
+		end
+	end
+end
+
+-- The X on the quiz: quiet until they step out and back in.
+local function onStop(player: Player)
+	if current[player] ~= nil then
+		stop(player)
+	end
+	if inZone[player] then
+		dismissed[player] = true
+	end
+end
+
 function LobbyQuizService.start()
 	if GameConfig.Lobby.QuizEnabled ~= 1 then
 		return
@@ -238,18 +301,15 @@ function LobbyQuizService.start()
 	Net.event("LobbyQuizCheck").OnServerEvent:Connect(onCheck)
 	Net.event("LobbyQuizAnswer").OnServerEvent:Connect(onAnswer)
 	Net.event("LobbyQuizSkip").OnServerEvent:Connect(onSkip)
+	Net.event("LobbyQuizStop").OnServerEvent:Connect(onStop)
 
+	-- A match takes over: the quiz stops the moment the player is put on a pillar.
 	local function watch(player: Player)
 		player:GetAttributeChangedSignal("Playing"):Connect(function()
-			if PlayerService.isPlaying(player) then
+			if PlayerService.isPlaying(player) and current[player] ~= nil then
 				stop(player)
-			else
-				serve(player)
 			end
 		end)
-		if not PlayerService.isPlaying(player) then
-			serve(player)
-		end
 	end
 	for _, player in Players:GetPlayers() do
 		watch(player)
@@ -259,6 +319,20 @@ function LobbyQuizService.start()
 		current[player] = nil
 		recent[player] = nil
 		serveTokens[player] = nil
+		inZone[player] = nil
+		dismissed[player] = nil
+	end)
+	task.spawn(function()
+		local lobby = workspace:WaitForChild("Lobby", 60)
+		local zone = if lobby ~= nil then lobby:WaitForChild("QuizZone", 60) else nil
+		if zone == nil or not zone:IsA("BasePart") then
+			warn("LobbyQuizService: Workspace.Lobby.QuizZone is missing; the warm-up quiz is off")
+			return
+		end
+		while true do
+			pollZone(zone)
+			task.wait(ZONE_POLL)
+		end
 	end)
 end
 
