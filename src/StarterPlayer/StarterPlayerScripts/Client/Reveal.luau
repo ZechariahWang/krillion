@@ -420,7 +420,9 @@ function Reveal.onState(payload: Net.RoundStatePayload)
 	local phase = payload.phase
 	if phase == "Surge" and lastPhase ~= "Surge" then
 		-- The card is normally long gone by now; this catches a short reveal.
-		hideCard(false)
+		if not lobbyCard then
+			hideCard(false)
+		end
 		local rows = pendingRows
 		pendingRows = nil
 		if rows ~= nil and gui.Visible then
