@@ -425,6 +425,7 @@ end
 local function sendCheck(text: string)
 	local now = os.clock()
 	if now - lastCheckAt < GameConfig.Answer.CheckMinInterval or now - lastWrongAt < GameConfig.Answer.RetryCooldown then
+		Ui.nudge(answerBox)
 		return
 	end
 	lastCheckAt = now
@@ -435,7 +436,7 @@ end
 
 -- Enter (or GO): the first press checks the answer; a second press with the same text locks it in.
 local function onEnter()
-	if locked or submitting then
+	if locked or submitting or outOfTime then
 		return
 	end
 	local text = trim(answerBox.Text)
@@ -808,6 +809,7 @@ function Hud.onState(payload)
 	applyTouchControls(not playing)
 	local mine = payload.yourSecondsLeft
 	outOfTime = phase == "Prompt" and mine ~= nil and mine <= 0
+	answerBox.TextEditable = not outOfTime
 	local inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
 	gui.Visible = inMatch
 	if not inMatch then
