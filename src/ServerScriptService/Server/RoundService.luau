@@ -573,8 +573,8 @@ end
 
 -- The prompt's base countdown, broadcast once a second like countdown(). It also ends early when the
 -- match is decided, or Round.AllLockedGrace after every eligible player has locked in (a late joiner or a
--- revive makes that false again, so the round carries on for them).
-local function promptCountdown(seconds: number)
+-- revive makes that false again, so the round carries on for them). Returns whether it ended early.
+local function promptCountdown(seconds: number): boolean
 	secondsLeft = seconds
 	broadcastState()
 	local nextTick = os.clock() + 1
@@ -582,7 +582,7 @@ local function promptCountdown(seconds: number)
 	while secondsLeft > 0 do
 		task.wait(PROMPT_POLL_SECONDS)
 		if matchOver() then
-			return
+			return true
 		end
 		local now = os.clock()
 		if AnswerService.allLocked() then
@@ -592,7 +592,7 @@ local function promptCountdown(seconds: number)
 			local since = allLockedAt or now
 			allLockedAt = since
 			if now - since >= GameConfig.Round.AllLockedGrace then
-				return
+				return true
 			end
 		else
 			allLockedAt = nil
@@ -603,6 +603,7 @@ local function promptCountdown(seconds: number)
 			broadcastState()
 		end
 	end
+	return false
 end
 
 -- After the base time runs out, keeps the prompt open while someone with bought extra time is still
@@ -638,8 +639,12 @@ local function runPrompt()
 	-- Set before the phase change so clients start their timer from the right number, not the last countdown's 0.
 	secondsLeft = seconds
 	setPhase("Prompt")
-	promptCountdown(seconds)
+	local endedEarly = promptCountdown(seconds)
 	runOvertime()
+	-- A lock-in sent just before the deadline is still in flight: AnswerGate accepts it this much later.
+	if not endedEarly then
+		task.wait(GameConfig.Answer.DeadlineGrace)
+	end
 	-- Bots that have not answered by now never will this prompt.
 	promptToken += 1
 	botPending = {}
