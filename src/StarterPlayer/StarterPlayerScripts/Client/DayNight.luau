@@ -2,7 +2,7 @@
 -- Runs the day and night cycle on this client: Lighting.ClockTime follows DayCycle from the shared server clock,
 -- so every player sees the same sky. Lighting as authored in Studio is the day look (bright ambient, the old
 -- linear fog); the night look is Lighting's NightAmbient / NightOutdoorAmbient attributes plus the authored
--- Lighting.Atmosphere haze. Parts tagged "NightLight" (the lobby torches) burn only at night.
+-- Lighting.Atmosphere haze. Parts and models tagged "NightLight" (the lobby torches) burn only at night.
 
 local CollectionService = game:GetService("CollectionService")
 local Lighting = game:GetService("Lighting")
@@ -17,7 +17,8 @@ local NO_FOG_DISTANCE = 20000 -- fog pushed this far out is invisible
 local NIGHT_TAG = "NightLight"
 local UNLIT_COLOR = Color3.fromRGB(40, 36, 34)
 
-type Torch = { part: BasePart, color: Color3, material: Enum.Material }
+-- A tagged part also dims its own colour; a tagged model only switches the lights inside it.
+type Torch = { root: Instance, part: BasePart?, color: Color3, material: Enum.Material }
 
 local dayAmbient = Lighting.Ambient
 local dayOutdoor = Lighting.OutdoorAmbient
@@ -28,7 +29,7 @@ local dayFogEnd = Lighting.FogEnd
 local atmosphere: Atmosphere? = nil
 local nightDensity = 0
 local nightHaze = 0
-local torches: { [BasePart]: Torch } = {}
+local torches: { [Instance]: Torch } = {}
 local torchesLit: boolean? = nil
 
 local DayNight = {}
@@ -42,21 +43,29 @@ local function colorAttribute(name: string, fallback: Color3): Color3
 end
 
 local function addTorch(instance: Instance)
-	if instance:IsA("BasePart") and torches[instance] == nil then
-		torches[instance] = { part = instance, color = instance.Color, material = instance.Material }
+	if torches[instance] ~= nil then
+		return
+	end
+	if instance:IsA("BasePart") then
+		torches[instance] = { root = instance, part = instance, color = instance.Color, material = instance.Material }
+		torchesLit = nil
+	elseif instance:IsA("Model") then
+		torches[instance] = { root = instance, part = nil, color = UNLIT_COLOR, material = Enum.Material.Slate }
 		torchesLit = nil
 	end
 end
 
 local function setTorch(torch: Torch, lit: boolean)
-	local part = torch.part
-	for _, child in part:GetChildren() do
+	for _, child in torch.root:GetDescendants() do
 		if child:IsA("Light") or child:IsA("Fire") or child:IsA("ParticleEmitter") then
 			child.Enabled = lit
 		end
 	end
-	part.Color = if lit then torch.color else UNLIT_COLOR
-	part.Material = if lit then torch.material else Enum.Material.Slate
+	local part = torch.part
+	if part ~= nil then
+		part.Color = if lit then torch.color else UNLIT_COLOR
+		part.Material = if lit then torch.material else Enum.Material.Slate
+	end
 end
 
 local function setTorches(lit: boolean)
@@ -64,11 +73,11 @@ local function setTorches(lit: boolean)
 		return
 	end
 	torchesLit = lit
-	for part, torch in torches do
-		if part.Parent == nil then
-			torches[part] = nil
-		else
+	for root, torch in torches do
+		if root:IsDescendantOf(workspace) then
 			setTorch(torch, lit)
+		else
+			torches[root] = nil
 		end
 	end
 end
