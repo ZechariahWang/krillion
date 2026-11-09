@@ -19,6 +19,8 @@ local index = 0
 local enabled = true
 local volume = 1 -- the Settings volume bar, applied on top of each track's authored volume
 local decided = false -- the profile (or the wait) has said whether music is on
+local profileApplied = false -- later profile pushes echo our own SetSetting and would undo a fresh change
+local fadeTween: Tween? = nil
 
 local Music = {}
 
@@ -33,8 +35,18 @@ local function announce(sound: Sound)
 	Toasts.show("♪ " .. string.upper(title) .. "  |  " .. string.upper(artist), "info")
 end
 
-local function fade(sound: Sound, target: number)
+local function cancelFade()
+	local tween = fadeTween
+	if tween ~= nil then
+		fadeTween = nil
+		tween:Cancel()
+	end
+end
+
+local function fade(sound: Sound, target: number): Tween
+	cancelFade()
 	local tween = TweenService:Create(sound, TweenInfo.new(FADE_SECONDS), { Volume = target })
+	fadeTween = tween
 	tween:Play()
 	return tween
 end
@@ -63,9 +75,12 @@ local function start()
 		fade(sound, volumes[sound] * volume)
 		return
 	end
-	if sound == nil or not sound.IsPlaying then
-		playNext()
+	-- Turned back on while the fade out still runs: fade back up from where it got to.
+	if sound ~= nil and sound.IsPlaying then
+		fade(sound, volumes[sound] * volume)
+		return
 	end
+	playNext()
 end
 
 local function stop()
@@ -73,8 +88,8 @@ local function stop()
 	if sound == nil or not sound.IsPlaying then
 		return
 	end
-	fade(sound, 0).Completed:Once(function()
-		if not enabled then
+	fade(sound, 0).Completed:Once(function(state)
+		if state == Enum.PlaybackState.Completed and not enabled then
 			sound:Pause()
 		end
 	end)
@@ -102,6 +117,7 @@ function Music.setVolume(level: number)
 	volume = math.clamp(level, 0, 1)
 	local sound = current
 	if sound ~= nil and enabled then
+		cancelFade()
 		sound.Volume = volumes[sound] * volume
 	end
 end
@@ -110,11 +126,12 @@ function Music.getVolume(): number
 	return volume
 end
 
--- ProfileChanged payload: the saved music choice.
+-- ProfileChanged payload: the saved music choice, taken from the first profile only.
 function Music.onProfile(profile)
-	if typeof(profile) ~= "table" then
+	if typeof(profile) ~= "table" or profileApplied then
 		return
 	end
+	profileApplied = true
 	if typeof(profile.musicVolume) == "number" then
 		Music.setVolume(profile.musicVolume)
 	end
