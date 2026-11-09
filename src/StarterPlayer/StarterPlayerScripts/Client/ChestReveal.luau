@@ -16,6 +16,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Fx = require(script.Parent.Fx)
 local ItemEmoji = require(script.Parent.ItemEmoji)
 local Sfx = require(script.Parent.Sfx)
+local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
 
 local WIND_UP = 1.1 -- the chest always shakes at least this long, so even an instant reply builds up
@@ -246,7 +247,14 @@ function ChestReveal.open(chestId: string)
 			return
 		end
 		local got = result
-		if got == nil or got.status ~= "ok" then
+		if got == nil then
+			-- The server may still open it after we stop waiting, so point the player at their items.
+			reply:Disconnect()
+			hide()
+			Toasts.show("CHEST DELAYED  |  CHECK YOUR ITEMS IN A MOMENT", "info")
+			return
+		end
+		if got.status ~= "ok" then
 			-- Market toasts the reason (not enough Shells, cooldown...).
 			reply:Disconnect()
 			hide()
