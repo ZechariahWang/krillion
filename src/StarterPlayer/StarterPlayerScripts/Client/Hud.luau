@@ -121,9 +121,8 @@ local function isTouch(): boolean
 	return Ui.isPhone()
 end
 
--- A phone's on-screen keyboard covers the bottom of the screen: the bar moves up to sit just over it, and
--- PromptEcho (authored above the bar) repeats the prompt there, since the top may be hidden too.
-local KEYBOARD_GAP = 8
+-- Phones: the answer bar sits in the strip at the top, under the prompt and timer, where the keyboard never
+-- reaches; the authored PromptEcho stays hidden. Desktop keeps the authored bottom position.
 local barRest: UDim2? = nil
 local promptText = ""
 
