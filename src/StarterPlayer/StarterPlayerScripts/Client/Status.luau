@@ -67,9 +67,9 @@ end
 
 function Status.init(playerGui: PlayerGui)
 	local gui = Ui.screen(playerGui, "Status") :: Frame
-	-- The chips hide under any open window: its header carries what matters.
+	-- The chips hide under an open window (its header carries what matters), except one that keeps them.
 	Windows.Changed.connect(function()
-		gui.Visible = not Windows.anyOpen()
+		gui.Visible = not Windows.hidesStatus()
 	end)
 	statusGui = gui
 	statusFrame = gui:WaitForChild("StatusFrame") :: Frame

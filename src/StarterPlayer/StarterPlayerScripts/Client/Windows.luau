@@ -11,15 +11,25 @@ local Windows = {}
 
 Windows.Changed = Signal.new("Windows")
 
+export type Options = {
+	keepStatus: boolean?, -- the status chips stay up under this window (the warm-up quiz keeps the countdown)
+}
+
 local openClose: (() -> ())? = nil
+local openKeepsStatus = false
 
 function Windows.anyOpen(): boolean
 	return openClose ~= nil
 end
 
-function Windows.opened(close: () -> ())
+function Windows.hidesStatus(): boolean
+	return openClose ~= nil and not openKeepsStatus
+end
+
+function Windows.opened(close: () -> (), options: Options?)
 	local previous = openClose
 	openClose = close
+	openKeepsStatus = options ~= nil and options.keepStatus == true
 	if previous ~= nil and previous ~= close then
 		previous()
 	end
@@ -40,6 +50,7 @@ end
 function Windows.closed(close: () -> ())
 	if openClose == close then
 		openClose = nil
+		openKeepsStatus = false
 		Windows.Changed.fire()
 	end
 end

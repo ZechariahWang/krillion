@@ -478,7 +478,7 @@ function LobbyQuiz.onPrompt(payload)
 		gui.Visible = true
 		Sfx.play("Open", 0.5)
 		Ui.pop(panel, 0.8)
-		Windows.opened(closeQuiz)
+		Windows.opened(closeQuiz, { keepStatus = true })
 	end
 	setProgress(payload)
 	if payload.capped then
