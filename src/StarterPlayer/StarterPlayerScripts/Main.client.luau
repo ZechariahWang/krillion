@@ -103,7 +103,16 @@ Net.event("MatchIntro").OnClientEvent:Connect(Transition.onIntro)
 Net.event("MatchEnded").OnClientEvent:Connect(Results.onMatchEnded)
 Net.event("LobbyQuizPrompt").OnClientEvent:Connect(LobbyQuiz.onPrompt)
 Net.event("LobbyQuizResult").OnClientEvent:Connect(LobbyQuiz.onResult)
+-- A profile that could not load is a placeholder: say so once, and once more when the real one lands.
+local loadFailedShown = false
 Net.event("ProfileChanged").OnClientEvent:Connect(function(profile)
+	if profile.loadFailed == true and not loadFailedShown then
+		loadFailedShown = true
+		Toasts.show("YOUR SAVE COULD NOT LOAD: PROGRESS IS PAUSED WHILE WE RETRY", "info")
+	elseif profile.loadFailed ~= true and loadFailedShown then
+		loadFailedShown = false
+		Toasts.show("YOUR SAVE IS BACK", "good")
+	end
 	Hud.onProfile(profile)
 	LobbyQuiz.setCash(profile.cash)
 	ShopUi.onProfile(profile)
