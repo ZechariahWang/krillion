@@ -38,10 +38,10 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Prompt bank: one module per prompt in `src/ServerStorage/PromptBank/`, listed in its `init.luau`;
   `tests/PromptBank.test.luau` guards it (normalized answers, no duplicates, aliases point at answers).
 - Templates cloned by code that are authored in Studio: `ReplicatedStorage.Templates.AfkTag` (SettingsService puts
-  it on an AFK player's Head), `Templates.AnswerTag`, `Templates.NameTag` (CosmeticService puts it on every Head:
+  it on an AFK player's Head), `Templates.NameTag` (CosmeticService puts it on every Head:
   the display name in the equipped tag's colour with the title line above; Roblox's own name display is off),
-  `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title` is
-  unused.
+  `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title`
+  and `Templates.AnswerTag` are unused.
 - Sea dressing: `Arena.Reef.Coral.Extra` and `Arena.Beach.GrassExtra` hold the extra kelp, coral and tufts;
   `Arena.Beach.Shallows` the seagrass, kelp, coral and shells on the
   underwater slope (kept under the surface), `Arena.Beach.Clutter` the towels, buckets, driftwood and net,
@@ -93,10 +93,15 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   pinch), Results. Before Starting, `MatchIntro` fades the starters' screens to black and the server teleports
   them; Starting is the 3-2-1 on the pillars (`Client/Transition`, `SharedUi.Transition`). Lengths are
   `GameConfig.Round.IntroFadeSeconds` and `StartCountdownSeconds`.
-- Authored for the mode: `Templates.CrazeCrab` (each client clones one; `Client/Crab` moves it and turns up its
-  `Anger` highlight), the heart pips at `PlatformTemplate.NameTag.NameText.Hearts`, `Hud.Vitals` (your hearts
-  and meter), and the `CrabPassed` / `CrabPinched` remotes. The chip under the status row (`Status.Tide`) lists
-  the question's used answers.
+- Authored for the mode: `Templates.CrazeCrab` (each client clones one; `Client/Crab` hovers it over the middle
+  of the ring, turns it to face the holder, sets the rate of its `Body.Mouth.Bubbles` emitter and turns up its
+  `Anger` highlight; the model's pivot looks along the crab's front), `Hud.Vitals` (one heart icon per heart
+  you have, and the meter), and the `CrabPassed` / `CrabPinched` / `Typing` remotes. Pillars carry no
+  billboard. Under the status row sit two chips: `Status.Typing` shows every other player what the holder is
+  typing as they type (AnswerService filters it with TextService first) and then their accepted answer;
+  `Status.Tide` lists the question's used answers.
+- A match opens with your camera behind your pillar, looking at the middle (`Client/Crab`); players are placed
+  facing the middle too.
 - A server holds 8 (`GameConfig.Server.MaxPlayers`; Server Size in the Creator Hub must match). Bots fill a
   match to 4. There is no late join.
 - Every teleport goes through `PlayerService.sendToPlatform` / `sendToLobby`: they anchor the root, move it, and

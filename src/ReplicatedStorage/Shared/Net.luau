@@ -46,6 +46,12 @@ export type CrabPassedPayload = {
 	gainedHeart: boolean,
 }
 
+-- Typing, to the server: the text in the holder's answer box. To the other clients: the same, filtered.
+export type TypingPayload = {
+	userId: number,
+	text: string,
+}
+
 -- CrabPinched: the fuse ran out on the holder.
 export type CrabPinchedPayload = {
 	userId: number,

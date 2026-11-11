@@ -1,12 +1,13 @@
 --!strict
 -- Drives StarterGui.Status: the top status line (the question, on a plate), the bar under it (whose turn it
--- is, or a countdown, beside the alive count), and the chip under that, which lists the answers the
--- question has used up. Shown in every phase.
+-- is, or a countdown, beside the alive count), the chip under that with what the holder is typing, and
+-- the chip under that, which lists the answers the question has used up. Shown in every phase.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
+local Net = require(ReplicatedStorage.Shared.Net)
 local Icons = require(script.Parent.Icons)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
@@ -23,6 +24,9 @@ local aliveText: TextLabel
 local tide: Frame
 local tideAccent: Frame
 local tideText: TextLabel
+local typing: Frame
+local typingText: TextLabel
+local typingFrom: number? = nil -- whose live typing the chip shows; nil while it shows an accepted answer
 
 local lastStatus = ""
 local lastPrompt = ""
@@ -79,6 +83,8 @@ function Status.init(playerGui: PlayerGui)
 	local tideFound = waitChild(gui, "Tide")
 	local accentFound = waitChild(tideFound, "Accent")
 	local tideTextFound = waitChild(tideFound, "Text")
+	local typingFound = waitChild(gui, "Typing")
+	local typingTextFound = waitChild(typingFound, "Text")
 	local plateFound = waitChild(frameFound, "Plate")
 	if gui == nil or missing ~= nil then
 		warn("Status: SharedUi.Status is missing " .. (missing or "entirely") .. "; no status chips")
@@ -102,6 +108,9 @@ function Status.init(playerGui: PlayerGui)
 	tide = tideFound :: Frame
 	tideAccent = accentFound :: Frame
 	tideText = tideTextFound :: TextLabel
+	typing = typingFound :: Frame
+	typingText = typingTextFound :: TextLabel
+	typing.Visible = false
 	-- A flash is coloured inline, so the chip takes rich text.
 	tideText.RichText = true
 	tide.Size = UDim2.new(math.max(tide.Size.X.Scale, TIDE_WIDTH), tide.Size.X.Offset, tide.Size.Y.Scale, tide.Size.Y.Offset)
@@ -181,6 +190,31 @@ function Status.flashTide(text: string, color: Color3, seconds: number)
 	end)
 end
 
+local function showTyping(text: string, color: Color3)
+	typingText.Text = string.upper(text)
+	typingText.TextColor3 = color
+	typing.Visible = text ~= ""
+end
+
+-- Typing: what another player holding the crab has typed so far.
+function Status.onTyping(payload: Net.TypingPayload)
+	if not ready or lastPayload == nil or payload.userId ~= lastPayload.holderUserId then
+		return
+	end
+	typingFrom = payload.userId
+	showTyping(payload.text, Theme.Color.Cream)
+end
+
+-- CrabPassed: the accepted answer stays on the typing chip, in its tier's colour, until the next
+-- holder types.
+function Status.onPassed(payload: Net.CrabPassedPayload)
+	if not ready or payload.fromUserId == Players.LocalPlayer.UserId then
+		return
+	end
+	typingFrom = nil
+	showTyping(payload.answer, Ui.tierColor(payload.tier))
+end
+
 -- The name of whoever holds the crab, from the ring rows.
 local function holderName(payload): string?
 	for _, row in payload.ring or {} do
@@ -199,6 +233,12 @@ function Status.onState(payload)
 	lastPayload = payload
 	secondaryText.TextColor3 = Theme.Color.Cream
 	updateChip(payload)
+	-- The typing chip clears when the question ends, on your own turn, and when its typist has moved on.
+	local holder = payload.holderUserId
+	if phase ~= "Prompt" or holder == Players.LocalPlayer.UserId or (typingFrom ~= nil and typingFrom ~= holder) then
+		typingFrom = nil
+		typing.Visible = false
+	end
 
 	if phase == "Waiting" then
 		setStatus("WAITING FOR PLAYERS")

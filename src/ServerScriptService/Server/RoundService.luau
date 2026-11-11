@@ -371,11 +371,10 @@ local function restore(player: Player, kind: string)
 	reviveUsed[player] = true
 	local state = match :: CrabMatch.Match
 	local platform = sunkPlatforms[player] :: Part
-	-- Back to its own colours, skin and name, then the pillar rises out of the water before the player is
+	-- Back to its own colours and skin, then the pillar rises out of the water before the player is
 	-- put back on it.
 	MapService.unmarkSunk(platform)
 	CosmeticService.applySkin(player, platform)
-	MapService.setPlatformName(platform, player.DisplayName)
 	MapService.glidePlatformTop(platform, GameConfig.Water.StartHeight, 0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 	if match ~= state or platform.Parent == nil then
 		refundRevive(player, kind)
@@ -478,9 +477,8 @@ local function startMatch()
 	local parts = MapService.spawnPlatforms(#order, GameConfig.Water.StartHeight)
 	for index, player in participants do
 		platforms[player] = parts[index]
-		-- Lets clients find a player's pillar (the crab, answer tags, hearts) without a lookup remote.
+		-- Lets clients find a player's pillar (the crab faces it) without a lookup remote.
 		parts[index]:SetAttribute("OwnerUserId", player.UserId)
-		MapService.setPlatformName(parts[index], player.DisplayName)
 		CosmeticService.applySkin(player, parts[index])
 		PlayerService.sendToPlatform(player, parts[index])
 	end
@@ -488,7 +486,6 @@ local function startMatch()
 		local part = parts[#participants + index]
 		botPlatforms[id] = part
 		part:SetAttribute("OwnerUserId", id)
-		MapService.setPlatformName(part, BotService.nameOf(id))
 		BotService.attach(id, part)
 	end
 	MatchEvents.MatchStarted.fire(table.clone(participantsList))

@@ -102,17 +102,16 @@ function MapService.spawnPlatforms(count: number, topY: number): { Part }
 	return table.clone(platforms)
 end
 
--- A sunk pillar turns slate and its tag says SUNK, so the ring shows at a glance who is still in.
+-- A sunk pillar turns slate, so the ring shows at a glance who is still in.
 function MapService.markSunk(platform: Part)
 	platform.Color = Theme.Color.Slate
 	local cap = platform:FindFirstChild("Cap") :: BasePart?
 	if cap ~= nil then
 		cap.Color = Theme.Color.Slate
 	end
-	MapService.setPlatformName(platform, "SUNK")
 end
 
--- Puts back the pillar's own colours after a revive. Skins and the name go on again after this
+-- Puts back the pillar's own colours after a revive. Skins go on again after this
 -- (CosmeticService.applySkin does nothing for a player without a skin, so the defaults must come first).
 function MapService.unmarkSunk(platform: Part)
 	local color = platform:GetAttribute("BaseColor")
@@ -148,17 +147,6 @@ function MapService.clearPlatforms()
 	end
 	platforms = {}
 	glideTokens = {}
-end
-
-function MapService.setPlatformName(platform: Part, name: string)
-	local tag = platform:FindFirstChild("NameTag")
-	if tag == nil then
-		return
-	end
-	local text = tag:FindFirstChild("NameText") :: TextLabel?
-	if text ~= nil then
-		text.Text = name
-	end
 end
 
 -- Confetti burst from the top of the pillar, bigger for rarer answers.
@@ -210,7 +198,13 @@ end
 function MapService.platformStandCFrame(platform: Part): CFrame
 	local lift = platform:FindFirstChild("Lift") :: AlignPosition
 	local topY = lift.Position.Y + GameConfig.Platform.Height / 2 + CAP_HEIGHT
-	return CFrame.new(lift.Position.X, topY + 3, lift.Position.Z)
+	local spot = Vector3.new(lift.Position.X, topY + 3, lift.Position.Z)
+	local middle = Vector3.new(0, spot.Y, 0)
+	-- Facing the middle of the ring, where the crab is.
+	if (middle - spot).Magnitude < 0.01 then
+		return CFrame.new(spot)
+	end
+	return CFrame.lookAt(spot, middle)
 end
 
 return MapService

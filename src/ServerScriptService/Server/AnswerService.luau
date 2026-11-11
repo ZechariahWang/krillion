@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
+local TextService = game:GetService("TextService")
 
 local AnswerGate = require(ReplicatedStorage.Shared.AnswerGate)
 local AnswerMatcher = require(ReplicatedStorage.Shared.AnswerMatcher)
@@ -25,11 +26,14 @@ export type Submission = {
 }
 
 local RAW_LIMIT = GameConfig.Answer.MaxLength * 2
+local TYPING_GAP_SECONDS = 0.1 -- typing updates closer together than this are dropped
 
 local currentPrompt: AnswerMatcher.Prompt? = nil
 local used: { [string]: boolean } = {} -- the question's used answers; RoundService's match owns the table
 local holder: Player? = nil
 local gate: AnswerGate.Gate? = nil -- the holder's guess rate for this turn
+local lastTyping = 0
+local typingToken = 0 -- only the newest typing update is sent on once its filter returns
 
 local AnswerService = {}
 
@@ -174,8 +178,39 @@ local function onSubmit(player: Player, text: any)
 	AnswerService.Answered.fire(player, graded)
 end
 
+-- Typing: what the holder has typed so far goes to every other player. It is one player's free text on
+-- other players' screens, so it is filtered first; text the filter cannot pass is not sent.
+local function onTyping(player: Player, text: any)
+	if holder ~= player or typeof(text) ~= "string" then
+		return
+	end
+	local now = os.clock()
+	if now - lastTyping < TYPING_GAP_SECONDS then
+		return
+	end
+	lastTyping = now
+	typingToken += 1
+	local token = typingToken
+	local shown = string.sub(text, 1, GameConfig.Answer.MaxLength)
+	if shown ~= "" then
+		local ok, filtered = pcall(function()
+			return TextService:FilterStringAsync(shown, player.UserId):GetNonChatStringForBroadcastAsync()
+		end)
+		if not ok or token ~= typingToken or holder ~= player then
+			return
+		end
+		shown = filtered
+	end
+	for _, other in Players:GetPlayers() do
+		if other ~= player then
+			Net.event("Typing"):FireClient(other, { userId = player.UserId, text = shown })
+		end
+	end
+end
+
 function AnswerService.start()
 	Net.event("SubmitAnswer").OnServerEvent:Connect(onSubmit)
+	Net.event("Typing").OnServerEvent:Connect(onTyping)
 	Players.PlayerRemoving:Connect(function(player)
 		if holder == player then
 			holder = nil

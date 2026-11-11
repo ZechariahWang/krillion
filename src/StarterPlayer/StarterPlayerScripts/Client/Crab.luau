@@ -1,7 +1,8 @@
 --!strict
--- Shows the crab during a match: one clone of ReplicatedStorage.Templates.CrazeCrab on this client, sitting
--- on the pillar of whoever holds it, hopping across when it is passed and shaking harder as its mood
--- sours. The server only says who holds it and its mood; the fuse itself never reaches a client.
+-- Shows the crab during a match: one clone of ReplicatedStorage.Templates.CrazeCrab on this client, hovering
+-- in the middle of the ring. It faces whoever holds it and blows its authored Bubbles their way, shaking
+-- harder and blowing more as its mood sours. The server only says who holds it and its mood; the fuse
+-- itself never reaches a client.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -14,10 +15,14 @@ local Sfx = require(script.Parent.Sfx)
 local Status = require(script.Parent.Status)
 
 local WAIT_SECONDS = 10
-local CAP_HEIGHT = 1 -- the cap part on top of a pillar
-local INWARD_STUDS = 2.6 -- the crab sits this far from the pillar's centre, towards the middle of the ring
-local HOP_SECONDS = 0.45
-local HOP_HEIGHT = 5
+local FLOAT_ABOVE_TOP = 11 -- the crab hovers this far over the pillar tops, clear of your own character
+local AIM_ABOVE_TOP = 3 -- it looks at a point this far over the holder's pillar top: the player
+local BOB_HEIGHT = 0.4
+local BOB_SPEED = 2
+local TURN_SPEED = 8 -- how fast it swings round to a new holder
+local CAMERA_BACK = 14 -- the match opens with the camera this far behind you, looking at the middle
+local CAMERA_UP = 9
+local CAMERA_AIM_ABOVE_TOP = 2
 local PINCH_SECONDS = 0.5
 local PINCH_HEIGHT = 3
 local FLASH_SECONDS = 2.5
@@ -26,24 +31,24 @@ type Mood = {
 	shake: number, -- radians the crab rocks either way
 	speed: number, -- rocks per second
 	glow: number, -- the Anger highlight's fill transparency
+	bubbles: number, -- bubbles per second
 }
 
 local MOODS: { [string]: Mood } = {
-	Calm = { shake = 0.04, speed = 1.5, glow = 1 },
-	Restless = { shake = 0.14, speed = 5, glow = 0.7 },
-	Furious = { shake = 0.3, speed = 11, glow = 0.35 },
+	Calm = { shake = 0.04, speed = 1.5, glow = 1, bubbles = 5 },
+	Restless = { shake = 0.14, speed = 5, glow = 0.7, bubbles = 12 },
+	Furious = { shake = 0.3, speed = 11, glow = 0.35, bubbles = 24 },
 }
 
 local crab: Model? = nil
 local anger: Highlight? = nil
-local halfHeight = 1.5
+local bubbles: ParticleEmitter? = nil
+local heading: CFrame? = nil -- the way it faces now, turning towards the holder
 local shown = false
+local lastPhase = ""
 local holderUserId: number? = nil
 local mood = "Calm"
 local names: { [number]: string } = {}
-local lastSpot: Vector3? = nil -- where the crab last sat, so a hop starts from there
-local hopFrom: Vector3? = nil
-local hopStart = 0
 local pinchStart = -math.huge
 
 local Crab = {}
@@ -62,26 +67,16 @@ local function platformFor(userId: number): BasePart?
 	return nil
 end
 
--- Where the crab sits on a pillar: on its top, on the side facing the middle of the ring.
-local function spotOn(platform: BasePart): Vector3
-	local top = platform.Position.Y + platform.Size.Y / 2 + CAP_HEIGHT + halfHeight
-	local centre = Vector3.new(platform.Position.X, 0, platform.Position.Z)
-	local inward = Vector3.zero
-	if centre.Magnitude > 0.01 then
-		inward = -centre.Unit * INWARD_STUDS
-	end
-	return Vector3.new(platform.Position.X + inward.X, top, platform.Position.Z + inward.Z)
-end
-
 local function hide()
 	local model = crab
 	if model ~= nil and shown then
 		shown = false
+		heading = nil
 		model.Parent = nil
 	end
 end
 
-local function step()
+local function step(dt: number)
 	local model = crab
 	local holder = holderUserId
 	if model == nil or holder == nil then
@@ -94,34 +89,28 @@ local function step()
 		return
 	end
 	local now = os.clock()
-	local spot = spotOn(platform)
-	local position = spot
-	local from = hopFrom
-	if from ~= nil then
-		local alpha = (now - hopStart) / HOP_SECONDS
-		if alpha >= 1 then
-			hopFrom = nil
-		else
-			position = from:Lerp(spot, alpha) + Vector3.new(0, math.sin(alpha * math.pi) * HOP_HEIGHT, 0)
-		end
-	end
+	local top = platform.Position.Y + platform.Size.Y / 2
+	local position = Vector3.new(0, top + FLOAT_ABOVE_TOP + math.sin(now * BOB_SPEED) * BOB_HEIGHT, 0)
 	local sincePinch = now - pinchStart
 	if sincePinch < PINCH_SECONDS then
 		position += Vector3.new(0, math.sin(sincePinch / PINCH_SECONDS * math.pi) * PINCH_HEIGHT, 0)
 	end
-	lastSpot = spot
+	-- It turns to face whoever holds it, aiming up at the player on the pillar.
+	local target = Vector3.new(platform.Position.X, top + AIM_ABOVE_TOP, platform.Position.Z)
+	local wanted = CFrame.lookAt(position, target).Rotation
+	local facing = heading or wanted
+	facing = facing:Lerp(wanted, math.min(1, dt * TURN_SPEED))
+	heading = facing
 	local look = MOODS[mood] or MOODS.Calm
 	local rock = math.sin(now * look.speed * math.pi * 2) * look.shake
-	-- It faces the player standing on the pillar.
-	local facing = Vector3.new(platform.Position.X, position.Y, platform.Position.Z)
-	local frame = CFrame.new(position)
-	if (facing - position).Magnitude > 0.01 then
-		frame = CFrame.lookAt(position, facing)
-	end
-	model:PivotTo(frame * CFrame.Angles(0, 0, rock))
+	model:PivotTo(CFrame.new(position) * facing * CFrame.Angles(0, 0, rock))
 	local glow = anger
 	if glow ~= nil then
 		glow.FillTransparency += (look.glow - glow.FillTransparency) * 0.2
+	end
+	local stream = bubbles
+	if stream ~= nil then
+		stream.Rate = look.bubbles
 	end
 	if not shown then
 		shown = true
@@ -129,28 +118,46 @@ local function step()
 	end
 end
 
+-- Turns your camera to the middle of the ring from behind your pillar, once it has streamed in. The
+-- camera stays yours to move.
+local function faceMiddle()
+	local deadline = os.clock() + WAIT_SECONDS
+	local platform = platformFor(Players.LocalPlayer.UserId)
+	while platform == nil and os.clock() < deadline do
+		task.wait(0.1)
+		platform = platformFor(Players.LocalPlayer.UserId)
+	end
+	local camera = workspace.CurrentCamera
+	if platform == nil or camera == nil then
+		return
+	end
+	local top = platform.Position.Y + platform.Size.Y / 2
+	local flat = Vector3.new(platform.Position.X, 0, platform.Position.Z)
+	if flat.Magnitude < 0.01 then
+		return
+	end
+	local eye = flat + flat.Unit * CAMERA_BACK + Vector3.new(0, top + CAMERA_UP, 0)
+	-- Aimed under the crab, so it shows over your head and not behind it.
+	camera.CFrame = CFrame.lookAt(eye, Vector3.new(0, top + CAMERA_AIM_ABOVE_TOP, 0))
+end
+
 function Crab.onState(payload: Net.RoundStatePayload)
 	if crab == nil then
 		return
 	end
+	if payload.phase == "Starting" and lastPhase ~= "Starting" and payload.playing == true then
+		task.spawn(faceMiddle)
+	end
+	lastPhase = payload.phase
 	for _, row in payload.ring or {} do
 		names[row.userId] = row.name
 	end
 	local inMatch = payload.phase == "Prompt" or payload.phase == "Reveal"
-	local holder = if inMatch then payload.holderUserId else nil
-	if holder ~= holderUserId and holder ~= nil and holderUserId ~= nil and lastSpot ~= nil then
-		hopFrom = lastSpot
-		hopStart = os.clock()
-	end
-	if holder == nil then
-		lastSpot = nil
-		hopFrom = nil
-	end
-	holderUserId = holder
+	holderUserId = if inMatch then payload.holderUserId else nil
 	mood = payload.mood or "Calm"
 end
 
--- CrabPassed: the hop itself follows the next state; this is the moment for the passer's reward.
+-- CrabPassed: the crab turns with the next state; this is the moment for the passer's reward.
 function Crab.onPassed(payload: Net.CrabPassedPayload)
 	if crab == nil then
 		return
@@ -188,10 +195,10 @@ function Crab.init()
 			return
 		end
 		local model = template:Clone()
-		local _, size = model:GetBoundingBox()
-		halfHeight = size.Y / 2
 		local glow = model:FindFirstChild("Anger")
 		anger = if glow ~= nil and glow:IsA("Highlight") then glow else nil
+		local stream = model:FindFirstChild("Bubbles", true)
+		bubbles = if stream ~= nil and stream:IsA("ParticleEmitter") then stream else nil
 		crab = model
 		RunService.RenderStepped:Connect(step)
 	end)

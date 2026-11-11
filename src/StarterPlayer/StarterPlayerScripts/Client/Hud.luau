@@ -24,7 +24,7 @@ local Ui = require(script.Parent.Ui)
 
 local FEEDBACK_SECONDS = 1.5
 local RETRY_SECONDS = 0.08 -- an answer that raced the server's cooldown is sent once more, this much later
-local EMPTY_HEART = 0.75 -- transparency of a heart slot you do not have
+local TYPING_SECONDS = 0.15 -- what you type is sent on at most this often
 local WAIT_SECONDS = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
 local BOOST_GAP = 8 -- pixels between the Shells chip and the boost buttons above it
@@ -450,7 +450,7 @@ end
 
 -- Vitals --------------------------------------------------------------------------------------------------
 
--- Your hearts (the slots you do not have are faint) and the meter towards the next one.
+-- Your hearts, one icon each, and the meter towards the next one.
 local function updateVitals(payload)
 	local mine = 0
 	for _, row in payload.ring or {} do
@@ -461,8 +461,7 @@ local function updateVitals(payload)
 	for _, slot in hearts:GetChildren() do
 		if slot:IsA("ImageLabel") then
 			local index = tonumber(string.match(slot.Name, "%d+")) or 0
-			slot.Visible = index <= (payload.maxHearts or 5)
-			slot.ImageTransparency = if index <= mine then 0 else EMPTY_HEART
+			slot.Visible = index <= mine
 		end
 	end
 	local goal = payload.meterTarget or 1
@@ -600,6 +599,20 @@ function Hud.init(newPlayerGui: PlayerGui)
 	placeAnswerBar()
 	Ui.pressable(submitButton)
 	submitButton.Activated:Connect(onEnter)
+	-- Everyone else watches the holder type: the box's text goes up a few times a second.
+	local typingQueued = false
+	answerBox:GetPropertyChangedSignal("Text"):Connect(function()
+		if not myTurn or typingQueued then
+			return
+		end
+		typingQueued = true
+		task.delay(TYPING_SECONDS, function()
+			typingQueued = false
+			if myTurn then
+				Net.event("Typing"):FireServer(answerBox.Text)
+			end
+		end)
+	end)
 	answerBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
 			onEnter()
