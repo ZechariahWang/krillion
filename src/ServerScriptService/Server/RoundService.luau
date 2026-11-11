@@ -171,6 +171,18 @@ local function provenParticipants(): number
 	return participantCount - unproven
 end
 
+-- Players with a character who are not AFK (Settings): an AFK player is never put on a pillar.
+local function readyPlayers(): { Player }
+	local result = {}
+	for _, player in Players:GetPlayers() do
+		local afk = player:GetAttribute("Afk") == true
+		if PlayerService.hasCharacter(player) and not afk then
+			table.insert(result, player)
+		end
+	end
+	return result
+end
+
 local function broadcastState()
 	local aliveUserIds = {}
 	local contestants: { any } = table.clone(alivePlayers())
@@ -443,18 +455,6 @@ local function eliminate(player: Player)
 	end
 	MatchState.eliminate(match, player)
 	sinkPlayer(player)
-end
-
--- Players with a character who are not AFK (Settings): an AFK player is never put on a pillar.
-local function readyPlayers(): { Player }
-	local result = {}
-	for _, player in Players:GetPlayers() do
-		local afk = player:GetAttribute("Afk") == true
-		if PlayerService.hasCharacter(player) and not afk then
-			table.insert(result, player)
-		end
-	end
-	return result
 end
 
 local function waitForPlayers()
