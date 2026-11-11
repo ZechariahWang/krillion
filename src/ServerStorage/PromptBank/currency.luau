@@ -46,7 +46,7 @@ return {
 				"carlino", "grano", "tari", "augustalis", "moidore", "pagoda", "mohur", "cowrie", "wampum",
 				"rai stone",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"ngultrum", "kwacha", "lempira", "tugrik", "quetzal", "nakfa", "ouguiya", "vatu", "paanga", "tala", "rufiyaa",
 			"dalasi", "loti", "ariary", "kina", "somoni", "dobra", "sestertius", "solidus", "obol", "aureus", "groat",
 			"cordoba", "gourde", "pataca",

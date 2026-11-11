@@ -147,7 +147,7 @@ return {
 			"gigantamax grimmsnarl", "gigantamax alcremie", "gigantamax copperajah", "gigantamax duraludon",
 			"gigantamax urshifu", "gigantamax butterfree",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"silcoon", "cascoon", "wurmple", "beautifly", "dustox", "lotad", "lombre", "seedot", "nuzleaf", "taillow",
 			"wingull", "surskit", "masquerain", "shroomish", "nincada", "ninjask", "shedinja", "whismur", "loudred",
 			"exploud", "makuhita", "azurill", "meditite", "volbeat", "illumise", "gulpin", "swalot", "carvanha", "numel",

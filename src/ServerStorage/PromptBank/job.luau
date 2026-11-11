@@ -121,7 +121,7 @@ return {
 			"cosmonaut", "taikonaut", "rocket scientist", "propulsion engineer", "avionics technician", "aircraft mechanic",
 			"airframe mechanic", "ramp agent", "baggage handler", "gate agent", "immigration officer", "border patrol agent",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"snake milker", "golf ball diver", "odor judge", "chicken sexer", "pet food taster", "water slide tester",
 			"ice cream taster", "foley artist", "dialect coach", "body double", "stand in", "hand model",
 			"crossword constructor", "puzzle designer", "fortune cookie writer", "greeting card writer", "toy designer",

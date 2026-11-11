@@ -101,7 +101,7 @@ return {
 			"belles magical world", "the hunchback of notre dame ii", "cinderella iii a twist in time",
 			"ariels beginning", "the pagemaster", "the black stallion", "pollyanna", 
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"perri", "toby tyler", "the sign of zorro", "ten who dared", "greyfriars bobby", "moon pilot", "bon voyage",
 			"big red", "almost angels", "summer magic", "savage sam", "a tiger walks", "emil and the detectives",
 			"those calloways", "the tattooed police horse", "the fighting prince of donegal", "follow me boys",

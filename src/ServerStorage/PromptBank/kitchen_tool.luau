@@ -64,7 +64,7 @@ return {
 			"probe thermometer", "culinary torch", "flame tamer", "heat diffuser", "simmer mat", "salt mill",
 			"spice rack", "herb scissors", "herb mincer", "hachoir", "ulu",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"spurtle", "chinois", "tamis", "couscoussier", "quenelle spoon", "parisienne scoop", "olive pitter",
 			"gravy ladle", "caviar spoon", "marrow scoop", "lemon reamer", "flan ring", "cannele mold", "madeleine pan",
 			"aebleskiver pan", "takoyaki pan", "tamagoyaki pan", "donabe", "suribachi", "surikogi", "oroshigane", "makisu",

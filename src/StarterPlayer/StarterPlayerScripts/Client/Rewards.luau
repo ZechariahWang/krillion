@@ -33,7 +33,7 @@ local PORTRAIT_ROW = 222 -- a portrait row stacks its button under the text
 local ROW_NAMES = { "GroupRow", "InviteRow", "FavoriteRow" }
 local CHECK_TIMEOUT = 35 -- the server re-checks membership for about 30 s; after this the button resets
 local GROUP_ID = GameConfig.Rewards.GroupId
-local INVITE_MESSAGE = "Come dive with me in Krillion! Give the rarest answers to stay above the water."
+local INVITE_MESSAGE = "Come dive with me in Rare or Sink! Give the rarest answers to stay above the water."
 -- The nudge waits for a calm moment so it never lands on the results or the reveal.
 local CALM_PHASES: { [string]: boolean } = { Waiting = true, Intermission = true }
 
@@ -352,7 +352,7 @@ local function maybeNudge()
 		return
 	end
 	nudged = true
-	Toasts.show("ENJOYING KRILLION? ⭐ FAVORITE IT SO YOU CAN FIND IT AGAIN", "info")
+	Toasts.show("ENJOYING RARE OR SINK? ⭐ FAVORITE IT SO YOU CAN FIND IT AGAIN", "info")
 end
 
 local function close()

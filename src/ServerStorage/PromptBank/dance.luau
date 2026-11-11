@@ -66,7 +66,7 @@ return {
 			"dancehall", "wining", "dutty wine", "gumboot", "adowa", "agbadza", "sabar", "kalbelia", "yakshagana", "sattriya",
 			"kamarinskaya", "hajdutanc",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bergamasca", "canario", "passacaglia", "chaconne", "forlana", "siciliana", "morisca", "matachin",
 			"bouffons", "tourdion", "basse danse", "estampie", "carole", "ductia", "rotta", "trotto", "piva", "calata",
 			"spagnoletta", "villano", "folia", "jacara", "guineo", "cumbe", "paracumbe", "zambapalo",

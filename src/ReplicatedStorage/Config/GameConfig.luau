@@ -85,7 +85,7 @@ local GameConfig = {
 			Schooler = 10,
 			Rare = 20,
 			DeepCut = 30,
-			OneInAKrillion = 50,
+			Mythic = 50,
 		},
 	},
 	Boosts = {
@@ -133,7 +133,7 @@ local GameConfig = {
 		CardBudgetSeconds = 3.3,
 		CardHoldSeconds = 0.45,
 		RaiseDelaySeconds = 4.5, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 4.5, -- answer Shells and Krillion announcements land with the rise
+		PayoutDelaySeconds = 4.5, -- answer Shells and Mythic announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},

@@ -134,9 +134,9 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		depth = math.clamp(options.depth or 0, tierInfo.depthMin, BOTTOM)
 	end
 	local tierIndex = Tiers.index(tierName)
-	local isKrillion = tierName == "OneInAKrillion"
+	local isMythic = tierName == "Mythic"
 	local tierColor = Ui.tierColor(tierName)
-	-- 0 for the commonest tier up to 1 for One in a Krillion: drives how hard the dive winds up and hits.
+	-- 0 for the commonest tier up to 1 for Mythic: drives how hard the dive winds up and hits.
 	local intensity = if hasAnswer then math.clamp((tierIndex - 1) / math.max(#Tiers.List - 1, 1), 0, 1) else 0
 	local shape = Depth.diveShape(intensity)
 	local shells = if hasAnswer then options.shells or 0 else 0
@@ -300,7 +300,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		footer.Position = footer.Position:Lerp(shellsChip.Position, 0.5)
 	end
 	stampLabel.Text = if tierInfo ~= nil
-		then string.upper(tierInfo.label) .. (if isKrillion then "!" else "")
+		then string.upper(tierInfo.label) .. (if isMythic then "!" else "")
 		else "NO ANSWER"
 
 	-- Authored strokes and corners are tuned for a 380 px card; scale them with the card so a small card
@@ -472,7 +472,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		tagStroke.Color = tierColor:Lerp(BLACK, 0.35)
 		sound("Thud", 0.7 + 0.3 * intensity, 1.1 - 0.25 * intensity)
 		sound("Ping", 1, 0.8 + 0.12 * tierIndex)
-		if not isKrillion then
+		if not isMythic then
 			-- The slam: every answer thuds, rarer ones hit harder and flash their colour.
 			Fx.shakeOffset(frame, (3 + 9 * intensity) * (if quick then 0.5 else 1), 0.35 + 0.2 * intensity)
 		end
@@ -506,7 +506,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		if tierName == "DeepCut" then
 			burst(if quick then 6 else 12)
 		end
-		if isKrillion then
+		if isMythic then
 			sound("Fanfare", 0.8, 1)
 			Fx.shakeOffset(frame, if quick then 5 else 12, 0.5)
 			burst(if quick then 14 else 30)

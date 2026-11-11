@@ -17,7 +17,7 @@ local list: { Tier } = {
 	{ name = "Schooler", label = "Schooler", points = 30, depthMin = 150, depthMax = 250, blurb = "A pretty common pick." },
 	{ name = "Rare", label = "Rare", points = 60, depthMin = 250, depthMax = 350, blurb = "Not many people said that!" },
 	{ name = "DeepCut", label = "Deep Cut", points = 85, depthMin = 350, depthMax = 450, blurb = "Hardly anyone thinks of that!" },
-	{ name = "OneInAKrillion", label = "One in a Krillion", points = 100, depthMin = 450, depthMax = 560, blurb = "Almost nobody says that. Legendary!" },
+	{ name = "Mythic", label = "Mythic", points = 100, depthMin = 450, depthMax = 560, blurb = "Almost nobody says that. Legendary!" },
 }
 
 local byName: { [string]: Tier } = {}
@@ -41,7 +41,7 @@ function Tiers.points(name: string): number
 	return tier.points
 end
 
--- 1 for Plankton up to 6 for OneInAKrillion; 0 for no tier.
+-- 1 for Plankton up to 6 for Mythic; 0 for no tier.
 function Tiers.index(name: string?): number
 	if name == nil then
 		return 0

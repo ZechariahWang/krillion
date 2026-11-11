@@ -125,7 +125,7 @@ function Quests.advance(progress: number, quest: Quest, amount: number): (number
 	return nextProgress, nextProgress >= quest.goal
 end
 
--- Quest kinds an answer of this tier counts toward (Tiers.index: 4 Rare, 5 Deep Cut, 6 One in a Krillion).
+-- Quest kinds an answer of this tier counts toward (Tiers.index: 4 Rare, 5 Deep Cut, 6 Mythic).
 function Quests.kindsForTier(tierIndex: number): { string }
 	local kinds = {}
 	if tierIndex >= RARE_INDEX then

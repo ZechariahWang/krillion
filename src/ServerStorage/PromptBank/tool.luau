@@ -107,7 +107,7 @@ return {
 			"bristol key", "spline key", "frearson", "reed and prince", "jis screwdriver", "jis", "mortorq",
 			"e torx", "security torx",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bodkin", "marlinspike", "fid", "serving mallet", "rigging knife", "caulking iron", "caulking mallet",
 			"oakum iron", "reefing iron", "hawsing iron", "making iron", "bent iron", "spike maul",
 			"sailmakers needle", "sail palm", "seam rubber", "prickers", "pricker", "bench hook", "saddlers clamp",

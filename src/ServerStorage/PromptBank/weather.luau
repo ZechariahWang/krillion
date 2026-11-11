@@ -67,7 +67,7 @@ return {
 			"westerlies", "polar easterlies", "intertropical convergence zone", "itcz", "monsoon trough",
 			"easterly wave", "saharan air layer", "dust plume", "sahara dust",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"elephanta", "baiu", "meiyu", "yamase", "oroshi", "kona storm", "chocolatero", "surazo", "friagem",
 			"virazon", "terral", "bayamo", "collada", "cordonazo", "aspre", "autan", "marin", "solano", "vardar",
 			"koshava", "jugo", "nevera", "bora scura", "bora chiara",

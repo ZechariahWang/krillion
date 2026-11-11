@@ -68,7 +68,7 @@ return {
 			"magnetar sgr 1806", "sgr 1806 20", "circinus x 1", "circinus", "scorpius x 1",
 			"hercules x 1", "vela x 1", "centaurus x 3", "sagittarius a west", "sagittarius a east", "sgr a",
 			"holm 15a", "ic 1101 galaxy", "barnards galaxy", },
-		OneInAKrillion = {
+		Mythic = {
 			},
 	},
 	aliases = {

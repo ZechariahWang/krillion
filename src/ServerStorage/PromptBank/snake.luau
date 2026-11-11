@@ -71,7 +71,7 @@ return {
 			"honduran milk snake", "pueblan milk snake", "banded water snake", "diamondback water snake",
 			"plain bellied water snake", "northern water snake", "brown water snake",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"titanoboa", "matildas horned viper", "barbados threadsnake", "madagascar leaf nosed snake",
 			"sumatran short tailed python", "borneo short tailed python", "bocourts water snake", "javan file snake",
 			"crab eating water snake", "burrowing asp", "kenyan horned viper", "lowland copperhead", "pygmy copperhead",

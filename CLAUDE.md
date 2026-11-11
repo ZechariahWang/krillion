@@ -1,4 +1,4 @@
-# Krillion
+# Rare or Sink
 
 Roblox party game. Code is synced with Rojo (`default.project.json`); everything visual lives in the Studio place.
 
@@ -70,7 +70,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   along the back of the deck, facing the front. Players roam the whole island: invisible `Arena.BeachBorder` walls
   stand just short of the waterline (and behind the deck) so nobody swims out.
 - `PhysicalAssets.TerrainBeforeDunes` is the terrain before the beach dunes were added.
-- Audio: UI sounds and the `Music` playlist folder live in `SoundService.Krillion` (Sfx looks there first, then
+- Audio: UI sounds and the `Music` playlist folder live in `SoundService.RareOrSink` (Sfx looks there first, then
   `ReplicatedStorage.Sounds`). Music tracks play in name order from a random start. Every track is DistroKid
   music from the Creator Store (Roblox-only licence) and carries `Title`, `Artist` and `Source` attributes that
   `Client/Music` shows as a toast when it starts; `docs/music-credits.md` lists them.
@@ -143,7 +143,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - `user_keyboard_input` with an `instance_path` clicks that instance first; to type into a focused box, omit it.
 - `get_console_output` returns only Edit-context lines. In play, run `game:GetService("LogService"):GetLogHistory()`
   on the Client or Server datamodel to read the game's output.
-- `ServerStorage.KrillionDebug:Invoke("state")` (Server datamodel, DebugService) returns the match snapshot:
+- `ServerStorage.RareOrSinkDebug:Invoke("state")` (Server datamodel, DebugService) returns the match snapshot:
   phase, round, alive ids, heights, water level, prompt.
 - Screenshots come back at 1596x1080 but the viewport is 1152x779; `user_mouse_input` takes viewport pixels.
 - With `MinPlayers = 1` a solo match starts 15 s after joining. To test the lobby, turn AFK on in Settings first.

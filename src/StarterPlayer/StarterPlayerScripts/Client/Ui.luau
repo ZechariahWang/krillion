@@ -134,7 +134,7 @@ function Ui.pop(object: GuiObject, from: number?)
 	Tween.play(scale, Theme.Tween.Pop, { Scale = rest })
 end
 
--- The big party-game entrance from 60%. Keep it for the reveal and rare moments (Rare+, Krillion, wins).
+-- The big party-game entrance from 60%. Keep it for the reveal and rare moments (Rare+, Mythic, wins).
 function Ui.bounce(object: GuiObject)
 	object.Visible = true
 	local scale = scaleOf(object)
@@ -710,7 +710,7 @@ end
 -- World text players see all the time: pillar name tags, head titles and the lobby leaderboard.
 local function isWorldText(object: Instance): boolean
 	if object:IsA("BillboardGui") then
-		return object.Name == "NameTag" or object.Name == "KrillionName"
+		return object.Name == "NameTag" or object.Name == "RareOrSinkName"
 	end
 	if object:IsA("SurfaceGui") then
 		return object:FindFirstAncestor("Leaderboard") ~= nil

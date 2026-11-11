@@ -69,7 +69,7 @@ return {
 			"macleays specter", "thorny devil stick insect", "phasmid", "tree cricket",
 			"king cricket", "sand cricket", "raspy cricket", "razor back", "decticus",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"heelwalker", "rock crawler", "ice crawler", "zorapteran", "twisted wing parasite", "meganeura", "timema",
 			"lord howe island stick insect", "phobaeticus", "giant prickly stick insect", "peanut head bug",
 			"hissing cockroach", "death head cockroach", "giant burrowing cockroach", "sea skater", "ensign wasp",

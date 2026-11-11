@@ -26,7 +26,7 @@ return {
 				"bardenas reales", "kaokoveld", "succulent karoo", "great salt lake desert", "owyhee", "yuma",
 				"mu us", "kubuqi", "hunshandake",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kyzylkum", "dasht e kavir", "gibson", "tanami", "badain jaran", "tengger", "gurbantunggut", "chalbi",
 			"cholistan", "registan",
 				"lop desert", "dasht e margo", "ulan buh",

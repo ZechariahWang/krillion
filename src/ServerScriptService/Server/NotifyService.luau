@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Net = require(ReplicatedStorage.Shared.Net)
 
-local KINDS = { info = true, good = true, bad = true, krillion = true, hint = true }
+local KINDS = { info = true, good = true, bad = true, mythic = true, hint = true }
 
 local NotifyService = {}
 
@@ -16,7 +16,7 @@ local function kindOf(kind: string?): string
 	return "info"
 end
 
--- kind: "info" | "good" | "bad" | "krillion" | "hint". Text is our own copy; never pass raw chat text here.
+-- kind: "info" | "good" | "bad" | "mythic" | "hint". Text is our own copy; never pass raw chat text here.
 function NotifyService.send(player: Player, text: string, kind: string?)
 	if player.Parent == nil then
 		return

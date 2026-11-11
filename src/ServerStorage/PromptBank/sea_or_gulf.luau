@@ -33,7 +33,7 @@ return {
 				"gulf of nicoya", "gulf of guayaquil", "gulf of anadyr", "gulf of boothia", "gulf of bonifacio",
 				"van diemen gulf", "joseph bonaparte gulf", "gulf st vincent",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"sargasso sea", "laptev sea", "banda sea", "gulf of bothnia", "sea of okhotsk", "east siberian sea",
 			"wadden sea", "flores sea", "molucca sea", "halmahera sea", "ceram sea", "savu sea", "bali sea", "scotia sea",
 			"amundsen sea", "bellingshausen sea", "davis sea", "lazarev sea", "riiser larsen sea", "cosmonauts sea",

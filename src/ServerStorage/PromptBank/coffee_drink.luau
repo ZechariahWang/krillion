@@ -40,7 +40,7 @@ return {
 				"bosnian coffee", "cascara latte", "es kopi susu", "kahawa", "cafecito", "colada", "ca phe den",
 				"pocillo", "kopi gula aren", "cappuccino freddo", "ca phe sua nong",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kopi susu", "kaffeost", "kaffeepunsch", "cortadito", "tinto", "cafe pharisaer", "pharisaer", "kopi joss",
 			"cafe brulot", "brulot",
 		},

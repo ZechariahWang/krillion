@@ -1,5 +1,5 @@
 --!strict
--- Game pass and developer product ids, created 2026-11-08 under the krillion universe (10774453756), owned by
+-- Game pass and developer product ids, created 2026-11-08 under the Rare or Sink universe (10774453756), owned by
 -- group 36001322. They were created off sale: switch each on sale in the Creator Hub (Monetization) to sell it.
 -- docs/monetization/creator-hub-checklist.md lists every one with its name, price and description. Robux
 -- prices here are what the shop shows; the Creator Hub price is what Roblox charges, so keep the two the same.

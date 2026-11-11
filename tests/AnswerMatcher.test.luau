@@ -6,7 +6,7 @@ local prompt = {
 	answers = {
 		Plankton = { "argentina", "australia" },
 		Rare = { "andorra" },
-		OneInAKrillion = { "antigua and barbuda" },
+		Mythic = { "antigua and barbuda" },
 	},
 	aliases = {
 		["antigua"] = "antigua and barbuda",
@@ -24,7 +24,7 @@ return function(test)
 	end)
 
 	test("alias resolves to the canonical answer tier", function()
-		assert(AnswerMatcher.match("antigua", prompt) == "OneInAKrillion")
+		assert(AnswerMatcher.match("antigua", prompt) == "Mythic")
 	end)
 
 	test("one character typo is accepted for answers of 5+ characters", function()
@@ -46,7 +46,7 @@ return function(test)
 
 	test("long answers forgive two typos", function()
 		local tier, corrected = AnswerMatcher.resolve("antiqua and barbada", prompt)
-		assert(tier == "OneInAKrillion")
+		assert(tier == "Mythic")
 		assert(corrected == "antigua and barbuda")
 	end)
 
@@ -73,7 +73,7 @@ return function(test)
 
 	test("an alias autocorrects to its canonical answer", function()
 		local tier, corrected = AnswerMatcher.resolve("antigua", prompt)
-		assert(tier == "OneInAKrillion")
+		assert(tier == "Mythic")
 		assert(corrected == "antigua and barbuda")
 	end)
 

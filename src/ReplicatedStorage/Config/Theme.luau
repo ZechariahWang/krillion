@@ -23,7 +23,7 @@ local Theme = {
 		Schooler = Color3.fromHex("50E07A"),
 		Rare = Color3.fromHex("A97BFF"),
 		DeepCut = Color3.fromHex("FF9F50"),
-		OneInAKrillion = Color3.fromHex("FFC24B"),
+		Mythic = Color3.fromHex("FFC24B"),
 	},
 	-- Shop item rarity (Config/Cosmetics `rarity`): the card frame and the rarity line.
 	Rarity = {

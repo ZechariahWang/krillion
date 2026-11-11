@@ -83,7 +83,7 @@ return {
 			"arthurs lake", "lake rowallan", "lake barrington", "lake parangana", "lake dundas", "lake everard",
 			"lake acraman", "lake yamma yamma",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"lake kaindy", "lake karachay", "karachay", "lake natron", "lake nyos", "lake monoun", "lake retba",
 			"lake tele", "lake bosumtwi", "lake assal", "lake abbe", "lake afrera", "lake bogoria", "lake nakuru",
 			"lake naivasha", "lake baringo", "lake elmenteita", "lake magadi", "lake manyara", "lake eyasi",

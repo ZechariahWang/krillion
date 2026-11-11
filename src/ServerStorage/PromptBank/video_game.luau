@@ -110,7 +110,7 @@ return {
 			"eye of the beholder", "dungeon master", "angband", "moria", "path of exile", "torchlight", "grim dawn",
 			"titan quest", "sacred", "dungeon siege",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"et the extraterrestrial", "desert bus", "spacewar", "tennis for two", "colossal cave adventure", "zork",
 			"rogue", "nethack", "pitfall", "river raid", "kaboom", "yars revenge", "berzerk", "defender", "joust",
 			"robotron 2084", "tempest", "battlezone", "missile command", "marble madness", "paperboy", "gauntlet",

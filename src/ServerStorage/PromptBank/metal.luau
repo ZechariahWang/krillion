@@ -80,7 +80,7 @@ return {
 			"tellurium copper", "sulfur copper", "copper sulfur", "leaded copper", "free machining copper",
 			"free cutting copper", "free cutting brass",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"eka silicon", "eka aluminium", "eka boron", "eka manganese", "ununennium", "unbinilium", "didymium",
 			"decipium", "philippium", "mosandrium", "davyum", "nipponium", "masurium", "illinium", "florentium",
 			"alabamine", "virginium", "moldavium",

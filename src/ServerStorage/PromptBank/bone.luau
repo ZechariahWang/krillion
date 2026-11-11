@@ -28,7 +28,7 @@ return {
 			"accessory navicular", "wormian bones", "wormian bone", "fabella", "os peroneum", "os acromiale",
 			"os vesalianum",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"stapes", "incus", "malleus", "zygomatic", "ethmoid", "sphenoid", "inferior nasal concha",
 			"sesamoid", "os supranaviculare", "os tibiale externum", "os subfibulare", "os inca",
 			"epipteric bone", "interparietal bone", "os centrale", "os japonicum",

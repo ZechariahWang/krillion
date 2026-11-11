@@ -1,6 +1,6 @@
 --!strict
 -- The client side of the paid extras that live outside the shop window:
---   Pets   every player's equipped pet (KrillionPet attribute) swims beside them, drawn locally from
+--   Pets   every player's equipped pet (RareOrSinkPet attribute) swims beside them, drawn locally from
 --          ReplicatedStorage.Templates.Pets.<name> (a Model authored in Studio)
 --   Toys   the lobby THROW key (LobbyUi.Rail.RailFrame.ToyButton) and key T: pick a player, the server
 --          checks it, then every client flies Templates.Toys.<toy> to them and the target gets a splat
@@ -34,7 +34,7 @@ local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
 
-local PET_ATTRIBUTE = "KrillionPet"
+local PET_ATTRIBUTE = "RareOrSinkPet"
 local PET_OFFSET = CFrame.new(2.6, 1.2, 2.2) -- beside and a little behind the owner's root part
 -- Pet models are built nose along +X; this turns them to swim the way their owner faces (-Z).
 local PET_FACING = CFrame.Angles(0, math.pi / 2, 0)
@@ -447,7 +447,7 @@ end
 
 function Market.init(playerGui: PlayerGui)
 	petFolder = Instance.new("Folder")
-	petFolder.Name = "KrillionPets"
+	petFolder.Name = "RareOrSinkPets"
 	petFolder.Parent = workspace
 	for _, other in Players:GetPlayers() do
 		watchPlayer(other)

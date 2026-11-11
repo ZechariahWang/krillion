@@ -78,7 +78,7 @@ return {
 			"linea alba", "iliacus", "flexor carpi", "sesamoid", "calcaneal tendon", "coronoid process", "condyle",
 			"trochanter", "epicondyle", "glenoid",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"interstitium", "fabella", "os trigonum", "palmaris longus", "plantaris", "pyramidalis", "auricularis",
 			"platysma", "procerus", "risorius", "zygomaticus", "buccinator", "orbicularis oris", "orbicularis oculi",
 			"depressor anguli oris", "mentalis", "nasalis", "levator labii superioris", "corrugator supercilii",

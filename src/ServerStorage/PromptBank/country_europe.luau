@@ -23,7 +23,7 @@ return {
 			"gibraltar", "isle of man", "jersey", "guernsey", "faroe islands", "aland islands", "svalbard",
 			"georgia", "armenia", "azerbaijan",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"transnistria", "sealand", "abkhazia", "south ossetia", "northern cyprus", "vatican", "holy see",
 		},
 	},

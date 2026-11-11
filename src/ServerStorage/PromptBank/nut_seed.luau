@@ -85,7 +85,7 @@ return {
 			"southern california walnut", "claro walnut", "paradox walnut", "royal walnut",
 			"butternut white walnut", "white walnut", "buartnut",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"pili nut kernel", "yeheb nut", "yeheb", "cordeauxia", "akee seed", "ackee seed", "sapote seed",
 			"mamey seed", "zapote seed", "sapodilla seed", "soursop seed", "custard apple seed", "cherimoya seed",
 			"atemoya seed", "jackfruit stone", "durian seed", "rambutan seed", "lychee seed", "longan seed",

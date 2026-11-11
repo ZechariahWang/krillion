@@ -106,7 +106,7 @@ return {
 			"dittersdorf", "carl ditters von dittersdorf", "vanhal", "johann baptist vanhal", "wagenseil",
 			"georg christoph wagenseil", "monn", "georg matthias monn", "reutter", "georg reutter",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"hans rott", "rott", "franz schmidt", "alexander zemlinsky", "zemlinsky", "franz schreker", "schreker",
 			"erwin schulhoff", "schulhoff", "viktor ullmann", "ullmann", "pavel haas", "hans krasa", "krasa",
 			"gideon klein", "ervin schulhoff", "kurt atterberg", "atterberg", "havergal brian", "kaikhosru sorabji",

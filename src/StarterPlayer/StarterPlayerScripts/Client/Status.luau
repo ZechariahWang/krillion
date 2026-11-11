@@ -137,13 +137,13 @@ local function tinted(text: string, color: Color3): string
 	return '<font color="#' .. color:ToHex() .. '">' .. text .. "</font>"
 end
 
--- "RARE+ TO SURVIVE" in the tier colour, "SAFE THIS ROUND" in green, "GO FOR A KRILLION" when nothing is enough.
+-- "RARE+ TO SURVIVE" in the tier colour, "SAFE THIS ROUND" in green, "GO FOR A MYTHIC" when nothing is enough.
 local function needHint(payload): string
 	local need = TideRules.needTier(payload.height, payload.waterY, payload.surge, payload.special)
 	if need == "safe" then
 		return tinted("SAFE THIS ROUND", Theme.Color.Green)
 	elseif need == "none" then
-		return tinted("GO FOR A KRILLION", Theme.Color.Red)
+		return tinted("GO FOR A MYTHIC", Theme.Color.Red)
 	elseif Tiers.index(need) == 1 then
 		return tinted("ANY ANSWER SURVIVES", Theme.Tier.Plankton)
 	end

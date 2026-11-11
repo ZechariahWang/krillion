@@ -61,7 +61,7 @@ return {
 			"zinc white", "lead white", "magnolia", "seashell", "snow", "linen", "parchment", "buttercream", "wheat",
 			"sorrel", "bay", "roan", "drab", "greige", "mushroom", "stone", "putty", "fallow",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"gamboge", "glaucous", "feldgrau", "smaragdine", "zaffre", "falu red", "xanadu", "tyrian purple", "eigengrau",
 			"lincoln green", "vermeil", "sinopia", "verdigris", "titian", "murrey", "gridelin", "lavender blush",
 			"mountbatten pink", "caput mortuum", "aureolin", "tuscan red", "yale blue", "oxford blue", "cambridge blue",

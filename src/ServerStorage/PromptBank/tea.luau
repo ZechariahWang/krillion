@@ -82,7 +82,7 @@ return {
 			"si ji chun", "cui yu", "jade oolong", "high mountain oolong", "gaoshan", "ali shan", "fushoushan",
 			"shan lin shi", "bai hao", "eastern beauty", "champagne oolong", "formosa oolong",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kukicha twig", "aracha", "tencha", "ryokucha", "fukamushi sencha", "asamushi", "kabuse sencha",
 			"shiraore", "matcha usucha", "matcha koicha", "kyobancha", "awa bancha", "goishicha", "batabatacha",
 			"awabancha", "kuromamecha", "black soybean tea", "tochucha", "hatomugicha", "soba cha",

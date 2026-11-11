@@ -65,7 +65,7 @@ return {
 			"polish hound", "croatian sheepdog", "karst shepherd", "central asian shepherd", "black russian terrier",
 			"russian toy", "laika", "west siberian laika", "east siberian laika", "russian spaniel",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"xoloitzcuintli", "mudi", "tornjak", "sarplaninac", "kromfohrlander", "markiesje", "dunker", "halden hound",
 			"schillerstovare", "smalandsstovare", "segugio italiano", "basset artesien normand", "griffon nivernais",
 			"porcelaine", "billy", "chien francais tricolore", "ariegeois", "poitevin", "gascon saintongeois",

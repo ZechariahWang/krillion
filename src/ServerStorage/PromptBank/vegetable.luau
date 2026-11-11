@@ -78,7 +78,7 @@ return {
 			"warabi", "zenmai", "lambs quarters", "chickweed", "miners lettuce", "claytonia",
 			"winter purslane",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"salsify", "cardoon", "samphire", "skirret", "scorzonera", "ulluco", "crosne", "sea kale",
 			"mashua", "hamburg parsley", "mouse melon", "cucamelon", "horned melon", "rat tail radish",
 			"podded radish", "root chervil", "turnip rooted chervil", "babington leek", "pink fir apple",

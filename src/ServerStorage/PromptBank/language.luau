@@ -65,7 +65,7 @@ return {
 			"ladin", "aromanian", "kiribati", "tuvaluan", "niuean", "rarotongan", "greenlandic", "seminole", "chinook jargon",
 			"tuareg", "proto indo european",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"damin", "lardil", "yidiny", "dyirbal", "guugu yimithirr", "kayardild", "wik mungkan", "murrinh patha",
 			"ngarrindjeri", "kaurna", "wiradjuri", "gamilaraay", "yuwaalaraay", "bundjalung", "yugambeh", "dharug",
 			"awabakal", "palawa kani", "nuenonne", "mbabaram", "yalarnnga", "kalkatungu", "pitta pitta", "diyari",

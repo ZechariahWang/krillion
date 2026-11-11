@@ -101,7 +101,7 @@ return {
 			"three stripe damselfish", "sergeant major", "garibaldi", "blue devil damselfish", "chromis",
 			"blue green chromis", "green chromis", "black and white chromis", "yellowtail damsel",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"barreleye", "viperfish", "fangtooth", "gulper eel", "pelican eel", "lantern fish", "dragonfish",
 			"stoplight loosejaw", "snipe eel", "oarfish", "ribbonfish", "blind cave fish", "mexican tetra",
 			"cave tetra", "cave molly", "devils hole pupfish", "desert pupfish", "owens pupfish",

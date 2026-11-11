@@ -36,7 +36,7 @@ return {
 			"german longhair", "american burmese", "european burmese", "ashera", "american lynx",
 			"desert lynx", "alpine lynx", "burmese contemporary", "burmese traditional",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kinkalow", "skookum", "lambkin", "genetta", "serrade petit", "foldex", "raas", "bohemian rex",
 			"nebelung longhair",
 		},

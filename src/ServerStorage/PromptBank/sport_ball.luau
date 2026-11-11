@@ -50,7 +50,7 @@ return {
 			"chole", "pelote bretonne", "ballon prisonnier", "chueca", "palin", "pallone col bracciale",
 			"pallacorda", "baggataway", "tewaaraton",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"ulama", "pitz", "kemari", "cuju", "harpastum", "episkyros", "lelo burti", "ringette",
 			"cestoball", "kronum", "pushball", "ballon au poing", "kaatsen", "fistball", "faustball",
 			"brannboll", "vigoro", "danish longball", "eton wall game", "calcio fiorentino", "la soule",

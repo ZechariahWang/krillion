@@ -27,7 +27,7 @@ return {
 				"stratiformis", "nebulosus", "wave cloud", "asperitatus", "cumulus congestus", "scud cloud",
 				"altocumulus castellanus", "stratus fractus", "cumulus fractus", "towering cumulus",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"cavum", "flumen", "cauda", "volutus", "homogenitus", "flammagenitus", "cataractagenitus", "silvagenitus",
 			"praecipitatio", "opacus", "translucidus", "perlucidus", "intortus", "vertebratus", "duplicatus", "lacunosus",
 			"arcus",

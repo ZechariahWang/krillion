@@ -120,7 +120,7 @@ return {
 			"luthiery", "guitar building", "violin making", "organ building", "piano tuning", "bell tuning",
 			"carillon playing",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"competitive eating", "cheese rolling", "wife carrying", "toe wrestling", "shin kicking", "gurning",
 			"caber tossing", "stone skimming", "pooh sticks", "conker fighting", "worm charming", "worm grunting",
 			"ferret legging", "bog snorkeling", "tractor pulling", "lawn mower racing", "pumpkin racing",

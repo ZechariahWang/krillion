@@ -61,7 +61,7 @@ return {
 			"fanta mango", "fanta peach", "fanta cherry", "kuat guarana", "guarana kuat", "pureza", "pureza guarana",
 			"antarctica", "antarctica guarana", "brahma guarana", "brahma",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"sinalco cola", "bluna orange", "fritz limo", "bionade elderflower", "bionade ginger orange",
 			"bionade lychee", "terere", "yerba mate soda", "guayaki", "kola inglesa", "kola champan",
 			"champagne cola", "kola escocesa", "malta india", "malta hatuey", "hatuey", "jamaican ting",

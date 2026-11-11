@@ -48,7 +48,7 @@ return {
 				"bourbon vanilla", "whiskey", "black tea", "lemon thyme", "basil", "tomato", "goat cheese",
 				"blue cheese", "lavender honey", "cucumber", "beet",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"durian", "tiger tail", "hokey pokey", "wasabi", "bubble tea", "dragon fruit", "black currant", "cantaloupe",
 			"papaya",
 				"foie gras", "oyster", "pickle", "ox tongue",

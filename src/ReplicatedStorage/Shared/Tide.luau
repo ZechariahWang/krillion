@@ -8,7 +8,7 @@ local SpecialRound = require("./SpecialRound")
 local Tide = {}
 
 -- "safe" when the pillar already clears this round's surge, otherwise the lowest tier whose lift is enough,
--- or "none" when even a One in a Krillion falls short. Sums are done the way the server does them
+-- or "none" when even a Mythic falls short. Sums are done the way the server does them
 -- (height + lift against waterY + surge) so float rounding lands on the same side.
 function Tide.needTier(height: number, waterY: number, surge: number, special: string?): string
 	local target = waterY + surge

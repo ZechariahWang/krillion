@@ -59,7 +59,7 @@ return {
 			"stilb", "phot", "skot", "apostilb", "foot lambert", "lusec", "inch of water", "feddan", "jo", "tan", "cho",
 			"sun", "ken", "bu", "kan", "sho", "go", "to",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"beard second", "sheppey", "barn", "garn", "potrzebie", "millihelen", "donkeypower",
 			"banana equivalent dose", "dog year", "nanoacre", "attoparsec", "microcentury", "hubble", "sverdrup",
 			"planck length", "planck time", "planck mass", "bohr radius", "hartree", "rydberg", "football field",

@@ -101,7 +101,7 @@ return {
 			"queen charlotte islands", "princess royal island", "calvert island", "hecate island", "quadra island",
 			"cortes island", "texada", "gabriola", "thetis", "valdes", "lasqueti", "gambier", "keats island", "anvil island",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bishops rock", "rockall", "hans island", "clipperton island", "peter i island", "scott island",
 			"young island", "sturge island", "buckle island", "ross island", "berkner island", "alexander island",
 			"adelaide island", "deception island", "king george island", "livingston island", "elephant island",

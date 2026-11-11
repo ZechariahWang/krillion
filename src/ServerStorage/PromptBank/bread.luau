@@ -44,7 +44,7 @@ return {
 			"roggenbrot", "bauernbrot", "kommissbrot", "laugenbrezel", "vetekatten", "pain de seigle", "pain poilane",
 			"pain perdu", "tourte", "couronne", "pain bagnat",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"skorpa", "pao alentejano", "pao de centeio", "pao caseiro", "pao de forma", "pao frances",
 			"ekmek", "lagana", "vasilopita", "tsoureki", "christopsomo", "prosphora", "paximadi", "koulouri", "lahoh",
 			"anjero", "aish baladi", "aish merahrah", "qursa", "khobz", "msemen", "baghrir", "harcha", "batbout",

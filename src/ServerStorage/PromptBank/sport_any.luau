@@ -76,7 +76,7 @@ return {
 			"mounted games", "kokpar", "chovgan", "pato", "atlas stones", "strongman", "farmers walk", "log lift",
 			"stone lifting",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bo taoshi", "cycle polo", "unicycle hockey", "kite fighting", "sack race", "egg and spoon race",
 			"three legged race", "competitive eating", "speed cubing", "cup stacking", "sport stacking",
 			"rock paper scissors", "thumb wrestling", "air guitar", "human pyramid", "pole sitting",

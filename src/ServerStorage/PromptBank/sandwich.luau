@@ -69,7 +69,7 @@ return {
 			"zaatar manakish", "manoushe", "manakish", "banh mi thit", "banh mi op la", "banh mi xiu mai",
 			"banh mi cha lua", "korean toast", "gilgeori toast",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"dyrlaegens natmad", "sandwich de miga", "pernil sandwich", "pebete", "mozzarella in carrozza",
 			"uitsmijter", "strammer max", "pan con chumpe", "torta de chilaquiles",
 			"matjesbrotchen", "leberkassemmel", "leberkasemmel", "belegtes brot", "chlebicek", "topinka",

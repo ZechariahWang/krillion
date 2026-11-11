@@ -23,7 +23,7 @@ return {
 			"st helier", "st peter port", "mariehamn",
 				"the hague",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"chisinau", "podgorica", "tirana", "skopje", "andorra la vella",
 				"longyearbyen",
 		},

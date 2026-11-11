@@ -103,7 +103,7 @@ return {
 			"niccolo ammaniti", "ammaniti", "susanna tamaro", "margaret mazzantini", "dacia maraini", "maraini",
 			"jaeggy", "sapienza", "ortese", "grazia deledda", "deledda", "aleramo",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"ivan goncharov", "goncharov", "aleksey tolstoy", "nikolai leskov", "leskov", "mikhail lermontov",
 			"lermontov", "mikhail saltykov shchedrin", "saltykov shchedrin", "vsevolod garshin", "garshin",
 			"vladimir korolenko", "korolenko", "aleksandr kuprin", "kuprin", "leonid andreyev", "andreyev",

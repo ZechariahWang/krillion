@@ -1,8 +1,8 @@
 # Creator Hub checklist: passes and products
 
-**Status (2026-11-08):** all 25 below were created through Open Cloud under the krillion universe (10774453756), with
+**Status (2026-11-08):** all 25 below were created through Open Cloud under the Rare or Sink universe (10774453756), with
 the icons in `assets/store-icons/`, and their ids are in the config. They were created **off sale**. To sell them, open
-the Creator Hub, then krillion, then Monetization, and switch each pass and product on sale. Until then Roblox's
+the Creator Hub, then Rare or Sink, then Monetization, and switch each pass and product on sale. Until then Roblox's
 purchase window says the item is not for sale.
 
 | Item | Id | Item | Id |
@@ -25,7 +25,7 @@ Everything paid with Shells works without any of this.
 
 ## How to add one
 
-1. Go to [create.roblox.com](https://create.roblox.com). Open **TwoTen Studio** (group 36001322), then **krillion**, then **Monetization**.
+1. Go to [create.roblox.com](https://create.roblox.com). Open **TwoTen Studio** (group 36001322), then **Rare or Sink**, then **Monetization**.
 2. Create the pass or product with the name, price and description below.
 3. Copy its id (the number in its URL) into `src/ReplicatedStorage/Config/Products.luau`, or into `src/ReplicatedStorage/Config/Cosmetics.luau` for items. Each line below says which.
 4. Keep the price on Roblox the same as the `robux` number in the config. The shop shows the config number, but Roblox charges what you set on the website.

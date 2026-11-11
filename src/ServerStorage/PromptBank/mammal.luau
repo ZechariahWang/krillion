@@ -70,7 +70,7 @@ return {
 			"tube nosed bat", "sword nosed bat", "slit faced bat", "ruffed lemur", "dwarf lemur",
 			"sportive lemur", "woolly monkey", "squirrel monkey", "owl monkey",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"monito del monte", "yapok", "kowari", "mulgara", "ningaui", "falanouc", "kusimanse", "angwantibo", "zokor",
 			"pacarana", "blesmol", "gundi", "olinguito", "ili pika", "long eared jerboa", "hirola", "dibatag", "beira",
 			"zorilla", "cacomistle", "marsupial mole", "dwarf blue sheep", "sunda colugo", "bumblebee bat",

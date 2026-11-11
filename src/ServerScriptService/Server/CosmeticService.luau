@@ -1,7 +1,7 @@
 --!strict
 -- Applies equipped cosmetics: the name and title over a player's head (Roblox's own name display is off),
 -- their pillar skin and sign colour, their elimination splash, the trail behind them and their aura. Titles, splashes, trails and auras are clones
--- of templates under ReplicatedStorage.Templates. Pets are drawn by clients from the KrillionPet attribute;
+-- of templates under ReplicatedStorage.Templates. Pets are drawn by clients from the RareOrSinkPet attribute;
 -- card themes are read by the client from its own profile.
 
 local Debris = game:GetService("Debris")
@@ -12,12 +12,12 @@ local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local DataService = require(script.Parent.DataService)
 
-local NAME_TAG = "KrillionName" -- the over-head billboard: the name, coloured by the equipped NameTag, with the title above
-local TRAIL_PREFIX = "KrillionTrail" -- every trail clone in the root part is named with this, for removal
-local TRAIL_NAME = "KrillionTrail"
-local AURA_PREFIX = "KrillionAura"
-local PET_ATTRIBUTE = "KrillionPet" -- player attribute: the Templates.Pets child to draw beside them
-local TAG_GRADIENT = "KrillionTagGradient"
+local NAME_TAG = "RareOrSinkName" -- the over-head billboard: the name, coloured by the equipped NameTag, with the title above
+local TRAIL_PREFIX = "RareOrSinkTrail" -- every trail clone in the root part is named with this, for removal
+local TRAIL_NAME = "RareOrSinkTrail"
+local AURA_PREFIX = "RareOrSinkAura"
+local PET_ATTRIBUTE = "RareOrSinkPet" -- player attribute: the Templates.Pets child to draw beside them
+local TAG_GRADIENT = "RareOrSinkTagGradient"
 
 local warned: { [string]: boolean } = {}
 local function warnOnce(what: string)

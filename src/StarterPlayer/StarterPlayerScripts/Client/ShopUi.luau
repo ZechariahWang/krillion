@@ -243,7 +243,7 @@ local function trailColors(item: Cosmetics.Item): ColorSequence
 	local folder = if templates ~= nil then templates:FindFirstChild("Trails") else nil
 	local name = item.trail
 	local trailFolder = if folder ~= nil and name ~= nil then folder:FindFirstChild(name) else nil
-	local trail = if trailFolder ~= nil then trailFolder:FindFirstChild("KrillionTrail") else nil
+	local trail = if trailFolder ~= nil then trailFolder:FindFirstChild("RareOrSinkTrail") else nil
 	if trail ~= nil and trail:IsA("Trail") then
 		return trail.Color
 	end

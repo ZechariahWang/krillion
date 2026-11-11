@@ -108,7 +108,7 @@ return {
 			"model horses", "horse figurines", "animal figurines", "animal figures", "dinosaur figures",
 			"dinosaur toys",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kendama", "bilboquet", "diabolo", "devil sticks", "flower stick", "big trak", "bigtrak",
 			"speak and read", "merlin", "football electronic", "mattel football", "mattel electronic football",
 			"microvision", "tomy pocket game", "tomy tutor", "big loader", "tomica", "plarail", "choro q",

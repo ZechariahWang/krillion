@@ -103,7 +103,7 @@ return {
 			"indoor herb garden", "aerogarden", "click and grow", "smart garden", "countertop garden",
 			"window garden",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kotatsu", "zojirushi", "takoyaki maker", "taiyaki maker", "yakitori grill", "konro", "shichirin",
 			"hibachi", "tandoor", "bread oven", "pottery kiln", "electric kiln", "ultrasonic cleaner",
 			"jewelry cleaner",

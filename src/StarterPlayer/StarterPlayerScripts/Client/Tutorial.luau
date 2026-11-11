@@ -122,7 +122,7 @@ local function portraitOverrides(): Ui.Overrides
 	for page = 1, 2 do
 		overrides["Pages/Page" .. page .. "/Body"] = { Size = UDim2.new(1, -24, 0, 126), TextSize = 26 }
 	end
-	for _, chip in { "Plankton", "TooClever", "Schooler", "Rare", "DeepCut", "OneInAKrillion" } do
+	for _, chip in { "Plankton", "TooClever", "Schooler", "Rare", "DeepCut", "Mythic" } do
 		local path = "Pages/Page3/Stage/TierChips/" .. chip
 		overrides[path] = { Size = UDim2.fromOffset(140, 31) }
 		overrides[path .. "/Text"] = { TextSize = 22 }

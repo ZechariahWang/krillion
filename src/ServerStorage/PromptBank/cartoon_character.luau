@@ -97,7 +97,7 @@ return {
 			"herb muddlefoot", "tank muddlefoot", "steelbeak", "taurus bulba", "colonel spigot", "dumptruck", "mad dog",
 			"baba looey", "jabberjaw", "captain caveman", "the great gazoo", "dudley doright", "gumby", "pokey", "fat albert",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bosko", "goopy geer", "cubby bear", "flip the frog", "willie whopper",
 			"krazy kat", "ignatz mouse", "offissa pupp", "little nemo", "gertie the dinosaur", "koko the clown",
 			"farmer al falfa", "terrytoons gandy goose", "sourpuss", "dinky duck", "little roquefort",

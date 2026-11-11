@@ -56,7 +56,7 @@ return {
 			"tactel", "qiana", "dralon", "manila hemp", "gunny", "icelandic wool", "wool crepe", "yak wool",
 			"sea island cotton", "end on end", "rib knit",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"marquisette", "etamine", "crash", "cheviot", "shetland", "kasha", "tabaret", "tiffany",
 			"lutestring", "paduasoy", "tammy", "calamanco", "durant", "wincey", "linsey woolsey", "camlet",
 			"grogram", "kerseymere", "sendal", "cendal", "sea silk", "byssus", "shahtoosh", "lotus silk",

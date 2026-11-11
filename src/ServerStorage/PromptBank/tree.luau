@@ -88,7 +88,7 @@ return {
 			"washingtonia", "sabal palm", "nypa palm", "silver fern", "copal tree", "gumbo limbo",
 			"agarwood", "gaharu",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"dragon blood tree", "wollemi pine", "quiver tree", "kauri", "pohutukawa", "sausage tree",
 			"cannonball tree", "lignum vitae", "manchineel", "bottle tree", "strangler fig",
 			"socotra dragon tree", "grandidier baobab", "fony baobab", "madagascar palm", "traveller tree",

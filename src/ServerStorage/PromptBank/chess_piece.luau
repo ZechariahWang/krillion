@@ -19,7 +19,7 @@ return {
 			"soldier", "squirrel", "rose", "kirin", "phoenix", "lion", "bison", "buffalo", "gnu", "antelope",
 			"aanca", "vao", "pao", "mao", "moa", "leo",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"dabbaba", "threeleaper", "berolina pawn",
 		},
 	},

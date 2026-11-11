@@ -57,7 +57,7 @@ return {
 			"mandrake the magician", "the shadow", "the phantom", "the green hornet", "frankenstein jr",
 			"hong kong phooey", "atom ant", "secret squirrel", "super chicken",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"howard the duck", "devil dinosaur", "throg", "hit monkey", "sleepwalker", "elongated man", "metamorpho",
 			"vigilante", "detective chimp", "ambush bug", "bat mite", "ragman", "doctor occult", "the spirit",
 			"the rocketeer", "green hornet", "doc savage", "space ghost", "birdman", "blue falcon", "captain midnight",

@@ -49,7 +49,7 @@ return {
 				"coverdale", "dovedale", "single gloucester", "ticklemore", "tunworth", "baron bigod", "waterloo",
 				"wigmore", "montgomery cheddar", "vermont cheddar", "wisconsin cheddar",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"taleggio", "reblochon", "vacherin mont dor", "stinking bishop", "cabrales", "castelmagno", "humboldt fog",
 			"pule", "bryndza", "oscypek", "gjetost", "shropshire blue", "idiazabal", "torta del casar", "ossau iraty",
 			"piave", "cashel blue", "kashkaval",

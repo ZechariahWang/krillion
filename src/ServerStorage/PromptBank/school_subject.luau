@@ -85,7 +85,7 @@ return {
 			"numismatics", "heraldry", "genealogy", "surveying", "hydrology", "soil science", "animal husbandry",
 			"agronomy",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"paleontology", "entomology", "ornithology", "volcanology", "seismology", "glaciology", "calligraphy",
 			"egyptology", "sinology", "cryptography", "topology", "game theory", "ethnomusicology", "papyrology",
 			"palaeography", "epigraphy", "codicology", "toponymy", "onomastics", "dendrochronology", "speleology",

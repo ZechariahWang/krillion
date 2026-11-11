@@ -103,7 +103,7 @@ for _, child in StarterGui:GetChildren() do
 	table.insert(assets, child)
 end
 -- The Music tracks are full songs: they stream in once the lobby shows instead of holding up the screen.
-local sounds = SoundService:FindFirstChild("Krillion")
+local sounds = SoundService:FindFirstChild("RareOrSink")
 if sounds ~= nil then
 	for _, child in sounds:GetChildren() do
 		if child.Name ~= "Music" then

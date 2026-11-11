@@ -92,7 +92,7 @@ return {
 			"kidney sofa", "camel back", "tete a tete sofa", "loveseat sofa", "rolled arm sofa", "track arm sofa",
 			"english roll arm sofa",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"sedia gestatoria", "cassone", "credenza cabinet", "schrank", "stollenschrank", "bauernschrank", "kast",
 			"bonnetiere", "armoire de mariage", "bombe chest", "serpentine chest", "breakfront",
 			"secretaire a abattant", "cylinder desk", "davenport writing desk", "carlton house desk", "wooton desk",

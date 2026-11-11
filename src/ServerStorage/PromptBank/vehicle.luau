@@ -73,7 +73,7 @@ return {
 			"outrigger", "clipper", "windjammer", "whaler", "liner", "supertanker", "bulk carrier", "torpedo boat", "rov",
 			"auv", "mini sub", "hydroplane", "powerboat", "jet boat", "swamp boat", "glass bottom boat", "drakkar",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"monowheel", "dicycle", "sinclair c5", "amphicar", "gyrocar", "aerocar", "flying platform", "rocket belt",
 			"gyrobus", "aerotrain", "schienenzeppelin", "land yacht", "ice yacht", "kite buggy", "kibitka", "britzka",
 			"telega", "araba", "tonga", "ekka", "shikara", "kettuvallam", "dahabeah", "jangada", "trajinera",

@@ -116,7 +116,7 @@ return {
 			"dahl whip snake", "european rat snake", "cat snake", "european cat snake", "false smooth snake",
 			"algerian whip snake",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"cave salamander", "texas blind salamander", "red salamander", "red backed salamander",
 			"slimy salamander", "two lined salamander", "dusky salamander", "jefferson salamander",
 			"marbled salamander", "ringed salamander", "mole salamander", "tiger salamander barred", "siren",

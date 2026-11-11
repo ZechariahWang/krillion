@@ -43,7 +43,7 @@ return {
 				"jatayu", "mapinguari", "iara", "el silbon", "chaneque", "tunche", "boto", "lobisomem",
 				"mula sem cabeca",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"tarasque", "amphisbaena", "each uisge", "nuckelavee", "pooka", "lindworm", "yowie", "ogopogo", "mokele mbembe",
 			"champ", "ammit", "bennu", "hecatoncheires", "domovoi", "leshy", "rusalka", "vodyanoy", "bakeneko", "nekomata",
 			"yuki onna", "kinnara", "boitata", "saci",

@@ -70,7 +70,7 @@ return {
 			"cream of celery", "cream of broccoli", "cream of potato", "cream of onion", "cream of spinach",
 			"cream of carrot", "cream of cauliflower",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"zupa ogorkowa", "czernina", "schav", "kalakeitto", "frugtsuppe", "nyponsoppa", "blabarssoppa",
 			"sotanghon soup", "misua soup", "nilaga", "sayur asem", "sop buntut", "rawon", "coto makassar", "konro",
 			"tekwan", "tom klong", "gaeng om", "pasta in brodo",

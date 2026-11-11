@@ -87,7 +87,7 @@ return {
 			"miniature horse", "american cream draft", "suffolk", "ardennes", "breton horse", "boulonnais",
 			"comtois", "noriker", "jutland horse", "dutch draft", "irish draught", "gypsy vanner", "drum horse",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"white park cattle", "chillingham cattle", "bos indicus", "kuri", "enderby island cattle",
 			"ankole longhorn", "nguni", "afrikaner cattle", "bonsmara", "drakensberger", "tuli", "boran",
 			"ayrshire cattle", "kerry cattle", "irish moiled", "dexter cattle", "vaynol", "shetland cattle",

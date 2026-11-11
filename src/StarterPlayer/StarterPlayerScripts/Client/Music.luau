@@ -1,5 +1,5 @@
 --!strict
--- Background music: the tracks authored under SoundService.Krillion.Music play one after another, from a
+-- Background music: the tracks authored under SoundService.RareOrSink.Music play one after another, from a
 -- random first track, for the whole session. Settings turns it on and off (saved as profile.musicOff); it
 -- waits for the profile before the first note so a player who turned music off never hears a burst.
 
@@ -175,9 +175,9 @@ end
 
 function Music.init()
 	task.spawn(function()
-		local folder = SoundService:WaitForChild("Krillion"):WaitForChild("Music", WAIT_SECONDS)
+		local folder = SoundService:WaitForChild("RareOrSink"):WaitForChild("Music", WAIT_SECONDS)
 		if folder == nil then
-			warn("Music: SoundService.Krillion.Music is missing; no background music")
+			warn("Music: SoundService.RareOrSink.Music is missing; no background music")
 			return
 		end
 		for _, child in folder:GetChildren() do

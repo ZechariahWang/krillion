@@ -104,7 +104,7 @@ return {
 			"lindner", "bischoff", "close", "estes", "immendorff", "penck", "lupertz", "palermo", "rothenberg", "ofili",
 			"nara", "ai weiwei", "zhang xiaogang", "yue minjun", "fang lijun", "wang guangyi",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"hugo simberg", "eero jarnefelt", "albert edelfelt", "magnus enckell", "tyko sallinen", "nils dardel",
 			"ivan agueli", "ernst josephson", "karl nordstrom", "prins eugen", "bruno liljefors", "harriet backer",
 			"kitty kielland", "frits thaulow", "christian krohg", "theodor kittelsen", "nikolai astrup",

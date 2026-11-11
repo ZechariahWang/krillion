@@ -39,7 +39,7 @@ return {
 				"krachai", "kasuri methi", "sambar powder", "rasam powder", "pav bhaji masala", "avocado leaf",
 				"pipicha", "papalo", "sazon", "korarima", "melegueta pepper", "myoga", "kinome",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"asafoetida", "lovage", "cubeb", "grains of paradise", "epazote", "culantro", "angelica", "mitsuba",
 			"vietnamese coriander", "tonka bean", "mahlab", "ajwain", "amchur", "kokum", "urfa biber", "aleppo pepper",
 				"uziza", "alligator pepper", "grains of selim", "negro pepper", "calabash nutmeg", "voatsiperifery",

@@ -75,7 +75,7 @@ return {
 			"queen of puddings", "jaffa cake", "dundee cake", "simnel cake", "eccles cake", "chorley cake", "banbury cake",
 			"lardy cake",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"cendol", "ais kacang", "bubur cha cha", "kuih lapis", "klepon", "pandan cake", "kue putu", "serabi",
 			"martabak manis", "es teler", "es campur", "che", "banh bo", "banh da lon", "khanom chan", "foi thong",
 			"sangkaya", "tub tim krob", "bingsu", "hotteok", "yakgwa", "injeolmi", "bungeoppang", "warabi mochi",

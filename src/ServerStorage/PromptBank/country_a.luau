@@ -18,7 +18,7 @@ return {
 		DeepCut = {
 			"antigua and barbuda", "aruba", "anguilla", "american samoa", "aland islands", "artsakh",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"abkhazia", "azawad", "ambazonia", "adjara",
 		},
 	},

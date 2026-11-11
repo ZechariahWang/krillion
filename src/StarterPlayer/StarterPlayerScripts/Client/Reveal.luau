@@ -29,7 +29,7 @@ local WAIT_SECONDS = 10
 local CARD_ENTER = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 local CARD_EXIT = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In)
 local EXIT_MARGIN = 0.1 -- the card is fully gone this long before the rise starts
-local KRILLION_GLOW = TweenInfo.new(0.45, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+local MYTHIC_GLOW = TweenInfo.new(0.45, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 
 local gui: Frame
 local badge: Frame
@@ -262,14 +262,14 @@ local function countRow(label: TextLabel, answerLabel: TextLabel, row: RevealRow
 	end)
 end
 
--- Pulses the row's authored gold "Glow" outline on a One in a Krillion row.
+-- Pulses the row's authored gold "Glow" outline on a Mythic row.
 local function glow(row: Frame)
 	local outline = row:FindFirstChild("Glow")
 	if outline == nil or not outline:IsA("UIStroke") then
 		return
 	end
 	outline.Enabled = true
-	TweenService:Create(outline, KRILLION_GLOW, { Thickness = 3.5 }):Play()
+	TweenService:Create(outline, MYTHIC_GLOW, { Thickness = 3.5 }):Play()
 end
 
 -- Best answer on top; rows arrive from the lowest up so the best one lands last.
@@ -301,7 +301,7 @@ local function showRows(rows: { RevealRow })
 		end
 		setPoints(pointsLabel, 0)
 		pointsLabel.TextColor3 = Ui.tierColor(row.tier)
-		if row.tier == "OneInAKrillion" then
+		if row.tier == "Mythic" then
 			glow(clone)
 		end
 		clone.Visible = false
@@ -338,17 +338,17 @@ local function celebrate(row: RevealRow, mine: DiveCard.Handle?, token: number)
 		end
 		if mine == nil then
 			-- No card to carry the moment (template missing): the old flash and fanfare.
-			if row.tier == "OneInAKrillion" then
-				Fx.flash(Theme.Tier.OneInAKrillion)
+			if row.tier == "Mythic" then
+				Fx.flash(Theme.Tier.Mythic)
 				Fx.shake(0.35, 0.5)
 				Sfx.play("Fanfare", 0.8)
 			elseif points >= Tiers.points("Rare") then
 				Fx.flash(Ui.tierColor(row.tier))
 				Sfx.play("Fanfare", 0.5)
 			end
-		elseif row.tier == "OneInAKrillion" then
+		elseif row.tier == "Mythic" then
 			Fx.confetti(90)
-			Fx.flash(Theme.Tier.OneInAKrillion)
+			Fx.flash(Theme.Tier.Mythic)
 		end
 		if level >= 2 then
 			task.wait(0.4)

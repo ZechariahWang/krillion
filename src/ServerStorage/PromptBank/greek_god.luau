@@ -34,7 +34,7 @@ return {
 			"alke", "androktasiai", "hysminai", "machai", "neikea", "pseudologoi", "phonoi", "litae",
 			"hermaphroditus", "bendis", "cabeiri", "eubuleus", "aphroditos",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"oizys", "philotes", "ate", "adrasteia", "comus", "thalassa", "phanes", "menoetius", "asteria",
 			"pallas", "achelous", "alpheus", "hesperus", "eosphorus", "chronos", "protogonos", "erikepaios",
 			"agdistis", "achlys", "aergia",

@@ -15,7 +15,7 @@ local BANK = {
 	Schooler = { "mango", "cherry" },
 	Rare = { "lychee", "quince" },
 	DeepCut = { "mandoline" },
-	OneInAKrillion = { "jabuticaba" },
+	Mythic = { "jabuticaba" },
 }
 
 return function(test)

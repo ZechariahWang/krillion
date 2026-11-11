@@ -106,7 +106,7 @@ export type JoinResultPayload = {
 
 export type NotifyPayload = {
 	text: string,
-	kind: string, -- "info" | "good" | "bad" | "krillion" | "hint"
+	kind: string, -- "info" | "good" | "bad" | "mythic" | "hint"
 }
 
 export type ShellsEarnedPayload = {

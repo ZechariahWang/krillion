@@ -96,7 +96,7 @@ return {
 			"adventure documentary", "expedition film", "polar film", "arctic film", "antarctic film", "ice film",
 			"snow film", "winter film",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"cinema of transgression", "remodernist film", "slow cinema", "contemplative cinema",
 			"cinema of attractions", "phantom ride", "trick film", "chase film", "actuality film",
 			"city symphony film", "kino pravda film", "nazisploitation film", "canuxploitation film",

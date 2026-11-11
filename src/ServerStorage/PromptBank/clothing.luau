@@ -84,7 +84,7 @@ return {
 			"tagelmust", "jilbab", "chador", "kokoshnik", "sarafan", "shapka", "glengarry", "pith helmet", "jabot",
 			"codpiece", "pantaloons",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"pourpoint", "tabi", "geta", "zori", "waraji", "jika tabi", "haori", "juban", "montsuki", "furisode",
 			"tomesode", "houmongi", "uchikake", "shiromuku", "jinbei", "samue", "happi", "kappa coat", "mino", "kasa",
 			"sugegasa", "eboshi", "kanmuri", "sokutai", "kariginu", "suikan", "junihitoe", "kosode", "kataginu",

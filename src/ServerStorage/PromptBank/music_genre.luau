@@ -84,7 +84,7 @@ return {
 			"piedmont blues", "texas blues", "british blues", "hardcore techno", "chicago house", "future funk",
 			"bubblegum bass", "bassline", "baile funk", "gqom house",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"pibroch", "puirt a beul", "sean nos singing", "waulking song", "lilting", "joik", "kulning", "yodel",
 			"schrammelmusik", "wienerlied", "tamburica", "sevdalinka", "starogradska", "lautareasca", "doina",
 			"hora lunga", "manele", "verbunkos", "magyar nota", "polska", "hambo", "slatter", "kveding", "runo song",

@@ -62,7 +62,7 @@ return {
 			"short rib", "shawarma", "falafel", "hummus", "baba ganoush", "tahini", "mole", "queso", "nacho cheese",
 			"tortilla chips", "mashed potatoes", "turkey",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"surimi", "banana curry", "durian", "reindeer", "kangaroo", "crocodile", "emu", "escargot", "natto",
 			"tuna mayo", "spam",
 			"cuttlefish", "oysters", "abalone", "bone marrow", "sweetbreads", "tripe", "lampredotto", "oxtail", "tongue",

@@ -86,7 +86,7 @@ return {
 			"beaufort", "summerville", "florence sc", "rock hill", "gastonia", "hickory", "boone", "outer banks",
 			"kitty hawk", "nags head", "manteo", "ocracoke", "new bern", "jacksonville nc", "kill devil hills",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"punxsutawney", "utqiagvik", "nome", "kotzebue", "bethel", "unalaska", "valdez", "seward", "homer",
 			"wasilla", "palmer", "skagway", "haines", "wrangell", "petersburg", "kodiak", "dillingham", "peculiar",
 			"santa claus", "north pole", "uncertain", "neptune beach",

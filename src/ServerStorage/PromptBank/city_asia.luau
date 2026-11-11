@@ -84,7 +84,7 @@ return {
 			"stung treng", "banlung", "pailin", "poipet", "luang namtha", "phonsavan", "xam neua", "thakhek", "muang sing",
 			"oudomxay",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"verkhoyansk", "tiksi", "anadyr", "pevek", "bilibino", "mirny", "aldan", "neryungri", "dudinka",
 			"salekhard", "nadym", "novy urengoy", "khanty mansiysk", "nizhnevartovsk", "tobolsk", "kurgan", "ishim",
 			"biysk", "gorno altaysk", "kyzyl", "abakan", "minusinsk", "bratsk", "ust ilimsk", "severobaykalsk", "tynda",

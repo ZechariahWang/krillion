@@ -44,7 +44,7 @@ return {
 				"hawtai", "yema", "swm", "qoros", "everus", "hozon", "zenos", "lister", "humber", "jowett",
 				"wolseley", "vanden plas", "austin healey", "standard", "daimler", "sunbeam",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"dacia", "proton", "tata", "perodua", "borgward", "wartburg", "zastava", "yugo", "tatra", "simca", "talbot",
 			"hillman", "mitsuoka", "hongqi", "roewe", "baojun", "faw", "saic",
 		},

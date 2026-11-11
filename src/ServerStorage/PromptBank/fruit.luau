@@ -43,7 +43,7 @@ return {
 			"buffaloberry", "chokecherry", "pin cherry", "beach plum", "bunchberry", "lilly pilly", "davidson plum",
 			"quandong", "kakadu plum", "muntries", "riberry", "shikuwasa", "natsumikan",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"jabuticaba", "salak", "miracle fruit", "grumichama", "pitanga", "kei apple", "bignay", "saba banana",
 			"red banana", "blue java banana", "lady finger banana", "manzano banana", "mangaba", "pequi", "buriti", "umari",
 			"sorva", "bacuri", "araza", "cocona", "pitomba", "sentul", "mabolo", "velvet apple", "chempedak", "tarap",

@@ -27,7 +27,7 @@ return {
 			"vanth", "dactyl", "dimorphos", "ilmare", "phorcys", "selam", "linus", "petit prince", "romulus",
 			"remus",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"methone", "pallene", "polydeuces", "anthe", "aegaeon", "ymir", "paaliaq", "tarvos", "ijiraq",
 			"suttungr", "kiviuq", "mundilfari", "albiorix", "skathi", "erriapus", "siarnaq", "thrymr",
 			"narvi", "bestla", "bergelmir", "hati", "aegir", "fenrir", "fornjot", "farbauti", "greip",

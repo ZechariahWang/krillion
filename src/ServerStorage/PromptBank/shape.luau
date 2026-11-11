@@ -33,7 +33,7 @@ return {
 				"circular segment", "helicoid", "catenoid", "ogive", "bicone", "bipyramid", "antiprism",
 				"gyroelongated pyramid",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"trapezium", "lemniscate", "cardioid", "deltoid", "astroid", "reuleaux triangle", "vesica piscis",
 			"mobius strip", "paraboloid", "hyperboloid", "klein bottle",
 				"scutoid", "gomboc", "rhombicuboctahedron", "snub cube", "truncated octahedron", "stella octangula",

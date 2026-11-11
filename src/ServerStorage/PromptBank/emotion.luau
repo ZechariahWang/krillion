@@ -75,7 +75,7 @@ return {
 			"mal du pays", "sprezzatura ease", "abattement", "tristesse", "cafard", "spleen", "pothos", "himeros", "eros",
 			"storge", "phobos", "deimos",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"acedia", "limerence", "ambivalence", "philia", "agape", "metanoia", "apatheia", "thymos", "melancholia",
 			"sanguine", "malaise", "lassitude", "languor", "torpor", "tedium", "taedium vitae",
 			"runners high",

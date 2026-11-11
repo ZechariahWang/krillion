@@ -45,7 +45,7 @@ return function(test)
 		assertSinksBetween("Plankton missing round 2", sinkRound("Plankton", 2), 4, 100)
 		assertSinksBetween("Schooler every round", sinkRound("Schooler"), 8, 10)
 		assertSinksBetween("Rare every round", sinkRound("Rare"), 12, 15)
-		assertSinksBetween("One in a Krillion every round", sinkRound("OneInAKrillion"), 1, 17)
+		assertSinksBetween("Mythic every round", sinkRound("Mythic"), 1, 17)
 	end)
 
 	test("prompt timer shrinks each round and never goes below the floor", function()

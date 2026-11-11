@@ -67,7 +67,7 @@ local function waitChild(parent: Instance?, name: string): Instance?
 end
 
 function Fx.init(playerGui: PlayerGui)
-	RunService:BindToRenderStep("KrillionShake", Enum.RenderPriority.Camera.Value + 1, function()
+	RunService:BindToRenderStep("RareOrSinkShake", Enum.RenderPriority.Camera.Value + 1, function()
 		if os.clock() >= shakeUntil then
 			return
 		end
@@ -278,7 +278,7 @@ local function stepConfetti()
 	end
 end
 
--- Confetti rains down the whole screen. Kept for wins and Krillions; capped so bursts never pile up.
+-- Confetti rains down the whole screen. Kept for wins and Mythics; capped so bursts never pile up.
 function Fx.confetti(count: number, colors: { Color3 }?)
 	local template = confettiTemplate
 	if template == nil or not ready then

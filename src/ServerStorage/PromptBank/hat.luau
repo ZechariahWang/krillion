@@ -76,7 +76,7 @@ return {
 			"shtreimel", "spodik", "kolpik hat", "borsalino", "borsalino hat", "kasket", "kippah knit",
 			"kippah crocheted", "bukharan kippah", "kippa srugah", "prayer cap",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"gatsby", "newsboy", "baker boy", "flat cap ivy", "scally cap", "scally", "skimmer", "skimmer hat",
 			"capeline", "picture hat", "gainsborough hat", "merry widow hat", "cartwheel hat", "wide brim hat",
 			"floppy hat", "floppy sun hat", "derby hat", "kentucky derby hat", "ascot hat", "royal ascot hat",

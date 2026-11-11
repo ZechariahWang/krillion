@@ -55,7 +55,7 @@ export type Profile = {
 	referredBy: number, -- UserId of the friend whose invite brought this player; 0 for none
 	quests: QuestDay,
 	lobby: LobbyDay,
-	krillions: number, -- One in a Krillion answers ever given in matches
+	krillions: number, -- Mythic answers ever given in matches
 	games: number, -- matches played to the end
 	musicOff: boolean, -- the player turned background music off in Settings
 	musicVolume: number, -- 0..1, the Settings volume bar

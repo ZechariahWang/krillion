@@ -66,7 +66,7 @@ return {
 			"castles of burgundy", "dominant species", "tzolkin", "mombasa", "navegador", "nusfjord",
 			"vinhos", "the gallerist", "railways of the world", "mini shogi", "chu shogi", "tai shogi",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"tichu", "cuttle", "hanafuda", "big two", "tien len", "belote", "terraforming mars",
 			"twilight imperium", "gloomhaven", "wingspan", "agricola", "brass birmingham", "spirit island",
 			"through the ages", "twilight struggle", "dune imperium", "ark nova", "great western trail",

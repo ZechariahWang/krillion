@@ -88,7 +88,7 @@ return {
 			"pesto rosso", "pesto trapanese", "ragu", "ragu napoletano", "genovese sauce", "sugo", "amatriciana",
 			"gricia", "nduja", "mostarda", "mostarda di cremona", "saba", "vincotto", "white balsamic", "agrodolce",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"garum", "liquamen", "allec", "defrutum", "sapa", "colatura di alici", "colatura", "bagnet verd",
 			"bagnet ross", "cogna", "mosto cotto", "oxygarum", "hallec", "kapi", "plaa ra", "pla ra", "teuk trey",
 			"tuk trey", "san som", "mam tom chua", "tuong cai", "tuong ban", "tuong hot", "sambal tumpang",

@@ -63,7 +63,7 @@ return {
 			"darwin glass", "fordite", "detroit agate", "vegetable ivory", "tagua", "paua", "melo pearl",
 			"quahog pearl", "pen shell pearl", "scallop pearl", "giant clam pearl",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"taaffeite", "musgravite", "grandidierite", "jeremejevite", "poudretteite", "serendibite",
 			"painite", "kyawthuite", "pezzottaite", "johachidolite", "zektzerite", "stibiotantalite",
 			"bobdownsite", "tsavorite garnet",

@@ -27,7 +27,7 @@ return {
 			"pictor", "pyxis", "reticulum", "sculptor", "sextans", "telescopium", "volans", "fornax", "apus",
 			"chamaeleon", "indus",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"argo navis", "quadrans muralis", "antinous", "felis", "noctua", "rangifer", "solarium",
 			"machina electrica", "globus aerostaticus", "officina typographica", "psalterium georgii",
 			"taurus poniatovii", "cerberus", "gallus", "jordanus", "tigris", "telescopium herschelii",

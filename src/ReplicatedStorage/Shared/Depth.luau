@@ -65,7 +65,7 @@ function Depth.diveSeconds(metres: number, quick: boolean): number
 	return seconds
 end
 
--- The shape of a dive for an answer of `intensity` (0 for the commonest tier, 1 for One in a Krillion):
+-- The shape of a dive for an answer of `intensity` (0 for the commonest tier, 1 for Mythic):
 -- `hold` is when the slow wind-up ends and the burst starts, `impact` is when the tag first reaches its depth
 -- (the stamp lands here), and `creep` and `overshoot` are fractions of the depth. Better answers wind up
 -- longer, burst faster and overshoot further before springing back.

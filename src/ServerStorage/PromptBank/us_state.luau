@@ -23,7 +23,7 @@ return {
 			"rhode island and providence plantations", "new york state", "washington state", "state of hawaii",
 			"state of california",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"commonwealth of massachusetts", "commonwealth of kentucky", "commonwealth of pennsylvania",
 			"commonwealth of virginia",
 		},

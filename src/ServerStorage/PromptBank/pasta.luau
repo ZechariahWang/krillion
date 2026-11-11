@@ -31,7 +31,7 @@ return {
 				"croxetti", "occhi di lupo", "risoni", "vermicelloni", "fusilli lunghi", "ravioloni", "tortellacci",
 				"ditaloni", "gomiti", "elicoidali", "farfallette", "quadrettini", "tagliarini",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"corzetti", "culurgiones", "pizzoccheri", "filindeu", "fileja", "lagane", "strangozzi",
 				"ciriole", "cjarsons", "lorighittas", "ciccioneddos", "bombolotti", "anelletti", "chifferi",
 				"mezzani", "ferrazzuoli", "lumachine", "maccheroncini di campofilone", "maccheroni al pettine",

@@ -34,7 +34,7 @@ return {
 				"horizontal bar", "still rings", "floor exercise", "team sprint", "points race", "scratch race",
 				"individual pursuit", "time trial",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"eventing", "jeu de paume", "motorboating", "roque",
 				"rope climbing", "club swinging", "plunge for distance", "standing high jump", "standing long jump",
 				"swimming obstacle race", "underwater swimming",

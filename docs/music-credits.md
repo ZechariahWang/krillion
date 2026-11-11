@@ -1,6 +1,6 @@
 # Music credits
 
-Every background track in `SoundService.Krillion.Music` is distributed to the Roblox Creator Store by the artist
+Every background track in `SoundService.RareOrSink.Music` is distributed to the Roblox Creator Store by the artist
 through Roblox's DistroKid partnership (uploader `DistrokidOfficial`, user id 7135127272). Artists opt in and
 declare they own the recording and publishing rights; the tracks are free for any Roblox experience. Roblox's
 terms limit that licence to use **on Roblox**: do not put these tracks in trailers or videos published elsewhere.

@@ -103,7 +103,7 @@ return {
 			"seven arm octopus", "ghost octopus", "longfin inshore squid", "giant cuttlefish",
 			"flamboyant cuttlefish", "pharaoh cuttlefish",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"vampire squid", "coelacanth", "sea pig", "siphonophore", "pyrosome", "comb jelly",
 			"glass squid", "bobbit worm", "pom pom crab", "venus flower basket", "hairy frogfish",
 			"ghost shark", "glass octopus", "tripod fish", "dragonfish", "black swallower",

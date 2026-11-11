@@ -115,7 +115,7 @@ return {
 			"basil lemonade", "rosemary lemonade", "thyme lemonade", "sage lemonade", "jalapeno lemonade",
 			"cayenne lemonade", "honey lemonade", "agave lemonade", "maple lemonade",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bitter melon juice", "wintermelon", "winter melon", "winter melon tea", "white gourd", "ash gourd",
 			"ash gourd juice", "bottle gourd", "bottle gourd juice", "lauki", "lauki juice", "tinda", "tinda juice",
 			"ridge gourd", "snake gourd", "pointed gourd", "ivy gourd", "kundru", "parwal", "karela", "karela juice",

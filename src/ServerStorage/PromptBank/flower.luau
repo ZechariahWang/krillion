@@ -95,7 +95,7 @@ return {
 			"tiarella", "tigridia", "tithonia", "tradescantia", "trifolium", "tropaeolum", "tulbaghia", "urospermum",
 			"uvularia", "verbascum", "zaluzianskya",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"victoria cruziana", "euryale", "medinilla", "lipstick plant", "goldfish plant", "flame violet",
 			"achimenes", "kohleria", "sinningia", "smithiantha", "primulina", "petrocosmea", "nematanthus", "alsobia",
 			"epiphyllum", "christmas cactus", "easter cactus",

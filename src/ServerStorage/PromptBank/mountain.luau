@@ -57,7 +57,7 @@ return {
 			"mount stanley", "margherita peak", "jebel toubkal", "mount nyiragongo",
 			"mount rwenzori", "rwenzori", "mount mulanje", "mount namuli", "lions head", "devils peak",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"tirich mir", "ushba", "pobeda peak", "belukha", "khan tengri", "ismoil somoni peak", "jengish chokusu",
 			"mount elgon", "mount karisimbi", "mount sarmiento", "monte pissis", "mount erciyes", "uludag",
 			"mount bartle frere",

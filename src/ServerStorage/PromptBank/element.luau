@@ -27,7 +27,7 @@ return {
 			"samarium", "gadolinium", "terbium", "holmium", "erbium", "nobelium", "neptunium", "actinium",
 			"ruthenium", "lutetium", "protactinium",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"dysprosium", "ytterbium", "praseodymium", "hafnium", "thulium", "promethium", "berkelium",
 			"mendelevium", "lawrencium", "rutherfordium", "dubnium", "seaborgium", "bohrium", "hassium",
 			"meitnerium", "darmstadtium", "roentgenium", "copernicium", "nihonium", "flerovium", "moscovium",

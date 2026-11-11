@@ -49,7 +49,7 @@ return {
 			"viola caipira", "bandurria", "tres", "guitarron", "jarana", "bombo leguero", "caxixi", "agbe", "xalam",
 			"akonting", "krar", "masenqo", "washint", "begena", "sanza", "likembe", "valiha", "marovany",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kora", "hurdy gurdy", "nyckelharpa", "shamisen", "erhu", "talharpa", "tromba marina", "morin khuur",
 			"chapman stick", "stroh violin", "octobass", "sarrusophone", "heckelphone", "contrabass flute", "crwth", "igil",
 			"pungi", "bansuri", "dilruba", "esraj", "ektara", "dotara", "rudra veena", "mohan veena", "vichitra veena",

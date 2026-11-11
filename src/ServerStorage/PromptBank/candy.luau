@@ -81,7 +81,7 @@ return {
 			"peppermint stick", "molasses chew", "nut goodie", "goo goo clusters", "moon pie", "moonpie", "tastykake",
 			"whatchamacallit bar",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"chicken dinner bar", "seafoam candy", "divinity", "penuche", "rock sugar", "barley sugar", "kompeito",
 			"haw flakes", "tamarind candy", "cajeta", "glorias", "obleas", "alegria", "borrachitos", "tooty frooties",
 			"chocolate limes", "frys five boys",

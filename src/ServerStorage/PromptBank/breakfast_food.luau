@@ -77,7 +77,7 @@ return {
 			"pitepalt", "kroppkakor", "palt", "raggmunk", "karjalanpiirakka", "rieska", "ruisleipa", "kaurapuuro",
 			"verilettu", "mustikkapiirakka",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"halim", "kalle pache", "sangak", "injera", "genfo", "chechebsa", "firfir", "mandazi", "chapati", "akara",
 			"koko", "ogi", "vetkoek", "rusks", "mieliepap", "hogs pudding",
 			"goetta", "chicken fried steak", "you tiao", "zongzi", "shengjian bao", "gyeran bbang", "mohinga",

@@ -85,7 +85,7 @@ return {
 			"vans checkerboard", "checkerboard slip on", "vans half cab", "half cab", "vans ultrarange",
 			"vans knu skool", "knu skool",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"poulaine shoe", "crakow shoe", "long toed shoe", "piked shoe", "chopines venetian", "venetian chopine",
 			"kabkab", "qabqab", "patten overshoe", "galoche", "galosh shoe", "sabot clog", "sabots", "klompen",
 			"klomp", "dutch klomp", "swedish clog", "sweden clogs", "troentorp", "troentorp clogs", "sandgrens",

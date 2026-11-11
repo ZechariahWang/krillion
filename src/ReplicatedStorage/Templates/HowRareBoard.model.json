@@ -1926,7 +1926,7 @@
                   ]
                 },
                 {
-                  "name": "OneInAKrillion",
+                  "name": "Mythic",
                   "className": "Frame",
                   "properties": {
                     "LayoutOrder": 6,
@@ -2060,7 +2060,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "One in a Krillion",
+                        "Text": "Mythic",
                         "TextSize": 26,
                         "TextColor3": [
                           1.0,

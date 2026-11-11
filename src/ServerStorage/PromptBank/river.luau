@@ -57,7 +57,7 @@ return {
 			"javari", "madre de dios", "beni", "mamore", "guapore", "itenez", "bermejo", "salado", "dulce",
 			"desaguadero",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"indigirka", "olenyok", "anadyr", "pechora", "mezen", "northern dvina", "western dvina", "daugava", "neman",
 			"narva", "kemijoki", "torne", "glomma", "klaralven", "dalalven", "gota alv", "tornealven", "vltava", "morava",
 			"olt", "siret", "struma", "maritsa", "vardar", "drin", "neretva", "vjosa", "aliakmon", "evros", "kizilirmak",

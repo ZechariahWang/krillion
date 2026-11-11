@@ -1,6 +1,6 @@
 --!strict
 -- Drives StarterGui.Toasts: a short stack of big chunky banners in the bottom-left corner (server Notify and
--- local ones). Kinds: "info" | "good" | "bad" | "krillion" | "hint", plus "shells" and "reward" (a "good" toast about
+-- local ones). Kinds: "info" | "good" | "bad" | "mythic" | "hint", plus "shells" and "reward" (a "good" toast about
 -- Shells or an unlock gets those looks on its own). "HEADLINE  |  details" splits into a big line and a sub line.
 -- The stack lifts above any bottom bar it overlaps (the answer bar during a prompt, the spectate bar, the join
 -- card) and above the touch thumbstick, so a toast never covers input. Toasts pop in and slide out to the left.
@@ -65,7 +65,7 @@ local STYLES: { [string]: Style } = {
 	shells = { swatch = "Gold", icon = Theme.Icon.Shell, life = 3.6, sound = "Ping" },
 	reward = { swatch = "Pink", icon = Theme.Icon.Gift, life = 4, sound = "Ping" },
 	bad = { swatch = "Red", icon = "❌", life = 3.6, sound = "Deny" },
-	krillion = {
+	mythic = {
 		swatch = "Purple",
 		icon = Theme.Icon.Sparkle,
 		life = 5,
@@ -229,8 +229,8 @@ local function display(text: string, kind: string)
 			if style.text ~= nil then
 				body.TextColor3 = style.text
 			end
-			-- A krillion find is a headline, not a note.
-			if key == "krillion" then
+			-- A mythic find is a headline, not a note.
+			if key == "mythic" then
 				body.TextSize += 4
 			end
 		end
@@ -246,7 +246,7 @@ local function display(text: string, kind: string)
 	-- A bouncy pop-in: the card grows from small, overshooting a little before it settles.
 	local scale = if card ~= nil then card:FindFirstChildOfClass("UIScale") else nil
 	if scale ~= nil then
-		scale.Scale = if key == "krillion" then 0.4 else 0.55
+		scale.Scale = if key == "mythic" then 0.4 else 0.55
 		Tween.play(scale, POP_IN, { Scale = 1 })
 	end
 	while #live > limit() do
@@ -254,7 +254,7 @@ local function display(text: string, kind: string)
 	end
 	local sound = style.sound
 	if sound ~= nil then
-		Sfx.play(sound, if key == "krillion" then 0.8 else 0.6)
+		Sfx.play(sound, if key == "mythic" then 0.8 else 0.6)
 	end
 	task.delay(style.life, dismiss, toast)
 end

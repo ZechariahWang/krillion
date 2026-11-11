@@ -47,7 +47,7 @@ return {
 			"plankalkul", "speedcoding", "short code", "autocode", "mortran", "bc", "dc", "ti basic",
 			"applesoft basic", "bbc basic", "gw basic", "blitz basic", "dark basic",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"malbolge", "intercal", "jovial", "mumps", "shakespeare", "chef", "unlambda", "thue",
 			"golfscript", "cow", "trac", "setl", "icon", "lpc", "clu", "lucid", "euphoria", "rebol",
 			"ratfor", "bliss", "arnoldc", "rockstar", "hq9", "velato", "deadfish", "jelly", "pyth", "05ab1e",

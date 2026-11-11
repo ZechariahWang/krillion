@@ -79,7 +79,7 @@ return {
 			"christkindlmarkt", "christkindlesmarkt", "nuremberg christmas market", "striezelmarkt",
 			"dresden striezelmarkt",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bun festival", "cheung chau bun festival", "hungry ghost festival", "yue lan", "zhongyuan",
 			"zhongyuan festival", "qixi", "qixi festival", "chinese valentines day", "double seventh festival",
 			"cold food festival", "hanshi", "hanshi festival", "duanwu festival", "dongzhi", "dongzhi festival",

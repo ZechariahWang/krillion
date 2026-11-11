@@ -80,7 +80,7 @@ return {
 			"mission san gabriel", "mission san francisco solano", "mission san rafael", "mission santa clara",
 			"mission san jose", "mission san juan bautista", "mission santa cruz", "mission san francisco de asis",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"bridge of the gods", "glienicke bridge", "remagen bridge", "ludendorff bridge", "arnhem bridge", "john frost bridge",
 			"pegasus bridge", "benouville bridge", "horsa bridge", "ranville bridge", "merville battery",
 			"pointe du hoc", "omaha beach", "utah beach", "gold beach", "juno beach", "sword beach", "arromanches",

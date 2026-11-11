@@ -110,7 +110,7 @@ return {
 			"lepiota cristata", "stinking parasol", "lepiota brunneoincarnata", "deadly parasol",
 			"lepiota castanea", "lepiotaceae", "cystoderma", "cystoderma amianthinum",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"termitomyces", "termite mushroom", "termitomyces titanicus", "titanic termite mushroom",
 			"leucocoprinus birnbaumii", "flowerpot parasol", "yellow houseplant mushroom", "leucocoprinus",
 			"phallus indusiatus", "bamboo mushroom", "bridal veil stinkhorn", "dictyophora", "phallus impudicus",

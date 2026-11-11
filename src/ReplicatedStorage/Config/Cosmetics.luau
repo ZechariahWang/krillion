@@ -82,7 +82,7 @@ local list: { Item } = {
 	{ id = "title_krill", slot = "Title", name = "Krill Lord", rarity = "Epic", price = 1500, color = { 255, 140, 90 } },
 	{ id = "title_niche", slot = "Title", name = "Niche Lord", rarity = "Epic", price = 1800, label = "HOT", color = { 200, 120, 255 } },
 	{ id = "title_abyssal", slot = "Title", name = "Abyssal", rarity = "Epic", price = 2000, color = { 120, 140, 255 } },
-	{ id = "title_krillionaire", slot = "Title", name = "Krillionaire", rarity = "Legendary", price = 5000, color = { 255, 200, 60 } },
+	{ id = "title_krillionaire", slot = "Title", name = "Mythic Diver", rarity = "Legendary", price = 5000, color = { 255, 200, 60 } },
 	{ id = "title_kraken", slot = "Title", name = "The Kraken", rarity = "Mythic", price = 0, chestOnly = true, color = { 190, 80, 255 } },
 	{ id = "title_vip", slot = "Title", name = "VIP", rarity = "Legendary", price = 0, pass = "Vip", color = { 255, 210, 80 } },
 	{ id = "title_crew", slot = "Title", name = "Reef Crew", rarity = "Rare", price = 0, reward = "Group", color = { 38, 198, 196 } },

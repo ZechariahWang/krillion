@@ -1,6 +1,6 @@
 --!strict
--- Studio-only test hook: ServerStorage.KrillionDebug (a BindableFunction) runs one text command and
--- returns a one-line result. Call it from the server, e.g. ServerStorage.KrillionDebug:Invoke("state").
+-- Studio-only test hook: ServerStorage.RareOrSinkDebug (a BindableFunction) runs one text command and
+-- returns a one-line result. Call it from the server, e.g. ServerStorage.RareOrSinkDebug:Invoke("state").
 --   state                                   RoundService.snapshot() as JSON
 --   players                                 who is in the server, with user ids
 --   shells <user> <n>                       grant n Shells (a negative n spends them)
@@ -29,7 +29,7 @@ local QuestService = require(script.Parent.QuestService)
 local RoundService = require(script.Parent.RoundService)
 local StoreService = require(script.Parent.StoreService)
 
-local HOOK_NAME = "KrillionDebug"
+local HOOK_NAME = "RareOrSinkDebug"
 local MAX_AMOUNT = 1000000 -- keeps a typo from granting a silly number
 local PERSIST_NOTE = " (saved to the live profile)"
 

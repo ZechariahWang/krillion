@@ -22,7 +22,7 @@ return {
 		DeepCut = {
 			"guinea bissau", "sao tome and principe", "western sahara",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"sahrawi arab democratic republic", "somaliland",
 		},
 	},

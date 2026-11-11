@@ -97,7 +97,7 @@ return {
 			"augur buzzard", "jackal buzzard", "mountain buzzard", "forest buzzard", "grasshopper buzzard",
 			"white eyed buzzard", "rufous winged buzzard", "gray faced buzzard",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"kagu", "bateleur", "potoo", "sungrebe", "wryneck", "plains wanderer", "palmchat", "diving petrel", "snowcock",
 			"hazel grouse", "bluethroat", "twite", "zitting cisticola", "cisticola", "picathartes", "mesite", "ploughbill",
 			"yellowhammer", "ortolan", "corn bunting", "snow bunting", "lapland bunting", "sedge warbler", "reed warbler",

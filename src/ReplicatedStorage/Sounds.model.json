@@ -1,7 +1,7 @@
 {
   "className": "Folder",
   "attributes": {
-    "Note": "Sounds added for the Sink or Niche port. Sfx.play looks in SoundService.Krillion first, then here. Swap SoundIds to retheme."
+    "Note": "Sounds added for the Sink or Niche port. Sfx.play looks in SoundService.RareOrSink first, then here. Swap SoundIds to retheme."
   },
   "children": [
     {

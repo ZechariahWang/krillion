@@ -57,7 +57,7 @@ return {
 				"xenotarsosaurus", "xiaosaurus", "yinlong", "zalmoxes", "zephyrosaurus", "aardonyx", "adasaurus",
 				"aeolosaurus", "aerosteon", "aletopelta",
 		},
-		OneInAKrillion = {
+		Mythic = {
 			"leaellynasaura", "minmi", "muttaburrasaurus", "nigersaurus", "sauroposeidon", "dracorex", "tianyulong",
 			"epidexipteryx", "anchiornis", "mononykus", "rugops", "masiakasaurus", "concavenator", "zuniceratops",
 			"einiosaurus", "kosmoceratops", "utahceratops", "achillobator", "austroraptor", "dromiceiomimus",
