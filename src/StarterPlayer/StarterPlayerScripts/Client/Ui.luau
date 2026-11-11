@@ -209,30 +209,6 @@ end
 
 -- Live text ------------------------------------------------------------------------------------------------
 
--- Theme.Icon glyph for a name ("Shell", "Trophy"...), or the text itself if it is not a known icon.
-function Ui.icon(name: string): string
-	local icons: { [string]: string } = Theme.Icon :: any
-	return icons[name] or name
-end
-
--- Keeps an emoji in front of whatever text code sets on the label ("🐚 1,250 SHELLS"), so icons sit
--- beside existing text without a new element. `when` can limit it to some texts (timers only, say).
-function Ui.prefixIcon(label: TextObject, name: string, when: ((string) -> boolean)?)
-	local prefix = Ui.icon(name) .. " "
-	local function apply()
-		local text = label.Text
-		if text == "" or string.sub(text, 1, #prefix) == prefix then
-			return
-		end
-		if when ~= nil and not when(text) then
-			return
-		end
-		label.Text = prefix .. text
-	end
-	label:GetPropertyChangedSignal("Text"):Connect(apply)
-	apply()
-end
-
 -- A UIGradient tints everything its object draws, text included, so a text object with a face gradient
 -- draws its text through an authored child "LiftedText" label, and its own glyphs are hidden with
 -- MaxVisibleGraphemes = 0. Code keeps setting Text, TextColor3 and the rest on the object; every change
@@ -642,19 +618,6 @@ local GROWS: { [string]: { [string]: number } } = {
 	},
 }
 
-local function isClock(text: string): boolean
-	return string.match(text, "^%d+:%d%d$") ~= nil
-end
-
--- Emoji beside existing labels: the shop counter, the tide chip, the timer, the results title.
-local ICONS: { [string]: { { path: string, icon: string, when: ((string) -> boolean)? } } } = {
-	LobbyUi = { { path = "Shop.Holder.Panel.CashText", icon = "Shell" } },
-	SharedUi = {
-		{ path = "Status.Tide.Text", icon = "Wave" },
-		{ path = "Status.SecondaryStatus.Secondary", icon = "Time", when = isClock },
-	},
-}
-
 local function find(root: Instance, path: string): Instance?
 	local current: Instance? = root
 	for name in string.gmatch(path, "[^%.]+") do
@@ -669,8 +632,8 @@ end
 local boundRoots: { [Instance]: boolean } = setmetatable({}, { __mode = "k" }) :: any
 
 -- Wires up the live parts of a ScreenGui, BillboardGui or SurfaceGui authored in Studio, and of everything
--- later cloned into it: outlines track their text, lifted captions mirror it, pop-ups fit the screen and
--- icons stay in front of the text. Nothing is created or restyled. Safe to call twice.
+-- later cloned into it: outlines track their text, lifted captions mirror it and pop-ups fit the screen.
+-- Nothing is created or restyled. Safe to call twice.
 function Ui.bindGui(root: LayerCollector)
 	if boundRoots[root] then
 		return
@@ -683,25 +646,14 @@ function Ui.bindGui(root: LayerCollector)
 		task.defer(bindOne, object)
 	end)
 	local grows = GROWS[root.Name]
-	local icons = ICONS[root.Name]
-	if grows == nil and icons == nil then
+	if grows == nil then
 		return
 	end
 	task.spawn(function()
-		if grows ~= nil then
-			for path, desired in grows do
-				local found = find(root, path)
-				if found ~= nil and found:IsA("GuiObject") then
-					Ui.grow(found, desired)
-				end
-			end
-		end
-		if icons ~= nil then
-			for _, entry in icons do
-				local found = find(root, entry.path)
-				if found ~= nil and isText(found) then
-					Ui.prefixIcon(found :: TextObject, entry.icon, entry.when)
-				end
+		for path, desired in grows do
+			local found = find(root, path)
+			if found ~= nil and found:IsA("GuiObject") then
+				Ui.grow(found, desired)
 			end
 		end
 	end)

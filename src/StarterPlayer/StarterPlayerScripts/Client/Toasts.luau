@@ -11,6 +11,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Tween = require(ReplicatedStorage.Shared.Tween)
+local Icons = require(script.Parent.Icons)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
@@ -52,7 +53,7 @@ end
 
 type Style = {
 	swatch: string, -- Theme.Chunky.Color the banner is painted with
-	icon: string,
+	icon: string?, -- a name in ReplicatedStorage.Templates.Icons; nil shows the authored Cross
 	life: number, -- seconds on screen
 	sound: string?,
 	kicker: string?, -- small line above the text
@@ -60,19 +61,19 @@ type Style = {
 }
 
 local STYLES: { [string]: Style } = {
-	info = { swatch = "Sky", icon = Theme.Icon.Wave, life = 3.4 },
-	good = { swatch = "Lime", icon = Theme.Icon.Check, life = 3.4, sound = "Ping" },
-	shells = { swatch = "Gold", icon = Theme.Icon.Shell, life = 3.6, sound = "Ping" },
-	reward = { swatch = "Pink", icon = Theme.Icon.Gift, life = 4, sound = "Ping" },
-	bad = { swatch = "Red", icon = "❌", life = 3.6, sound = "Deny" },
+	info = { swatch = "Sky", icon = "Wave", life = 3.4 },
+	good = { swatch = "Lime", icon = "Check", life = 3.4, sound = "Ping" },
+	shells = { swatch = "Gold", icon = "Shell", life = 3.6, sound = "Ping" },
+	reward = { swatch = "Pink", icon = "Gift", life = 4, sound = "Ping" },
+	bad = { swatch = "Red", life = 3.6, sound = "Deny" },
 	mythic = {
 		swatch = "Purple",
-		icon = Theme.Icon.Sparkle,
+		icon = "Sparkle",
 		life = 5,
 		sound = "Fanfare",
 		text = Color3.fromRGB(255, 217, 94),
 	},
-	hint = { swatch = "Sea", icon = Theme.Icon.Hint, life = 9, sound = "Pop", kicker = "HINT" },
+	hint = { swatch = "Sea", icon = "Hint", life = 9, sound = "Pop", kicker = "HINT" },
 }
 local SWATCHES: { [string]: Swatch } = Theme.Chunky.Color :: any
 
@@ -125,7 +126,7 @@ local function styleKey(text: string, kind: string): string
 			return "reward"
 		end
 	end
-	if string.find(text, Theme.Icon.Shell, 1, true) ~= nil or string.find(upper, "SHELLS", 1, true) ~= nil then
+	if string.find(upper, "SHELLS", 1, true) ~= nil then
 		return "shells"
 	end
 	return "good"
@@ -212,9 +213,17 @@ local function display(text: string, kind: string)
 		if face ~= nil and face:IsA("UIGradient") and swatch ~= nil then
 			paint(face, swatch)
 		end
-		local icon = textOf(card:FindFirstChild("Accent"), "Icon")
-		if icon ~= nil then
-			icon.Text = style.icon
+		local accent = card:FindFirstChild("Accent")
+		local icon = if accent ~= nil then accent:FindFirstChild("Icon") else nil
+		local cross = if accent ~= nil then accent:FindFirstChild("Cross") else nil
+		if icon ~= nil and icon:IsA("ImageLabel") then
+			icon.Visible = style.icon ~= nil
+			if style.icon ~= nil then
+				icon.Image = Icons.image(style.icon)
+			end
+		end
+		if cross ~= nil and cross:IsA("GuiObject") then
+			cross.Visible = style.icon == nil
 		end
 		local content = card:FindFirstChild("Content")
 		local headline, rest = split(text)

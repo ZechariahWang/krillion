@@ -21,7 +21,6 @@ local UserInputService = game:GetService("UserInputService")
 local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Products = require(ReplicatedStorage.Config.Products)
-local Theme = require(ReplicatedStorage.Config.Theme)
 local Currency = require(ReplicatedStorage.Shared.Currency)
 local Economy = require(ReplicatedStorage.Shared.Economy)
 local Net = require(ReplicatedStorage.Shared.Net)
@@ -221,7 +220,7 @@ local function startAiming()
 		return
 	end
 	aimingUntil = os.clock() + AIM_SECONDS
-	Toasts.show(Theme.Icon.Tomato .. " CLICK A PLAYER TO THROW", "info")
+	Toasts.show("CLICK A PLAYER TO THROW", "info")
 end
 
 local function showSplat(color: Color3)
@@ -392,11 +391,8 @@ local function onMatchEnded()
 		if not nudgedStarter and profile.claimed.StarterPack ~= true and Products.StarterPack.productId ~= 0 then
 			nudgedStarter = true
 			Toasts.show(
-				Theme.Icon.Gift
-					.. " STARTER PACK  |  "
-					.. Currency.digits(Products.StarterPack.cash)
-					.. " "
-					.. Theme.Icon.Shell
+				"STARTER PACK  |  "
+					.. Currency.format(Products.StarterPack.cash)
 					.. " + PET + SKIN FOR R$ "
 					.. Products.StarterPack.robux
 					.. " IN THE SHOP",

@@ -79,11 +79,18 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 		titleText.Text = "SOLO DIVE"
 		winnerText.Text = "SURVIVED " .. math.max(0, payload.rounds - 1) .. " ROUNDS"
 	elseif won then
-		titleText.Text = Theme.Icon.Trophy .. " VICTORY! " .. Theme.Icon.Trophy
+		titleText.Text = "VICTORY!"
 		winnerText.Text = string.upper(payload.winnerName)
 	else
 		titleText.Text = "LAST ONE FLOATING"
 		winnerText.Text = string.upper(payload.winnerName)
+	end
+	-- The authored trophies either side of the title show for a win only.
+	for _, name in { "TrophyLeft", "TrophyRight" } do
+		local trophy = titleText:FindFirstChild(name)
+		if trophy ~= nil and trophy:IsA("GuiObject") then
+			trophy.Visible = won
+		end
 	end
 	for place = 1, 3 do
 		local row = podium:FindFirstChild("Place" .. place) :: Frame?

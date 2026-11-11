@@ -35,7 +35,7 @@ local function announce(sound: Sound)
 	if typeof(title) ~= "string" or typeof(artist) ~= "string" then
 		return
 	end
-	Toasts.show("♪ " .. string.upper(title) .. "  |  " .. string.upper(artist), "info")
+	Toasts.show(string.upper(title) .. "  |  " .. string.upper(artist), "info")
 end
 
 local function cancelFade()

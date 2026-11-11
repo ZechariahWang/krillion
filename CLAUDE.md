@@ -128,10 +128,16 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   (past the match water meter, above the touch thumbstick). The bottom-right column, from the
   bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.
+- Icons are ImageLabels authored in Studio; text never carries an emoji. The artwork lives once in
+  `ReplicatedStorage.Templates.Icons` (one ImageLabel per name: `Shell`, `Trophy`, `Fish`...). An icon beside
+  text is a child named `Icon` sitting in that label's UIPadding. Code only picks an image by name when it
+  depends on data (`Client/Icons.image`: toast kind, quest kind, shop and chest items via `Client/ItemIcon`)
+  or shows and hides an authored one (`Icons.show`: the status clock, the boost price shell). The X, + and
+  arrow marks are authored bars and labels inside their buttons.
 - Spacing: 16 px from screen edges, 8 px between stacked pieces, text at least 12 px from a button or pill's
   sides.
 - The look (outlines, gradients, corners, `LiftedText` captions) is authored. `Ui.bindAll` only binds live
-  behaviour: outlines tracking text, captions mirroring their label, pop-up fit (`GROWS`) and icon prefixes (`ICONS`).
+  behaviour: outlines tracking text, captions mirroring their label and pop-up fit (`GROWS`).
 
 ## Studio MCP tips
 

@@ -17,6 +17,7 @@ local Currency = require(ReplicatedStorage.Shared.Currency)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Fx = require(script.Parent.Fx)
+local Icons = require(script.Parent.Icons)
 local Sfx = require(script.Parent.Sfx)
 local Status = require(script.Parent.Status)
 local Toasts = require(script.Parent.Toasts)
@@ -229,7 +230,7 @@ local function showConfirm(text: string, corrected: string)
 	feedback.Visible = false
 	local action = if isTouch() then "TAP LOCK IN" else "PRESS ENTER AGAIN"
 	if confirmText ~= nil then
-		confirmText.Text = Theme.Icon.Lock .. " LOCK IN  " .. string.upper(corrected) .. "?  " .. action
+		confirmText.Text = "LOCK IN  " .. string.upper(corrected) .. "?  " .. action
 	end
 	if confirmChip ~= nil then
 		Ui.pop(confirmChip)
@@ -333,8 +334,8 @@ function refreshBoosts()
 		local usedUp = usesOf(kind) >= GameConfig.Boosts.PerRound
 		local cost = costOf(kind)
 		local product = productOf(kind)
-		-- The price pill says what pressing spends: Shells (with the shell icon), Robux, or one you own.
-		local shellPrice = Theme.Icon.Shell .. " " .. cost
+		-- The price pill says what pressing spends: Shells (with the authored shell icon), Robux, or one you own.
+		local shellPrice = tostring(cost)
 		local payable = true
 		local priceColor = PRICE_SHELLS
 		if inventoryOf(kind) > 0 then
@@ -351,9 +352,14 @@ function refreshBoosts()
 			payable = false
 		end
 		chip.price.TextColor3 = priceColor
+		Icons.show(chip.price, chip.price.Text == shellPrice)
 		local usable = payable and not usedUp
 		chip.button.BackgroundColor3 = if usable then chip.face else chip.face:Lerp(DISABLED_FACE, 0.75)
-		chip.uses.Text = if usedUp then Theme.Icon.Check else tostring(GameConfig.Boosts.PerRound - usesOf(kind))
+		chip.uses.Text = if usedUp then "" else tostring(GameConfig.Boosts.PerRound - usesOf(kind))
+		local check = chip.uses:FindFirstChild("Check")
+		if check ~= nil and check:IsA("GuiObject") then
+			check.Visible = usedUp
+		end
 	end
 end
 

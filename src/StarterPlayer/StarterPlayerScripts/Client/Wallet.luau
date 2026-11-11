@@ -1,6 +1,6 @@
 --!strict
 -- Drives SharedUi.Wallet: the chunky gold Shells chip in the bottom-right corner, always on screen (lobby and
--- match), that counts up, and the "+25 🐚 ANSWER" pills that bounce in above the corner column for every
+-- match), that counts up, and the "+25 ANSWER" pills (the shell icon is authored on the pill) that bounce in above the corner column for every
 -- payout or spend (ShellsEarned).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -359,7 +359,7 @@ function Wallet.onShells(payload)
 	local caption = if reason ~= nil then CAPTIONS[reason] else nil
 	local target = chip
 	if amount > 0 then
-		spawnPop("+" .. Currency.digits(amount) .. " " .. Theme.Icon.Shell, caption, "Gold")
+		spawnPop("+" .. Currency.digits(amount), caption, "Gold")
 		-- Bigger payouts ring a little higher.
 		Sfx.play("Coin", 0.6, 1 + math.clamp(amount / 100, 0, 0.3))
 		if reason == "win" then
@@ -369,7 +369,7 @@ function Wallet.onShells(payload)
 			Ui.bump(target, if amount >= 100 then 1.22 else 1.14)
 		end
 	else
-		spawnPop("-" .. Currency.digits(-amount) .. " " .. Theme.Icon.Shell, caption or CAPTIONS.spend, "Red")
+		spawnPop("-" .. Currency.digits(-amount), caption or CAPTIONS.spend, "Red")
 		Sfx.play("Coin", 0.5, 0.7)
 	end
 end

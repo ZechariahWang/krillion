@@ -127,25 +127,6 @@ local Theme = {
 		Color3.fromRGB(150, 96, 255),
 		Color3.fromRGB(38, 198, 196),
 	},
-	-- Emoji icons in TextLabels named "Icon"; they can become group-uploaded images later.
-	Icon = {
-		Shell = "🐚",
-		Hint = "💡",
-		Time = "⏱️",
-		Quest = "📜",
-		Gift = "🎁",
-		Help = "❓",
-		Lock = "🔒",
-		Check = "✅",
-		Trophy = "🏆",
-		Wave = "🌊",
-		Crown = "👑",
-		Sparkle = "✨",
-		Chest = "🧰",
-		Paw = "🐾",
-		Tomato = "🍅",
-		Robux = "R$",
-	},
 	-- Short ease-outs. Only Pop (and its Bounce/Stamp variants) overshoot, and those are kept for
 	-- reward moments: the reveal, rare tiers, wins.
 	Tween = {

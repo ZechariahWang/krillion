@@ -114,7 +114,7 @@ local function updateHeader()
 		.. "/"
 		.. Currency.digits(dailyCap)
 		.. " "
-		.. Theme.Icon.Shell
+		.. Currency.Upper
 		.. " TODAY"
 end
 
@@ -164,7 +164,7 @@ local function showConfirm(text: string, corrected: string)
 	result.Visible = false
 	local action = if isTouch() then "TAP LOCK IN" else "PRESS ENTER AGAIN"
 	if confirmText ~= nil then
-		confirmText.Text = Theme.Icon.Lock .. " LOCK IN  " .. string.upper(corrected) .. "?  " .. action
+		confirmText.Text = "LOCK IN  " .. string.upper(corrected) .. "?  " .. action
 	end
 	if confirmChip ~= nil then
 		Ui.pop(confirmChip)
@@ -307,7 +307,7 @@ local function playCard(payload, token: number)
 			return
 		end
 		if payload.cash > 0 and handle.frame ~= nil then
-			Fx.coinPop("+" .. Currency.digits(payload.cash) .. " " .. Theme.Icon.Shell, handle.frame)
+			Fx.coinPop("+" .. Currency.format(payload.cash), handle.frame)
 		end
 		-- Held like a match card, then it shrinks away and the panel is back for NEXT.
 		task.wait(GameConfig.Reveal.CardHoldSeconds)

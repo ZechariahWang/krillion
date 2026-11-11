@@ -11,6 +11,7 @@ local Theme = require(ReplicatedStorage.Config.Theme)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local TideRules = require(ReplicatedStorage.Shared.Tide)
 local Fx = require(script.Parent.Fx)
+local Icons = require(script.Parent.Icons)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
@@ -104,6 +105,12 @@ function Status.init(playerGui: PlayerGui)
 	statusText = statusFound :: TextLabel
 	secondaryText = secondaryFound :: TextLabel
 	aliveText = aliveFound :: TextLabel
+	-- The authored clock icon shows beside a countdown only, not beside LOBBY or REVEAL.
+	local function showClock()
+		Icons.show(secondaryText, string.match(secondaryText.Text, "^%d+:%d%d$") ~= nil)
+	end
+	secondaryText:GetPropertyChangedSignal("Text"):Connect(showClock)
+	showClock()
 	tide = tideFound :: Frame
 	tideAccent = accentFound :: Frame
 	tideText = tideTextFound :: TextLabel
@@ -306,7 +313,7 @@ function Status.onState(payload)
 		-- How many have locked in, once anyone has: the compact stand-in for the old lock counter.
 		local locked = #(payload.lockedUserIds or {})
 		if locked > 0 then
-			aliveText.Text ..= "  " .. Theme.Icon.Lock .. locked
+			aliveText.Text ..= "  LOCKED " .. locked
 		end
 	elseif phase == "Reveal" then
 		setStatus("ROUND " .. payload.round .. " RESULTS")

@@ -8,7 +8,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
-local Theme = require(ReplicatedStorage.Config.Theme)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local Quests = require(ReplicatedStorage.Shared.Quests)
 local DataService = require(script.Parent.DataService)
@@ -23,7 +22,7 @@ local QuestService = {}
 
 local function complete(player: Player, quest: Quests.Quest)
 	StoreService.grantShells(player, quest.reward, "quest")
-	NotifyService.send(player, `QUEST COMPLETE  |  {quest.text}  +{quest.reward} {Theme.Icon.Shell}`, "good")
+	NotifyService.send(player, `QUEST COMPLETE  |  {quest.text}  +{quest.reward} SHELLS`, "good")
 end
 
 -- Today's saved progress for one quest. A profile still on an older day counts as nothing done yet.

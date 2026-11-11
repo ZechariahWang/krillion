@@ -294,7 +294,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	shellsChip.Visible = false
 	shellsLip.BackgroundColor3 = shellsFace.BackgroundColor3:Lerp(BLACK, LIP_SHADE)
 	if shells > 0 then
-		shellsText.Text = "+" .. Currency.digits(shells) .. " " .. Theme.Icon.Shell .. " " .. Currency.Upper
+		shellsText.Text = "+" .. Currency.format(shells)
 	else
 		-- No chip: the footer line drops into the space it would have used.
 		footer.Position = footer.Position:Lerp(shellsChip.Position, 0.5)

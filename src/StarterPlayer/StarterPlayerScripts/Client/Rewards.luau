@@ -215,13 +215,13 @@ local function render()
 				"Get the %s + %s %s",
 				itemNames(RewardRules.Group),
 				Currency.digits(grant.shells),
-				Theme.Icon.Shell
+				Currency.Upper
 			)
 		end
 		setRowBadge(group, not groupDone and not checking and not joining)
 		if groupDone then
 			setButton(group, "CLAIMED", false)
-			setProgress(group, Theme.Icon.Check .. " WELCOME TO THE CREW")
+			setProgress(group, "WELCOME TO THE CREW")
 		elseif checking then
 			setButton(group, "CHECKING...", false)
 			setProgress(group, nil)
@@ -251,7 +251,7 @@ local function render()
 		if goal ~= nil then
 			setProgress(invite, string.format("%d / %d FRIENDS", referrals, goal))
 		else
-			setProgress(invite, Theme.Icon.Check .. " ALL INVITE REWARDS UNLOCKED")
+			setProgress(invite, "ALL INVITE REWARDS UNLOCKED")
 		end
 		setButton(invite, "INVITE", true)
 	end
@@ -352,7 +352,7 @@ local function maybeNudge()
 		return
 	end
 	nudged = true
-	Toasts.show("ENJOYING RARE OR SINK? ⭐ FAVORITE IT SO YOU CAN FIND IT AGAIN", "info")
+	Toasts.show("ENJOYING RARE OR SINK? FAVORITE IT SO YOU CAN FIND IT AGAIN", "info")
 end
 
 local function close()

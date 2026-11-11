@@ -29,7 +29,8 @@ local Tween = require(ReplicatedStorage.Shared.Tween)
 local Rail = require(script.Parent.Rail)
 local Rewards = require(script.Parent.Rewards)
 local ChestReveal = require(script.Parent.ChestReveal)
-local ItemEmoji = require(script.Parent.ItemEmoji)
+local Icons = require(script.Parent.Icons)
+local ItemIcon = require(script.Parent.ItemIcon)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
@@ -53,7 +54,6 @@ local PORTRAIT_BELOW = 0.7 -- the wide layout shows smaller than this: use the t
 local PORTRAIT_SIZE = UDim2.fromOffset(520, 880)
 local PRICE_X_WITH_COIN = 142
 local PRICE_X_PLAIN = 120
-local LOCKED = "🔒"
 local DIM = 0.45 -- text and preview transparency of an item you do not own, in the inventory
 
 local PRICES = { "All", "Shells", "Robux", "Free" }
@@ -70,7 +70,7 @@ local BADGE_LOOK: { [string]: { color: Color3, light: boolean } } = {
 	LIMITED = { color = RED, light = true },
 }
 
-local PASS_EMOJI: { [string]: string } = { Vip = "👑", DoubleCash = "💰", SecondChance = "❤️", BoostPlus = "⚡" }
+local PASS_ICON: { [string]: string } = { Vip = "Crown", DoubleCash = "Money", SecondChance = "Heart", BoostPlus = "Bolt" }
 local PASS_NAMES: { [string]: string } = {
 	Vip = "VIP",
 	DoubleCash = "2X " .. Currency.Upper,
@@ -102,7 +102,7 @@ type Entry = {
 	owned: boolean,
 	color: Color3,
 	rarity: string?, -- colours the card border
-	emoji: string?,
+	icon: string?, -- a name in ReplicatedStorage.Templates.Icons
 	stripe: ColorSequence?, -- trails: the colours along the trail, for the preview stripe
 	onClick: () -> (),
 }
@@ -302,7 +302,7 @@ local function emptyEntry(kind: string, name: string, color: Color3): Entry
 		owned = false,
 		color = color,
 		rarity = nil,
-		emoji = nil,
+		icon = nil,
 		stripe = nil,
 		onClick = function() end,
 	}
@@ -320,7 +320,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 	local equipped = (profile.equipped :: any)[item.slot] == item.id
 	local entry = emptyEntry(item.slot, string.upper(item.name), colorOf(item))
 	entry.rarity = item.rarity
-	entry.emoji = ItemEmoji.of(item)
+	entry.icon = ItemIcon.of(item)
 	entry.stripe = if item.trail ~= nil then trailColors(item) else nil
 	entry.badge = item.label
 	entry.owned = owned
@@ -394,7 +394,7 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 			end
 		else
 			-- Short of Shells: the button sells Shells instead of greying out.
-			entry.action = "GET " .. Theme.Icon.Shell
+			entry.action = "GET " .. Currency.Upper
 			entry.onClick = function()
 				goToKind("Shells")
 			end
@@ -423,7 +423,7 @@ local function passEntry(key: string): Entry
 	local owned = passes[key] == true
 	local entry = emptyEntry("Shop", PASS_NAMES[key] or string.upper(key), GOLD)
 	entry.rarity = "Legendary"
-	entry.emoji = PASS_EMOJI[key]
+	entry.icon = PASS_ICON[key]
 	entry.sub = passPerks(key)
 	entry.currency = "Robux"
 	entry.price = if robux ~= nil then "R$ " .. robux else "Game pass"
@@ -446,9 +446,9 @@ local function passEntry(key: string): Entry
 	return entry
 end
 
-local function productEntry(name: string, robux: number, productId: number, emoji: string?): Entry
+local function productEntry(name: string, robux: number, productId: number, icon: string?): Entry
 	local entry = emptyEntry("Shop", name, GOLD)
-	entry.emoji = emoji
+	entry.icon = icon
 	entry.currency = "Robux"
 	entry.price = "R$ " .. robux
 	entry.priceColor = GOLD
@@ -465,7 +465,7 @@ local function starterEntry(): Entry?
 		return nil
 	end
 	local pack = Products.StarterPack
-	local entry = productEntry("STARTER PACK", pack.robux, pack.productId, Theme.Icon.Gift)
+	local entry = productEntry("STARTER PACK", pack.robux, pack.productId, "Gift")
 	entry.rarity = "Epic"
 	entry.badge = pack.badge
 	-- Short enough to read on the card: the Shells and what kinds of items come with them, marking the ones
@@ -481,12 +481,12 @@ local function starterEntry(): Entry?
 			table.insert(kinds, kind)
 		end
 	end
-	entry.sub = Currency.digits(pack.cash) .. " " .. Theme.Icon.Shell .. " + " .. table.concat(kinds, " + ") .. ", one time only"
+	entry.sub = Currency.format(pack.cash) .. " + " .. table.concat(kinds, " + ") .. ", one time only"
 	return entry
 end
 
 local function packEntry(pack: { productId: number, cash: number, robux: number, badge: string? }, rarity: string): Entry
-	local entry = productEntry(Currency.format(pack.cash), pack.robux, pack.productId, Theme.Icon.Shell)
+	local entry = productEntry(Currency.format(pack.cash), pack.robux, pack.productId, "Shell")
 	entry.rarity = rarity
 	entry.badge = pack.badge
 	entry.sub = math.floor(pack.cash / pack.robux + 0.5) .. " " .. Currency.Upper .. " per R$"
@@ -500,9 +500,9 @@ local function packEntries(entries: { Entry })
 end
 
 -- What a boost costs when used from its in-match button; there is nothing to buy here.
-local function boostShellsEntry(name: string, shells: number, emoji: string): Entry
+local function boostShellsEntry(name: string, shells: number, icon: string): Entry
 	local entry = emptyEntry("Shop", name, GOLD)
-	entry.emoji = emoji
+	entry.icon = icon
 	entry.sub = "Buy it from the match button when you need it"
 	entry.price = Currency.digits(shells) .. " each"
 	entry.currency = "Cash"
@@ -518,15 +518,15 @@ local function boostEntries(entries: { Entry })
 	-- In a match the boost buttons use held boosts first, then Shells; Robux only stocks up.
 	local hintName = "HINT"
 	local timeName = "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
-	table.insert(entries, boostShellsEntry(hintName, GameConfig.Boosts.HintShells, Theme.Icon.Hint))
-	local hint = productEntry(hintName .. " x1", Products.Boosts.Hint.robux, Products.Boosts.Hint.productId, Theme.Icon.Hint)
+	table.insert(entries, boostShellsEntry(hintName, GameConfig.Boosts.HintShells, "Hint"))
+	local hint = productEntry(hintName .. " x1", Products.Boosts.Hint.robux, Products.Boosts.Hint.productId, "Hint")
 	hint.sub = "One hint in your stock"
 	if profile.hints > 0 then
 		hint.badge = profile.hints .. " OWNED"
 	end
 	table.insert(entries, hint)
-	table.insert(entries, boostShellsEntry(timeName, GameConfig.Boosts.ExtraTimeShells, Theme.Icon.Time))
-	local extra = productEntry(timeName .. " x1", Products.Boosts.ExtraTime.robux, Products.Boosts.ExtraTime.productId, Theme.Icon.Time)
+	table.insert(entries, boostShellsEntry(timeName, GameConfig.Boosts.ExtraTimeShells, "Time"))
+	local extra = productEntry(timeName .. " x1", Products.Boosts.ExtraTime.robux, Products.Boosts.ExtraTime.productId, "Time")
 	extra.sub = "One +time in your stock"
 	if profile.extraTimes > 0 then
 		extra.badge = profile.extraTimes .. " OWNED"
@@ -534,8 +534,8 @@ local function boostEntries(entries: { Entry })
 	table.insert(entries, extra)
 	for _, pack in Products.BoostPacks do
 		local name = (if pack.kind == "Hint" then hintName else timeName) .. " x" .. pack.count
-		local emoji = if pack.kind == "Hint" then Theme.Icon.Hint else Theme.Icon.Time
-		local entry = productEntry(name, pack.robux, pack.productId, emoji)
+		local icon = if pack.kind == "Hint" then "Hint" else "Time"
+		local entry = productEntry(name, pack.robux, pack.productId, icon)
 		entry.sub = pack.count .. " in your stock, cheaper than one at a time"
 		entry.badge = "SAVE"
 		table.insert(entries, entry)
@@ -547,7 +547,7 @@ local function specialEntries(entries: { Entry })
 	if starter ~= nil then
 		table.insert(entries, starter)
 	end
-	local revive = productEntry("REVIVE", Products.Revive.robux, Products.Revive.productId, "❤️")
+	local revive = productEntry("REVIVE", Products.Revive.robux, Products.Revive.productId, "Heart")
 	revive.sub = "Jump back in the next time you sink"
 	if profile.revives > 0 then
 		revive.badge = profile.revives .. " OWNED"
@@ -565,7 +565,7 @@ end
 local function chestEntries(entries: { Entry })
 	if chestsAllowed ~= true then
 		local blocked = emptyEntry("Shop", "CHESTS", MUTED)
-		blocked.emoji = Theme.Icon.Chest
+		blocked.icon = "Chest"
 		blocked.sub = if chestsAllowed == false then "Not available where you live" else "Try again shortly"
 		blocked.action = "LOCKED"
 		blocked.enabled = false
@@ -574,7 +574,7 @@ local function chestEntries(entries: { Entry })
 	end
 	for _, chest in Chests.List do
 		local entry = emptyEntry("Chest", string.upper(chest.name), rgb(chest.color, GOLD))
-		entry.emoji = Theme.Icon.Chest
+		entry.icon = "Chest"
 		entry.rarity = if chest.price >= 1000 then "Epic" else "Rare"
 		entry.sub = "One random prize, odds below"
 		entry.price = Currency.digits(chest.price)
@@ -585,7 +585,7 @@ local function chestEntries(entries: { Entry })
 				ChestReveal.open(chest.id)
 			end
 		else
-			entry.action = "GET " .. Theme.Icon.Shell
+			entry.action = "GET " .. Currency.Upper
 			entry.onClick = function()
 				goToKind("Shells")
 			end
@@ -599,7 +599,7 @@ local function chestEntries(entries: { Entry })
 			if item ~= nil then
 				local entry = emptyEntry("Odds", string.upper(item.name), colorOf(item))
 				entry.rarity = item.rarity
-				entry.emoji = ItemEmoji.of(item)
+				entry.icon = ItemIcon.of(item)
 				entry.sub = "In the " .. chest.name
 				entry.price = Chests.percent(drop.chance) .. " chance"
 				entry.priceColor = Theme.Rarity[item.rarity] or MUTED
@@ -660,15 +660,15 @@ local function entriesFor(section: Section): { Entry }
 	return entries
 end
 
--- Shows the preview that fits the item: a shaded disc (with an emoji when the template has a
--- Preview.Emoji label), the title or name tag as a pill, a burst for splashes, or the trail's colours as a
+-- Shows the preview that fits the item: a shaded disc (with the item's icon when the template has a
+-- Preview.Icon image), the title or name tag as a pill, a burst for splashes, or the trail's colours as a
 -- stripe (an authored Stripe frame if the template has one, else the disc).
 local function fillPreview(preview: Frame, entry: Entry)
 	local disc = preview:FindFirstChild("Disc") :: Frame
 	local pill = preview:FindFirstChild("TitlePill") :: TextLabel
 	local burst = preview:FindFirstChild("Burst") :: Frame
 	local stripe = preview:FindFirstChild("Stripe") :: Frame?
-	local emoji = preview:FindFirstChild("Emoji") :: TextLabel?
+	local icon = preview:FindFirstChild("Icon") :: ImageLabel?
 	local isTrail = entry.kind == "Trail"
 	local isPill = entry.kind == "Title" or entry.kind == "NameTag"
 	disc.Visible = not isPill and entry.kind ~= "Splash" and not (isTrail and stripe ~= nil)
@@ -677,9 +677,9 @@ local function fillPreview(preview: Frame, entry: Entry)
 	if stripe ~= nil then
 		stripe.Visible = isTrail
 	end
-	if emoji ~= nil then
-		emoji.Visible = entry.emoji ~= nil and disc.Visible
-		emoji.Text = entry.emoji or ""
+	if icon ~= nil then
+		icon.Visible = entry.icon ~= nil and disc.Visible
+		icon.Image = if entry.icon ~= nil then Icons.image(entry.icon) else ""
 	end
 	disc.BackgroundColor3 = entry.color
 	pill.Text = if entry.kind == "NameTag" then "NAME" else entry.name
@@ -701,13 +701,20 @@ local function fillPreview(preview: Frame, entry: Entry)
 	end
 end
 
-local function fillBadge(badge: TextLabel, text: string?)
-	badge.Visible = text ~= nil
-	if text == nil then
+-- A locked card with no badge of its own shows the authored Lock icon on a blank badge.
+local function fillBadge(badge: TextLabel, text: string?, locked: boolean)
+	local showLock = locked and text == nil
+	local lock = badge:FindFirstChild("Lock")
+	if lock ~= nil and lock:IsA("GuiObject") then
+		lock.Visible = showLock
+	end
+	badge.Visible = text ~= nil or showLock
+	if not badge.Visible then
 		return
 	end
-	badge.Text = text
-	local look = BADGE_LOOK[text]
+	local shown = text or ""
+	badge.Text = shown
+	local look = BADGE_LOOK[shown]
 	badge.BackgroundColor3 = if look ~= nil then look.color else WHITE
 	badge.TextColor3 = if look ~= nil and look.light then WHITE else NAVY
 end
@@ -793,7 +800,7 @@ local function fillCard(w: Window, card: Frame, entry: Entry)
 		end
 	end
 	local locked = w.inventory and not entry.owned
-	fillBadge(badge, if locked and entry.badge == nil then LOCKED else entry.badge)
+	fillBadge(badge, entry.badge, locked)
 	local dim = if locked then DIM else 0
 	nameLabel.TextTransparency = dim
 	if subLabel ~= nil then
@@ -806,6 +813,8 @@ local function fillCard(w: Window, card: Frame, entry: Entry)
 			for _, part in preview:GetChildren() do
 				if part:IsA("TextLabel") then
 					part.TextTransparency = DIM
+				elseif part:IsA("ImageLabel") then
+					part.ImageTransparency = DIM
 				elseif part:IsA("GuiObject") then
 					part.BackgroundTransparency = math.max(part.BackgroundTransparency, DIM)
 				end

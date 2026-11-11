@@ -376,22 +376,10 @@
             },
             {
               "name": "IconLeft",
-              "className": "TextLabel",
+              "className": "ImageLabel",
               "properties": {
                 "BackgroundTransparency": 1,
                 "BorderSizePixel": 0,
-                "TextScaled": true,
-                "FontFace": {
-                  "family": "rbxasset://fonts/families/FredokaOne.json",
-                  "weight": "Regular",
-                  "style": "Normal"
-                },
-                "TextColor3": [
-                  1,
-                  1,
-                  1
-                ],
-                "Text": "🌊",
                 "Position": {
                   "UDim2": [
                     [
@@ -416,7 +404,9 @@
                     ]
                   ]
                 },
-                "ZIndex": 5
+                "ZIndex": 5,
+                "Image": "rbxassetid://90822590750484",
+                "ScaleType": "Fit"
               },
               "children": [
                 {
@@ -431,22 +421,14 @@
             },
             {
               "name": "IconRight",
-              "className": "TextLabel",
+              "className": "ImageLabel",
               "properties": {
                 "BackgroundTransparency": 1,
                 "BorderSizePixel": 0,
-                "TextScaled": true,
-                "FontFace": {
-                  "family": "rbxasset://fonts/families/FredokaOne.json",
-                  "weight": "Regular",
-                  "style": "Normal"
-                },
-                "TextColor3": [
+                "AnchorPoint": [
                   1,
-                  1,
-                  1
+                  0
                 ],
-                "Text": "🌊",
                 "Position": {
                   "UDim2": [
                     [
@@ -472,10 +454,8 @@
                   ]
                 },
                 "ZIndex": 5,
-                "AnchorPoint": [
-                  1,
-                  0
-                ]
+                "Image": "rbxassetid://90822590750484",
+                "ScaleType": "Fit"
               },
               "children": [
                 {
@@ -1659,22 +1639,10 @@
                 },
                 {
                   "name": "Fish1",
-                  "className": "TextLabel",
+                  "className": "ImageLabel",
                   "properties": {
                     "BackgroundTransparency": 1,
                     "BorderSizePixel": 0,
-                    "TextScaled": true,
-                    "FontFace": {
-                      "family": "rbxasset://fonts/families/BuilderSans.json",
-                      "weight": "Bold",
-                      "style": "Normal"
-                    },
-                    "TextColor3": [
-                      1,
-                      1,
-                      1
-                    ],
-                    "Text": "🐟",
                     "AnchorPoint": [
                       0.5,
                       0.5
@@ -1703,7 +1671,9 @@
                         ]
                       ]
                     },
-                    "TextTransparency": 0.2
+                    "Image": "rbxassetid://110283043756819",
+                    "ScaleType": "Fit",
+                    "ImageTransparency": 0.2
                   },
                   "children": [
                     {
@@ -1717,22 +1687,10 @@
                 },
                 {
                   "name": "Fish2",
-                  "className": "TextLabel",
+                  "className": "ImageLabel",
                   "properties": {
                     "BackgroundTransparency": 1,
                     "BorderSizePixel": 0,
-                    "TextScaled": true,
-                    "FontFace": {
-                      "family": "rbxasset://fonts/families/BuilderSans.json",
-                      "weight": "Bold",
-                      "style": "Normal"
-                    },
-                    "TextColor3": [
-                      1,
-                      1,
-                      1
-                    ],
-                    "Text": "🐟",
                     "AnchorPoint": [
                       0.5,
                       0.5
@@ -1761,7 +1719,9 @@
                         ]
                       ]
                     },
-                    "TextTransparency": 0.2
+                    "Image": "rbxassetid://110283043756819",
+                    "ScaleType": "Fit",
+                    "ImageTransparency": 0.2
                   },
                   "children": [
                     {
@@ -1775,22 +1735,10 @@
                 },
                 {
                   "name": "Fish3",
-                  "className": "TextLabel",
+                  "className": "ImageLabel",
                   "properties": {
                     "BackgroundTransparency": 1,
                     "BorderSizePixel": 0,
-                    "TextScaled": true,
-                    "FontFace": {
-                      "family": "rbxasset://fonts/families/BuilderSans.json",
-                      "weight": "Bold",
-                      "style": "Normal"
-                    },
-                    "TextColor3": [
-                      1,
-                      1,
-                      1
-                    ],
-                    "Text": "🐠",
                     "AnchorPoint": [
                       0.5,
                       0.5
@@ -1819,7 +1767,9 @@
                         ]
                       ]
                     },
-                    "TextTransparency": 0.2
+                    "Image": "rbxassetid://110283043756819",
+                    "ScaleType": "Fit",
+                    "ImageTransparency": 0.2
                   },
                   "children": [
                     {
@@ -1833,22 +1783,10 @@
                 },
                 {
                   "name": "Fish4",
-                  "className": "TextLabel",
+                  "className": "ImageLabel",
                   "properties": {
                     "BackgroundTransparency": 1,
                     "BorderSizePixel": 0,
-                    "TextScaled": true,
-                    "FontFace": {
-                      "family": "rbxasset://fonts/families/BuilderSans.json",
-                      "weight": "Bold",
-                      "style": "Normal"
-                    },
-                    "TextColor3": [
-                      1,
-                      1,
-                      1
-                    ],
-                    "Text": "🐡",
                     "AnchorPoint": [
                       0.5,
                       0.5
@@ -1877,7 +1815,9 @@
                         ]
                       ]
                     },
-                    "TextTransparency": 0.2
+                    "Image": "rbxassetid://88339691613685",
+                    "ScaleType": "Fit",
+                    "ImageTransparency": 0.2
                   },
                   "children": [
                     {
@@ -1891,22 +1831,10 @@
                 },
                 {
                   "name": "Fish5",
-                  "className": "TextLabel",
+                  "className": "ImageLabel",
                   "properties": {
                     "BackgroundTransparency": 1,
                     "BorderSizePixel": 0,
-                    "TextScaled": true,
-                    "FontFace": {
-                      "family": "rbxasset://fonts/families/BuilderSans.json",
-                      "weight": "Bold",
-                      "style": "Normal"
-                    },
-                    "TextColor3": [
-                      1,
-                      1,
-                      1
-                    ],
-                    "Text": "🦑",
                     "AnchorPoint": [
                       0.5,
                       0.5
@@ -1935,7 +1863,9 @@
                         ]
                       ]
                     },
-                    "TextTransparency": 0.2
+                    "Image": "rbxassetid://108076434560267",
+                    "ScaleType": "Fit",
+                    "ImageTransparency": 0.2
                   },
                   "children": [
                     {
@@ -1949,22 +1879,10 @@
                 },
                 {
                   "name": "Fish6",
-                  "className": "TextLabel",
+                  "className": "ImageLabel",
                   "properties": {
                     "BackgroundTransparency": 1,
                     "BorderSizePixel": 0,
-                    "TextScaled": true,
-                    "FontFace": {
-                      "family": "rbxasset://fonts/families/BuilderSans.json",
-                      "weight": "Bold",
-                      "style": "Normal"
-                    },
-                    "TextColor3": [
-                      1,
-                      1,
-                      1
-                    ],
-                    "Text": "🐙",
                     "AnchorPoint": [
                       0.5,
                       0.5
@@ -1993,7 +1911,9 @@
                         ]
                       ]
                     },
-                    "TextTransparency": 0.2
+                    "Image": "rbxassetid://111445195788375",
+                    "ScaleType": "Fit",
+                    "ImageTransparency": 0.2
                   },
                   "children": [
                     {

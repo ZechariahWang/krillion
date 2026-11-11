@@ -10,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Theme = require(ReplicatedStorage.Config.Theme)
 local QuestRules = require(ReplicatedStorage.Shared.Quests)
 local Tween = require(ReplicatedStorage.Shared.Tween)
+local Icons = require(script.Parent.Icons)
 local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
@@ -27,28 +28,28 @@ local ROWS_TOP = 104
 local BADGE = "QuestsButton"
 local BAR_COLOR = Color3.fromRGB(164, 123, 255)
 local DONE_COLOR = Color3.fromRGB(122, 220, 72)
-local DEFAULT_ICON = Theme.Icon.Quest
--- Each quest's card icon, by the event that advances it.
+local DEFAULT_ICON = "Quest"
+-- Each quest's card icon (a name in Templates.Icons), by the event that advances it.
 local KIND_ICONS: { [string]: string } = {
-	match_played = "🎮",
-	round_survived = Theme.Icon.Wave,
-	rare_answer = "💎",
-	deep_answer = "🐙",
-	practice_answer = "📝",
-	play_seconds = Theme.Icon.Time,
-	match_won = Theme.Icon.Trophy,
+	match_played = "Controller",
+	round_survived = "Wave",
+	rare_answer = "Gem",
+	deep_answer = "Octopus",
+	practice_answer = "Pencil",
+	play_seconds = "Time",
+	match_won = "Trophy",
 }
 
 type QuestDay = { day: number, progress: { [string]: number }, done: { [string]: boolean } }
 
 type Row = {
 	frame: GuiObject,
-	icon: TextLabel?,
+	icon: ImageLabel?,
 	text: TextLabel?,
 	reward: TextLabel?,
 	fill: Frame?,
 	count: TextLabel?,
-	check: TextLabel?,
+	check: ImageLabel?,
 }
 
 local player = Players.LocalPlayer
@@ -85,7 +86,7 @@ end
 local function updateFooter()
 	local label = footer
 	if label ~= nil then
-		label.Text = Theme.Icon.Time .. " NEW QUESTS IN " .. QuestRules.resetText(QuestRules.secondsLeft(now()))
+		label.Text = "NEW QUESTS IN " .. QuestRules.resetText(QuestRules.secondsLeft(now()))
 	end
 end
 
@@ -100,11 +101,11 @@ local function fillRow(row: Row, quest: QuestRules.Quest, day: number, animate: 
 	end
 	local icon = row.icon
 	if icon ~= nil then
-		icon.Text = KIND_ICONS[quest.kind] or DEFAULT_ICON
+		icon.Image = Icons.image(KIND_ICONS[quest.kind] or DEFAULT_ICON)
 	end
 	local reward = row.reward
 	if reward ~= nil then
-		reward.Text = `+{quest.reward} {Theme.Icon.Shell}`
+		reward.Text = `+{quest.reward}`
 	end
 	local count = row.count
 	if count ~= nil then
@@ -250,18 +251,23 @@ local function textChild(parent: Instance?, name: string): TextLabel?
 	return if found ~= nil and found:IsA("TextLabel") then found else nil
 end
 
+local function imageChild(parent: Instance?, name: string): ImageLabel?
+	local found = if parent ~= nil then parent:FindFirstChild(name) else nil
+	return if found ~= nil and found:IsA("ImageLabel") then found else nil
+end
+
 -- Row children: IconBack.Icon, Text, RewardChip.Reward, Track.Fill, Track.Count, Check.
 local function bindRow(frame: GuiObject): Row
 	local track = frame:FindFirstChild("Track")
 	local fill = if track ~= nil then track:FindFirstChild("Fill") else nil
 	return {
 		frame = frame,
-		icon = textChild(frame:FindFirstChild("IconBack"), "Icon"),
+		icon = imageChild(frame:FindFirstChild("IconBack"), "Icon"),
 		text = textChild(frame, "Text"),
 		reward = textChild(frame:FindFirstChild("RewardChip"), "Reward") or textChild(frame, "Reward"),
 		fill = if fill ~= nil and fill:IsA("Frame") then fill else nil,
 		count = textChild(track, "Count") or textChild(frame, "Count"),
-		check = textChild(frame, "Check"),
+		check = imageChild(frame, "Check"),
 	}
 end
 

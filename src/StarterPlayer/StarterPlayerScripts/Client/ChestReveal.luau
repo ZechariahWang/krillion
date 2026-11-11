@@ -14,7 +14,8 @@ local Theme = require(ReplicatedStorage.Config.Theme)
 local Currency = require(ReplicatedStorage.Shared.Currency)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Fx = require(script.Parent.Fx)
-local ItemEmoji = require(script.Parent.ItemEmoji)
+local Icons = require(script.Parent.Icons)
+local ItemIcon = require(script.Parent.ItemIcon)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
@@ -97,13 +98,13 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 
 	-- Burst: the chest blows up and vanishes in the prize's colour.
 	tint(color)
-	local chestLabel = root:FindFirstChild("Chest") :: TextLabel
+	local chestLabel = root:FindFirstChild("Chest") :: ImageLabel
 	local chestScale = scaleOf(chestLabel)
 	chestLabel.Rotation = 0
 	if chestScale ~= nil then
 		tween(chestScale, 0.18, { Scale = 1.7 })
 	end
-	tween(chestLabel, 0.18, { TextTransparency = 1 })
+	tween(chestLabel, 0.18, { ImageTransparency = 1 })
 	local glow = root:FindFirstChild("Glow") :: Frame
 	local glowScale = scaleOf(glow)
 	if glowScale ~= nil then
@@ -138,10 +139,11 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 	end
 	text("Rarity").Text = string.upper(rarity)
 	text("Rarity").TextColor3 = color
-	text("Emoji").Text = ItemEmoji.any(item)
+	local itemIcon = card:FindFirstChild("Icon") :: ImageLabel
+	itemIcon.Image = Icons.image(ItemIcon.any(item))
 	text("ItemName").Text = string.upper(item.name)
 	if payload.duplicate then
-		text("Note").Text = "DUPLICATE  |  +" .. Currency.digits(payload.refund or 0) .. " " .. Theme.Icon.Shell .. " BACK"
+		text("Note").Text = "DUPLICATE  |  +" .. Currency.format(payload.refund or 0) .. " BACK"
 	else
 		text("Note").Text = "NEW!  EQUIPPED"
 	end
@@ -151,7 +153,7 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 	end
 	local again = card:FindFirstChild("Again") :: TextButton
 	local affordable = cash >= chest.price
-	setButton(again, "AGAIN  " .. Currency.digits(chest.price) .. " " .. Theme.Icon.Shell, affordable)
+	setButton(again, "AGAIN  " .. Currency.format(chest.price), affordable)
 	again:SetAttribute("Chest", chest.id)
 	card.Visible = true
 	local cardScale = scaleOf(card)
@@ -159,10 +161,10 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 		cardScale.Scale = 0.3
 		tween(cardScale, 0.45, { Scale = 1 }, Enum.EasingStyle.Back)
 	end
-	local emojiScale = scaleOf(text("Emoji"))
-	if emojiScale ~= nil then
-		emojiScale.Scale = 0.2
-		tween(emojiScale, 0.55, { Scale = 1 }, Enum.EasingStyle.Elastic)
+	local iconScale = scaleOf(itemIcon)
+	if iconScale ~= nil then
+		iconScale.Scale = 0.2
+		tween(iconScale, 0.55, { Scale = 1 }, Enum.EasingStyle.Elastic)
 	end
 	busy = false
 end
@@ -185,9 +187,8 @@ function ChestReveal.open(chestId: string)
 	root.Visible = true
 	local card = root:FindFirstChild("Card") :: Frame
 	card.Visible = false
-	local chestLabel = root:FindFirstChild("Chest") :: TextLabel
-	chestLabel.Text = Theme.Icon.Chest
-	chestLabel.TextTransparency = 0
+	local chestLabel = root:FindFirstChild("Chest") :: ImageLabel
+	chestLabel.ImageTransparency = 0
 	chestLabel.Rotation = 0
 	local chestScale = scaleOf(chestLabel)
 	if chestScale ~= nil then
