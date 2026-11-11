@@ -118,14 +118,14 @@ end
 
 local function broadcastState()
 	local state = match
-	local ring: { { userId: number, hearts: number } } = {}
+	local ring: { Net.RingRow } = {}
 	local aliveUserIds: { number } = {}
 	local holderUserId: number? = nil
 	local used: { string } = {}
 	local mood = "Calm"
 	if state ~= nil then
 		for _, id in state.order do
-			table.insert(ring, { userId = userIdOf(id), hearts = state.hearts[id] })
+			table.insert(ring, { userId = userIdOf(id), name = nameOf(id), hearts = state.hearts[id] })
 			if state.alive[id] then
 				table.insert(aliveUserIds, userIdOf(id))
 			end

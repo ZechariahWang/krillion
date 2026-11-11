@@ -24,16 +24,8 @@ local GameConfig = {
 		LockBroadcastSeconds = 0.25, -- a lock-in pushes a state update this soon (at most 4 a second)
 	},
 	Water = {
-		StartHeight = 6, -- platform top above the starting water line
-		-- Round r surges SurgeBase + SurgeGrowth * (r - 1) ^ SurgePower; tests/WaterCurve pins the survival targets.
-		SurgeBase = 0.5,
-		SurgeGrowth = 0.4,
-		SurgePower = 1.5,
-		LiftPerPoint = 0.1,
-		CullHz = 10,
-		CreepFraction = 0.7, -- slow part of the surge
-		CreepSeconds = 2,
-		JumpSeconds = 0.4,
+		StartHeight = 6, -- every pillar's top above the water line, for the whole match
+		CullHz = 10, -- how often the server looks for players who fell in
 	},
 	Platform = {
 		Height = 140, -- tall enough to reach the tank floor at any height
@@ -101,16 +93,6 @@ local GameConfig = {
 		Cooldown = 0.5, -- seconds between UseBoost requests
 		PurchaseWaitSeconds = 5, -- how long a Robux-bought boost waits for its receipt before giving up
 	},
-	LateJoin = {
-		Enabled = 1,
-		MaxRound = 2, -- joining is open up to and including this round
-		MinSecondsLeft = 8, -- in MaxRound, only while this many prompt seconds remain
-		ReserveSlots = 4, -- late joiners a match may take on top of its starters; their pillars go in free gaps
-	},
-	Schooling = {
-		Enabled = 0, -- off until Zechariah agrees: two players with the same answer each get Factor of the points
-		Factor = 0.5,
-	},
 	Quests = {
 		PerDay = 3,
 		PlaySecondsTick = 30, -- play-time quests advance this often
@@ -176,12 +158,6 @@ local GameConfig = {
 		RefreshSeconds = 60,
 		Size = 10,
 	},
-	Special = {
-		MinRound = 3, -- no special rounds before this
-		Chance = 0.25, -- per eligible round; never two in a row
-		TidalWaveMultiplier = 2, -- water rises this many times further
-		DoubleLiftMultiplier = 2, -- pillars rise this many times further
-	},
 	-- Crab Craze: the holder answers to pass the crab on before its fuse runs out.
 	Crab = {
 		StartHearts = 2,
@@ -209,12 +185,9 @@ table.freeze(GameConfig.Water)
 table.freeze(GameConfig.Platform)
 table.freeze(GameConfig.Answer)
 table.freeze(GameConfig.Lobby)
-table.freeze(GameConfig.Special)
 table.freeze(GameConfig.Cash.AnswerByTier)
 table.freeze(GameConfig.Cash)
 table.freeze(GameConfig.Boosts)
-table.freeze(GameConfig.LateJoin)
-table.freeze(GameConfig.Schooling)
 table.freeze(GameConfig.Quests)
 table.freeze(GameConfig.Rewards)
 table.freeze(GameConfig.Reveal)

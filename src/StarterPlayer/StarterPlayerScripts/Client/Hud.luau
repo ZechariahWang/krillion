@@ -1,9 +1,9 @@
 --!strict
--- Drives StarterGui.Hud during a match: the answer box (Enter checks the answer, Enter again locks it in),
--- the Hint and +10s boost chips, Shells, water meter, sudden-death card.
--- The prompt, timer and alive count live in StarterGui.Status (see Status.luau); surge feedback in Tide.luau.
--- ConfirmChip, HintRow and BoostBar are Studio templates (ReplicatedStorage.Templates) cloned into
--- Hud.AnswerBar, unless the place already has them authored there.
+-- Drives GameUi.Hud during a match: your hearts and the meter towards the next one (Hud.Vitals), and, while
+-- you hold the crab, the answer box (one Enter sends the answer) with the Hint and +10s boost chips.
+-- The question, whose turn it is and the used answers live in SharedUi.Status (see Status.luau).
+-- HintRow and BoostBar are Studio templates (ReplicatedStorage.Templates) cloned into Hud.AnswerBar, unless
+-- the place already has them authored there.
 
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
@@ -19,14 +19,12 @@ local Tween = require(ReplicatedStorage.Shared.Tween)
 local Fx = require(script.Parent.Fx)
 local Icons = require(script.Parent.Icons)
 local Sfx = require(script.Parent.Sfx)
-local Status = require(script.Parent.Status)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
 
-local METER_RANGE = 30 -- studs of margin that fills the whole meter
-local METER_WATER = 0.2 -- fraction of the meter the water fill occupies
 local FEEDBACK_SECONDS = 1.5
-local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
+local RETRY_SECONDS = 0.08 -- an answer that raced the server's cooldown is sent once more, this much later
+local EMPTY_HEART = 0.75 -- transparency of a heart slot you do not have
 local WAIT_SECONDS = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
 local BOOST_GAP = 8 -- pixels between the Shells chip and the boost buttons above it
@@ -39,11 +37,12 @@ local PRICE_ROBUX = Color3.fromRGB(120, 235, 140)
 local PRICE_OWNED = Color3.fromRGB(255, 255, 255)
 
 local INVALID_TEXT = "NOT IN THE BANK  |  TRY AGAIN"
+local USED_TEXT = "ALREADY USED  |  TRY ANOTHER"
 local BOOST_MESSAGES: { [string]: string } = {
 	no_shells = "NOT ENOUGH " .. Currency.Upper,
 	none = "NO HINT FOR THIS ONE",
-	closed = "TIME'S UP",
-	locked = "ALREADY LOCKED IN",
+	closed = "NOT YOUR TURN",
+	not_playing = "NOT YOUR TURN",
 	pending = "FINISHING YOUR PURCHASE...",
 }
 
@@ -56,39 +55,29 @@ type BoostChip = {
 
 local playerGui: PlayerGui
 local gui: Frame
-local meter: Frame
-local marker: Frame
-local target: Frame
+local vitals: Frame
+local hearts: Frame
+local meterFill: Frame
+local meterText: TextLabel
 local answerBar: Frame
 local answerBox: TextBox
 local submitButton: TextButton
-local lockedCard: Frame
-local lockedText: TextLabel
 local feedback: Frame
 local feedbackText: TextLabel?
-local banner: Frame
-local confirmChip: Frame? = nil
-local confirmText: TextLabel? = nil
 local hintRow: Frame? = nil
 local hintText: TextLabel? = nil
 local boostBar: Frame? = nil
 local boostChips: { [string]: BoostChip } = {}
 
-local locked = false
 local playing = false
 local phase = ""
-local outOfTime = false -- overtime that is not yours: the prompt is open only for someone else
-local buttonText = "GO"
-local lastCheckAt = -math.huge
+local myTurn = false -- you hold the crab: the answer box is yours
 local lastWrongAt = -math.huge
 local lastBoostAt = -math.huge
-local checking: string? = nil -- the trimmed text of the check in flight
-local confirmed: string? = nil -- the trimmed text the server found in the bank; Enter again locks it in
-local submitting = false
+local sent: string? = nil -- the trimmed text of the answer in flight
 local retried = false
 local feedbackToken = 0
 local lastRound = 0
-local lastPhase = ""
 local inventory = { Hint = 0, ExtraTime = 0 }
 local cash = 0
 local uses: Net.BoostUses = { Hint = 0, ExtraTime = 0 }
@@ -125,7 +114,6 @@ end
 -- Phones: the answer bar sits in the strip at the top, under the prompt and timer, where the keyboard never
 -- reaches; the authored PromptEcho stays hidden. Desktop keeps the authored bottom position.
 local barRest: UDim2? = nil
-local promptText = ""
 
 local refreshBoosts: () -> ()
 local TOUCH_BAR_TOP = 0.17 -- phones: the answer bar's top, as a fraction of the screen height (under the chips)
@@ -204,9 +192,6 @@ local function showFeedback(text: string)
 	if feedbackText ~= nil then
 		feedbackText.Text = text
 	end
-	if confirmChip ~= nil then
-		confirmChip.Visible = false
-	end
 	Ui.appear(feedback)
 	Ui.nudge(answerBar)
 	task.delay(FEEDBACK_SECONDS, function()
@@ -216,43 +201,11 @@ local function showFeedback(text: string)
 	end)
 end
 
-local function hideConfirm()
-	confirmed = nil
-	if confirmChip ~= nil then
-		confirmChip.Visible = false
-	end
-	submitButton.Text = buttonText
-end
-
-local function showConfirm(text: string, corrected: string)
-	confirmed = text
-	feedbackToken += 1
-	feedback.Visible = false
-	local action = if isTouch() then "TAP LOCK IN" else "PRESS ENTER AGAIN"
-	if confirmText ~= nil then
-		confirmText.Text = "LOCK IN  " .. string.upper(corrected) .. "?  " .. action
-	end
-	if confirmChip ~= nil then
-		Ui.pop(confirmChip)
-	end
-	submitButton.Text = "LOCK IN"
-	Sfx.play("Ping", 0.35)
-end
-
-local function showLocked()
-	answerBox:ReleaseFocus()
-	answerBox.Visible = false
-	submitButton.Visible = false
-	Ui.appear(lockedCard)
-end
-
 local function showEntry()
 	answerBox.Text = ""
 	answerBox.Visible = true
 	submitButton.Visible = true
-	lockedCard.Visible = false
 	feedback.Visible = false
-	hideConfirm()
 	if hintRow ~= nil then
 		hintRow.Visible = false
 	end
@@ -261,7 +214,7 @@ end
 -- Boosts --------------------------------------------------------------------------------------------------
 
 local function boostsShown(): boolean
-	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
+	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and myTurn
 end
 
 -- The Shells chip in the bottom-right corner (SharedUi.Wallet.Chip), while it shows.
@@ -365,7 +318,7 @@ end
 
 local function limitMessage(kind: string): string
 	if usesOf(kind) >= GameConfig.Boosts.PerRound then
-		return "ONE OF EACH PER ROUND"
+		return "ONE OF EACH PER QUESTION"
 	end
 	return GameConfig.Boosts.PerMatch .. " OF EACH PER MATCH"
 end
@@ -405,7 +358,7 @@ local function useBoost(kind: string)
 	deny(BOOST_MESSAGES.no_shells)
 end
 
--- The +10s pops under the Status timer, where the player is already looking.
+-- The +10s pops under the Status turn label, where the player is already looking.
 local function showExtraTime()
 	local from: GuiObject? = nil
 	local status = Ui.findScreen(playerGui, "Status")
@@ -427,155 +380,95 @@ end
 
 -- Answering -----------------------------------------------------------------------------------------------
 
-local function sendCheck(text: string)
-	local now = os.clock()
-	if now - lastCheckAt < GameConfig.Answer.CheckMinInterval or now - lastWrongAt < GameConfig.Answer.RetryCooldown then
-		Ui.nudge(answerBox)
-		return
-	end
-	lastCheckAt = now
-	checking = text
-	retried = false
-	Net.event("CheckAnswer"):FireServer(text)
-end
-
--- Enter (or GO): the first press checks the answer; a second press with the same text locks it in.
+-- Enter (or GO) sends the answer. A wrong or used one is refused and the box is yours again.
 local function onEnter()
-	if locked or submitting or outOfTime then
+	if not myTurn or sent ~= nil then
 		return
 	end
 	local text = trim(answerBox.Text)
 	if #text == 0 then
 		return
 	end
-	if confirmed ~= nil and text == confirmed then
-		submitting = true
-		retried = false
-		Net.event("SubmitAnswer"):FireServer(text)
+	if os.clock() - lastWrongAt < GameConfig.Answer.RetryCooldown then
+		Ui.nudge(answerBox)
+		keepFocus()
 		return
 	end
-	sendCheck(text)
+	sent = text
+	retried = false
+	Net.event("SubmitAnswer"):FireServer(text)
 	keepFocus()
 end
 
-local function wrongAnswer()
+local function refused(text: string)
 	lastWrongAt = os.clock()
 	answerBox.Text = ""
-	showFeedback(INVALID_TEXT)
+	showFeedback(text)
 	Sfx.play("Wrong", 0.5)
 	keepFocus()
-end
-
-local function onCheckResult(payload)
-	local text = checking
-	checking = nil
-	if locked or text == nil then
-		return
-	end
-	local status = payload.status
-	if status == "cooldown" then
-		if not retried and text == trim(answerBox.Text) then
-			retried = true
-			checking = text
-			task.delay(RETRY_SECONDS, function()
-				if not locked and checking == text then
-					Net.event("CheckAnswer"):FireServer(text)
-				end
-			end)
-		end
-		return
-	end
-	retried = false
-	if status == "valid" then
-		-- Typing on while the check was in flight means the player moved on from that answer.
-		if text == trim(answerBox.Text) then
-			showConfirm(text, payload.corrected or text)
-		end
-	elseif status == "invalid" then
-		wrongAnswer()
-	elseif status == "limit" then
-		deny("THAT'S A LOT OF CHECKS  |  LOCK ONE IN")
-	elseif status == "closed" then
-		deny("TIME'S UP")
-	end
-end
-
-local function onSubmitResult(payload)
-	submitting = false
-	if payload.accepted then
-		locked = true
-		hideConfirm()
-		-- Autocorrect: show the answer in the bank's spelling, whatever was typed.
-		local corrected = payload.corrected or answerBox.Text
-		answerBox.Text = string.upper(corrected)
-		lockedText.Text = "LOCKED IN  |  " .. string.upper(corrected)
-		showLocked()
-		refreshBoosts()
-		Sfx.play("LockIn", 0.7)
-		Fx.flash(Theme.Color.Green)
-		return
-	end
-	local status = payload.status
-	if status == "cooldown" and not retried and confirmed ~= nil then
-		retried = true
-		submitting = true
-		local text = confirmed
-		task.delay(RETRY_SECONDS, function()
-			if not locked then
-				Net.event("SubmitAnswer"):FireServer(text)
-			end
-		end)
-		return
-	end
-	retried = false
-	hideConfirm()
-	if status == "closed" then
-		deny("TIME'S UP")
-	elseif status == "limit" then
-		deny("THAT'S A LOT OF CHECKS  |  LOCK ONE IN")
-	elseif status == "cooldown" then
-		keepFocus()
-	else
-		wrongAnswer()
-	end
 end
 
 function Hud.onAnswerResult(payload)
 	if not ready then
 		return
 	end
-	if payload.stage == "check" then
-		onCheckResult(payload)
-	else
-		onSubmitResult(payload)
+	local text = sent
+	sent = nil
+	if payload.accepted then
+		-- The crab is on its way: the box goes until it comes back round.
+		myTurn = false
+		answerBox.Text = ""
+		answerBox:ReleaseFocus()
+		answerBar.Visible = false
+		refreshBoosts()
+		Sfx.play("LockIn", 0.7)
+		Fx.flash(Theme.Color.Green)
+		return
+	end
+	local status = payload.status
+	if status == "cooldown" then
+		if not retried and text ~= nil and myTurn then
+			retried = true
+			sent = text
+			task.delay(RETRY_SECONDS, function()
+				if sent == text then
+					Net.event("SubmitAnswer"):FireServer(text)
+				end
+			end)
+		end
+		return
+	end
+	retried = false
+	if status == "invalid" then
+		refused(INVALID_TEXT)
+	elseif status == "used" then
+		refused(USED_TEXT)
+	elseif status == "limit" then
+		deny("THAT'S A LOT OF GUESSES  |  SLOW DOWN")
 	end
 end
 
--- Meter ---------------------------------------------------------------------------------------------------
+-- Vitals --------------------------------------------------------------------------------------------------
 
--- Where a height sits on the meter, measured from the current water line.
-local function meterY(height: number, waterY: number): number
-	local margin = math.clamp((height - waterY) / METER_RANGE, 0, 1)
-	return 1 - METER_WATER - margin * (1 - METER_WATER)
-end
-
--- The marker is you; the target line is where the water will reach this round.
--- The marker turns red while you are still below that line.
-local function updateMeter(payload)
-	local markerY = meterY(payload.height, payload.waterY)
-	Tween.play(marker, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, markerY) })
-	local showTarget = payload.phase == "Prompt" or payload.phase == "Reveal"
-	target.Visible = showTarget
-	if showTarget then
-		local targetY = meterY(payload.waterY + payload.surge, payload.waterY)
-		Tween.play(target, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, targetY) })
+-- Your hearts (the slots you do not have are faint) and the meter towards the next one.
+local function updateVitals(payload)
+	local mine = 0
+	for _, row in payload.ring or {} do
+		if row.userId == Players.LocalPlayer.UserId then
+			mine = row.hearts
+		end
 	end
-	local willSink = payload.height < payload.waterY + payload.surge
-	if showTarget and willSink then
-		marker.BackgroundColor3 = Theme.Color.Red
-	else
-		marker.BackgroundColor3 = Theme.Color.Cream
+	for _, slot in hearts:GetChildren() do
+		if slot:IsA("ImageLabel") then
+			local index = tonumber(string.match(slot.Name, "%d+")) or 0
+			slot.Visible = index <= (payload.maxHearts or 5)
+			slot.ImageTransparency = if index <= mine then 0 else EMPTY_HEART
+		end
 	end
+	local goal = payload.meterTarget or 1
+	local have = payload.meter or 0
+	Tween.play(meterFill, Theme.Tween.Enter, { Size = UDim2.fromScale(math.clamp(have / goal, 0, 1), 1) })
+	meterText.Text = "NEXT HEART " .. have .. "/" .. goal
 end
 
 -- Setup ---------------------------------------------------------------------------------------------------
@@ -624,14 +517,6 @@ end
 local function bindExtras()
 	-- The boost chips sit outside the bar's left edge.
 	answerBar.ClipsDescendants = false
-	local chip = adopt("ConfirmChip")
-	if chip ~= nil then
-		confirmChip = chip
-		local label = chip:FindFirstChild("Text")
-		if label ~= nil and label:IsA("TextLabel") then
-			confirmText = label
-		end
-	end
 	local row = adopt("HintRow")
 	if row ~= nil then
 		hintRow = row
@@ -674,39 +559,40 @@ function Hud.init(newPlayerGui: PlayerGui)
 	playerGui = newPlayerGui
 	local screen = Ui.screen(playerGui, "Hud", WAIT_SECONDS)
 	if screen == nil then
-		warn("Hud: GameUi.Hud is missing; no answer bar or water meter")
+		warn("Hud: GameUi.Hud is missing; no answer bar or hearts")
 		return
 	end
-	local meterFound = waitChild(screen, "WaterMeter")
-	local markerFound = waitChild(meterFound, "Marker")
-	local targetFound = waitChild(meterFound, "Target")
+	local vitalsFound = waitChild(screen, "Vitals")
+	local heartsFound = waitChild(vitalsFound, "Hearts")
+	local meterFound = waitChild(vitalsFound, "Meter")
+	local fillFound = waitChild(meterFound, "Fill")
+	local meterTextFound = waitChild(meterFound, "Text")
 	local barFound = waitChild(screen, "AnswerBar")
 	local boxFound = waitChild(barFound, "AnswerBox")
 	local submitFound = waitChild(barFound, "SubmitButton")
-	local lockedFound = waitChild(barFound, "LockedText")
-	local lockedTextFound = waitChild(lockedFound, "Text")
 	local feedbackFound = waitChild(barFound, "Feedback")
-	local bannerFound = waitChild(screen, "Banner")
 	if missing ~= nil then
-		warn("Hud: GameUi.Hud has no " .. missing .. "; no answer bar or water meter")
+		warn("Hud: GameUi.Hud has no " .. missing .. "; no answer bar or hearts")
 		return
 	end
 	gui = screen
-	meter = meterFound :: Frame
-	marker = markerFound :: Frame
-	target = targetFound :: Frame
+	vitals = vitalsFound :: Frame
+	hearts = heartsFound :: Frame
+	meterFill = fillFound :: Frame
+	meterText = meterTextFound :: TextLabel
 	answerBar = barFound :: Frame
 	answerBox = boxFound :: TextBox
 	submitButton = submitFound :: TextButton
-	lockedCard = lockedFound :: Frame
-	lockedText = lockedTextFound :: TextLabel
 	feedback = feedbackFound :: Frame
 	local label = feedback:FindFirstChild("Text")
 	if label ~= nil and label:IsA("TextLabel") then
 		feedbackText = label
 	end
-	banner = bannerFound :: Frame
-	buttonText = submitButton.Text
+	-- The old lock-in card under the bar has no use in a turn: one Enter passes the crab.
+	local lockedCard = answerBar:FindFirstChild("LockedText")
+	if lockedCard ~= nil and lockedCard:IsA("GuiObject") then
+		lockedCard.Visible = false
+	end
 	ready = true
 
 	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(placeForKeyboard)
@@ -717,12 +603,6 @@ function Hud.init(newPlayerGui: PlayerGui)
 	answerBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
 			onEnter()
-		end
-	end)
-	-- Any edit cancels a pending lock-in, so only the answer that was checked can be locked.
-	answerBox:GetPropertyChangedSignal("Text"):Connect(function()
-		if confirmed ~= nil and trim(answerBox.Text) ~= confirmed then
-			hideConfirm()
 		end
 	end)
 	-- A Robux boost is used as soon as it is bought; the server waits for the receipt if it is slow.
@@ -789,17 +669,18 @@ function Hud.onBoostResult(payload)
 	refreshBoosts()
 end
 
--- You sank or reset: your meter and answer bar go now, not on the next state tick.
+-- You are out: your hearts and answer bar go now, not on the next state tick.
 function Hud.onEliminated()
 	if not ready then
 		return
 	end
 	playing = false
+	myTurn = false
+	sent = nil
 	applyTouchControls(true)
-	meter.Visible = false
+	vitals.Visible = false
 	answerBar.Visible = false
 	answerBox:ReleaseFocus()
-	banner.Visible = false
 end
 
 function Hud.onState(payload)
@@ -807,60 +688,45 @@ function Hud.onState(payload)
 		return
 	end
 	phase = payload.phase
-	if type(payload.prompt) == "string" then
-		promptText = string.upper(payload.prompt)
-	end
 	playing = payload.playing == true
 	applyTouchControls(not playing)
-	local mine = payload.yourSecondsLeft
-	outOfTime = phase == "Prompt" and mine ~= nil and mine <= 0
-	answerBox.TextEditable = not outOfTime
-	local inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
+	local inMatch = phase == "Prompt" or phase == "Reveal"
 	gui.Visible = inMatch
+	local holding = phase == "Prompt" and playing and payload.holderUserId == Players.LocalPlayer.UserId
 	if not inMatch then
+		myTurn = false
+		sent = nil
 		answerBox:ReleaseFocus()
-		lastPhase = phase
 		refreshBoosts()
 		return
 	end
 
-	meter.Visible = payload.playing and not isTouch()
-	if payload.playing then
-		updateMeter(payload)
+	vitals.Visible = playing
+	if playing then
+		updateVitals(payload)
 	end
-
-	-- Prompt phase only, so it never sits on top of the reveal card.
-	local suddenDeath = phase == "Prompt" and payload.playing and payload.alive == GameConfig.Round.SuddenDeathAlive
-	if suddenDeath and not banner.Visible then
-		Ui.appear(banner)
-	end
-	banner.Visible = suddenDeath
-
-	local newPrompt = phase == "Prompt" and (lastPhase ~= "Prompt" or payload.round ~= lastRound)
-	if newPrompt then
-		locked = false
-		submitting = false
-		retried = false
-		checking = nil
-		lastWrongAt = -math.huge
+	-- One of each boost per question.
+	if payload.round ~= lastRound then
+		lastRound = payload.round
 		uses = { Hint = 0, ExtraTime = 0 }
-		showEntry()
-		if payload.playing then
-			answerBar.Visible = true
-			keepFocus()
-		end
 	end
-
-	if phase == "Prompt" then
-		answerBar.Visible = payload.playing
-	else
-		answerBar.Visible = false
+	if holding and not myTurn then
+		-- The crab just reached you.
+		myTurn = true
+		sent = nil
+		retried = false
+		lastWrongAt = -math.huge
+		showEntry()
+		answerBar.Visible = true
+		keepFocus()
+		Sfx.play("Ping", 0.6)
+	elseif not holding and myTurn then
+		myTurn = false
+		sent = nil
 		answerBox:ReleaseFocus()
 	end
+	answerBar.Visible = myTurn
 	refreshBoosts()
-
-	lastPhase = phase
-	lastRound = payload.round
 end
 
 return Hud

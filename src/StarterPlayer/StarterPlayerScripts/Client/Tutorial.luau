@@ -6,7 +6,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Rail = require(script.Parent.Rail)
@@ -55,8 +54,9 @@ local leftMidMatch = false
 
 local Tutorial = {}
 
+-- The authored note about shared answers scoring less: that rule is off, so the note stays hidden.
 local function schoolingOn(): boolean
-	return GameConfig.Schooling.Enabled == 1
+	return false
 end
 
 local function isPlaying(): boolean

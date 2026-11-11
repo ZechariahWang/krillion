@@ -1,18 +1,20 @@
 --!strict
--- Tags every other pillar with its answer once the pillars rise (ReplicatedStorage.Templates.AnswerTag,
--- or a Studio-authored NameTag.AnswerText if the template ever gains one), and hides your own pillar's name
--- tag locally so it never blocks your view.
+-- Tags a pillar with its player's answer when they pass the crab (ReplicatedStorage.Templates.AnswerTag,
+-- or a Studio-authored NameTag.AnswerText if the template ever gains one), keeps the authored heart pips
+-- over every name in step with the match, and hides your own pillar's name tag locally so it never
+-- blocks your view.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
-local Theme = require(ReplicatedStorage.Config.Theme)
+local Net = require(ReplicatedStorage.Shared.Net)
 local Ui = require(script.Parent.Ui)
 
 local TAG_GAP = 4 -- pixels between a pillar's name tag and its answer tag
 local TAG_STUDS = 2.5 -- fallback lift when the name tag is sized in studs
-local MATCH_PHASES: { [string]: boolean } = { Prompt = true, Reveal = true, Surge = true }
+local MATCH_PHASES: { [string]: boolean } = { Prompt = true, Reveal = true }
+local EMPTY_HEART = 0.75 -- transparency of a heart slot the player does not have
 
 type Tag = {
 	label: TextLabel,
@@ -21,7 +23,6 @@ type Tag = {
 }
 
 local phase = "Waiting"
-local revealToken = 0
 local tags: { [Instance]: Tag } = {}
 
 local PillarTags = {}
@@ -122,7 +123,6 @@ local function setTagShown(tag: Tag, shown: boolean)
 end
 
 local function hideTags()
-	revealToken += 1
 	for platform, tag in tags do
 		if platform.Parent == nil then
 			tags[platform] = nil
@@ -132,20 +132,20 @@ local function hideTags()
 	end
 end
 
-local function showTags(revealRows)
-	local me = Players.LocalPlayer.UserId
-	for _, row in revealRows do
-		local platform = if row.userId ~= me then platformFor(row.userId) else nil
-		local tag = if platform ~= nil then tagFor(platform) else nil
-		if tag ~= nil then
-			local color = Ui.tierColor(row.tier)
-			tag.label.Text = if row.answer ~= nil then string.upper(row.answer) else "NO ANSWER"
-			tag.label.TextColor3 = if row.answer ~= nil then color else Theme.Color.Grey
-			local border = tag.border
-			if border ~= nil then
-				border.Color = color
-			end
-			setTagShown(tag, true)
+-- The heart pips authored on a pillar's name tag: as many bright as the player has hearts.
+local function showHearts(platform: BasePart, hearts: number, maxHearts: number)
+	local nameTag = nameTagOf(platform)
+	local nameText = if nameTag ~= nil then nameTag:FindFirstChild("NameText") else nil
+	local row = if nameText ~= nil then nameText:FindFirstChild("Hearts") else nil
+	if row == nil or not row:IsA("GuiObject") then
+		return
+	end
+	row.Visible = hearts > 0
+	for _, slot in row:GetChildren() do
+		if slot:IsA("ImageLabel") then
+			local index = tonumber(string.match(slot.Name, "%d+")) or 0
+			slot.Visible = index <= maxHearts
+			slot.ImageTransparency = if index <= hearts then 0 else EMPTY_HEART
 		end
 	end
 end
@@ -159,8 +159,8 @@ local function hideOwnNameTag()
 	end
 end
 
--- RoundState payload: only the phase matters here.
-function PillarTags.onState(payload)
+-- RoundState payload: the phase, and everyone's hearts.
+function PillarTags.onState(payload: Net.RoundStatePayload)
 	local previous = phase
 	phase = payload.phase
 	if MATCH_PHASES[phase] then
@@ -172,20 +172,33 @@ function PillarTags.onState(payload)
 	elseif not MATCH_PHASES[phase] then
 		hideTags()
 	end
+	for _, row in payload.ring or {} do
+		local platform = platformFor(row.userId)
+		if platform ~= nil then
+			showHearts(platform, row.hearts, payload.maxHearts or 5)
+		end
+	end
 end
 
--- Reveal payload: the answers for the pillar tags.
-function PillarTags.onReveal(payload)
-	local revealRows = payload.rows or {}
-	-- The answer tags appear as the pillars start to rise, after the dive cards have landed.
-	revealToken += 1
-	local token = revealToken
-	task.delay(GameConfig.Reveal.RaiseDelaySeconds, function()
-		if token ~= revealToken or (phase ~= "Reveal" and phase ~= "Surge") then
-			return
-		end
-		showTags(revealRows)
-	end)
+-- CrabPassed payload: the passer's answer goes up over their pillar, in its tier's colour, until the next
+-- question. Your own is not tagged: your name tag is hidden for you.
+function PillarTags.onPassed(payload: Net.CrabPassedPayload)
+	if payload.fromUserId == Players.LocalPlayer.UserId then
+		return
+	end
+	local platform = platformFor(payload.fromUserId)
+	local tag = if platform ~= nil then tagFor(platform) else nil
+	if tag == nil then
+		return
+	end
+	local color = Ui.tierColor(payload.tier)
+	tag.label.Text = string.upper(payload.answer)
+	tag.label.TextColor3 = color
+	local border = tag.border
+	if border ~= nil then
+		border.Color = color
+	end
+	setTagShown(tag, true)
 end
 
 return PillarTags
