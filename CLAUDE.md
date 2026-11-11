@@ -134,6 +134,10 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   depends on data (`Client/Icons.image`: toast kind, quest kind, shop and chest items via `Client/ItemIcon`)
   or shows and hides an authored one (`Icons.show`: the status clock, the boost price shell). The X, + and
   arrow marks are authored bars and labels inside their buttons.
+- Icon images: `assets/ui-icons/<Name>.png` are the uploaded files (group-owned; ids in `ids.json`), made by
+  `normalize.py` from Codex's Style A originals so every icon is trimmed, centred and the same size. A new icon
+  goes through `normalize.py`, gets uploaded, and its id goes in `ids.json` and `Templates.Icons`. An `Icon`
+  beside text sits 8 px from it (4 to 6 px on small labels) and at least 12 px from a button's edge.
 - Spacing: 16 px from screen edges, 8 px between stacked pieces, text at least 12 px from a button or pill's
   sides.
 - The look (outlines, gradients, corners, `LiftedText` captions) is authored. `Ui.bindAll` only binds live
