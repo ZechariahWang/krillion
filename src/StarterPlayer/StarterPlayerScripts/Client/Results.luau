@@ -130,7 +130,7 @@ function Results.onState(payload: Net.RoundStatePayload)
 	if not ready then
 		return
 	end
-	if payload.playing and (payload.phase == "Prompt" or payload.phase == "Reveal" or payload.phase == "Surge") then
+	if payload.playing and (payload.phase == "Prompt" or payload.phase == "Reveal") then
 		reachedRound = math.max(reachedRound, payload.round)
 	end
 	if payload.phase == "Results" then

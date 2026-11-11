@@ -310,33 +310,12 @@ function Lobby.setReviveOpen(open: boolean, revived: boolean?)
 	refreshExtras()
 end
 
--- JoinResult {status, message} from the server after a JUMP IN press.
-function Lobby.onJoinResult(payload)
-	if not ready then
-		return
-	end
-	setJoinPending(false)
-	if type(payload) ~= "table" or type(payload.message) ~= "string" then
-		return
-	end
-	local status = payload.status
-	local kind = "bad"
-	if status == "joined" then
-		kind = "good"
-		joinOpen = false
-	elseif status == "not_ready" then
-		kind = "info"
-	end
-	Toasts.show(payload.message, kind)
-	refreshExtras()
-end
-
 function Lobby.onState(payload)
 	if not ready then
 		return
 	end
 	local phase = payload.phase
-	inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
+	inMatch = phase == "Prompt" or phase == "Reveal"
 	playing = payload.playing == true
 	joinOpen = payload.lateJoinOpen == true
 	joinRound = if type(payload.round) == "number" then payload.round else 0

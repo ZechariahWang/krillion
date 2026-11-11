@@ -119,11 +119,6 @@ export type BoostResultPayload = {
 	uses: BoostUses, -- used this round
 }
 
-export type JoinResultPayload = {
-	status: string, -- "joined" | "closed" | "full" | "already" | "not_ready"
-	message: string,
-}
-
 export type NotifyPayload = {
 	text: string,
 	kind: string, -- "info" | "good" | "bad" | "mythic" | "hint"
