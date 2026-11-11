@@ -8,7 +8,8 @@ local GameConfig = require("../Config/GameConfig")
 local RULES = GameConfig.Crab
 
 export type Match = {
-	order: { any }, -- everyone who started, clockwise round the ring
+	order: { any }, -- everyone who started and has not left, clockwise round the ring
+	started: number, -- how many started, leavers included
 	alive: { [any]: boolean },
 	hearts: { [any]: number },
 	meter: { [any]: number }, -- answer points towards the next extra heart
@@ -33,6 +34,8 @@ export type PinchResult = {
 
 local CrabMatch = {}
 
+local putOut: (match: Match, id: any) -> ()
+
 function CrabMatch.rollFuse(roll: number): number
 	return RULES.FuseMinSeconds + (RULES.FuseMaxSeconds - RULES.FuseMinSeconds) * roll
 end
@@ -40,6 +43,7 @@ end
 function CrabMatch.new(order: { any }, holderRoll: number, fuseRoll: number): Match
 	local match: Match = {
 		order = table.clone(order),
+		started = #order,
 		alive = {},
 		hearts = {},
 		meter = {},
@@ -93,6 +97,44 @@ function CrabMatch.isUsed(match: Match, answer: string): boolean
 	return match.used[answer] == true
 end
 
+-- Takes a player out of the match. If they held the crab, the next player still in holds it.
+function putOut(match: Match, id: any)
+	match.alive[id] = false
+	match.hearts[id] = 0
+	table.insert(match.out, id)
+	if match.holder == id then
+		match.holder = CrabMatch.nextHolder(match, id)
+	end
+end
+
+-- A player fell in or died mid-match: out at once, whatever hearts they had.
+function CrabMatch.eliminate(match: Match, id: any)
+	if match.alive[id] ~= true then
+		return
+	end
+	putOut(match, id)
+end
+
+-- A player left the server: gone from the ring and the ranking.
+function CrabMatch.remove(match: Match, id: any)
+	local index = table.find(match.order, id)
+	if index == nil then
+		return
+	end
+	if match.holder == id then
+		local nextId = CrabMatch.nextHolder(match, id)
+		match.holder = if nextId ~= id then nextId else nil
+	end
+	table.remove(match.order, index)
+	match.alive[id] = nil
+	match.hearts[id] = nil
+	match.meter[id] = nil
+	local outIndex = table.find(match.out, id)
+	if outIndex ~= nil then
+		table.remove(match.out, outIndex)
+	end
+end
+
 -- The holder gave an accepted answer worth `points`: it is used up, their meter fills, the fuse is topped
 -- up and the crab moves on.
 function CrabMatch.pass(match: Match, answer: string, points: number): PassResult
@@ -137,9 +179,7 @@ function CrabMatch.pinch(match: Match, fuseRoll: number): PinchResult
 	match.hearts[holder] = hearts
 	local eliminated = hearts <= 0
 	if eliminated then
-		match.alive[holder] = false
-		table.insert(match.out, holder)
-		match.holder = CrabMatch.nextHolder(match, holder)
+		putOut(match, holder)
 	end
 	match.used = {}
 	match.usedList = {}
@@ -178,7 +218,7 @@ end
 -- Two or more started: over when one is left. One started alone: over when they are out.
 function CrabMatch.over(match: Match): boolean
 	local alive = CrabMatch.aliveCount(match)
-	if #match.order <= 1 then
+	if match.started <= 1 then
 		return alive == 0
 	end
 	return alive <= 1
@@ -186,7 +226,7 @@ end
 
 -- The last one standing, once a match of two or more is over.
 function CrabMatch.winner(match: Match): any?
-	if #match.order <= 1 or CrabMatch.aliveCount(match) ~= 1 then
+	if match.started <= 1 or CrabMatch.aliveCount(match) ~= 1 then
 		return nil
 	end
 	for _, id in match.order do

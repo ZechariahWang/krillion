@@ -78,7 +78,7 @@ local GameConfig = {
 		ChestSessionLimit = 50, -- chest openings per player per server visit, a guard against runaway spending
 		ChestCooldown = 1.2, -- seconds between chest openings (the open animation's length)
 		StartingShells = 100, -- one-time gift to a brand-new profile
-		-- Paid per graded match answer, after the dive card lands (Reveal.PayoutDelaySeconds).
+		-- Paid per accepted match answer (Reveal.PayoutDelaySeconds later).
 		AnswerByTier = {
 			Plankton = 5,
 			TooClever = 5,
@@ -133,7 +133,7 @@ local GameConfig = {
 		CardBudgetSeconds = 3.3,
 		CardHoldSeconds = 0.45,
 		RaiseDelaySeconds = 4.5, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 4.5, -- answer Shells and Mythic announcements land with the rise
+		PayoutDelaySeconds = 0, -- answer Shells and Mythic announcements land as the crab is passed
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},
@@ -194,9 +194,13 @@ local GameConfig = {
 		PinchSeconds = 3, -- the beat that shows the pinch before the next fuse starts
 		RestlessSeconds = 6, -- the crab turns restless with this much fuse left
 		FuriousSeconds = 3, -- and furious with this much
+		BotDelayMin = 2, -- a bot answers this long after it gets the crab, at random in the range
+		BotDelayMax = 9, -- past MinTurnSeconds on purpose: a bot handed a short fuse is sometimes pinched
+		SunkDepth = 8, -- a sunk pillar's top ends this far under the water
+		SinkSeconds = 1.2,
 	},
 	Server = {
-		MaxPlayers = 16, -- also set Server Size to 16 in the Creator Hub (Places > Configure)
+		MaxPlayers = 8, -- also set Server Size to 8 in the Creator Hub (Places > Configure)
 	},
 }
 

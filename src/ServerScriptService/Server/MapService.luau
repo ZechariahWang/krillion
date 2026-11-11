@@ -1,6 +1,6 @@
 --!strict
 -- Finds the Studio-built map placed in Workspace (Arena, Lobby, Mountains) and spawns per-player pillars from
--- ServerStorage.PhysicalAssets.PlatformTemplate (the starting ring, late joiners in the gaps, slate for a sunk pillar).
+-- ServerStorage.PhysicalAssets.PlatformTemplate (the starting ring; a pillar turns slate and sinks when its player is out).
 
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -9,7 +9,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local ArenaLayout = require(ReplicatedStorage.Shared.ArenaLayout)
-local LateJoin = require(ReplicatedStorage.Shared.LateJoin)
 local Theme = require(ReplicatedStorage.Config.Theme)
 
 local CAP_HEIGHT = 1
@@ -20,9 +19,6 @@ local template: Part
 local platformFolder: Folder
 local platforms: { Part } = {}
 local glideTokens: { [Part]: number } = {}
-local freeSpotDirty = true
-local freeX: number? = nil
-local freeZ: number? = nil
 
 local MapService = {}
 
@@ -93,7 +89,6 @@ local function makePlatform(index: number, x: number, z: number, topY: number): 
 	platform.Parent = platformFolder
 	platform:SetNetworkOwner(nil)
 	table.insert(platforms, platform)
-	freeSpotDirty = true
 	return platform
 end
 
@@ -105,36 +100,6 @@ function MapService.spawnPlatforms(count: number, topY: number): { Part }
 		makePlatform(index, x, z, topY)
 	end
 	return table.clone(platforms)
-end
-
--- Where the next late joiner's pillar would stand, leaving every existing pillar (sunk ones too) in place.
--- Cached until the pillars change, since RoundService asks on every broadcast.
-local function freeSpot(): (number?, number?)
-	if freeSpotDirty then
-		local taken = {}
-		for _, platform in platforms do
-			local lift = platform:FindFirstChild("Lift") :: AlignPosition?
-			local position = if lift ~= nil then lift.Position else platform.Position
-			table.insert(taken, { position.X, position.Z })
-		end
-		freeX, freeZ = LateJoin.spot(taken, GameConfig.Platform.Spacing, GameConfig.Platform.RingMaxRadius)
-		freeSpotDirty = false
-	end
-	return freeX, freeZ
-end
-
-function MapService.hasFreeSpot(): boolean
-	local x = freeSpot()
-	return x ~= nil
-end
-
--- A late joiner's pillar in the best free spot, standing at `topY`. Nil when the arena is full.
-function MapService.addPlatform(topY: number): Part?
-	local x, z = freeSpot()
-	if x == nil or z == nil then
-		return nil
-	end
-	return makePlatform(#platforms + 1, x, z, topY)
 end
 
 -- A sunk pillar turns slate and its tag says SUNK, so the ring shows at a glance who is still in.
@@ -171,13 +136,18 @@ function MapService.unmarkSunk(platform: Part)
 	end
 end
 
+-- Marks the pillar sunk and slides it under the water. Does not wait for the slide.
+function MapService.sinkPlatform(platform: Part)
+	MapService.markSunk(platform)
+	task.spawn(MapService.glidePlatformTop, platform, -GameConfig.Crab.SunkDepth, GameConfig.Crab.SinkSeconds, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+end
+
 function MapService.clearPlatforms()
 	for _, platform in platforms do
 		platform:Destroy()
 	end
 	platforms = {}
 	glideTokens = {}
-	freeSpotDirty = true
 end
 
 function MapService.setPlatformName(platform: Part, name: string)

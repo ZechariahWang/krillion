@@ -9,7 +9,6 @@
 --   tutorial <user> reset                   clear tutorialDone so the first-visit tutorial shows again
 --   stats <promptId>                        recorded answer counts for a prompt
 --   flush                                   write pending answer counts now
---   join <user>                             the JoinMatch path (late join), as if the player pressed JOIN
 -- <user> is a user id (negative in local test servers) or a player's name.
 -- Inert in live servers: the BindableFunction is only created when RunService:IsStudio().
 -- Studio with API access writes the LIVE Profile_v1 DataStore, so shells/boost/quest/tutorial changes persist.
@@ -224,19 +223,8 @@ commands.flush = function()
 	return "answer counts flushed"
 end
 
--- Same as the JoinMatch remote: RoundService.tryJoin does every check, and the client gets its JoinResult.
-commands.join = function(args)
-	local player = findPlayer(args[1])
-	if player == nil then
-		return noPlayer(args[1])
-	end
-	local status, message = RoundService.tryJoin(player)
-	Net.event("JoinResult"):FireClient(player, { status = status, message = message })
-	return `{player.Name}: {status} ({message})`
-end
-
 local HELP = "commands: state, players, shells <user> <n>, boost <user> <Hint|ExtraTime> <n>, "
-	.. "quest <user> [questId n], tutorial <user> reset, stats <promptId>, flush, join <user>"
+	.. "quest <user> [questId n], tutorial <user> reset, stats <promptId>, flush"
 
 -- Accepts one command line or separate arguments: Invoke("shells -1 500") or Invoke("shells", -1, 500).
 local function run(...: any): string
