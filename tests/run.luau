@@ -39,6 +39,7 @@ local suites = {
 	require("./Monetization.test"),
 	require("./PromptBank.test"),
 	require("./DayCycle.test"),
+	require("./CrabMatch.test"),
 }
 
 for _, suite in suites do

@@ -182,6 +182,19 @@ local GameConfig = {
 		TidalWaveMultiplier = 2, -- water rises this many times further
 		DoubleLiftMultiplier = 2, -- pillars rise this many times further
 	},
+	-- Crab Craze: the holder answers to pass the crab on before its fuse runs out.
+	Crab = {
+		StartHearts = 2,
+		MaxHearts = 5,
+		ReviveHearts = 1, -- a revived player comes back with this many
+		MeterTarget = 600, -- answer points that earn an extra heart
+		FuseMinSeconds = 10, -- each fuse is a random length in this range; clients are never told it
+		FuseMaxSeconds = 30,
+		MinTurnSeconds = 8, -- a pass tops the fuse back up to this, so the next holder always gets a turn
+		PinchSeconds = 3, -- the beat that shows the pinch before the next fuse starts
+		RestlessSeconds = 6, -- the crab turns restless with this much fuse left
+		FuriousSeconds = 3, -- and furious with this much
+	},
 	Server = {
 		MaxPlayers = 16, -- also set Server Size to 16 in the Creator Hub (Places > Configure)
 	},
@@ -206,5 +219,6 @@ table.freeze(GameConfig.Bots)
 table.freeze(GameConfig.Revive)
 table.freeze(GameConfig.Toys)
 table.freeze(GameConfig.Leaderboard)
+table.freeze(GameConfig.Crab)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)
