@@ -1,6 +1,6 @@
-# Crab Party: the new main gamemode
+# Crab Craze: the new main gamemode
 
-Date: 2026-11-10. Branch: `feat/puffer-party`. Status: plan, nothing built yet.
+Date: 2026-11-10. Branch: `feat/puffer-party`. Status: plan with decisions made (section 7), nothing built yet.
 
 Goal: replace the rising-water mode with a hot-potato mode modelled on Krillion's Puffer Party, with a crab in
 place of the puffer. The rising-water mode is archived so it can come back later.
@@ -30,23 +30,26 @@ Not stated anywhere I could read, so these are my assumptions:
 - The meter uses the normal tier points (10 to 100 per answer).
 - Who holds the puffer after an explosion, and the passing order.
 
-## 2. Crab Party rules
+## 2. Crab Craze rules
 
-The mode keeps the game's name honest: rare answers still lift you, and you still sink when you lose.
+The mode keeps the game's name honest: rare answers still keep you in, and you still sink when you lose.
 
-- **Ring.** Players stand on their pillars in the arena ring, as today. The water stays at one level.
+- **Ring.** Players stand on their pillars in the arena ring, as today. Every pillar stays at the same height
+  for the whole match and the water stays at one level.
 - **The crab.** One crab sits on the holder's pillar. A valid answer sends it scuttling to the next player
   still in, clockwise.
 - **Your turn.** Only the holder can answer. Everyone sees the question and the answers already used, so they
   can think ahead. A wrong or used answer is refused and the holder can try again while the fuse burns.
   Enter submits at once; a near-miss spelling is corrected and accepted (no second "lock in" press).
-- **Fuse.** Hidden, random 10 to 30 seconds, shared, topped up to 8 seconds on a pass. Same numbers as the
-  original. The crab shows no countdown.
+- **Fuse.** Random 10 to 30 seconds, shared, topped up to 8 seconds on a pass. Same numbers as the original.
+  There is no countdown on screen, but the crab gets angrier as the fuse runs down: calm, then restless,
+  then furious in the last seconds.
 - **Pinch.** When the fuse ends the crab pinches the holder. They lose a heart, a new fuse is rolled and a new
-  question starts with an empty used list.
-- **Hearts are pillar height.** A pillar stands one notch high per heart. Losing a heart drops it a notch;
-  at zero hearts it sinks and the player is out (the existing sink and Splash cosmetic). An extra heart
-  lifts it a notch (the existing rise). Start with 2, at most 5.
+  question starts with an empty used list. The pinched player holds the crab again; if that pinch put them
+  out, it goes to the next player.
+- **Hearts.** Start with 2, at most 5, shown as pips on the pillar's name tag and on the Hud. At zero hearts
+  the player is out and their pillar sinks (the existing sink and Splash cosmetic). That is the only time a
+  pillar moves.
 - **Rarity meter.** Each accepted answer adds its tier points (Plankton 10 up to Mythic 100) to the player's
   meter. At 600 the meter empties and the player gains a heart, unless they already have 5.
 - **Win.** Last player standing. Podium order is the order players went out.
@@ -61,7 +64,8 @@ The mode keeps the game's name honest: rare answers still lift you, and you stil
 | `FuseMinSeconds` / `FuseMaxSeconds` | 10 / 30 | original |
 | `MinTurnSeconds` | 8 | original |
 | `PinchSeconds` | 3 | new: the beat that shows the pinch before the next fuse |
-| `NotchStuds` | 6 | new: pillar height per heart, tune in play |
+| `RestlessSeconds` | 6 | new: the crab turns restless with this much fuse left |
+| `FuriousSeconds` | 3 | new: the crab turns furious with this much fuse left |
 
 ## 3. What changes around the mode
 
@@ -95,15 +99,16 @@ Rewritten:
   matchmaking attributes) is carried over; the pillar-and-water engine is replaced by the crab loop.
 - `Server/AnswerService.luau`: gains a turn: only the holder may submit, a refused answer can be retried,
   used answers are refused. `grade`, `isValidText` and `randomPrompt` are untouched (the lobby quiz uses them).
-- `Server/MapService.luau`: pillars move by heart notch instead of by answer lift.
+- `Server/MapService.luau`: pillars are placed once and only sink; the rise and lift code leaves.
 - `Server/BotService.luau`, `Server/BoostService.luau`, `Server/DebugService.luau`: follow the new loop.
 - Client: `Hud` (hearts, meter, used answers, "YOUR TURN"), `Status`, `PillarTags`, `Lobby` (spectate),
   `Results`, `Tutorial`, plus a new `Client/Crab.luau` that moves the crab and plays the pinch.
 
-Remotes: `RoundState` carries the holder, everyone's hearts, your meter and the used answers in place of the
-water fields. Two new events, `CrabPassed` and `CrabPinched`, drive the animations.
+Remotes: `RoundState` carries the holder, everyone's hearts, your meter, the used answers and the crab's mood
+in place of the water fields. The fuse's exact time is never sent to clients. Two new events, `CrabPassed` and `CrabPinched`, drive the animations.
 
-Authored in Studio (not by code): the crab model (`Templates.PartyCrab`), heart pips on the pillar name tag,
+Authored in Studio (not by code): the crab model (`Templates.CrazeCrab`) with its calm, restless and furious
+looks, heart pips on the pillar name tag,
 the Hud hearts row, meter and used-answer strip, and the two remotes.
 
 Leaves the live game (archived, see below): `WaterService`, `Shared/MatchState`, `WaterCurve`, `Tide`,
@@ -148,15 +153,17 @@ One commit per step; tests, syntax check and `rojo build` green at each.
 5. Client: `Hud`, `Status`, `Crab`, `PillarTags`, spectate, `Results`.
 6. Boosts, revive, shells and quest wording, the debug hook.
 7. Tutorial, boards, `CLAUDE.md`, the game description.
-8. Play test: solo with bots, a pass chain, a pinch, an extra heart, a sink, a revive, a win, phone layout.
+8. Play test: solo with bots, a pass chain, the crab's moods, a pinch, an extra heart, a sink, a revive, a
+   win, phone layout.
 
-## 7. Decisions to make before building
+## 7. Decisions (made 2026-11-10)
 
-1. **Server size.** With 16 on one ring a player waits a long time for a turn. Options: lower the server to
-   8 (recommended, closest to the original's 6), or keep 16 and add a second crab from 9 players up.
-2. **Who holds the crab after a pinch.** The next player (recommended, kinder) or the pinched player again.
-3. **The fuse on screen.** Fully hidden as in the original (recommended), or the crab gets visibly angrier in
-   the last few seconds.
-4. **The Best stat.** It stores the best pillar height. Leave it frozen (recommended, no save migration), or
-   give it a new meaning such as most answers in one match.
-5. **Mode name on screen.** "Crab Party" as a working name; the game stays Rare or Sink.
+1. **Server size: 8.** `GameConfig.Server.MaxPlayers` becomes 8, and Server Size is set to 8 in the Creator
+   Hub. One ring, one crab.
+2. **After a pinch the pinched player holds the crab again.**
+3. **The crab gets visibly angrier** as the fuse runs down. No countdown is shown.
+4. **All pillars stay the same height.** Hearts are pips, not height. With no heights, the Best stat is left
+   frozen: no save migration.
+5. **The mode is called Crab Craze** on screen. The game stays Rare or Sink.
+
+One reading of mine to confirm: a pillar still sinks when its player runs out of hearts.
