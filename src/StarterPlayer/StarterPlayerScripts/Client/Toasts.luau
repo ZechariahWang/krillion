@@ -372,12 +372,12 @@ local function fitStack(box: Frame)
 	end
 end
 
--- Pixels from the left edge: past the match's water meter when it shows along that edge.
+-- Pixels from the left edge: past the match hearts card when it shows along that edge.
 local function wantedLeft(): number
 	local left = EDGE
 	local playerGui = root
 	local hud = if playerGui ~= nil then Ui.findScreen(playerGui, "Hud") else nil
-	local meter = if hud ~= nil then hud:FindFirstChild("WaterMeter") else nil
+	local meter = if hud ~= nil then hud:FindFirstChild("Vitals") else nil
 	if meter ~= nil and meter:IsA("GuiObject") and isShowing(meter) then
 		local owner = meter:FindFirstAncestorWhichIsA("LayerCollector")
 		local origin = if owner ~= nil and owner:IsA("LayerCollector") then owner.AbsolutePosition.X else 0

@@ -503,7 +503,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "READ THE PROMPT",
+                        "Text": "READ THE QUESTION",
                         "TextSize": 28,
                         "TextColor3": [
                           1,
@@ -564,7 +564,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "Every round asks for something.",
+                        "Text": "Everyone gets the same one.",
                         "TextSize": 20,
                         "TextColor3": [
                           0.8431,
@@ -760,7 +760,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "TYPE THE RAREST ANSWER",
+                        "Text": "ANSWER ON YOUR TURN",
                         "TextSize": 28,
                         "TextColor3": [
                           1,
@@ -821,7 +821,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "Enter checks it, Enter again locks it in.",
+                        "Text": "A right answer passes the crab on.",
                         "TextSize": 20,
                         "TextColor3": [
                           0.8431,
@@ -1017,7 +1017,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "RARER = HIGHER",
+                        "Text": "DON'T GET PINCHED",
                         "TextSize": 28,
                         "TextColor3": [
                           1,
@@ -1078,7 +1078,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "Stay above the rising water to win!",
+                        "Text": "Rare answers earn hearts. Last one standing wins!",
                         "TextSize": 20,
                         "TextColor3": [
                           0.8431,

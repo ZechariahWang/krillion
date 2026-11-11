@@ -76,7 +76,7 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 	end
 	-- A solo dive has no winner to name: show how far the player got instead.
 	if payload.solo then
-		titleText.Text = "SOLO DIVE"
+		titleText.Text = "SOLO RUN"
 		winnerText.Text = "SURVIVED " .. math.max(0, payload.rounds - 1) .. " ROUNDS"
 	elseif won then
 		titleText.Text = "VICTORY!"
@@ -105,7 +105,7 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 			end
 		end
 	end
-	nextText.Text = "NEXT DIVE IN " .. payload.seconds
+	nextText.Text = "NEXT MATCH IN " .. payload.seconds
 	gui.Visible = true
 	-- A win lands with the big bounce; any other ending still pops, the panel is the moment.
 	if won then
@@ -134,7 +134,7 @@ function Results.onState(payload: Net.RoundStatePayload)
 		reachedRound = math.max(reachedRound, payload.round)
 	end
 	if payload.phase == "Results" then
-		nextText.Text = "NEXT DIVE IN " .. payload.secondsLeft
+		nextText.Text = "NEXT MATCH IN " .. payload.secondsLeft
 	else
 		gui.Visible = false
 	end
