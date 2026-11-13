@@ -134,7 +134,7 @@ function AnswerService.allLocked(): boolean
 	return any
 end
 
--- The bank spellings locked in this prompt, so a hint never gives away an answer someone already has.
+-- The bank spellings locked in this prompt, so a hint never gives an answer someone already has.
 function AnswerService.lockedCorrected(): { [string]: boolean }
 	local result = {}
 	for _, submission in submissions do
@@ -248,6 +248,27 @@ function AnswerService.submitFor(id: number, text: string): Submission?
 	return gradeText(text)
 end
 
+-- Locks `graded` in as the player's answer and tells them, as an accepted submit.
+local function lock(player: Player, gate: AnswerGate.Gate, graded: Submission)
+	AnswerGate.lock(gate)
+	submissions[player] = graded
+	Net.event("AnswerResult"):FireClient(player, { stage = "submit", accepted = true, corrected = graded.corrected })
+	AnswerService.Locked.fire(player)
+end
+
+-- Locks a bank answer in for a player without them typing it (a hint). False if they cannot answer now.
+function AnswerService.lockIn(player: Player, answer: string): boolean
+	if AnswerService.boostStatus(player) ~= "ok" then
+		return false
+	end
+	local graded = gradeText(answer)
+	if graded == nil then
+		return false
+	end
+	lock(player, gates[player] :: AnswerGate.Gate, graded)
+	return true
+end
+
 -- Enter once: is it in the bank, and how is it spelled? Never says the tier, and never locks anything.
 local function onCheck(player: Player, text: any)
 	local result = Net.event("AnswerResult")
@@ -295,10 +316,7 @@ local function onSubmit(player: Player, text: any)
 		result:FireClient(player, { stage = "submit", accepted = false, status = "invalid" })
 		return
 	end
-	AnswerGate.lock(gate)
-	submissions[player] = graded
-	result:FireClient(player, { stage = "submit", accepted = true, corrected = graded.corrected })
-	AnswerService.Locked.fire(player)
+	lock(player, gate, graded)
 end
 
 function AnswerService.start()

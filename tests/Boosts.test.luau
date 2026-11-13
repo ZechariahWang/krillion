@@ -55,31 +55,37 @@ return function(test)
 		assert(uses.round.ExtraTime == 1 and uses.match.ExtraTime == 1)
 	end)
 
-	test("pickHint picks from Rare and Deep Cut and is deterministic for a roll", function()
-		local display, tier, answer = Boosts.pickHint(BANK, 4, 5, {}, 0)
-		assert(display == "Lychee" and tier == "Rare" and answer == "lychee", tostring(display))
-		local again = Boosts.pickHint(BANK, 4, 5, {}, 0)
+	test("pickHint gives a Mythic answer and is deterministic for a roll", function()
+		local display, tier, answer = Boosts.pickHint(BANK, {}, 0)
+		assert(display == "Jabuticaba" and tier == "Mythic" and answer == "jabuticaba", tostring(display))
+		local again = Boosts.pickHint(BANK, {}, 0)
 		assert(again == display)
-		local last, lastTier = Boosts.pickHint(BANK, 4, 5, {}, 0.99)
-		assert(last == "Mandoline" and lastTier == "DeepCut", tostring(last))
 	end)
 
-	test("pickHint skips locked and already hinted answers", function()
-		local excluded = { lychee = true, mandoline = true }
-		local display, tier = Boosts.pickHint(BANK, 4, 5, excluded, 0)
-		assert(display == "Quince" and tier == "Rare", tostring(display))
+	test("pickHint skips answers already locked in", function()
+		local two = { Rare = { "lychee" }, Mythic = { "jabuticaba", "salak" } }
+		local display, tier = Boosts.pickHint(two, { jabuticaba = true }, 0)
+		assert(display == "Salak" and tier == "Mythic", tostring(display))
 	end)
 
-	test("pickHint widens down when Rare and Deep Cut are used up, never to the top tier", function()
-		local excluded = { lychee = true, quince = true, mandoline = true }
-		local display, tier = Boosts.pickHint(BANK, 4, 5, excluded, 0)
+	test("pickHint drops a tier at a time when the higher ones are used up", function()
+		local excluded = { jabuticaba = true }
+		local display, tier = Boosts.pickHint(BANK, excluded, 0)
+		assert(tier == "DeepCut" and display == "Mandoline", tostring(display))
+		excluded.mandoline = true
+		display, tier = Boosts.pickHint(BANK, excluded, 0.99)
+		assert(tier == "Rare" and display == "Quince", tostring(display))
+		excluded.lychee = true
+		excluded.quince = true
+		display, tier = Boosts.pickHint(BANK, excluded, 0)
 		assert(tier == "Schooler" and display == "Mango", tostring(display))
-		excluded.mango = true
-		excluded.cherry = true
-		display, tier = Boosts.pickHint(BANK, 4, 5, excluded, 0)
-		assert(tier == "TooClever" and display == "Kiwi", tostring(display))
-		excluded.kiwi = true
-		display = Boosts.pickHint(BANK, 4, 5, excluded, 0)
+	end)
+
+	test("pickHint gives the highest tier a question has, and nil when nothing is left", function()
+		local small = { Plankton = { "apple" }, Rare = { "lychee" } }
+		local display, tier = Boosts.pickHint(small, {}, 0)
+		assert(tier == "Rare" and display == "Lychee", tostring(display))
+		display = Boosts.pickHint(small, { apple = true, lychee = true }, 0)
 		assert(display == nil, tostring(display))
 	end)
 end

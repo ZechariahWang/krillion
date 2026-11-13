@@ -1,8 +1,9 @@
 --!strict
 -- Drives StarterGui.Hud during a match: the answer box (Enter checks the answer, Enter again locks it in),
--- the Hint and +10s boost chips, Shells, water meter, sudden-death card.
+-- the Hint (locks the best unused answer in for you) and +10s boost chips, Shells, water meter,
+-- sudden-death card.
 -- The prompt, timer and alive count live in StarterGui.Status (see Status.luau); surge feedback in Tide.luau.
--- ConfirmChip, HintRow and BoostBar are Studio templates (ReplicatedStorage.Templates) cloned into
+-- ConfirmChip and BoostBar are Studio templates (ReplicatedStorage.Templates) cloned into
 -- Hud.AnswerBar, unless the place already has them authored there.
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -70,8 +71,6 @@ local feedbackText: TextLabel?
 local banner: Frame
 local confirmChip: Frame? = nil
 local confirmText: TextLabel? = nil
-local hintRow: Frame? = nil
-local hintText: TextLabel? = nil
 local boostBar: Frame? = nil
 local boostChips: { [string]: BoostChip } = {}
 
@@ -258,9 +257,6 @@ local function showEntry()
 	lockedCard.Visible = false
 	feedback.Visible = false
 	hideConfirm()
-	if hintRow ~= nil then
-		hintRow.Visible = false
-	end
 end
 
 -- Boosts --------------------------------------------------------------------------------------------------
@@ -639,14 +635,6 @@ local function bindExtras()
 			confirmText = label
 		end
 	end
-	local row = adopt("HintRow")
-	if row ~= nil then
-		hintRow = row
-		local label = row:FindFirstChild("Text")
-		if label ~= nil and label:IsA("TextLabel") then
-			hintText = label
-		end
-	end
 	local bar = adopt("BoostBar")
 	if bar ~= nil then
 		-- Out of the answer bar and into the bottom-right column above the Shells chip.
@@ -775,12 +763,7 @@ function Hud.onBoostResult(payload)
 	local status = payload.status
 	if status == "ok" then
 		if kind == "Hint" and typeof(payload.hint) == "string" then
-			if hintText ~= nil then
-				hintText.Text = payload.hint
-			end
-			if hintRow ~= nil then
-				Ui.pop(hintRow)
-			end
+			-- The server has locked the hinted answer in (an accepted AnswerResult fills the box with it).
 			Toasts.show(payload.hint, "hint")
 			Sfx.play("Ping", 0.5)
 		elseif kind == "ExtraTime" then

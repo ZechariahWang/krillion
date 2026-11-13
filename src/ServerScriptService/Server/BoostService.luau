@@ -1,5 +1,6 @@
 --!strict
--- In-match boosts: Hint (a whole Rare/Deep Cut answer) and ExtraTime (+10 s for you only).
+-- In-match boosts: Hint (the best answer nobody has locked in, Mythic whenever one is left, locked in for
+-- you at once) and ExtraTime (+10 s for you only).
 -- Paid from the boost inventory first; ExtraTime then falls back to Shells, a Hint never does (hints are
 -- only bought with Robux). Robux products only add inventory. A Robux buy made mid-prompt is applied when
 -- its receipt lands (the client asks with pay "inventory" and the server remembers the request), so a slow
@@ -21,7 +22,6 @@ local StoreService = require(script.Parent.StoreService)
 local KINDS = { Hint = true, ExtraTime = true }
 
 local usage: { [Player]: Boosts.Usage } = {}
-local hinted: { [Player]: { [string]: boolean } } = {} -- answers already hinted to this player this prompt
 local lastRequest: { [Player]: number } = {}
 -- A boost bought with Robux that is waiting for its receipt: applied by the product handler if it lands
 -- before `expires`, otherwise the bought boost just stays in the inventory.
@@ -63,17 +63,13 @@ local function reply(player: Player, kind: string, status: string, extra: { [str
 	return status
 end
 
--- The hint this player would get now, without using it: display spelling, tier name, bank answer.
-local function findHint(player: Player): (string?, string?, string?)
+-- The hint a player would get now, without using it: display spelling, tier name, bank answer.
+local function findHint(): (string?, string?, string?)
 	local answers = AnswerService.currentAnswersByTier()
 	if answers == nil then
 		return nil, nil, nil
 	end
-	local excluded = AnswerService.lockedCorrected()
-	for answer in hinted[player] or {} do
-		excluded[answer] = true
-	end
-	return Boosts.pickHint(answers, GameConfig.Boosts.HintMinTier, GameConfig.Boosts.HintMaxTier, excluded, math.random())
+	return Boosts.pickHint(answers, AnswerService.lockedCorrected(), math.random())
 end
 
 -- Uses one boost for the player. pay: "auto" (inventory, then Shells for ExtraTime) | "inventory" (a Robux
@@ -93,32 +89,38 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 	end
 	local display: string?, tier: string?, answer: string? = nil, nil, nil
 	if kind == "Hint" then
-		display, tier, answer = findHint(player)
+		display, tier, answer = findHint()
 		if display == nil or tier == nil or answer == nil then
 			return reply(player, kind, "none")
 		end
 	end
 
-	if inventoryOf(player, kind) > 0 then
-		DataService.spendBoost(player, kind)
-	elseif pay == "inventory" then
+	local owned = inventoryOf(player, kind) > 0
+	if not owned and pay == "inventory" then
 		-- The receipt has not landed yet; the product handler finishes this request when it does.
 		pending[player] = { kind = kind, expires = os.clock() + GameConfig.Boosts.PurchaseWaitSeconds }
 		return reply(player, kind, "pending")
-	elseif kind == "Hint" then
-		return reply(player, kind, "no_hints")
-	elseif not StoreService.spendShells(player, GameConfig.Boosts.ExtraTimeShells, "spend") then
-		return reply(player, kind, "no_shells")
 	end
-
-	Boosts.noteUse(usageOf(player), kind)
 	if kind == "Hint" then
-		local seen = hinted[player] or {}
-		hinted[player] = seen
-		seen[answer :: string] = true
+		if not owned then
+			return reply(player, kind, "no_hints")
+		end
+		-- The answer is locked in first, so a hint that cannot be used is never paid for.
+		if not AnswerService.lockIn(player, answer :: string) then
+			return reply(player, kind, "closed")
+		end
+		DataService.spendBoost(player, kind)
+		Boosts.noteUse(usageOf(player), kind)
 		local label = Tiers.ByName[tier :: string].label
 		return reply(player, kind, "ok", { hint = Boosts.hintText(label, display :: string) })
 	end
+
+	if owned then
+		DataService.spendBoost(player, kind)
+	elseif not StoreService.spendShells(player, GameConfig.Boosts.ExtraTimeShells, "spend") then
+		return reply(player, kind, "no_shells")
+	end
+	Boosts.noteUse(usageOf(player), kind)
 	local secondsLeft = AnswerService.extend(player, GameConfig.Boosts.ExtraTimeSeconds)
 	return reply(player, kind, "ok", { secondsLeft = secondsLeft })
 end
@@ -164,12 +166,11 @@ function BoostService.start()
 		end)
 	end
 
-	-- One of each per round: the round count, hints given and any waiting purchase reset on every prompt.
+	-- One of each per round: the round count and any waiting purchase reset on every prompt.
 	MatchEvents.PromptOpened.connect(function()
 		for _, uses in usage do
 			uses.round = Boosts.newUses()
 		end
-		hinted = {}
 		pending = {}
 	end)
 	MatchEvents.MatchStarted.connect(function()
@@ -177,7 +178,6 @@ function BoostService.start()
 	end)
 	Players.PlayerRemoving:Connect(function(player)
 		usage[player] = nil
-		hinted[player] = nil
 		lastRequest[player] = nil
 		pending[player] = nil
 	end)

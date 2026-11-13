@@ -95,8 +95,6 @@ local GameConfig = {
 		PerRound = 1, -- of each kind
 		PerMatch = 3, -- of each kind
 		PerMatchPlus = 5, -- of each kind, for holders of the Boost Plus game pass
-		HintMinTier = 4, -- Tiers.List index: Rare
-		HintMaxTier = 5, -- DeepCut; a hint never gives away the best tier
 		Cooldown = 0.5, -- seconds between UseBoost requests
 		PurchaseWaitSeconds = 5, -- how long a Robux-bought boost waits for its receipt before giving up
 	},
