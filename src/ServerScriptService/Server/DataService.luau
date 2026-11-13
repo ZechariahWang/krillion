@@ -713,6 +713,12 @@ function DataService.hasReceipt(player: Player, receipt: string): boolean
 	return Profile.hasReceipt(profile, receipt)
 end
 
+-- Whether the receipt is in the profile as last saved, not only in this session's unsaved changes.
+function DataService.receiptSaved(player: Player, receipt: string): boolean
+	local saved = stored[player]
+	return saved ~= nil and Profile.hasReceipt(saved, receipt)
+end
+
 function DataService.addReceipt(player: Player, receipt: string)
 	local current = session(player)
 	if current ~= nil then
