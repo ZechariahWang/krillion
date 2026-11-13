@@ -1,6 +1,7 @@
 local PromptBank = require("../src/ServerStorage/PromptBank")
 local AnswerMatcher = require("../src/ReplicatedStorage/Shared/AnswerMatcher")
 local Tiers = require("../src/ReplicatedStorage/Config/Tiers")
+local GameConfig = require("../src/ReplicatedStorage/Config/GameConfig")
 
 local REQUIRED_TIERS = { "Plankton", "Schooler", "Rare" }
 
@@ -45,6 +46,17 @@ return function(test)
 					assert(AnswerMatcher.normalize(answer) == answer, prompt.id .. ": not normalized: " .. answer)
 					assert(seen[answer] == nil, prompt.id .. ": " .. answer .. " is in " .. tostring(seen[answer]) .. " and " .. tierName)
 					seen[answer] = tierName
+				end
+			end
+		end)
+	end)
+
+	test("every answer is short enough to type and to lock in", function()
+		local limit = GameConfig.Answer.MaxLength
+		eachPrompt(function(prompt)
+			for _, list in prompt.answers do
+				for _, answer in list do
+					assert(#answer <= limit, prompt.id .. ": longer than " .. limit .. " characters: " .. answer)
 				end
 			end
 		end)
