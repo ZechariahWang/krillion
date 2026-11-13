@@ -60,6 +60,12 @@ local function playNext()
 	end
 	index = (index % #tracks) + 1
 	local sound = tracks[index]
+	-- Only ever one track: whatever else is still sounding stops before the next one starts.
+	for _, other in tracks do
+		if other ~= sound and other.IsPlaying then
+			other:Stop()
+		end
+	end
 	current = sound
 	playToken += 1
 	local token = playToken
