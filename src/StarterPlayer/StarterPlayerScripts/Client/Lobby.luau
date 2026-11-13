@@ -135,13 +135,11 @@ local function stopSpectating()
 end
 
 -- What the camera follows for this id, and the name to show: a player's humanoid, or a bot's rig on its
--- pillar (bots have negative ids; RoundService names the pillar's owner in its OwnerName attribute).
+-- pillar (RoundService names the pillar's owner in its OwnerName attribute). An id is a player's when a
+-- Player has it, never by its sign: players in a Studio test server have negative ids, as bots do.
 local function targetOf(userId: number): (Instance?, string)
-	if userId > 0 then
-		local target = Players:GetPlayerByUserId(userId)
-		if target == nil then
-			return nil, "PLAYER"
-		end
+	local target = Players:GetPlayerByUserId(userId)
+	if target ~= nil then
 		local character = target.Character
 		local humanoid = if character ~= nil then character:FindFirstChildOfClass("Humanoid") else nil
 		return humanoid, target.DisplayName
@@ -332,10 +330,12 @@ function Lobby.onState(payload)
 		return
 	end
 
-	-- Everyone still in can be watched, bots (negative ids) included.
+	-- Everyone still in can be watched, bots included; never yourself.
 	aliveUserIds = {}
 	for _, id in payload.aliveUserIds or {} do
-		table.insert(aliveUserIds, id)
+		if id ~= Players.LocalPlayer.UserId then
+			table.insert(aliveUserIds, id)
+		end
 	end
 
 	if not inMatch then
