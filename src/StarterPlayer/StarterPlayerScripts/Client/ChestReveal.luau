@@ -24,6 +24,7 @@ local WIND_UP = 1.1 -- the chest always shakes at least this long, so even an in
 local TIMEOUT = 6 -- no reply by then: give up and close
 local TICK_EVERY = 0.13
 local RAY_SPIN = 14 -- degrees per second
+local CARD_MARGIN = 16 -- pixels the prize card keeps clear of the screen edges
 local CONFETTI: { [string]: number } = { Common = 0, Rare = 30, Epic = 60, Legendary = 100, Mythic = 150 }
 
 local screen: Frame? = nil
@@ -82,6 +83,16 @@ local function setButton(button: TextButton, text: string, enabled: boolean)
 	button.Active = enabled
 	button.AutoButtonColor = enabled
 	button.BackgroundTransparency = if enabled then 0 else 0.65
+end
+
+-- The prize card's scale: full size, or smaller on a screen too short or narrow for it (a phone).
+local function cardFit(root: Frame, card: Frame, scale: UIScale): number
+	local shown = math.max(scale.Scale, 0.01)
+	local width = math.max(card.AbsoluteSize.X / shown, 1)
+	local height = math.max(card.AbsoluteSize.Y / shown, 1)
+	local wide = (root.AbsoluteSize.X - CARD_MARGIN * 2) / width
+	local tall = (root.AbsoluteSize.Y - CARD_MARGIN * 2) / height
+	return math.clamp(math.min(wide, tall), 0.1, 1)
 end
 
 -- Shows the prize. `chest` is the one that was opened, for the AGAIN price.
@@ -158,8 +169,9 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 	card.Visible = true
 	local cardScale = scaleOf(card)
 	if cardScale ~= nil then
-		cardScale.Scale = 0.3
-		tween(cardScale, 0.45, { Scale = 1 }, Enum.EasingStyle.Back)
+		local full = cardFit(root, card, cardScale)
+		cardScale.Scale = 0.3 * full
+		tween(cardScale, 0.45, { Scale = full }, Enum.EasingStyle.Back)
 	end
 	local iconScale = scaleOf(itemIcon)
 	if iconScale ~= nil then
