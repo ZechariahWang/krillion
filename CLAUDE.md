@@ -15,6 +15,11 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Do not author an instance in Studio while a `model.json` still owns it: Rojo reverts it on a later sync. Delete the
   `model.json` first, with Rojo disconnected. Remaining ones: `ReplicatedStorage/Remotes/*`, `Templates/{BotRig,Confetti,DiveCard,HowRareBoard,HowToBoard,Trails,leaderstats}`, `Sounds`.
 - `ServerStorage.UIArchive` keeps the UI as it was before the style bake (2026-11-05). Reference only.
+- Modes: the rising-water mode is live. Crab Craze (tried 2026-11-10 to 13) is kept at git tag
+  `mode/crab-craze`, with Studio copies of its authored pieces in `ServerStorage.CrabCrazeInstances`
+  (reference only). Keep Studio-only archives as direct children of ServerStorage: Rojo deletes Studio-only
+  children of any folder it syncs from disk below that (it deleted `ModeArchive.RisingWater.Instances` on a
+  branch switch; `ServerStorage.TowerInstancesBackup` is the recovered copy).
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
 - Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
   `ServerStorage.PhysicalAssets` holds `PlatformTemplate` (cloned per pillar, walls authored on it) and
@@ -33,9 +38,11 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   next to an instance you already moved there. Check for duplicates and delete the empty one.
 - Prompt bank: one module per prompt in `src/ServerStorage/PromptBank/`, listed in its `init.luau`;
   `tests/PromptBank.test.luau` guards it (normalized answers, no duplicates, aliases point at answers).
-- Templates cloned by code that are authored in Studio: `ReplicatedStorage.Templates.AfkTag` (SettingsService puts
-  it on an AFK player's Head), `Templates.AnswerTag`, `Templates.NameTag` (CosmeticService puts it on every Head:
-  the display name in the equipped tag's colour with the title line above; Roblox's own name display is off),
+- Templates cloned by code that are authored in Studio: `Templates.AnswerTag`, `Templates.NameTag`, the head
+  label (CosmeticService puts it on every Head, named `RareOrSinkName`; Roblox's own name display is off). Its
+  `Main` is a bottom-anchored vertical list, so hidden rows collapse: `Afk`, `TitleText`, `NameText`. The
+  server fills the name and title; `Client/HeadTags` shows the `Afk` row from the player's `Afk` attribute
+  and lifts labels that would overlap on screen (`Shared/LabelSpread`), so no two cover each other.
   `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title` is
   unused.
 - Sea dressing: `Arena.Reef.Coral.Extra` and `Arena.Beach.GrassExtra` hold the extra kelp, coral and tufts;
@@ -48,8 +55,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Phones play landscape only (`StarterGui.ScreenOrientation`). In a match a phone shows only the strip at the
   top (prompt, timer, `Hud.AnswerBar` at 17% of the height, boosts beside it), above where the on-screen
   keyboard reaches; `PromptEcho` stays hidden. Walking is off on a pillar (`Hud` disables the touch controls).
-- World labels: each BillboardGui's main child is centred and holds a UIScale named `DistanceScale`;
-  `Client/BillboardScale` keeps it at authored size within 45 studs and shrinks it beyond. Give new labels one.
+- World labels: each BillboardGui's main child is centred (the head label's is bottom-anchored, so it shrinks
+  towards the head) and holds a UIScale named `DistanceScale`; `Client/BillboardScale` keeps it at authored
+  size within 45 studs and shrinks it beyond. Give new labels one.
 - Loading screen: `ReplicatedFirst.LoadingScreen` (authored), with `ScreenInsets = None` and
   `ClipToDeviceSafeArea` off so it covers the phone notch area.
 - StreamingEnabled is on. Client code must not cache streamed parts: a part that streams back in is a new instance
