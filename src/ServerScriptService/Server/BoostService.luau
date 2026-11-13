@@ -179,7 +179,7 @@ function BoostService.start()
 		end)
 	end
 
-	-- One of each per round: the round count and any waiting purchase reset on every prompt.
+	-- The +time round count and any waiting purchase reset on every prompt.
 	MatchEvents.PromptOpened.connect(function()
 		for _, uses in usage do
 			uses.round = Boosts.newUses()

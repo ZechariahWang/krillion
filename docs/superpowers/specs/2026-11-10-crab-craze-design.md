@@ -1,5 +1,10 @@
 # Crab Craze: the new main gamemode
 
+> **Reverted 2026-11-13.** Crab Craze was built, tried for three days and taken out again. The rising-water
+> mode is the live game. Crab Craze is kept at git tag `mode/crab-craze` (its Studio pieces are in
+> `ServerStorage.CrabCrazeInstances`). This document is history: nothing in it describes the current game,
+> and the `ModeArchive` it mentions has been deleted.
+
 Date: 2026-11-10. Branch: `feat/puffer-party`. Status: plan with decisions made (section 7), nothing built yet.
 
 Goal: replace the rising-water mode with a hot-potato mode modelled on Krillion's Puffer Party, with a crab in

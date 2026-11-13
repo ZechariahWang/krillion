@@ -1,7 +1,7 @@
 --!strict
 -- Micro-interactions shared by the controllers, plus the live parts of the Studio-authored UI. Every
 -- outline, gradient, corner and caption is authored in Studio; this module only animates and tracks them.
--- The big pop-ups (eliminated, revive, results, callouts) show bigger through their UIScale only, fitted to
+-- The big pop-ups (revive, results, callouts) show bigger through their UIScale only, fitted to
 -- the screen, so the HUD between pop-ups stays as small as authored.
 
 local GuiService = game:GetService("GuiService")

@@ -27,7 +27,7 @@ local DOT_SIZE = UDim2.fromOffset(20, 20)
 local DOT_ACTIVE_SIZE = UDim2.fromOffset(44, 20)
 local BOARDS = { "HowToBoard", "HowRareBoard" }
 -- After leaving a pillar mid-match (sunk), wait for the match to end so the modal never covers the
--- revive offer or the eliminated card.
+-- revive offer.
 local CALM_PHASES: { [string]: boolean } = { Waiting = true, Intermission = true }
 
 local player = Players.LocalPlayer

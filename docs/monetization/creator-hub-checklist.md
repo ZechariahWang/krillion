@@ -39,7 +39,7 @@ Studio test purchases are free, so once an id is in, you can try every purchase 
 | VIP | 199 | +10% Shells forever, the Aurora pillar, the Gold Wake trail, a VIP title and a gold VIP name tag. | `Products.Passes.Vip` |
 | 2x Shells | 299 | Double every Shell you earn from answers, surviving and winning. | `Products.Passes.DoubleCash` |
 | Second Chance | 249 | One free revive in every match (not in a 1v1). | `Products.Passes.SecondChance` |
-| Boost Plus | 149 | Use up to 5 hints and 5 +10 SEC boosts per match instead of 3. | `Products.Passes.BoostPlus` |
+| Boost Plus | 149 | Use up to 5 +10 SEC boosts per match instead of 3. | `Products.Passes.BoostPlus` |
 
 ## Developer products (Monetization, then Developer Products)
 
@@ -52,9 +52,9 @@ Studio test purchases are free, so once an id is in, you can try every purchase 
 | Starter Pack | 49 | One time only: 1,000 Shells, a Sea Turtle pet and the Sunset pillar. | `Products.StarterPack.productId` |
 | Revive | 25 | A revive to use the next time you sink. | `Products.Revive.productId` |
 | Revive Now | 35 | Jump straight back in when you sink. | `Products.ReviveNow.productId` |
-| Hint | 15 | One hint boost. | `Products.Boosts.Hint.productId` |
+| Hint | 15 | Locks in a Mythic answer for you: the best one nobody has used. Used right away. | `Products.Boosts.Hint.productId` |
 | +10 SEC | 10 | One +10 seconds boost. | `Products.Boosts.ExtraTime.productId` |
-| Hint x3 | 35 | Three hint boosts. | `Products.BoostPacks[1].productId` |
+| Hint x3 (retired 2026-11-13: not sold any more, keep the product so old receipts still pay out) | 35 | Three hint boosts. | `Products.BoostPacks[1].productId` |
 | +10 SEC x3 | 25 | Three +10 seconds boosts. | `Products.BoostPacks[2].productId` |
 
 ## Robux items (each is a developer product)

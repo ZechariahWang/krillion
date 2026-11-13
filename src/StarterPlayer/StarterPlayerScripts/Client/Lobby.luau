@@ -282,11 +282,6 @@ function Lobby.init(playerGui: PlayerGui)
 	task.spawn(bindExtras)
 end
 
--- Whether the spectate camera is following someone in the match.
-function Lobby.isSpectating(): boolean
-	return spectating
-end
-
 -- You sank: a flash and a splash, you are in the lobby, and a toast says how far you got and that the eye
 -- button lets you watch the rest.
 function Lobby.onEliminated(payload)

@@ -18,8 +18,17 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Modes: the rising-water mode is live. Crab Craze (tried 2026-11-10 to 13) is kept at git tag
   `mode/crab-craze`, with Studio copies of its authored pieces in `ServerStorage.CrabCrazeInstances`
   (reference only). Keep Studio-only archives as direct children of ServerStorage: Rojo deletes Studio-only
-  children of any folder it syncs from disk below that (it deleted `ModeArchive.RisingWater.Instances` on a
-  branch switch; `ServerStorage.TowerInstancesBackup` is the recovered copy).
+  children of any folder it syncs from disk below that (it once deleted an archive's `Instances` folder on a
+  branch switch; `ServerStorage.TowerInstancesBackup` is the recovered copy of the rising-water UI).
+- Pillars carry no name. RoundService sets `OwnerUserId` on each pillar and `OwnerName` on a bot's; clients
+  find a pillar by owner (`Client/PillarTags` floats `Templates.AnswerTag` over it at the reveal, spectating
+  follows a bot's rig on it).
+- Boosts: a Hint costs 15 Robux each (no Shell price, no limit), picks the highest-rarity answer nobody has
+  locked in (Mythic first) and locks it in for the player at once. +10 SEC costs Shells or Robux and is
+  limited per round and per match (Boost Plus raises the match limit). The in-match chip asks for a second
+  tap before opening a Robux purchase. The 3-hint pack is `retired` in `Products.BoostPacks`: not sold, its
+  receipts still honoured.
+- A user's saved data can be deleted with the Studio debug command `erase <userId>` (`DataService.erase`).
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
 - Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
   `ServerStorage.PhysicalAssets` holds `PlatformTemplate` (cloned per pillar, walls authored on it) and
@@ -38,8 +47,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   next to an instance you already moved there. Check for duplicates and delete the empty one.
 - Prompt bank: one module per prompt in `src/ServerStorage/PromptBank/`, listed in its `init.luau`;
   `tests/PromptBank.test.luau` guards it (normalized answers, no duplicates, aliases point at answers).
-- Templates cloned by code that are authored in Studio: `Templates.AnswerTag`, `Templates.NameTag`, the head
-  label (CosmeticService puts it on every Head, named `RareOrSinkName`; Roblox's own name display is off). Its
+- Templates cloned by code that are authored in Studio: `Templates.AnswerTag`, and `Templates.NameTag`, which
+  is the head label (CosmeticService puts it on every Head, named `RareOrSinkName`; Roblox's own name display is off). Its
   `Main` is a bottom-anchored vertical list, so hidden rows collapse: `Afk`, `TitleText`, `NameText`. The
   server fills the name and title; `Client/HeadTags` shows the `Afk` row from the player's `Afk` attribute
   and lifts labels that would overlap on screen (`Shared/LabelSpread`), so no two cover each other.
