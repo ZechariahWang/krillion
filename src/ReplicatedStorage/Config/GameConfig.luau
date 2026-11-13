@@ -90,8 +90,7 @@ local GameConfig = {
 	},
 	Boosts = {
 		Enabled = 1, -- 0 hides both in-match boosts and refuses UseBoost
-		HintShells = 100,
-		ExtraTimeShells = 75,
+		ExtraTimeShells = 75, -- a hint has no Shell price: it is only ever paid for with Robux
 		ExtraTimeSeconds = 10,
 		PerRound = 1, -- of each kind
 		PerMatch = 3, -- of each kind

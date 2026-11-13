@@ -35,7 +35,8 @@ local Products = {
 	Revive = { productId = 3729794156, robux = 25 },
 	-- Bought on the revive card at the moment you sink, by someone with no revive in stock: revives at once.
 	ReviveNow = { productId = 3729794171, robux = 35 },
-	-- Each adds `count` to the boost inventory; the in-match buttons spend inventory before Shells.
+	-- Each adds `count` to the boost inventory, which the in-match buttons spend first. A hint has no other
+	-- price; +time falls back to Shells.
 	Boosts = {
 		Hint = { productId = 3729794185, robux = 15 },
 		ExtraTime = { productId = 3729794199, robux = 10 },

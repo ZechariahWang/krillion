@@ -93,7 +93,7 @@ export type BoostUses = { Hint: number, ExtraTime: number }
 
 export type BoostResultPayload = {
 	kind: string, -- "Hint" | "ExtraTime"
-	status: string, -- "ok" | "no_shells" | "limit" | "closed" | "not_playing" | "locked" | "none" | "disabled" | "pending"
+	status: string, -- "ok" | "no_shells" | "no_hints" | "limit" | "closed" | "not_playing" | "locked" | "none" | "disabled" | "pending"
 	hint: string?, -- e.g. "A DEEP CUT  |  M _ _ _ _ _ _ _ E (9 letters)"
 	secondsLeft: number?,
 	uses: BoostUses, -- used this round

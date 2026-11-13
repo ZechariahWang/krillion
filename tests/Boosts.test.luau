@@ -19,36 +19,11 @@ local BANK = {
 }
 
 return function(test)
-	test("mask shows the first and last letter of a word", function()
-		local got = Boosts.mask("mandoline")
-		assert(got == "M _ _ _ _ _ _ _ E (9 letters)", got)
-	end)
-
-	test("mask shows only the first letter of a short word", function()
-		local got = Boosts.mask("fig")
-		assert(got == "F _ _ (3 letters)", got)
-	end)
-
-	test("mask puts three spaces between words and counts every letter", function()
-		local got = Boosts.mask("antigua and barbuda")
-		assert(got == "A _ _ _ _ _ A   A _ _   B _ _ _ _ _ A (17 letters)", got)
-	end)
-
-	test("mask keeps punctuation visible and does not count it", function()
-		local got = Boosts.mask("forget-me-not")
-		assert(got == "F _ _ _ _ _ - _ _ - _ _ T (11 letters)", got)
-		got = Boosts.mask("jack-o-lantern")
-		assert(got == "J _ _ _ - _ - _ _ _ _ _ _ N (12 letters)", got)
-	end)
-
-	test("mask of a one-letter answer says letter", function()
-		local got = Boosts.mask("x")
-		assert(got == "X (1 letter)", got)
-	end)
-
-	test("hint text leads with the tier", function()
+	test("hint text leads with the tier and gives the whole answer", function()
 		local got = Boosts.hintText("Deep Cut", "Mandoline")
-		assert(got == "A DEEP CUT  |  M _ _ _ _ _ _ _ E (9 letters)", got)
+		assert(got == "A DEEP CUT  |  MANDOLINE", got)
+		got = Boosts.hintText("Rare", "Antigua And Barbuda")
+		assert(got == "A RARE  |  ANTIGUA AND BARBUDA", got)
 	end)
 
 	test("titleCase capitalises each word", function()

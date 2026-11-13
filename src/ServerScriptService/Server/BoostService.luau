@@ -1,8 +1,9 @@
 --!strict
--- In-match boosts: Hint (a masked Rare/Deep Cut answer) and ExtraTime (+10 s for you only).
--- Paid from the boost inventory first, then Shells; Robux products only add inventory. A Robux buy made
--- mid-prompt is applied when its receipt lands (the client asks with pay "inventory" and the server
--- remembers the request), so a slow receipt never falls through to spending Shells.
+-- In-match boosts: Hint (a whole Rare/Deep Cut answer) and ExtraTime (+10 s for you only).
+-- Paid from the boost inventory first; ExtraTime then falls back to Shells, a Hint never does (hints are
+-- only bought with Robux). Robux products only add inventory. A Robux buy made mid-prompt is applied when
+-- its receipt lands (the client asks with pay "inventory" and the server remembers the request), so a slow
+-- receipt never falls through to spending Shells.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -43,13 +44,6 @@ function BoostService.usesFor(player: Player): Net.BoostUses
 	return { Hint = round.Hint, ExtraTime = round.ExtraTime }
 end
 
-local function costOf(kind: string): number
-	if kind == "Hint" then
-		return GameConfig.Boosts.HintShells
-	end
-	return GameConfig.Boosts.ExtraTimeShells
-end
-
 local function inventoryOf(player: Player, kind: string): number
 	local profile = DataService.get(player)
 	if profile == nil then
@@ -82,8 +76,8 @@ local function findHint(player: Player): (string?, string?, string?)
 	return Boosts.pickHint(answers, GameConfig.Boosts.HintMinTier, GameConfig.Boosts.HintMaxTier, excluded, math.random())
 end
 
--- Uses one boost for the player. pay: "auto" (inventory, then Shells) | "inventory" (a Robux purchase
--- that just landed; never falls back to Shells). Returns the BoostResult status it sent.
+-- Uses one boost for the player. pay: "auto" (inventory, then Shells for ExtraTime) | "inventory" (a Robux
+-- purchase that just landed; never falls back to Shells). Returns the BoostResult status it sent.
 -- Everything is checked before anything is paid, so no path needs a refund.
 function BoostService.apply(player: Player, kind: string, pay: string?): string
 	if GameConfig.Boosts.Enabled == 0 then
@@ -111,7 +105,9 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 		-- The receipt has not landed yet; the product handler finishes this request when it does.
 		pending[player] = { kind = kind, expires = os.clock() + GameConfig.Boosts.PurchaseWaitSeconds }
 		return reply(player, kind, "pending")
-	elseif not StoreService.spendShells(player, costOf(kind), "spend") then
+	elseif kind == "Hint" then
+		return reply(player, kind, "no_hints")
+	elseif not StoreService.spendShells(player, GameConfig.Boosts.ExtraTimeShells, "spend") then
 		return reply(player, kind, "no_shells")
 	end
 

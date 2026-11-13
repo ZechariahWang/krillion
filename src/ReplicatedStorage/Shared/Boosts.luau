@@ -1,5 +1,5 @@
 --!strict
--- Rules for the in-match boosts: the masked hint text, which bank answer a hint gives away, and the
+-- Rules for the in-match boosts: the hint text, which bank answer a hint gives away, and the
 -- per-round and per-match limits. Pure, so Lune tests can require it.
 local GameConfig = require("../Config/GameConfig")
 local Tiers = require("../Config/Tiers")
@@ -17,7 +17,6 @@ export type Limits = {
 	PerMatch: number,
 }
 
-local SHORT_WORD = 3 -- words this short only show their first letter
 local WIDEN_TRIES = 2 -- a hint widens its tier range by one on each side at most this many times
 
 local Boosts = {}
@@ -33,72 +32,9 @@ function Boosts.titleCase(normalized: string): string
 	end))
 end
 
--- Characters of a word, UTF-8 aware; an invalid string falls back to its ASCII bytes.
-local function charsOf(text: string): { string }
-	local chars = {}
-	if utf8.len(text) ~= nil then
-		for _, code in utf8.codes(text) do
-			table.insert(chars, utf8.char(code))
-		end
-		return chars
-	end
-	for index = 1, #text do
-		local ch = string.sub(text, index, index)
-		if string.byte(ch) < 128 then
-			table.insert(chars, ch)
-		end
-	end
-	return chars
-end
-
--- Letters and digits are hidden and counted; anything else ("-", "'") stays visible as a clue.
-local function isLetter(ch: string): boolean
-	return #ch > 1 or string.match(ch, "^%w$") ~= nil
-end
-
--- "mandoline" -> "M _ _ _ _ _ _ _ E (9 letters)". Each word shows its first and last letter (only the
--- first for words of 3 letters or fewer); characters are spaced, words are three spaces apart.
-function Boosts.mask(display: string): string
-	local words: { string } = {}
-	local total = 0
-	for word in string.gmatch(display, "%S+") do
-		local chars = charsOf(word)
-		local letters = 0
-		local first: number? = nil
-		local last: number? = nil
-		for index, ch in chars do
-			if isLetter(ch) then
-				letters += 1
-				first = first or index
-				last = index
-			end
-		end
-		total += letters
-		if letters <= SHORT_WORD then
-			last = first
-		end
-		local shown = {}
-		for index, ch in chars do
-			if index == first or index == last then
-				table.insert(shown, string.upper(ch))
-			elseif isLetter(ch) then
-				table.insert(shown, "_")
-			else
-				table.insert(shown, ch)
-			end
-		end
-		table.insert(words, table.concat(shown, " "))
-	end
-	if total == 0 then
-		return display
-	end
-	local unit = if total == 1 then "letter" else "letters"
-	return string.format("%s (%d %s)", table.concat(words, "   "), total, unit)
-end
-
--- "A DEEP CUT  |  M _ _ _ _ _ _ _ E (9 letters)"
+-- "A DEEP CUT  |  MANDOLINE": the tier, then the whole answer.
 function Boosts.hintText(tierLabel: string, display: string): string
-	return "A " .. string.upper(tierLabel) .. "  |  " .. Boosts.mask(display)
+	return "A " .. string.upper(tierLabel) .. "  |  " .. string.upper(display)
 end
 
 -- The limits for one player: Boost Plus holders get PerMatchPlus uses of each boost per match.

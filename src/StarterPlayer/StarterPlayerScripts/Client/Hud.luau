@@ -41,6 +41,7 @@ local PRICE_OWNED = Color3.fromRGB(255, 255, 255)
 local INVALID_TEXT = "NOT IN THE BANK  |  TRY AGAIN"
 local BOOST_MESSAGES: { [string]: string } = {
 	no_shells = "NOT ENOUGH " .. Currency.Upper,
+	no_hints = "BUY A HINT TO USE ONE",
 	none = "NO HINT FOR THIS ONE",
 	closed = "TIME'S UP",
 	locked = "ALREADY LOCKED IN",
@@ -109,8 +110,12 @@ local function inventoryOf(kind: string): number
 	return if kind == "Hint" then inventory.Hint else inventory.ExtraTime
 end
 
-local function costOf(kind: string): number
-	return if kind == "Hint" then GameConfig.Boosts.HintShells else GameConfig.Boosts.ExtraTimeShells
+-- The boost's price in Shells, or nil for a hint: hints are only bought with Robux.
+local function shellCostOf(kind: string): number?
+	if kind == "Hint" then
+		return nil
+	end
+	return GameConfig.Boosts.ExtraTimeShells
 end
 
 local function productOf(kind: string): { productId: number, robux: number }
@@ -332,16 +337,17 @@ function refreshBoosts()
 	fitBoostBar()
 	for kind, chip in boostChips do
 		local usedUp = usesOf(kind) >= GameConfig.Boosts.PerRound
-		local cost = costOf(kind)
+		local cost = shellCostOf(kind)
 		local product = productOf(kind)
-		-- The price pill says what pressing spends: Shells (with the authored shell icon), Robux, or one you own.
-		local shellPrice = tostring(cost)
+		-- The price pill says what pressing spends: one you own, Shells (with the authored shell icon; never
+		-- for a hint) or Robux.
+		local shellPrice = if cost ~= nil then tostring(cost) else ""
 		local payable = true
 		local priceColor = PRICE_SHELLS
 		if inventoryOf(kind) > 0 then
 			chip.price.Text = "OWNED x" .. inventoryOf(kind)
 			priceColor = PRICE_OWNED
-		elseif cash >= cost then
+		elseif cost ~= nil and cash >= cost then
 			chip.price.Text = shellPrice
 		elseif product.productId ~= 0 then
 			chip.price.Text = "R$ " .. product.robux
@@ -352,7 +358,7 @@ function refreshBoosts()
 			payable = false
 		end
 		chip.price.TextColor3 = priceColor
-		Icons.show(chip.price, chip.price.Text == shellPrice)
+		Icons.show(chip.price, cost ~= nil and chip.price.Text == shellPrice)
 		local usable = payable and not usedUp
 		chip.button.BackgroundColor3 = if usable then chip.face else chip.face:Lerp(DISABLED_FACE, 0.75)
 		chip.uses.Text = if usedUp then "" else tostring(GameConfig.Boosts.PerRound - usesOf(kind))
@@ -393,7 +399,8 @@ local function useBoost(kind: string)
 	if chip ~= nil then
 		Ui.bump(chip.button, 1.06)
 	end
-	if inventoryOf(kind) > 0 or cash >= costOf(kind) then
+	local cost = shellCostOf(kind)
+	if inventoryOf(kind) > 0 or (cost ~= nil and cash >= cost) then
 		Net.event("UseBoost"):FireServer(kind)
 		return
 	end
@@ -402,7 +409,7 @@ local function useBoost(kind: string)
 		MarketplaceService:PromptProductPurchase(Players.LocalPlayer, product.productId)
 		return
 	end
-	deny(BOOST_MESSAGES.no_shells)
+	deny(if cost ~= nil then BOOST_MESSAGES.no_shells else BOOST_MESSAGES.no_hints)
 end
 
 -- The +10s pops under the Status timer, where the player is already looking.

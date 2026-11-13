@@ -515,10 +515,9 @@ local function boostEntries(entries: { Entry })
 	if GameConfig.Boosts.Enabled ~= 1 then
 		return
 	end
-	-- In a match the boost buttons use held boosts first, then Shells; Robux only stocks up.
+	-- In a match the boost buttons use held boosts first. +time then costs Shells; a hint is Robux only.
 	local hintName = "HINT"
 	local timeName = "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
-	table.insert(entries, boostShellsEntry(hintName, GameConfig.Boosts.HintShells, "Hint"))
 	local hint = productEntry(hintName .. " x1", Products.Boosts.Hint.robux, Products.Boosts.Hint.productId, "Hint")
 	hint.sub = "One hint in your stock"
 	if profile.hints > 0 then
