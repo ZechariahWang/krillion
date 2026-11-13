@@ -118,6 +118,19 @@ function RevivePrompt.init(playerGui: PlayerGui)
 	end)
 end
 
+-- The offer is only good while the match it came from is running and you are out of it: the card goes
+-- when the match ends or you are back on a pillar.
+function RevivePrompt.onState(payload: Net.RoundStatePayload)
+	if not ready then
+		return
+	end
+	local inMatch = payload.phase == "Prompt" or payload.phase == "Reveal" or payload.phase == "Surge"
+	if not inMatch or payload.playing == true then
+		token += 1
+		hide()
+	end
+end
+
 function RevivePrompt.onPrompt(payload: Net.RevivePromptPayload)
 	if not ready then
 		return
@@ -130,10 +143,10 @@ function RevivePrompt.onPrompt(payload: Net.RevivePromptPayload)
 		count.Text = "SECOND CHANCE"
 		use.Text = "FREE REVIVE"
 	elseif kind == "buy" then
-		count.Text = "JUMP BACK IN"
+		count.Text = "COSTS " .. tostring(payload.robux or 0) .. " ROBUX"
 		use.Text = "REVIVE  R$ " .. tostring(payload.robux or 0)
 	else
-		count.Text = payload.revives .. " LEFT"
+		count.Text = if payload.revives == 1 then "1 REVIVE LEFT" else payload.revives .. " REVIVES LEFT"
 		use.Text = useText
 	end
 	fill.Size = UDim2.fromScale(1, 1)

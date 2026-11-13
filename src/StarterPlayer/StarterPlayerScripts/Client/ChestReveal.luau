@@ -185,7 +185,12 @@ end
 function ChestReveal.open(chestId: string)
 	local root = screen
 	local chest = Chests.ById[chestId]
-	if root == nil or chest == nil or busy then
+	if chest == nil or busy then
+		return
+	end
+	if root == nil then
+		-- No reveal screen (not found yet, or missing): the chest still opens, and Market toasts the prize.
+		Net.event("ChestOpen"):FireServer(chestId)
 		return
 	end
 	busy = true
@@ -290,11 +295,26 @@ function ChestReveal.init(playerGui: PlayerGui)
 			warn("[ChestReveal] SharedUi.ChestReveal is missing; chests open without a reveal")
 			return
 		end
-		screen = found
 		found.Visible = false
-		local card = found:FindFirstChild("Card") :: Frame
-		local again = card:FindFirstChild("Again") :: TextButton
-		local done = card:FindFirstChild("Done") :: TextButton
+		local cardFound = found:FindFirstChild("Card")
+		local againFound = if cardFound ~= nil then cardFound:FindFirstChild("Again") else nil
+		local doneFound = if cardFound ~= nil then cardFound:FindFirstChild("Done") else nil
+		local whole = cardFound ~= nil
+			and againFound ~= nil
+			and againFound:IsA("TextButton")
+			and doneFound ~= nil
+			and doneFound:IsA("TextButton")
+			and found:FindFirstChild("Chest") ~= nil
+			and found:FindFirstChild("Glow") ~= nil
+		if not whole then
+			warn("[ChestReveal] SharedUi.ChestReveal is missing a piece; chests open without a reveal")
+			return
+		end
+		-- Only a complete screen is used: a half-built one could open and never close.
+		screen = found
+		local card = cardFound :: Frame
+		local again = againFound :: TextButton
+		local done = doneFound :: TextButton
 		Ui.pressable(again)
 		Ui.pressable(done)
 		again.MouseButton1Click:Connect(function()

@@ -52,8 +52,19 @@ local function inventoryOf(player: Player, kind: string): number
 	return if kind == "Hint" then profile.hints else profile.extraTimes
 end
 
+-- How many more +time boosts this player may use this match.
+local function timeLeftThisMatch(player: Player): number
+	local limits = Boosts.limitsFor(StoreService.ownsPass(player, "BoostPlus"))
+	return math.max(0, limits.PerMatch - usageOf(player).match.ExtraTime)
+end
+
 local function reply(player: Player, kind: string, status: string, extra: { [string]: any }?): string
-	local payload: { [string]: any } = { kind = kind, status = status, uses = BoostService.usesFor(player) }
+	local payload: { [string]: any } = {
+		kind = kind,
+		status = status,
+		uses = BoostService.usesFor(player),
+		timeLeftThisMatch = timeLeftThisMatch(player),
+	}
 	if extra ~= nil then
 		for key, value in extra do
 			payload[key] = value
@@ -135,6 +146,8 @@ local function onBoostBought(player: Player, kind: string, count: number?)
 	end
 	pending[player] = nil
 	if os.clock() > waiting.expires then
+		-- Too late to use it for them: it is in their stock, and they are told so.
+		reply(player, kind, "stocked")
 		return
 	end
 	-- Deferred so the receipt handler finishes (and saves) before the boost is spent.

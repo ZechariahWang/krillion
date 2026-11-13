@@ -317,7 +317,8 @@ local function offerRevive(player: Player)
 		othersAlive = RoundService.aliveCount(),
 		secondChance = StoreService.ownsPass(player, "SecondChance"),
 		secondChanceUsed = false, -- the one-per-match rule already covers it
-		canBuy = Products.ReviveNow.productId ~= 0,
+		-- No Robux offer to a player whose save has not loaded: the receipt could not be granted.
+		canBuy = Products.ReviveNow.productId ~= 0 and not DataService.isReadOnly(player),
 	})
 	if kind == nil then
 		return

@@ -128,8 +128,9 @@ local function stopSpectating()
 	spectating = false
 	spectateBar.Visible = false
 	local camera = workspace.CurrentCamera
-	if camera ~= nil then
-		camera.CameraSubject = ownHumanoid()
+	local humanoid = ownHumanoid()
+	if camera ~= nil and humanoid ~= nil then
+		camera.CameraSubject = humanoid
 	end
 	refreshExtras()
 end
@@ -167,11 +168,13 @@ local function watch(index: number)
 	spectateIndex = ((index - 1) % #aliveUserIds) + 1
 	watchedId = aliveUserIds[spectateIndex]
 	local subject, name = targetOf(watchedId)
-	watchingText.Text = "WATCHING " .. string.upper(name)
 	local camera = workspace.CurrentCamera
-	-- Not streamed in yet: the next state update tries again.
 	if camera ~= nil and subject ~= nil and (subject:IsA("Humanoid") or subject:IsA("BasePart")) then
 		camera.CameraSubject = subject
+		watchingText.Text = "WATCHING " .. string.upper(name)
+	else
+		-- Not streamed in yet: the bar says so, and the next state update tries again.
+		watchingText.Text = "FINDING " .. string.upper(name) .. "..."
 	end
 end
 
@@ -284,13 +287,18 @@ function Lobby.isSpectating(): boolean
 	return spectating
 end
 
--- You sank: a flash and a splash, and you are in the lobby. The spectate button is there if you want it.
-function Lobby.onEliminated()
+-- You sank: a flash and a splash, you are in the lobby, and a toast says how far you got and that the eye
+-- button lets you watch the rest.
+function Lobby.onEliminated(payload)
 	if not ready then
 		return
 	end
+	playing = false
 	Fx.flash(Theme.Color.Water)
 	Sfx.play("Splash", 0.8)
+	local reached = if type(payload) == "table" and type(payload.round) == "number" then payload.round else nil
+	local text = if reached ~= nil then "YOU'RE OUT IN ROUND " .. reached else "YOU'RE OUT"
+	Toasts.show(text .. "  |  TAP THE EYE TO WATCH", "info")
 	refreshExtras()
 end
 
@@ -326,7 +334,11 @@ function Lobby.onState(payload)
 	joinRound = if type(payload.round) == "number" then payload.round else 0
 	gui.Visible = inMatch and not playing
 	if payload.playing then
-		stopSpectating()
+		if spectating then
+			stopSpectating()
+		else
+			refreshExtras()
+		end
 		return
 	end
 

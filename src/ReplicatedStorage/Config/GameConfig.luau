@@ -149,7 +149,7 @@ local GameConfig = {
 		DelayRange = 0.6,
 	},
 	Revive = {
-		WindowSeconds = 5,
+		WindowSeconds = 8, -- long enough for a child to read the card and tap it
 		BuyWindowSeconds = 12, -- Revive Now: long enough to get through the Robux purchase dialog
 		MinOthersAlive = 2, -- fewer than this and the match is already decided
 		HeightAboveWater = 4,

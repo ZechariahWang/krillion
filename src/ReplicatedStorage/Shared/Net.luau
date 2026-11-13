@@ -93,8 +93,8 @@ export type BoostUses = { Hint: number, ExtraTime: number }
 
 export type BoostResultPayload = {
 	kind: string, -- "Hint" | "ExtraTime"
-	status: string, -- "ok" | "no_shells" | "no_hints" | "limit" | "closed" | "not_playing" | "locked" | "none" | "disabled" | "pending"
-	hint: string?, -- e.g. "A DEEP CUT  |  M _ _ _ _ _ _ _ E (9 letters)"
+	status: string, -- "ok" | "no_shells" | "no_hints" | "limit" | "closed" | "not_playing" | "locked" | "none" | "disabled" | "pending" | "stocked" (a Robux boost that landed too late to use: it is in the inventory)
+	hint: string?, -- e.g. "A MYTHIC  |  JABUTICABA"
 	secondsLeft: number?,
 	uses: BoostUses, -- used this round
 }

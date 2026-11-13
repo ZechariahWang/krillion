@@ -175,8 +175,18 @@ local function colorOf(item: Cosmetics.Item): Color3
 	return rgb(item.color, Color3.fromRGB(60, 200, 255))
 end
 
+-- Nothing is sold for Robux while the profile has not loaded: the receipt could not be granted until the
+-- player rejoined.
+local function saveReady(): boolean
+	if (profile :: any).loadFailed == true then
+		Toasts.show("YOUR SAVE IS STILL LOADING  |  TRY AGAIN SOON", "bad")
+		return false
+	end
+	return true
+end
+
 local function promptProduct(productId: number)
-	if productId == 0 then
+	if productId == 0 or not saveReady() then
 		return
 	end
 	MarketplaceService:PromptProductPurchase(player, productId)
@@ -433,7 +443,7 @@ local function passEntry(key: string): Entry
 	entry.owned = owned
 	entry.action = "BUY"
 	entry.onClick = function()
-		if passId ~= 0 then
+		if passId ~= 0 and saveReady() then
 			MarketplaceService:PromptGamePassPurchase(player, passId)
 		end
 	end
@@ -582,9 +592,12 @@ local function chestEntries(entries: { Entry })
 		entry.price = Currency.digits(chest.price)
 		entry.currency = "Cash"
 		if profile.cash >= chest.price then
-			entry.action = "OPEN"
+			entry.action = if isConfirming(chest.id) then "CONFIRM?" else "OPEN"
+			-- A chest is a spend like any other: the same second tap confirms it.
 			entry.onClick = function()
-				ChestReveal.open(chest.id)
+				confirmThen(chest.id, function()
+					ChestReveal.open(chest.id)
+				end)
 			end
 		else
 			entry.action = "GET " .. Currency.Upper

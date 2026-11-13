@@ -85,7 +85,6 @@ local AVOID: { { string } } = {
 	{ "Hud", "AnswerBar" },
 	{ "Spectate", "SpectateBar" },
 	{ "Spectate", "JoinCard" },
-	{ "Spectate", "WatchButton" },
 	{ "LobbyQuiz", "Panel" },
 }
 
@@ -445,8 +444,9 @@ function Toasts.show(text: string, kind: string?)
 	if type(text) ~= "string" then
 		return
 	end
-	-- Phones, on a pillar: the prompt, the box and the timer are all that shows.
-	if Ui.isPhone() and Players.LocalPlayer:GetAttribute("Playing") == true then
+	-- Phones, on a pillar: the prompt, the box and the timer are all that shows. A hint's toast still
+	-- comes through: it is the only thing that says why the box just filled itself in.
+	if Ui.isPhone() and Players.LocalPlayer:GetAttribute("Playing") == true and kind ~= "hint" then
 		return
 	end
 	local message = clip(string.match(text, "^%s*(.-)%s*$") or "")

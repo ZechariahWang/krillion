@@ -39,11 +39,15 @@ local PRICE_SHORT = Color3.fromRGB(255, 130, 112) -- not enough Shells
 local PRICE_ROBUX = Color3.fromRGB(120, 235, 140)
 local PRICE_OWNED = Color3.fromRGB(255, 255, 255)
 
-local INVALID_TEXT = "NOT IN THE BANK  |  TRY AGAIN"
+local INVALID_TEXT = "WE DON'T KNOW THAT ONE  |  TRY ANOTHER"
+local SAVE_TEXT = "YOUR SAVE IS STILL LOADING  |  TRY AGAIN SOON"
+local CONFIRM_SECONDS = 3 -- how long a Robux chip waits for the second tap that opens the purchase
+local MIN_BUY_SECONDS = 6 -- with less time than this left, a purchase could not finish in time to be used
+local AUTO_LOCK_SECONDS = 1 -- a checked answer still in the box this close to the end is locked in for you
 local BOOST_MESSAGES: { [string]: string } = {
 	no_shells = "NOT ENOUGH " .. Currency.Upper,
-	no_hints = "BUY A HINT TO USE ONE",
-	none = "NO HINT FOR THIS ONE",
+	no_hints = "HINTS COST ROBUX",
+	none = "NO HINT LEFT  |  EVERY ANSWER IS TAKEN",
 	closed = "TIME'S UP",
 	locked = "ALREADY LOCKED IN",
 	pending = "FINISHING YOUR PURCHASE...",
@@ -90,6 +94,11 @@ local feedbackToken = 0
 local lastRound = 0
 local lastPhase = ""
 local inventory = { Hint = 0, ExtraTime = 0 }
+local timeLeftThisMatch: number? = nil -- +time uses left this match, once the server has said; nil is unknown
+local secondsLeft = 0 -- your own time left on the open prompt
+local saveFailed = false -- the profile did not load: nothing can be bought until it does
+local armedKind: string? = nil -- the Robux chip tapped once, waiting for the confirming tap
+local armedUntil = 0
 local cash = 0
 local uses: Net.BoostUses = { Hint = 0, ExtraTime = 0 }
 local ready = false -- GameUi.Hud and its children were found; every handler is a no-op until then
@@ -351,7 +360,8 @@ function refreshBoosts()
 		elseif cost ~= nil and cash >= cost then
 			chip.price.Text = shellPrice
 		elseif product.productId ~= 0 then
-			chip.price.Text = "R$ " .. product.robux
+			local armed = armedKind == kind and os.clock() < armedUntil
+			chip.price.Text = if armed then "TAP AGAIN" else "R$ " .. product.robux
 			priceColor = PRICE_ROBUX
 		else
 			chip.price.Text = shellPrice
@@ -374,9 +384,9 @@ end
 
 local function limitMessage(kind: string): string
 	if roundLimitHit(kind) then
-		return "ONE +TIME PER ROUND"
+		return "ONLY ONE +10 SEC PER ROUND"
 	end
-	return GameConfig.Boosts.PerMatch .. " +TIME PER MATCH"
+	return "NO +10 SEC LEFT THIS MATCH"
 end
 
 local function deny(text: string)
@@ -394,7 +404,8 @@ local function useBoost(kind: string)
 	end
 	lastBoostAt = now
 	keepFocus()
-	if roundLimitHit(kind) then
+	-- Refused before anything is paid for: the round limit, and the match limit once the server has said.
+	if roundLimitHit(kind) or (kind == "ExtraTime" and timeLeftThisMatch == 0) then
 		deny(limitMessage(kind))
 		return
 	end
@@ -408,11 +419,30 @@ local function useBoost(kind: string)
 		return
 	end
 	local product = productOf(kind)
-	if product.productId ~= 0 then
-		MarketplaceService:PromptProductPurchase(Players.LocalPlayer, product.productId)
+	if product.productId == 0 then
+		deny(if cost ~= nil then BOOST_MESSAGES.no_shells else BOOST_MESSAGES.no_hints)
 		return
 	end
-	deny(if cost ~= nil then BOOST_MESSAGES.no_shells else BOOST_MESSAGES.no_hints)
+	-- From here pressing costs Robux, so nothing opens by accident or when it could not be used.
+	if saveFailed then
+		deny(SAVE_TEXT)
+		return
+	end
+	if secondsLeft < MIN_BUY_SECONDS then
+		deny("NOT ENOUGH TIME LEFT TO BUY ONE")
+		return
+	end
+	if armedKind ~= kind or now >= armedUntil then
+		armedKind = kind
+		armedUntil = now + CONFIRM_SECONDS
+		local name = if kind == "Hint" then "A HINT" else "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
+		showFeedback(name .. " COSTS " .. product.robux .. " ROBUX  |  TAP AGAIN TO BUY")
+		refreshBoosts()
+		task.delay(CONFIRM_SECONDS, refreshBoosts)
+		return
+	end
+	armedKind = nil
+	MarketplaceService:PromptProductPurchase(Players.LocalPlayer, product.productId)
 end
 
 -- The +10s pops under the Status timer, where the player is already looking.
@@ -468,12 +498,18 @@ local function onEnter()
 	keepFocus()
 end
 
+-- The text stays in the box, selected, so a typo is fixed and not retyped.
 local function wrongAnswer()
 	lastWrongAt = os.clock()
-	answerBox.Text = ""
 	showFeedback(INVALID_TEXT)
 	Sfx.play("Wrong", 0.5)
 	keepFocus()
+	task.delay(0, function()
+		if answerBox:IsFocused() then
+			answerBox.SelectionStart = 1
+			answerBox.CursorPosition = #answerBox.Text + 1
+		end
+	end)
 end
 
 local function onCheckResult(payload)
@@ -504,7 +540,7 @@ local function onCheckResult(payload)
 	elseif status == "invalid" then
 		wrongAnswer()
 	elseif status == "limit" then
-		deny("THAT'S A LOT OF CHECKS  |  LOCK ONE IN")
+		deny("OUT OF TRIES THIS ROUND")
 	elseif status == "closed" then
 		deny("TIME'S UP")
 	end
@@ -542,7 +578,7 @@ local function onSubmitResult(payload)
 	if status == "closed" then
 		deny("TIME'S UP")
 	elseif status == "limit" then
-		deny("THAT'S A LOT OF CHECKS  |  LOCK ONE IN")
+		deny("OUT OF TRIES THIS ROUND")
 	elseif status == "cooldown" then
 		keepFocus()
 	else
@@ -752,6 +788,7 @@ function Hud.onProfile(profile)
 	if typeof(profile.extraTimes) == "number" then
 		inventory.ExtraTime = profile.extraTimes
 	end
+	saveFailed = profile.loadFailed == true
 	if typeof(profile.cash) == "number" then
 		cash = profile.cash
 	end
@@ -767,6 +804,9 @@ function Hud.onBoostResult(payload)
 	if typeof(payload.uses) == "table" then
 		uses = { Hint = payload.uses.Hint or 0, ExtraTime = payload.uses.ExtraTime or 0 }
 	end
+	if typeof(payload.timeLeftThisMatch) == "number" then
+		timeLeftThisMatch = payload.timeLeftThisMatch
+	end
 	local status = payload.status
 	if status == "ok" then
 		if kind == "Hint" and typeof(payload.hint) == "string" then
@@ -780,6 +820,10 @@ function Hud.onBoostResult(payload)
 		deny(limitMessage(kind))
 	elseif status == "pending" then
 		showFeedback(BOOST_MESSAGES.pending)
+	elseif status == "stocked" then
+		-- The purchase landed too late to use for you: it is yours, one tap away.
+		local name = if kind == "Hint" then "HINT" else "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
+		showFeedback(name .. " SAVED  |  TAP IT TO USE IT")
 	elseif BOOST_MESSAGES[status] ~= nil then
 		deny(BOOST_MESSAGES[status])
 	end
@@ -797,6 +841,7 @@ function Hud.onEliminated()
 	answerBar.Visible = false
 	answerBox:ReleaseFocus()
 	banner.Visible = false
+	refreshBoosts()
 end
 
 function Hud.onState(payload)
@@ -810,8 +855,14 @@ function Hud.onState(payload)
 	playing = payload.playing == true
 	applyTouchControls(not playing)
 	local mine = payload.yourSecondsLeft
+	local wasOutOfTime = outOfTime
 	outOfTime = phase == "Prompt" and mine ~= nil and mine <= 0
 	answerBox.TextEditable = not outOfTime
+	secondsLeft = if typeof(mine) == "number" then mine else (payload.secondsLeft or 0)
+	-- The box stopping is said out loud, once.
+	if outOfTime and not wasOutOfTime and playing and not locked then
+		deny("TIME'S UP")
+	end
 	local inMatch = phase == "Prompt" or phase == "Reveal" or phase == "Surge"
 	gui.Visible = inMatch
 	if not inMatch then
@@ -841,10 +892,26 @@ function Hud.onState(payload)
 		checking = nil
 		lastWrongAt = -math.huge
 		uses = { Hint = 0, ExtraTime = 0 }
+		armedKind = nil
+		-- A new match starts the +time count again.
+		if payload.round < lastRound or payload.round <= 1 then
+			timeLeftThisMatch = nil
+		end
 		showEntry()
 		if payload.playing then
 			answerBar.Visible = true
 			keepFocus()
+		end
+	end
+
+	-- An answer you checked but never locked in would count as no answer: with the time about gone it is
+	-- locked in for you, as long as it is still what is in the box.
+	if phase == "Prompt" and playing and secondsLeft <= AUTO_LOCK_SECONDS and not locked and not submitting then
+		local text = trim(answerBox.Text)
+		if confirmed ~= nil and text == confirmed then
+			submitting = true
+			retried = false
+			Net.event("SubmitAnswer"):FireServer(text)
 		end
 	end
 
