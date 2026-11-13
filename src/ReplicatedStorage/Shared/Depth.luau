@@ -58,7 +58,7 @@ function Depth.diveSeconds(metres: number, quick: boolean): number
 		return 0.9
 	end
 	local fraction = math.clamp(metres / 500, 0, 1)
-	local seconds = 1.3 + 2.5 * fraction ^ 0.85
+	local seconds = 1.7 + 3.1 * fraction ^ 0.85
 	if quick then
 		seconds /= 2
 	end

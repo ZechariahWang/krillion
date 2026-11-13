@@ -28,6 +28,11 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   limited per round and per match (Boost Plus raises the match limit). The in-match chip asks for a second
   tap before opening a Robux purchase. The 3-hint pack is `retired` in `Products.BoostPacks`: not sold, its
   receipts still honoured.
+- Daily reward: `LobbyUi.Daily` (authored: `Holder.Panel` with `Days.Day1`..`Day7` cards, each with `Amount`,
+  `Bonus`, `Check`, `Today` and `Dim`; `ClaimButton`; `Footer`) and the rail's `DailyButton`. `Client/Daily`
+  draws it from `profile.daily` (`{ day, streak }`, saved in the DataStore); `Server/DailyService` pays the
+  claim; the rules are `Shared/Daily` and the week is `GameConfig.Daily.Days`. One claim per UTC day, a missed
+  day starts over, day 7 opens a free chest. The debug command `daily <user> <n>` sets the state for a test.
 - A user's saved data can be deleted with the Studio debug command `erase <userId>` (`DataService.erase`).
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
 - Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
@@ -119,7 +124,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 | Root | DisplayOrder | Studio default | Screens |
 |------|--------------|----------------|---------|
 | `GameUi` | 1 | Enabled off (code turns it on) | Hud, Reveal, Results, Revive, Spectate, Vignette |
-| `LobbyUi` | 2 | on | Rail, Shop, Inventory, Store, LobbyQuiz, Quests, Rewards, Tutorial |
+| `LobbyUi` | 2 | on | Rail, Shop, Inventory, Store, LobbyQuiz, Quests, Daily, Rewards, Tutorial |
 | `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings, Transition, ChestReveal |
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
@@ -130,7 +135,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
-- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
+- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, DAILY, REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
   wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar circle right of
   the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye circle right of that: it is always

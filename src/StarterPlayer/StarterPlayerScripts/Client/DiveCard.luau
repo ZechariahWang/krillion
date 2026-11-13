@@ -56,6 +56,8 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
+local TICK_METRES = 35 -- the depth counter clicks once for every this many metres the tag falls
+local TICK_GAP = 0.05 -- seconds between clicks at the fastest
 
 local DiveCard = {}
 
@@ -503,8 +505,23 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		if tierIndex >= Tiers.index("Rare") then
 			play(cardStroke, TweenInfo.new(0.3), { Color = tierColor })
 		end
+		if tierName == "Rare" then
+			burst(if quick then 3 else 6)
+		end
 		if tierName == "DeepCut" then
 			burst(if quick then 6 else 12)
+		end
+		-- A good answer's stamp keeps a slow pulse while the card holds, so the result has a moment.
+		if not isMythic and tierIndex >= Tiers.index("Rare") then
+			task.delay(0.3 * speed, function()
+				if not destroyed then
+					play(
+						stampScale,
+						TweenInfo.new(0.55, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+						{ Scale = 1.05 }
+					)
+				end
+			end)
 		end
 		if isMythic then
 			sound("Fanfare", 0.8, 1)
@@ -561,6 +578,8 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local nextZone = 2
 	local bursting = false
 	local rumble = 0 -- sideways jitter of the tag during the wind-up, in window widths
+	local tickedAt = 0 -- depth of the last counter click
+	local tickedTime = 0
 
 	local function step(dt: number)
 		local now = os.clock()
@@ -595,6 +614,13 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		else
 			-- No answer: the tag bobs at the surface.
 			current = math.sin(elapsed * 3) * 4
+		end
+
+		-- The fall is heard as well as seen: the counter clicks faster and higher the deeper it goes.
+		if hasAnswer and not quick and not landed and current - tickedAt >= TICK_METRES and now - tickedTime >= TICK_GAP then
+			tickedAt = current
+			tickedTime = now
+			sound("Tick", 0.22, 0.75 + 0.9 * math.clamp(current / BOTTOM, 0, 1))
 		end
 
 		if not splashed and elapsed >= dropTime then
