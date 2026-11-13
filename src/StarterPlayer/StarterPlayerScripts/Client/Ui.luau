@@ -612,7 +612,6 @@ end
 -- Pop-ups shown bigger than authored (through their UIScale), by root and dotted path.
 local GROWS: { [string]: { [string]: number } } = {
 	GameUi = {
-		["Spectate.EliminatedCard"] = Theme.Chunky.Grow.Card,
 		["Revive.Card"] = Theme.Chunky.Grow.Card,
 		["Results.Panel"] = Theme.Chunky.Grow.Results,
 	},

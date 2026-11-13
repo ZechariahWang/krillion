@@ -124,7 +124,10 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
   wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar circle right of
-  the Settings gear (`Ui.placeTopButton`); `Rail.ToyButton` is the small THROW key above the Shells chip.
+  the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye circle right of that: it shows for
+  anyone in the lobby while a match with a real player in it is running, and opens the spectate bar
+  (`GameUi.Spectate.SpectateBar`, driven by `Client/Lobby`). A player who sinks lands in the lobby with no
+  card; `Rail.ToyButton` is the small THROW key above the Shells chip.
 - Pop-up windows (Quests, Rewards, Help, Shop, Settings) and the match countdown sit dead centre: anchor
   (0.5, 0.5) at Position (0.5, 0.5). One window at a time: each reports to `Client/Windows`, and while any is
   open the rail, the top buttons, the status chips and the Shells chip hide (the warm-up quiz opens with

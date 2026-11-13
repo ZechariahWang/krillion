@@ -1,19 +1,20 @@
 --!strict
--- Drives StarterGui.Lobby for anyone not on a platform: eliminated card, spectating, the late-join card
--- and the spectate button for players who are off a pillar mid-match. JoinCard and WatchButton are
--- Studio templates (ReplicatedStorage.Templates) cloned in here, unless the place authors its own.
+-- Drives GameUi.Spectate for anyone not on a platform: spectating and the late-join card. Anyone in the
+-- lobby while a match runs can spectate from the small eye button in the top-left (Rail.WatchButton); a
+-- player who sinks just lands in the lobby, with no card in the way. JoinCard is a Studio template
+-- (ReplicatedStorage.Templates) cloned in here, unless the place authors its own.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
-local Currency = require(ReplicatedStorage.Shared.Currency)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Fx = require(script.Parent.Fx)
+local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local JOIN_TIMEOUT = 4 -- seconds before a JUMP IN press with no answer can be pressed again
@@ -21,9 +22,6 @@ local BAR_GAP = 12 -- pixels between the join card and the bar under it
 local BOTTOM_GAP = 20 -- pixels from the screen bottom when nothing is under the join card
 
 local gui: Frame
-local eliminatedCard: Frame
-local eliminatedSubtitle: TextLabel
-local spectateButton: TextButton
 local spectateBar: Frame
 local watchingText: TextLabel
 local nextButton: TextButton
@@ -32,7 +30,7 @@ local joinCard: Frame? = nil
 local joinSub: TextLabel? = nil
 local joinButton: TextButton? = nil
 local joinButtonText = "JUMP IN"
-local watchButton: TextButton? = nil
+local watchBound = false -- the top-left spectate button has its click connected
 
 local aliveUserIds: { number } = {}
 local spectating = false
@@ -43,8 +41,6 @@ local playing = false
 local joinOpen = false
 local joinRound = 0
 local joinPendingSince: number? = nil
-local reviveOpen = false -- the revive card is up, so the eliminated card waits behind it
-local eliminatedWaiting = false
 local ready = false
 local missing: string? = nil
 
@@ -58,18 +54,12 @@ local function ownHumanoid(): Humanoid?
 	return character:FindFirstChildOfClass("Humanoid")
 end
 
--- The join card sits above whichever bottom-centre bar is showing (the spectate bar or watch button).
+-- The join card sits above the spectate bar when that is showing.
 local function placeJoinCard(card: Frame)
 	local lift = BOTTOM_GAP
 	local bottom = gui.AbsolutePosition.Y + gui.AbsoluteSize.Y
-	local bars: { GuiObject } = { spectateBar }
-	if watchButton ~= nil then
-		table.insert(bars, watchButton)
-	end
-	for _, bar in bars do
-		if bar.Visible then
-			lift = math.max(lift, bottom - bar.AbsolutePosition.Y + BAR_GAP)
-		end
+	if spectateBar.Visible then
+		lift = math.max(lift, bottom - spectateBar.AbsolutePosition.Y + BAR_GAP)
 	end
 	card.Position = UDim2.new(card.Position.X.Scale, card.Position.X.Offset, 1, -math.floor(lift + 0.5))
 end
@@ -82,18 +72,27 @@ local function setJoinPending(pending: boolean)
 	end
 end
 
--- Shows the card while the server says this player may jump in, and the spectate button for anyone off
--- a pillar mid-match who is not already spectating or looking at the eliminated card.
+local startSpectating: () -> ()
+
+-- The small eye button in the top-left (authored as Rail.WatchButton; Rail places it on the top bar line).
+-- Rail starts after this controller, so the button is looked up when it is needed.
+local function watchButton(): TextButton?
+	local button = Rail.button("WatchButton")
+	if button ~= nil and not watchBound then
+		watchBound = true
+		button.Activated:Connect(function()
+			startSpectating()
+		end)
+	end
+	return button
+end
+
+-- Shows the card while the server says this player may jump in, and the spectate button for anyone in the
+-- lobby while a match with someone to watch is running.
 local function refreshExtras()
-	local button = watchButton
+	local button = watchButton()
 	if button ~= nil then
-		button.Visible = inMatch
-			and not playing
-			and not spectating
-			and not eliminatedCard.Visible
-			and not reviveOpen
-			and not eliminatedWaiting
-			and #aliveUserIds > 0
+		button.Visible = inMatch and not playing and not spectating and #aliveUserIds > 0 and not Windows.anyOpen()
 	end
 	local card = joinCard
 	if card == nil then
@@ -148,10 +147,8 @@ local function watch(index: number)
 	watchingText.Text = "WATCHING " .. string.upper(target.DisplayName)
 end
 
-local function startSpectating()
+function startSpectating()
 	spectating = true
-	eliminatedWaiting = false
-	eliminatedCard.Visible = false
 	spectateBar.Visible = true
 	watch(1)
 	refreshExtras()
@@ -201,13 +198,6 @@ local function bindExtras()
 		end
 		joinCard = card :: Frame
 	end
-	local watchObject = adopt("WatchButton", "TextButton")
-	if watchObject ~= nil then
-		local button = watchObject :: TextButton
-		Ui.pressable(button)
-		button.Activated:Connect(startSpectating)
-		watchButton = button
-	end
 	refreshExtras()
 end
 
@@ -226,34 +216,26 @@ end
 function Lobby.init(playerGui: PlayerGui)
 	local screen = Ui.screen(playerGui, "Spectate", WAIT_SECONDS)
 	if screen == nil then
-		warn("[Lobby] GameUi.Spectate is missing; no eliminated card or spectating")
+		warn("[Lobby] GameUi.Spectate is missing; no spectating")
 		return
 	end
-	local cardFound = waitChild(screen, "EliminatedCard")
-	local subtitleFound = waitChild(cardFound, "Subtitle")
-	local spectateFound = waitChild(cardFound, "SpectateButton")
 	local barFound = waitChild(screen, "SpectateBar")
 	local watchingFound = waitChild(barFound, "Watching")
 	local nextFound = waitChild(barFound, "NextButton")
 	local backFound = waitChild(barFound, "BackButton")
 	if missing ~= nil then
-		warn("[Lobby] GameUi.Spectate has no " .. missing .. "; no eliminated card or spectating")
+		warn("[Lobby] GameUi.Spectate has no " .. missing .. "; no spectating")
 		return
 	end
 	gui = screen
-	eliminatedCard = cardFound :: Frame
-	eliminatedSubtitle = subtitleFound :: TextLabel
-	spectateButton = spectateFound :: TextButton
 	spectateBar = barFound :: Frame
 	watchingText = watchingFound :: TextLabel
 	nextButton = nextFound :: TextButton
 	backButton = backFound :: TextButton
 	ready = true
 
-	Ui.pressable(spectateButton)
 	Ui.pressable(nextButton)
 	Ui.pressable(backButton)
-	spectateButton.Activated:Connect(startSpectating)
 	nextButton.Activated:Connect(function()
 		watch(spectateIndex + 1)
 	end)
@@ -265,6 +247,7 @@ function Lobby.init(playerGui: PlayerGui)
 		end)
 	end
 	backButton.Activated:Connect(stopSpectating)
+	Windows.Changed.connect(refreshExtras)
 	task.spawn(bindExtras)
 end
 
@@ -273,47 +256,13 @@ function Lobby.isSpectating(): boolean
 	return spectating
 end
 
-function Lobby.onEliminated(payload)
+-- You sank: a flash and a splash, and you are in the lobby. The spectate button is there if you want it.
+function Lobby.onEliminated()
 	if not ready then
 		return
-	end
-	local text = "YOU MADE IT TO ROUND " .. payload.round
-	-- The second line only fits a label that scales or wraps its text.
-	if eliminatedSubtitle.TextScaled or eliminatedSubtitle.TextWrapped then
-		text ..= if GameConfig.Lobby.QuizEnabled == 1
-			then "\nSPECTATE, OR WARM UP FOR " .. Currency.Upper
-			else "\nSPECTATE UNTIL THE NEXT MATCH"
-	end
-	eliminatedSubtitle.Text = text
-	-- Both cards are big now, so they never share the screen: the revive choice comes first.
-	if reviveOpen then
-		eliminatedWaiting = true
-	else
-		Ui.pop(eliminatedCard, 0.7)
 	end
 	Fx.flash(Theme.Color.Water)
 	Sfx.play("Splash", 0.8)
-	refreshExtras()
-end
-
--- RevivePrompt calls this while its card is up. The eliminated card steps aside and comes back when the
--- revive card goes, unless the revive was used (the player is going back onto a pillar).
-function Lobby.setReviveOpen(open: boolean, revived: boolean?)
-	if not ready then
-		return
-	end
-	reviveOpen = open
-	if open then
-		if eliminatedCard.Visible then
-			eliminatedCard.Visible = false
-			eliminatedWaiting = true
-		end
-	elseif eliminatedWaiting then
-		eliminatedWaiting = false
-		if revived ~= true and inMatch and not playing and not spectating then
-			Ui.pop(eliminatedCard, 0.7)
-		end
-	end
 	refreshExtras()
 end
 
@@ -349,7 +298,6 @@ function Lobby.onState(payload)
 	joinRound = if type(payload.round) == "number" then payload.round else 0
 	gui.Visible = inMatch and not playing
 	if payload.playing then
-		eliminatedWaiting = false
 		stopSpectating()
 		return
 	end
@@ -363,8 +311,6 @@ function Lobby.onState(payload)
 	end
 
 	if not inMatch then
-		eliminatedCard.Visible = false
-		eliminatedWaiting = false
 		if spectating then
 			stopSpectating()
 		end
