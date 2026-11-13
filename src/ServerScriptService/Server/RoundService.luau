@@ -49,7 +49,7 @@ local participantCount = 0
 local participantsList: { Player } = {}
 local slotCount = 0 -- how many players this match may hold, late joiners included
 local playedUserIds: { [number]: boolean } = {} -- everyone who had a pillar this match, even if they left
-local lateUnproven: { [Player]: boolean } = {} -- late joiners who have not had an answer graded yet
+local unproven: { [Player]: boolean } = {} -- players in the match who have not had an answer graded yet
 local matchId = 0
 local sunkPlatforms: { [Player]: Part } = {} -- kept so a revive can put the player back on their own pillar
 local reviveUsed: { [Player]: boolean } = {}
@@ -161,14 +161,14 @@ local function lateJoinOpenFor(player: Player): boolean
 	return match ~= nil and lateJoinWindow() and not playedUserIds[player.UserId] and lateJoinRoom()
 end
 
--- Starters plus late joiners who have answered at least once: a joiner who never answers (or an alt that
--- joins and leaves) cannot turn a solo run into a Win.
+-- Players who have had at least one answer graded: someone who starts or joins and never answers (an alt
+-- that leaves at once) cannot turn a solo run into a Win.
 local function provenParticipants(): number
-	local unproven = 0
-	for _ in lateUnproven do
-		unproven += 1
+	local waiting = 0
+	for _ in unproven do
+		waiting += 1
 	end
-	return participantCount - unproven
+	return participantCount - waiting
 end
 
 -- Players with a character who are not AFK (Settings): an AFK player is never put on a pillar.
@@ -296,6 +296,10 @@ local function sinkPosition(player: Player): Vector3?
 	return root.Position
 end
 
+-- While the water is rising, offers wait until everyone it takes is out: the offer rules count who is left.
+local surgeCulling = false
+local heldOffers: { Player } = {}
+
 -- One revive per player per match, whatever pays for it (Economy.reviveOffer): the Second Chance pass's
 -- free one, a revive from stock, or Revive Now bought on the spot. Never in a 1v1.
 local function offerRevive(player: Player)
@@ -350,7 +354,11 @@ local function sinkPlayer(player: Player)
 	Net.event("Eliminated"):FireClient(player, { round = round })
 	setServerAttributes()
 	MatchEvents.PlayerSank.fire(player, round)
-	offerRevive(player)
+	if surgeCulling then
+		table.insert(heldOffers, player)
+	else
+		offerRevive(player)
+	end
 end
 
 -- A bot under the water: its pillar goes slate and its rig sinks. Bots get no revive offer.
@@ -387,6 +395,15 @@ local function refundRevive(player: Player, kind: string)
 	end
 end
 
+-- How far above the water a revived player comes back. Once answers are closed for the round (Reveal) they
+-- have no answer to lift them, so they also clear the rise that is about to come.
+local function reviveHeight(): number
+	if phase == "Reveal" then
+		return GameConfig.Revive.HeightAboveWater + roundSurge
+	end
+	return GameConfig.Revive.HeightAboveWater
+end
+
 -- Puts a sunk player back on their own pillar just above the water. The caller has checked liveOffer and
 -- taken payment; `kind` is the offer's kind (Economy.reviveOffer), so the payment can go back if this fails.
 local function restore(player: Player, kind: string)
@@ -394,18 +411,30 @@ local function restore(player: Player, kind: string)
 	reviveUsed[player] = true
 	local state = match :: MatchState.State
 	local platform = sunkPlatforms[player] :: Part
-	local top = state.waterY + GameConfig.Revive.HeightAboveWater
 	-- Back to its own colours and skin, then the pillar glides out of the water before the player
 	-- is put back on it.
 	MapService.unmarkSunk(platform)
 	CosmeticService.applySkin(player, platform)
-	MapService.glidePlatformTop(platform, top, 0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+	MapService.glidePlatformTop(platform, state.waterY + reviveHeight(), 0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+	if match ~= state or platform.Parent == nil then
+		refundRevive(player, kind)
+		return
+	end
+	-- They left or died while the pillar came up: it goes back under and the revive is not spent.
+	if player.Parent == nil or not PlayerService.hasCharacter(player) then
+		MapService.markSunk(platform)
+		refundRevive(player, kind)
+		return
+	end
+	-- The water or the phase may have moved during the glide: the height is worked out again now.
+	local above = reviveHeight()
+	MapService.glidePlatformTop(platform, state.waterY + above, 0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 	if match ~= state or platform.Parent == nil then
 		refundRevive(player, kind)
 		return
 	end
 	PlayerService.sendToPlatform(player, platform)
-	MatchState.revive(state, player, GameConfig.Revive.HeightAboveWater)
+	MatchState.revive(state, player, above)
 	platforms[player] = platform
 	sunkPlatforms[player] = nil
 	AnswerService.allow(player)
@@ -470,8 +499,9 @@ local function startMatch()
 	participantsList = table.clone(participants)
 	slotCount = LateJoin.slotCount(#participants, GameConfig.LateJoin, GameConfig.Server.MaxPlayers)
 	playedUserIds = {}
-	lateUnproven = {}
+	unproven = {}
 	for _, player in participants do
+		unproven[player] = true
 		playedUserIds[player.UserId] = true
 	end
 	local state = MatchState.new(GameConfig.Water.StartHeight)
@@ -655,6 +685,7 @@ local function runPrompt()
 	local endedEarly = promptCountdown(seconds)
 	runOvertime()
 	-- A lock-in sent just before the deadline is still in flight: AnswerGate accepts it this much later.
+	AnswerService.beginClose()
 	if not endedEarly then
 		task.wait(GameConfig.Answer.DeadlineGrace)
 	end
@@ -709,7 +740,7 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 			-- Accepted answers are shown in the bank's spelling, which is our own text, so it needs no chat filter.
 			shownAnswer = submission.corrected
 			if player ~= nil then
-				lateUnproven[player] = nil
+				unproven[player] = nil
 			end
 		end
 		local lift = SpecialRound.lift(points, special)
@@ -759,6 +790,7 @@ local function runSurge()
 	setPhase("Surge")
 	surging = false
 	MatchState.surge(state, roundSurge)
+	surgeCulling = true
 	WaterService.surgeTo(state.waterY)
 	local culled = MatchState.cull(state)
 	for _, id in culled do
@@ -766,6 +798,14 @@ local function runSurge()
 			sinkPlayer(id :: Player)
 		else
 			sinkBot(id :: number)
+		end
+	end
+	surgeCulling = false
+	local waiting = heldOffers
+	heldOffers = {}
+	for _, player in waiting do
+		if player.Parent ~= nil and match == state then
+			offerRevive(player)
 		end
 	end
 	for _, player in alivePlayers() do
@@ -860,7 +900,7 @@ local function endMatch()
 	})
 	participantsList = {}
 	playedUserIds = {}
-	lateUnproven = {}
+	unproven = {}
 	slotCount = 0
 	countdown(GameConfig.Round.ResultsSeconds)
 end
@@ -887,6 +927,10 @@ local function runMatch()
 	setPhase("Starting")
 	countdown(GameConfig.Round.StartCountdownSeconds)
 	while true do
+		-- Everyone can sink or leave during the 3-2-1: no prompt for nobody.
+		if matchOver() then
+			break
+		end
 		local submissions = runPrompt()
 		if matchOver() then
 			break
@@ -947,7 +991,7 @@ function RoundService.tryJoin(player: Player): (string, string)
 	playedUserIds[player.UserId] = true
 	participantCount += 1
 	table.insert(participantsList, player)
-	lateUnproven[player] = true
+	unproven[player] = true
 	platform:SetAttribute("OwnerUserId", player.UserId)
 	CosmeticService.applySkin(player, platform)
 	PlayerService.sendToPlatform(player, platform)
@@ -1034,9 +1078,9 @@ function RoundService.start()
 			platforms[player] = nil
 			sunkPlatforms[player] = nil
 			reviveOffers[player] = nil
-			-- A late joiner who leaves before answering never counted, so a solo run stays solo.
-			if lateUnproven[player] then
-				lateUnproven[player] = nil
+			-- Someone who leaves before answering never counted, so a solo run stays solo.
+			if unproven[player] then
+				unproven[player] = nil
 				participantCount -= 1
 				local index = table.find(participantsList, player)
 				if index ~= nil then

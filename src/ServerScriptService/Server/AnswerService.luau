@@ -28,6 +28,8 @@ export type Submission = {
 local RAW_LIMIT = GameConfig.Answer.MaxLength * 2
 
 local accepting = false
+local closing = false -- the prompt's time is up: only lock-ins already in flight are still taken
+local botLocked: { [string]: boolean } = {} -- bank spellings bots have locked in this prompt
 local currentPrompt: AnswerMatcher.Prompt? = nil
 local eligible: { [Player]: boolean } = {}
 local submissions: { [Player]: Submission } = {}
@@ -66,6 +68,8 @@ function AnswerService.openRound(prompt: AnswerMatcher.Prompt, players: { Player
 	submissions = {}
 	eligible = {}
 	gates = {}
+	closing = false
+	botLocked = {}
 	baseDeadline = os.clock() + (seconds or GameConfig.Round.PromptSeconds)
 	for _, player in players do
 		eligible[player] = true
@@ -78,7 +82,8 @@ end
 -- LateJoin.MinSecondsLeft to do it: past the base time the prompt runs on in overtime for them.
 function AnswerService.allow(player: Player)
 	eligible[player] = true
-	if not accepting then
+	-- In the closing grace there is no time left to hand out: they answer from the next prompt.
+	if not accepting or closing then
 		return
 	end
 	local floor = math.max(baseDeadline, os.clock() + GameConfig.LateJoin.MinSecondsLeft)
@@ -98,8 +103,14 @@ function AnswerService.disallow(player: Player)
 	gates[player] = nil
 end
 
+-- The prompt's time (and any overtime) is up. Lock-ins already sent are still accepted until closeRound.
+function AnswerService.beginClose()
+	closing = true
+end
+
 function AnswerService.closeRound(): { [Player]: Submission }
 	accepting = false
+	closing = false
 	currentPrompt = nil
 	return submissions
 end
@@ -108,11 +119,14 @@ function AnswerService.randomPrompt(exclude: { [string]: boolean }): AnswerMatch
 	return PromptBank.random(exclude)
 end
 
--- UserIds of everyone who has locked in an answer this prompt.
+-- UserIds of everyone still in who has locked in an answer this prompt. A sunk player's answer is kept
+-- for a revive, but they no longer count.
 function AnswerService.lockedUserIds(): { number }
 	local ids = {}
 	for player in submissions do
-		table.insert(ids, player.UserId)
+		if eligible[player] then
+			table.insert(ids, player.UserId)
+		end
 	end
 	return ids
 end
@@ -134,9 +148,10 @@ function AnswerService.allLocked(): boolean
 	return any
 end
 
--- The bank spellings locked in this prompt, so a hint never gives an answer someone already has.
+-- The bank spellings locked in this prompt, by players and bots, so a hint never gives an answer someone
+-- already has.
 function AnswerService.lockedCorrected(): { [string]: boolean }
-	local result = {}
+	local result = table.clone(botLocked)
 	for _, submission in submissions do
 		if submission.corrected ~= nil then
 			result[submission.corrected] = true
@@ -240,12 +255,17 @@ local function gradeText(text: any): Submission?
 end
 
 -- Grades a bot's answer (a negative number id) against the open prompt, before its base deadline. Bots are
--- not eligible players, so this stores nothing: RoundService keeps the result. Nil when refused.
+-- not eligible players: RoundService keeps the result, and only the spelling is noted here so a hint
+-- never repeats it. Nil when refused.
 function AnswerService.submitFor(id: number, text: string): Submission?
 	if id >= 0 or not accepting or os.clock() > baseDeadline then
 		return nil
 	end
-	return gradeText(text)
+	local graded = gradeText(text)
+	if graded ~= nil and graded.corrected ~= nil then
+		botLocked[graded.corrected] = true
+	end
+	return graded
 end
 
 -- Locks `graded` in as the player's answer and tells them, as an accepted submit.
