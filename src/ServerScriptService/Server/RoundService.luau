@@ -395,11 +395,10 @@ local function restore(player: Player, kind: string)
 	local state = match :: MatchState.State
 	local platform = sunkPlatforms[player] :: Part
 	local top = state.waterY + GameConfig.Revive.HeightAboveWater
-	-- Back to its own colours, skin and name, then the pillar glides out of the water before the player
+	-- Back to its own colours and skin, then the pillar glides out of the water before the player
 	-- is put back on it.
 	MapService.unmarkSunk(platform)
 	CosmeticService.applySkin(player, platform)
-	MapService.setPlatformName(platform, player.DisplayName)
 	MapService.glidePlatformTop(platform, top, 0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 	if match ~= state or platform.Parent == nil then
 		refundRevive(player, kind)
@@ -503,7 +502,6 @@ local function startMatch()
 		platforms[player] = parts[index]
 		-- Lets clients find a player's pillar (answer tags) without a lookup remote.
 		parts[index]:SetAttribute("OwnerUserId", player.UserId)
-		MapService.setPlatformName(parts[index], player.DisplayName)
 		CosmeticService.applySkin(player, parts[index])
 		PlayerService.sendToPlatform(player, parts[index])
 	end
@@ -512,7 +510,6 @@ local function startMatch()
 		MatchState.addPlayer(state, id)
 		botPlatforms[id] = part
 		part:SetAttribute("OwnerUserId", id)
-		MapService.setPlatformName(part, BotService.nameOf(id))
 		BotService.attach(id, part)
 	end
 	MatchEvents.MatchStarted.fire(table.clone(participantsList))
@@ -950,7 +947,6 @@ function RoundService.tryJoin(player: Player): (string, string)
 	table.insert(participantsList, player)
 	lateUnproven[player] = true
 	platform:SetAttribute("OwnerUserId", player.UserId)
-	MapService.setPlatformName(platform, player.DisplayName)
 	CosmeticService.applySkin(player, platform)
 	PlayerService.sendToPlatform(player, platform)
 	-- Added after the teleport, so the water poll never sees them still standing in the lobby.

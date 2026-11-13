@@ -659,10 +659,10 @@ function Ui.bindGui(root: LayerCollector)
 	end)
 end
 
--- World text players see all the time: pillar name tags, head titles and the lobby leaderboard.
+-- World text players see all the time: head labels and the lobby leaderboard.
 local function isWorldText(object: Instance): boolean
 	if object:IsA("BillboardGui") then
-		return object.Name == "NameTag" or object.Name == "RareOrSinkName"
+		return object.Name == "RareOrSinkName"
 	end
 	if object:IsA("SurfaceGui") then
 		return object:FindFirstAncestor("Leaderboard") ~= nil

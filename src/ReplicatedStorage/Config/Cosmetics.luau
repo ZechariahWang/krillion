@@ -10,7 +10,7 @@
 --   Pet       swims beside you and adds `shellBonus` to earned Shells (Templates.Pets.<pet>)
 --   Aura      a particle glow on your character (Templates.Auras.<aura>)
 --   CardTheme colours your dive card and answer tag (`card`)
---   NameTag   colours your pillar name tag (`tag`, one colour or a gradient)
+--   NameTag   colours your name over your head (`tag`, one colour or a gradient)
 --   Toy       a throwable for the lobby (Templates.Toys.<toy>)
 --
 -- `pass` items come with a game pass; `reward` items are never sold and only RewardService grants them;
