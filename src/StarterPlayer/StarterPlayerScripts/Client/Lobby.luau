@@ -257,6 +257,13 @@ function Lobby.init(playerGui: PlayerGui)
 	nextButton.Activated:Connect(function()
 		watch(spectateIndex + 1)
 	end)
+	local prevButton = spectateBar:FindFirstChild("PrevButton")
+	if prevButton ~= nil and prevButton:IsA("TextButton") then
+		Ui.pressable(prevButton)
+		prevButton.Activated:Connect(function()
+			watch(spectateIndex - 1)
+		end)
+	end
 	backButton.Activated:Connect(stopSpectating)
 	task.spawn(bindExtras)
 end
