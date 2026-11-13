@@ -1,7 +1,8 @@
 --!strict
--- Drives GameUi.Spectate for anyone not on a platform: spectating and the late-join card. Anyone in the
--- lobby while a match runs can spectate from the small eye button in the top-left (Rail.WatchButton); a
--- player who sinks just lands in the lobby, with no card in the way. JoinCard is a Studio template
+-- Drives GameUi.Spectate for anyone not on a platform: spectating and the late-join card. The small eye
+-- button in the top-left (Rail.WatchButton) is always there in the lobby; it starts spectating when a match
+-- has anyone left in it, players and bots alike, and says so when there is nobody to watch. A player who
+-- sinks just lands in the lobby, with no card in the way. JoinCard is a Studio template
 -- (ReplicatedStorage.Templates) cloned in here, unless the place authors its own.
 
 local Players = game:GetService("Players")
@@ -81,18 +82,23 @@ local function watchButton(): TextButton?
 	if button ~= nil and not watchBound then
 		watchBound = true
 		button.Activated:Connect(function()
-			startSpectating()
+			if inMatch and not playing and #aliveUserIds > 0 then
+				startSpectating()
+			else
+				Ui.nudge(button)
+				Toasts.show("NOBODY TO WATCH RIGHT NOW", "info")
+			end
 		end)
 	end
 	return button
 end
 
--- Shows the card while the server says this player may jump in, and the spectate button for anyone in the
--- lobby while a match with someone to watch is running.
+-- Shows the card while the server says this player may jump in. The spectate button is up whenever you are
+-- in the lobby with no window open; it only steps aside for the spectate bar.
 local function refreshExtras()
 	local button = watchButton()
 	if button ~= nil then
-		button.Visible = inMatch and not playing and not spectating and #aliveUserIds > 0 and not Windows.anyOpen()
+		button.Visible = not playing and not spectating and not Windows.anyOpen()
 	end
 	local card = joinCard
 	if card == nil then
@@ -128,6 +134,33 @@ local function stopSpectating()
 	refreshExtras()
 end
 
+-- What the camera follows for this id, and the name to show: a player's humanoid, or a bot's rig on its
+-- pillar (bots have negative ids; RoundService names the pillar's owner in its OwnerName attribute).
+local function targetOf(userId: number): (Instance?, string)
+	if userId > 0 then
+		local target = Players:GetPlayerByUserId(userId)
+		if target == nil then
+			return nil, "PLAYER"
+		end
+		local character = target.Character
+		local humanoid = if character ~= nil then character:FindFirstChildOfClass("Humanoid") else nil
+		return humanoid, target.DisplayName
+	end
+	local folder = workspace:FindFirstChild("Platforms")
+	if folder == nil then
+		return nil, "BOT"
+	end
+	for _, platform in folder:GetChildren() do
+		if platform:GetAttribute("OwnerUserId") == userId then
+			local rig = platform:FindFirstChild("BotRig")
+			local head = if rig ~= nil then rig:FindFirstChild("Head") else nil
+			local name = platform:GetAttribute("OwnerName")
+			return head, if typeof(name) == "string" then name else "BOT"
+		end
+	end
+	return nil, "BOT"
+end
+
 local function watch(index: number)
 	if #aliveUserIds == 0 then
 		stopSpectating()
@@ -135,16 +168,13 @@ local function watch(index: number)
 	end
 	spectateIndex = ((index - 1) % #aliveUserIds) + 1
 	watchedId = aliveUserIds[spectateIndex]
-	local target = Players:GetPlayerByUserId(watchedId)
-	if target == nil or target.Character == nil then
-		return
-	end
-	local humanoid = target.Character:FindFirstChildOfClass("Humanoid")
+	local subject, name = targetOf(watchedId)
+	watchingText.Text = "WATCHING " .. string.upper(name)
 	local camera = workspace.CurrentCamera
-	if humanoid ~= nil and camera ~= nil then
-		camera.CameraSubject = humanoid
+	-- Not streamed in yet: the next state update tries again.
+	if camera ~= nil and subject ~= nil and (subject:IsA("Humanoid") or subject:IsA("BasePart")) then
+		camera.CameraSubject = subject
 	end
-	watchingText.Text = "WATCHING " .. string.upper(target.DisplayName)
 end
 
 function startSpectating()
@@ -302,12 +332,10 @@ function Lobby.onState(payload)
 		return
 	end
 
-	-- Only real players can be watched: bots (negative ids) have no Player to follow.
+	-- Everyone still in can be watched, bots (negative ids) included.
 	aliveUserIds = {}
 	for _, id in payload.aliveUserIds or {} do
-		if id > 0 then
-			table.insert(aliveUserIds, id)
-		end
+		table.insert(aliveUserIds, id)
 	end
 
 	if not inMatch then
@@ -319,12 +347,10 @@ function Lobby.onState(payload)
 	end
 
 	if spectating then
+		-- Stay on the same one while they are in (pointing the camera again, in case their character was
+		-- not streamed in before); move on when they are out.
 		local index = table.find(aliveUserIds, watchedId)
-		if index ~= nil then
-			spectateIndex = index
-		else
-			watch(spectateIndex)
-		end
+		watch(index or spectateIndex)
 	end
 	refreshExtras()
 end

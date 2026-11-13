@@ -510,6 +510,8 @@ local function startMatch()
 		MatchState.addPlayer(state, id)
 		botPlatforms[id] = part
 		part:SetAttribute("OwnerUserId", id)
+		-- A bot has no Player for a client to read its name from: the spectate bar shows this.
+		part:SetAttribute("OwnerName", BotService.nameOf(id))
 		BotService.attach(id, part)
 	end
 	MatchEvents.MatchStarted.fire(table.clone(participantsList))
