@@ -2,10 +2,10 @@ local Boosts = require("../src/ReplicatedStorage/Shared/Boosts")
 
 local LIMITS = { Enabled = 1, PerRound = 1, PerMatch = 3 }
 
-local function usage(roundHints: number, matchHints: number)
+local function usage(roundTimes: number, matchTimes: number)
 	return {
-		round = { Hint = roundHints, ExtraTime = 0 },
-		match = { Hint = matchHints, ExtraTime = 0 },
+		round = { Hint = 0, ExtraTime = roundTimes },
+		match = { Hint = 0, ExtraTime = matchTimes },
 	}
 end
 
@@ -31,20 +31,25 @@ return function(test)
 		assert(Boosts.titleCase("7up") == "7up")
 	end)
 
-	test("canUse allows the first boost and stops at the round limit", function()
-		assert(Boosts.canUse(usage(0, 0), "Hint", LIMITS) == "ok")
-		assert(Boosts.canUse(usage(1, 1), "Hint", LIMITS) == "limit")
-		-- The other kind has its own count.
-		assert(Boosts.canUse(usage(1, 1), "ExtraTime", LIMITS) == "ok")
+	test("canUse allows the first +time and stops at the round limit", function()
+		assert(Boosts.canUse(usage(0, 0), "ExtraTime", LIMITS) == "ok")
+		assert(Boosts.canUse(usage(1, 1), "ExtraTime", LIMITS) == "limit")
 	end)
 
-	test("canUse stops at the match limit", function()
-		assert(Boosts.canUse(usage(0, 2), "Hint", LIMITS) == "ok")
-		assert(Boosts.canUse(usage(0, 3), "Hint", LIMITS) == "limit")
+	test("canUse stops +time at the match limit", function()
+		assert(Boosts.canUse(usage(0, 2), "ExtraTime", LIMITS) == "ok")
+		assert(Boosts.canUse(usage(0, 3), "ExtraTime", LIMITS) == "limit")
+	end)
+
+	test("canUse never limits a hint, however many were used", function()
+		local many = { round = { Hint = 9, ExtraTime = 0 }, match = { Hint = 99, ExtraTime = 0 } }
+		assert(Boosts.canUse(many, "Hint", LIMITS) == "ok")
 	end)
 
 	test("canUse is disabled by the kill switch", function()
-		assert(Boosts.canUse(usage(0, 0), "Hint", { Enabled = 0, PerRound = 1, PerMatch = 3 }) == "disabled")
+		local off = { Enabled = 0, PerRound = 1, PerMatch = 3 }
+		assert(Boosts.canUse(usage(0, 0), "Hint", off) == "disabled")
+		assert(Boosts.canUse(usage(0, 0), "ExtraTime", off) == "disabled")
 	end)
 
 	test("noteUse counts the round and the match", function()

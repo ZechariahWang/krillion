@@ -109,6 +109,11 @@ local function inventoryOf(kind: string): number
 	return if kind == "Hint" then inventory.Hint else inventory.ExtraTime
 end
 
+-- Only +time has a per-round limit: a hint is bought each time and can be used every round.
+local function roundLimitHit(kind: string): boolean
+	return kind ~= "Hint" and usesOf(kind) >= GameConfig.Boosts.PerRound
+end
+
 -- The boost's price in Shells, or nil for a hint: hints are only bought with Robux.
 local function shellCostOf(kind: string): number?
 	if kind == "Hint" then
@@ -332,7 +337,7 @@ function refreshBoosts()
 	end
 	fitBoostBar()
 	for kind, chip in boostChips do
-		local usedUp = usesOf(kind) >= GameConfig.Boosts.PerRound
+		local usedUp = roundLimitHit(kind)
 		local cost = shellCostOf(kind)
 		local product = productOf(kind)
 		-- The price pill says what pressing spends: one you own, Shells (with the authored shell icon; never
@@ -357,7 +362,9 @@ function refreshBoosts()
 		Icons.show(chip.price, cost ~= nil and chip.price.Text == shellPrice)
 		local usable = payable and not usedUp
 		chip.button.BackgroundColor3 = if usable then chip.face else chip.face:Lerp(DISABLED_FACE, 0.75)
-		chip.uses.Text = if usedUp then "" else tostring(GameConfig.Boosts.PerRound - usesOf(kind))
+		-- The count is the +time uses left this round; a hint has no limit, so it shows none.
+		local counted = kind ~= "Hint" and not usedUp
+		chip.uses.Text = if counted then tostring(GameConfig.Boosts.PerRound - usesOf(kind)) else ""
 		local check = chip.uses:FindFirstChild("Check")
 		if check ~= nil and check:IsA("GuiObject") then
 			check.Visible = usedUp
@@ -366,10 +373,10 @@ function refreshBoosts()
 end
 
 local function limitMessage(kind: string): string
-	if usesOf(kind) >= GameConfig.Boosts.PerRound then
-		return "ONE OF EACH PER ROUND"
+	if roundLimitHit(kind) then
+		return "ONE +TIME PER ROUND"
 	end
-	return GameConfig.Boosts.PerMatch .. " OF EACH PER MATCH"
+	return GameConfig.Boosts.PerMatch .. " +TIME PER MATCH"
 end
 
 local function deny(text: string)
@@ -387,7 +394,7 @@ local function useBoost(kind: string)
 	end
 	lastBoostAt = now
 	keepFocus()
-	if usesOf(kind) >= GameConfig.Boosts.PerRound then
+	if roundLimitHit(kind) then
 		deny(limitMessage(kind))
 		return
 	end

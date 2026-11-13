@@ -30,11 +30,7 @@ local PASS_MESSAGES: { [string]: string } = {
 		.. ", AURORA PILLAR, GOLD WAKE TRAIL, VIP TITLE AND TAG",
 	DoubleCash = "2X " .. Currency.Upper .. " UNLOCKED!",
 	SecondChance = "SECOND CHANCE UNLOCKED!  |  ONE FREE REVIVE EVERY MATCH",
-	BoostPlus = "BOOST PLUS UNLOCKED!  |  "
-		.. GameConfig.Boosts.PerMatchPlus
-		.. " HINTS AND "
-		.. GameConfig.Boosts.PerMatchPlus
-		.. " +TIME PER MATCH",
+	BoostPlus = "BOOST PLUS UNLOCKED!  |  " .. GameConfig.Boosts.PerMatchPlus .. " +TIME PER MATCH",
 }
 
 local lastPassCheck: { [Player]: number } = {}

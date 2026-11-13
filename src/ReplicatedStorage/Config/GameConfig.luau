@@ -92,9 +92,9 @@ local GameConfig = {
 		Enabled = 1, -- 0 hides both in-match boosts and refuses UseBoost
 		ExtraTimeShells = 75, -- a hint has no Shell price: it is only ever paid for with Robux
 		ExtraTimeSeconds = 10,
-		PerRound = 1, -- of each kind
-		PerMatch = 3, -- of each kind
-		PerMatchPlus = 5, -- of each kind, for holders of the Boost Plus game pass
+		PerRound = 1, -- +time uses per round; a hint has no limit
+		PerMatch = 3, -- +time uses per match
+		PerMatchPlus = 5, -- +time uses per match for holders of the Boost Plus game pass
 		Cooldown = 0.5, -- seconds between UseBoost requests
 		PurchaseWaitSeconds = 5, -- how long a Robux-bought boost waits for its receipt before giving up
 	},

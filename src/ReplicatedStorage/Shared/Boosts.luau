@@ -36,7 +36,7 @@ function Boosts.hintText(tierLabel: string, display: string): string
 	return "A " .. string.upper(tierLabel) .. "  |  " .. string.upper(display)
 end
 
--- The limits for one player: Boost Plus holders get PerMatchPlus uses of each boost per match.
+-- The +time limits for one player: Boost Plus holders get PerMatchPlus uses per match.
 function Boosts.limitsFor(hasBoostPlus: boolean): Limits
 	local base = GameConfig.Boosts
 	return {
@@ -46,15 +46,17 @@ function Boosts.limitsFor(hasBoostPlus: boolean): Limits
 	}
 end
 
--- "ok" | "disabled" | "limit" for one more boost of `kind`.
+-- "ok" | "disabled" | "limit" for one more boost of `kind`. A hint has no limit: each one is paid for, and
+-- it locks your answer in, so a round can only ever take one.
 function Boosts.canUse(usage: Usage, kind: string, cfg: Limits?): string
 	local limits: Limits = cfg or GameConfig.Boosts
 	if limits.Enabled == 0 then
 		return "disabled"
 	end
-	local round = if kind == "Hint" then usage.round.Hint else usage.round.ExtraTime
-	local match = if kind == "Hint" then usage.match.Hint else usage.match.ExtraTime
-	if round >= limits.PerRound or match >= limits.PerMatch then
+	if kind == "Hint" then
+		return "ok"
+	end
+	if usage.round.ExtraTime >= limits.PerRound or usage.match.ExtraTime >= limits.PerMatch then
 		return "limit"
 	end
 	return "ok"

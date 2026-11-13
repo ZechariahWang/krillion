@@ -275,7 +275,7 @@ return function(test)
 		end
 	end)
 
-	test("Boost Plus raises only the per-match limit", function()
+	test("Boost Plus raises only the +time per-match limit", function()
 		local plain = Boosts.limitsFor(false)
 		local plus = Boosts.limitsFor(true)
 		assert(plain.PerMatch == GameConfig.Boosts.PerMatch)
@@ -283,9 +283,9 @@ return function(test)
 		assert(plus.PerMatch > plain.PerMatch)
 		assert(plus.PerRound == plain.PerRound)
 		local usage = { round = Boosts.newUses(), match = Boosts.newUses() }
-		usage.match.Hint = plain.PerMatch
-		assert(Boosts.canUse(usage, "Hint", plain) == "limit")
-		assert(Boosts.canUse(usage, "Hint", plus) == "ok")
+		usage.match.ExtraTime = plain.PerMatch
+		assert(Boosts.canUse(usage, "ExtraTime", plain) == "limit")
+		assert(Boosts.canUse(usage, "ExtraTime", plus) == "ok")
 	end)
 
 	-- Profile --------------------------------------------------------------------------------------------

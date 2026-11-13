@@ -412,7 +412,7 @@ local function passPerks(key: string): string
 	elseif key == "SecondChance" then
 		return "One free revive every match"
 	elseif key == "BoostPlus" then
-		return GameConfig.Boosts.PerMatchPlus .. " hints and " .. GameConfig.Boosts.PerMatchPlus .. " +time per match"
+		return GameConfig.Boosts.PerMatchPlus .. " +time boosts per match"
 	end
 	return "Game pass"
 end
@@ -532,6 +532,9 @@ local function boostEntries(entries: { Entry })
 	end
 	table.insert(entries, extra)
 	for _, pack in Products.BoostPacks do
+		if pack.retired == true then
+			continue
+		end
 		local name = (if pack.kind == "Hint" then hintName else timeName) .. " x" .. pack.count
 		local icon = if pack.kind == "Hint" then "Hint" else "Time"
 		local entry = productEntry(name, pack.robux, pack.productId, icon)
