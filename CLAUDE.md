@@ -45,6 +45,10 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   and lifts labels that would overlap on screen (`Shared/LabelSpread`), so no two cover each other.
   `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title` is
   unused.
+- Pets: `Templates.Pets.<Name>` are Models built from parts (ellipsoids are block Parts with a Sphere
+  SpecialMesh), about 2 to 3 studs long, facing +X with `Body` as PrimaryPart at the pivot. Each has big
+  white eyes with a pupil and glint, blush cheeks and a mouth. `Client/Market` clones one beside each player.
+  `ServerStorage.PetsBackup` keeps the plainer models from before 2026-11-13.
 - Sea dressing: `Arena.Reef.Coral.Extra` and `Arena.Beach.GrassExtra` hold the extra kelp, coral and tufts;
   `Arena.Beach.Shallows` the seagrass, kelp, coral and shells on the
   underwater slope (kept under the surface), `Arena.Beach.Clutter` the towels, buckets, driftwood and net,
