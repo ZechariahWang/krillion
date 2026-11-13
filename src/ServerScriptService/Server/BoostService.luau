@@ -1,6 +1,5 @@
 --!strict
--- In-match boosts for whoever holds the crab: Hint (a masked Rare/Deep Cut answer nobody has used) and
--- ExtraTime (+10 s on the fuse).
+-- In-match boosts: Hint (a masked Rare/Deep Cut answer) and ExtraTime (+10 s for you only).
 -- Paid from the boost inventory first, then Shells; Robux products only add inventory. A Robux buy made
 -- mid-prompt is applied when its receipt lands (the client asks with pay "inventory" and the server
 -- remembers the request), so a slow receipt never falls through to spending Shells.
@@ -76,7 +75,7 @@ local function findHint(player: Player): (string?, string?, string?)
 	if answers == nil then
 		return nil, nil, nil
 	end
-	local excluded = AnswerService.usedAnswers()
+	local excluded = AnswerService.lockedCorrected()
 	for answer in hinted[player] or {} do
 		excluded[answer] = true
 	end
@@ -169,7 +168,7 @@ function BoostService.start()
 		end)
 	end
 
-	-- One of each per question: the count, hints given and any waiting purchase reset on every question.
+	-- One of each per round: the round count, hints given and any waiting purchase reset on every prompt.
 	MatchEvents.PromptOpened.connect(function()
 		for _, uses in usage do
 			uses.round = Boosts.newUses()

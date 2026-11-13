@@ -490,6 +490,16 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				sound("Pop", 0.5, 1.2)
 			end)
 		end
+		local schooled = options.schooled
+		if schooled ~= nil and schooled >= 2 then
+			local factor = GameConfig.Schooling.Factor
+			local lift = if factor == 0.5 then "HALF LIFT" else math.floor(factor * 100 + 0.5) .. "% LIFT"
+			local chipText = schooledChip:FindFirstChild("Text")
+			if chipText ~= nil and chipText:IsA("TextLabel") then
+				chipText.Text = "SCHOOLED x" .. schooled .. "  |  " .. lift
+			end
+			schooledChip.Visible = true
+		end
 		if tierIndex >= Tiers.index("Rare") then
 			play(cardStroke, TweenInfo.new(0.3), { Color = tierColor })
 		end

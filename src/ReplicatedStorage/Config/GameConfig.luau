@@ -24,8 +24,16 @@ local GameConfig = {
 		LockBroadcastSeconds = 0.25, -- a lock-in pushes a state update this soon (at most 4 a second)
 	},
 	Water = {
-		StartHeight = 6, -- every pillar's top above the water line, for the whole match
-		CullHz = 10, -- how often the server looks for players who fell in
+		StartHeight = 6, -- platform top above the starting water line
+		-- Round r surges SurgeBase + SurgeGrowth * (r - 1) ^ SurgePower; tests/WaterCurve pins the survival targets.
+		SurgeBase = 0.5,
+		SurgeGrowth = 0.4,
+		SurgePower = 1.5,
+		LiftPerPoint = 0.1,
+		CullHz = 10,
+		CreepFraction = 0.7, -- slow part of the surge
+		CreepSeconds = 2,
+		JumpSeconds = 0.4,
 	},
 	Platform = {
 		Height = 140, -- tall enough to reach the tank floor at any height
@@ -70,7 +78,7 @@ local GameConfig = {
 		ChestSessionLimit = 50, -- chest openings per player per server visit, a guard against runaway spending
 		ChestCooldown = 1.2, -- seconds between chest openings (the open animation's length)
 		StartingShells = 100, -- one-time gift to a brand-new profile
-		-- Paid per accepted match answer (Reveal.PayoutDelaySeconds later).
+		-- Paid per graded match answer, after the dive card lands (Reveal.PayoutDelaySeconds).
 		AnswerByTier = {
 			Plankton = 5,
 			TooClever = 5,
@@ -92,6 +100,16 @@ local GameConfig = {
 		HintMaxTier = 5, -- DeepCut; a hint never gives away the best tier
 		Cooldown = 0.5, -- seconds between UseBoost requests
 		PurchaseWaitSeconds = 5, -- how long a Robux-bought boost waits for its receipt before giving up
+	},
+	LateJoin = {
+		Enabled = 1,
+		MaxRound = 2, -- joining is open up to and including this round
+		MinSecondsLeft = 8, -- in MaxRound, only while this many prompt seconds remain
+		ReserveSlots = 4, -- late joiners a match may take on top of its starters; their pillars go in free gaps
+	},
+	Schooling = {
+		Enabled = 0, -- off until Zechariah agrees: two players with the same answer each get Factor of the points
+		Factor = 0.5,
 	},
 	Quests = {
 		PerDay = 3,
@@ -115,7 +133,7 @@ local GameConfig = {
 		CardBudgetSeconds = 3.3,
 		CardHoldSeconds = 0.45,
 		RaiseDelaySeconds = 4.5, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 0, -- answer Shells and Mythic announcements land as the crab is passed
+		PayoutDelaySeconds = 4.5, -- answer Shells and Mythic announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},
@@ -158,25 +176,14 @@ local GameConfig = {
 		RefreshSeconds = 60,
 		Size = 10,
 	},
-	-- Crab Craze: the holder answers to pass the crab on before its fuse runs out.
-	Crab = {
-		StartHearts = 2,
-		MaxHearts = 5,
-		ReviveHearts = 1, -- a revived player comes back with this many
-		MeterTarget = 600, -- answer points that earn an extra heart
-		FuseMinSeconds = 10, -- each fuse is a random length in this range; clients are never told it
-		FuseMaxSeconds = 30,
-		MinTurnSeconds = 8, -- a pass tops the fuse back up to this, so the next holder always gets a turn
-		PinchSeconds = 3, -- the beat that shows the pinch before the next fuse starts
-		RestlessSeconds = 6, -- the crab turns restless with this much fuse left
-		FuriousSeconds = 3, -- and furious with this much
-		BotDelayMin = 2, -- a bot answers this long after it gets the crab, at random in the range
-		BotDelayMax = 9, -- past MinTurnSeconds on purpose: a bot handed a short fuse is sometimes pinched
-		SunkDepth = 8, -- a sunk pillar's top ends this far under the water
-		SinkSeconds = 1.2,
+	Special = {
+		MinRound = 3, -- no special rounds before this
+		Chance = 0.25, -- per eligible round; never two in a row
+		TidalWaveMultiplier = 2, -- water rises this many times further
+		DoubleLiftMultiplier = 2, -- pillars rise this many times further
 	},
 	Server = {
-		MaxPlayers = 8, -- also set Server Size to 8 in the Creator Hub (Places > Configure)
+		MaxPlayers = 16, -- also set Server Size to 16 in the Creator Hub (Places > Configure)
 	},
 }
 
@@ -185,9 +192,12 @@ table.freeze(GameConfig.Water)
 table.freeze(GameConfig.Platform)
 table.freeze(GameConfig.Answer)
 table.freeze(GameConfig.Lobby)
+table.freeze(GameConfig.Special)
 table.freeze(GameConfig.Cash.AnswerByTier)
 table.freeze(GameConfig.Cash)
 table.freeze(GameConfig.Boosts)
+table.freeze(GameConfig.LateJoin)
+table.freeze(GameConfig.Schooling)
 table.freeze(GameConfig.Quests)
 table.freeze(GameConfig.Rewards)
 table.freeze(GameConfig.Reveal)
@@ -196,6 +206,5 @@ table.freeze(GameConfig.Bots)
 table.freeze(GameConfig.Revive)
 table.freeze(GameConfig.Toys)
 table.freeze(GameConfig.Leaderboard)
-table.freeze(GameConfig.Crab)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)

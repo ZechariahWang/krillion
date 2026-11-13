@@ -205,6 +205,15 @@ local function colourName(player: Player, text: TextLabel)
 	gradient.Parent = text
 end
 
+-- The pillar's sign.
+local function applyNameTag(player: Player, platform: Instance)
+	local tag = platform:FindFirstChild("NameTag")
+	local text = if tag ~= nil then tag:FindFirstChild("NameText") else nil
+	if text ~= nil and text:IsA("TextLabel") then
+		colourName(player, text)
+	end
+end
+
 -- The name over the head (Templates.NameTag), in place of Roblox's own display name.
 local function applyName(player: Player)
 	local character = player.Character
@@ -251,11 +260,16 @@ function CosmeticService.refresh(player: Player)
 	applyTrail(player)
 	applyAura(player)
 	applyPet(player)
+	local platform = platformOf(player)
+	if platform ~= nil then
+		applyNameTag(player, platform)
+	end
 end
 
 -- Recolours a freshly spawned pillar (and its cap) with the player's skin, if they have one equipped.
 -- Skins with a `top` colour give the cap that colour; others get a lightened body colour.
 function CosmeticService.applySkin(player: Player, platform: Part)
+	applyNameTag(player, platform)
 	local item = CosmeticService.equipped(player, "Skin")
 	if item == nil then
 		return
