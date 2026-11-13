@@ -8,29 +8,55 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local FOLDER_NAME = "Remotes"
 
+export type RingRow = {
+	userId: number, -- negative for bots
+	name: string,
+	hearts: number, -- 0 once they are out
+}
+
 export type RoundStatePayload = {
-	phase: string, -- "Waiting" | "Intermission" | "Starting" | "Prompt" | "Reveal" | "Surge" | "Results"
-	round: number,
-	secondsLeft: number,
-	yourSecondsLeft: number?, -- this player's own time when it differs from secondsLeft (a +10s boost, overtime)
-	overtime: boolean, -- the prompt is running past its base time because someone bought extra time
+	phase: string, -- "Waiting" | "Intermission" | "Starting" | "Prompt" | "Reveal" | "Results"
+	round: number, -- the question number
+	secondsLeft: number, -- the countdown outside a question; the fuse is never sent
 	alive: number,
 	aliveUserIds: { number },
-	lockedUserIds: { number }, -- who has locked in an answer this prompt
 	prompt: string?,
 	promptId: string?,
-	playing: boolean, -- is the receiving player on a platform this match
-	lateJoinOpen: boolean, -- the receiving player may jump into the running match now
+	playing: boolean, -- is the receiving player still in this match
+	holderUserId: number?, -- who holds the crab
+	mood: string, -- "Calm" | "Restless" | "Furious": all a client learns about the fuse
+	ring: { RingRow }, -- everyone in the match, clockwise
+	used: { string }, -- answers the current question has used up, in order
+	meter: number, -- the receiving player's points towards an extra heart
+	meterTarget: number,
+	maxHearts: number,
 	playerCount: number,
 	readyCount: number, -- players with a living character who are not AFK: what the match actually waits on
 	minPlayers: number,
 	starting: number, -- players who started the current match
-	height: number,
-	waterY: number,
-	surge: number, -- how far the water rises at the end of this round
-	surging: boolean, -- the Surge broadcast sent before the water rises; false on the settled one and on mid-surge updates
-	settled: boolean, -- the Surge broadcast sent once the water has stopped; false on mid-surge updates
-	special: string?, -- "TidalWave" | "DoubleLift" | nil
+}
+
+-- CrabPassed: the holder's answer was accepted and the crab moved on.
+export type CrabPassedPayload = {
+	fromUserId: number,
+	toUserId: number?,
+	answer: string, -- the bank spelling
+	tier: string?,
+	points: number,
+	gainedHeart: boolean,
+}
+
+-- Typing, to the server: the text in the holder's answer box. To the other clients: the same, filtered.
+export type TypingPayload = {
+	userId: number,
+	text: string,
+}
+
+-- CrabPinched: the fuse ran out on the holder.
+export type CrabPinchedPayload = {
+	userId: number,
+	hearts: number, -- what they have left
+	eliminated: boolean,
 }
 
 export type RevealRow = {
@@ -51,11 +77,11 @@ export type RevealPayload = {
 	rows: { RevealRow },
 }
 
--- AnswerResult: stage "check" answers an Enter-to-check, stage "submit" answers a lock-in.
+-- AnswerResult: the reply to SubmitAnswer.
 export type AnswerResultPayload = {
-	stage: string, -- "check" | "submit"
-	status: string?, -- "valid" | "invalid" | "cooldown" | "limit" | "closed"
-	accepted: boolean?, -- submit only
+	stage: string, -- "submit"
+	status: string?, -- when refused: "invalid" | "used" | "cooldown" | "limit" | "closed"
+	accepted: boolean?,
 	corrected: string?, -- the bank spelling; never the tier
 }
 
@@ -97,11 +123,6 @@ export type BoostResultPayload = {
 	hint: string?, -- e.g. "A DEEP CUT  |  M _ _ _ _ _ _ _ E (9 letters)"
 	secondsLeft: number?,
 	uses: BoostUses, -- used this round
-}
-
-export type JoinResultPayload = {
-	status: string, -- "joined" | "closed" | "full" | "already" | "not_ready"
-	message: string,
 }
 
 export type NotifyPayload = {

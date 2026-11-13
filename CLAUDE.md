@@ -15,6 +15,10 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Do not author an instance in Studio while a `model.json` still owns it: Rojo reverts it on a later sync. Delete the
   `model.json` first, with Rojo disconnected. Remaining ones: `ReplicatedStorage/Remotes/*`, `Templates/{BotRig,Confetti,DiveCard,HowRareBoard,HowToBoard,Trails,leaderstats}`, `Sounds`.
 - `ServerStorage.UIArchive` keeps the UI as it was before the style bake (2026-11-05). Reference only.
+- `ServerStorage.ModeArchive.RisingWater` keeps the rising-water gamemode (git tag `mode/rising-water`): its
+  modules from `src/ServerStorage/ModeArchive/RisingWater/` with a `Manifest` of where each came from, and
+  Studio-only copies of its authored pieces under `Instances`. Nothing there runs; its tests are in
+  `tests/archive/rising-water/`, out of the test run.
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
 - Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
   `ServerStorage.PhysicalAssets` holds `PlatformTemplate` (cloned per pillar, walls authored on it) and
@@ -34,10 +38,10 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Prompt bank: one module per prompt in `src/ServerStorage/PromptBank/`, listed in its `init.luau`;
   `tests/PromptBank.test.luau` guards it (normalized answers, no duplicates, aliases point at answers).
 - Templates cloned by code that are authored in Studio: `ReplicatedStorage.Templates.AfkTag` (SettingsService puts
-  it on an AFK player's Head), `Templates.AnswerTag`, `Templates.NameTag` (CosmeticService puts it on every Head:
+  it on an AFK player's Head), `Templates.NameTag` (CosmeticService puts it on every Head:
   the display name in the equipped tag's colour with the title line above; Roblox's own name display is off),
-  `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title` is
-  unused.
+  `Templates.ShellPickup` (PickupService drops them on the sand and deck between rounds). `Templates.Title`
+  and `Templates.AnswerTag` are unused.
 - Sea dressing: `Arena.Reef.Coral.Extra` and `Arena.Beach.GrassExtra` hold the extra kelp, coral and tufts;
   `Arena.Beach.Shallows` the seagrass, kelp, coral and shells on the
   underwater slope (kept under the surface), `Arena.Beach.Clutter` the towels, buckets, driftwood and net,
@@ -46,7 +50,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   tapered hull, cabin, rails, mast, main and jib hung along the boom so their faces show from the island),
   `Seagull` and `Buoy` models (Persistent, `Speed` attribute) that SeaLife moves round the island.
 - Phones play landscape only (`StarterGui.ScreenOrientation`). In a match a phone shows only the strip at the
-  top (prompt, timer, `Hud.AnswerBar` at 17% of the height, boosts beside it), above where the on-screen
+  top (question, whose turn it is, `Hud.AnswerBar` at 17% of the height, boosts beside it), above where the on-screen
   keyboard reaches; `PromptEcho` stays hidden. Walking is off on a pillar (`Hud` disables the touch controls).
 - World labels: each BillboardGui's main child is centred and holds a UIScale named `DistanceScale`;
   `Client/BillboardScale` keeps it at authored size within 45 studs and shrinks it beyond. Give new labels one.
@@ -54,7 +58,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `ClipToDeviceSafeArea` off so it covers the phone notch area.
 - StreamingEnabled is on. Client code must not cache streamed parts: a part that streams back in is a new instance
   (the next-level ring once showed only an arc). Read children when you use them, or watch `ChildAdded`.
-  `Arena.SeaLife` swimmers are `Atomic`; `Arena.NextLevel` is `Persistent` (always on every client).
+  `Arena.SeaLife` swimmers are `Atomic`.
 - Day and night: Lighting's properties and linear fog are the day look; its `NightAmbient` / `NightOutdoorAmbient`
   attributes and the `Lighting.Atmosphere` haze are the night look. `Client/DayNight` blends them at dusk and dawn
   (fog out, then haze in) and lights parts tagged `NightLight` (lobby and beach torches, `Arena.TankLights`)
@@ -78,13 +82,31 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 
 ## Match flow
 
-- Phases: Waiting, Intermission, Starting, Prompt, Reveal, Surge, Results. Before Starting, `MatchIntro` fades the
-  starters' screens to black and the server teleports them; Starting is the 3-2-1 on the pillars
-  (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
-  `StartCountdownSeconds`.
+- The gamemode is Crab Craze (design: `docs/superpowers/specs/2026-11-10-crab-craze-design.md`). Players stand
+  on a ring of pillars that never move. Whoever holds the crab answers the question to pass it clockwise; no
+  answer can be used twice in a question. The crab has a hidden fuse (the server never sends it; clients only
+  learn its mood: Calm, Restless, Furious). When it runs out the holder is pinched and loses a heart, and a new
+  question starts. Answer points fill a meter that earns extra hearts. At zero hearts the pillar sinks and the
+  player is out; the last one in wins. Rules are in `Shared/CrabMatch` (pure, tested), numbers in
+  `GameConfig.Crab`, the loop in `Server/RoundService`.
+- Phases: Waiting, Intermission, Starting, Prompt (a question, the crab going round), Reveal (the beat after a
+  pinch), Results. Before Starting, `MatchIntro` fades the starters' screens to black and the server teleports
+  them; Starting is the 3-2-1 on the pillars (`Client/Transition`, `SharedUi.Transition`). Lengths are
+  `GameConfig.Round.IntroFadeSeconds` and `StartCountdownSeconds`.
+- Authored for the mode: `Templates.CrazeCrab` (each client clones one; `Client/Crab` hovers it over the middle
+  of the ring, turns it to face the holder, sets the rate of its `Body.Mouth.Bubbles` emitter and turns up its
+  `Anger` highlight; the model's pivot looks along the crab's front), `Hud.Vitals` (one heart icon per heart
+  you have, and the meter), and the `CrabPassed` / `CrabPinched` / `Typing` remotes. Pillars carry no
+  billboard. Under the status row sit two chips: `Status.Typing` shows every other player what the holder is
+  typing as they type (AnswerService filters it with TextService first) and then their accepted answer;
+  `Status.Tide` lists the question's used answers.
+- A match opens with your camera behind your pillar, looking at the middle (`Client/Crab`); players are placed
+  facing the middle too.
+- A server holds 8 (`GameConfig.Server.MaxPlayers`; Server Size in the Creator Hub must match). Bots fill a
+  match to 4. There is no late join.
 - Every teleport goes through `PlayerService.sendToPlatform` / `sendToLobby`: they anchor the root, move it, and
   release it once the spot has streamed in, so nobody falls through a pillar their client does not have yet.
-- Dying or respawning while alive in a match eliminates the player (RoundService), like sinking.
+- Dying, respawning or falling in the water while in a match puts the player out (RoundService).
 - Settings: music on/off and volume are saved in the profile (`musicOff`, `musicVolume`); AFK is session only.
 - Profiles: a load that fails after retries leaves the player read-only (`DataService.isReadOnly`): no spends,
   payouts or saves, `loadFailed` in the payload, retried every 60 s. Studio is exempt and gets a throwaway
@@ -125,7 +147,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
   gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. Toasts stack in the bottom-left
-  (past the match water meter, above the touch thumbstick). The bottom-right column, from the
+  (past the match hearts card, above the touch thumbstick). The bottom-right column, from the
   bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.
 - Icons are ImageLabels authored in Studio; text never carries an emoji. The artwork lives once in
@@ -154,6 +176,6 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - `get_console_output` returns only Edit-context lines. In play, run `game:GetService("LogService"):GetLogHistory()`
   on the Client or Server datamodel to read the game's output.
 - `ServerStorage.RareOrSinkDebug:Invoke("state")` (Server datamodel, DebugService) returns the match snapshot:
-  phase, round, alive ids, heights, water level, prompt.
+  phase, round, alive ids, hearts, the holder, the fuse and mood, used answers, prompt.
 - Screenshots come back at 1596x1080 but the viewport is 1152x779; `user_mouse_input` takes viewport pixels.
 - With `MinPlayers = 1` a solo match starts 15 s after joining. To test the lobby, turn AFK on in Settings first.

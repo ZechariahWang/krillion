@@ -12,16 +12,14 @@ local MatchEvents = {
 	-- (participants: { Player }) after pillars are spawned and everyone is placed.
 	MatchStarted = Signal.new("MatchStarted"),
 	-- (prompt: { id: string, prompt: string }, round: number, players: { Player }, seconds: number)
-	-- right after AnswerService.openRound: per-round resets (boost uses), stats prefetch.
+	-- when a question opens: per-question resets (boost uses), stats prefetch. `seconds` is 0: the fuse is hidden.
 	PromptOpened = Signal.new("PromptOpened"),
-	-- (player: Player) a late joiner got a pillar in the running match.
-	PlayerJoinedMatch = Signal.new("PlayerJoinedMatch"),
-	-- (player: Player, tier: string?, points: number, promptId: string, answer: string?) once per alive
-	-- player at each reveal; tier and answer are nil when they gave no accepted answer.
+	-- (player: Player, tier: string?, points: number, promptId: string, answer: string?) each time a
+	-- player's answer is accepted and the crab moves on.
 	AnswerGraded = Signal.new("AnswerGraded"),
-	-- (player: Player, round: number) for each player still afloat after a surge.
+	-- (player: Player, round: number) for each player still in after a pinch.
 	RoundSurvived = Signal.new("RoundSurvived"),
-	-- (player: Player, round: number) when the water takes a player (or they fall off).
+	-- (player: Player, round: number) when a player is out: no hearts left, or they fell in.
 	PlayerSank = Signal.new("PlayerSank"),
 	-- (participants: { Player }, winner: Player?, countsAsWin: boolean, rounds: number) at the end of a
 	-- match, before MatchEnded goes to clients. Participants still in the server only.

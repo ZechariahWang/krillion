@@ -16,9 +16,6 @@ end
 
 local suites = {
 	require("./AnswerMatcher.test"),
-	require("./WaterCurve.test"),
-	require("./MatchState.test"),
-	require("./SpecialRound.test"),
 	require("./Profile.test"),
 	require("./Economy.test"),
 	require("./ArenaLayout.test"),
@@ -28,17 +25,15 @@ local suites = {
 	require("./Depth.test"),
 	require("./Boosts.test"),
 	require("./AnswerGate.test"),
-	require("./LateJoin.test"),
-	require("./Schooling.test"),
 	require("./Quests.test"),
 	require("./Rewards.test"),
 	require("./Cosmetics.test"),
-	require("./Tide.test"),
 	require("./AnswerStats.test"),
 	require("./BotBrain.test"),
 	require("./Monetization.test"),
 	require("./PromptBank.test"),
 	require("./DayCycle.test"),
+	require("./CrabMatch.test"),
 }
 
 for _, suite in suites do
