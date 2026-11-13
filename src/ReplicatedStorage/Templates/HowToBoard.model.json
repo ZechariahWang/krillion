@@ -821,7 +821,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "Enter checks it, Enter again locks it in.",
+                        "Text": "Enter or GO checks it. Again locks it in.",
                         "TextSize": 20,
                         "TextColor3": [
                           0.8431,
@@ -1078,7 +1078,7 @@
                           ]
                         },
                         "BackgroundTransparency": 1,
-                        "Text": "Stay above the rising water to win!",
+                        "Text": "If the water reaches you, you are out!",
                         "TextSize": 20,
                         "TextColor3": [
                           0.8431,

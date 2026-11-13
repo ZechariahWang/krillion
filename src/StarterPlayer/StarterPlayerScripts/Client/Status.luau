@@ -144,6 +144,20 @@ local function tinted(text: string, color: Color3): string
 	return '<font color="#' .. color:ToHex() .. '">' .. text .. "</font>"
 end
 
+-- The same hint in a word or two, for the small slot a phone has: "SAFE", "ANY", "RARE+", "MYTHIC!".
+local function needShort(payload): string
+	local need = TideRules.needTier(payload.height, payload.waterY, payload.surge, payload.special)
+	if need == "safe" then
+		return tinted("SAFE", Theme.Color.Green)
+	elseif need == "none" then
+		return tinted("MYTHIC!", Theme.Color.Red)
+	elseif Tiers.index(need) == 1 then
+		return tinted("ANY", Theme.Tier.Plankton)
+	end
+	local tierColors: { [string]: Color3 } = Theme.Tier :: any
+	return tinted("NEED " .. string.upper(Tiers.ByName[need].label) .. "+", tierColors[need] or Theme.Color.Cream)
+end
+
 -- "RARE+ TO SURVIVE" in the tier colour, "SAFE THIS ROUND" in green, "GO FOR A MYTHIC" when nothing is enough.
 local function needHint(payload): string
 	local need = TideRules.needTier(payload.height, payload.waterY, payload.surge, payload.special)
@@ -296,7 +310,7 @@ function Status.onState(payload)
 		local ready = if typeof(payload.readyCount) == "number" then payload.readyCount else payload.playerCount
 		aliveText.Text = "PLAYERS " .. ready .. "/" .. payload.minPlayers
 	elseif phase == "Intermission" then
-		setStatus("DIVING IN")
+		setStatus("STARTING SOON")
 		secondaryText.Text = Status.formatTime(payload.secondsLeft)
 		aliveText.Text = "PLAYERS " .. payload.playerCount
 	elseif phase == "Starting" then
@@ -326,13 +340,22 @@ function Status.onState(payload)
 	elseif phase == "Results" then
 		setStatus("MATCH OVER")
 		secondaryText.Text = Status.formatTime(payload.secondsLeft)
-		aliveText.Text = "NEXT DIVE"
+		aliveText.Text = "NEXT MATCH"
 	end
-	-- Phones, on a pillar: only the prompt and the timer. The alive count and the tide chip stay off.
+	-- Phones, on a pillar: only the prompt and the timer row. The tide chip stays off, and while a prompt
+	-- is open the slot beside the timer says in a word what you need to stay above the water.
+	aliveText.RichText = false
 	if Ui.isPhone() and payload.playing == true then
-		aliveText.Visible = false
 		tide.Visible = false
-		secondaryText.Size = UDim2.new(1, 0, 1, 0)
+		if phase == "Prompt" then
+			aliveText.RichText = true
+			aliveText.Text = needShort(payload)
+			aliveText.Visible = true
+			secondaryText.Size = UDim2.new(0.5, 0, 1, 0)
+		else
+			aliveText.Visible = false
+			secondaryText.Size = UDim2.new(1, 0, 1, 0)
+		end
 	else
 		aliveText.Visible = true
 		secondaryText.Size = UDim2.new(0.5, 0, 1, 0)

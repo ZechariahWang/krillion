@@ -84,7 +84,7 @@ local SLOT_NAMES: { [string]: string } = {
 	Trail = "trail",
 	Pet = "pet",
 	Aura = "aura",
-	CardTheme = "dive card theme",
+	CardTheme = "answer card theme",
 	NameTag = "name tag",
 	Toy = "toy",
 }
@@ -418,7 +418,7 @@ local function passPerks(key: string): string
 		local bonus = math.floor(GameConfig.Cash.VipBonus * 100 + 0.5)
 		return "+" .. bonus .. "% " .. Currency.Upper .. ", Aurora pillar, Gold Wake, VIP title and tag"
 	elseif key == "DoubleCash" then
-		return "Double every " .. Currency.Upper .. " you earn, forever"
+		return "Earn double " .. Currency.Name .. " from everything, forever"
 	elseif key == "SecondChance" then
 		return "One free revive every match"
 	elseif key == "BoostPlus" then
@@ -513,7 +513,7 @@ end
 local function boostShellsEntry(name: string, shells: number, icon: string): Entry
 	local entry = emptyEntry("Shop", name, GOLD)
 	entry.icon = icon
-	entry.sub = "Buy it from the match button when you need it"
+	entry.sub = "Use it from its button during a match"
 	entry.price = Currency.digits(shells) .. " each"
 	entry.currency = "Cash"
 	entry.action = "IN MATCH"
@@ -529,14 +529,14 @@ local function boostEntries(entries: { Entry })
 	local hintName = "HINT"
 	local timeName = "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
 	local hint = productEntry(hintName .. " x1", Products.Boosts.Hint.robux, Products.Boosts.Hint.productId, "Hint")
-	hint.sub = "One hint in your stock"
+	hint.sub = "Locks in a Mythic answer for you"
 	if profile.hints > 0 then
 		hint.badge = profile.hints .. " OWNED"
 	end
 	table.insert(entries, hint)
 	table.insert(entries, boostShellsEntry(timeName, GameConfig.Boosts.ExtraTimeShells, "Time"))
 	local extra = productEntry(timeName .. " x1", Products.Boosts.ExtraTime.robux, Products.Boosts.ExtraTime.productId, "Time")
-	extra.sub = "One +time in your stock"
+	extra.sub = "Ten more seconds to answer"
 	if profile.extraTimes > 0 then
 		extra.badge = profile.extraTimes .. " OWNED"
 	end
@@ -548,7 +548,7 @@ local function boostEntries(entries: { Entry })
 		local name = (if pack.kind == "Hint" then hintName else timeName) .. " x" .. pack.count
 		local icon = if pack.kind == "Hint" then "Hint" else "Time"
 		local entry = productEntry(name, pack.robux, pack.productId, icon)
-		entry.sub = pack.count .. " in your stock, cheaper than one at a time"
+		entry.sub = pack.count .. " to keep, cheaper than one at a time"
 		entry.badge = "SAVE"
 		table.insert(entries, entry)
 	end
@@ -560,7 +560,7 @@ local function specialEntries(entries: { Entry })
 		table.insert(entries, starter)
 	end
 	local revive = productEntry("REVIVE", Products.Revive.robux, Products.Revive.productId, "Heart")
-	revive.sub = "Jump back in the next time you sink"
+	revive.sub = "Come back if you sink in your next match"
 	if profile.revives > 0 then
 		revive.badge = profile.revives .. " OWNED"
 	end
