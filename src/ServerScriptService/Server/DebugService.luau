@@ -10,6 +10,7 @@
 --   stats <promptId>                        recorded answer counts for a prompt
 --   flush                                   write pending answer counts now
 --   join <user>                             the JoinMatch path (late join), as if the player pressed JOIN
+--   erase <userId>                          delete everything saved for a user id (a right-to-erasure request)
 -- <user> is a user id (negative in local test servers) or a player's name.
 -- Inert in live servers: the BindableFunction is only created when RunService:IsStudio().
 -- Studio with API access writes the LIVE Profile_v1 DataStore, so shells/boost/quest/tutorial changes persist.
@@ -222,6 +223,16 @@ end
 commands.flush = function()
 	AnswerStatsService.flush()
 	return "answer counts flushed"
+end
+
+-- Takes a number only, never a name: an erasure request names a user id, and this cannot be undone.
+commands.erase = function(args)
+	local userId = wholeNumber(args[1])
+	if userId == nil then
+		return "usage: erase <userId>"
+	end
+	local _, line = DataService.erase(userId)
+	return line
 end
 
 -- Same as the JoinMatch remote: RoundService.tryJoin does every check, and the client gets its JoinResult.

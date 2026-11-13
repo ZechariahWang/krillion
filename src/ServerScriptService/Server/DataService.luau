@@ -726,6 +726,24 @@ function DataService.addReceipt(player: Player, receipt: string)
 	end
 end
 
+-- Deletes everything saved for a user id: the profile, the old coins entry and the leaderboard entry. For
+-- a right-to-erasure request from Roblox. Refused while that player is in this server (their session would
+-- write it straight back). Returns whether every delete went through, and a line to show.
+function DataService.erase(userId: number): (boolean, string)
+	if Players:GetPlayerByUserId(userId) ~= nil then
+		return false, "user " .. userId .. " is in this server; erase after they leave"
+	end
+	local ok, err = pcall(function()
+		need(profileStore):RemoveAsync(DataService.keyFor(userId))
+		need(legacyStore):RemoveAsync("coins_" .. userId)
+		need(winsStore):RemoveAsync(tostring(userId))
+	end)
+	if not ok then
+		return false, "erase failed for " .. userId .. ": " .. tostring(err)
+	end
+	return true, "erased saved data for user " .. userId
+end
+
 -- Top players by wins, best first, as { userId, wins }.
 function DataService.topWins(count: number): { { userId: number, wins: number } }
 	local result = {}
