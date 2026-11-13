@@ -33,6 +33,13 @@ export type LobbyDay = {
 	earned: number,
 }
 
+-- The daily reward (Shared/Daily): the UTC day of the last claim and which day of the cycle it was. An
+-- absolute value in a session too; day 0 means untouched.
+export type DailyState = {
+	day: number,
+	streak: number,
+}
+
 -- The server (game.JobId) that has the profile loaded, and when it last wrote this (os.time).
 export type ActiveSession = {
 	jobId: string,
@@ -55,6 +62,7 @@ export type Profile = {
 	referredBy: number, -- UserId of the friend whose invite brought this player; 0 for none
 	quests: QuestDay,
 	lobby: LobbyDay,
+	daily: DailyState,
 	krillions: number, -- Mythic answers ever given in matches
 	games: number, -- matches played to the end
 	musicOff: boolean, -- the player turned background music off in Settings
@@ -78,6 +86,7 @@ export type Session = {
 	referredBy: number, -- 0 unless set this session
 	quests: QuestDay,
 	lobby: LobbyDay,
+	daily: DailyState,
 	krillions: number, -- delta
 	games: number, -- delta
 	musicOff: boolean?, -- nil unless the player changed the music setting this session
@@ -98,6 +107,10 @@ local function newLobby(): LobbyDay
 	return { day = 0, earned = 0 }
 end
 
+local function newDaily(): DailyState
+	return { day = 0, streak = 0 }
+end
+
 function Profile.new(): Profile
 	return {
 		cash = 0,
@@ -115,6 +128,7 @@ function Profile.new(): Profile
 		referredBy = 0,
 		quests = newQuests(),
 		lobby = newLobby(),
+		daily = newDaily(),
 		krillions = 0,
 		games = 0,
 		musicOff = false,
@@ -169,6 +183,23 @@ local function copyLobby(value: any): LobbyDay -- any: stored table or a LobbyDa
 		lobby.earned = numberOr(value.earned, 0)
 	end
 	return lobby
+end
+
+local function copyDaily(value: any): DailyState -- any: stored table or a DailyState
+	local daily = newDaily()
+	if typeof(value) == "table" then
+		daily.day = numberOr(value.day, 0)
+		daily.streak = numberOr(value.streak, 0)
+	end
+	return daily
+end
+
+-- The later claim of two: an older day never rolls a newer one back.
+local function laterDaily(a: DailyState, b: DailyState): DailyState
+	if b.day > a.day then
+		return copyDaily(b)
+	end
+	return copyDaily(a)
 end
 
 -- Same-day quest progress from two sources: the higher progress per quest, and done if either is done.
@@ -238,6 +269,7 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	profile.referredBy = numberOr(stored.referredBy, 0)
 	profile.quests = copyQuests(stored.quests)
 	profile.lobby = copyLobby(stored.lobby)
+	profile.daily = copyDaily(stored.daily)
 	profile.krillions = numberOr(stored.krillions, 0)
 	profile.games = numberOr(stored.games, 0)
 	profile.musicOff = stored.musicOff == true
@@ -265,6 +297,7 @@ function Profile.newSession(): Session
 		referredBy = 0,
 		quests = newQuests(),
 		lobby = newLobby(),
+		daily = newDaily(),
 		krillions = 0,
 		games = 0,
 	}
@@ -316,6 +349,7 @@ function Profile.combine(first: Session, second: Session): Session
 	else
 		combined.lobby = { day = first.lobby.day, earned = first.lobby.earned + second.lobby.earned }
 	end
+	combined.daily = laterDaily(first.daily, second.daily)
 	combined.krillions = first.krillions + second.krillions
 	combined.games = first.games + second.games
 	if second.musicOff ~= nil then
@@ -380,6 +414,7 @@ function Profile.merge(stored: Profile, session: Session): Profile
 	elseif session.lobby.day == merged.lobby.day then
 		merged.lobby.earned += session.lobby.earned
 	end
+	merged.daily = laterDaily(merged.daily, session.daily)
 	merged.krillions = merged.krillions + session.krillions
 	merged.games = merged.games + session.games
 	if session.musicOff ~= nil then

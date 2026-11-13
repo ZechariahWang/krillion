@@ -13,7 +13,7 @@ local UserInputService = game:GetService("UserInputService")
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
+local BUTTONS = { "QuestsButton", "DailyButton", "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
 local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WATCH_SLOT = 2 -- the spectate eye, right of Help
 local WAIT_SECONDS = 10

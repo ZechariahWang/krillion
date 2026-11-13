@@ -153,6 +153,20 @@ local GameConfig = {
 		MinOthersAlive = 2, -- fewer than this and the match is already decided
 		HeightAboveWater = 4,
 	},
+	-- The daily reward (Shared/Daily): one claim per UTC day, walked through in order on consecutive days and
+	-- started over after the last. A missed day starts again at day 1. `chest` is opened for free.
+	Daily = {
+		Enabled = 1,
+		Days = {
+			{ shells = 50 },
+			{ shells = 75 },
+			{ shells = 100 },
+			{ shells = 150 },
+			{ shells = 200 },
+			{ shells = 300 },
+			{ shells = 500, chest = "chest_reef" },
+		},
+	},
 	-- Shells lying on the island between rounds (PickupService). SessionCap is per visit.
 	Pickups = {
 		Enabled = 1,

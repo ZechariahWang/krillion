@@ -182,7 +182,8 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 end
 
 -- Shows the chest and asks the server to open it. Does nothing while another chest is still opening.
-function ChestReveal.open(chestId: string)
+-- `request` replaces the usual paid ChestOpen for a chest the server opens another way (the daily reward).
+function ChestReveal.open(chestId: string, request: (() -> ())?)
 	local root = screen
 	local chest = Chests.ById[chestId]
 	if chest == nil or busy then
@@ -190,7 +191,11 @@ function ChestReveal.open(chestId: string)
 	end
 	if root == nil then
 		-- No reveal screen (not found yet, or missing): the chest still opens, and Market toasts the prize.
-		Net.event("ChestOpen"):FireServer(chestId)
+		if request ~= nil then
+			request()
+		else
+			Net.event("ChestOpen"):FireServer(chestId)
+		end
 		return
 	end
 	busy = true
@@ -254,7 +259,11 @@ function ChestReveal.open(chestId: string)
 		reply:Disconnect()
 		result = payload
 	end)
-	Net.event("ChestOpen"):FireServer(chestId)
+	if request ~= nil then
+		request()
+	else
+		Net.event("ChestOpen"):FireServer(chestId)
+	end
 
 	task.spawn(function()
 		while result == nil and os.clock() - started < TIMEOUT and token == mine do

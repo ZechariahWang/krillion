@@ -40,6 +40,7 @@ local suites = {
 	require("./PromptBank.test"),
 	require("./DayCycle.test"),
 	require("./LabelSpread.test"),
+	require("./Daily.test"),
 }
 
 for _, suite in suites do

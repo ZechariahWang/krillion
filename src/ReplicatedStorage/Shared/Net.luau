@@ -144,6 +144,14 @@ export type ChestResultPayload = {
 	refund: number?, -- Shells paid back for a duplicate
 }
 
+-- DailyResult: what a DailyClaim did.
+export type DailyResultPayload = {
+	status: string, -- "ok" | "claimed" (today's is already claimed) | "closed" (off, or the profile is not ready)
+	index: number?, -- which day of the week was claimed
+	shells: number?,
+	chest: string?, -- the chest opened for free, if that day has one (its ChestResult follows)
+}
+
 -- ShopResult: why a Shells buy did or did not go through.
 export type ShopResultPayload = {
 	status: string, -- "ok" | "cash" | "owned" | "unknown"

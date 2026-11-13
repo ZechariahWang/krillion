@@ -186,6 +186,7 @@ local function sendProfile(player: Player)
 	payload.referrals = profile.referrals
 	payload.quests = profile.quests
 	payload.lobbyEarnedToday = Profile.lobbyEarned(profile, today())
+	payload.daily = profile.daily
 	payload.krillions = profile.krillions
 	payload.games = profile.games
 	payload.musicOff = profile.musicOff
@@ -640,6 +641,16 @@ function DataService.addLobbyEarned(player: Player, day: number, amount: number)
 	else
 		return
 	end
+	DataService.changed(player)
+end
+
+-- Records a daily reward claim (Shared/Daily state: the UTC day and which day of the week it was).
+function DataService.setDaily(player: Player, daily: Profile.DailyState)
+	local current = session(player)
+	if current == nil then
+		return
+	end
+	current.daily = { day = daily.day, streak = daily.streak }
 	DataService.changed(player)
 end
 

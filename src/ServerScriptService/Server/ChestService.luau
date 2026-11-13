@@ -76,6 +76,33 @@ local function reply(player: Player, payload: { [string]: any })
 	Net.event("ChestResult"):FireClient(player, payload)
 end
 
+-- Rolls one item from the chest and grants it, or pays the duplicate refund when it is already owned. The
+-- caller has taken any payment.
+local function rollAndGrant(player: Player, chest: Chests.Chest)
+	local profile = DataService.get(player)
+	if profile == nil then
+		return
+	end
+	local itemId = Chests.roll(chest, random:NextNumber())
+	local item = Cosmetics.ById[itemId]
+	if item == nil then
+		warn("ChestService: " .. chest.id .. " rolled unknown item " .. tostring(itemId) .. "; refunding")
+		StoreService.grantShells(player, chest.price, "refund")
+		return reply(player, { chest = chest.id, status = "refunded", refund = chest.price })
+	end
+	local duplicate = profile.owned[itemId] == true
+	local refund = 0
+	if duplicate then
+		refund = Chests.refund(chest)
+		StoreService.grantShells(player, refund, "refund")
+	else
+		DataService.grantItem(player, itemId)
+		DataService.equip(player, item.slot, itemId)
+		CosmeticService.refresh(player)
+	end
+	reply(player, { chest = chest.id, status = "ok", item = itemId, duplicate = duplicate, refund = refund })
+end
+
 local function open(player: Player, chestId: any)
 	if typeof(chestId) ~= "string" then
 		return
@@ -107,25 +134,16 @@ local function open(player: Player, chestId: any)
 	end
 	lastOpen[player] = now
 	opened[player] = (opened[player] or 0) + 1
+	rollAndGrant(player, chest)
+end
 
-	local itemId = Chests.roll(chest, random:NextNumber())
-	local item = Cosmetics.ById[itemId]
-	if item == nil then
-		warn("ChestService: " .. chestId .. " rolled unknown item " .. tostring(itemId) .. "; refunding")
-		StoreService.grantShells(player, chest.price, "refund")
-		return reply(player, { chest = chestId, status = "refunded", refund = chest.price })
+-- Opens a chest that was given, not bought (the daily reward): no price, no cooldown, and no policy check,
+-- because nothing is paid for it. The client hears ChestResult as for any chest.
+function ChestService.openFree(player: Player, chestId: string)
+	local chest = Chests.ById[chestId]
+	if chest ~= nil and DataService.get(player) ~= nil then
+		rollAndGrant(player, chest)
 	end
-	local duplicate = profile.owned[itemId] == true
-	local refund = 0
-	if duplicate then
-		refund = Chests.refund(chest)
-		StoreService.grantShells(player, refund, "refund")
-	else
-		DataService.grantItem(player, itemId)
-		DataService.equip(player, item.slot, itemId)
-		CosmeticService.refresh(player)
-	end
-	reply(player, { chest = chestId, status = "ok", item = itemId, duplicate = duplicate, refund = refund })
 end
 
 function ChestService.start()
