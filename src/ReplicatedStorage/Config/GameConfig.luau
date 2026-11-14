@@ -122,12 +122,13 @@ local GameConfig = {
 		JoinDataWaitSeconds = 5, -- join data can arrive a few seconds after the player
 	},
 	Reveal = {
-		-- Your full-screen dive card: the dive is long enough to watch the answer sink through the tiers
-		-- (Depth.diveSeconds, at most CardBudgetSeconds), the card holds CardHoldSeconds on the result after
-		-- the stamp settles (~0.3 s), then shrinks away (0.25 s). That is about 7 s at most, so it is gone
-		-- before the rise at RaiseDelaySeconds. tests/Depth.test.luau keeps these in step with each other.
+		-- Your full-screen dive card: the pack is slow enough to watch the answers sink through the tiers
+		-- (Depth.diveSeconds for the deepest one; every tag has landed by CardBudgetSeconds), the view moves to
+		-- the deepest answer and crowns it (under 1.5 s), the card holds CardHoldSeconds, or what is left before
+		-- the rise, then shrinks away (0.25 s). It is always gone before the rise at RaiseDelaySeconds.
+		-- tests/Depth.test.luau keeps these in step with each other.
 		CardBudgetSeconds = 5,
-		CardHoldSeconds = 1.9, -- long enough to zoom out and read everyone's dives
+		CardHoldSeconds = 1.9, -- long enough to read the result and see who went deepest
 		RaiseDelaySeconds = 7.5, -- pillars start rising this long after the reveal, once your card is out of the way
 		PayoutDelaySeconds = 7.5, -- answer Shells and Mythic announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt

@@ -111,9 +111,15 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   starters' screens to black and the server teleports them; Starting is the 3-2-1 on the pillars
   (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
   `StartCountdownSeconds`.
-- Reveal: your dive card carries everyone else's answers too (`DiveCard` options `peers`, one
-  `Templates.DiveCard...PeerTag` each, in left, right and middle lanes). Once your stamp settles the view zooms
-  out so the deepest answer sits above the stamp, and the round's deepest tag shows its `Crown`.
+- Reveal: your dive card slides in and carries everyone's answers (`DiveCard` options `peers`; a player with
+  no answer is left to the answers list). Each is a `Templates.DiveCard...PeerTag` (the player's picture in a
+  circle, or a bot's initial, then the answer), yours too. `Shared/DivePack` (pure, tested) gives every tag a
+  lane and sinks them as a pack, so tags never overlap; lanes stay clear of the zone labels and the ruler.
+  The view follows your tag, then glides to the round's deepest answer and shows its `Crown` (ties share
+  it). When that answer is Rare or better the tags that stopped short drift away first, and the crowned tag
+  ends in the middle, larger, when it is alone on screen. Nothing is drawn over the tags: a zone you cross
+  flashes its own label, and the streak callout waits for the card to leave. Do not rotate anything inside
+  the water window: a rotated GuiObject is not clipped by `ClipsDescendants`.
 - Deepest dive: RoundService keeps the match's deepest accepted answer and sends it as `MatchEnded.deepest`;
   `Results.Panel.Deepest` (authored) shows it with your all-time best under it. The best is saved in the profile
   (`deepest`, `deepestAnswer`, keeps the max); `DataService.recordDive` flags a beaten best as the reveal row's
