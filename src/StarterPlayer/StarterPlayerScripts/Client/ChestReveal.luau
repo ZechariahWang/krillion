@@ -24,6 +24,7 @@ local WIND_UP = 1.1 -- the chest always shakes at least this long, so even an in
 local TIMEOUT = 6 -- no reply by then: give up and close
 local TICK_EVERY = 0.13
 local RAY_SPIN = 14 -- degrees per second
+local CARD_MARGIN = 16 -- pixels the prize card keeps clear of the screen edges
 local CONFETTI: { [string]: number } = { Common = 0, Rare = 30, Epic = 60, Legendary = 100, Mythic = 150 }
 
 local screen: Frame? = nil
@@ -82,6 +83,16 @@ local function setButton(button: TextButton, text: string, enabled: boolean)
 	button.Active = enabled
 	button.AutoButtonColor = enabled
 	button.BackgroundTransparency = if enabled then 0 else 0.65
+end
+
+-- The prize card's scale: full size, or smaller on a screen too short or narrow for it (a phone).
+local function cardFit(root: Frame, card: Frame, scale: UIScale): number
+	local shown = math.max(scale.Scale, 0.01)
+	local width = math.max(card.AbsoluteSize.X / shown, 1)
+	local height = math.max(card.AbsoluteSize.Y / shown, 1)
+	local wide = (root.AbsoluteSize.X - CARD_MARGIN * 2) / width
+	local tall = (root.AbsoluteSize.Y - CARD_MARGIN * 2) / height
+	return math.clamp(math.min(wide, tall), 0.1, 1)
 end
 
 -- Shows the prize. `chest` is the one that was opened, for the AGAIN price.
@@ -158,8 +169,9 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 	card.Visible = true
 	local cardScale = scaleOf(card)
 	if cardScale ~= nil then
-		cardScale.Scale = 0.3
-		tween(cardScale, 0.45, { Scale = 1 }, Enum.EasingStyle.Back)
+		local full = cardFit(root, card, cardScale)
+		cardScale.Scale = 0.3 * full
+		tween(cardScale, 0.45, { Scale = full }, Enum.EasingStyle.Back)
 	end
 	local iconScale = scaleOf(itemIcon)
 	if iconScale ~= nil then
@@ -170,10 +182,20 @@ local function reveal(chest: Chests.Chest, payload: Net.ChestResultPayload)
 end
 
 -- Shows the chest and asks the server to open it. Does nothing while another chest is still opening.
-function ChestReveal.open(chestId: string)
+-- `request` replaces the usual paid ChestOpen for a chest the server opens another way (the daily reward).
+function ChestReveal.open(chestId: string, request: (() -> ())?)
 	local root = screen
 	local chest = Chests.ById[chestId]
-	if root == nil or chest == nil or busy then
+	if chest == nil or busy then
+		return
+	end
+	if root == nil then
+		-- No reveal screen (not found yet, or missing): the chest still opens, and Market toasts the prize.
+		if request ~= nil then
+			request()
+		else
+			Net.event("ChestOpen"):FireServer(chestId)
+		end
 		return
 	end
 	busy = true
@@ -237,7 +259,11 @@ function ChestReveal.open(chestId: string)
 		reply:Disconnect()
 		result = payload
 	end)
-	Net.event("ChestOpen"):FireServer(chestId)
+	if request ~= nil then
+		request()
+	else
+		Net.event("ChestOpen"):FireServer(chestId)
+	end
 
 	task.spawn(function()
 		while result == nil and os.clock() - started < TIMEOUT and token == mine do
@@ -278,11 +304,26 @@ function ChestReveal.init(playerGui: PlayerGui)
 			warn("[ChestReveal] SharedUi.ChestReveal is missing; chests open without a reveal")
 			return
 		end
-		screen = found
 		found.Visible = false
-		local card = found:FindFirstChild("Card") :: Frame
-		local again = card:FindFirstChild("Again") :: TextButton
-		local done = card:FindFirstChild("Done") :: TextButton
+		local cardFound = found:FindFirstChild("Card")
+		local againFound = if cardFound ~= nil then cardFound:FindFirstChild("Again") else nil
+		local doneFound = if cardFound ~= nil then cardFound:FindFirstChild("Done") else nil
+		local whole = cardFound ~= nil
+			and againFound ~= nil
+			and againFound:IsA("TextButton")
+			and doneFound ~= nil
+			and doneFound:IsA("TextButton")
+			and found:FindFirstChild("Chest") ~= nil
+			and found:FindFirstChild("Glow") ~= nil
+		if not whole then
+			warn("[ChestReveal] SharedUi.ChestReveal is missing a piece; chests open without a reveal")
+			return
+		end
+		-- Only a complete screen is used: a half-built one could open and never close.
+		screen = found
+		local card = cardFound :: Frame
+		local again = againFound :: TextButton
+		local done = doneFound :: TextButton
 		Ui.pressable(again)
 		Ui.pressable(done)
 		again.MouseButton1Click:Connect(function()

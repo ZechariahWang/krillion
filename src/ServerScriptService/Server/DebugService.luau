@@ -9,6 +9,9 @@
 --   tutorial <user> reset                   clear tutorialDone so the first-visit tutorial shows again
 --   stats <promptId>                        recorded answer counts for a prompt
 --   flush                                   write pending answer counts now
+--   join <user>                             the JoinMatch path (late join), as if the player pressed JOIN
+--   erase <userId>                          delete everything saved for a user id (a right-to-erasure request)
+--   daily <user> <n>                        set the daily reward as if day n was claimed yesterday (0 clears it)
 -- <user> is a user id (negative in local test servers) or a player's name.
 -- Inert in live servers: the BindableFunction is only created when RunService:IsStudio().
 -- Studio with API access writes the LIVE Profile_v1 DataStore, so shells/boost/quest/tutorial changes persist.
@@ -223,8 +226,44 @@ commands.flush = function()
 	return "answer counts flushed"
 end
 
+-- Puts the daily reward where a test needs it: day n claimed yesterday, so today's claim is day n + 1.
+commands.daily = function(args)
+	local player, why = loadedPlayer(args)
+	if player == nil then
+		return why
+	end
+	local streak = wholeNumber(args[2])
+	if streak == nil or streak < 0 then
+		return "usage: daily <user> <n>"
+	end
+	local yesterday = math.floor(os.time() / 86400) - 1
+	DataService.setDaily(player, { day = if streak == 0 then 0 else yesterday, streak = streak })
+	return `{player.Name}: daily reward set to day {streak} claimed yesterday{PERSIST_NOTE}`
+end
+
+-- Takes a number only, never a name: an erasure request names a user id, and this cannot be undone.
+commands.erase = function(args)
+	local userId = wholeNumber(args[1])
+	if userId == nil then
+		return "usage: erase <userId>"
+	end
+	local _, line = DataService.erase(userId)
+	return line
+end
+
+-- Same as the JoinMatch remote: RoundService.tryJoin does every check, and the client gets its JoinResult.
+commands.join = function(args)
+	local player = findPlayer(args[1])
+	if player == nil then
+		return noPlayer(args[1])
+	end
+	local status, message = RoundService.tryJoin(player)
+	Net.event("JoinResult"):FireClient(player, { status = status, message = message })
+	return `{player.Name}: {status} ({message})`
+end
+
 local HELP = "commands: state, players, shells <user> <n>, boost <user> <Hint|ExtraTime> <n>, "
-	.. "quest <user> [questId n], tutorial <user> reset, stats <promptId>, flush"
+	.. "quest <user> [questId n], tutorial <user> reset, stats <promptId>, flush, join <user>"
 
 -- Accepts one command line or separate arguments: Invoke("shells -1 500") or Invoke("shells", -1, 500).
 local function run(...: any): string

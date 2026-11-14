@@ -231,20 +231,6 @@ local function applyName(player: Player)
 	tag.Parent = head
 end
 
--- The player's own pillar this match, if they have one standing.
-local function platformOf(player: Player): Instance?
-	local folder = workspace:FindFirstChild("Platforms")
-	if folder == nil then
-		return nil
-	end
-	for _, child in folder:GetChildren() do
-		if child:GetAttribute("OwnerUserId") == player.UserId then
-			return child
-		end
-	end
-	return nil
-end
-
 function CosmeticService.refresh(player: Player)
 	applyName(player)
 	applyTitle(player)

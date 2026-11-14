@@ -85,7 +85,6 @@ local AVOID: { { string } } = {
 	{ "Hud", "AnswerBar" },
 	{ "Spectate", "SpectateBar" },
 	{ "Spectate", "JoinCard" },
-	{ "Spectate", "WatchButton" },
 	{ "LobbyQuiz", "Panel" },
 }
 
@@ -372,12 +371,12 @@ local function fitStack(box: Frame)
 	end
 end
 
--- Pixels from the left edge: past the match hearts card when it shows along that edge.
+-- Pixels from the left edge: past the match's water meter when it shows along that edge.
 local function wantedLeft(): number
 	local left = EDGE
 	local playerGui = root
 	local hud = if playerGui ~= nil then Ui.findScreen(playerGui, "Hud") else nil
-	local meter = if hud ~= nil then hud:FindFirstChild("Vitals") else nil
+	local meter = if hud ~= nil then hud:FindFirstChild("WaterMeter") else nil
 	if meter ~= nil and meter:IsA("GuiObject") and isShowing(meter) then
 		local owner = meter:FindFirstAncestorWhichIsA("LayerCollector")
 		local origin = if owner ~= nil and owner:IsA("LayerCollector") then owner.AbsolutePosition.X else 0
@@ -445,8 +444,9 @@ function Toasts.show(text: string, kind: string?)
 	if type(text) ~= "string" then
 		return
 	end
-	-- Phones, on a pillar: the prompt, the box and the timer are all that shows.
-	if Ui.isPhone() and Players.LocalPlayer:GetAttribute("Playing") == true then
+	-- Phones, on a pillar: the prompt, the box and the timer are all that shows. A hint's toast still
+	-- comes through: it is the only thing that says why the box just filled itself in.
+	if Ui.isPhone() and Players.LocalPlayer:GetAttribute("Playing") == true and kind ~= "hint" then
 		return
 	end
 	local message = clip(string.match(text, "^%s*(.-)%s*$") or "")

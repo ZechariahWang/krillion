@@ -140,7 +140,7 @@ local function announceSunk(after: { number })
 		end
 	end
 	if iSank then
-		Toasts.show("THE TIDE GOT YOU!", "bad")
+		Toasts.show("THE WATER GOT YOU!", "bad")
 	end
 	local text = TideRules.sunkText(sunkNames, SUNK_NAMES)
 	if text ~= nil then

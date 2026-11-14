@@ -8,7 +8,7 @@
 local Products = {
 	-- Game pass ids. Perks: Vip (+10% earned Shells, Aurora skin, Gold Wake trail, VIP title and tag),
 	-- DoubleCash ("2X SHELLS", +100% earned Shells), SecondChance (one free revive every match, never in a
-	-- 1v1), BoostPlus (hint and +10s limit per match raised from GameConfig.Boosts.PerMatch to PerMatchPlus).
+	-- 1v1), BoostPlus (+10s limit per match raised from GameConfig.Boosts.PerMatch to PerMatchPlus).
 	Passes = {
 		Vip = 2074210408,
 		DoubleCash = 2074618471,
@@ -35,13 +35,16 @@ local Products = {
 	Revive = { productId = 3729794156, robux = 25 },
 	-- Bought on the revive card at the moment you sink, by someone with no revive in stock: revives at once.
 	ReviveNow = { productId = 3729794171, robux = 35 },
-	-- Each adds `count` to the boost inventory; the in-match buttons spend inventory before Shells.
+	-- Each adds `count` to the boost inventory, which the in-match buttons spend first. A hint has no other
+	-- price; +time falls back to Shells.
 	Boosts = {
 		Hint = { productId = 3729794185, robux = 15 },
 		ExtraTime = { productId = 3729794199, robux = 10 },
 	},
+	-- `retired` packs are not sold any more (a hint is 15 Robux each, every time); their receipts are still
+	-- honoured.
 	BoostPacks = {
-		{ productId = 3729794218, kind = "Hint", count = 3, robux = 35 },
+		{ productId = 3729794218, kind = "Hint", count = 3, robux = 35, retired = true },
 		{ productId = 3729794235, kind = "ExtraTime", count = 3, robux = 25 },
 	},
 	-- One time per player (profile.claimed.StarterPack): Shells plus a pet and a skin.

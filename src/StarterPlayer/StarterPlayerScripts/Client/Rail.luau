@@ -13,8 +13,9 @@ local UserInputService = game:GetService("UserInputService")
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local BUTTONS = { "QuestsButton", "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
+local BUTTONS = { "QuestsButton", "DailyButton", "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
 local HELP_SLOT = 1 -- top bar place right of the Settings gear
+local WATCH_SLOT = 2 -- the spectate eye, right of Help
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
 local MIN_FIT = 0.45
@@ -177,6 +178,19 @@ function Rail.init(playerGui: PlayerGui)
 		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeHelp)
 		help:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
 		placeHelp()
+	end
+	-- The spectate eye sits next to it. Client/Lobby shows it while a match is running and connects it.
+	local watch = found:FindFirstChild("WatchButton")
+	if watch ~= nil and watch:IsA("TextButton") then
+		buttons.WatchButton = watch
+		watch.Visible = false
+		Ui.pressable(watch)
+		local function placeWatch()
+			Ui.placeTopButton(watch, WATCH_SLOT)
+		end
+		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeWatch)
+		watch:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeWatch)
+		placeWatch()
 	end
 	Windows.Changed.connect(refresh)
 	refresh()

@@ -1,7 +1,6 @@
 --!strict
--- Tags every other pillar with its answer once the pillars rise (ReplicatedStorage.Templates.AnswerTag,
--- or a Studio-authored NameTag.AnswerText if the template ever gains one), and hides your own pillar's name
--- tag locally so it never blocks your view.
+-- Tags every other pillar with its answer once the pillars rise (a clone of
+-- ReplicatedStorage.Templates.AnswerTag floating over the pillar top). Pillars carry no name.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -10,13 +9,12 @@ local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Ui = require(script.Parent.Ui)
 
-local TAG_GAP = 4 -- pixels between a pillar's name tag and its answer tag
-local TAG_STUDS = 2.5 -- fallback lift when the name tag is sized in studs
+local TAG_ABOVE_TOP = 9 -- studs the answer tag floats over the pillar top
 local MATCH_PHASES: { [string]: boolean } = { Prompt = true, Reveal = true, Surge = true }
 
 type Tag = {
 	label: TextLabel,
-	billboard: BillboardGui?, -- our clone; nil when the label is a Studio-authored NameTag.AnswerText
+	billboard: BillboardGui,
 	border: UIStroke?,
 }
 
@@ -39,52 +37,10 @@ local function platformFor(userId: number): BasePart?
 	return nil
 end
 
-local function nameTagOf(platform: Instance): BillboardGui?
-	local tag = platform:FindFirstChild("NameTag")
-	if tag ~= nil and tag:IsA("BillboardGui") then
-		return tag
-	end
-	return nil
-end
-
--- Puts our tag just above the pillar's name tag, wherever the template places that.
-local function placeAbove(tag: BillboardGui, nameTag: BillboardGui?)
-	if nameTag == nil then
-		tag.StudsOffsetWorldSpace = Vector3.new(0, GameConfig.Platform.Height / 2 + 8, 0)
-		return
-	end
-	tag.Adornee = nameTag.Adornee
-	tag.StudsOffset = nameTag.StudsOffset
-	tag.StudsOffsetWorldSpace = nameTag.StudsOffsetWorldSpace
-	tag.ExtentsOffset = nameTag.ExtentsOffset
-	tag.ExtentsOffsetWorldSpace = nameTag.ExtentsOffsetWorldSpace
-	tag.MaxDistance = nameTag.MaxDistance
-	tag.AlwaysOnTop = nameTag.AlwaysOnTop
-	local nameSize = nameTag.Size
-	local tagSize = tag.Size
-	if nameSize.Y.Scale == 0 and tagSize.Y.Scale == 0 and tagSize.Y.Offset > 0 then
-		-- Both sized in pixels: SizeOffset stacks ours on top at any distance.
-		local nameHeight = nameSize.Y.Offset
-		local tagHeight = tagSize.Y.Offset
-		local lift = nameTag.SizeOffset.Y * nameHeight + (nameHeight + tagHeight) / 2 + TAG_GAP
-		local shiftX = nameTag.SizeOffset.X * nameSize.X.Offset / math.max(tagSize.X.Offset, 1)
-		tag.SizeOffset = Vector2.new(shiftX, lift / tagHeight)
-	else
-		tag.StudsOffset = nameTag.StudsOffset + Vector3.new(0, TAG_STUDS, 0)
-	end
-end
-
 local function tagFor(platform: BasePart): Tag?
 	local existing = tags[platform]
 	if existing ~= nil then
 		return existing
-	end
-	local nameTag = nameTagOf(platform)
-	local authored = if nameTag ~= nil then nameTag:FindFirstChild("AnswerText") else nil
-	if authored ~= nil and authored:IsA("TextLabel") then
-		local tag: Tag = { label = authored, billboard = nil, border = nil }
-		tags[platform] = tag
-		return tag
 	end
 	local templates = ReplicatedStorage:FindFirstChild("Templates")
 	local template = if templates ~= nil then templates:FindFirstChild("AnswerTag") else nil
@@ -99,7 +55,7 @@ local function tagFor(platform: BasePart): Tag?
 		return nil
 	end
 	clone.Enabled = false
-	placeAbove(clone, nameTag)
+	clone.StudsOffsetWorldSpace = Vector3.new(0, GameConfig.Platform.Height / 2 + TAG_ABOVE_TOP, 0)
 	clone.Parent = platform
 	Ui.bindGui(clone)
 	local stroke = if pill ~= nil then pill:FindFirstChild("Border") else nil
@@ -112,22 +68,13 @@ local function tagFor(platform: BasePart): Tag?
 	return tag
 end
 
-local function setTagShown(tag: Tag, shown: boolean)
-	local billboard = tag.billboard
-	if billboard ~= nil then
-		billboard.Enabled = shown
-	else
-		tag.label.Visible = shown
-	end
-end
-
 local function hideTags()
 	revealToken += 1
 	for platform, tag in tags do
 		if platform.Parent == nil then
 			tags[platform] = nil
 		else
-			setTagShown(tag, false)
+			tag.billboard.Enabled = false
 		end
 	end
 end
@@ -145,17 +92,8 @@ local function showTags(revealRows)
 			if border ~= nil then
 				border.Color = color
 			end
-			setTagShown(tag, true)
+			tag.billboard.Enabled = true
 		end
-	end
-end
-
--- Your own name tag sits right over your head from the default camera, so it is hidden for you only.
-local function hideOwnNameTag()
-	local platform = platformFor(Players.LocalPlayer.UserId)
-	local nameTag = if platform ~= nil then nameTagOf(platform) else nil
-	if nameTag ~= nil and nameTag.Enabled then
-		nameTag.Enabled = false
 	end
 end
 
@@ -163,9 +101,6 @@ end
 function PillarTags.onState(payload)
 	local previous = phase
 	phase = payload.phase
-	if MATCH_PHASES[phase] then
-		hideOwnNameTag()
-	end
 	-- A new question clears the pillar tags; so does leaving the match.
 	if phase == "Prompt" and previous ~= "Prompt" then
 		hideTags()

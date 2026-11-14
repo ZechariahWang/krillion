@@ -1,9 +1,10 @@
 --!strict
--- In-match boosts for whoever holds the crab: Hint (a masked Rare/Deep Cut answer nobody has used) and
--- ExtraTime (+10 s on the fuse).
--- Paid from the boost inventory first, then Shells; Robux products only add inventory. A Robux buy made
--- mid-prompt is applied when its receipt lands (the client asks with pay "inventory" and the server
--- remembers the request), so a slow receipt never falls through to spending Shells.
+-- In-match boosts: Hint (the best answer nobody has locked in, Mythic whenever one is left, locked in for
+-- you at once) and ExtraTime (+10 s for you only).
+-- Paid from the boost inventory first; ExtraTime then falls back to Shells, a Hint never does (hints are
+-- only bought with Robux). Robux products only add inventory. A Robux buy made mid-prompt is applied when
+-- its receipt lands (the client asks with pay "inventory" and the server remembers the request), so a slow
+-- receipt never falls through to spending Shells.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -21,7 +22,6 @@ local StoreService = require(script.Parent.StoreService)
 local KINDS = { Hint = true, ExtraTime = true }
 
 local usage: { [Player]: Boosts.Usage } = {}
-local hinted: { [Player]: { [string]: boolean } } = {} -- answers already hinted to this player this prompt
 local lastRequest: { [Player]: number } = {}
 -- A boost bought with Robux that is waiting for its receipt: applied by the product handler if it lands
 -- before `expires`, otherwise the bought boost just stays in the inventory.
@@ -44,13 +44,6 @@ function BoostService.usesFor(player: Player): Net.BoostUses
 	return { Hint = round.Hint, ExtraTime = round.ExtraTime }
 end
 
-local function costOf(kind: string): number
-	if kind == "Hint" then
-		return GameConfig.Boosts.HintShells
-	end
-	return GameConfig.Boosts.ExtraTimeShells
-end
-
 local function inventoryOf(player: Player, kind: string): number
 	local profile = DataService.get(player)
 	if profile == nil then
@@ -59,8 +52,19 @@ local function inventoryOf(player: Player, kind: string): number
 	return if kind == "Hint" then profile.hints else profile.extraTimes
 end
 
+-- How many more +time boosts this player may use this match.
+local function timeLeftThisMatch(player: Player): number
+	local limits = Boosts.limitsFor(StoreService.ownsPass(player, "BoostPlus"))
+	return math.max(0, limits.PerMatch - usageOf(player).match.ExtraTime)
+end
+
 local function reply(player: Player, kind: string, status: string, extra: { [string]: any }?): string
-	local payload: { [string]: any } = { kind = kind, status = status, uses = BoostService.usesFor(player) }
+	local payload: { [string]: any } = {
+		kind = kind,
+		status = status,
+		uses = BoostService.usesFor(player),
+		timeLeftThisMatch = timeLeftThisMatch(player),
+	}
 	if extra ~= nil then
 		for key, value in extra do
 			payload[key] = value
@@ -70,21 +74,17 @@ local function reply(player: Player, kind: string, status: string, extra: { [str
 	return status
 end
 
--- The hint this player would get now, without using it: display spelling, tier name, bank answer.
-local function findHint(player: Player): (string?, string?, string?)
+-- The hint a player would get now, without using it: display spelling, tier name, bank answer.
+local function findHint(): (string?, string?, string?)
 	local answers = AnswerService.currentAnswersByTier()
 	if answers == nil then
 		return nil, nil, nil
 	end
-	local excluded = AnswerService.usedAnswers()
-	for answer in hinted[player] or {} do
-		excluded[answer] = true
-	end
-	return Boosts.pickHint(answers, GameConfig.Boosts.HintMinTier, GameConfig.Boosts.HintMaxTier, excluded, math.random())
+	return Boosts.pickHint(answers, AnswerService.lockedCorrected(), math.random())
 end
 
--- Uses one boost for the player. pay: "auto" (inventory, then Shells) | "inventory" (a Robux purchase
--- that just landed; never falls back to Shells). Returns the BoostResult status it sent.
+-- Uses one boost for the player. pay: "auto" (inventory, then Shells for ExtraTime) | "inventory" (a Robux
+-- purchase that just landed; never falls back to Shells). Returns the BoostResult status it sent.
 -- Everything is checked before anything is paid, so no path needs a refund.
 function BoostService.apply(player: Player, kind: string, pay: string?): string
 	if GameConfig.Boosts.Enabled == 0 then
@@ -100,30 +100,38 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 	end
 	local display: string?, tier: string?, answer: string? = nil, nil, nil
 	if kind == "Hint" then
-		display, tier, answer = findHint(player)
+		display, tier, answer = findHint()
 		if display == nil or tier == nil or answer == nil then
 			return reply(player, kind, "none")
 		end
 	end
 
-	if inventoryOf(player, kind) > 0 then
-		DataService.spendBoost(player, kind)
-	elseif pay == "inventory" then
+	local owned = inventoryOf(player, kind) > 0
+	if not owned and pay == "inventory" then
 		-- The receipt has not landed yet; the product handler finishes this request when it does.
 		pending[player] = { kind = kind, expires = os.clock() + GameConfig.Boosts.PurchaseWaitSeconds }
 		return reply(player, kind, "pending")
-	elseif not StoreService.spendShells(player, costOf(kind), "spend") then
-		return reply(player, kind, "no_shells")
 	end
-
-	Boosts.noteUse(usageOf(player), kind)
 	if kind == "Hint" then
-		local seen = hinted[player] or {}
-		hinted[player] = seen
-		seen[answer :: string] = true
+		if not owned then
+			return reply(player, kind, "no_hints")
+		end
+		-- The answer is locked in first, so a hint that cannot be used is never paid for.
+		if not AnswerService.lockIn(player, answer :: string) then
+			return reply(player, kind, "closed")
+		end
+		DataService.spendBoost(player, kind)
+		Boosts.noteUse(usageOf(player), kind)
 		local label = Tiers.ByName[tier :: string].label
 		return reply(player, kind, "ok", { hint = Boosts.hintText(label, display :: string) })
 	end
+
+	if owned then
+		DataService.spendBoost(player, kind)
+	elseif not StoreService.spendShells(player, GameConfig.Boosts.ExtraTimeShells, "spend") then
+		return reply(player, kind, "no_shells")
+	end
+	Boosts.noteUse(usageOf(player), kind)
 	local secondsLeft = AnswerService.extend(player, GameConfig.Boosts.ExtraTimeSeconds)
 	return reply(player, kind, "ok", { secondsLeft = secondsLeft })
 end
@@ -138,6 +146,8 @@ local function onBoostBought(player: Player, kind: string, count: number?)
 	end
 	pending[player] = nil
 	if os.clock() > waiting.expires then
+		-- Too late to use it for them: it is in their stock, and they are told so.
+		reply(player, kind, "stocked")
 		return
 	end
 	-- Deferred so the receipt handler finishes (and saves) before the boost is spent.
@@ -169,12 +179,11 @@ function BoostService.start()
 		end)
 	end
 
-	-- One of each per question: the count, hints given and any waiting purchase reset on every question.
+	-- The +time round count and any waiting purchase reset on every prompt.
 	MatchEvents.PromptOpened.connect(function()
 		for _, uses in usage do
 			uses.round = Boosts.newUses()
 		end
-		hinted = {}
 		pending = {}
 	end)
 	MatchEvents.MatchStarted.connect(function()
@@ -182,7 +191,6 @@ function BoostService.start()
 	end)
 	Players.PlayerRemoving:Connect(function(player)
 		usage[player] = nil
-		hinted[player] = nil
 		lastRequest[player] = nil
 		pending[player] = nil
 	end)

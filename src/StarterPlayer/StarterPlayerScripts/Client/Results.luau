@@ -20,6 +20,7 @@ local winnerText: TextLabel
 local podium: Frame
 local nextText: TextLabel
 
+local footer = "" -- what the results footer says before its countdown
 local reachedRound = 0 -- the last round this player was on a pillar for, this match
 local ready = false
 local missing: string? = nil
@@ -74,16 +75,16 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 	else
 		won = payload.winnerName == Players.LocalPlayer.DisplayName
 	end
-	-- A solo dive has no winner to name: show how far the player got instead.
+	-- A solo match has no winner to name: show how far the player got instead.
 	if payload.solo then
-		titleText.Text = "SOLO RUN"
+		titleText.Text = "SOLO MATCH"
 		winnerText.Text = "SURVIVED " .. math.max(0, payload.rounds - 1) .. " ROUNDS"
 	elseif won then
 		titleText.Text = "VICTORY!"
 		winnerText.Text = string.upper(payload.winnerName)
 	else
-		titleText.Text = "LAST ONE FLOATING"
-		winnerText.Text = string.upper(payload.winnerName)
+		titleText.Text = "MATCH OVER"
+		winnerText.Text = "WINNER: " .. string.upper(payload.winnerName)
 	end
 	-- The authored trophies either side of the title show for a win only.
 	for _, name in { "TrophyLeft", "TrophyRight" } do
@@ -105,7 +106,9 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 			end
 		end
 	end
-	nextText.Text = "NEXT MATCH IN " .. payload.seconds
+	-- Anyone who went under sees how far they got, beside the countdown.
+	footer = if not won and not payload.solo and reachedRound > 0 then "YOU REACHED ROUND " .. reachedRound .. "  |  " else ""
+	nextText.Text = footer .. "NEXT MATCH IN " .. payload.seconds
 	gui.Visible = true
 	-- A win lands with the big bounce; any other ending still pops, the panel is the moment.
 	if won then
@@ -130,11 +133,11 @@ function Results.onState(payload: Net.RoundStatePayload)
 	if not ready then
 		return
 	end
-	if payload.playing and (payload.phase == "Prompt" or payload.phase == "Reveal") then
+	if payload.playing and (payload.phase == "Prompt" or payload.phase == "Reveal" or payload.phase == "Surge") then
 		reachedRound = math.max(reachedRound, payload.round)
 	end
 	if payload.phase == "Results" then
-		nextText.Text = "NEXT MATCH IN " .. payload.secondsLeft
+		nextText.Text = footer .. "NEXT MATCH IN " .. payload.secondsLeft
 	else
 		gui.Visible = false
 	end

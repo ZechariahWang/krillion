@@ -1,6 +1,6 @@
 --!strict
 -- Shrinks world labels with distance, on this client. Every UIScale named "DistanceScale" inside a BillboardGui
--- (pillar name tags, answer tags, titles, the AFK tag; authored in Studio) is full size up to NEAR_STUDS away
+-- (head labels, pillar answer tags; authored in Studio) is full size up to NEAR_STUDS away
 -- and shrinks in proportion beyond that, so a far label stays in scale with its pillar instead of covering it.
 
 local RunService = game:GetService("RunService")

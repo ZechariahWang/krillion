@@ -73,7 +73,7 @@ local Theme = {
 		Danger = Color3.fromRGB(255, 84, 84),
 		Good = Color3.fromRGB(70, 214, 110),
 	},
-	-- The chunky toy look for big pop-ups (callouts, eliminated card, revive, results): saturated fills
+	-- The chunky toy look for big pop-ups (callouts, revive, results): saturated fills
 	-- shaded lighter at the top and darker at the bottom, a hard darker lip band along the bottom edge,
 	-- thick dark borders, big corners and big outlined FredokaOne text. Model.json files cannot require
 	-- Theme, so the values are spelled out for them:
@@ -110,7 +110,7 @@ local Theme = {
 		Grow = {
 			Callout = 1.6,
 			CoinPop = 1.5,
-			Card = 1.5, -- eliminated card and revive card
+			Card = 1.5, -- the revive card
 			Results = 1.4,
 		},
 	},

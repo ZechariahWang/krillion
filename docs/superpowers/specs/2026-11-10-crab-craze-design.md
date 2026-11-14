@@ -1,6 +1,11 @@
 # Crab Craze: the new main gamemode
 
-Date: 2026-11-10. Branch: `feat/puffer-party`. Status: built (2026-11-10). Section 8 lists what differs from the plan and what is still to check.
+> **Reverted 2026-11-13.** Crab Craze was built, tried for three days and taken out again. The rising-water
+> mode is the live game. Crab Craze is kept at git tag `mode/crab-craze` (its Studio pieces are in
+> `ServerStorage.CrabCrazeInstances`). This document is history: nothing in it describes the current game,
+> and the `ModeArchive` it mentions has been deleted.
+
+Date: 2026-11-10. Branch: `feat/puffer-party`. Status: plan with decisions made (section 7), nothing built yet.
 
 Goal: replace the rising-water mode with a hot-potato mode modelled on Krillion's Puffer Party, with a crab in
 place of the puffer. The rising-water mode is archived so it can come back later.
@@ -167,22 +172,3 @@ One commit per step; tests, syntax check and `rojo build` green at each.
 5. **The mode is called Crab Craze** on screen. The game stays Rare or Sink.
 
 One reading of mine to confirm: a pillar still sinks when its player runs out of hearts.
-
-## 8. As built
-
-Differences from the plan above:
-
-- `WaterService` stays, trimmed: the water rests at one level and its poll still finds players who fall in
-  (they are out at once).
-- The used answers show on the chip under the status row (`Status.Tide`), not on a new Hud strip.
-- Answer Shells pay as the crab is passed (`Reveal.PayoutDelaySeconds` is 0).
-- A bot that draws a blank thinks again, so it is only pinched when it was handed a short fuse
-  (`Crab.BotDelayMin` / `BotDelayMax`).
-- The archive also holds `PlayerService`, `Boosts`, `Net` and the two entry scripts, so it is a full snapshot of
-  everything the new mode touched.
-
-Checked in a Studio play test: the loop with bots, a refused and an accepted answer, the pass and the used
-list, the meter, a pinch and lost heart, the crab's moods, a match ending.
-
-Not yet checked in play: an extra heart at 600, a revive, the Hint and +10 SEC boosts, the heart pips over
-other pillars after their canvas fix, phone layout, and more than one real player.

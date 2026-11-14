@@ -1,14 +1,18 @@
 --!strict
--- Drives StarterGui.Status: the top status line (the question, on a plate), the bar under it (whose turn it
--- is, or a countdown, beside the alive count), the chip under that with what the holder is typing, and
--- the chip under that, which lists the answers the question has used up. Shown in every phase.
+-- Drives StarterGui.Status: the top status line (with accent underline), the time | alive bar under it,
+-- and the tide chip that says how far the water rises this round and, while you play, what tier keeps you
+-- afloat. Tide.luau flashes SAFE on the chip after a surge. Shown in every phase.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
-local Net = require(ReplicatedStorage.Shared.Net)
+local Tiers = require(ReplicatedStorage.Config.Tiers)
+local TideRules = require(ReplicatedStorage.Shared.Tide)
+local Fx = require(script.Parent.Fx)
 local Icons = require(script.Parent.Icons)
+local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
@@ -24,25 +28,29 @@ local aliveText: TextLabel
 local tide: Frame
 local tideAccent: Frame
 local tideText: TextLabel
-local typing: Frame
-local typingText: TextLabel
-local typingFrom: number? = nil -- whose live typing the chip shows; nil while it shows an accepted answer
 
 local lastStatus = ""
 local lastPrompt = ""
-local lastUsed = 0 -- how many used answers the chip last showed, so it only bumps when one is added
+local lastRound = 0
+local lastTick = "" -- round and second of the last danger tick, so extra broadcasts never double-tick
+local lastNeed = "" -- the need hint last shown, so the chip only bumps when it changes
 local lastPayload: any = nil
 local flashToken = 0
 local flashUntil = 0
 local flashText = ""
 local flashColor = Theme.Color.Green
 
-local TIDE_WIDTH = 0.26 -- wider than authored so a long list of used answers stays readable
+local TIDE_WIDTH = 0.26 -- wider than authored so the need hint fits beside a special-round prefix
 local PLATE_PAD_X = 28 -- pixels of plate either side of the status text
 -- The plate is centred on the status line and a little shorter than its box (the box includes the font's
 -- empty ascender and descender room), so the letters sit in the middle and its border clears the timer row.
 local PLATE_HEIGHT = 0.9 -- of the status line's height
 local PLATE_BORDER_PER_PIXEL = 1 / 200 -- border thickness per pixel of screen height, up to the chunky border
+
+local SPECIAL_NAMES = {
+	TidalWave = "TIDAL WAVE",
+	DoubleLift = "DOUBLE LIFT",
+}
 
 local Status = {}
 
@@ -83,8 +91,6 @@ function Status.init(playerGui: PlayerGui)
 	local tideFound = waitChild(gui, "Tide")
 	local accentFound = waitChild(tideFound, "Accent")
 	local tideTextFound = waitChild(tideFound, "Text")
-	local typingFound = waitChild(gui, "Typing")
-	local typingTextFound = waitChild(typingFound, "Text")
 	local plateFound = waitChild(frameFound, "Plate")
 	if gui == nil or missing ~= nil then
 		warn("Status: SharedUi.Status is missing " .. (missing or "entirely") .. "; no status chips")
@@ -108,10 +114,7 @@ function Status.init(playerGui: PlayerGui)
 	tide = tideFound :: Frame
 	tideAccent = accentFound :: Frame
 	tideText = tideTextFound :: TextLabel
-	typing = typingFound :: Frame
-	typingText = typingTextFound :: TextLabel
-	typing.Visible = false
-	-- A flash is coloured inline, so the chip takes rich text.
+	-- The need hint is coloured inline so the accent keeps the special round's colour.
 	tideText.RichText = true
 	tide.Size = UDim2.new(math.max(tide.Size.X.Scale, TIDE_WIDTH), tide.Size.X.Offset, tide.Size.Y.Scale, tide.Size.Y.Offset)
 
@@ -141,31 +144,73 @@ local function tinted(text: string, color: Color3): string
 	return '<font color="#' .. color:ToHex() .. '">' .. text .. "</font>"
 end
 
--- The chip under the status row: the answers this question has used up, newest last. A flash (a pinch,
--- an extra heart) shows over it for a moment.
-local function updateChip(payload)
+-- The same hint in a word or two, for the small slot a phone has: "SAFE", "ANY", "RARE+", "MYTHIC!".
+local function needShort(payload): string
+	local need = TideRules.needTier(payload.height, payload.waterY, payload.surge, payload.special)
+	if need == "safe" then
+		return tinted("SAFE", Theme.Color.Green)
+	elseif need == "none" then
+		return tinted("MYTHIC!", Theme.Color.Red)
+	elseif Tiers.index(need) == 1 then
+		return tinted("ANY", Theme.Tier.Plankton)
+	end
+	local tierColors: { [string]: Color3 } = Theme.Tier :: any
+	return tinted("NEED " .. string.upper(Tiers.ByName[need].label) .. "+", tierColors[need] or Theme.Color.Cream)
+end
+
+-- "RARE+ TO SURVIVE" in the tier colour, "SAFE THIS ROUND" in green, "GO FOR A MYTHIC" when nothing is enough.
+local function needHint(payload): string
+	local need = TideRules.needTier(payload.height, payload.waterY, payload.surge, payload.special)
+	if need == "safe" then
+		return tinted("SAFE THIS ROUND", Theme.Color.Green)
+	elseif need == "none" then
+		return tinted("GO FOR A MYTHIC", Theme.Color.Red)
+	elseif Tiers.index(need) == 1 then
+		return tinted("ANY ANSWER SURVIVES", Theme.Tier.Plankton)
+	end
+	local tierColors: { [string]: Color3 } = Theme.Tier :: any
+	return tinted(string.upper(Tiers.ByName[need].label) .. "+ TO SURVIVE", tierColors[need] or Theme.Color.Cream)
+end
+
+local function updateTide(payload)
 	if os.clock() < flashUntil then
 		tide.Visible = true
 		tideAccent.BackgroundColor3 = flashColor
 		tideText.Text = tinted(flashText, flashColor)
 		return
 	end
-	local used: { string } = payload.used or {}
-	local shown = payload.phase == "Prompt" and #used > 0
-	tide.Visible = shown
-	if not shown then
-		lastUsed = 0
+	local inRound = payload.phase == "Prompt" or payload.phase == "Reveal"
+	tide.Visible = inRound
+	if not inRound then
+		lastNeed = ""
 		return
 	end
-	tideAccent.BackgroundColor3 = Theme.Color.Water
-	tideText.Text = "USED  |  " .. string.upper(table.concat(used, ", "))
-	if #used ~= lastUsed then
-		lastUsed = #used
-		Ui.bump(tide, 1.06)
+	local text = "WATER +" .. string.format("%.1f", payload.surge)
+	local special = payload.special
+	if special == "TidalWave" then
+		tideAccent.BackgroundColor3 = Theme.Color.Red
+		text = "TIDAL WAVE  |  " .. text
+	elseif special == "DoubleLift" then
+		tideAccent.BackgroundColor3 = Theme.Color.Green
+		text = "DOUBLE LIFT  |  " .. text
+	else
+		tideAccent.BackgroundColor3 = Theme.Color.Water
 	end
+	-- Answers are graded by the reveal, so the hint only helps while the prompt is open.
+	if payload.phase == "Prompt" and payload.playing then
+		local need = needHint(payload)
+		text ..= "  |  " .. need
+		if need ~= lastNeed then
+			lastNeed = need
+			Ui.bump(tide, 1.06)
+		end
+	else
+		lastNeed = ""
+	end
+	tideText.Text = text
 end
 
--- Shows `text` on the chip for `seconds` (over the used answers or a hidden chip), then puts it back.
+-- Shows `text` on the tide chip for `seconds` (over the need hint or a hidden chip), then puts it back.
 function Status.flashTide(text: string, color: Color3, seconds: number)
 	if not ready then
 		return
@@ -175,7 +220,11 @@ function Status.flashTide(text: string, color: Color3, seconds: number)
 	flashUntil = os.clock() + seconds
 	flashText = text
 	flashColor = color
-	updateChip(lastPayload or { phase = "Reveal" })
+	lastNeed = ""
+	if tide == nil then
+		return
+	end
+	updateTide(lastPayload or { phase = "Surge" })
 	Ui.bump(tide, 1.08)
 	task.delay(seconds, function()
 		if token ~= flashToken then
@@ -183,46 +232,62 @@ function Status.flashTide(text: string, color: Color3, seconds: number)
 		end
 		flashUntil = 0
 		if lastPayload ~= nil then
-			updateChip(lastPayload)
+			updateTide(lastPayload)
 		else
 			tide.Visible = false
 		end
 	end)
 end
 
-local function showTyping(text: string, color: Color3)
-	typingText.Text = string.upper(text)
-	typingText.TextColor3 = color
-	typing.Visible = text ~= ""
-end
-
--- Typing: what another player holding the crab has typed so far.
-function Status.onTyping(payload: Net.TypingPayload)
-	if not ready or lastPayload == nil or payload.userId ~= lastPayload.holderUserId then
-		return
-	end
-	typingFrom = payload.userId
-	showTyping(payload.text, Theme.Color.Cream)
-end
-
--- CrabPassed: the accepted answer stays on the typing chip, in its tier's colour, until the next
--- holder types.
-function Status.onPassed(payload: Net.CrabPassedPayload)
-	if not ready or payload.fromUserId == Players.LocalPlayer.UserId then
-		return
-	end
-	typingFrom = nil
-	showTyping(payload.answer, Ui.tierColor(payload.tier))
-end
-
--- The name of whoever holds the crab, from the ring rows.
-local function holderName(payload): string?
-	for _, row in payload.ring or {} do
-		if row.userId == payload.holderUserId then
-			return row.name
+local function isLocked(payload): boolean
+	local me = Players.LocalPlayer.UserId
+	for _, id in payload.lockedUserIds or {} do
+		if id == me then
+			return true
 		end
 	end
-	return nil
+	return false
+end
+
+-- The pill's left half during a prompt: your own time (a +10s boost) or the shared countdown, and
+-- OVERTIME while the prompt only stays open for someone else's extra time.
+local function promptTimer(payload)
+	local mine = payload.yourSecondsLeft
+	local outOfTime = mine == nil or mine <= 0 or not payload.playing or isLocked(payload)
+	if payload.overtime and outOfTime then
+		secondaryText.Text = "OVERTIME"
+		return
+	end
+	local shown = if mine ~= nil then mine else payload.secondsLeft
+	secondaryText.Text = Status.formatTime(shown)
+	if shown <= GameConfig.Round.DangerSeconds then
+		secondaryText.TextColor3 = Theme.Color.Red
+		-- Only the players on the pillars hear the countdown tick; the lobby just sees it go red.
+		local key = payload.round .. ":" .. shown
+		if payload.playing == true and key ~= lastTick then
+			lastTick = key
+			Ui.bump(secondaryText, 1.08)
+			Sfx.play("Tick", 0.5)
+		end
+	end
+end
+
+-- Announces a special round once, when its prompt starts.
+local function announceSpecial(payload)
+	if payload.phase ~= "Prompt" or payload.round == lastRound then
+		return
+	end
+	lastRound = payload.round
+	local special = payload.special
+	if special == nil then
+		return
+	end
+	local color = Theme.Color.Green
+	if special == "TidalWave" then
+		color = Theme.Color.Red
+	end
+	Fx.callout(SPECIAL_NAMES[special] or special, color)
+	Sfx.play("Fanfare", 0.5)
 end
 
 function Status.onState(payload)
@@ -232,12 +297,10 @@ function Status.onState(payload)
 	local phase = payload.phase
 	lastPayload = payload
 	secondaryText.TextColor3 = Theme.Color.Cream
-	updateChip(payload)
-	-- The typing chip clears when the question ends, on your own turn, and when its typist has moved on.
-	local holder = payload.holderUserId
-	if phase ~= "Prompt" or holder == Players.LocalPlayer.UserId or (typingFrom ~= nil and typingFrom ~= holder) then
-		typingFrom = nil
-		typing.Visible = false
+	updateTide(payload)
+	announceSpecial(payload)
+	if phase == "Results" or phase == "Waiting" then
+		lastRound = 0
 	end
 
 	if phase == "Waiting" then
@@ -247,7 +310,7 @@ function Status.onState(payload)
 		local ready = if typeof(payload.readyCount) == "number" then payload.readyCount else payload.playerCount
 		aliveText.Text = "PLAYERS " .. ready .. "/" .. payload.minPlayers
 	elseif phase == "Intermission" then
-		setStatus("CRAB CRAZE STARTS SOON")
+		setStatus("STARTING SOON")
 		secondaryText.Text = Status.formatTime(payload.secondsLeft)
 		aliveText.Text = "PLAYERS " .. payload.playerCount
 	elseif phase == "Starting" then
@@ -259,16 +322,19 @@ function Status.onState(payload)
 			lastPrompt = string.upper(payload.prompt)
 		end
 		setStatus(lastPrompt)
-		-- Whose turn it is, where the countdown used to be: the fuse has no clock to show.
-		if payload.holderUserId == Players.LocalPlayer.UserId then
-			secondaryText.Text = "YOUR TURN"
-			secondaryText.TextColor3 = Theme.Color.Green
-		else
-			secondaryText.Text = string.upper(holderName(payload) or "...")
-		end
+		promptTimer(payload)
 		aliveText.Text = "ALIVE " .. payload.alive .. "/" .. payload.starting
+		-- How many have locked in, once anyone has: the compact stand-in for the old lock counter.
+		local locked = #(payload.lockedUserIds or {})
+		if locked > 0 then
+			aliveText.Text ..= "  LOCKED " .. locked
+		end
 	elseif phase == "Reveal" then
-		setStatus("PINCHED!")
+		setStatus("ROUND " .. payload.round .. " RESULTS")
+		secondaryText.Text = "REVEAL"
+		aliveText.Text = "ALIVE " .. payload.alive .. "/" .. payload.starting
+	elseif phase == "Surge" then
+		setStatus("THE WATER IS RISING")
 		secondaryText.Text = "ROUND " .. payload.round
 		aliveText.Text = "ALIVE " .. payload.alive .. "/" .. payload.starting
 	elseif phase == "Results" then
@@ -276,11 +342,20 @@ function Status.onState(payload)
 		secondaryText.Text = Status.formatTime(payload.secondsLeft)
 		aliveText.Text = "NEXT MATCH"
 	end
-	-- Phones, on a pillar: only the question and whose turn it is. The alive count and the chip stay off.
+	-- Phones, on a pillar: only the prompt and the timer row. The tide chip stays off, and while a prompt
+	-- is open the slot beside the timer says in a word what you need to stay above the water.
+	aliveText.RichText = false
 	if Ui.isPhone() and payload.playing == true then
-		aliveText.Visible = false
 		tide.Visible = false
-		secondaryText.Size = UDim2.new(1, 0, 1, 0)
+		if phase == "Prompt" then
+			aliveText.RichText = true
+			aliveText.Text = needShort(payload)
+			aliveText.Visible = true
+			secondaryText.Size = UDim2.new(0.5, 0, 1, 0)
+		else
+			aliveText.Visible = false
+			secondaryText.Size = UDim2.new(1, 0, 1, 0)
+		end
 	else
 		aliveText.Visible = true
 		secondaryText.Size = UDim2.new(0.5, 0, 1, 0)

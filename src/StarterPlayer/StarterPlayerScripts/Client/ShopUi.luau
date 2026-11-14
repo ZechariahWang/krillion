@@ -84,7 +84,7 @@ local SLOT_NAMES: { [string]: string } = {
 	Trail = "trail",
 	Pet = "pet",
 	Aura = "aura",
-	CardTheme = "dive card theme",
+	CardTheme = "answer card theme",
 	NameTag = "name tag",
 	Toy = "toy",
 }
@@ -175,8 +175,18 @@ local function colorOf(item: Cosmetics.Item): Color3
 	return rgb(item.color, Color3.fromRGB(60, 200, 255))
 end
 
+-- Nothing is sold for Robux while the profile has not loaded: the receipt could not be granted until the
+-- player rejoined.
+local function saveReady(): boolean
+	if (profile :: any).loadFailed == true then
+		Toasts.show("YOUR SAVE IS STILL LOADING  |  TRY AGAIN SOON", "bad")
+		return false
+	end
+	return true
+end
+
 local function promptProduct(productId: number)
-	if productId == 0 then
+	if productId == 0 or not saveReady() then
 		return
 	end
 	MarketplaceService:PromptProductPurchase(player, productId)
@@ -408,11 +418,11 @@ local function passPerks(key: string): string
 		local bonus = math.floor(GameConfig.Cash.VipBonus * 100 + 0.5)
 		return "+" .. bonus .. "% " .. Currency.Upper .. ", Aurora pillar, Gold Wake, VIP title and tag"
 	elseif key == "DoubleCash" then
-		return "Double every " .. Currency.Upper .. " you earn, forever"
+		return "Earn double " .. Currency.Name .. " from everything, forever"
 	elseif key == "SecondChance" then
 		return "One free revive every match"
 	elseif key == "BoostPlus" then
-		return GameConfig.Boosts.PerMatchPlus .. " hints and " .. GameConfig.Boosts.PerMatchPlus .. " +time per match"
+		return GameConfig.Boosts.PerMatchPlus .. " +time boosts per match"
 	end
 	return "Game pass"
 end
@@ -433,7 +443,7 @@ local function passEntry(key: string): Entry
 	entry.owned = owned
 	entry.action = "BUY"
 	entry.onClick = function()
-		if passId ~= 0 then
+		if passId ~= 0 and saveReady() then
 			MarketplaceService:PromptGamePassPurchase(player, passId)
 		end
 	end
@@ -503,7 +513,7 @@ end
 local function boostShellsEntry(name: string, shells: number, icon: string): Entry
 	local entry = emptyEntry("Shop", name, GOLD)
 	entry.icon = icon
-	entry.sub = "Buy it from the match button when you need it"
+	entry.sub = "Use it from its button during a match"
 	entry.price = Currency.digits(shells) .. " each"
 	entry.currency = "Cash"
 	entry.action = "IN MATCH"
@@ -515,28 +525,30 @@ local function boostEntries(entries: { Entry })
 	if GameConfig.Boosts.Enabled ~= 1 then
 		return
 	end
-	-- In a match the boost buttons use held boosts first, then Shells; Robux only stocks up.
+	-- In a match the boost buttons use held boosts first. +time then costs Shells; a hint is Robux only.
 	local hintName = "HINT"
 	local timeName = "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
-	table.insert(entries, boostShellsEntry(hintName, GameConfig.Boosts.HintShells, "Hint"))
 	local hint = productEntry(hintName .. " x1", Products.Boosts.Hint.robux, Products.Boosts.Hint.productId, "Hint")
-	hint.sub = "One hint in your stock"
+	hint.sub = "Locks in a Mythic answer for you"
 	if profile.hints > 0 then
 		hint.badge = profile.hints .. " OWNED"
 	end
 	table.insert(entries, hint)
 	table.insert(entries, boostShellsEntry(timeName, GameConfig.Boosts.ExtraTimeShells, "Time"))
 	local extra = productEntry(timeName .. " x1", Products.Boosts.ExtraTime.robux, Products.Boosts.ExtraTime.productId, "Time")
-	extra.sub = "One +time in your stock"
+	extra.sub = "Ten more seconds to answer"
 	if profile.extraTimes > 0 then
 		extra.badge = profile.extraTimes .. " OWNED"
 	end
 	table.insert(entries, extra)
 	for _, pack in Products.BoostPacks do
+		if pack.retired == true then
+			continue
+		end
 		local name = (if pack.kind == "Hint" then hintName else timeName) .. " x" .. pack.count
 		local icon = if pack.kind == "Hint" then "Hint" else "Time"
 		local entry = productEntry(name, pack.robux, pack.productId, icon)
-		entry.sub = pack.count .. " in your stock, cheaper than one at a time"
+		entry.sub = pack.count .. " to keep, cheaper than one at a time"
 		entry.badge = "SAVE"
 		table.insert(entries, entry)
 	end
@@ -548,7 +560,7 @@ local function specialEntries(entries: { Entry })
 		table.insert(entries, starter)
 	end
 	local revive = productEntry("REVIVE", Products.Revive.robux, Products.Revive.productId, "Heart")
-	revive.sub = "Jump back in the next time you sink"
+	revive.sub = "Come back if you sink in your next match"
 	if profile.revives > 0 then
 		revive.badge = profile.revives .. " OWNED"
 	end
@@ -580,9 +592,12 @@ local function chestEntries(entries: { Entry })
 		entry.price = Currency.digits(chest.price)
 		entry.currency = "Cash"
 		if profile.cash >= chest.price then
-			entry.action = "OPEN"
+			entry.action = if isConfirming(chest.id) then "CONFIRM?" else "OPEN"
+			-- A chest is a spend like any other: the same second tap confirms it.
 			entry.onClick = function()
-				ChestReveal.open(chest.id)
+				confirmThen(chest.id, function()
+					ChestReveal.open(chest.id)
+				end)
 			end
 		else
 			entry.action = "GET " .. Currency.Upper

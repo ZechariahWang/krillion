@@ -30,11 +30,7 @@ local PASS_MESSAGES: { [string]: string } = {
 		.. ", AURORA PILLAR, GOLD WAKE TRAIL, VIP TITLE AND TAG",
 	DoubleCash = "2X " .. Currency.Upper .. " UNLOCKED!",
 	SecondChance = "SECOND CHANCE UNLOCKED!  |  ONE FREE REVIVE EVERY MATCH",
-	BoostPlus = "BOOST PLUS UNLOCKED!  |  "
-		.. GameConfig.Boosts.PerMatchPlus
-		.. " HINTS AND "
-		.. GameConfig.Boosts.PerMatchPlus
-		.. " +TIME PER MATCH",
+	BoostPlus = "BOOST PLUS UNLOCKED!  |  " .. GameConfig.Boosts.PerMatchPlus .. " +TIME PER MATCH",
 }
 
 local lastPassCheck: { [Player]: number } = {}
@@ -207,7 +203,12 @@ local function processReceipt(info): Enum.ProductPurchaseDecision
 	end
 	local receipt = tostring(info.PurchaseId)
 	if DataService.hasReceipt(player, receipt) then
-		return Enum.ProductPurchaseDecision.PurchaseGranted
+		-- Granted already. It is only acknowledged once that grant is saved: a receipt recorded in this
+		-- session but lost to a failed save must stay open, or a crash would lose the purchase.
+		if DataService.receiptSaved(player, receipt) or DataService.save(player) then
+			return Enum.ProductPurchaseDecision.PurchaseGranted
+		end
+		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 	local handler = productHandlers[info.ProductId]
 	if handler == nil then
@@ -224,7 +225,7 @@ local function processReceipt(info): Enum.ProductPurchaseDecision
 	if DataService.save(player) then
 		return Enum.ProductPurchaseDecision.PurchaseGranted
 	end
-	-- The grant and receipt stay in the session and are saved later; a retry sees the receipt.
+	-- The grant and receipt stay in the session; the retry acknowledges it once a save has gone through.
 	return Enum.ProductPurchaseDecision.NotProcessedYet
 end
 

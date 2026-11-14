@@ -23,7 +23,7 @@ local WARMUP = 4 -- neighbouring seeds (tomorrow's) start almost equal; a few st
 local pool: { Quest } = {
 	{ id = "play_match", kind = "match_played", text = "PLAY 1 MATCH", goal = 1, reward = 75 },
 	{ id = "play_3", kind = "match_played", text = "PLAY 3 MATCHES", goal = 3, reward = 175 },
-	{ id = "survive_5", kind = "round_survived", text = "SURVIVE 5 PINCHES", goal = 5, reward = 125 },
+	{ id = "survive_5", kind = "round_survived", text = "SURVIVE 5 ROUNDS", goal = 5, reward = 125 },
 	{ id = "rare_2", kind = "rare_answer", text = "GIVE 2 RARE+ ANSWERS", goal = 2, reward = 125 },
 	{ id = "deep_1", kind = "deep_answer", text = "GIVE A DEEP CUT+ ANSWER", goal = 1, reward = 150 },
 	{ id = "warmup_5", kind = "practice_answer", text = "ANSWER 5 WARM-UPS", goal = 5, reward = 100 },

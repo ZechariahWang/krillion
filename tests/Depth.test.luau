@@ -1,4 +1,5 @@
 local Depth = require("../src/ReplicatedStorage/Shared/Depth")
+local GameConfig = require("../src/ReplicatedStorage/Config/GameConfig")
 local Tiers = require("../src/ReplicatedStorage/Config/Tiers")
 
 return function(test)
@@ -61,6 +62,20 @@ return function(test)
 			assert(seconds >= previous, "not monotonic at " .. metres)
 			previous = seconds
 		end
+	end)
+
+	test("a deep dive is long enough to watch, and every dive fits the reveal", function()
+		local reveal = GameConfig.Reveal
+		local deepest = Depth.diveSeconds(GameConfig.Depth.MaxMetres, false)
+		assert(deepest >= 4.5, "the deepest dive is over too fast: " .. deepest)
+		assert(Depth.diveSeconds(40, false) >= 1.8, "a shallow dive is over too fast")
+		-- The stamp lands inside the card's budget, and the card has left before the pillars rise.
+		assert(deepest <= reveal.CardBudgetSeconds, "the deepest dive would be squeezed")
+		assert(reveal.CardBudgetSeconds + reveal.CardHoldSeconds + 0.6 <= reveal.RaiseDelaySeconds)
+		assert(reveal.CardHoldSeconds >= 1, "the result is not held long enough to read")
+		-- Room after the rise starts for the pillars to finish, but the whole reveal stays under 10 s.
+		assert(GameConfig.Round.RevealSeconds >= reveal.RaiseDelaySeconds + 2.5)
+		assert(GameConfig.Round.RevealSeconds <= 10)
 	end)
 
 	test("a dive creeps, bursts past its depth, then settles exactly on it", function()

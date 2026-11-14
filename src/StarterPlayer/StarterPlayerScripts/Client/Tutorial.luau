@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Rail = require(script.Parent.Rail)
@@ -26,7 +27,7 @@ local DOT_SIZE = UDim2.fromOffset(20, 20)
 local DOT_ACTIVE_SIZE = UDim2.fromOffset(44, 20)
 local BOARDS = { "HowToBoard", "HowRareBoard" }
 -- After leaving a pillar mid-match (sunk), wait for the match to end so the modal never covers the
--- revive offer or the eliminated card.
+-- revive offer.
 local CALM_PHASES: { [string]: boolean } = { Waiting = true, Intermission = true }
 
 local player = Players.LocalPlayer
@@ -54,9 +55,8 @@ local leftMidMatch = false
 
 local Tutorial = {}
 
--- The authored note about shared answers scoring less: that rule is off, so the note stays hidden.
 local function schoolingOn(): boolean
-	return false
+	return GameConfig.Schooling.Enabled == 1
 end
 
 local function isPlaying(): boolean

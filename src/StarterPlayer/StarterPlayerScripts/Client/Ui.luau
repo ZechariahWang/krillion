@@ -1,7 +1,7 @@
 --!strict
 -- Micro-interactions shared by the controllers, plus the live parts of the Studio-authored UI. Every
 -- outline, gradient, corner and caption is authored in Studio; this module only animates and tracks them.
--- The big pop-ups (eliminated, revive, results, callouts) show bigger through their UIScale only, fitted to
+-- The big pop-ups (revive, results, callouts) show bigger through their UIScale only, fitted to
 -- the screen, so the HUD between pop-ups stays as small as authored.
 
 local GuiService = game:GetService("GuiService")
@@ -539,6 +539,7 @@ local ROOT_OF: { [string]: string } = {
 	Store = "LobbyUi",
 	LobbyQuiz = "LobbyUi",
 	Quests = "LobbyUi",
+	Daily = "LobbyUi",
 	Rewards = "LobbyUi",
 	Tutorial = "LobbyUi",
 	Hud = "GameUi",
@@ -612,7 +613,6 @@ end
 -- Pop-ups shown bigger than authored (through their UIScale), by root and dotted path.
 local GROWS: { [string]: { [string]: number } } = {
 	GameUi = {
-		["Spectate.EliminatedCard"] = Theme.Chunky.Grow.Card,
 		["Revive.Card"] = Theme.Chunky.Grow.Card,
 		["Results.Panel"] = Theme.Chunky.Grow.Results,
 	},
@@ -659,10 +659,10 @@ function Ui.bindGui(root: LayerCollector)
 	end)
 end
 
--- World text players see all the time: pillar name tags, head titles and the lobby leaderboard.
+-- World text players see all the time: head labels and the lobby leaderboard.
 local function isWorldText(object: Instance): boolean
 	if object:IsA("BillboardGui") then
-		return object.Name == "NameTag" or object.Name == "RareOrSinkName"
+		return object.Name == "RareOrSinkName"
 	end
 	if object:IsA("SurfaceGui") then
 		return object:FindFirstAncestor("Leaderboard") ~= nil

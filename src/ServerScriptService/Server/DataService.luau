@@ -186,6 +186,7 @@ local function sendProfile(player: Player)
 	payload.referrals = profile.referrals
 	payload.quests = profile.quests
 	payload.lobbyEarnedToday = Profile.lobbyEarned(profile, today())
+	payload.daily = profile.daily
 	payload.krillions = profile.krillions
 	payload.games = profile.games
 	payload.musicOff = profile.musicOff
@@ -643,6 +644,16 @@ function DataService.addLobbyEarned(player: Player, day: number, amount: number)
 	DataService.changed(player)
 end
 
+-- Records a daily reward claim (Shared/Daily state: the UTC day and which day of the week it was).
+function DataService.setDaily(player: Player, daily: Profile.DailyState)
+	local current = session(player)
+	if current == nil then
+		return
+	end
+	current.daily = { day = daily.day, streak = daily.streak }
+	DataService.changed(player)
+end
+
 -- Records the friend whose invite brought this player. Returns false if one is already recorded.
 function DataService.setReferredBy(player: Player, userId: number): boolean
 	local profile = DataService.get(player)
@@ -713,11 +724,35 @@ function DataService.hasReceipt(player: Player, receipt: string): boolean
 	return Profile.hasReceipt(profile, receipt)
 end
 
+-- Whether the receipt is in the profile as last saved, not only in this session's unsaved changes.
+function DataService.receiptSaved(player: Player, receipt: string): boolean
+	local saved = stored[player]
+	return saved ~= nil and Profile.hasReceipt(saved, receipt)
+end
+
 function DataService.addReceipt(player: Player, receipt: string)
 	local current = session(player)
 	if current ~= nil then
 		table.insert(current.receipts, receipt)
 	end
+end
+
+-- Deletes everything saved for a user id: the profile, the old coins entry and the leaderboard entry. For
+-- a right-to-erasure request from Roblox. Refused while that player is in this server (their session would
+-- write it straight back). Returns whether every delete went through, and a line to show.
+function DataService.erase(userId: number): (boolean, string)
+	if Players:GetPlayerByUserId(userId) ~= nil then
+		return false, "user " .. userId .. " is in this server; erase after they leave"
+	end
+	local ok, err = pcall(function()
+		need(profileStore):RemoveAsync(DataService.keyFor(userId))
+		need(legacyStore):RemoveAsync("coins_" .. userId)
+		need(winsStore):RemoveAsync(tostring(userId))
+	end)
+	if not ok then
+		return false, "erase failed for " .. userId .. ": " .. tostring(err)
+	end
+	return true, "erased saved data for user " .. userId
 end
 
 -- Top players by wins, best first, as { userId, wins }.

@@ -9,7 +9,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Net = require(ReplicatedStorage.Shared.Net)
-local Lobby = require(script.Parent.Lobby)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 
@@ -42,29 +41,25 @@ local function waitChild(parent: Instance?, name: string): Instance?
 	return found
 end
 
-local function hide(revived: boolean)
+local function hide()
 	if not gui.Visible then
 		return
 	end
 	gui.Visible = false
 	offer = nil
-	Lobby.setReviveOpen(false, revived)
 end
 
--- After USE: celebrate only once the server has put you back on a pillar. A refused or late press brings
--- the eliminated card back instead.
+-- After USE: celebrate only once the server has put you back on a pillar; a refused or late press gets none.
 local function awaitRevive()
 	local player = Players.LocalPlayer
 	local deadline = os.clock() + CONFIRM_SECONDS
 	while os.clock() < deadline do
 		if player:GetAttribute("Playing") == true then
-			Lobby.setReviveOpen(false, true)
 			Sfx.play("Fanfare", 0.5)
 			return
 		end
 		task.wait(CONFIRM_POLL)
 	end
-	Lobby.setReviveOpen(false, false)
 end
 
 function RevivePrompt.init(playerGui: PlayerGui)
@@ -117,10 +112,23 @@ function RevivePrompt.init(playerGui: PlayerGui)
 		end
 		if productId == current.productId then
 			token += 1
-			hide(true)
+			hide()
 			Sfx.play("Fanfare", 0.5)
 		end
 	end)
+end
+
+-- The offer is only good while the match it came from is running and you are out of it: the card goes
+-- when the match ends or you are back on a pillar.
+function RevivePrompt.onState(payload: Net.RoundStatePayload)
+	if not ready then
+		return
+	end
+	local inMatch = payload.phase == "Prompt" or payload.phase == "Reveal" or payload.phase == "Surge"
+	if not inMatch or payload.playing == true then
+		token += 1
+		hide()
+	end
 end
 
 function RevivePrompt.onPrompt(payload: Net.RevivePromptPayload)
@@ -135,21 +143,20 @@ function RevivePrompt.onPrompt(payload: Net.RevivePromptPayload)
 		count.Text = "SECOND CHANCE"
 		use.Text = "FREE REVIVE"
 	elseif kind == "buy" then
-		count.Text = "JUMP BACK IN"
+		count.Text = "COSTS " .. tostring(payload.robux or 0) .. " ROBUX"
 		use.Text = "REVIVE  R$ " .. tostring(payload.robux or 0)
 	else
-		count.Text = payload.revives .. " LEFT"
+		count.Text = if payload.revives == 1 then "1 REVIVE LEFT" else payload.revives .. " REVIVES LEFT"
 		use.Text = useText
 	end
 	fill.Size = UDim2.fromScale(1, 1)
 	gui.Visible = true
-	Lobby.setReviveOpen(true)
 	Ui.pop(card, 0.6)
 	Sfx.play("Tick", 0.5, 1.3)
 	TweenService:Create(fill, TweenInfo.new(payload.seconds, Enum.EasingStyle.Linear), { Size = UDim2.fromScale(0, 1) }):Play()
 	task.delay(payload.seconds, function()
 		if token == mine then
-			hide(false)
+			hide()
 		end
 	end)
 end
