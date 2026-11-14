@@ -170,7 +170,8 @@ export type ShopResultPayload = {
 	status: string, -- "ok" | "cash" | "owned" | "unknown"
 }
 
--- ToyHit (to every client): a lobby throw. `to` is the target's UserId; the toy lands after FlightSeconds.
+-- ToyHit (to every client): a throw. `to` is the target's UserId, or a bot's id when a spectator throws at
+-- a bot on its pillar; the toy lands when its flight ends.
 export type ToyHitPayload = {
 	from: number,
 	to: number,

@@ -360,14 +360,14 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 	end
 	local source = Cosmetics.source(item)
 	if source == "reward" then
-		-- Never sold: RewardService grants it, so GET opens the panel that says how.
+		-- Never sold: RewardService grants it, so GET opens the Rewards tab, which says how.
 		entry.badge = "FREE"
 		entry.currency = "Free"
 		entry.price = Cosmetics.RewardHow[item.reward :: string] or "Free reward"
 		entry.action = "GET"
 		entry.onClick = function()
 			setOpen(false)
-			Rewards.open()
+			Rewards.open("Rewards")
 		end
 	elseif source == "pass" then
 		entry.price = "With the " .. string.upper(item.pass :: string) .. " pass"

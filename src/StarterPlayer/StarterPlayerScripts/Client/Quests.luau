@@ -1,8 +1,8 @@
 --!strict
--- Drives StarterGui.Quests: a big centred panel with today's three daily quests as chunky cards (icon, chunky
--- progress bar, gold reward chip, a check when done), opened from the rail's QUESTS key (lobby only), plus the
--- rail badge "x/3". The list is drawn here from Shared/Quests with the same (userId, UTC day) seed the server
--- uses; the profile only carries progress, so a new day needs no message.
+-- Draws the Quests page of the REWARDS window (LobbyUi.Rewards; Client/Rewards owns the window and its tabs):
+-- today's three daily quests as chunky cards (icon, chunky progress bar, gold reward chip, a check when done),
+-- plus the tab badge "x/3" while any quest is unfinished. The list is drawn here from Shared/Quests with the
+-- same (userId, UTC day) seed the server uses; the profile only carries progress, so a new day needs no message.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -11,21 +11,11 @@ local Theme = require(ReplicatedStorage.Config.Theme)
 local QuestRules = require(ReplicatedStorage.Shared.Quests)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Icons = require(script.Parent.Icons)
-local Rail = require(script.Parent.Rail)
-local Sfx = require(script.Parent.Sfx)
+local Rewards = require(script.Parent.Rewards)
 local Ui = require(script.Parent.Ui)
-local Windows = require(script.Parent.Windows)
 
-local WAIT_SECONDS = 10
+local PAGE = "Quests" -- this controller's tab and page in the REWARDS window
 local ROWS = 3
-local MARGIN = 16 -- pixels kept clear around the panel when it is scaled down for a small screen
-local MIN_FIT = 0.4
-local PORTRAIT_BELOW = 0.7 -- the wide layout shows smaller than this: use the tall phone one if it shows bigger
-local PORTRAIT_SIZE = UDim2.fromOffset(460, 656)
-local PORTRAIT_ROW = 152 -- a portrait card puts its reward chip under the progress bar
-local PORTRAIT_ROW_GAP = 12
-local ROWS_TOP = 104
-local BADGE = "QuestsButton"
 local BAR_COLOR = Color3.fromRGB(164, 123, 255)
 local DONE_COLOR = Color3.fromRGB(122, 220, 72)
 local DEFAULT_ICON = "Quest"
@@ -54,10 +44,6 @@ type Row = {
 
 local player = Players.LocalPlayer
 
-local gui: Frame? = nil
-local panel: GuiObject? = nil
-local fit: UIScale? = nil
-local layout: Ui.PhoneLayout? = nil
 local footer: TextLabel? = nil
 local empty: TextLabel? = nil
 local rows: { [number]: Row } = {}
@@ -65,8 +51,6 @@ local rows: { [number]: Row } = {}
 local saved: QuestDay? = nil -- profile.quests from the last ProfileChanged; nil until the first one
 local shownDay = -1
 local lastDone: { [string]: boolean } = {}
-local isOpen = false
-local playing = false
 
 local Quests = {}
 
@@ -134,7 +118,7 @@ local function fillRow(row: Row, quest: QuestRules.Quest, day: number, animate: 
 	return done
 end
 
--- Redraws the rows and the rail badge. `animate` slides the bars and pops new checks (panel open).
+-- Redraws the rows and the tab badge. `animate` slides the bars and pops new checks (page showing).
 local function render(animate: boolean)
 	local day = QuestRules.day(now())
 	shownDay = day
@@ -166,83 +150,11 @@ local function render(animate: boolean)
 		empty.Visible = #list == 0
 	end
 	updateFooter()
-	-- The badge waits for the profile, so it never flashes "0/3" for someone who is already done.
+	-- The badge waits for the profile, so it never flashes "0/3" for someone who is already done. It goes
+	-- once every quest is done: a plain open of the window lands on this tab only while it carries a badge.
 	if saved ~= nil then
-		Rail.setBadge(BADGE, if #list > 0 then `{doneCount}/{math.min(#list, ROWS)}` else nil)
-	end
-end
-
--- Shrinks the panel on small screens instead of letting it run off the edge; a portrait phone gets the tall
--- layout so the counts and rewards stay readable.
-local function fitToScreen()
-	local screen = gui
-	local frame = panel
-	local scale = fit
-	if screen == nil or frame == nil or scale == nil then
-		return
-	end
-	Ui.fitPanel(screen.AbsoluteSize, frame, scale, layout, MARGIN, MIN_FIT, PORTRAIT_BELOW)
-end
-
--- Portrait phone layout: narrow and tall cards, the reward chip and check under the progress bar.
-local function portraitOverrides(): Ui.Overrides
-	local overrides: Ui.Overrides = {
-		Empty = { Size = UDim2.new(1, -60, 0, ROWS * PORTRAIT_ROW + (ROWS - 1) * PORTRAIT_ROW_GAP) },
-		Footer = {
-			Position = UDim2.new(0.5, 0, 0, ROWS_TOP + ROWS * PORTRAIT_ROW + (ROWS - 1) * PORTRAIT_ROW_GAP + 14),
-		},
-	}
-	for index = 1, ROWS do
-		local path = "Row" .. index
-		overrides[path] = {
-			Size = UDim2.new(1, -48, 0, PORTRAIT_ROW),
-			Position = UDim2.fromOffset(24, ROWS_TOP + (index - 1) * (PORTRAIT_ROW + PORTRAIT_ROW_GAP)),
-		}
-		overrides[path .. "/IconBack"] = { Size = UDim2.fromOffset(76, 76) }
-		overrides[path .. "/Text"] = { Position = UDim2.fromOffset(108, 12), Size = UDim2.new(1, -124, 0, 36) }
-		overrides[path .. "/Track"] = { Position = UDim2.fromOffset(108, 56), Size = UDim2.new(1, -124, 0, 32) }
-		overrides[path .. "/RewardChip"] = { Position = UDim2.fromOffset(108, 98), AnchorPoint = Vector2.zero }
-		overrides[path .. "/Check"] = { Position = UDim2.fromOffset(278, 121) }
-	end
-	return overrides
-end
-
-local function close()
-	local screen = gui
-	if screen == nil or not isOpen then
-		return
-	end
-	isOpen = false
-	screen.Visible = false
-	Windows.closed(close)
-end
-
--- Opens the panel. Never over a pillar: the match comes first.
-function Quests.open()
-	local screen = gui
-	if screen == nil or playing or player:GetAttribute("Playing") == true then
-		return
-	end
-	render(false)
-	fitToScreen()
-	screen.Visible = true
-	if not isOpen then
-		isOpen = true
-		Sfx.play("Open", 0.5)
-		local frame = panel
-		if frame ~= nil then
-			Ui.pop(frame, 0.7)
-		end
-	end
-	Windows.opened(close)
-end
-
-local function toggle()
-	if isOpen then
-		Sfx.play("Close", 0.5)
-		close()
-	else
-		Quests.open()
+		local total = math.min(#list, ROWS)
+		Rewards.setTabBadge(PAGE, if doneCount < total then `{doneCount}/{total}` else nil)
 	end
 end
 
@@ -271,70 +183,37 @@ local function bindRow(frame: GuiObject): Row
 	}
 end
 
-local function bind(screen: Frame, playerGui: PlayerGui)
-	local holder = screen:WaitForChild("Holder", WAIT_SECONDS)
-	local frame = if holder ~= nil then holder:WaitForChild("Panel", WAIT_SECONDS) else nil
-	if holder == nil or frame == nil or not frame:IsA("GuiObject") then
-		warn("Quests: StarterGui.Quests.Holder.Panel is missing; the quests panel stays closed")
-		return
-	end
-	panel = frame
-	local scale = holder:FindFirstChild("Fit")
-	fit = if scale ~= nil and scale:IsA("UIScale") then scale else nil
-	footer = textChild(frame, "Footer")
-	empty = textChild(frame, "Empty")
-	layout = Ui.phoneLayout(frame, PORTRAIT_SIZE, portraitOverrides())
+local function bind(page: GuiObject)
+	footer = textChild(page, "Footer")
+	empty = textChild(page, "Empty")
 	for index = 1, ROWS do
-		local row = frame:FindFirstChild("Row" .. index)
+		local row = page:FindFirstChild("Row" .. index)
 		if row ~= nil and row:IsA("GuiObject") then
 			rows[index] = bindRow(row)
 		end
 	end
-	local closeButton = frame:FindFirstChild("CloseButton")
-	if closeButton ~= nil and closeButton:IsA("TextButton") then
-		Ui.pressable(closeButton)
-		closeButton.Activated:Connect(function()
-			Sfx.play("Close", 0.5)
-			close()
-		end)
-	end
-	local railButton = Rail.button(BADGE)
-	if railButton ~= nil then
-		railButton.Activated:Connect(toggle)
-	else
-		warn("Quests: the rail has no QuestsButton; the quests panel cannot be opened")
-	end
-	-- Tapping outside the panel closes it.
-	local scrim = screen:FindFirstChild("Scrim")
-	if scrim ~= nil and scrim:IsA("GuiButton") then
-		scrim.Activated:Connect(close)
-	end
-	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
-	gui = screen
 	render(false)
 end
 
-function Quests.init(playerGui: PlayerGui)
-	player:GetAttributeChangedSignal("Playing"):Connect(function()
-		if player:GetAttribute("Playing") == true then
-			close()
-		end
+function Quests.init()
+	Rewards.onShow(PAGE, function()
+		render(false)
 	end)
 	task.spawn(function()
-		local found = Ui.screen(playerGui, "Quests", WAIT_SECONDS)
-		if found == nil or not found:IsA("Frame") then
-			warn("Quests: StarterGui.Quests is missing; the quests panel stays closed")
+		local page = Rewards.page(PAGE)
+		if page == nil then
+			warn("Quests: LobbyUi.Rewards has no Quests page; the quests are not shown")
 			return
 		end
-		bind(found, playerGui)
+		bind(page)
 	end)
-	-- The countdown ticks while the panel is open, and the list redraws itself at UTC midnight.
+	-- The countdown ticks while the page is showing, and the list redraws itself at UTC midnight.
 	task.spawn(function()
 		while true do
 			task.wait(1)
 			if QuestRules.day(now()) ~= shownDay then
-				render(isOpen)
-			elseif isOpen then
+				render(Rewards.isOpen(PAGE))
+			elseif Rewards.isOpen(PAGE) then
 				updateFooter()
 			end
 		end
@@ -345,6 +224,12 @@ end
 function Quests.onProfile(profile)
 	local quests = if type(profile) == "table" then profile.quests else nil
 	if type(quests) ~= "table" or type(quests.day) ~= "number" then
+		return
+	end
+	-- A profile that failed to load says nothing about progress: no badge until the real one.
+	if profile.loadFailed == true then
+		saved = nil
+		Rewards.setTabBadge(PAGE, nil)
 		return
 	end
 	local progress: { [string]: number } = {}
@@ -364,14 +249,7 @@ function Quests.onProfile(profile)
 		end
 	end
 	saved = { day = quests.day, progress = progress, done = done }
-	render(isOpen)
-end
-
-function Quests.onState(payload)
-	playing = type(payload) == "table" and payload.playing == true
-	if playing then
-		close()
-	end
+	render(Rewards.isOpen(PAGE))
 end
 
 return Quests

@@ -1,6 +1,11 @@
 --!strict
--- Drives StarterGui.Rewards: free rewards for joining the group and inviting friends, plus an unrewarded
--- FAVORITE nudge, as a big chunky panel. Opened from the rail's REWARDS key and from reward items in the shop.
+-- Drives LobbyUi.Rewards: the one REWARDS window, opened from the rail's REWARDS key, with a Daily, a Quests
+-- and a Rewards tab. This module owns the window (fit, open and close, the tabs, their badges and the rail
+-- key's badge) and draws the Rewards page: free rewards for joining the group and inviting friends, plus an
+-- unrewarded FAVORITE nudge. Reward items in the shop open that page.
+-- Client/Daily and Client/Quests draw the other two pages: each takes its page from Rewards.page, marks its
+-- tab with Rewards.setTabBadge and redraws from Rewards.onShow. They require this module, so it must never
+-- require them.
 -- Row buttons keep their text on a child Label (the button itself carries the thick border); the group row's
 -- button shows a "!" badge while that reward is waiting.
 -- The server (RewardService) verifies and grants everything; this only prompts and shows progress.
@@ -14,7 +19,6 @@ local SocialService = game:GetService("SocialService")
 
 local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
-local Theme = require(ReplicatedStorage.Config.Theme)
 local Currency = require(ReplicatedStorage.Shared.Currency)
 local Net = require(ReplicatedStorage.Shared.Net)
 local RewardRules = require(ReplicatedStorage.Shared.Rewards)
@@ -27,10 +31,10 @@ local Windows = require(script.Parent.Windows)
 local WAIT_SECONDS = 10
 local MARGIN = 16 -- pixels kept clear around the panel when it is scaled down for a small screen
 local MIN_FIT = 0.4
-local PORTRAIT_BELOW = 0.7 -- the wide layout shows smaller than this: use the tall phone one if it shows bigger
-local PORTRAIT_SIZE = UDim2.fromOffset(460, 876)
-local PORTRAIT_ROW = 222 -- a portrait row stacks its button under the text
-local ROW_NAMES = { "GroupRow", "InviteRow", "FavoriteRow" }
+local RAIL_KEY = "RewardsButton"
+-- The pages under Panel.Pages; each tab key names one in its `Page` attribute.
+local PAGES = { "Daily", "Quests", "Rewards" }
+local UNLIT_TRANSPARENCY = 0.75 -- a tab that is not showing fades its face, like an unlit shop section key
 local CHECK_TIMEOUT = 35 -- the server re-checks membership for about 30 s; after this the button resets
 local GROUP_ID = GameConfig.Rewards.GroupId
 local INVITE_MESSAGE = "Come dive with me in Rare or Sink! Give the rarest answers to stay above the water."
@@ -39,8 +43,8 @@ local CALM_PHASES: { [string]: boolean } = { Waiting = true, Intermission = true
 
 type Swatch = { Top: Color3, Bottom: Color3, Lip: Color3 }
 
--- Repaints a chunky face (white, coloured by its gradient) with a Theme.Chunky swatch, keeping the height
--- of the lip band authored in Studio.
+-- Repaints a chunky face (white, coloured by its gradient) with a swatch, keeping the height of the lip band
+-- authored in Studio.
 local function paint(gradient: UIGradient, swatch: Swatch)
 	local points = gradient.Color.Keypoints
 	local edge = if #points >= 4 then points[3].Time else 0.9
@@ -61,6 +65,12 @@ local DONE_SWATCH: Swatch = {
 
 local player = Players.LocalPlayer
 
+type Tab = {
+	button: TextButton,
+	lip: UIGradient?, -- the lit face
+	badge: TextLabel?,
+}
+
 type Row = {
 	frame: Frame,
 	sub: TextLabel?,
@@ -75,8 +85,16 @@ type Row = {
 local gui: Frame? = nil
 local fit: UIScale? = nil
 local panel: Frame? = nil
-local layout: Ui.PhoneLayout? = nil
+local pages: { [string]: GuiObject } = {}
+local tabs: { [string]: Tab } = {}
 local rows: { [string]: Row } = {}
+local bound = false -- the window lookups are over, whether or not they found it
+
+local opened = false
+local current: string? = nil -- the page showing
+-- Each tab's badge text. Kept here so a badge set before the window is bound still shows.
+local badges: { [string]: string? } = {}
+local showCallbacks: { [string]: { () -> () } } = {}
 
 local claimed: { [string]: boolean } = {}
 local referrals = 0
@@ -84,7 +102,6 @@ local firstGames: number? = nil -- profile.games when this session started
 local games = 0
 local playing = false
 local phase = "Waiting"
-local isOpen = false
 
 local joining = false -- PromptJoinAsync is up
 local checking = false -- RewardClaim sent; waiting for the server's verdict
@@ -95,6 +112,162 @@ local nudged = false
 
 local Rewards = {}
 
+-- The window -----------------------------------------------------------------------------------------------
+
+-- Shrinks the panel on small screens instead of letting it run off the edge.
+local function fitToScreen()
+	local screen = gui
+	local frame = panel
+	local scale = fit
+	if screen == nil or frame == nil or scale == nil then
+		return
+	end
+	Ui.fitPanel(screen.AbsoluteSize, frame, scale, nil, MARGIN, MIN_FIT, 0)
+end
+
+local function drawBadge(name: string)
+	local tab = tabs[name]
+	local badge = if tab ~= nil then tab.badge else nil
+	if badge == nil then
+		return
+	end
+	local text = badges[name]
+	if text == nil then
+		badge.Visible = false
+		return
+	end
+	badge.Text = text
+	if not badge.Visible then
+		Ui.pop(badge)
+	end
+end
+
+-- The rail key carries one badge for all three tabs, in the order a plain open picks its tab: "!" while a
+-- daily claim waits, else the Quests count, else the "!" of the group reward. So a reward that is never
+-- claimed does not hide the other two.
+local profileSeen = false -- a profile that loaded has arrived
+
+local function railBadge(): string?
+	if badges.Daily == "!" then
+		return "!"
+	end
+	return badges.Quests or badges.Rewards
+end
+
+-- Shows a badge on a tab ("!" or "1/3"); nil hides it. The rail key's badge follows.
+function Rewards.setTabBadge(tab: string, text: string?)
+	badges[tab] = text
+	drawBadge(tab)
+	Rail.setBadge(RAIL_KEY, railBadge())
+end
+
+-- Calls `callback` whenever this tab's page becomes the one showing in the open window, opening included.
+function Rewards.onShow(tab: string, callback: () -> ())
+	local callbacks = showCallbacks[tab] or {}
+	showCallbacks[tab] = callbacks
+	table.insert(callbacks, callback)
+end
+
+-- Whether the window is open; with a tab, whether it is open on that tab's page.
+function Rewards.isOpen(tab: string?): boolean
+	return opened and (tab == nil or tab == current)
+end
+
+-- A tab's page frame ("Daily", "Quests" or "Rewards"), for the controller that draws it. Yields until the
+-- window is bound, WAIT_SECONDS at most; nil when the page is not there.
+function Rewards.page(name: string): GuiObject?
+	local deadline = os.clock() + WAIT_SECONDS
+	while not bound and os.clock() < deadline do
+		task.wait()
+	end
+	return pages[name]
+end
+
+local function setTabLit(tab: Tab, lit: boolean)
+	local lip = tab.lip
+	if lip ~= nil then
+		lip.Enabled = lit
+	end
+	tab.button.BackgroundTransparency = if lit then 0 else UNLIT_TRANSPARENCY
+end
+
+-- Shows one page, lights its tab and lets the page's owner redraw it.
+local function showPage(name: string)
+	current = name
+	for pageName, page in pages do
+		page.Visible = pageName == name
+	end
+	for pageName, tab in tabs do
+		setTabLit(tab, pageName == name)
+	end
+	local callbacks = showCallbacks[name]
+	if callbacks ~= nil then
+		for _, callback in callbacks do
+			callback()
+		end
+	end
+end
+
+-- The tab a plain open lands on: a daily claim that is waiting, then unfinished quests, then the free
+-- rewards. The tab badges say which: Daily carries "!" while a claim waits, Quests a count until all are done.
+local function defaultTab(): string?
+	if badges.Daily == "!" and pages.Daily ~= nil then
+		return "Daily"
+	end
+	if badges.Quests ~= nil and pages.Quests ~= nil then
+		return "Quests"
+	end
+	if pages.Rewards ~= nil then
+		return "Rewards"
+	end
+	-- No Rewards page: whichever page is there.
+	return (next(pages))
+end
+
+function Rewards.close()
+	local screen = gui
+	if screen == nil or not opened then
+		return
+	end
+	opened = false
+	screen.Visible = false
+	Windows.closed(Rewards.close)
+end
+
+-- Opens the window on a tab ("Daily", "Quests" or "Rewards"), or on the one with something to do when none
+-- is given. Never over a pillar: the match comes first.
+function Rewards.open(tab: string?)
+	local screen = gui
+	local frame = panel
+	if screen == nil or frame == nil or playing or player:GetAttribute("Playing") == true then
+		return
+	end
+	local name = if tab ~= nil and pages[tab] ~= nil then tab else defaultTab()
+	if name == nil then
+		return
+	end
+	fitToScreen()
+	screen.Visible = true
+	if not opened then
+		opened = true
+		Sfx.play("Open", 0.5)
+		Ui.pop(frame, 0.7)
+	end
+	showPage(name)
+	Windows.opened(Rewards.close)
+end
+
+local function toggle()
+	if opened then
+		Sfx.play("Close", 0.5)
+		Rewards.close()
+	else
+		Rewards.open()
+	end
+end
+
+-- The Rewards page -----------------------------------------------------------------------------------------
+
 local function itemNames(reward: string): string
 	local names = {}
 	for _, id in RewardRules.itemsFor(reward) do
@@ -104,56 +277,6 @@ local function itemNames(reward: string): string
 		end
 	end
 	return table.concat(names, " + ")
-end
-
--- Shrinks the panel on small screens instead of letting it run off the edge; a portrait phone gets the tall
--- layout so the row text stays readable.
-local function fitToScreen()
-	local screen = gui
-	local frame = panel
-	local scale = fit
-	if screen == nil or frame == nil or scale == nil then
-		return
-	end
-	Ui.fitPanel(screen.AbsoluteSize, frame, scale, layout, MARGIN, MIN_FIT, PORTRAIT_BELOW)
-end
-
--- Portrait phone layout: narrow and tall, each row's button full width under its text, bigger small print.
-local function portraitOverrides(): Ui.Overrides
-	local overrides: Ui.Overrides = {
-		Rows = { Size = UDim2.new(1, -48, 0, PORTRAIT_ROW * #ROW_NAMES + 14 * (#ROW_NAMES - 1)) },
-		LikeLine = {
-			Position = UDim2.new(0, 24, 1, -62),
-			Size = UDim2.new(1, -48, 0, 50),
-			TextWrapped = true,
-		},
-	}
-	for _, name in ROW_NAMES do
-		local path = "Rows/" .. name
-		overrides[path] = { Size = UDim2.new(1, 0, 0, PORTRAIT_ROW) }
-		overrides[path .. "/IconBack"] = {
-			Size = UDim2.fromOffset(76, 76),
-			Position = UDim2.fromOffset(14, 12),
-			AnchorPoint = Vector2.zero,
-		}
-		overrides[path .. "/Title"] = { Position = UDim2.fromOffset(102, 10), Size = UDim2.new(1, -116, 0, 34) }
-		overrides[path .. "/Sub"] = {
-			Position = UDim2.fromOffset(102, 46),
-			Size = UDim2.new(1, -116, 0, 70),
-			TextSize = 20,
-		}
-		overrides[path .. "/Progress"] = {
-			Position = UDim2.fromOffset(16, 118),
-			Size = UDim2.new(1, -32, 0, 24),
-			TextSize = 20,
-		}
-		overrides[path .. "/Button"] = {
-			Size = UDim2.new(1, -32, 0, 64),
-			Position = UDim2.new(0.5, 0, 1, -12),
-			AnchorPoint = Vector2.new(0.5, 1),
-		}
-	end
-	return overrides
 end
 
 local function setButton(row: Row?, text: string, enabled: boolean)
@@ -204,7 +327,8 @@ end
 
 local function render()
 	local groupDone = claimed[RewardRules.Group] == true
-	Rail.setBadge("RewardsButton", if groupDone or GROUP_ID == 0 then nil else "!")
+	-- No badge until the real profile is in: before it, nothing is known to be unclaimed.
+	Rewards.setTabBadge("Rewards", if profileSeen and not groupDone and GROUP_ID ~= 0 then "!" else nil)
 
 	local group = rows.Group
 	if group ~= nil then
@@ -355,20 +479,12 @@ local function maybeNudge()
 	Toasts.show("ENJOYING RARE OR SINK? FAVORITE IT SO YOU CAN FIND IT AGAIN", "info")
 end
 
-local function close()
-	local screen = gui
-	if screen == nil or not isOpen then
-		return
-	end
-	isOpen = false
-	screen.Visible = false
-	Windows.closed(close)
-end
+-- Binding --------------------------------------------------------------------------------------------------
 
 local function bindRow(container: Instance, key: string, name: string, onClick: () -> ())
 	local frame = container:FindFirstChild(name)
 	if frame == nil or not frame:IsA("Frame") then
-		warn("Rewards: StarterGui.Rewards row " .. name .. " is missing")
+		warn("Rewards: the Rewards page has no row " .. name)
 		return
 	end
 	local sub = frame:FindFirstChild("Sub")
@@ -401,46 +517,106 @@ local function bindRow(container: Instance, key: string, name: string, onClick: 
 	end
 end
 
+-- The tab keys are the TextButtons under Panel.Tabs; each one's `Page` attribute names the page it shows.
+local function bindTabs(frame: Instance)
+	for _, child in frame:GetChildren() do
+		local name = child:GetAttribute("Page")
+		if child:IsA("TextButton") and type(name) == "string" then
+			if pages[name] == nil then
+				warn(`Rewards: the tab {child.Name} names the page "{name}", which is missing`)
+				continue
+			end
+			local lip = child:FindFirstChild("Lip")
+			local badge = child:FindFirstChild("Badge")
+			tabs[name] = {
+				button = child,
+				lip = if lip ~= nil and lip:IsA("UIGradient") then lip else nil,
+				badge = if badge ~= nil and badge:IsA("TextLabel") then badge else nil,
+			}
+			Ui.pressable(child)
+			child.Activated:Connect(function()
+				Sfx.play("Pop", 0.4)
+				showPage(name)
+			end)
+			drawBadge(name)
+		end
+	end
+end
+
 local function bind(screen: Frame)
 	local holder = screen:WaitForChild("Holder", WAIT_SECONDS)
 	local found = if holder ~= nil then holder:WaitForChild("Panel", WAIT_SECONDS) else nil
 	if holder == nil or found == nil or not found:IsA("Frame") then
-		warn("Rewards: StarterGui.Rewards.Holder.Panel is missing; the rewards panel stays closed")
+		warn("Rewards: LobbyUi.Rewards.Holder.Panel is missing; the rewards window stays closed")
+		return
+	end
+	local pageHolder = found:WaitForChild("Pages", WAIT_SECONDS)
+	if pageHolder ~= nil then
+		for _, name in PAGES do
+			local page = pageHolder:FindFirstChild(name)
+			if page ~= nil and page:IsA("GuiObject") then
+				pages[name] = page
+			else
+				warn(`Rewards: LobbyUi.Rewards has no page {name}; its tab stays empty`)
+			end
+		end
+	end
+	if next(pages) == nil then
+		warn("Rewards: LobbyUi.Rewards.Holder.Panel.Pages is missing or empty; the rewards window stays closed")
 		return
 	end
 	local scale = holder:FindFirstChild("Fit")
 	fit = if scale ~= nil and scale:IsA("UIScale") then scale else nil
 	panel = found
-	local list = found:WaitForChild("Rows", WAIT_SECONDS)
+	local ownPage = pages.Rewards
+	local list = if ownPage ~= nil then ownPage:FindFirstChild("Rows") else nil
 	if list ~= nil then
 		bindRow(list, "Group", "GroupRow", onGroup)
 		bindRow(list, "Invite", "InviteRow", onInvite)
 		bindRow(list, "Favorite", "FavoriteRow", onFavorite)
+	elseif ownPage ~= nil then
+		warn("Rewards: the Rewards page has no Rows")
 	end
-	layout = Ui.phoneLayout(found, PORTRAIT_SIZE, portraitOverrides())
+	local tabHolder = found:FindFirstChild("Tabs")
+	if tabHolder ~= nil then
+		bindTabs(tabHolder)
+	end
+	for _, name in PAGES do
+		if pages[name] ~= nil and tabs[name] == nil then
+			warn(`Rewards: the page {name} has no tab key under Panel.Tabs`)
+		end
+	end
 	local closeButton = found:FindFirstChild("CloseButton")
 	if closeButton ~= nil and closeButton:IsA("TextButton") then
 		Ui.pressable(closeButton)
 		closeButton.Activated:Connect(function()
 			Sfx.play("Close", 0.5)
-			close()
+			Rewards.close()
 		end)
 	end
 	-- Tapping outside the panel closes it.
 	local scrim = screen:FindFirstChild("Scrim")
 	if scrim ~= nil and scrim:IsA("GuiButton") then
-		scrim.Activated:Connect(close)
+		scrim.Activated:Connect(Rewards.close)
 	end
 	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
+	screen.Visible = false
 	gui = screen
 	render()
 end
 
 function Rewards.init(playerGui: PlayerGui)
-	local railButton = Rail.button("RewardsButton")
+	local railButton = Rail.button(RAIL_KEY)
 	if railButton ~= nil then
-		railButton.Activated:Connect(Rewards.open)
+		railButton.Activated:Connect(toggle)
+	else
+		warn("Rewards: the rail has no RewardsButton; the rewards window only opens by itself")
 	end
+	player:GetAttributeChangedSignal("Playing"):Connect(function()
+		if player:GetAttribute("Playing") == true then
+			Rewards.close()
+		end
+	end)
 	pcall(function()
 		AvatarEditorService.PromptSetFavoriteCompleted:Connect(function(result)
 			if result == Enum.AvatarPromptResult.Success then
@@ -450,19 +626,22 @@ function Rewards.init(playerGui: PlayerGui)
 			end
 		end)
 	end)
+	Rewards.onShow("Rewards", render)
 	render()
 	task.spawn(function()
 		local found = Ui.screen(playerGui, "Rewards", WAIT_SECONDS)
-		if found == nil or not found:IsA("Frame") then
-			warn("Rewards: StarterGui.Rewards is missing; the rewards panel stays closed")
-			return
+		if found ~= nil then
+			bind(found)
+		else
+			warn("Rewards: LobbyUi.Rewards is missing; the rewards window stays closed")
 		end
-		bind(found)
+		bound = true
 	end)
 end
 
 -- ProfileChanged payload: claimed, referrals, games.
 function Rewards.onProfile(profile)
+	profileSeen = profile.loadFailed ~= true
 	if typeof(profile.claimed) == "table" then
 		claimed = profile.claimed
 	end
@@ -487,27 +666,9 @@ function Rewards.onState(payload)
 	playing = payload.playing == true
 	phase = payload.phase
 	if playing then
-		close()
+		Rewards.close()
 	end
 	maybeNudge()
-end
-
--- Opens the rewards panel (ShopUi calls this for "FREE: JOIN GROUP" items). Never over a pillar.
-function Rewards.open()
-	local screen = gui
-	local frame = panel
-	if screen == nil or frame == nil or playing then
-		return
-	end
-	render()
-	fitToScreen()
-	screen.Visible = true
-	if not isOpen then
-		isOpen = true
-		Sfx.play("Open", 0.5)
-		Ui.pop(frame, 0.7)
-	end
-	Windows.opened(close)
 end
 
 return Rewards

@@ -44,7 +44,7 @@ local backdropTransparency = 0.35 -- replaced by the authored Backdrop's value
 
 local card: DiveCard.Handle? = nil
 local lobbyCard = false -- the card up now is the lobby warm-up's, not this round's: state ticks leave it alone
-local pendingRows: { RevealRow }? = nil -- shown in the list when the Surge starts
+local pendingRows: { RevealRow }? = nil -- shown in the list when your card leaves (or at the Surge, if it has not)
 local lastPhase = ""
 local revealToken = 0
 local streak = 0
@@ -223,13 +223,26 @@ function Reveal.hideOwnCard(instant: boolean)
 	hideCard(instant)
 end
 
+local showRows: (rows: { RevealRow }) -> ()
+
 -- The card holds briefly once its stamp settles, then leaves; it is gone before the rise whatever happens.
+-- The answers list follows it out, so it has the whole rise and surge to be read.
 local function scheduleExit(mine: DiveCard.Handle, token: number)
 	local started = os.clock()
 	local deadline = GameConfig.Reveal.RaiseDelaySeconds - CARD_EXIT.Time - EXIT_MARGIN
 	local function leave()
-		if token == revealToken and card == mine then
-			hideCard(false)
+		if token ~= revealToken or card ~= mine then
+			return
+		end
+		hideCard(false)
+		local rows = pendingRows
+		pendingRows = nil
+		if rows ~= nil then
+			task.delay(CARD_EXIT.Time, function()
+				if token == revealToken and gui.Visible then
+					showRows(rows)
+				end
+			end)
 		end
 	end
 	task.delay(deadline, leave)
@@ -289,7 +302,7 @@ local function glow(row: Frame)
 end
 
 -- Best answer on top; rows arrive from the lowest up so the best one lands last.
-local function showRows(rows: { RevealRow })
+function showRows(rows: { RevealRow })
 	Ui.clearClones(list, rowTemplate.Name, "Row")
 	local ordered = table.clone(rows)
 	table.sort(ordered, function(a, b)

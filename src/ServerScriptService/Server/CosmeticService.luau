@@ -11,6 +11,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local DataService = require(script.Parent.DataService)
+local MapService = require(script.Parent.MapService)
 
 local NAME_TAG = "RareOrSinkName" -- the over-head billboard: the name, coloured by the equipped NameTag, with the title above
 local TRAIL_PREFIX = "RareOrSinkTrail" -- every trail clone in the root part is named with this, for removal
@@ -258,15 +259,12 @@ function CosmeticService.applySkin(player: Player, platform: Part)
 			local top = item.top
 			cap.Color = if top ~= nil then Color3.fromRGB(top[1], top[2], top[3]) else color:Lerp(Color3.new(1, 1, 1), 0.35)
 		end
+		-- The pillar's trim, bands and light follow the skin too.
+		MapService.tint(platform, color)
 	end
 	platform.Material = material
 	if cap ~= nil then
-		-- Studs only render on Plastic, so plastic-look skins keep the cap's studded top.
-		if material == Enum.Material.Plastic or material == Enum.Material.SmoothPlastic then
-			cap.Material = Enum.Material.Plastic
-		else
-			cap.Material = material
-		end
+		cap.Material = material
 	end
 end
 

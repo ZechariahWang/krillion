@@ -1,5 +1,5 @@
 --!strict
--- One pop-up window at a time (Shop, Inventory, Quests, Rewards, Help, Settings). A controller opening its
+-- One pop-up window at a time (Shop, Inventory, Rewards, Help, Settings). A controller opening its
 -- window passes its close function; the window open before is closed. While any window is open the rail, the
 -- top buttons, the status chips and the Shells chip hide, so nothing stacks: they watch Windows.Changed.
 

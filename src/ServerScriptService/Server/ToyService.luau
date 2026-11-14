@@ -1,13 +1,15 @@
 --!strict
--- Lobby throwables (Cosmetics slot Toy). ToyThrow(targetUserId) from a player holding an owned toy throws it
--- at another player in the lobby; every client hears ToyHit and animates the flight, and the target's screen
--- gets a splat. Never on a pillar: neither the thrower nor the target may be in a match.
+-- Throwables (Cosmetics slot Toy). ToyThrow(targetId) from a player in the lobby holding an owned toy throws
+-- it at another lobby player nearby, or at whoever they are spectating on a pillar (a player or a bot, at any
+-- distance). Every client hears ToyHit and draws the flight and a splat in the world; nothing is ever put
+-- on the target's screen. A player in a match cannot throw.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Net = require(ReplicatedStorage.Shared.Net)
+local BotService = require(script.Parent.BotService)
 local CosmeticService = require(script.Parent.CosmeticService)
 local PlayerService = require(script.Parent.PlayerService)
 
@@ -39,17 +41,25 @@ local function onThrow(player: Player, targetUserId: any)
 	if toy == nil or toy.toy == nil then
 		return
 	end
-	local target = Players:GetPlayerByUserId(targetUserId)
-	if target == nil or PlayerService.isPlaying(player) or PlayerService.isPlaying(target) then
+	local from = rootOf(player)
+	if from == nil or PlayerService.isPlaying(player) then
 		return
 	end
-	local from = rootOf(player)
-	local to = rootOf(target)
-	if from == nil or to == nil or (from.Position - to.Position).Magnitude > GameConfig.Toys.Range then
+	local target = Players:GetPlayerByUserId(targetUserId)
+	if target ~= nil then
+		local to = rootOf(target)
+		if to == nil then
+			return
+		end
+		-- Two lobby players must be near each other; a player on a pillar is thrown at by whoever watches them.
+		if not PlayerService.isPlaying(target) and (from.Position - to.Position).Magnitude > GameConfig.Toys.Range then
+			return
+		end
+	elseif not BotService.standing(targetUserId) then
 		return
 	end
 	lastThrow[player] = now
-	Net.event("ToyHit"):FireAllClients({ from = player.UserId, to = target.UserId, toy = toy.toy })
+	Net.event("ToyHit"):FireAllClients({ from = player.UserId, to = targetUserId, toy = toy.toy })
 end
 
 function ToyService.start()
