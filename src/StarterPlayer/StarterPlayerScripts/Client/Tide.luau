@@ -19,7 +19,7 @@ local Ui = require(script.Parent.Ui)
 
 local GUI_WAIT = 10
 local SUNK_NAMES = 4 -- names listed in the sunk toast before "AND N MORE"
-local SAFE_FLASH_SECONDS = 1.5
+local SAFE_FLASH_SECONDS = 0.9 -- shorter than Round.SettleSeconds, so it is over before the next prompt
 local BEAT_SECONDS = 0.6 -- one lub-dub every this long
 local DUB_DELAY = 0.22
 local VIGNETTE_PEAK = 0.6 -- band transparency at the lub; the dub is a touch softer

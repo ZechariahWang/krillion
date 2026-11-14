@@ -31,6 +31,12 @@ function BotService.isBot(id: any): boolean
 	return typeof(id) == "number" and id < 0
 end
 
+-- Whether this id is a bot that is on a pillar now: in the current match and not sunk.
+function BotService.standing(id: any): boolean
+	local bot = if typeof(id) == "number" then bots[id] else nil
+	return bot ~= nil and bot.rig ~= nil
+end
+
 -- Creates `count` bots with names nobody in `usedNames` has. Returns their ids.
 function BotService.fill(count: number, usedNames: { [string]: boolean }): { number }
 	BotService.clear()

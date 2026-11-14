@@ -44,6 +44,7 @@ local PICK_RADIUS = 160 -- screen pixels around the cursor that key T looks for 
 local SPLAT_FADE = 0.6
 local SPLAT_OUT = 0.25 -- studs the splat sits proud of the part it hit
 local PLATFORMS = "Platforms" -- the Workspace folder of pillars; a bot's carries its id and its rig
+local UNSEEN_THROWER = Vector3.new(18, 30, 0) -- where a toy starts from, off the target, when its thrower is not streamed in
 local NUDGE_DELAY = 4 -- seconds after the results screen before a nudge, so it never covers the scores
 
 local player = Players.LocalPlayer
@@ -53,6 +54,7 @@ local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
 local playing = false
 local toyButton: TextButton? = nil
+local lastThrowAt = -math.huge
 local aimingUntil = 0
 local nudgedStarter = false
 local nudgedDouble = false
@@ -166,6 +168,12 @@ local function throwAt(targetId: number)
 		return
 	end
 	aimingUntil = 0
+	-- The server refuses a throw inside the cooldown without a word, so say so here.
+	if os.clock() - lastThrowAt < GameConfig.Toys.Cooldown then
+		Toasts.show("TOY RELOADING", "info")
+		return
+	end
+	lastThrowAt = os.clock()
 	Net.event("ToyThrow"):FireServer(targetId)
 end
 
@@ -303,14 +311,16 @@ local function toyColor(toy: string): Color3
 end
 
 -- Every client flies the toy from thrower to target along an arc, then bursts it into a splat on the target.
--- A target that has not streamed in here is simply not drawn.
+-- A target that has not streamed in here is simply not drawn; a thrower who has not (a spectator far off in
+-- the lobby) has their toy drop in from above the target.
 local function onToyHit(payload: Net.ToyHitPayload)
 	local from = Players:GetPlayerByUserId(payload.from)
 	local start = if from ~= nil then rootOf(from) else nil
 	local finish = targetPart(payload.to)
-	if start == nil or finish == nil then
+	if finish == nil then
 		return
 	end
+	local fallback = finish.Position + UNSEEN_THROWER
 	local folder = templateFolder("Toys")
 	local template = if folder ~= nil then folder:FindFirstChild(payload.toy) else nil
 	local color = toyColor(payload.toy)
@@ -339,13 +349,13 @@ local function onToyHit(payload: Net.ToyHitPayload)
 	end
 	projectile.Parent = workspace
 	local toys = GameConfig.Toys
-	local distance = (finish.Position - start.Position).Magnitude
+	local distance = (finish.Position - (if start ~= nil then start.Position else fallback)).Magnitude
 	local flight = math.clamp(toys.FlightSeconds * distance / toys.FlightStuds, toys.FlightSeconds, toys.MaxFlightSeconds)
 	local started = os.clock()
 	local connection: RBXScriptConnection
 	connection = RunService.RenderStepped:Connect(function()
 		local t = math.min(1, (os.clock() - started) / flight)
-		local a = start.Position + Vector3.new(0, 1.5, 0)
+		local a = if start ~= nil and start.Parent ~= nil then start.Position + Vector3.new(0, 1.5, 0) else fallback
 		local b = finish.Position + Vector3.new(0, 1, 0)
 		local height = math.min(12, (b - a).Magnitude * 0.25)
 		local position = a:Lerp(b, t) + Vector3.new(0, math.sin(t * math.pi) * height, 0)

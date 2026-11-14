@@ -127,7 +127,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
   `StartCountdownSeconds`.
 - Reveal: your dive card slides in and carries everyone's answers (`DiveCard` options `peers`; a player with
-  no answer is left to the answers list). Each is a `Templates.DiveCard...PeerTag` (the player's picture in a
+  no answer is left to the answers list, which rolls in as the card leaves). Each is a `Templates.DiveCard...PeerTag` (the player's picture in a
   circle, or a bot's initial, then the answer), yours too. `Shared/DivePack` (pure, tested) gives every tag a
   lane and sinks them as a pack (a wind-up just under the surface while the tags swell, then a burst), so
   tags never overlap; lanes stay clear of the zone labels and the ruler.
@@ -181,13 +181,13 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   `keepStatus`, so the phase and countdown chips stay). Window titles carry no emoji.
 - REWARDS window (`LobbyUi.Rewards`, the rail's `RewardsButton`): one window with Daily, Quests and Rewards
   tabs. `Holder.Panel` holds `Title`, `CloseButton`, `Tabs` (`DailyTab`, `QuestsTab`, `RewardsTab`: TextButtons
-  with a `Page` attribute naming their page, a `Lip` gradient that is enabled while the tab is lit and a hidden
-  `Badge`) and `Pages` (`Daily`, `Quests`, `Rewards`, shown one at a time). `Client/Rewards` owns the window,
+  with a `Page` attribute naming their page, a `Lip` gradient that is enabled while the tab is lit, a hidden
+  `Badge`, and `Chunky = true` so a hover does not fade a lit tab's face) and `Pages` (`Daily`, `Quests`, `Rewards`, shown one at a time). `Client/Rewards` owns the window,
   the tabs and the Rewards page (`Rows.GroupRow`, `InviteRow`, `FavoriteRow`; `LikeLine`). `Client/Daily` and
   `Client/Quests` (`Row1`..`Row3`, `Empty`, `Footer`) draw their pages through `Rewards.page`,
   `Rewards.setTabBadge` and `Rewards.onShow`; Rewards never requires them. A tab's badge is "!" for a daily
-  claim or group reward that is waiting and "x/3" while quests are unfinished; the rail key shows "!" if any
-  tab does, else the quest count. A plain open lands on Daily if a claim waits, else on Quests if one is
+  claim or group reward that is waiting and "x/3" while quests are unfinished; the rail key shows "!" while a
+  daily claim waits, else the quest count, else the group reward's "!". A plain open lands on Daily if a claim waits, else on Quests if one is
   unfinished, else on Rewards; `Rewards.open(tab)` picks the tab.
 - Shop (`LobbyUi.Shop.Holder.Panel`) and Inventory (`LobbyUi.Inventory`, the same tree with only the cosmetic
   sections): the section keys under `Sections` carry `Kind` (Featured | Slots | Chests | Shells | Passes |

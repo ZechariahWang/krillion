@@ -26,6 +26,7 @@ local Ui = require(script.Parent.Ui)
 
 local METER_RANGE = 30 -- studs of margin that fills the whole meter
 local METER_WATER = 0.2 -- fraction of the meter the water fill occupies
+local LABEL_ROOM = 0.1 -- fraction of the meter, from its top, that a label above a line needs
 local FEEDBACK_SECONDS = 1.5
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
 local WAIT_SECONDS = 10
@@ -635,7 +636,8 @@ local function updateMeter(payload)
 	local danger = showTarget and willSink
 	marker.BackgroundColor3 = if danger then Theme.Color.Red else Theme.Color.Cream
 	-- Each label goes on the far side of its line from the other line, so the two never overlap.
-	placeLabel(markerLabel, not danger)
+	-- Near the top of the meter YOU drops below its line, clear of the label above the meter.
+	placeLabel(markerLabel, not danger and markerY > LABEL_ROOM)
 	placeLabel(targetLabel, danger)
 	local you = markerLabel
 	if you ~= nil then

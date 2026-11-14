@@ -55,7 +55,7 @@ local function onThrow(player: Player, targetUserId: any)
 		if not PlayerService.isPlaying(target) and (from.Position - to.Position).Magnitude > GameConfig.Toys.Range then
 			return
 		end
-	elseif not BotService.isBot(targetUserId) then
+	elseif not BotService.standing(targetUserId) then
 		return
 	end
 	lastThrow[player] = now

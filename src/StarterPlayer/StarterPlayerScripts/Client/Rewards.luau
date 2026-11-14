@@ -142,15 +142,16 @@ local function drawBadge(name: string)
 	end
 end
 
--- The rail key carries one badge for all three tabs: "!" when any tab has something to claim, else the
--- Quests tab's count.
+-- The rail key carries one badge for all three tabs, in the order a plain open picks its tab: "!" while a
+-- daily claim waits, else the Quests count, else the "!" of the group reward. So a reward that is never
+-- claimed does not hide the other two.
+local profileSeen = false -- a profile that loaded has arrived
+
 local function railBadge(): string?
-	for _, text in badges do
-		if text == "!" then
-			return "!"
-		end
+	if badges.Daily == "!" then
+		return "!"
 	end
-	return badges.Quests
+	return badges.Quests or badges.Rewards
 end
 
 -- Shows a badge on a tab ("!" or "1/3"); nil hides it. The rail key's badge follows.
@@ -326,7 +327,8 @@ end
 
 local function render()
 	local groupDone = claimed[RewardRules.Group] == true
-	Rewards.setTabBadge("Rewards", if groupDone or GROUP_ID == 0 then nil else "!")
+	-- No badge until the real profile is in: before it, nothing is known to be unclaimed.
+	Rewards.setTabBadge("Rewards", if profileSeen and not groupDone and GROUP_ID ~= 0 then "!" else nil)
 
 	local group = rows.Group
 	if group ~= nil then
@@ -639,6 +641,7 @@ end
 
 -- ProfileChanged payload: claimed, referrals, games.
 function Rewards.onProfile(profile)
+	profileSeen = profile.loadFailed ~= true
 	if typeof(profile.claimed) == "table" then
 		claimed = profile.claimed
 	end

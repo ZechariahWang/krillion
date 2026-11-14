@@ -124,6 +124,11 @@ function Fx.flash(color: Color3)
 	Tween.play(flash, Theme.Tween.Flash, { BackgroundTransparency = 1 })
 end
 
+-- Whether a callout is on screen now. A routine one (ROUND n) gives way to it.
+function Fx.calloutShowing(): boolean
+	return ready and callout.Visible
+end
+
 -- Lands big and tilted from 40%, sliding up a few pixels, holds, then shrinks a little as it fades. The
 -- text is white under a gradient in `color` (lighter on top, darker at the bottom) with a thick outline.
 function Fx.callout(text: string, color: Color3)

@@ -226,6 +226,12 @@ function Quests.onProfile(profile)
 	if type(quests) ~= "table" or type(quests.day) ~= "number" then
 		return
 	end
+	-- A profile that failed to load says nothing about progress: no badge until the real one.
+	if profile.loadFailed == true then
+		saved = nil
+		Rewards.setTabBadge(PAGE, nil)
+		return
+	end
 	local progress: { [string]: number } = {}
 	if type(quests.progress) == "table" then
 		for id, amount in quests.progress do

@@ -142,6 +142,7 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
+local WIND_UP_METRES = 60 -- a pack whose deepest answer is shallower than this just sinks: no show for a short drop
 local INHALE = 0.09 -- every tag swells this much while the pack winds up under the surface...
 local EXHALE = 0.84 -- ...and snaps to this share of its size as it bursts, before springing back
 local CHARGE_SLOW = 0.17 -- seconds between the wind-up's clicks at its start
@@ -875,6 +876,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local leaderDeep = false -- it is Rare or better: the tags that stopped short drift away
 	local burstAt = math.huge -- seconds into the dive the wind-up ends and the pack bursts down
 	local burst = false
+	local windUp = false -- the pack goes deep enough for the wind-up and burst to be played up
 	local chargeAt = 0 -- when the wind-up clicks next
 
 	-- Window width the zone labels (left) and the ruler's numbers (right) take, so no tag sits on them.
@@ -998,6 +1000,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			end
 		end
 		burstAt = dropTime + DivePack.holdSeconds(sinkTime)
+		windUp = deepest >= WIND_UP_METRES
 		started = os.clock()
 		ready = true
 	end
@@ -1120,7 +1123,9 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				sound("Splash", 0.6, 1.1)
 			end
 
-			if not burst and elapsed < burstAt then
+			if not windUp then
+				burst = true
+			elseif not burst and elapsed < burstAt then
 				-- The wind-up: the pack hangs just under the surface and every tag swells, to clicks that quicken.
 				local hold = burstAt - dropTime
 				local charge = if hold > 0 then math.clamp((elapsed - dropTime) / hold, 0, 1) else 1

@@ -39,6 +39,8 @@ local cards: { [number]: Card } = {}
 local saved: Rules.State? = nil -- profile.daily from the last ProfileChanged; nil until the first one
 local tutorialDone = false
 local playing = false
+local phase = "" -- the round phase, so the window never opens itself over the results screen
+local wantAuto = false -- back from a match: open once the results screen has gone
 local autoShown = false
 local pendingSince: number? = nil -- a claim is with the server
 
@@ -163,6 +165,11 @@ local function tryAutoOpen()
 	if autoShown or not bound or playing or not tutorialDone or not claimable() or Windows.anyOpen() then
 		return
 	end
+	if phase == "Results" then
+		-- The results screen is up (a solo match ends the moment you sink): wait for it to go.
+		wantAuto = true
+		return
+	end
 	autoShown = true
 	Rewards.open(PAGE)
 end
@@ -256,11 +263,21 @@ function Daily.onProfile(profile)
 	end
 end
 
+-- Main calls this before Rewards.onState, which closes the window when a match takes you.
 function Daily.onState(payload)
 	local wasPlaying = playing
 	playing = type(payload) == "table" and payload.playing == true
+	phase = if type(payload) == "table" and type(payload.phase) == "string" then payload.phase else ""
+	if playing and not wasPlaying and autoShown and Rewards.isOpen(PAGE) and claimable() then
+		-- The match is closing the automatic showing before it was answered: it gets another afterwards.
+		autoShown = false
+	end
 	if wasPlaying and not playing then
-		-- Back in the lobby after a match: a reward still waiting gets its one automatic showing.
+		wantAuto = true
+	end
+	if wantAuto and not playing and phase ~= "Results" then
+		-- Back in the lobby with the results gone: a reward still waiting gets its one automatic showing.
+		wantAuto = false
 		task.delay(AUTO_OPEN_SECONDS, tryAutoOpen)
 	end
 end
