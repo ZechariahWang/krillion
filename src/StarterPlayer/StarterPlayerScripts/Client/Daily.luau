@@ -203,11 +203,12 @@ local function claim()
 	end
 end
 
--- DailyResult: the Shells arrive with the profile; this is the sound and the button coming back.
+-- DailyResult: the Shells arrive with the profile; this is the sound and the window closing on a claim.
 function Daily.onResult(payload: Net.DailyResultPayload)
 	pendingSince = nil
 	if type(payload) == "table" and payload.status == "ok" then
 		Sfx.play("Fanfare", 0.6)
+		close()
 	end
 	render()
 end
