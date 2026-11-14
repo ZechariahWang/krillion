@@ -44,6 +44,7 @@ export type RevealRow = {
 	depth: number, -- metres on the dive card (Depth.metres); 0 with no answer
 	oneIn: number?, -- real "1 in N players" from recorded answers, nil until there is enough data
 	schooled: number?, -- how many players gave this same answer, when 2 or more
+	newBest: boolean?, -- true when this dive is the player's deepest ever
 }
 
 export type RevealPayload = {
@@ -80,12 +81,22 @@ export type LobbyQuizResultPayload = {
 	cap: number?,
 }
 
+export type DeepestDive = {
+	userId: number, -- negative for bots
+	name: string,
+	answer: string,
+	tier: string,
+	metres: number,
+	round: number,
+}
+
 export type MatchEndedPayload = {
 	solo: boolean,
 	rounds: number,
 	winnerName: string,
 	winnerUserId: number?, -- nil when nobody won or the winner has left
 	podium: { { name: string, points: number } },
+	deepest: DeepestDive?, -- the match's deepest dive; nil when nobody had an accepted answer
 	seconds: number,
 }
 
@@ -119,6 +130,8 @@ export type ProfilePayload = {
 	cash: number,
 	wins: number,
 	best: number,
+	deepest: number, -- metres of your deepest match dive ever
+	deepestAnswer: string,
 	revives: number,
 	owned: { [string]: boolean },
 	equipped: { [string]: string },

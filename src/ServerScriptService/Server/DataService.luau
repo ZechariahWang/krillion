@@ -176,6 +176,8 @@ local function sendProfile(player: Player)
 	payload.cash = profile.cash
 	payload.wins = profile.wins
 	payload.best = profile.best
+	payload.deepest = profile.deepest
+	payload.deepestAnswer = profile.deepestAnswer
 	payload.revives = profile.revives
 	payload.owned = profile.owned
 	payload.equipped = profile.equipped
@@ -469,6 +471,26 @@ function DataService.recordHeight(player: Player, height: number)
 	end
 	current.best = whole
 	DataService.changed(player)
+end
+
+-- Records a match answer's dive. Returns true when it beats the player's deepest ever (and saves it), false
+-- otherwise, including when the profile is not loaded or is read-only. The very first dive is saved but
+-- returns false: beating nothing is not worth a "new personal best".
+function DataService.recordDive(player: Player, metres: number, answer: string): boolean
+	local current = session(player)
+	local profile = DataService.get(player)
+	if current == nil or profile == nil or DataService.isReadOnly(player) then
+		return false
+	end
+	local whole = math.floor(metres)
+	if whole <= profile.deepest then
+		return false
+	end
+	local hadOne = profile.deepest > 0
+	current.deepest = whole
+	current.deepestAnswer = answer
+	DataService.changed(player)
+	return hadOne
 end
 
 function DataService.addRevives(player: Player, count: number)

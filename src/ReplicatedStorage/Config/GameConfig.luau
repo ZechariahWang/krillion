@@ -11,7 +11,7 @@ local GameConfig = {
 		PromptSeconds = 20,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
 		PromptSecondsMin = 10,
-		RevealSeconds = 9.5, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
+		RevealSeconds = 10, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
 		SettleSeconds = 1.5, -- after the water settles, before the next prompt or the results: room for the callouts
 		ResultsSeconds = 10,
 		MaxRounds = 0, -- 0 means no cap: last player standing
@@ -124,12 +124,12 @@ local GameConfig = {
 	Reveal = {
 		-- Your full-screen dive card: the dive is long enough to watch the answer sink through the tiers
 		-- (Depth.diveSeconds, at most CardBudgetSeconds), the card holds CardHoldSeconds on the result after
-		-- the stamp settles (~0.3 s), then shrinks away (0.25 s). That is about 6 s at most, so it is gone
+		-- the stamp settles (~0.3 s), then shrinks away (0.25 s). That is about 7 s at most, so it is gone
 		-- before the rise at RaiseDelaySeconds. tests/Depth.test.luau keeps these in step with each other.
 		CardBudgetSeconds = 5,
-		CardHoldSeconds = 1.2,
-		RaiseDelaySeconds = 6.8, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 6.8, -- answer Shells and Mythic announcements land with the rise
+		CardHoldSeconds = 1.9, -- long enough to zoom out and read everyone's dives
+		RaiseDelaySeconds = 7.5, -- pillars start rising this long after the reveal, once your card is out of the way
+		PayoutDelaySeconds = 7.5, -- answer Shells and Mythic announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},

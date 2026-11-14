@@ -1,6 +1,6 @@
 --!strict
 -- The saved player profile and how one server's session changes merge into it.
--- Cash, wins and revives are deltas so two servers never overwrite each other; best keeps the max.
+-- Cash, wins and revives are deltas so two servers never overwrite each other; best and deepest keep the max.
 -- Every field has a merge rule (see merge). Add a new field to Profile, Session, new, newSession,
 -- fromStored, combine and merge, or it is silently dropped on save.
 -- No Roblox APIs here, so Lune tests can require it.
@@ -64,6 +64,8 @@ export type Profile = {
 	lobby: LobbyDay,
 	daily: DailyState,
 	krillions: number, -- Mythic answers ever given in matches
+	deepest: number, -- metres of the deepest match dive ever (Depth.metres); 0 before the first answer
+	deepestAnswer: string, -- the answer that dove deepest, in the bank spelling; "" before the first
 	games: number, -- matches played to the end
 	musicOff: boolean, -- the player turned background music off in Settings
 	musicVolume: number, -- 0..1, the Settings volume bar
@@ -88,6 +90,8 @@ export type Session = {
 	lobby: LobbyDay,
 	daily: DailyState,
 	krillions: number, -- delta
+	deepest: number, -- the deepest dive this session, 0 for none; kept with its answer when deeper
+	deepestAnswer: string,
 	games: number, -- delta
 	musicOff: boolean?, -- nil unless the player changed the music setting this session
 	musicVolume: number?, -- nil unless the player moved the volume bar this session
@@ -130,6 +134,8 @@ function Profile.new(): Profile
 		lobby = newLobby(),
 		daily = newDaily(),
 		krillions = 0,
+		deepest = 0,
+		deepestAnswer = "",
 		games = 0,
 		musicOff = false,
 		musicVolume = 1,
@@ -271,6 +277,8 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	profile.lobby = copyLobby(stored.lobby)
 	profile.daily = copyDaily(stored.daily)
 	profile.krillions = numberOr(stored.krillions, 0)
+	profile.deepest = numberOr(stored.deepest, 0)
+	profile.deepestAnswer = if typeof(stored.deepestAnswer) == "string" then stored.deepestAnswer else ""
 	profile.games = numberOr(stored.games, 0)
 	profile.musicOff = stored.musicOff == true
 	if typeof(stored.musicVolume) == "number" then
@@ -299,6 +307,8 @@ function Profile.newSession(): Session
 		lobby = newLobby(),
 		daily = newDaily(),
 		krillions = 0,
+		deepest = 0,
+		deepestAnswer = "",
 		games = 0,
 	}
 end
@@ -351,6 +361,9 @@ function Profile.combine(first: Session, second: Session): Session
 	end
 	combined.daily = laterDaily(first.daily, second.daily)
 	combined.krillions = first.krillions + second.krillions
+	local deeper = if second.deepest > first.deepest then second else first
+	combined.deepest = deeper.deepest
+	combined.deepestAnswer = deeper.deepestAnswer
 	combined.games = first.games + second.games
 	if second.musicOff ~= nil then
 		combined.musicOff = second.musicOff
@@ -416,6 +429,10 @@ function Profile.merge(stored: Profile, session: Session): Profile
 	end
 	merged.daily = laterDaily(merged.daily, session.daily)
 	merged.krillions = merged.krillions + session.krillions
+	if session.deepest > merged.deepest then
+		merged.deepest = session.deepest
+		merged.deepestAnswer = session.deepestAnswer
+	end
 	merged.games = merged.games + session.games
 	if session.musicOff ~= nil then
 		merged.musicOff = session.musicOff

@@ -265,6 +265,24 @@ return function(test)
 		assert(Profile.combine(session, session).games == 2)
 	end)
 
+	test("the deepest dive keeps the deeper one with its answer", function()
+		local stored = Profile.fromStored({ deepest = 300, deepestAnswer = "kiwi" })
+		assert(stored.deepest == 300 and stored.deepestAnswer == "kiwi")
+		assert(Profile.fromStored({}).deepestAnswer == "")
+		local shallower = Profile.newSession()
+		shallower.deepest = 120
+		shallower.deepestAnswer = "apple"
+		local kept = Profile.merge(stored, shallower)
+		assert(kept.deepest == 300 and kept.deepestAnswer == "kiwi")
+		local deeper = Profile.newSession()
+		deeper.deepest = 512
+		deeper.deepestAnswer = "jabuticaba"
+		local replaced = Profile.merge(stored, deeper)
+		assert(replaced.deepest == 512 and replaced.deepestAnswer == "jabuticaba")
+		local combined = Profile.combine(deeper, shallower)
+		assert(combined.deepest == 512 and combined.deepestAnswer == "jabuticaba")
+	end)
+
 	test("fromStored keeps the server that holds the profile", function()
 		local profile = Profile.fromStored({ activeSession = { jobId = "job-a", time = 1000 } })
 		local active = profile.activeSession
