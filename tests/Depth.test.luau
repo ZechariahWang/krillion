@@ -69,35 +69,14 @@ return function(test)
 		local deepest = Depth.diveSeconds(GameConfig.Depth.MaxMetres, false)
 		assert(deepest >= 4.5, "the deepest dive is over too fast: " .. deepest)
 		assert(Depth.diveSeconds(40, false) >= 1.8, "a shallow dive is over too fast")
-		-- The stamp lands inside the card's budget, and the card has left before the pillars rise.
-		assert(deepest <= reveal.CardBudgetSeconds, "the deepest dive would be squeezed")
-		assert(reveal.CardBudgetSeconds + reveal.CardHoldSeconds + 0.6 <= reveal.RaiseDelaySeconds)
+		-- Every tag lands, and the view reaches the deepest answer, inside the card's budget (a deep pack is
+		-- squeezed a little to fit). The crown pops (0.4 s), the result is read for at least a second, and
+		-- the card has left (0.35 s) before the pillars rise.
+		assert(deepest <= reveal.CardBudgetSeconds, "the deepest dive would be squeezed hard")
+		assert(reveal.CardBudgetSeconds + 0.4 + 1 + 0.35 <= reveal.RaiseDelaySeconds, "the deepest dives leave no time to read the result")
 		assert(reveal.CardHoldSeconds >= 1, "the result is not held long enough to read")
 		-- Room after the rise starts for the pillars to finish, but the whole reveal stays under 10 s.
 		assert(GameConfig.Round.RevealSeconds >= reveal.RaiseDelaySeconds + 2.5)
 		assert(GameConfig.Round.RevealSeconds <= 10)
-	end)
-
-	test("a dive creeps, bursts past its depth, then settles exactly on it", function()
-		for _, intensity in { 0, 0.4, 1 } do
-			local shape = Depth.diveShape(intensity)
-			assert(Depth.dive(0, intensity) == 0)
-			assert(math.abs(Depth.dive(1, intensity) - 1) < 1e-9, "ends on the depth")
-			assert(Depth.dive(shape.hold, intensity) <= 0.1, "the wind-up stays shallow")
-			assert(Depth.dive(shape.hold / 2, intensity) < shape.creep / 2, "the wind-up starts slow")
-			local previous = -1
-			for step = 0, 100 do
-				local t = shape.impact * step / 100
-				local value = Depth.dive(t, intensity)
-				assert(value >= previous, "sinks without stopping until impact")
-				previous = value
-			end
-			assert(Depth.dive(shape.impact, intensity) > 1, "overshoots at impact")
-		end
-		local small = Depth.diveShape(0)
-		local big = Depth.diveShape(1)
-		assert(big.hold > small.hold, "better answers wind up longer")
-		assert(big.impact - big.hold < small.impact - small.hold, "and burst faster")
-		assert(big.overshoot > small.overshoot, "and overshoot further")
 	end)
 end

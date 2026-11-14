@@ -2007,7 +2007,7 @@
                   1
                 ],
                 "BackgroundTransparency": 0.35,
-                "ZIndex": 3
+                "ZIndex": 2
               }
             },
             {
@@ -2034,11 +2034,11 @@
                 "Size": {
                   "UDim2": [
                     [
-                      0.36,
+                      0.4,
                       0
                     ],
                     [
-                      0.1,
+                      0.14,
                       0
                     ]
                   ]
@@ -2048,11 +2048,11 @@
                   1,
                   1
                 ],
-                "ZIndex": 2,
+                "ZIndex": 3,
                 "Visible": false
               },
               "attributes": {
-                "Note": "Another player's answer on your dive card: DiveCard.luau clones it per player, dives it to their depth beside yours and crowns the round's deepest."
+                "Note": "One player's answer in the pack on a dive card: their picture in a circle (Avatar: Image for a real player, Initial for a bot), their name and the answer. DiveCard.luau clones it per player (and for you, when other answers share the card), gives each a lane, sinks them together and crowns the round's deepest."
               },
               "children": [
                 {
@@ -2061,7 +2061,7 @@
                   "properties": {
                     "CornerRadius": {
                       "UDim": [
-                        0.3,
+                        0.5,
                         0
                       ]
                     }
@@ -2119,7 +2119,7 @@
                   "name": "UIAspectRatioConstraint",
                   "className": "UIAspectRatioConstraint",
                   "properties": {
-                    "AspectRatio": 3.4,
+                    "AspectRatio": 4,
                     "AspectType": "FitWithinMaxSize"
                   }
                 },
@@ -2140,15 +2140,15 @@
                       0.4118,
                       0.5294
                     ],
-                    "Text": "PLAYER  |  0 M",
+                    "Text": "PLAYER",
                     "Position": {
                       "UDim2": [
                         [
-                          0.08,
+                          0.25,
                           0
                         ],
                         [
-                          0.08,
+                          0.1,
                           0
                         ]
                       ]
@@ -2156,16 +2156,17 @@
                     "Size": {
                       "UDim2": [
                         [
-                          0.84,
+                          0.7,
                           0
                         ],
                         [
-                          0.34,
+                          0.3,
                           0
                         ]
                       ]
                     },
-                    "ZIndex": 3
+                    "ZIndex": 4,
+                    "TextXAlignment": "Left"
                   }
                 },
                 {
@@ -2189,11 +2190,11 @@
                     "Position": {
                       "UDim2": [
                         [
-                          0.08,
+                          0.25,
                           0
                         ],
                         [
-                          0.42,
+                          0.4,
                           0
                         ]
                       ]
@@ -2201,7 +2202,7 @@
                     "Size": {
                       "UDim2": [
                         [
-                          0.84,
+                          0.7,
                           0
                         ],
                         [
@@ -2210,8 +2211,166 @@
                         ]
                       ]
                     },
-                    "ZIndex": 3
+                    "ZIndex": 4,
+                    "TextXAlignment": "Left"
                   }
+                },
+                {
+                  "name": "Avatar",
+                  "className": "Frame",
+                  "properties": {
+                    "BorderSizePixel": 0,
+                    "AnchorPoint": [
+                      0,
+                      0.5
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.025,
+                          0
+                        ],
+                        [
+                          0.5,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.8,
+                          0
+                        ],
+                        [
+                          0.8,
+                          0
+                        ]
+                      ]
+                    },
+                    "SizeConstraint": "RelativeYY",
+                    "BackgroundColor3": [
+                      0.1608,
+                      0.2392,
+                      0.4196
+                    ],
+                    "ZIndex": 4
+                  },
+                  "children": [
+                    {
+                      "name": "UICorner",
+                      "className": "UICorner",
+                      "properties": {
+                        "CornerRadius": {
+                          "UDim": [
+                            1,
+                            0
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Border",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Border",
+                        "Color": [
+                          0.0392,
+                          0.0784,
+                          0.1569
+                        ],
+                        "Thickness": 2,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "Image",
+                      "className": "ImageLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "BorderSizePixel": 0,
+                        "Size": {
+                          "UDim2": [
+                            [
+                              1,
+                              0
+                            ],
+                            [
+                              1,
+                              0
+                            ]
+                          ]
+                        },
+                        "ScaleType": "Crop",
+                        "Image": "",
+                        "Visible": false,
+                        "ZIndex": 5
+                      },
+                      "children": [
+                        {
+                          "name": "UICorner",
+                          "className": "UICorner",
+                          "properties": {
+                            "CornerRadius": {
+                              "UDim": [
+                                1,
+                                0
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Initial",
+                      "className": "TextLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "BorderSizePixel": 0,
+                        "AnchorPoint": [
+                          0.5,
+                          0.5
+                        ],
+                        "Position": {
+                          "UDim2": [
+                            [
+                              0.5,
+                              0
+                            ],
+                            [
+                              0.5,
+                              0
+                            ]
+                          ]
+                        },
+                        "Size": {
+                          "UDim2": [
+                            [
+                              0.62,
+                              0
+                            ],
+                            [
+                              0.62,
+                              0
+                            ]
+                          ]
+                        },
+                        "TextScaled": true,
+                        "FontFace": {
+                          "family": "rbxasset://fonts/families/FredokaOne.json",
+                          "weight": "Regular",
+                          "style": "Normal"
+                        },
+                        "TextColor3": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "Text": "A",
+                        "ZIndex": 5
+                      }
+                    }
+                  ]
                 },
                 {
                   "name": "Crown",
@@ -2226,11 +2385,11 @@
                     "Position": {
                       "UDim2": [
                         [
-                          0.03,
+                          0.125,
                           0
                         ],
                         [
-                          0.08,
+                          0.06,
                           0
                         ]
                       ]
@@ -2238,21 +2397,20 @@
                     "Size": {
                       "UDim2": [
                         [
-                          1.1,
+                          0.6,
                           0
                         ],
                         [
-                          1.1,
+                          0.6,
                           0
                         ]
                       ]
                     },
                     "SizeConstraint": "RelativeYY",
-                    "Rotation": -18,
                     "Image": "rbxassetid://128409213460266",
                     "ScaleType": "Fit",
                     "Visible": false,
-                    "ZIndex": 4
+                    "ZIndex": 6
                   }
                 }
               ]
@@ -2387,7 +2545,7 @@
                     "Position": {
                       "UDim2": [
                         [
-                          0.08,
+                          0.2,
                           0
                         ],
                         [
@@ -2399,7 +2557,7 @@
                     "Size": {
                       "UDim2": [
                         [
-                          0.84,
+                          0.75,
                           0
                         ],
                         [
@@ -2412,23 +2570,22 @@
                   }
                 },
                 {
-                  "name": "Crown",
-                  "className": "ImageLabel",
+                  "name": "Avatar",
+                  "className": "Frame",
                   "properties": {
-                    "BackgroundTransparency": 1,
                     "BorderSizePixel": 0,
                     "AnchorPoint": [
-                      0.5,
+                      0,
                       0.5
                     ],
                     "Position": {
                       "UDim2": [
                         [
-                          0.03,
+                          0.025,
                           0
                         ],
                         [
-                          0.08,
+                          0.5,
                           0
                         ]
                       ]
@@ -2436,92 +2593,138 @@
                     "Size": {
                       "UDim2": [
                         [
-                          1.1,
+                          0.78,
                           0
                         ],
                         [
-                          1.1,
+                          0.78,
                           0
                         ]
                       ]
                     },
                     "SizeConstraint": "RelativeYY",
-                    "Rotation": -18,
-                    "Image": "rbxassetid://128409213460266",
-                    "ScaleType": "Fit",
-                    "Visible": false,
-                    "ZIndex": 6
-                  }
-                }
-              ]
-            },
-            {
-              "name": "ZoneFlash",
-              "className": "TextLabel",
-              "properties": {
-                "BackgroundTransparency": 1,
-                "BorderSizePixel": 0,
-                "TextScaled": true,
-                "FontFace": {
-                  "family": "rbxasset://fonts/families/FredokaOne.json",
-                  "weight": "Regular",
-                  "style": "Normal"
-                },
-                "TextColor3": [
-                  1,
-                  1,
-                  1
-                ],
-                "Text": "",
-                "AnchorPoint": [
-                  0.5,
-                  0.5
-                ],
-                "Position": {
-                  "UDim2": [
-                    [
-                      0.5,
-                      0
+                    "BackgroundColor3": [
+                      0.1608,
+                      0.2392,
+                      0.4196
                     ],
-                    [
-                      0.82,
-                      0
-                    ]
+                    "ZIndex": 5
+                  },
+                  "children": [
+                    {
+                      "name": "UICorner",
+                      "className": "UICorner",
+                      "properties": {
+                        "CornerRadius": {
+                          "UDim": [
+                            1,
+                            0
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Border",
+                      "className": "UIStroke",
+                      "properties": {
+                        "ApplyStrokeMode": "Border",
+                        "Color": [
+                          0.0392,
+                          0.0784,
+                          0.1569
+                        ],
+                        "Thickness": 2,
+                        "LineJoinMode": "Round"
+                      }
+                    },
+                    {
+                      "name": "Image",
+                      "className": "ImageLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "BorderSizePixel": 0,
+                        "Size": {
+                          "UDim2": [
+                            [
+                              1,
+                              0
+                            ],
+                            [
+                              1,
+                              0
+                            ]
+                          ]
+                        },
+                        "ScaleType": "Crop",
+                        "Image": "",
+                        "Visible": false,
+                        "ZIndex": 6
+                      },
+                      "children": [
+                        {
+                          "name": "UICorner",
+                          "className": "UICorner",
+                          "properties": {
+                            "CornerRadius": {
+                              "UDim": [
+                                1,
+                                0
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Initial",
+                      "className": "TextLabel",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "BorderSizePixel": 0,
+                        "AnchorPoint": [
+                          0.5,
+                          0.5
+                        ],
+                        "Position": {
+                          "UDim2": [
+                            [
+                              0.5,
+                              0
+                            ],
+                            [
+                              0.5,
+                              0
+                            ]
+                          ]
+                        },
+                        "Size": {
+                          "UDim2": [
+                            [
+                              0.62,
+                              0
+                            ],
+                            [
+                              0.62,
+                              0
+                            ]
+                          ]
+                        },
+                        "TextScaled": true,
+                        "FontFace": {
+                          "family": "rbxasset://fonts/families/FredokaOne.json",
+                          "weight": "Regular",
+                          "style": "Normal"
+                        },
+                        "TextColor3": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "Text": "A",
+                        "ZIndex": 6
+                      }
+                    }
                   ]
-                },
-                "Size": {
-                  "UDim2": [
-                    [
-                      0.92,
-                      0
-                    ],
-                    [
-                      0.12,
-                      0
-                    ]
-                  ]
-                },
-                "TextTransparency": 1,
-                "ZIndex": 6
-              },
-              "children": [
-                {
-                  "name": "Outline",
-                  "className": "UIStroke",
-                  "properties": {
-                    "ApplyStrokeMode": "Contextual",
-                    "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
-                    ],
-                    "Thickness": 3,
-                    "LineJoinMode": "Round"
-                  }
-                },
-                {
-                  "name": "UIScale",
-                  "className": "UIScale"
                 }
               ]
             }
@@ -2544,7 +2747,7 @@
                   0
                 ],
                 [
-                  0.225,
+                  0.15,
                   0
                 ]
               ]
