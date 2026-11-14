@@ -1,5 +1,6 @@
 --!strict
--- Drives StarterGui.Results: winner, podium and the countdown to the next dive.
+-- Drives StarterGui.Results: winner, podium, the match's deepest dive with your all-time best, and the
+-- countdown to the next dive.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -19,6 +20,10 @@ local titleText: TextLabel
 local winnerText: TextLabel
 local podium: Frame
 local nextText: TextLabel
+local deepestRow: Frame? = nil -- optional: the deepest-dive row under the podium
+
+local myDeepest = 0 -- your all-time deepest dive in metres, from ProfileChanged
+local myDeepestAnswer = ""
 
 local footer = "" -- what the results footer says before its countdown
 local reachedRound = 0 -- the last round this player was on a pillar for, this match
@@ -60,7 +65,45 @@ function Results.init(playerGui: PlayerGui)
 	winnerText = winnerFound :: TextLabel
 	podium = podiumFound :: Frame
 	nextText = nextFound :: TextLabel
+	local deepestFound = (panelFound :: Frame):FindFirstChild("Deepest")
+	deepestRow = if deepestFound ~= nil and deepestFound:IsA("Frame") then deepestFound else nil
+	Net.event("ProfileChanged").OnClientEvent:Connect(function(payload)
+		if type(payload) == "table" and type(payload.deepest) == "number" then
+			myDeepest = payload.deepest
+			myDeepestAnswer = if type(payload.deepestAnswer) == "string" then payload.deepestAnswer else ""
+		end
+	end)
 	ready = true
+end
+
+-- The deepest dive of the match, and your best ever under it.
+local function showDeepest(deepest: Net.DeepestDive?)
+	local row = deepestRow
+	if row == nil then
+		return
+	end
+	row.Visible = deepest ~= nil
+	if deepest == nil then
+		return
+	end
+	local label = row:FindFirstChild("Label")
+	if label ~= nil and label:IsA("TextLabel") then
+		label.Text = "DEEPEST DIVE  |  "
+			.. string.upper(deepest.name)
+			.. "  |  "
+			.. string.upper(deepest.answer)
+			.. "  |  "
+			.. math.floor(deepest.metres + 0.5)
+			.. " M"
+	end
+	local best = row:FindFirstChild("Best")
+	if best ~= nil and best:IsA("TextLabel") then
+		best.Visible = myDeepest > 0
+		best.Text = "YOUR BEST  |  "
+			.. myDeepest
+			.. " M"
+			.. (if myDeepestAnswer ~= "" then "  |  " .. string.upper(myDeepestAnswer) else "")
+	end
 end
 
 function Results.onMatchEnded(payload: Net.MatchEndedPayload)
@@ -106,6 +149,7 @@ function Results.onMatchEnded(payload: Net.MatchEndedPayload)
 			end
 		end
 	end
+	showDeepest(payload.deepest)
 	-- Anyone who went under sees how far they got, beside the countdown.
 	footer = if not won and not payload.solo and reachedRound > 0 then "YOU REACHED ROUND " .. reachedRound .. "  |  " else ""
 	nextText.Text = footer .. "NEXT MATCH IN " .. payload.seconds

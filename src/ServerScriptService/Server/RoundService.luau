@@ -53,6 +53,8 @@ local unproven: { [Player]: boolean } = {} -- players in the match who have not 
 local matchId = 0
 local sunkPlatforms: { [Player]: Part } = {} -- kept so a revive can put the player back on their own pillar
 local reviveUsed: { [Player]: boolean } = {}
+-- The match's deepest accepted answer so far (Results crowns it); nil until someone answers.
+local matchDeepest: Net.DeepestDive? = nil
 local reviveOffers: { [Player]: { matchId: number, expires: number, kind: string } } = {}
 local broadcastQueued = false
 -- Bots (negative number ids, see BotService) live in the match state but never in `platforms` or
@@ -508,6 +510,7 @@ local function startMatch()
 	local state = MatchState.new(GameConfig.Water.StartHeight)
 	match = state
 	round = 0
+	matchDeepest = nil
 	usedPromptIds = {}
 	special = nil
 	roundSurge = 0
@@ -751,8 +754,23 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 		end
 		local depth = Depth.metres(tier, shownAnswer)
 		local oneIn: number? = nil
-		if shownAnswer ~= nil then
+		local newBest: boolean? = nil
+		if shownAnswer ~= nil and tier ~= nil then
 			oneIn = AnswerStatsService.oneIn(promptId, shownAnswer)
+			local deepest = matchDeepest
+			if deepest == nil or depth > deepest.metres then
+				matchDeepest = {
+					userId = userIdOf(id),
+					name = nameOf(id),
+					answer = shownAnswer,
+					tier = tier,
+					metres = depth,
+					round = round,
+				}
+			end
+			if player ~= nil and DataService.recordDive(player, depth, shownAnswer) then
+				newBest = true
+			end
 		end
 		table.insert(rows, {
 			userId = userIdOf(id),
@@ -765,6 +783,7 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 			depth = depth,
 			oneIn = oneIn,
 			schooled = schooled,
+			newBest = newBest,
 		})
 		if player ~= nil then
 			table.insert(graded, { player = player, tier = tier, points = points, answer = shownAnswer })
@@ -897,8 +916,10 @@ local function endMatch()
 		winnerName = winnerName,
 		winnerUserId = if winnerHere ~= nil then winnerHere.UserId else nil,
 		podium = top,
+		deepest = matchDeepest,
 		seconds = GameConfig.Round.ResultsSeconds,
 	})
+	matchDeepest = nil
 	participantsList = {}
 	playedUserIds = {}
 	unproven = {}

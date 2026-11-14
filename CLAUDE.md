@@ -52,6 +52,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   next to an instance you already moved there. Check for duplicates and delete the empty one.
 - Prompt bank: one module per prompt in `src/ServerStorage/PromptBank/`, listed in its `init.luau`;
   `tests/PromptBank.test.luau` guards it (normalized answers, no duplicates, aliases point at answers).
+  `Shared/AnswerMatcher` also matches word by word (doctor/dr, saint/st...: `WORD_FOLDS`), in any word order,
+  and as a last resort drops `QUALIFIERS` (diet, zero, sugar, cherry...) from the ends, so the bank needs no
+  entry for every "diet"/"zero sugar" variant; such an answer counts as the bank answer that is left.
 - Templates cloned by code that are authored in Studio: `Templates.AnswerTag`, and `Templates.NameTag`, which
   is the head label (CosmeticService puts it on every Head, named `RareOrSinkName`; Roblox's own name display is off). Its
   `Main` is a bottom-anchored vertical list, so hidden rows collapse: `Afk`, `TitleText`, `NameText`. The
@@ -108,6 +111,13 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   starters' screens to black and the server teleports them; Starting is the 3-2-1 on the pillars
   (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
   `StartCountdownSeconds`.
+- Reveal: your dive card carries everyone else's answers too (`DiveCard` options `peers`, one
+  `Templates.DiveCard...PeerTag` each, in left, right and middle lanes). Once your stamp settles the view zooms
+  out so the deepest answer sits above the stamp, and the round's deepest tag shows its `Crown`.
+- Deepest dive: RoundService keeps the match's deepest accepted answer and sends it as `MatchEnded.deepest`;
+  `Results.Panel.Deepest` (authored) shows it with your all-time best under it. The best is saved in the profile
+  (`deepest`, `deepestAnswer`, keeps the max); `DataService.recordDive` flags a beaten best as the reveal row's
+  `newBest`, which toasts NEW PERSONAL BEST (a first-ever dive is saved without the toast).
 - Every teleport goes through `PlayerService.sendToPlatform` / `sendToLobby`: they anchor the root, move it, and
   release it once the spot has streamed in, so nobody falls through a pillar their client does not have yet.
 - Dying or respawning while alive in a match eliminates the player (RoundService), like sinking.

@@ -1,5 +1,6 @@
 --!strict
--- Drives the reveal: your own dive card fills the screen (StarterGui.DiveCards), lands, holds a moment and
+-- Drives the reveal: your own dive card fills the screen (StarterGui.DiveCards) with everyone else's answers
+-- diving beside yours, lands, zooms out to show them all with the round's deepest crowned, holds a moment and
 -- shrinks away before the pillars rise (GameConfig.Reveal.RaiseDelaySeconds), so you watch your pillar and
 -- the water. StarterGui.Reveal's compact answer list rolls in on the right at the Surge, or straight away
 -- for anyone without a card (sunk players, spectators, the lobby).
@@ -17,6 +18,7 @@ local Tiers = require(ReplicatedStorage.Config.Tiers)
 local DiveCard = require(script.Parent.DiveCard)
 local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
+local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
 
 type RevealRow = Net.RevealRow
@@ -179,10 +181,36 @@ local function showCardWith(options: DiveCard.Options): DiveCard.Handle?
 	return handle
 end
 
--- Your round's card.
-local function showCard(row: RevealRow): DiveCard.Handle?
+-- The row with the round's deepest accepted answer, or nil when nobody had one.
+local function deepestRow(rows: { RevealRow }): RevealRow?
+	local best: RevealRow? = nil
+	for _, row in rows do
+		if row.tier ~= nil and (best == nil or row.depth > best.depth) then
+			best = row
+		end
+	end
+	return best
+end
+
+-- Your round's card, with everyone else's answers diving beside yours.
+local function showCard(row: RevealRow, rows: { RevealRow }): DiveCard.Handle?
 	lobbyCard = false
+	local deepest = deepestRow(rows)
+	local peers: { DiveCard.Peer } = {}
+	for _, other in rows do
+		if other ~= row then
+			table.insert(peers, {
+				name = other.name,
+				answer = other.answer,
+				tier = other.tier,
+				depth = other.depth or 0,
+				deepest = other == deepest,
+			})
+		end
+	end
 	return showCardWith({
+		peers = peers,
+		deepest = row == deepest and #peers > 0,
 		title = "YOUR DIVE",
 		isYou = true,
 		answer = row.answer,
@@ -350,6 +378,9 @@ local function celebrate(row: RevealRow, mine: DiveCard.Handle?, token: number)
 			Fx.confetti(90)
 			Fx.flash(Theme.Tier.Mythic)
 		end
+		if row.newBest == true then
+			Toasts.show("NEW PERSONAL BEST  |  " .. math.floor(row.depth + 0.5) .. " M DIVE", "good")
+		end
 		if level >= 2 then
 			task.wait(0.4)
 			Fx.callout("STREAK x" .. level, Theme.Color.Orange)
@@ -376,8 +407,8 @@ function Reveal.onReveal(payload: Net.RevealPayload)
 		end
 	end
 
-	-- Only you get a card; everyone else's answers are in the list.
-	local mine = if myRow ~= nil then showCard(myRow) else nil
+	-- Only you get a card, with everyone else's answers diving on it; the list follows once it leaves.
+	local mine = if myRow ~= nil then showCard(myRow, rows) else nil
 	if mine ~= nil then
 		list.Visible = false
 		pendingRows = rows

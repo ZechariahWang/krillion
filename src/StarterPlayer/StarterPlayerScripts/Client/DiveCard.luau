@@ -30,6 +30,35 @@ export type Options = {
 	scale: number?, -- card height as a fraction of the parent's height (default 1)
 	fill: boolean?, -- full-screen: the card takes its parent's shape (within FILL_ASPECT), not the portrait one
 	budget: number?, -- the stamp lands within this many seconds of play(); deep dives play a little faster
+	peers: { Peer }?, -- everyone else's answers this round: they dive beside yours, then the view zooms out
+	deepest: boolean?, -- your answer is the round's deepest: your tag gets the crown once the view zooms out
+}
+
+-- Another player's answer on your card.
+export type Peer = {
+	name: string,
+	answer: string?, -- bank spelling; nil for no answer
+	tier: string?,
+	depth: number, -- metres
+	deepest: boolean?, -- the round's deepest dive: this tag gets the crown
+}
+
+type PeerState = {
+	frame: Frame,
+	scale: UIScale?,
+	stroke: UIStroke?,
+	crown: GuiObject?,
+	hasAnswer: boolean,
+	depth: number,
+	shown: number, -- depth it sits at once zoomed out, pushed down when its lane is crowded there
+	intensity: number,
+	color: Color3,
+	diveTime: number,
+	current: number,
+	phase: number,
+	lane: number,
+	landed: boolean,
+	deepest: boolean,
 }
 
 export type Handle = {
@@ -58,6 +87,16 @@ local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
 local TICK_METRES = 35 -- the depth counter clicks once for every this many metres the tag falls
 local TICK_GAP = 0.05 -- seconds between clicks at the fastest
+-- Everyone's answers: once your stamp settles the view zooms out over ZOOM_TIME until it shows the surface
+-- down past the deepest answer, and every tag sits in one of the LANES (window width fractions).
+local ZOOM_TIME = 0.6
+local ZOOM_SKY = 18 -- metres of sky above the surface in the zoomed view
+-- The deepest answer sits this far down the zoomed window, above where the stamp lands over its bottom.
+local ZOOM_FILL = 0.56
+local ZOOMED_TAG = 0.48 -- your tag's scale once zoomed out, so it fits a lane
+local LANES = { 0.5, 0.19, 0.81 }
+local LANE_GAP = 0.012 -- window-height fraction kept between two tags in one lane
+local PEER_PACE = 0.9 -- other answers dive a touch quicker than yours, so yours stays the one to watch
 
 local DiveCard = {}
 
@@ -286,6 +325,56 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		tag.BackgroundColor3 = Color3.fromRGB(200, 208, 222)
 		tagText.Text = "NO ANSWER"
 	end
+	-- Everyone else's answers, one PeerTag each, diving beside yours.
+	local peers: { PeerState } = {}
+	local peerTemplate = window:FindFirstChild("PeerTag")
+	if options.peers ~= nil and peerTemplate ~= nil and peerTemplate:IsA("Frame") then
+		for _, peer in options.peers do
+			local info = if peer.tier ~= nil then Tiers.ByName[peer.tier] else nil
+			local peerDepth = if info ~= nil then math.clamp(peer.depth, info.depthMin, BOTTOM) else 0
+			local clone = (peerTemplate :: Frame):Clone()
+			clone.Name = "PeerTagLive"
+			local nameLabel = clone:FindFirstChild("Name")
+			if nameLabel ~= nil and nameLabel:IsA("TextLabel") then
+				nameLabel.Text = string.upper(peer.name)
+					.. (if info ~= nil then "  |  " .. Currency.digits(math.floor(peerDepth + 0.5)) .. " M" else "")
+			end
+			local answerLabel = clone:FindFirstChild("Text")
+			if answerLabel ~= nil and answerLabel:IsA("TextLabel") then
+				answerLabel.Text = if info ~= nil then string.upper(peer.answer or "ACCEPTED") else "NO ANSWER"
+			end
+			if info == nil then
+				clone.BackgroundColor3 = Color3.fromRGB(200, 208, 222)
+			end
+			local stroke = clone:FindFirstChild("Border")
+			local crownIcon = clone:FindFirstChild("Crown")
+			local peerIndex = Tiers.index(peer.tier)
+			clone.Position = UDim2.fromScale(0.5, -0.2)
+			clone.Visible = true
+			clone.Parent = window
+			table.insert(peers, {
+				frame = clone,
+				scale = clone:FindFirstChildOfClass("UIScale"),
+				stroke = if stroke ~= nil and stroke:IsA("UIStroke") then stroke else nil,
+				crown = if crownIcon ~= nil and crownIcon:IsA("GuiObject") then crownIcon else nil,
+				hasAnswer = info ~= nil,
+				depth = peerDepth,
+				shown = peerDepth,
+				intensity = if info ~= nil
+					then math.clamp((peerIndex - 1) / math.max(#Tiers.List - 1, 1), 0, 1)
+					else 0,
+				color = Ui.tierColor(peer.tier),
+				diveTime = 0,
+				current = -SKY - 20,
+				phase = random:NextNumber(0, math.pi * 2),
+				lane = 2,
+				landed = false,
+				deepest = peer.deepest == true,
+			})
+		end
+	end
+	local ownCrown = tag:FindFirstChild("Crown")
+
 	counter.Text = "0 m"
 	footer.Text = ""
 	schooledChip.Visible = false
@@ -581,6 +670,130 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local tickedAt = 0 -- depth of the last counter click
 	local tickedTime = 0
 
+	-- Other answers dive on the same clock, a little quicker, and never past the caller's budget.
+	for _, peer in peers do
+		if peer.hasAnswer then
+			local natural = Depth.diveSeconds(peer.depth, quick) * PEER_PACE
+			local limit = if budget ~= nil and budget > 0 then math.max(budget - dropTime, 0.5) else natural
+			peer.diveTime = math.min(natural * pace, limit)
+		end
+	end
+
+	-- The zoomed-out view: from a little sky down past the deepest answer.
+	local deepestShown = if hasAnswer then depth else 0
+	for _, peer in peers do
+		deepestShown = math.max(deepestShown, peer.depth)
+	end
+	local zoomTop = -ZOOM_SKY
+	-- Past the bottom of the scale the window's own abyss colour carries the water on.
+	local zoomView = math.max((deepestShown + ZOOM_SKY) / ZOOM_FILL, VIEW)
+	if #peers > 0 then
+		window.BackgroundColor3 = Theme.Depth.Abyss
+	end
+	local zoomStart: number? = nil
+	local zoomFromTop = 0
+	local zoomDone = false
+	local lanesReady = false
+
+	-- Puts every peer in a lane: left and right first, the middle (yours) last, each at its own depth unless
+	-- a tag already sits there, then just below it. Runs once the window has a size to measure tags by.
+	local function assignLanes()
+		local windowHeight = window.AbsoluteSize.Y
+		if windowHeight < 2 or #peers == 0 then
+			return
+		end
+		lanesReady = true
+		local metresPerPixel = zoomView / windowHeight
+		local gap = LANE_GAP * zoomView
+		local taken: { { { number } } } = { {}, {}, {} }
+		local ownHalf = tag.AbsoluteSize.Y * ZOOMED_TAG * metresPerPixel / 2
+		local ownAt = if hasAnswer then depth else 0
+		table.insert(taken[1], { ownAt - ownHalf, ownAt + ownHalf })
+		local order = table.clone(peers)
+		table.sort(order, function(a: PeerState, b: PeerState): boolean
+			return a.depth < b.depth
+		end)
+		for _, peer in order do
+			local half = peer.frame.AbsoluteSize.Y * metresPerPixel / 2 + gap / 2
+			-- Left and right take turns, so tags spread across both sides; the middle is the last resort.
+			local sides = if #taken[2] <= #taken[3] then { 2, 3, 1 } else { 3, 2, 1 }
+			local bestLane, bestAt = sides[1], math.huge
+			for _, lane in sides do
+				local at = peer.depth
+				local moved = true
+				while moved do
+					moved = false
+					for _, span in taken[lane] do
+						if at + half > span[1] and at - half < span[2] then
+							at = span[2] + half
+							moved = true
+						end
+					end
+				end
+				if at < bestAt - 0.01 then
+					bestLane, bestAt = lane, at
+				end
+			end
+			peer.lane = bestLane
+			peer.shown = bestAt
+			table.insert(taken[bestLane], { bestAt - half, bestAt + half })
+		end
+	end
+
+	local function startZoom(top: number)
+		zoomStart = os.clock()
+		zoomFromTop = top
+		local tagScale = tag:FindFirstChildOfClass("UIScale")
+		if tagScale ~= nil then
+			play(tagScale, TweenInfo.new(ZOOM_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), { Scale = ZOOMED_TAG })
+		end
+		sound("Splash", 0.35, 1.3)
+	end
+
+	-- Once zoomed out, the round's deepest answer gets its crown.
+	local function crown(icon: Instance?)
+		if icon == nil or not icon:IsA("GuiObject") then
+			return
+		end
+		icon.Visible = true
+		local holder = icon.Parent
+		local holderScale = if holder ~= nil then holder:FindFirstChildOfClass("UIScale") else nil
+		if holderScale ~= nil then
+			local rest = holderScale.Scale
+			holderScale.Scale = rest * 1.35
+			play(holderScale, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = rest })
+		end
+		sound("Ping", 0.7, 1.5)
+	end
+
+	local function stepPeers(elapsed: number, now: number)
+		for _, peer in peers do
+			if elapsed < dropTime then
+				local u = elapsed / dropTime
+				peer.current = (-SKY - 20) * (1 - u * u)
+			elseif peer.hasAnswer and elapsed < dropTime + peer.diveTime then
+				local t = (elapsed - dropTime) / peer.diveTime
+				peer.current = peer.depth * Depth.dive(t, peer.intensity)
+			elseif peer.hasAnswer then
+				peer.current = peer.depth
+				if not peer.landed then
+					peer.landed = true
+					local stroke = peer.stroke
+					if stroke ~= nil then
+						stroke.Color = peer.color:Lerp(BLACK, 0.35)
+					end
+					local peerScale = peer.scale
+					if peerScale ~= nil then
+						peerScale.Scale = 1.18
+						play(peerScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 })
+					end
+				end
+			else
+				peer.current = math.sin(now * 3 + peer.phase) * 4
+			end
+		end
+	end
+
 	local function step(dt: number)
 		local now = os.clock()
 		local elapsed = now - started
@@ -649,11 +862,47 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			task.delay(settleTime, fire)
 		end
 
+		if #peers > 0 then
+			if not lanesReady then
+				assignLanes()
+			end
+			stepPeers(elapsed, now)
+		end
+
+		-- The view follows your tag; with other answers on the card it zooms out once your stamp settles.
+		local view = VIEW
 		local top = math.clamp(current - TAG_Y * VIEW, -SKY, BOTTOM - VIEW)
-		content.Position = UDim2.fromScale(0, -(top + SKY) / VIEW)
-		local tagY = (current - top) / VIEW
+		local zoom = 0
+		if #peers > 0 and landedFired and zoomStart == nil then
+			startZoom(top)
+		end
+		local zoomedAt = zoomStart
+		if zoomedAt ~= nil then
+			local u = math.min((now - zoomedAt) / ZOOM_TIME, 1)
+			zoom = u * u * (3 - 2 * u)
+			view = VIEW + (zoomView - VIEW) * zoom
+			top = zoomFromTop + (zoomTop - zoomFromTop) * zoom
+			if u >= 1 and not zoomDone then
+				zoomDone = true
+				if options.deepest == true then
+					crown(ownCrown)
+				end
+				for _, peer in peers do
+					if peer.deepest then
+						crown(peer.crown)
+					end
+				end
+			end
+		end
+		content.Size = UDim2.fromScale(1, RANGE / view)
+		content.Position = UDim2.fromScale(0, -(top + SKY) / view)
+		local tagY = (current - top) / view
 		tag.Position = UDim2.fromScale(0.5 + rumble, tagY)
-		local ropeTop = math.max((0 - top) / VIEW, 0)
+		for _, peer in peers do
+			local at = peer.current + (peer.shown - peer.depth) * zoom
+			peer.frame.Position = UDim2.fromScale(LANES[peer.lane], (at - top) / view)
+		end
+		local ropeTop = math.max((0 - top) / view, 0)
 		if tagY > ropeTop + 0.01 then
 			rope.Visible = true
 			rope.Position = UDim2.fromScale(0.5, ropeTop)

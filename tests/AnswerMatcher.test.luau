@@ -186,4 +186,59 @@ return function(test)
 		assert(AnswerMatcher.match(string.rep("a", 41), prompt) == nil)
 		assert(AnswerMatcher.match("france", prompt) == nil)
 	end)
+
+	local drinks = {
+		id = "test_drinks",
+		prompt = "Name a soft drink",
+		answers = {
+			Plankton = { "pepsi", "dr pepper" },
+			Schooler = { "diet dr pepper", "pepsi zero", "mt dew" },
+			Rare = { "dr pepper cherry", "a and w" },
+		},
+		aliases = {},
+	}
+
+	test("whole words with a short spelling match either way", function()
+		local tier, spelling = AnswerMatcher.resolve("Diet Doctor Pepper", drinks)
+		assert(tier == "Schooler" and spelling == "diet dr pepper", tostring(spelling))
+		assert(AnswerMatcher.match("mount dew", drinks) == "Schooler")
+	end)
+
+	test("word order does not matter for answers of two or more words", function()
+		local tier, spelling = AnswerMatcher.resolve("cherry dr pepper", drinks)
+		assert(tier == "Rare" and spelling == "dr pepper cherry", tostring(spelling))
+	end)
+
+	test("qualifier words at the ends are dropped when the answer is refused as typed", function()
+		local tier, spelling = AnswerMatcher.resolve("pepsi zero sugar", drinks)
+		assert(tier == "Schooler" and spelling == "pepsi zero", tostring(spelling))
+		tier, spelling = AnswerMatcher.resolve("vanilla pepsi", drinks)
+		assert(tier == "Plankton" and spelling == "pepsi", tostring(spelling))
+		tier, spelling = AnswerMatcher.resolve("diet doctor pepper zero sugar", drinks)
+		assert(tier == "Schooler" and spelling == "diet dr pepper", tostring(spelling))
+	end)
+
+	test("an answer that is listed as typed keeps its own tier over a shorter one", function()
+		assert(AnswerMatcher.match("diet dr pepper", drinks) == "Schooler")
+		assert(AnswerMatcher.match("a & w", drinks) == "Rare")
+	end)
+
+	test("qualifiers alone, negations and words in the middle are not dropped", function()
+		assert(AnswerMatcher.match("diet zero", drinks) == nil)
+		assert(AnswerMatcher.match("not pepsi", drinks) == nil)
+		assert(AnswerMatcher.match("no sugar pepsi", drinks) == nil)
+		assert(AnswerMatcher.match("pepsi with sprite", drinks) == nil)
+		assert(AnswerMatcher.match("diet doctor pespi", drinks) == nil, "pepsi and dr pepper are different drinks")
+	end)
+
+	test("a qualifier word that is an answer itself is not dropped", function()
+		local fruit = {
+			id = "test_fruit",
+			prompt = "Name a fruit",
+			answers = { Plankton = { "lemon", "lime", "apple" } },
+			aliases = {},
+		}
+		assert(AnswerMatcher.match("lemon lime", fruit) == nil)
+		assert(AnswerMatcher.match("fresh apple", fruit) == "Plankton")
+	end)
 end

@@ -2011,6 +2011,253 @@
               }
             },
             {
+              "name": "PeerTag",
+              "className": "Frame",
+              "properties": {
+                "BorderSizePixel": 0,
+                "AnchorPoint": [
+                  0.5,
+                  0.5
+                ],
+                "Position": {
+                  "UDim2": [
+                    [
+                      0.2,
+                      0
+                    ],
+                    [
+                      -0.2,
+                      0
+                    ]
+                  ]
+                },
+                "Size": {
+                  "UDim2": [
+                    [
+                      0.36,
+                      0
+                    ],
+                    [
+                      0.1,
+                      0
+                    ]
+                  ]
+                },
+                "BackgroundColor3": [
+                  1,
+                  1,
+                  1
+                ],
+                "ZIndex": 2,
+                "Visible": false
+              },
+              "attributes": {
+                "Note": "Another player's answer on your dive card: DiveCard.luau clones it per player, dives it to their depth beside yours and crowns the round's deepest."
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        0.3,
+                        0
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Border",
+                  "className": "UIStroke",
+                  "properties": {
+                    "ApplyStrokeMode": "Border",
+                    "Color": [
+                      0.0392,
+                      0.0784,
+                      0.1569
+                    ],
+                    "Thickness": 2,
+                    "LineJoinMode": "Round"
+                  }
+                },
+                {
+                  "name": "UIScale",
+                  "className": "UIScale",
+                  "properties": {}
+                },
+                {
+                  "name": "Shade",
+                  "className": "UIGradient",
+                  "properties": {
+                    "Rotation": 90,
+                    "Color": {
+                      "ColorSequence": {
+                        "keypoints": [
+                          {
+                            "time": 0,
+                            "color": [
+                              1,
+                              1,
+                              1
+                            ]
+                          },
+                          {
+                            "time": 1,
+                            "color": [
+                              0.8,
+                              0.85,
+                              0.93
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "UIAspectRatioConstraint",
+                  "className": "UIAspectRatioConstraint",
+                  "properties": {
+                    "AspectRatio": 3.4,
+                    "AspectType": "FitWithinMaxSize"
+                  }
+                },
+                {
+                  "name": "Name",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "BorderSizePixel": 0,
+                    "TextScaled": true,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Regular",
+                      "style": "Normal"
+                    },
+                    "TextColor3": [
+                      0.3529,
+                      0.4118,
+                      0.5294
+                    ],
+                    "Text": "PLAYER  |  0 M",
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.08,
+                          0
+                        ],
+                        [
+                          0.08,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.84,
+                          0
+                        ],
+                        [
+                          0.34,
+                          0
+                        ]
+                      ]
+                    },
+                    "ZIndex": 3
+                  }
+                },
+                {
+                  "name": "Text",
+                  "className": "TextLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "BorderSizePixel": 0,
+                    "TextScaled": true,
+                    "FontFace": {
+                      "family": "rbxasset://fonts/families/FredokaOne.json",
+                      "weight": "Regular",
+                      "style": "Normal"
+                    },
+                    "TextColor3": [
+                      0.1059,
+                      0.1647,
+                      0.2863
+                    ],
+                    "Text": "ANSWER",
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.08,
+                          0
+                        ],
+                        [
+                          0.42,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          0.84,
+                          0
+                        ],
+                        [
+                          0.5,
+                          0
+                        ]
+                      ]
+                    },
+                    "ZIndex": 3
+                  }
+                },
+                {
+                  "name": "Crown",
+                  "className": "ImageLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "BorderSizePixel": 0,
+                    "AnchorPoint": [
+                      0.5,
+                      0.5
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.03,
+                          0
+                        ],
+                        [
+                          0.08,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          1.1,
+                          0
+                        ],
+                        [
+                          1.1,
+                          0
+                        ]
+                      ]
+                    },
+                    "SizeConstraint": "RelativeYY",
+                    "Rotation": -18,
+                    "Image": "rbxassetid://128409213460266",
+                    "ScaleType": "Fit",
+                    "Visible": false,
+                    "ZIndex": 4
+                  }
+                }
+              ]
+            },
+            {
               "name": "AnswerTag",
               "className": "Frame",
               "properties": {
@@ -2162,6 +2409,48 @@
                       ]
                     },
                     "ZIndex": 5
+                  }
+                },
+                {
+                  "name": "Crown",
+                  "className": "ImageLabel",
+                  "properties": {
+                    "BackgroundTransparency": 1,
+                    "BorderSizePixel": 0,
+                    "AnchorPoint": [
+                      0.5,
+                      0.5
+                    ],
+                    "Position": {
+                      "UDim2": [
+                        [
+                          0.03,
+                          0
+                        ],
+                        [
+                          0.08,
+                          0
+                        ]
+                      ]
+                    },
+                    "Size": {
+                      "UDim2": [
+                        [
+                          1.1,
+                          0
+                        ],
+                        [
+                          1.1,
+                          0
+                        ]
+                      ]
+                    },
+                    "SizeConstraint": "RelativeYY",
+                    "Rotation": -18,
+                    "Image": "rbxassetid://128409213460266",
+                    "ScaleType": "Fit",
+                    "Visible": false,
+                    "ZIndex": 6
                   }
                 }
               ]
