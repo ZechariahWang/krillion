@@ -244,6 +244,12 @@ local function waitChild(parent: Instance?, name: string): Instance?
 	return found
 end
 
+-- The id the spectate camera is on (a player's UserId or a bot's id), or nil when not spectating. Market
+-- throws your toy at it.
+function Lobby.watching(): number?
+	return if spectating then watchedId else nil
+end
+
 function Lobby.init(playerGui: PlayerGui)
 	local screen = Ui.screen(playerGui, "Spectate", WAIT_SECONDS)
 	if screen == nil then

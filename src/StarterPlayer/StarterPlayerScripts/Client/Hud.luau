@@ -65,6 +65,11 @@ local gui: Frame
 local meter: Frame
 local marker: Frame
 local target: Frame
+-- Optional labels on the meter (authored): YOU beside your line, what the yellow line is beside it, and how
+-- far you still have to rise above the meter.
+local markerLabel: TextLabel? = nil
+local targetLabel: TextLabel? = nil
+local needLabel: TextLabel? = nil
 local answerBar: Frame
 local answerBox: TextBox
 local submitButton: TextButton
@@ -605,8 +610,17 @@ local function meterY(height: number, waterY: number): number
 	return 1 - METER_WATER - margin * (1 - METER_WATER)
 end
 
+-- A line's label sits beside it, above the line (`up`) or below it.
+local function placeLabel(label: TextLabel?, up: boolean)
+	if label ~= nil then
+		label.AnchorPoint = Vector2.new(0, if up then 1 else 0)
+		label.Position = UDim2.new(label.Position.X.Scale, label.Position.X.Offset, 0.5, if up then -1 else 1)
+	end
+end
+
 -- The marker is you; the target line is where the water will reach this round.
--- The marker turns red while you are still below that line.
+-- The marker turns red while you are still below that line, and the label above the meter says how far
+-- you have to rise to clear it, or by how much you are safe.
 local function updateMeter(payload)
 	local markerY = meterY(payload.height, payload.waterY)
 	Tween.play(marker, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, markerY) })
@@ -616,11 +630,27 @@ local function updateMeter(payload)
 		local targetY = meterY(payload.waterY + payload.surge, payload.waterY)
 		Tween.play(target, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, targetY) })
 	end
-	local willSink = payload.height < payload.waterY + payload.surge
-	if showTarget and willSink then
-		marker.BackgroundColor3 = Theme.Color.Red
-	else
-		marker.BackgroundColor3 = Theme.Color.Cream
+	local gap = payload.waterY + payload.surge - payload.height
+	local willSink = gap > 0
+	local danger = showTarget and willSink
+	marker.BackgroundColor3 = if danger then Theme.Color.Red else Theme.Color.Cream
+	-- Each label goes on the far side of its line from the other line, so the two never overlap.
+	placeLabel(markerLabel, not danger)
+	placeLabel(targetLabel, danger)
+	local you = markerLabel
+	if you ~= nil then
+		you.TextColor3 = if danger then Theme.Color.Red else Theme.Color.Cream
+	end
+	local need = needLabel
+	if need ~= nil then
+		need.Visible = showTarget
+		if willSink then
+			need.Text = string.format("RISE +%.1f", gap)
+			need.TextColor3 = Theme.Color.Red
+		else
+			need.Text = string.format("SAFE +%.1f", -gap)
+			need.TextColor3 = Theme.Color.Green
+		end
 	end
 end
 
@@ -733,6 +763,13 @@ function Hud.init(newPlayerGui: PlayerGui)
 	meter = meterFound :: Frame
 	marker = markerFound :: Frame
 	target = targetFound :: Frame
+	local function optionalLabel(parent: Instance, name: string): TextLabel?
+		local found = parent:FindFirstChild(name)
+		return if found ~= nil and found:IsA("TextLabel") then found else nil
+	end
+	markerLabel = optionalLabel(marker, "Label")
+	targetLabel = optionalLabel(target, "Label")
+	needLabel = optionalLabel(meter, "Need")
 	answerBar = barFound :: Frame
 	answerBox = boxFound :: TextBox
 	submitButton = submitFound :: TextButton

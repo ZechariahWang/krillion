@@ -2,9 +2,10 @@
 -- The client side of the paid extras that live outside the shop window:
 --   Pets   every player's equipped pet (RareOrSinkPet attribute) swims beside them, drawn locally from
 --          ReplicatedStorage.Templates.Pets.<name> (a Model authored in Studio)
---   Toys   the lobby THROW key (LobbyUi.Rail.RailFrame.ToyButton) and key T: pick a player, the server
---          checks it, then every client flies Templates.Toys.<toy> to them and the target gets a splat
---          (SharedUi.Fx.Splat when authored, a coloured flash otherwise)
+--   Toys   the THROW key (LobbyUi.Rail.ToyButton) and key T, for players not in a match: while you
+--          spectate it throws at whoever you are watching, otherwise you pick a lobby player. The server
+--          checks it, then every client flies Templates.Toys.<toy> to the target and leaves a splat on them
+--          in the world (Templates.ToySplat). Nothing is drawn on the target's screen.
 --   Chests what a ChestOpen gave, as a toast (confetti for Legendary and up)
 --   Shop   why the server refused a Shells buy (ShopResult), as a toast
 --   Themes your equipped dive card theme, handed to DiveCard
@@ -27,11 +28,10 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local DiveCard = require(script.Parent.DiveCard)
-local Fx = require(script.Parent.Fx)
+local Lobby = require(script.Parent.Lobby)
 local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
-local Ui = require(script.Parent.Ui)
 
 local PET_ATTRIBUTE = "RareOrSinkPet"
 local PET_OFFSET = CFrame.new(2.6, 1.2, 2.2) -- beside and a little behind the owner's root part
@@ -42,6 +42,8 @@ local PET_BOB = 0.35 -- studs up and down
 local AIM_SECONDS = 6 -- how long the THROW key waits for you to pick a player
 local PICK_RADIUS = 160 -- screen pixels around the cursor that key T looks for a target in
 local SPLAT_FADE = 0.6
+local SPLAT_OUT = 0.25 -- studs the splat sits proud of the part it hit
+local PLATFORMS = "Platforms" -- the Workspace folder of pillars; a bot's carries its id and its rig
 local NUDGE_DELAY = 4 -- seconds after the results screen before a nudge, so it never covers the scores
 
 local player = Players.LocalPlayer
@@ -51,7 +53,6 @@ local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
 local playing = false
 local toyButton: TextButton? = nil
-local splat: Frame? = nil
 local aimingUntil = 0
 local nudgedStarter = false
 local nudgedDouble = false
@@ -160,12 +161,12 @@ local function refreshToyButton()
 	end
 end
 
-local function throwAt(target: Player)
-	if target == player or playing then
+local function throwAt(targetId: number)
+	if targetId == player.UserId or playing then
 		return
 	end
 	aimingUntil = 0
-	Net.event("ToyThrow"):FireServer(target.UserId)
+	Net.event("ToyThrow"):FireServer(targetId)
 end
 
 -- The player whose character is under the screen point, if any.
@@ -215,32 +216,80 @@ local function playerNear(screen: Vector2): Player?
 	return best
 end
 
+-- While you spectate, the throw goes straight at whoever you are watching. Otherwise you pick a player.
 local function startAiming()
 	if equippedToy() == nil or playing then
+		return
+	end
+	local watched = Lobby.watching()
+	if watched ~= nil then
+		throwAt(watched)
 		return
 	end
 	aimingUntil = os.clock() + AIM_SECONDS
 	Toasts.show("CLICK A PLAYER TO THROW", "info")
 end
 
-local function showSplat(color: Color3)
-	local frame = splat
-	if frame == nil then
-		Fx.flash(color)
-		return
+-- The part a toy flies to for this id: a player's root part, or a bot's head on its pillar.
+local function targetPart(userId: number): BasePart?
+	local target = Players:GetPlayerByUserId(userId)
+	if target ~= nil then
+		return rootOf(target)
 	end
-	frame.Visible = true
-	for _, blob in frame:GetDescendants() do
-		if blob:IsA("Frame") then
-			blob.BackgroundColor3 = color
-			blob.BackgroundTransparency = 0.1
-			TweenService:Create(blob, TweenInfo.new(SPLAT_FADE, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false, GameConfig.Toys.SplatSeconds), {
-				BackgroundTransparency = 1,
-			}):Play()
+	local folder = workspace:FindFirstChild(PLATFORMS)
+	if folder == nil then
+		return nil
+	end
+	for _, platform in folder:GetChildren() do
+		if platform:GetAttribute("OwnerUserId") == userId then
+			local rig = platform:FindFirstChild("BotRig")
+			local head = if rig ~= nil then rig:FindFirstChild("Head") else nil
+			return if head ~= nil and head:IsA("BasePart") then head else nil
 		end
 	end
-	task.delay(GameConfig.Toys.SplatSeconds + SPLAT_FADE, function()
-		frame.Visible = false
+	return nil
+end
+
+-- The splat a toy leaves: a blob stuck on the side of the part it hit, in the world, that fades away. It
+-- rides along if the target moves, and nothing is put on anyone's screen.
+local function worldSplat(hit: BasePart, cameFrom: Vector3, color: Color3)
+	local template = templateFolder("ToySplat")
+	local blob: BasePart
+	if template ~= nil and template:IsA("BasePart") then
+		blob = template:Clone()
+	else
+		local ball = Instance.new("Part")
+		ball.Shape = Enum.PartType.Ball
+		ball.Size = Vector3.new(1.6, 1.6, 1.6)
+		ball.Material = Enum.Material.SmoothPlastic
+		blob = ball
+	end
+	blob.Name = "ToySplatLive"
+	blob.Color = color
+	blob.Anchored = false
+	blob.Massless = true
+	blob.CanCollide = false
+	blob.CanQuery = false
+	blob.CanTouch = false
+	local toward = (cameFrom - hit.Position) * Vector3.new(1, 0, 1)
+	local facing = if toward.Magnitude > 0.1 then toward.Unit else Vector3.zAxis
+	local spot = hit.Position + facing * (math.min(hit.Size.X, hit.Size.Z) / 2 + SPLAT_OUT)
+	blob.CFrame = CFrame.lookAt(spot, spot + facing)
+	local weld = Instance.new("WeldConstraint")
+	weld.Part0 = blob
+	weld.Part1 = hit
+	weld.Parent = blob
+	blob.Parent = petFolder
+	for _, emitter in blob:GetDescendants() do
+		if emitter:IsA("ParticleEmitter") then
+			emitter.Color = ColorSequence.new(color)
+			emitter:Emit(emitter:GetAttribute("Burst") or 12)
+		end
+	end
+	local fade = TweenInfo.new(SPLAT_FADE, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false, GameConfig.Toys.SplatSeconds)
+	TweenService:Create(blob, fade, { Transparency = 1 }):Play()
+	task.delay(GameConfig.Toys.SplatSeconds + SPLAT_FADE + 0.1, function()
+		blob:Destroy()
 	end)
 end
 
@@ -253,12 +302,12 @@ local function toyColor(toy: string): Color3
 	return Color3.fromRGB(230, 50, 40)
 end
 
--- Every client flies the toy from thrower to target along a short arc, then bursts it.
+-- Every client flies the toy from thrower to target along an arc, then bursts it into a splat on the target.
+-- A target that has not streamed in here is simply not drawn.
 local function onToyHit(payload: Net.ToyHitPayload)
 	local from = Players:GetPlayerByUserId(payload.from)
-	local to = Players:GetPlayerByUserId(payload.to)
 	local start = if from ~= nil then rootOf(from) else nil
-	local finish = if to ~= nil then rootOf(to) else nil
+	local finish = targetPart(payload.to)
 	if start == nil or finish == nil then
 		return
 	end
@@ -289,7 +338,9 @@ local function onToyHit(payload: Net.ToyHitPayload)
 		projectile.CanQuery = false
 	end
 	projectile.Parent = workspace
-	local flight = GameConfig.Toys.FlightSeconds
+	local toys = GameConfig.Toys
+	local distance = (finish.Position - start.Position).Magnitude
+	local flight = math.clamp(toys.FlightSeconds * distance / toys.FlightStuds, toys.FlightSeconds, toys.MaxFlightSeconds)
 	local started = os.clock()
 	local connection: RBXScriptConnection
 	connection = RunService.RenderStepped:Connect(function()
@@ -302,9 +353,12 @@ local function onToyHit(payload: Net.ToyHitPayload)
 		if t >= 1 then
 			connection:Disconnect()
 			projectile:Destroy()
-			Sfx.play("Splash", 0.5, 1.4)
-			if to == player then
-				showSplat(color)
+			if finish.Parent ~= nil then
+				worldSplat(finish, a, color)
+			end
+			-- Heard by the lobby and spectators only: it must not distract a player who is answering.
+			if not playing then
+				Sfx.play("Splash", 0.5, 1.4)
 			end
 		end
 	end)
@@ -322,9 +376,9 @@ local function onInput(input: InputObject, processed: boolean)
 			return
 		end
 		local mouse = UserInputService:GetMouseLocation()
-		local target = playerNear(mouse)
+		local target = if Lobby.watching() == nil then playerNear(mouse) else nil
 		if target ~= nil then
-			throwAt(target)
+			throwAt(target.UserId)
 		else
 			startAiming()
 		end
@@ -335,7 +389,7 @@ local function onInput(input: InputObject, processed: boolean)
 		local point = Vector2.new(input.Position.X, input.Position.Y)
 		local target = playerAt(point) or playerNear(point)
 		if target ~= nil then
-			throwAt(target)
+			throwAt(target.UserId)
 		end
 	end
 end
@@ -461,12 +515,6 @@ function Market.init(playerGui: PlayerGui)
 				startAiming()
 			end)
 			refreshToyButton()
-		end
-		local fx = Ui.screen(playerGui, "Fx", 10)
-		local found = if fx ~= nil then fx:FindFirstChild("Splat") else nil
-		if found ~= nil and found:IsA("Frame") then
-			found.Visible = false
-			splat = found
 		end
 	end)
 	UserInputService.InputBegan:Connect(onInput)

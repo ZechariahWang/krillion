@@ -179,9 +179,11 @@ local GameConfig = {
 	-- Lobby throwables (Cosmetics slot Toy): owned forever, never usable on a pillar.
 	Toys = {
 		Cooldown = 2.5, -- seconds between throws
-		Range = 90, -- studs; a target further away is refused
-		FlightSeconds = 0.45, -- how long the toy is in the air (the hit lands when it arrives)
-		SplatSeconds = 2.2, -- how long the splat covers the hit player's screen
+		Range = 90, -- studs; a lobby target further away is refused (a spectated one is hit at any distance)
+		FlightSeconds = 0.45, -- how long the toy is in the air over a short throw (the hit lands when it arrives)
+		FlightStuds = 40, -- a throw longer than this takes longer in proportion, up to MaxFlightSeconds
+		MaxFlightSeconds = 1.1,
+		SplatSeconds = 2.2, -- how long the splat stays on whoever was hit, in the world (never on their screen)
 	},
 	Leaderboard = {
 		RefreshSeconds = 60,
