@@ -5,15 +5,15 @@
 local GameConfig = {
 	Round = {
 		MinPlayers = 1, -- one player plays solo until they sink; two or more play last-player-standing
-		IntermissionSeconds = 15,
+		IntermissionSeconds = 10,
 		IntroFadeSeconds = 0.35, -- screens fade to black this long before the teleport onto the pillars
 		StartCountdownSeconds = 3, -- the 3-2-1 on the pillars before round 1
 		PromptSeconds = 20,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
 		PromptSecondsMin = 10,
-		RevealSeconds = 10, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
-		SettleSeconds = 1.5, -- after the water settles, before the next prompt or the results: room for the callouts
-		ResultsSeconds = 10,
+		RevealSeconds = 7.5, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
+		SettleSeconds = 1, -- after the water settles, before the next prompt or the results: room for the callouts
+		ResultsSeconds = 8,
 		MaxRounds = 0, -- 0 means no cap: last player standing
 		SuddenDeathAlive = 2, -- banner only, no rule change
 		DangerSeconds = 5, -- timer turns red and shakes below this
@@ -31,13 +31,13 @@ local GameConfig = {
 		LiftPerPoint = 0.1,
 		CullHz = 10,
 		CreepFraction = 0.7, -- slow part of the surge
-		CreepSeconds = 2,
+		CreepSeconds = 1.4,
 		JumpSeconds = 0.4,
 	},
 	Platform = {
 		Height = 140, -- tall enough to reach the tank floor at any height
 		Spacing = 16, -- preferred distance between pillar centres
-		MinSpacing = 13, -- a full ring (16 players) squeezes down to this to stay inside RingMaxRadius
+		MinSpacing = 13, -- a ring too big for RingMaxRadius squeezes down to this (never with 6 players)
 		RingMaxRadius = 34, -- outermost pillar centre; the reef rim sits outside this
 		RiseSeconds = 1.1, -- one eased glide with a soft overshoot at the top
 		ConfettiMinPoints = 60,
@@ -122,15 +122,15 @@ local GameConfig = {
 		JoinDataWaitSeconds = 5, -- join data can arrive a few seconds after the player
 	},
 	Reveal = {
-		-- Your full-screen dive card: the pack is slow enough to watch the answers sink through the tiers
-		-- (Depth.diveSeconds for the deepest one; every tag has landed by CardBudgetSeconds), the view moves to
+		-- Your full-screen dive card: the pack winds up, then bursts down through the tiers (Depth.diveSeconds
+		-- for the deepest answer; every tag has landed by CardBudgetSeconds), the view moves to
 		-- the deepest answer and crowns it (under 1.5 s), the card holds CardHoldSeconds, or what is left before
 		-- the rise, then shrinks away (0.25 s). It is always gone before the rise at RaiseDelaySeconds.
 		-- tests/Depth.test.luau keeps these in step with each other.
-		CardBudgetSeconds = 5,
-		CardHoldSeconds = 1.9, -- long enough to read the result and see who went deepest
-		RaiseDelaySeconds = 7.5, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 7.5, -- answer Shells and Mythic announcements land with the rise
+		CardBudgetSeconds = 3.6,
+		CardHoldSeconds = 1.5, -- long enough to read the result and see who went deepest
+		RaiseDelaySeconds = 5.9, -- pillars start rising this long after the reveal, once your card is out of the way
+		PayoutDelaySeconds = 5.9, -- answer Shells and Mythic announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},
@@ -194,7 +194,7 @@ local GameConfig = {
 		DoubleLiftMultiplier = 2, -- pillars rise this many times further
 	},
 	Server = {
-		MaxPlayers = 16, -- also set Server Size to 16 in the Creator Hub (Places > Configure)
+		MaxPlayers = 6, -- also set Server Size to 6 in the Creator Hub (Places > Configure)
 	},
 }
 

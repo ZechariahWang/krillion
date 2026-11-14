@@ -87,7 +87,7 @@ return function(test)
 		assert(sizes[1] == 2 and sizes[2] == 2 and sizes[3] == 2)
 	end)
 
-	test("the front drifts onto the water, then sinks to its reach without ever going back", function()
+	test("the front drifts onto the water, winds up, then bursts to its reach without ever going back", function()
 		assert(DivePack.front(0, 0.3, 4, 500, 60) == -60)
 		assert(math.abs(DivePack.front(0.3, 0.3, 4, 500, 60)) < 1e-9)
 		assert(DivePack.front(4.3, 0.3, 4, 500, 60) == 500)
@@ -100,6 +100,18 @@ return function(test)
 		end
 		-- No jolt where the drop meets the sink: it is all but still either side of the surface.
 		assert(math.abs(DivePack.front(0.31, 0.3, 4, 500, 60) - DivePack.front(0.29, 0.3, 4, 500, 60)) < 1)
+		-- The wind-up: until the hold ends the front has only crept a few metres under the surface...
+		local hold = DivePack.holdSeconds(4)
+		assert(hold > 0.5 and hold < 2)
+		local crept = DivePack.front(0.3 + hold, 0.3, 4, 500, 60)
+		assert(crept > 0 and crept <= 6, "it crept " .. crept)
+		-- ...and no jolt where the burst starts either.
+		assert(DivePack.front(0.3 + hold + 0.01, 0.3, 4, 500, 60) - DivePack.front(0.3 + hold - 0.01, 0.3, 4, 500, 60) < 1)
+		-- The burst: a fifth of the way through it the front is already a quarter of the way down, and it is
+		-- still moving when it arrives, so the deepest tag lands with a thud.
+		local burst = 4 - hold
+		assert(DivePack.front(0.3 + hold + 0.2 * burst, 0.3, 4, 500, 60) > 0.25 * 500)
+		assert(500 - DivePack.front(0.3 + 4 - 0.02, 0.3, 4, 500, 60) > 0.5)
 	end)
 
 	test("no two tags in a lane ever come closer than the spacing, and every tag ends on its resting place", function()
@@ -115,8 +127,8 @@ return function(test)
 			local drop, sink, sky = 0.3, 1 + random() * 4, 60
 			local last: { number } = {}
 			local previousFront = -sky
-			-- The front never covers more than this in one step: its top speed, in the drop or at the end of the sink.
-			local stride = math.max(2 * sky / drop, 1.7 * reach / sink) * (drop + sink) / 200 + 1e-6
+			-- The front never covers more than this in one step: its top speed, in the drop or early in the burst.
+			local stride = math.max(2 * sky / drop, 1.8 * reach / (sink - DivePack.holdSeconds(sink))) * (drop + sink) / 200 + 1e-6
 			for step = 0, 200 do
 				local elapsed = (drop + sink) * step / 200
 				local front = DivePack.front(elapsed, drop, sink, reach, sky)

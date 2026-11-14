@@ -142,6 +142,10 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
+local INHALE = 0.09 -- every tag swells this much while the pack winds up under the surface...
+local EXHALE = 0.84 -- ...and snaps to this share of its size as it bursts, before springing back
+local CHARGE_SLOW = 0.17 -- seconds between the wind-up's clicks at its start
+local CHARGE_FAST = 0.05 -- and at its end, just before the burst
 local TICK_METRES = 35 -- the depth counter clicks once for every this many metres your tag falls
 local TICK_GAP = 0.05 -- seconds between clicks at the fastest
 local ZONE_FLASH = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -869,6 +873,9 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local reach = SOFT_MIN
 	local leader: Diver? = nil -- the round's deepest answer, when other answers share the card
 	local leaderDeep = false -- it is Rare or better: the tags that stopped short drift away
+	local burstAt = math.huge -- seconds into the dive the wind-up ends and the pack bursts down
+	local burst = false
+	local chargeAt = 0 -- when the wind-up clicks next
 
 	-- Window width the zone labels (left) and the ruler's numbers (right) take, so no tag sits on them.
 	local function gutters(size: Vector2): (number, number)
@@ -990,6 +997,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				settleTime *= pace
 			end
 		end
+		burstAt = dropTime + DivePack.holdSeconds(sinkTime)
 		started = os.clock()
 		ready = true
 	end
@@ -1110,11 +1118,34 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			if not splashed and own.pos >= -2 then
 				splashed = true
 				sound("Splash", 0.6, 1.1)
-				local tagScale = own.scale
-				if tagScale ~= nil then
-					tagScale.Scale = own.rest * 0.8
-					play(tagScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = own.rest })
+			end
+
+			if not burst and elapsed < burstAt then
+				-- The wind-up: the pack hangs just under the surface and every tag swells, to clicks that quicken.
+				local hold = burstAt - dropTime
+				local charge = if hold > 0 then math.clamp((elapsed - dropTime) / hold, 0, 1) else 1
+				for _, diver in divers do
+					local tagScale = diver.scale
+					if tagScale ~= nil then
+						tagScale.Scale = diver.rest * (1 + INHALE * charge * charge)
+					end
 				end
+				if not quick and elapsed >= dropTime and now >= chargeAt then
+					chargeAt = now + CHARGE_SLOW + (CHARGE_FAST - CHARGE_SLOW) * charge
+					sound("Tick", 0.16 + 0.2 * charge, 0.85 + 0.8 * charge)
+				end
+			elseif not burst then
+				-- The burst: they snap thin, shed bubbles and plunge.
+				burst = true
+				for _, diver in divers do
+					local tagScale = diver.scale
+					if tagScale ~= nil then
+						tagScale.Scale = diver.rest * EXHALE
+						play(tagScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = diver.rest })
+					end
+					puff(diver, (diver.pos - viewTop) / VIEW)
+				end
+				sound("Splash", 0.8, 0.75)
 			end
 
 			-- The fall is heard as well as seen: the counter clicks faster and higher the deeper it goes.

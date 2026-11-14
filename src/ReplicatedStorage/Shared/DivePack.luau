@@ -11,7 +11,15 @@ export type Slot = {
 	final: number, -- metres where the tag comes to rest: its depth, or lower when its lane is crowded there
 }
 
-local SINK_POWER = 1.7 -- the pack starts slowly and gathers speed
+-- The sink is a wind-up, then a burst. For HOLD_SHARE of it the pack only creeps CREEP_METRES under the surface;
+-- then it launches, at full speed within the first sixth of the burst (LAUNCH_POWER), and eases off towards
+-- the deepest answer (GLIDE_POWER) while keeping CARRY of its speed, so even the last tag lands with a thud.
+local HOLD_SHARE = 0.3
+local CREEP_METRES = 5
+local LAUNCH_POWER = 1.35
+local GLIDE_POWER = 4
+local CARRY = 0.35
+local LAND_STEPS = 40 -- halvings when a landing time is searched for
 local LAND_SHARE = 0.6 -- a tag counts as landed once the pack is this share of `soft` past its resting place
 local OWN_LANE_ROOM = 2 -- spacings of push another tag takes on before it joins your lane
 
@@ -103,8 +111,15 @@ function DivePack.reach(slots: { Slot }, soft: number): number
 	return deepest + soft
 end
 
+-- How much of `sinkSeconds` is the wind-up before the burst.
+function DivePack.holdSeconds(sinkSeconds: number): number
+	return HOLD_SHARE * sinkSeconds
+end
+
 -- Metres of the pack's front `elapsed` seconds in: it drifts down from `sky` metres above the surface over
--- `dropSeconds`, coming to rest on the water, then sinks to `reach` over `sinkSeconds`, gathering speed.
+-- `dropSeconds`, coming to rest on the water; winds up, creeping just under the surface; then bursts down to
+-- `reach`. The wind-up and the burst together take `sinkSeconds`. It never goes back up and never jumps: it
+-- is still for an instant where the drop, the wind-up and the burst meet.
 function DivePack.front(elapsed: number, dropSeconds: number, sinkSeconds: number, reach: number, sky: number): number
 	if elapsed <= 0 then
 		return -sky
@@ -116,8 +131,16 @@ function DivePack.front(elapsed: number, dropSeconds: number, sinkSeconds: numbe
 	if sinkSeconds <= 0 then
 		return reach
 	end
-	local u = math.min((elapsed - dropSeconds) / sinkSeconds, 1)
-	return reach * u ^ SINK_POWER
+	local creep = math.min(CREEP_METRES, 0.4 * reach)
+	local hold = HOLD_SHARE * sinkSeconds
+	local since = elapsed - dropSeconds
+	if since < hold then
+		local left = 1 - since / hold
+		return creep * (1 - left * left)
+	end
+	local u = math.min((since - hold) / (sinkSeconds - hold), 1)
+	local launched = u ^ LAUNCH_POWER
+	return creep + (reach - creep) * ((1 - CARRY) * (1 - (1 - launched) ^ GLIDE_POWER) + CARRY * launched)
 end
 
 -- Metres of one tag when the pack's front is at `front`: its place in the line, slowing over `soft` metres
@@ -144,7 +167,18 @@ function DivePack.landSeconds(
 	if needed <= 0 or reach <= 0 then
 		return dropSeconds
 	end
-	return dropSeconds + sinkSeconds * math.min(needed / reach, 1) ^ (1 / SINK_POWER)
+	-- The front only ever sinks, so the moment it passes `needed` can be closed in on.
+	local low = dropSeconds
+	local high = dropSeconds + sinkSeconds
+	for _ = 1, LAND_STEPS do
+		local middle = (low + high) / 2
+		if DivePack.front(middle, dropSeconds, sinkSeconds, reach, 0) >= needed then
+			high = middle
+		else
+			low = middle
+		end
+	end
+	return high
 end
 
 return table.freeze(DivePack)

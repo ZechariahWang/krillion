@@ -32,6 +32,7 @@ local tideText: TextLabel
 local lastStatus = ""
 local lastPrompt = ""
 local lastRound = 0
+local promptRound = 0 -- the round whose prompt has made its entrance
 local lastTick = "" -- round and second of the last danger tick, so extra broadcasts never double-tick
 local lastNeed = "" -- the need hint last shown, so the chip only bumps when it changes
 local lastPayload: any = nil
@@ -272,6 +273,22 @@ local function promptTimer(payload)
 	end
 end
 
+-- A new prompt makes an entrance nobody can miss: the status line slams in from oversize and shakes, the
+-- screen flashes, two sounds play, and from round 2 a ROUND callout crosses the screen (a special round has
+-- its own callout, and round 1 has GO!).
+local PROMPT_SLAM = 1.45
+
+local function promptArrives(payload)
+	Ui.pop(statusFrame, PROMPT_SLAM)
+	Fx.shakeOffset(statusFrame, 7, 0.35)
+	Fx.flash(Theme.Color.Yellow)
+	Sfx.play("Pop", 0.8, 0.9)
+	Sfx.play("Ping", 0.6, 1.2)
+	if payload.special == nil and payload.round > 1 then
+		Fx.callout("ROUND " .. payload.round, Theme.Color.Yellow)
+	end
+end
+
 -- Announces a special round once, when its prompt starts.
 local function announceSpecial(payload)
 	if payload.phase ~= "Prompt" or payload.round == lastRound then
@@ -301,6 +318,7 @@ function Status.onState(payload)
 	announceSpecial(payload)
 	if phase == "Results" or phase == "Waiting" then
 		lastRound = 0
+		promptRound = 0
 	end
 
 	if phase == "Waiting" then
@@ -322,6 +340,10 @@ function Status.onState(payload)
 			lastPrompt = string.upper(payload.prompt)
 		end
 		setStatus(lastPrompt)
+		if payload.round ~= promptRound then
+			promptRound = payload.round
+			promptArrives(payload)
+		end
 		promptTimer(payload)
 		aliveText.Text = "ALIVE " .. payload.alive .. "/" .. payload.starting
 		-- How many have locked in, once anyone has: the compact stand-in for the old lock counter.
