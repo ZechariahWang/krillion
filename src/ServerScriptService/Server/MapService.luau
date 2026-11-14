@@ -13,6 +13,8 @@ local LateJoin = require(ReplicatedStorage.Shared.LateJoin)
 local Theme = require(ReplicatedStorage.Config.Theme)
 
 local CAP_HEIGHT = 1
+local RISE_FLASH = 5 -- how many times brighter a pillar's light burns as it starts to rise
+local RISE_FLASH_INFO = TweenInfo.new(0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
 local arena: Model
 local lobby: Model
@@ -52,6 +54,18 @@ local function centerY(topY: number): number
 	return topY - CAP_HEIGHT - GameConfig.Platform.Height / 2
 end
 
+-- The pillar's authored decoration (trim, bands, posts, its light) follows its colour: anything on it with a
+-- `Tint` attribute takes `color` lerped that far towards white, or towards black for a negative Tint. Used
+-- for the pillar's own colour, a skin's, and slate when it sinks.
+function MapService.tint(platform: Part, color: Color3)
+	for _, piece in platform:GetDescendants() do
+		local amount = piece:GetAttribute("Tint")
+		if typeof(amount) == "number" and (piece:IsA("BasePart") or piece:IsA("Light")) then
+			(piece :: any).Color = if amount >= 0 then color:Lerp(Theme.Color.White, amount) else color:Lerp(Color3.new(), -amount)
+		end
+	end
+end
+
 -- Builds one pillar whose standing surface sits at `topY`, centred on (x, z). Pillars are unanchored and
 -- held by the template's Lift (AlignPosition) and Upright (AlignOrientation), so physics carries standing
 -- characters when the server moves the Lift target. The default colours are kept as attributes so a sunk
@@ -86,6 +100,7 @@ local function makePlatform(index: number, x: number, z: number, topY: number): 
 		platform:SetAttribute("CapColor", cap.Color)
 		platform:SetAttribute("CapMaterial", cap.Material.Name)
 	end
+	MapService.tint(platform, color)
 
 	local lift = platform:FindFirstChild("Lift") :: AlignPosition
 	lift.Position = position
@@ -144,6 +159,7 @@ function MapService.markSunk(platform: Part)
 	if cap ~= nil then
 		cap.Color = Theme.Color.Slate
 	end
+	MapService.tint(platform, Theme.Color.Slate)
 end
 
 -- Puts back the pillar's own colours after a revive. Skins go on again after this
@@ -152,6 +168,7 @@ function MapService.unmarkSunk(platform: Part)
 	local color = platform:GetAttribute("BaseColor")
 	if typeof(color) == "Color3" then
 		platform.Color = color
+		MapService.tint(platform, color)
 	end
 	local material = platform:GetAttribute("BaseMaterial")
 	if type(material) == "string" then
@@ -191,7 +208,7 @@ function MapService.celebrate(platform: Part, points: number)
 	end
 end
 
--- A quick bubble puff from the top of the pillar as it starts to rise.
+-- As the pillar starts to rise: a bubble puff and a ring of sparks from its top, and its light flares.
 function MapService.riseBurst(platform: Part)
 	local top = platform:FindFirstChild("Top")
 	if top == nil then
@@ -200,6 +217,21 @@ function MapService.riseBurst(platform: Part)
 	local bubbles = top:FindFirstChild("Bubbles") :: ParticleEmitter?
 	if bubbles ~= nil then
 		bubbles:Emit(24)
+	end
+	local sparks = top:FindFirstChild("Sparks")
+	if sparks ~= nil and sparks:IsA("ParticleEmitter") then
+		sparks.Color = ColorSequence.new(platform.Color:Lerp(Theme.Color.White, 0.5))
+		sparks:Emit(36)
+	end
+	local glow = platform:FindFirstChild("Glow", true)
+	if glow ~= nil and glow:IsA("PointLight") then
+		local resting = glow:GetAttribute("Brightness")
+		if typeof(resting) ~= "number" then
+			resting = glow.Brightness
+			glow:SetAttribute("Brightness", resting)
+		end
+		glow.Brightness = resting * RISE_FLASH
+		TweenService:Create(glow, RISE_FLASH_INFO, { Brightness = resting }):Play()
 	end
 end
 
