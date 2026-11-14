@@ -1,26 +1,22 @@
 --!strict
--- Drives LobbyUi.Daily: the daily reward window (authored in Studio). Seven day cards show the week: the
--- days already claimed carry a check, today's is lit, the rest wait. CLAIM asks the server (DailyClaim);
--- the claim lives in the profile (profile.daily), so the window only draws what the server last said.
--- Opened from the rail's DAILY key, which carries a "!" badge while a reward is waiting, and once by
--- itself on the first lobby visit of a session when there is something to claim.
+-- Draws the Daily page of the REWARDS window (LobbyUi.Rewards; Client/Rewards owns the window and its tabs):
+-- the daily reward. Seven day cards show the week: the days already claimed carry a check, today's is lit,
+-- the rest wait. CLAIM asks the server (DailyClaim); the claim lives in the profile (profile.daily), so the
+-- page only draws what the server last said. Its tab carries a "!" badge while a reward is waiting, and the
+-- window opens on it by itself once, on the first lobby visit of a session with something to claim.
 
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Rules = require(ReplicatedStorage.Shared.Daily)
 local Net = require(ReplicatedStorage.Shared.Net)
 local ChestReveal = require(script.Parent.ChestReveal)
-local Rail = require(script.Parent.Rail)
+local Rewards = require(script.Parent.Rewards)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local WAIT_SECONDS = 10
-local MARGIN = 16 -- pixels kept clear around the panel when it is scaled down for a small screen
-local MIN_FIT = 0.4
-local BADGE = "DailyButton"
+local PAGE = "Daily" -- this controller's tab and page in the REWARDS window
 local AUTO_OPEN_SECONDS = 2 -- how long after the lobby settles the window opens by itself
 local CLAIM_TIMEOUT = 6 -- a claim with no answer by then can be pressed again
 local WAITING_TRANSPARENCY = 0.45 -- a day not reached yet is dimmed this much
@@ -34,11 +30,7 @@ type Card = {
 	dim: GuiObject?,
 }
 
-local player = Players.LocalPlayer
-
-local gui: Frame? = nil
-local panel: GuiObject? = nil
-local fit: UIScale? = nil
+local bound = false -- the page was found and its pieces are connected
 local claimButton: TextButton? = nil
 local claimLabel: TextLabel? = nil -- the button's authored caption
 local footer: TextLabel? = nil
@@ -46,7 +38,6 @@ local cards: { [number]: Card } = {}
 
 local saved: Rules.State? = nil -- profile.daily from the last ProfileChanged; nil until the first one
 local tutorialDone = false
-local isOpen = false
 local playing = false
 local autoShown = false
 local pendingSince: number? = nil -- a claim is with the server
@@ -128,56 +119,8 @@ local function render()
 		button.BackgroundTransparency = if ready then 0 else 0.6
 	end
 	updateFooter()
-	Rail.setBadge(BADGE, if claimable() then "!" else nil)
-end
-
-local function fitToScreen()
-	local screen = gui
-	local frame = panel
-	local scale = fit
-	if screen == nil or frame == nil or scale == nil then
-		return
-	end
-	Ui.fitPanel(screen.AbsoluteSize, frame, scale, nil, MARGIN, MIN_FIT, 0)
-end
-
-local function close()
-	local screen = gui
-	if screen == nil or not isOpen then
-		return
-	end
-	isOpen = false
-	screen.Visible = false
-	Windows.closed(close)
-end
-
--- Opens the window. Never over a pillar: the match comes first.
-function Daily.open()
-	local screen = gui
-	if screen == nil or playing or player:GetAttribute("Playing") == true then
-		return
-	end
-	render()
-	fitToScreen()
-	screen.Visible = true
-	if not isOpen then
-		isOpen = true
-		Sfx.play("Open", 0.5)
-		local frame = panel
-		if frame ~= nil then
-			Ui.pop(frame, 0.7)
-		end
-	end
-	Windows.opened(close)
-end
-
-local function toggle()
-	if isOpen then
-		Sfx.play("Close", 0.5)
-		close()
-	else
-		Daily.open()
-	end
+	-- Without the page there is nothing to claim on, so the tab and the rail key stay unmarked.
+	Rewards.setTabBadge(PAGE, if bound and claimable() then "!" else nil)
 end
 
 local function claim()
@@ -194,7 +137,7 @@ local function claim()
 	local reward = Rules.reward(Rules.nextIndex(state, Rules.today(now())))
 	if reward.chest ~= nil then
 		-- The chest opens with the full reveal; the claim itself is what makes the server roll it.
-		close()
+		Rewards.close()
 		ChestReveal.open(reward.chest, function()
 			Net.event("DailyClaim"):FireServer()
 		end)
@@ -208,17 +151,20 @@ function Daily.onResult(payload: Net.DailyResultPayload)
 	pendingSince = nil
 	if type(payload) == "table" and payload.status == "ok" then
 		Sfx.play("Fanfare", 0.6)
-		close()
+		-- Only when the claim is still what the player is looking at: they may have moved to another tab.
+		if Rewards.isOpen(PAGE) then
+			Rewards.close()
+		end
 	end
 	render()
 end
 
 local function tryAutoOpen()
-	if autoShown or gui == nil or playing or not tutorialDone or not claimable() or Windows.anyOpen() then
+	if autoShown or not bound or playing or not tutorialDone or not claimable() or Windows.anyOpen() then
 		return
 	end
 	autoShown = true
-	Daily.open()
+	Rewards.open(PAGE)
 end
 
 local function child(parent: Instance?, name: string): GuiObject?
@@ -231,21 +177,16 @@ local function textChild(parent: Instance?, name: string): TextLabel?
 	return if found ~= nil and found:IsA("TextLabel") then found else nil
 end
 
-local function bind(screen: Frame)
-	local holder = screen:FindFirstChild("Holder")
-	local frame = child(holder, "Panel")
-	local scale = if holder ~= nil then holder:FindFirstChild("Fit") else nil
-	local days = child(frame, "Days")
-	local button = if frame ~= nil then frame:FindFirstChild("ClaimButton") else nil
-	if frame == nil or days == nil or button == nil or not button:IsA("TextButton") then
-		warn("Daily: LobbyUi.Daily is missing Holder.Panel, Days or ClaimButton; no daily reward window")
+local function bind(page: GuiObject)
+	local days = child(page, "Days")
+	local button = page:FindFirstChild("ClaimButton")
+	if days == nil or button == nil or not button:IsA("TextButton") then
+		warn("Daily: the Daily page of LobbyUi.Rewards is missing Days or ClaimButton; no daily reward")
 		return
 	end
-	panel = frame
-	fit = if scale ~= nil and scale:IsA("UIScale") then scale else nil
 	claimButton = button
 	claimLabel = textChild(button, "Label")
-	footer = textChild(frame, "Footer")
+	footer = textChild(page, "Footer")
 	for index = 1, #GameConfig.Daily.Days do
 		local card = child(days, "Day" .. index)
 		if card ~= nil then
@@ -261,45 +202,21 @@ local function bind(screen: Frame)
 	end
 	Ui.pressable(button)
 	button.Activated:Connect(claim)
-	local closeButton = frame:FindFirstChild("CloseButton")
-	if closeButton ~= nil and closeButton:IsA("GuiButton") then
-		Ui.pressable(closeButton)
-		closeButton.Activated:Connect(function()
-			Sfx.play("Close", 0.5)
-			close()
-		end)
-	end
-	local scrim = screen:FindFirstChild("Scrim")
-	if scrim ~= nil and scrim:IsA("GuiButton") then
-		scrim.Activated:Connect(close)
-	end
-	local railButton = Rail.button(BADGE)
-	if railButton ~= nil then
-		railButton.Activated:Connect(toggle)
-	else
-		warn("Daily: the rail has no DailyButton; the daily window only opens by itself")
-	end
-	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
-	screen.Visible = false
-	gui = screen
+	bound = true
 	render()
 end
 
-function Daily.init(playerGui: PlayerGui)
-	player:GetAttributeChangedSignal("Playing"):Connect(function()
-		if player:GetAttribute("Playing") == true then
-			close()
-		end
-	end)
+function Daily.init()
+	Rewards.onShow(PAGE, render)
 	task.spawn(function()
-		local found = Ui.screen(playerGui, "Daily", WAIT_SECONDS)
-		if found == nil or not found:IsA("Frame") then
-			warn("Daily: LobbyUi.Daily is missing; no daily reward window")
+		local page = Rewards.page(PAGE)
+		if page == nil then
+			warn("Daily: LobbyUi.Rewards has no Daily page; no daily reward")
 			return
 		end
-		bind(found)
+		bind(page)
 	end)
-	-- The countdown ticks while the window is open; the week redraws itself at UTC midnight.
+	-- The countdown ticks while the page is showing; the week redraws itself at UTC midnight.
 	task.spawn(function()
 		local shownDay = -1
 		while true do
@@ -308,7 +225,7 @@ function Daily.init(playerGui: PlayerGui)
 			if today ~= shownDay then
 				shownDay = today
 				render()
-			elseif isOpen then
+			elseif Rewards.isOpen(PAGE) then
 				updateFooter()
 			end
 		end
@@ -325,10 +242,10 @@ function Daily.onProfile(profile)
 	if type(daily) ~= "table" or type(daily.day) ~= "number" or type(daily.streak) ~= "number" then
 		return
 	end
-	-- A profile that failed to load cannot be claimed against: the window stays quiet until the real one.
+	-- A profile that failed to load cannot be claimed against: the page stays quiet until the real one.
 	if profile.loadFailed == true then
 		saved = nil
-		Rail.setBadge(BADGE, nil)
+		Rewards.setTabBadge(PAGE, nil)
 		return
 	end
 	local first = saved == nil
@@ -342,9 +259,7 @@ end
 function Daily.onState(payload)
 	local wasPlaying = playing
 	playing = type(payload) == "table" and payload.playing == true
-	if playing then
-		close()
-	elseif wasPlaying then
+	if wasPlaying and not playing then
 		-- Back in the lobby after a match: a reward still waiting gets its one automatic showing.
 		task.delay(AUTO_OPEN_SECONDS, tryAutoOpen)
 	end

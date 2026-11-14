@@ -28,11 +28,13 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   limited per round and per match (Boost Plus raises the match limit). The in-match chip asks for a second
   tap before opening a Robux purchase. The 3-hint pack is `retired` in `Products.BoostPacks`: not sold, its
   receipts still honoured.
-- Daily reward: `LobbyUi.Daily` (authored: `Holder.Panel` with `Days.Day1`..`Day7` cards, each with `Amount`,
-  `Bonus`, `Check`, `Today` and `Dim`; `ClaimButton`; `Footer`) and the rail's `DailyButton`. `Client/Daily`
+- Daily reward: the Daily tab of the REWARDS window (`LobbyUi.Rewards`, see UI layout). Its page
+  (`Pages.Daily`, authored) holds `Days.Day1`..`Day7` cards, each with `Amount`, `Bonus`, `Check`, `Today` and
+  `Dim`; `ClaimButton`; `Footer`. `Client/Daily`
   draws it from `profile.daily` (`{ day, streak }`, saved in the DataStore); `Server/DailyService` pays the
   claim; the rules are `Shared/Daily` and the week is `GameConfig.Daily.Days`. One claim per UTC day, a missed
-  day starts over, day 7 opens a free chest. The debug command `daily <user> <n>` sets the state for a test.
+  day starts over, day 7 opens a free chest. The window opens on the tab by itself once a session while a
+  claim waits. The debug command `daily <user> <n>` sets the state for a test.
 - A user's saved data can be deleted with the Studio debug command `erase <userId>` (`DataService.erase`).
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
 - Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
@@ -107,6 +109,19 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 
 ## Match flow
 
+- A server holds 6 (`GameConfig.Server.MaxPlayers`; Server Size in the Creator Hub is set to match).
+- Pillars: `PlatformTemplate` is a Part with `Cap` (the smooth standing surface), `Lift`, `Upright` and `Top`
+  (emitters: `Confetti`, `Bubbles`, `Sparks` on a rise, `Sparkle` always). Its decoration (a glowing `Collar`
+  and `Band1..5`, corner `Post1..4`, the `PadRing`/`PadDisc`/`Emblem` landing pad, the `GlowPoint.Glow`
+  light) is authored as direct child parts welded to it, non-colliding and massless; a piece with a `Tint`
+  attribute follows the pillar's colour (`MapService.tint`: its own colour, a skin's, slate when sunk).
+  `ServerStorage.PlatformTemplateBackup` is the plain studded pillar from before 2026-11-14.
+- Toys: a player who is not in a match throws their equipped toy with the THROW key or T. While spectating
+  it goes at whoever they are watching, a player or a bot, at any distance; otherwise they pick a lobby player
+  nearby. Every client flies `Templates.Toys.<toy>` and leaves `Templates.ToySplat` welded to the target for
+  a moment. Nothing is drawn on the target's screen and they do not hear it.
+- A new prompt slams the status line in (`Client/Status` promptArrives): oversize pop, shake, flash, two
+  sounds and, from round 2, a ROUND callout.
 - Phases: Waiting, Intermission, Starting, Prompt, Reveal, Surge, Results. Before Starting, `MatchIntro` fades the
   starters' screens to black and the server teleports them; Starting is the 3-2-1 on the pillars
   (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
@@ -114,7 +129,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Reveal: your dive card slides in and carries everyone's answers (`DiveCard` options `peers`; a player with
   no answer is left to the answers list). Each is a `Templates.DiveCard...PeerTag` (the player's picture in a
   circle, or a bot's initial, then the answer), yours too. `Shared/DivePack` (pure, tested) gives every tag a
-  lane and sinks them as a pack, so tags never overlap; lanes stay clear of the zone labels and the ruler.
+  lane and sinks them as a pack (a wind-up just under the surface while the tags swell, then a burst), so
+  tags never overlap; lanes stay clear of the zone labels and the ruler.
   The view follows your tag, then glides to the round's deepest answer and shows its `Crown` (ties share
   it). When that answer is Rare or better the tags that stopped short drift away first, and the crowned tag
   ends in the middle, larger, when it is alone on screen. Nothing is drawn over the tags: a zone you cross
@@ -140,7 +156,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 | Root | DisplayOrder | Studio default | Screens |
 |------|--------------|----------------|---------|
 | `GameUi` | 1 | Enabled off (code turns it on) | Hud, Reveal, Results, Revive, Spectate, Vignette |
-| `LobbyUi` | 2 | on | Rail, Shop, Inventory, Store, LobbyQuiz, Quests, Daily, Rewards, Tutorial |
+| `LobbyUi` | 2 | on | Rail, Shop, Inventory, Store, LobbyQuiz, Rewards, Tutorial |
 | `SharedUi` | 3 | on | Status, Toasts, Fx, Wallet, DiveCards, Settings, Transition, ChestReveal |
 
 - Controllers get a screen with `Ui.screen(playerGui, "Hud")` (or `Ui.findScreen`) and show it with `Visible`.
@@ -151,7 +167,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
-- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): QUESTS, DAILY, REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
+- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
   wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar circle right of
   the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye circle right of that: it is always
@@ -159,15 +175,29 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   match has anyone left in it, and says so when there is nobody to watch. Bots can be watched: the camera
   follows the rig's Head on its pillar, and the pillar's `OwnerName` attribute gives the name. A player who sinks lands in the lobby with no
   card; `Rail.ToyButton` is the small THROW key above the Shells chip.
-- Pop-up windows (Quests, Rewards, Help, Shop, Settings) and the match countdown sit dead centre: anchor
+- Pop-up windows (Rewards, Help, Shop, Settings) and the match countdown sit dead centre: anchor
   (0.5, 0.5) at Position (0.5, 0.5). One window at a time: each reports to `Client/Windows`, and while any is
   open the rail, the top buttons, the status chips and the Shells chip hide (the warm-up quiz opens with
   `keepStatus`, so the phase and countdown chips stay). Window titles carry no emoji.
+- REWARDS window (`LobbyUi.Rewards`, the rail's `RewardsButton`): one window with Daily, Quests and Rewards
+  tabs. `Holder.Panel` holds `Title`, `CloseButton`, `Tabs` (`DailyTab`, `QuestsTab`, `RewardsTab`: TextButtons
+  with a `Page` attribute naming their page, a `Lip` gradient that is enabled while the tab is lit and a hidden
+  `Badge`) and `Pages` (`Daily`, `Quests`, `Rewards`, shown one at a time). `Client/Rewards` owns the window,
+  the tabs and the Rewards page (`Rows.GroupRow`, `InviteRow`, `FavoriteRow`; `LikeLine`). `Client/Daily` and
+  `Client/Quests` (`Row1`..`Row3`, `Empty`, `Footer`) draw their pages through `Rewards.page`,
+  `Rewards.setTabBadge` and `Rewards.onShow`; Rewards never requires them. A tab's badge is "!" for a daily
+  claim or group reward that is waiting and "x/3" while quests are unfinished; the rail key shows "!" if any
+  tab does, else the quest count. A plain open lands on Daily if a claim waits, else on Quests if one is
+  unfinished, else on Rewards; `Rewards.open(tab)` picks the tab.
 - Shop (`LobbyUi.Shop.Holder.Panel`) and Inventory (`LobbyUi.Inventory`, the same tree with only the cosmetic
   sections): the section keys under `Sections` carry `Kind` (Featured | Slots | Chests | Shells | Passes |
   Specials) and, for Slots, a comma list in `Slots`; `Tools` holds the search box and filter keys. `ShopUi`
   drives both; the rail SHOP and ITEMS keys open them. Robux items (passes, Shell packs, specials) have their
   own STORE window (`LobbyUi.Store`).
+- Water meter (`Hud.WaterMeter`, desktop only): the blue fill is the water now, `Marker` is your pillar top
+  and `Target` (yellow) is where the water will be after this round's surge. Optional authored labels that
+  `Hud` drives: `Marker.Label` (YOU), `Target.Label` (WATER RISES TO HERE), each put on the far side of its
+  line from the other, and `Need` above the meter (RISE +x in red, or SAFE +x in green).
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
   gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. Toasts stack in the bottom-left

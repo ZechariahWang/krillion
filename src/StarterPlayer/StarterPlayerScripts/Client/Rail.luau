@@ -1,10 +1,10 @@
 --!strict
--- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (QUESTS, REWARDS, SHOP, STORE, ITEMS), each
+-- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (REWARDS, SHOP, STORE, ITEMS), each
 -- with an icon, a label and a "!" badge, the HELP circle on the top bar next to the Settings gear, and the
 -- small THROW key at the right edge. It
 -- shows only in the lobby, off a pillar, and hides while any window is open. On short screens (landscape
 -- phones) the keys wrap into two columns and RailFrame.Fit shrinks them to fit.
--- Each button belongs to its own controller: Quests, Rewards, ShopUi and Tutorial call Rail.button(name) to connect
+-- Each button belongs to its own controller: Rewards, ShopUi and Tutorial call Rail.button(name) to connect
 -- it and Rail.setBadge(name, text) to mark it, so this module never needs to know them.
 
 local GuiService = game:GetService("GuiService")
@@ -13,7 +13,7 @@ local UserInputService = game:GetService("UserInputService")
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local BUTTONS = { "QuestsButton", "DailyButton", "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
+local BUTTONS = { "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
 local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WATCH_SLOT = 2 -- the spectate eye, right of Help
 local WAIT_SECONDS = 10
@@ -196,7 +196,7 @@ function Rail.init(playerGui: PlayerGui)
 	refresh()
 end
 
--- The button with this name ("QuestsButton", "InventoryButton", "HelpButton", ...), or nil if not authored.
+-- The button with this name ("RewardsButton", "InventoryButton", "HelpButton", ...), or nil if not authored.
 function Rail.button(name: string): TextButton?
 	return buttons[name]
 end
