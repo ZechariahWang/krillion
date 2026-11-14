@@ -204,6 +204,38 @@ function AnswerMatcher.variants(answer: string): { string }
 	return forms
 end
 
+-- Whole words that mean the same thing, folded to one spelling on both sides, so "diet doctor pepper"
+-- meets "diet dr pepper" and "mount everest" meets "mt everest" without an alias for every answer.
+local WORD_FOLDS: { [string]: string } = {
+	doctor = "dr",
+	saint = "st",
+	mount = "mt",
+	mister = "mr",
+	missus = "mrs",
+	junior = "jr",
+	senior = "sr",
+	fort = "ft",
+	["and"] = "n",
+}
+
+local function foldWords(answer: string): string
+	local words = {}
+	for word in string.gmatch(answer, "%S+") do
+		table.insert(words, WORD_FOLDS[word] or word)
+	end
+	return table.concat(words, " ")
+end
+
+-- The words in alphabetical order, so "cherry dr pepper" meets "dr pepper cherry".
+local function sortWords(answer: string): string
+	local words = {}
+	for word in string.gmatch(answer, "%S+") do
+		table.insert(words, word)
+	end
+	table.sort(words)
+	return table.concat(words, " ")
+end
+
 -- Fallback lookups after exact and alias, loosest last. Each turns an answer into the forms it
 -- may be compared by; the bank side gets the same treatment, so "the moon" and "moon" meet
 -- either way round, and so do "cherry" and "cherries".
@@ -218,7 +250,67 @@ local FOLDS: { (string) -> { string } } = {
 		local spaceless = string.gsub(stripArticle(answer), " ", "")
 		return AnswerMatcher.variants(spaceless)
 	end,
+	function(answer)
+		return AnswerMatcher.variants(foldWords(stripArticle(answer)))
+	end,
+	function(answer)
+		local sorted = sortWords(foldWords(stripArticle(answer)))
+		if not string.find(sorted, " ") then
+			return {}
+		end
+		return { sorted }
+	end,
 }
+
+-- Words that only say which version of a thing it is. When an answer is refused as typed, these are
+-- dropped from its start and end and the rest is tried again: "pepsi zero sugar" counts as "pepsi zero",
+-- "cherry pepsi" as "pepsi". The answer then counts as the bank answer that is left.
+local QUALIFIERS: { [string]: boolean } = {}
+for _, word in {
+	"diet", "zero", "sugar", "free", "sugarfree", "light", "lite", "max", "original", "classic", "regular",
+	"plain", "mini", "large", "small", "fresh", "homemade", "flavored", "flavoured", "flavor", "flavour",
+	"cherry", "vanilla", "lime", "lemon", "orange", "grape", "strawberry", "raspberry", "peach", "mango",
+	"caffeine", "decaf", "iced", "can", "bottle", "of",
+} do
+	QUALIFIERS[word] = true
+end
+
+-- A negation makes the answer mean something else, so nothing is dropped from it.
+local NEGATIONS: { [string]: boolean } = { ["not"] = true, ["no"] = true, ["non"] = true, ["without"] = true }
+
+-- The answer with qualifier words dropped from its ends, fewest dropped first, so "pepsi zero sugar"
+-- tries "pepsi zero" before "pepsi". Empty when there is nothing to drop or a negation is in it. A word
+-- that is an answer itself (`isAnswer`) is never dropped, so "lemon lime" is not "lime" in a fruit question.
+local function withoutQualifiers(answer: string, isAnswer: (string) -> boolean): { string }
+	local words = {}
+	for word in string.gmatch(answer, "%S+") do
+		if NEGATIONS[word] then
+			return {}
+		end
+		table.insert(words, word)
+	end
+	local leading = 0
+	local function droppable(word: string): boolean
+		return QUALIFIERS[word] == true and not isAnswer(word)
+	end
+	while leading < #words and droppable(words[leading + 1]) do
+		leading += 1
+	end
+	local trailing = 0
+	while trailing < #words - leading and droppable(words[#words - trailing]) do
+		trailing += 1
+	end
+	local forms = {}
+	for dropped = 1, leading + trailing do
+		for fromStart = math.min(dropped, leading), 0, -1 do
+			local fromEnd = dropped - fromStart
+			if fromEnd <= trailing and fromStart + fromEnd < #words then
+				table.insert(forms, table.concat(words, " ", fromStart + 1, #words - fromEnd))
+			end
+		end
+	end
+	return forms
+end
 
 local function tierIndex(name: string): number
 	for index, tier in Tiers.List do
@@ -283,15 +375,8 @@ local function findFolded(prompt: Prompt, answer: string): (string?, string?)
 	return nil, nil
 end
 
--- Returns the tier and the bank spelling for an accepted answer, or nil when it is refused.
--- The bank spelling is what autocorrect shows back to the player.
--- Lookups run strictest first: exact, alias, then the article, plural and space-less fallbacks,
--- then typos. The existing pre-normalized bank entries therefore still match first.
-function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?)
-	local answer = AnswerMatcher.normalize(text)
-	if #answer == 0 or #answer > GameConfig.Answer.MaxLength then
-		return nil, nil
-	end
+-- Exact, alias, folds and typos for an already normalized answer.
+local function resolveNormalized(answer: string, prompt: Prompt): (string?, string?)
 	local exact = findExact(prompt, answer)
 	if exact ~= nil then
 		return exact, answer
@@ -309,6 +394,32 @@ function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?)
 		return tier, spelling
 	end
 	return findClosest(prompt, answer)
+end
+
+-- Returns the tier and the bank spelling for an accepted answer, or nil when it is refused.
+-- The bank spelling is what autocorrect shows back to the player.
+-- Lookups run strictest first: exact, alias, then the article, plural, space-less, word-spelling and
+-- word-order fallbacks, then typos, and last the same again with qualifier words ("diet", "zero") dropped
+-- from the ends. The existing pre-normalized bank entries therefore still match first.
+function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?)
+	local answer = AnswerMatcher.normalize(text)
+	if #answer == 0 or #answer > GameConfig.Answer.MaxLength then
+		return nil, nil
+	end
+	local tier, spelling = resolveNormalized(answer, prompt)
+	if tier ~= nil then
+		return tier, spelling
+	end
+	local function isAnswer(word: string): boolean
+		return findExact(prompt, word) ~= nil
+	end
+	for _, core in withoutQualifiers(answer, isAnswer) do
+		tier, spelling = resolveNormalized(core, prompt)
+		if tier ~= nil then
+			return tier, spelling
+		end
+	end
+	return nil, nil
 end
 
 function AnswerMatcher.match(text: string, prompt: Prompt): string?
