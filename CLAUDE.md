@@ -217,8 +217,8 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. On a phone (`Ui.isPhone`) the gear, Help and
   Watch circles go to the top-right instead, counted in from `TopbarInset.Max.X` with the gear in the
   corner, clear of the status bar; a phone shows no player list there. On a phone the Shells chip hangs
-  close under them (`Client/Wallet` placeOnPhone), the THROW key hangs right under the chip, and the Shells
-  pop-ups drop in below both. Toasts stack in the bottom-left
+  under them (`Client/Wallet` placeOnPhone), the THROW key hangs under the chip, and the Shells pop-ups drop
+  in below both; neither shows while the player is on a pillar, where the match strip has the top to itself. Toasts stack in the bottom-left
   (past the match water meter, above the touch thumbstick). The bottom-right column, from the
   bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.

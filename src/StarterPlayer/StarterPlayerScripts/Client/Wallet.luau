@@ -24,8 +24,8 @@ local POP_FADE = 0.3
 local POP_DRIFT = 18 -- pixels a pill moves away from the chip while it fades
 local POP_CLEAR = 10 -- pixels of a slot left clear between two pills
 local PHONE_SIDE = 8 -- phones: pixels from the right end of the top bar to the chip, as the top bar buttons keep
-local PHONE_TOP = 2 -- phones: pixels from the bottom of the top bar to the chip, close under its buttons
-local PHONE_STACK_GAP = 6 -- phones: pixels between the chip and the THROW key under it
+local PHONE_TOP = 10 -- phones: pixels from the bottom of the top bar to the chip under its buttons
+local PHONE_STACK_GAP = 12 -- phones: pixels between the chip and the THROW key under it
 local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter screens scale them down
 local MIN_FIT = 0.65
 local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
@@ -68,6 +68,7 @@ local popsFit: UIScale? = nil
 local popTemplate: Frame? = nil
 local playerGuiRef: PlayerGui? = nil
 local phase = ""
+local playing = false -- the local player is on a pillar in the running match
 
 -- Tweened for the count-up; the label follows it.
 local counter = Instance.new("NumberValue")
@@ -240,7 +241,12 @@ local function refresh()
 	if own == nil then
 		return
 	end
-	own.Visible = phase ~= "Results" and not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
+	-- A phone's match strip (prompt, answer bar, boosts) needs the top of the screen to itself.
+	local inMatchOnPhone = playing and Ui.isPhone()
+	own.Visible = phase ~= "Results"
+		and not inMatchOnPhone
+		and not Windows.anyOpen()
+		and not UserInputService.OnScreenKeyboardVisible
 	placeChip()
 	placePops()
 end
@@ -451,6 +457,7 @@ end
 
 function Wallet.onState(payload)
 	phase = payload.phase
+	playing = payload.playing == true
 	refresh()
 end
 
