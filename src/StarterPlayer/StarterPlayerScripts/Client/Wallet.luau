@@ -209,7 +209,10 @@ local function placeOnPhone()
 	local inset = GuiService.TopbarInset
 	local right = inset.Max.X - PHONE_SIDE
 	local top = inset.Max.Y + PHONE_TOP
-	local origin = screen.AbsolutePosition
+	-- TopbarInset is measured from the screen's top-left corner; an AbsolutePosition is measured from the
+	-- corner below Roblox's top bar, so it is the GUI inset short of that.
+	local guiInset = GuiService:GetGuiInset()
+	local origin = screen.AbsolutePosition + guiInset
 	own.AnchorPoint = Vector2.new(1, 0)
 	own.Position = UDim2.fromOffset(right - origin.X, top - origin.Y)
 	local root = playerGuiRef
@@ -217,7 +220,7 @@ local function placeOnPhone()
 	local toy = if rail ~= nil then rail:FindFirstChild("ToyButton") else nil
 	if rail ~= nil and toy ~= nil and toy:IsA("GuiObject") then
 		-- The key is a child of the rail screen, which has an origin of its own.
-		local railOrigin = rail.AbsolutePosition
+		local railOrigin = rail.AbsolutePosition + guiInset
 		local under = top + own.AbsoluteSize.Y + PHONE_STACK_GAP
 		toy.AnchorPoint = Vector2.new(1, 0)
 		toy.Position = UDim2.fromOffset(right - railOrigin.X, under - railOrigin.Y)
