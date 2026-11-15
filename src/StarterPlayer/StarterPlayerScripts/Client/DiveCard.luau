@@ -111,7 +111,6 @@ local SPOT_TIME = 0.4
 local SPOT_CLEAR = 0.75 -- views another tag must be away, up or down, for the crowned one to count as alone
 local OVERRUN = 3 -- `finished` fires this long after the pack stops whatever happens
 local MAX_LANES = 6 -- a full match: every answer gets a lane of its own, side by side
-local MIN_LANE_SCALE = 0.45 -- tags shrink this far to fit one more lane; below it the pack takes fewer lanes
 local LANE_GAP = 0.012 -- window width kept clear between two lanes
 local OWN_SCALE = 1.1 -- your tag is a little larger than the others
 local ROW_GAP = 0.25 -- tag heights kept clear between two tags in a lane: room for the crown
@@ -957,16 +956,10 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				end
 			end
 			area = math.max(1 - left - right, 0.3)
-			-- As many lanes as tags, up to MAX_LANES, while the tags stay a readable size.
-			local laneScale = 1
-			for count = math.min(#divers, MAX_LANES), 1, -1 do
-				local fit = (area / count - LANE_GAP) / (tagWidth * OWN_SCALE)
-				if fit >= MIN_LANE_SCALE or count == 1 then
-					lanes = count
-					laneScale = math.clamp(fit, MIN_LANE_SCALE, 1)
-					break
-				end
-			end
+			-- A lane for every tag, up to MAX_LANES, and the tags shrink as far as it takes to fit side by side
+			-- on any screen shape.
+			lanes = math.clamp(#divers, 1, MAX_LANES)
+			local laneScale = math.min((area / lanes - LANE_GAP) / (tagWidth * OWN_SCALE), 1)
 			for _, diver in divers do
 				diver.rest = laneScale * (if diver.own then OWN_SCALE else 1)
 				local tagScale = diver.scale
