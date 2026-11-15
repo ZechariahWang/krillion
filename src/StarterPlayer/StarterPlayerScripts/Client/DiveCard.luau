@@ -110,10 +110,8 @@ local SPOT_SCALE = 1.5 -- the crowned tag grows this much and slides to the midd
 local SPOT_TIME = 0.4
 local SPOT_CLEAR = 0.75 -- views another tag must be away, up or down, for the crowned one to count as alone
 local OVERRUN = 3 -- `finished` fires this long after the pack stops whatever happens
-local MAX_LANES = 4
-local MIN_LANE_SCALE = 0.72 -- tags shrink this far to fit one more lane; below it the pack takes fewer lanes
-local CROWD = 6 -- with more tags than this they may shrink further, so fewer are pushed down a crowded lane
-local CROWD_LANE_SCALE = 0.6
+local MAX_LANES = 6 -- a full match: every answer gets a lane of its own, side by side
+local MIN_LANE_SCALE = 0.45 -- tags shrink this far to fit one more lane; below it the pack takes fewer lanes
 local LANE_GAP = 0.012 -- window width kept clear between two lanes
 local OWN_SCALE = 1.1 -- your tag is a little larger than the others
 local ROW_GAP = 0.25 -- tag heights kept clear between two tags in a lane: room for the crown
@@ -961,12 +959,11 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			area = math.max(1 - left - right, 0.3)
 			-- As many lanes as tags, up to MAX_LANES, while the tags stay a readable size.
 			local laneScale = 1
-			local smallest = if #divers > CROWD then CROWD_LANE_SCALE else MIN_LANE_SCALE
 			for count = math.min(#divers, MAX_LANES), 1, -1 do
 				local fit = (area / count - LANE_GAP) / (tagWidth * OWN_SCALE)
-				if fit >= smallest or count == 1 then
+				if fit >= MIN_LANE_SCALE or count == 1 then
 					lanes = count
-					laneScale = math.clamp(fit, 0.5, 1)
+					laneScale = math.clamp(fit, MIN_LANE_SCALE, 1)
 					break
 				end
 			end
