@@ -42,9 +42,11 @@ function BotService.fill(count: number, usedNames: { [string]: boolean }): { num
 	BotService.clear()
 	local used = table.clone(usedNames)
 	local ids = {}
-	local start = random:NextInteger(1, #BotBrain.Names)
+	local function nextRoll(): number
+		return random:NextNumber()
+	end
 	for index = 1, math.max(0, count) do
-		local name = BotBrain.pickName(start + index - 1, used)
+		local name = BotBrain.pickName(nextRoll, used)
 		used[name] = true
 		local id = FIRST_ID - (index - 1)
 		bots[id] = { name = name, skill = BotBrain.skill(random:NextNumber()) }

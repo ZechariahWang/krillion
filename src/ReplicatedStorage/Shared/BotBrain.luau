@@ -8,47 +8,53 @@ local Tiers = require("../Config/Tiers")
 
 local TIER_SPREAD = 1.2 -- standard deviation, in tiers, around a bot's aim
 
-local NAMES = {
-	"Captain Kelp",
-	"Barnacle Bea",
-	"Sandy Bottom",
-	"Admiral Anchovy",
-	"Coral Ray",
-	"Finn Fathom",
-	"Shelly Tide",
-	"Doc Drift",
-	"Gill Grouper",
-	"Pearl Diver",
-	"Inky Squidd",
-	"Murky Mo",
+-- A bot's name is FIRST + SECOND + a number, the way players name themselves ("dogLover234").
+local FIRST = {
+	"dog", "cat", "pizza", "taco", "ninja", "panda", "cookie", "shadow", "turbo", "mango",
+	"pixel", "frog", "bacon", "robo", "star", "lava", "frost", "sushi", "melon", "waffle",
+	"dino", "bunny", "pickle", "noodle", "comet", "tiger", "banana", "storm", "lemon", "otter",
 }
+local SECOND = {
+	"Lover", "King", "Queen", "Master", "Gamer", "Fan", "Boss", "Hero", "Pro", "Wizard",
+	"Legend", "Girl", "Boy", "Dude", "Rider", "Plays", "Squad", "Champ", "Kid", "Star",
+}
+local NUMBER_MIN = 10
+local NUMBER_MAX = 999
+local NAME_TRIES = 20 -- rolls for a free name before a taken one gets an extra digit
 
 local BotBrain = {}
-
-BotBrain.Names = table.freeze(NAMES)
 
 -- How many bots top a match of `humans` up to `fillTo` (0 turns bots off), within `maxSlots` pillars.
 function BotBrain.fillCount(humans: number, fillTo: number, maxSlots: number): number
 	return math.max(0, math.min(fillTo, maxSlots) - humans)
 end
 
--- The first name from `start` (wrapping round the list) that nobody in `used` has; when all are taken,
--- that name with the lowest free number after it ("Captain Kelp 2").
-function BotBrain.pickName(start: number, used: { [string]: boolean }): string
-	local count = #NAMES
-	local first = ((math.floor(start) - 1) % count) + 1
-	for offset = 0, count - 1 do
-		local name = NAMES[((first - 1 + offset) % count) + 1]
+local function pick(list: { string }, roll: number): string
+	local index = math.clamp(math.floor(roll * #list) + 1, 1, #list)
+	return list[index]
+end
+
+-- Each roll is in [0, 1): the first word, the second word, the number.
+function BotBrain.username(rollFirst: number, rollSecond: number, rollNumber: number): string
+	local span = NUMBER_MAX - NUMBER_MIN + 1
+	local number = NUMBER_MIN + math.clamp(math.floor(rollNumber * span), 0, span - 1)
+	return pick(FIRST, rollFirst) .. pick(SECOND, rollSecond) .. number
+end
+
+-- A username nobody in `used` has. `nextRoll` gives a fresh roll in [0, 1) each call.
+function BotBrain.pickName(nextRoll: () -> number, used: { [string]: boolean }): string
+	local name = ""
+	for _ = 1, NAME_TRIES do
+		name = BotBrain.username(nextRoll(), nextRoll(), nextRoll())
 		if not used[name] then
 			return name
 		end
 	end
-	local base = NAMES[first]
-	local suffix = 2
-	while used[base .. " " .. suffix] do
-		suffix += 1
+	local digit = 0
+	while used[name .. digit] do
+		digit += 1
 	end
-	return base .. " " .. suffix
+	return name .. digit
 end
 
 -- `roll` in [0, 1) gives a skill in [MinSkill, MaxSkill].

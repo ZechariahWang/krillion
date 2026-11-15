@@ -24,13 +24,7 @@ local function meanTier(skill: number): number
 end
 
 return function(test)
-	test("bots: twelve distinct names, and fill tops up to FillTo", function()
-		assert(#BotBrain.Names == 12)
-		local seen = {}
-		for _, name in BotBrain.Names do
-			assert(not seen[name], name .. " twice")
-			seen[name] = true
-		end
+	test("bots: fill tops up to FillTo", function()
 		assert(BotBrain.fillCount(1, 4, 12) == 3)
 		assert(BotBrain.fillCount(4, 4, 12) == 0)
 		assert(BotBrain.fillCount(6, 4, 12) == 0)
@@ -39,17 +33,27 @@ return function(test)
 		assert(BotBrain.fillCount(1, GameConfig.Bots.FillTo, GameConfig.Server.MaxPlayers) == 5, "a lone player gets five bots")
 	end)
 
-	test("bots: pickName skips taken names and numbers them once all are used", function()
-		assert(BotBrain.pickName(1, {}) == BotBrain.Names[1])
-		assert(BotBrain.pickName(1, { [BotBrain.Names[1]] = true }) == BotBrain.Names[2])
-		assert(BotBrain.pickName(13, {}) == BotBrain.Names[1], "start wraps round the list")
-		local all = {}
-		for _, name in BotBrain.Names do
-			all[name] = true
+	test("bots: a username reads like a player's: a word, a capitalised word, a number", function()
+		local name = BotBrain.username(0, 0, 0)
+		assert(string.match(name, "^%l+%u%l+%d+$") ~= nil, name)
+		assert(BotBrain.username(0, 0, 0) == name, "the same rolls give the same name")
+		assert(BotBrain.username(0.99, 0.99, 0.99) ~= name)
+		assert(string.match(BotBrain.username(0.99, 0.99, 0.99), "^%l+%u%l+%d+$") ~= nil)
+	end)
+
+	test("bots: pickName rolls again past a taken name, and still finds a free one when the rolls repeat", function()
+		local taken = BotBrain.username(0, 0, 0)
+		local rolls = { 0, 0, 0, 0.5, 0.5, 0.5 }
+		local at = 0
+		local function nextRoll(): number
+			at += 1
+			return rolls[at]
 		end
-		assert(BotBrain.pickName(3, all) == BotBrain.Names[3] .. " 2")
-		all[BotBrain.Names[3] .. " 2"] = true
-		assert(BotBrain.pickName(3, all) == BotBrain.Names[3] .. " 3")
+		assert(BotBrain.pickName(nextRoll, { [taken] = true }) == BotBrain.username(0.5, 0.5, 0.5))
+		local stuck = BotBrain.pickName(function()
+			return 0
+		end, { [taken] = true })
+		assert(stuck ~= taken and string.sub(stuck, 1, #taken) == taken)
 	end)
 
 	test("bots: skill stays within MinSkill and MaxSkill", function()
