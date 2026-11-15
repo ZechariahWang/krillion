@@ -38,10 +38,10 @@ local Products = {
 	-- Each adds `count` to the boost inventory, which the in-match buttons spend first. A hint has no other
 	-- price; +time falls back to Shells.
 	Boosts = {
-		Hint = { productId = 3729794185, robux = 50 },
+		Hint = { productId = 3729794185, robux = 35 },
 		ExtraTime = { productId = 3729794199, robux = 10 },
 	},
-	-- `retired` packs are not sold any more (a hint is 50 Robux each, every time); their receipts are still
+	-- `retired` packs are not sold any more (a hint is 35 Robux each, every time); their receipts are still
 	-- honoured.
 	BoostPacks = {
 		{ productId = 3729794218, kind = "Hint", count = 3, robux = 35, retired = true },
