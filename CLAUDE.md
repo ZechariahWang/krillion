@@ -23,7 +23,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Pillars carry no name. RoundService sets `OwnerUserId` on each pillar and `OwnerName` on a bot's; clients
   find a pillar by owner (`Client/PillarTags` floats `Templates.AnswerTag` over it at the reveal, spectating
   follows a bot's rig on it).
-- Boosts: a Hint costs 15 Robux each (no Shell price, no limit), picks the highest-rarity answer nobody has
+- Boosts: a Hint costs 50 Robux each (no Shell price, no limit), picks the highest-rarity answer nobody has
   locked in (Mythic first) and locks it in for the player at once. +10 SEC costs Shells or Robux and is
   limited per round and per match (Boost Plus raises the match limit). The in-match chip asks for a second
   tap before opening a Robux purchase. The 3-hint pack is `retired` in `Products.BoostPacks`: not sold, its
