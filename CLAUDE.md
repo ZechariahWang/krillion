@@ -1,4 +1,4 @@
-# Rare or Sink
+# Rarest Word Wins!
 
 Roblox party game. Code is synced with Rojo (`default.project.json`); everything visual lives in the Studio place.
 

@@ -37,7 +37,7 @@ local PAGES = { "Daily", "Quests", "Rewards" }
 local UNLIT_TRANSPARENCY = 0.75 -- a tab that is not showing fades its face, like an unlit shop section key
 local CHECK_TIMEOUT = 35 -- the server re-checks membership for about 30 s; after this the button resets
 local GROUP_ID = GameConfig.Rewards.GroupId
-local INVITE_MESSAGE = "Come dive with me in Rare or Sink! Give the rarest answers to stay above the water."
+local INVITE_MESSAGE = "Come dive with me in Rarest Word Wins! Give the rarest answers to stay above the water."
 -- The nudge waits for a calm moment so it never lands on the results or the reveal.
 local CALM_PHASES: { [string]: boolean } = { Waiting = true, Intermission = true }
 
@@ -476,7 +476,7 @@ local function maybeNudge()
 		return
 	end
 	nudged = true
-	Toasts.show("ENJOYING RARE OR SINK? FAVORITE IT SO YOU CAN FIND IT AGAIN", "info")
+	Toasts.show("ENJOYING RAREST WORD WINS? FAVORITE IT SO YOU CAN FIND IT AGAIN", "info")
 end
 
 -- Binding --------------------------------------------------------------------------------------------------

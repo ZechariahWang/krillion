@@ -1,1 +1,1 @@
-# Rare or Sink
+# Rarest Word Wins!
