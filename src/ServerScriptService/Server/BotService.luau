@@ -2,11 +2,12 @@
 -- Bots that top small matches up to GameConfig.Bots.FillTo. Bot ids are negative numbers (-1001, -1002, ...)
 -- kept apart from Players, so the water cull never sees them; bots fire no MatchEvents and earn nothing,
 -- and a match only counts as a Win with 2+ human participants (RoundService).
--- Each bot stands on its pillar as a clone of one of the Templates.BotLooks characters (authored: posed,
--- jointless, anchored), welded to the pillar so it rides every rise, with the head label players have.
--- Templates.BotRig is the stand-in when BotLooks is missing.
+-- Each bot stands on its pillar as a clone of one of the Templates.BotLooks characters (authored: R6, posed,
+-- anchored, joints kept), its root welded to the pillar so it rides every rise, with the head label players
+-- have and the idle animation players stand in. Templates.BotRig is the stand-in when BotLooks is missing.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterPlayer = game:GetService("StarterPlayer")
 local TweenService = game:GetService("TweenService")
 
 local BotBrain = require(ReplicatedStorage.Shared.BotBrain)
@@ -17,6 +18,8 @@ local FIRST_ID = -1001 -- well clear of local test servers' player ids (-1, -2, 
 local SHIRT_TINT = 0.2 -- the rig's torso is its pillar's colour, a little lighter
 local SINK_DEPTH = 6 -- studs the rig drops while it fades out
 local SINK_TWEEN = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+local IDLE_SPEED_MIN = 0.85 -- each bot idles at its own speed, so they do not sway in step
+local IDLE_SPEED_MAX = 1.15
 
 type Bot = {
 	name: string,
@@ -120,9 +123,33 @@ local function rigTemplate(bot: Bot): Model?
 	return nil
 end
 
--- Puts the bot's rig on its pillar, facing the middle of the ring. The rig's parts are welded to the
--- pillar and massless, so the pillar's Lift carries it like a standing player, and clearing the pillars
--- clears it too.
+-- The idle animation players stand in (the game's Animate script), so a bot moves the way they do.
+local function idleAnimation(): Animation?
+	local scripts = StarterPlayer:FindFirstChild("StarterCharacterScripts")
+	local animate = if scripts ~= nil then scripts:FindFirstChild("Animate") else nil
+	local idle = if animate ~= nil then animate:FindFirstChild("idle") else nil
+	if idle == nil then
+		return nil
+	end
+	return idle:FindFirstChildOfClass("Animation")
+end
+
+-- Starts the idle on a rig that has a Humanoid with an Animator; the stand-in rig has neither.
+local function playIdle(rig: Model)
+	local humanoid = rig:FindFirstChildOfClass("Humanoid")
+	local animator = if humanoid ~= nil then humanoid:FindFirstChildOfClass("Animator") else nil
+	local animation = idleAnimation()
+	if animator == nil or animation == nil then
+		return
+	end
+	local track = animator:LoadAnimation(animation)
+	track.Looped = true
+	track:Play(0.1, 1, random:NextNumber(IDLE_SPEED_MIN, IDLE_SPEED_MAX))
+end
+
+-- Puts the bot's rig on its pillar, facing the middle of the ring. The rig is massless and welded to the
+-- pillar (a character by its root, so its joints stay free to animate; the stand-in rig by every part), so
+-- the pillar's Lift carries it like a standing player, and clearing the pillars clears it too.
 function BotService.attach(id: number, platform: Part)
 	local bot = bots[id]
 	if bot == nil then
@@ -144,6 +171,7 @@ function BotService.attach(id: number, platform: Part)
 	end
 	rig:PivotTo(facing * feet:Inverse() * rig:GetPivot())
 	local shirt = platform.Color:Lerp(Color3.new(1, 1, 1), SHIRT_TINT)
+	local root = rig:FindFirstChild("HumanoidRootPart")
 	for _, part in rig:GetDescendants() do
 		if part:IsA("BasePart") then
 			part.Anchored = false
@@ -154,10 +182,12 @@ function BotService.attach(id: number, platform: Part)
 			if part:GetAttribute("Shirt") == true then
 				part.Color = shirt
 			end
-			local weld = Instance.new("WeldConstraint")
-			weld.Part0 = platform
-			weld.Part1 = part
-			weld.Parent = part
+			if root == nil or part == root then
+				local weld = Instance.new("WeldConstraint")
+				weld.Part0 = platform
+				weld.Part1 = part
+				weld.Parent = part
+			end
 		end
 	end
 	rig.Parent = platform
@@ -166,6 +196,7 @@ function BotService.attach(id: number, platform: Part)
 	if head ~= nil and bot.look ~= nil then
 		CosmeticService.tagHead(head, bot.name)
 	end
+	playIdle(rig)
 end
 
 -- The water took this bot: the rig lets go of the pillar, drops and fades, then is removed.
