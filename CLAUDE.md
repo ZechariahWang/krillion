@@ -118,8 +118,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `ServerStorage.PlatformTemplateBackup` is the plain studded pillar from before 2026-11-14.
 - Bots: a match with fewer than 6 players is filled to 6 (`GameConfig.Bots.FillTo`) with bots made to pass
   as players: a generated username (`BotBrain.username`, like dogLover234), one of the `Templates.BotLooks`
-  characters (authored from free Roblox starter bundles, each with a `BundleId` attribute: R6, posed,
-  anchored, joints kept, an `Animator` in the Humanoid), the idle animation players stand in (read from
+  characters (authored from Roblox's free classic clothing and hair: R6, block body and block head with no
+  body meshes, posed, anchored, joints kept, an `Animator` in the Humanoid), the idle animation players stand in (read from
   `StarterCharacterScripts.Animate.idle`), the head label players have, and that look as their dive card picture (`PeerTag.Avatar.View`, a
   ViewportFrame; its Camera is made by `Client/DiveCard` because a Camera in a template does not replicate).
   A late joiner takes the lowest standing bot's pillar (`LateJoin.pickBot`), so the ring of six never
