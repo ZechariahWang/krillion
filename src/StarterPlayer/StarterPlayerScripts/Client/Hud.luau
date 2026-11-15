@@ -35,6 +35,7 @@ local BOOST_GAP = 8 -- pixels between the Shells chip and the boost buttons abov
 local BOOST_EDGE = 16 -- pixels from the screen edges when there is no Shells chip to stand on
 local BOOST_MIN_SCALE = 0.6 -- the smallest the boost buttons shrink to on a short screen
 local BOOST_DESIGN_HEIGHT = 820 -- screen height the boost buttons are drawn for
+local BOOST_DESKTOP_SCALE = 1.4 -- desktop shows the boost buttons this much larger than authored
 local PRICE_SHELLS = Color3.fromRGB(255, 217, 94) -- shell gold
 local PRICE_SHORT = Color3.fromRGB(255, 130, 112) -- not enough Shells
 local PRICE_ROBUX = Color3.fromRGB(120, 235, 140)
@@ -335,7 +336,8 @@ local function fitBoostBar()
 	bar.AnchorPoint = Vector2.new(1, 1)
 	bar.Position = UDim2.fromOffset(math.floor(right + 0.5), math.floor(bottom + 0.5))
 	if height > 0 then
-		scale.Scale = math.clamp(height / BOOST_DESIGN_HEIGHT, BOOST_MIN_SCALE, 1)
+		local fit = math.clamp(height / BOOST_DESIGN_HEIGHT, BOOST_MIN_SCALE, 1)
+		scale.Scale = fit * BOOST_DESKTOP_SCALE
 	end
 end
 
