@@ -12,6 +12,7 @@ local BotBrain = require(ReplicatedStorage.Shared.BotBrain)
 local Depth = require(ReplicatedStorage.Shared.Depth)
 local LateJoin = require(ReplicatedStorage.Shared.LateJoin)
 local MatchState = require(ReplicatedStorage.Shared.MatchState)
+local Metrics = require(ReplicatedStorage.Shared.Metrics)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Schooling = require(ReplicatedStorage.Shared.Schooling)
 local SpecialRound = require(ReplicatedStorage.Shared.SpecialRound)
@@ -26,6 +27,7 @@ local DataService = require(script.Parent.DataService)
 local LobbyQuizService = require(script.Parent.LobbyQuizService)
 local MapService = require(script.Parent.MapService)
 local MatchEvents = require(script.Parent.MatchEvents)
+local MetricsService = require(script.Parent.MetricsService)
 local NotifyService = require(script.Parent.NotifyService)
 local PlayerService = require(script.Parent.PlayerService)
 local StoreService = require(script.Parent.StoreService)
@@ -332,6 +334,7 @@ local function offerRevive(player: Player)
 	-- A purchase takes longer than a tap, so Revive Now gets the longer window.
 	local seconds = if kind == "buy" then GameConfig.Revive.BuyWindowSeconds else GameConfig.Revive.WindowSeconds
 	reviveOffers[player] = { matchId = matchId, expires = os.clock() + seconds, kind = kind }
+	MetricsService.event(player, "ReviveOffered", 1, Metrics.field("Kind", kind))
 	Net.event("RevivePrompt"):FireClient(player, {
 		seconds = seconds,
 		revives = profile.revives,
@@ -444,6 +447,7 @@ local function restore(player: Player, kind: string)
 	MapService.riseBurst(platform)
 	broadcastState()
 	setServerAttributes()
+	MetricsService.event(player, "ReviveUsed", 1, Metrics.field("Kind", kind))
 end
 
 -- ReviveUse: a free (Second Chance) or stocked revive. Revive Now goes through its receipt instead.

@@ -42,6 +42,7 @@ local suites = {
 	require("./LabelSpread.test"),
 	require("./Daily.test"),
 	require("./DivePack.test"),
+	require("./Metrics.test"),
 }
 
 for _, suite in suites do

@@ -16,6 +16,7 @@ local Products = require(ReplicatedStorage.Config.Products)
 local Shop = require(ReplicatedStorage.Shared.Shop)
 local CosmeticService = require(script.Parent.CosmeticService)
 local DataService = require(script.Parent.DataService)
+local MetricsService = require(script.Parent.MetricsService)
 local NotifyService = require(script.Parent.NotifyService)
 
 -- A Robux item bought again (it can only happen through a stale shop) pays this many Shells per Robux.
@@ -72,6 +73,7 @@ function StoreService.payEarned(player: Player, cash: number, reason: string?): 
 	if amount > 0 then
 		DataService.addCash(player, amount)
 		tellWallet(player, amount, reason)
+		MetricsService.shells(player, amount, reason)
 	end
 	return amount
 end
@@ -83,14 +85,17 @@ function StoreService.grantShells(player: Player, amount: number, reason: string
 	end
 	DataService.addCash(player, amount)
 	tellWallet(player, amount, reason)
+	MetricsService.shells(player, amount, reason)
 end
 
 -- Spends Shells if the player has enough, and shows the spend in the wallet. Returns whether it was spent.
-function StoreService.spendShells(player: Player, amount: number, reason: string?): boolean
+-- sku names what was bought, for the metrics.
+function StoreService.spendShells(player: Player, amount: number, reason: string?, sku: string?): boolean
 	if not DataService.spendCash(player, amount) then
 		return false
 	end
 	tellWallet(player, -amount, reason or "spend")
+	MetricsService.shells(player, -amount, reason or "spend", sku)
 	return true
 end
 
@@ -252,7 +257,7 @@ local function onBuy(player: Player, itemId: any)
 		end
 		return shopReply(player, "unknown")
 	end
-	if not StoreService.spendShells(player, item.price, "spend") then
+	if not StoreService.spendShells(player, item.price, "spend", "item_" .. item.slot) then
 		return shopReply(player, "cash")
 	end
 	DataService.grantItem(player, item.id)

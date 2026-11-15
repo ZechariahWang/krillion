@@ -143,6 +143,11 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Every teleport goes through `PlayerService.sendToPlatform` / `sendToLobby`: they anchor the root, move it, and
   release it once the spot has streamed in, so nobody falls through a pillar their client does not have yet.
 - Dying or respawning while alive in a match eliminates the player (RoundService), like sinking.
+- Metrics: `Server/MetricsService` sends to Roblox's AnalyticsService (Creator Hub > Analytics, developers
+  only): the onboarding funnel for first visits, a `Match` funnel (start, each round survived), every Shells
+  gain and spend (`StoreService` calls it; a spend passes a `sku`), and custom events (`AnswerGraded`, `Sank`,
+  `Won`, `BoostUsed`, `ReviveOffered`, `ReviveUsed`). Names and step numbers are `Shared/Metrics` (tested);
+  append onboarding steps, never renumber. Studio records nothing, so there each event prints as `[Metrics] ...`.
 - Settings: music on/off and volume are saved in the profile (`musicOff`, `musicVolume`); AFK is session only.
 - Profiles: a load that fails after retries leaves the player read-only (`DataService.isReadOnly`): no spends,
   payouts or saves, `loadFailed` in the payload, retried every 60 s. Studio is exempt and gets a throwaway

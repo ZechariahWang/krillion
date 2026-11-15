@@ -129,7 +129,7 @@ local function open(player: Player, chestId: any)
 	if profile == nil then
 		return
 	end
-	if not StoreService.spendShells(player, chest.price, "spend") then
+	if not StoreService.spendShells(player, chest.price, "spend", "chest_" .. chestId) then
 		return reply(player, { chest = chestId, status = "no_shells" })
 	end
 	lastOpen[player] = now

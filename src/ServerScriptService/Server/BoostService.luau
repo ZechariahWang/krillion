@@ -13,10 +13,12 @@ local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Products = require(ReplicatedStorage.Config.Products)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local Boosts = require(ReplicatedStorage.Shared.Boosts)
+local Metrics = require(ReplicatedStorage.Shared.Metrics)
 local Net = require(ReplicatedStorage.Shared.Net)
 local AnswerService = require(script.Parent.AnswerService)
 local DataService = require(script.Parent.DataService)
 local MatchEvents = require(script.Parent.MatchEvents)
+local MetricsService = require(script.Parent.MetricsService)
 local StoreService = require(script.Parent.StoreService)
 
 local KINDS = { Hint = true, ExtraTime = true }
@@ -122,16 +124,19 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 		end
 		DataService.spendBoost(player, kind)
 		Boosts.noteUse(usageOf(player), kind)
+		MetricsService.event(player, "BoostUsed", 1, Metrics.field("Kind", kind), Metrics.field("Paid", "Owned"))
 		local label = Tiers.ByName[tier :: string].label
 		return reply(player, kind, "ok", { hint = Boosts.hintText(label, display :: string) })
 	end
 
 	if owned then
 		DataService.spendBoost(player, kind)
-	elseif not StoreService.spendShells(player, GameConfig.Boosts.ExtraTimeShells, "spend") then
+	elseif not StoreService.spendShells(player, GameConfig.Boosts.ExtraTimeShells, "spend", "boost_ExtraTime") then
 		return reply(player, kind, "no_shells")
 	end
 	Boosts.noteUse(usageOf(player), kind)
+	local paid = if owned then "Owned" else "Shells"
+	MetricsService.event(player, "BoostUsed", 1, Metrics.field("Kind", kind), Metrics.field("Paid", paid))
 	local secondsLeft = AnswerService.extend(player, GameConfig.Boosts.ExtraTimeSeconds)
 	return reply(player, kind, "ok", { secondsLeft = secondsLeft })
 end
