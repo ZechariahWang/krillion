@@ -124,7 +124,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   ViewportFrame; its Camera is made by `Client/DiveCard` because a Camera in a template does not replicate).
   A late joiner takes the lowest standing bot's pillar (`LateJoin.pickBot`), so the ring of six never
   changes; with no bot left standing the match is full. `Templates.BotRig` is only the stand-in when
-  `BotLooks` is missing. Wins still need 2+ real players.
+  `BotLooks` is missing. A bot answers every prompt. Wins still need 2+ real players.
 - Toys: a player who is not in a match throws their equipped toy with the THROW key or T. While spectating
   it goes at whoever they are watching, a player or a bot, at any distance; otherwise they pick a lobby player
   nearby. Every client flies `Templates.Toys.<toy>` and leaves `Templates.ToySplat` welded to the target for

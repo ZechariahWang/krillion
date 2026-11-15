@@ -8,14 +8,11 @@ local BANK = {
 	Rare = { "sunfish", "oarfish" },
 }
 
--- A roll that never takes the no-answer branch.
-local ANSWERS = 0.999
-
 local function meanTier(skill: number): number
 	local total = 0
 	local count = 0
 	for step = -20, 20 do
-		local tier = BotBrain.chooseTier(skill, ANSWERS, step / 10)
+		local tier = BotBrain.chooseTier(skill, step / 10)
 		assert(tier ~= nil)
 		total += tier
 		count += 1
@@ -65,24 +62,23 @@ return function(test)
 		end
 	end)
 
-	test("bots: a low no-answer roll misses the prompt, more often for weak bots", function()
-		assert(BotBrain.chooseTier(0.5, 0, 0) == nil)
-		local cfg = GameConfig.Bots
-		local weakMiss = cfg.NoAnswerBase + cfg.NoAnswerSkill * (1 - 0.15)
-		local strongMiss = cfg.NoAnswerBase + cfg.NoAnswerSkill * (1 - 0.85)
-		local between = (weakMiss + strongMiss) / 2
-		assert(BotBrain.chooseTier(0.15, between, 0) == nil, "weak bot misses")
-		assert(BotBrain.chooseTier(0.85, between, 0) ~= nil, "strong bot answers")
+	test("bots: every bot aims at a tier every prompt, the weakest too", function()
+		for _, skill in { 0, GameConfig.Bots.MinSkill, 0.5, GameConfig.Bots.MaxSkill, 1 } do
+			for _, z in { -3, 0, 3 } do
+				local tier = BotBrain.chooseTier(skill, z)
+				assert(type(tier) == "number", "skill " .. skill .. " missed the prompt")
+			end
+		end
 	end)
 
 	test("bots: higher skill aims at a deeper tier on average, always within the tier list", function()
 		assert(meanTier(0.85) > meanTier(0.15) + 1)
 		for _, z in { -10, 10 } do
-			local tier = BotBrain.chooseTier(0.5, ANSWERS, z) :: number
+			local tier = BotBrain.chooseTier(0.5, z)
 			assert(tier >= 1 and tier <= #Tiers.List, "tier " .. tier)
 		end
-		assert(BotBrain.chooseTier(0, ANSWERS, 0) == 1)
-		assert(BotBrain.chooseTier(1, ANSWERS, 0) == 5)
+		assert(BotBrain.chooseTier(0, 0) == 1)
+		assert(BotBrain.chooseTier(1, 0) == 5)
 	end)
 
 	test("bots: gaussian is centred and finite even for a zero roll", function()

@@ -639,8 +639,8 @@ local function scheduleBots(prompt: AnswerService.Prompt, seconds: number)
 	local token = promptToken
 	local taken: { [string]: boolean } = {}
 	for _, id in aliveBots() do
-		local aim = BotBrain.chooseTier(BotService.skillOf(id), math.random(), BotBrain.gaussian(math.random(), math.random()))
-		local index = if aim ~= nil then BotBrain.nearestTier(prompt.answers, aim) else nil
+		local aim = BotBrain.chooseTier(BotService.skillOf(id), BotBrain.gaussian(math.random(), math.random()))
+		local index = BotBrain.nearestTier(prompt.answers, aim)
 		local answer = if index ~= nil then BotBrain.chooseAnswer(prompt.answers, index, taken, math.random()) else nil
 		if answer ~= nil then
 			taken[answer] = true

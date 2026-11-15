@@ -69,14 +69,10 @@ function BotBrain.gaussian(u1: number, u2: number): number
 	return math.sqrt(-2 * math.log(safe)) * math.cos(2 * math.pi * u2)
 end
 
--- The Tiers.List index a bot aims for, or nil when it misses the prompt. Skilled bots miss less and aim
--- deeper: the aim is 1 + 4 * skill, spread by TIER_SPREAD times `z` (a standard normal deviate).
-function BotBrain.chooseTier(skill: number, rollNoAnswer: number, z: number): number?
-	local cfg = GameConfig.Bots
+-- The Tiers.List index a bot aims for: a bot answers every prompt. Skilled bots aim deeper: the aim is
+-- 1 + 4 * skill, spread by TIER_SPREAD times `z` (a standard normal deviate).
+function BotBrain.chooseTier(skill: number, z: number): number
 	local s = math.clamp(skill, 0, 1)
-	if rollNoAnswer < cfg.NoAnswerBase + cfg.NoAnswerSkill * (1 - s) then
-		return nil
-	end
 	local aim = 1 + 4 * s + TIER_SPREAD * z
 	return math.clamp(math.floor(aim + 0.5), 1, #Tiers.List)
 end

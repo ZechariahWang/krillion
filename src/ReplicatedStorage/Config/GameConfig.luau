@@ -144,8 +144,6 @@ local GameConfig = {
 		FillTo = 6, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
 		MinSkill = 0.15,
 		MaxSkill = 0.85,
-		NoAnswerBase = 0.06, -- chance a bot misses the prompt, plus NoAnswerSkill * (1 - skill)
-		NoAnswerSkill = 0.12,
 		DelayMin = 0.25, -- bots answer between DelayMin and DelayMin + DelayRange of the prompt time
 		DelayRange = 0.6,
 	},
