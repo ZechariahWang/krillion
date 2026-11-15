@@ -45,6 +45,7 @@ export type RevealRow = {
 	oneIn: number?, -- real "1 in N players" from recorded answers, nil until there is enough data
 	schooled: number?, -- how many players gave this same answer, when 2 or more
 	newBest: boolean?, -- true when this dive is the player's deepest ever
+	look: string?, -- a bot's Templates.BotLooks model, drawn as its picture on the dive card
 }
 
 export type RevealPayload = {

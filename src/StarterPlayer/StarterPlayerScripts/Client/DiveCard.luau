@@ -41,7 +41,8 @@ export type Options = {
 
 -- Another player's answer on your card.
 export type Peer = {
-	userId: number?, -- above 0 for a real player (their picture); a bot shows its initial
+	userId: number?, -- above 0 for a real player (their picture); a bot shows its look, or its initial
+	look: string?, -- a bot's Templates.BotLooks model
 	name: string,
 	answer: string?, -- bank spelling; nil for no answer
 	tier: string?,
@@ -89,6 +90,9 @@ local BOTTOM = GameConfig.Depth.MaxMetres
 local VIEW = GameConfig.Depth.ViewMetres
 local RANGE = SKY + BOTTOM
 local HEADSHOT = "rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150"
+local LOOK_FIELD_OF_VIEW = 30
+local LOOK_DISTANCE = 5.2 -- studs from a bot's head to the camera that draws its picture
+local LOOK_AIM = Vector3.new(0, 0.15, 0) -- aimed a little above the head's centre, so hair fits
 local TAG_Y = 0.46 -- window height fraction the view keeps its focus tag at
 local START_SKY = SKY + 20 -- metres above the surface the pack starts at, out of sight
 local ENTER_TIME = 0.45 -- the card slides up and grows into place
@@ -208,10 +212,39 @@ local function initialOf(name: string): string
 	return string.upper(string.sub(name, 1, (second or #name + 1) - 1))
 end
 
--- A tag's Avatar circle: a real player's headshot, or a bot's initial on a colour picked by its name. A real
--- player shows their initial too until the picture has loaded, so the circle is never empty: the picture and
--- the initial to hide then are returned while it is still loading (IsLoaded has no change signal to wait on).
-local function fillAvatar(tag: Frame, userId: number?, name: string): (ImageLabel?, TextLabel?)
+-- Shows a bot's look in the Avatar circle's authored `View` (a ViewportFrame): a copy of the
+-- Templates.BotLooks model, framed on its head from the front. False when either piece is missing.
+local function showLook(avatar: GuiObject, look: string?): boolean
+	local view = avatar:FindFirstChild("View")
+	local templates = ReplicatedStorage:FindFirstChild("Templates")
+	local looks = if templates ~= nil then templates:FindFirstChild("BotLooks") else nil
+	local model = if looks ~= nil and look ~= nil then looks:FindFirstChild(look) else nil
+	if view == nil or not view:IsA("ViewportFrame") or model == nil or not model:IsA("Model") then
+		return false
+	end
+	local head = model:FindFirstChild("Head")
+	if head == nil or not head:IsA("BasePart") then
+		return false
+	end
+	-- Made here, not authored: a Camera in a template does not replicate to clients.
+	local camera = Instance.new("Camera")
+	camera.FieldOfView = LOOK_FIELD_OF_VIEW
+	camera.Parent = view
+	local copy = model:Clone()
+	copy.Parent = view
+	-- A character faces -Z, so the camera stands in front of the face and looks back at it.
+	local target = head.Position + LOOK_AIM
+	camera.CFrame = CFrame.lookAt(target + Vector3.new(0, 0, -LOOK_DISTANCE), target)
+	view.CurrentCamera = camera
+	view.Visible = true
+	return true
+end
+
+-- A tag's Avatar circle: a real player's headshot; a bot's look, or its initial on a colour picked by its
+-- name when it has none. A real player shows their initial too until the picture has loaded, so the circle
+-- is never empty: the picture and the initial to hide then are returned while it is still loading (IsLoaded
+-- has no change signal to wait on).
+local function fillAvatar(tag: Frame, userId: number?, name: string, look: string?): (ImageLabel?, TextLabel?)
 	local avatar = tag:FindFirstChild("Avatar")
 	if avatar == nil or not avatar:IsA("GuiObject") then
 		return nil, nil
@@ -228,9 +261,10 @@ local function fillAvatar(tag: Frame, userId: number?, name: string): (ImageLabe
 	local initial = avatar:FindFirstChild("Initial")
 	local letter = if initial ~= nil and initial:IsA("TextLabel") then initial else nil
 	local loading = real and picture ~= nil and not picture.IsLoaded
+	local drawn = not real and showLook(avatar, look)
 	if letter ~= nil then
 		letter.Text = initialOf(name)
-		letter.Visible = not real or loading
+		letter.Visible = (not real and not drawn) or loading
 	end
 	if not real then
 		local sum = 0
@@ -253,7 +287,7 @@ local function fadeParts(root: Instance): { FadePart }
 			table.insert(parts, { instance = instance, property = "BackgroundTransparency", base = instance.BackgroundTransparency })
 			if instance:IsA("TextLabel") then
 				table.insert(parts, { instance = instance, property = "TextTransparency", base = instance.TextTransparency })
-			elseif instance:IsA("ImageLabel") then
+			elseif instance:IsA("ImageLabel") or instance:IsA("ViewportFrame") then
 				table.insert(parts, { instance = instance, property = "ImageTransparency", base = instance.ImageTransparency })
 			end
 		elseif instance:IsA("UIStroke") then
@@ -455,7 +489,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local divers: { Diver } = {}
 	local loading: { { picture: ImageLabel, letter: TextLabel } } = {} -- pictures still on their way
 
-	local function addDiver(tag: Frame, own: boolean, userId: number?, name: string, shown: string, answer: string?, tier: string?, metres: number)
+	local function addDiver(tag: Frame, own: boolean, userId: number?, name: string, shown: string, answer: string?, tier: string?, metres: number, look: string?)
 		local info = if tier ~= nil then Tiers.ByName[tier] else nil
 		local answerLabel = tag:FindFirstChild("Text")
 		if answerLabel ~= nil and answerLabel:IsA("TextLabel") then
@@ -468,7 +502,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		if info == nil then
 			tag.BackgroundColor3 = NO_ANSWER_GREY
 		end
-		local picture, letter = fillAvatar(tag, userId, name)
+		local picture, letter = fillAvatar(tag, userId, name, look)
 		if picture ~= nil and letter ~= nil then
 			table.insert(loading, { picture = picture, letter = letter })
 		end
@@ -539,7 +573,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				clone.Name = "PeerTagLive"
 				clone.Visible = true
 				clone.Parent = window
-				addDiver(clone, false, peer.userId, peer.name, peer.name, peer.answer, peer.tier, peer.depth)
+				addDiver(clone, false, peer.userId, peer.name, peer.name, peer.answer, peer.tier, peer.depth, peer.look)
 			end
 		end
 	end

@@ -829,6 +829,7 @@ local function runReveal(submissions: { [Player]: AnswerService.Submission })
 			oneIn = oneIn,
 			schooled = schooled,
 			newBest = newBest,
+			look = if player == nil then BotService.lookOf(id) else nil,
 		})
 		if player ~= nil then
 			table.insert(graded, { player = player, tier = tier, points = points, answer = shownAnswer })

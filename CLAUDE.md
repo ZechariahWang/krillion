@@ -116,6 +116,14 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   light) is authored as direct child parts welded to it, non-colliding and massless; a piece with a `Tint`
   attribute follows the pillar's colour (`MapService.tint`: its own colour, a skin's, slate when sunk).
   `ServerStorage.PlatformTemplateBackup` is the plain studded pillar from before 2026-11-14.
+- Bots: a match with fewer than 6 players is filled to 6 (`GameConfig.Bots.FillTo`) with bots made to pass
+  as players: a generated username (`BotBrain.username`, like dogLover234), one of the `Templates.BotLooks`
+  characters (authored from free Roblox starter bundles, each with a `BundleId` attribute: posed, jointless,
+  anchored), the head label players have, and that look as their dive card picture (`PeerTag.Avatar.View`, a
+  ViewportFrame; its Camera is made by `Client/DiveCard` because a Camera in a template does not replicate).
+  A late joiner takes the lowest standing bot's pillar (`LateJoin.pickBot`), so the ring of six never
+  changes; with no bot left standing the match is full. `Templates.BotRig` is only the stand-in when
+  `BotLooks` is missing. Wins still need 2+ real players.
 - Toys: a player who is not in a match throws their equipped toy with the THROW key or T. While spectating
   it goes at whoever they are watching, a player or a bot, at any distance; otherwise they pick a lobby player
   nearby. Every client flies `Templates.Toys.<toy>` and leaves `Templates.ToySplat` welded to the target for

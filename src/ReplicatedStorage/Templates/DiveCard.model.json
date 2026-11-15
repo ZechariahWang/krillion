@@ -2322,6 +2322,52 @@
                       ]
                     },
                     {
+                      "name": "View",
+                      "className": "ViewportFrame",
+                      "properties": {
+                        "BackgroundTransparency": 1,
+                        "BorderSizePixel": 0,
+                        "Size": {
+                          "UDim2": [
+                            [
+                              1,
+                              0
+                            ],
+                            [
+                              1,
+                              0
+                            ]
+                          ]
+                        },
+                        "Ambient": [
+                          0.8,
+                          0.8,
+                          0.8
+                        ],
+                        "LightColor": [
+                          1,
+                          1,
+                          1
+                        ],
+                        "Visible": false,
+                        "ZIndex": 5
+                      },
+                      "children": [
+                        {
+                          "name": "UICorner",
+                          "className": "UICorner",
+                          "properties": {
+                            "CornerRadius": {
+                              "UDim": [
+                                1,
+                                0
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
                       "name": "Initial",
                       "className": "TextLabel",
                       "properties": {

@@ -2,12 +2,15 @@
 -- Bots that top small matches up to GameConfig.Bots.FillTo. Bot ids are negative numbers (-1001, -1002, ...)
 -- kept apart from Players, so the water cull never sees them; bots fire no MatchEvents and earn nothing,
 -- and a match only counts as a Win with 2+ human participants (RoundService).
--- Each bot stands on its pillar as a Templates.BotRig clone, welded to the pillar so it rides every rise.
+-- Each bot stands on its pillar as a clone of one of the Templates.BotLooks characters (authored: posed,
+-- jointless, anchored), welded to the pillar so it rides every rise, with the head label players have.
+-- Templates.BotRig is the stand-in when BotLooks is missing.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local BotBrain = require(ReplicatedStorage.Shared.BotBrain)
+local CosmeticService = require(script.Parent.CosmeticService)
 local MapService = require(script.Parent.MapService)
 
 local FIRST_ID = -1001 -- well clear of local test servers' player ids (-1, -2, ...)
@@ -18,6 +21,7 @@ local SINK_TWEEN = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirectio
 type Bot = {
 	name: string,
 	skill: number,
+	look: string?, -- the Templates.BotLooks model it wears
 	rig: Model?,
 }
 
@@ -37,10 +41,27 @@ function BotService.standing(id: any): boolean
 	return bot ~= nil and bot.rig ~= nil
 end
 
+-- The names of the authored looks, shuffled, so the bots of one match all look different.
+local function shuffledLooks(): { string }
+	local names: { string } = {}
+	local templates = ReplicatedStorage:FindFirstChild("Templates")
+	local folder = if templates ~= nil then templates:FindFirstChild("BotLooks") else nil
+	if folder ~= nil then
+		for _, look in folder:GetChildren() do
+			if look:IsA("Model") then
+				table.insert(names, look.Name)
+			end
+		end
+	end
+	random:Shuffle(names)
+	return names
+end
+
 -- Creates `count` bots with names nobody in `usedNames` has. Returns their ids.
 function BotService.fill(count: number, usedNames: { [string]: boolean }): { number }
 	BotService.clear()
 	local used = table.clone(usedNames)
+	local looks = shuffledLooks()
 	local ids = {}
 	local function nextRoll(): number
 		return random:NextNumber()
@@ -49,7 +70,8 @@ function BotService.fill(count: number, usedNames: { [string]: boolean }): { num
 		local name = BotBrain.pickName(nextRoll, used)
 		used[name] = true
 		local id = FIRST_ID - (index - 1)
-		bots[id] = { name = name, skill = BotBrain.skill(random:NextNumber()) }
+		local look = if #looks > 0 then looks[(index - 1) % #looks + 1] else nil
+		bots[id] = { name = name, skill = BotBrain.skill(random:NextNumber()), look = look }
 		table.insert(ids, id)
 	end
 	return ids
@@ -71,8 +93,22 @@ function BotService.skillOf(id: number): number
 	return bot.skill
 end
 
-local function rigTemplate(): Model?
+-- The look this bot wears: clients draw it on the dive card. Nil for an unknown bot or with no looks authored.
+function BotService.lookOf(id: number): string?
+	local bot = bots[id]
+	if bot == nil then
+		return nil
+	end
+	return bot.look
+end
+
+local function rigTemplate(bot: Bot): Model?
 	local templates = ReplicatedStorage:FindFirstChild("Templates")
+	local looks = if templates ~= nil then templates:FindFirstChild("BotLooks") else nil
+	local look = if looks ~= nil and bot.look ~= nil then looks:FindFirstChild(bot.look) else nil
+	if look ~= nil and look:IsA("Model") then
+		return look
+	end
 	local rig = if templates ~= nil then templates:FindFirstChild("BotRig") else nil
 	if rig ~= nil and rig:IsA("Model") then
 		return rig
@@ -89,8 +125,11 @@ end
 -- clears it too.
 function BotService.attach(id: number, platform: Part)
 	local bot = bots[id]
-	local template = rigTemplate()
-	if bot == nil or template == nil then
+	if bot == nil then
+		return
+	end
+	local template = rigTemplate(bot)
+	if template == nil then
 		return
 	end
 	local rig = template:Clone()
@@ -123,6 +162,10 @@ function BotService.attach(id: number, platform: Part)
 	end
 	rig.Parent = platform
 	bot.rig = rig
+	local head = rig:FindFirstChild("Head")
+	if head ~= nil and bot.look ~= nil then
+		CosmeticService.tagHead(head, bot.name)
+	end
 end
 
 -- The water took this bot: the rig lets go of the pillar, drops and fades, then is removed.

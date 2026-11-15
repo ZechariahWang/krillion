@@ -206,13 +206,9 @@ local function colourName(player: Player, text: TextLabel)
 	gradient.Parent = text
 end
 
--- The name over the head (Templates.NameTag), in place of Roblox's own display name.
-local function applyName(player: Player)
-	local character = player.Character
-	local head = if character ~= nil then character:FindFirstChild("Head") else nil
-	if head == nil then
-		return
-	end
+-- Puts the name label (Templates.NameTag) on a head, in place of any it has. Returns the label's name text.
+-- Bots get theirs here too, so a bot's label is the same as a player's.
+function CosmeticService.tagHead(head: Instance, name: string): TextLabel?
 	local old = head:FindFirstChild(NAME_TAG)
 	if old ~= nil then
 		old:Destroy()
@@ -220,16 +216,30 @@ local function applyName(player: Player)
 	local template = templates():FindFirstChild("NameTag")
 	if template == nil or not template:IsA("BillboardGui") then
 		warnOnce("name tag")
-		return
+		return nil
 	end
 	local tag = template:Clone()
 	tag.Name = NAME_TAG
 	local text = tag:FindFirstChild("NameText", true)
-	if text ~= nil and text:IsA("TextLabel") then
-		text.Text = player.DisplayName
-		colourName(player, text)
+	local label = if text ~= nil and text:IsA("TextLabel") then text else nil
+	if label ~= nil then
+		label.Text = name
 	end
 	tag.Parent = head
+	return label
+end
+
+-- The name over the head, in place of Roblox's own display name.
+local function applyName(player: Player)
+	local character = player.Character
+	local head = if character ~= nil then character:FindFirstChild("Head") else nil
+	if head == nil then
+		return
+	end
+	local label = CosmeticService.tagHead(head, player.DisplayName)
+	if label ~= nil then
+		colourName(player, label)
+	end
 end
 
 function CosmeticService.refresh(player: Player)

@@ -193,6 +193,7 @@ local function showCard(row: RevealRow, rows: { RevealRow }): DiveCard.Handle?
 				answer = other.answer,
 				tier = other.tier,
 				depth = other.depth or 0,
+				look = other.look,
 			})
 		end
 	end
