@@ -214,7 +214,9 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   line from the other, and `Need` above the meter (RISE +x in red, or SAFE +x in green).
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
   gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
-  `GuiService.TopbarInset.Min.X` and 2 px above its bottom. Toasts stack in the bottom-left
+  `GuiService.TopbarInset.Min.X` and 2 px above its bottom. On a phone (`Ui.isPhone`) the gear, Help and
+  Watch circles go to the top-right instead, counted in from `TopbarInset.Max.X` with the gear in the
+  corner, clear of the status bar; a phone shows no player list there. Toasts stack in the bottom-left
   (past the match water meter, above the touch thumbstick). The bottom-right column, from the
   bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.

@@ -518,11 +518,17 @@ local TOPBAR_GAP = 8 -- pixels between Roblox's last top bar button and ours (Ro
 local TOPBAR_BOTTOM = 2 -- Roblox's buttons end this far above the bottom of GuiService.TopbarInset
 
 -- Puts a 44 px circle button on the line of Roblox's own top bar buttons, `slot` places right of them
--- (0 is next to them). Call again when GuiService.TopbarInset or the button's size changes.
+-- (0 is next to them). On a phone the buttons go to the top-right corner, counted from the right edge
+-- (0 is in the corner), clear of the status bar in the middle; a phone shows no player list there.
+-- Call again when GuiService.TopbarInset or the button's size changes.
 function Ui.placeTopButton(button: GuiObject, slot: number)
 	local inset = GuiService.TopbarInset
 	local size = button.AbsoluteSize
-	local x = inset.Min.X + TOPBAR_GAP + slot * (size.X + TOPBAR_GAP)
+	local offset = TOPBAR_GAP + slot * (size.X + TOPBAR_GAP)
+	local x = inset.Min.X + offset
+	if Ui.isPhone() then
+		x = inset.Max.X - offset - size.X
+	end
 	local y = inset.Max.Y - TOPBAR_BOTTOM - size.Y
 	button.AnchorPoint = Vector2.zero
 	button.Position = UDim2.fromOffset(math.floor(x + 0.5), math.floor(y + 0.5))
