@@ -1,8 +1,10 @@
 --!strict
 -- Drives SharedUi.Wallet: the chunky gold Shells chip in the bottom-right corner, always on screen (lobby and
 -- match), that counts up, and the "+25 ANSWER" pills (the shell icon is authored on the pill) that bounce in above the corner column for every
--- payout or spend (ShellsEarned).
+-- payout or spend (ShellsEarned). On a phone the chip hangs in the top-right corner under the top bar buttons
+-- and the pills drop in below it.
 
+local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
@@ -19,7 +21,9 @@ local POP_SLOT = 64 -- pixels between stacked pills; the newest sits closest to 
 local POP_GAP = 12 -- pixels between the chip and the first pill
 local POP_HOLD = 1.4
 local POP_FADE = 0.3
-local POP_DRIFT = 18 -- pixels a pill rises (away from the chip) while it fades
+local POP_DRIFT = 18 -- pixels a pill moves away from the chip while it fades
+local POP_CLEAR = 10 -- pixels of a slot left clear between two pills
+local TOP_GAP = 8 -- phones: pixels between the top bar buttons and the chip under them
 local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter screens scale them down
 local MIN_FIT = 0.65
 local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
@@ -101,7 +105,8 @@ local function columnParts(): { GuiObject }
 end
 
 -- Puts the popup column just above the chip's right edge, above everything else in the column, so a pill
--- never covers it. Pills stack upward from the column's bottom.
+-- never covers it. Pills stack upward from the column's bottom. On a phone the chip hangs under the top
+-- bar, so the column hangs under the chip and its pills stack downward.
 local function placePops()
 	local layer = pops
 	local screen = gui
@@ -112,13 +117,18 @@ local function placePops()
 	local origin = screen.AbsolutePosition
 	local right = target.AbsolutePosition.X + target.AbsoluteSize.X - origin.X
 	local top = target.AbsolutePosition.Y - origin.Y
-	for _, part in columnParts() do
-		if part.AbsoluteSize.Y > 0 then
-			top = math.min(top, part.AbsolutePosition.Y - origin.Y)
+	if Ui.isPhone() then
+		layer.AnchorPoint = Vector2.new(1, 0)
+		layer.Position = UDim2.fromOffset(right, top + target.AbsoluteSize.Y + POP_GAP)
+	else
+		for _, part in columnParts() do
+			if part.AbsoluteSize.Y > 0 then
+				top = math.min(top, part.AbsolutePosition.Y - origin.Y)
+			end
 		end
+		layer.AnchorPoint = Vector2.new(1, 1)
+		layer.Position = UDim2.fromOffset(right, top - POP_GAP)
 	end
-	layer.AnchorPoint = Vector2.new(1, 1)
-	layer.Position = UDim2.fromOffset(right, top - POP_GAP)
 	local scale = popsFit
 	if scale ~= nil and screen.AbsoluteSize.Y > 0 then
 		scale.Scale = math.clamp(screen.AbsoluteSize.Y / DESIGN_HEIGHT, MIN_FIT, 1)
@@ -170,18 +180,57 @@ local function dodgeJumpButton()
 	end
 end
 
+-- Phones: the chip hangs in the top-right corner, right under the top bar buttons and in line with them,
+-- where no thumb covers it. The THROW key takes the place just above the jump button.
+local function placeOnPhone()
+	local own = chip
+	local screen = gui
+	if own == nil or screen == nil then
+		return
+	end
+	local inset = GuiService.TopbarInset
+	local origin = screen.AbsolutePosition
+	own.AnchorPoint = Vector2.new(1, 0)
+	own.Position = UDim2.fromOffset(inset.Max.X - TOP_GAP - origin.X, inset.Max.Y + TOP_GAP - origin.Y)
+	local root = playerGuiRef
+	local rail = if root ~= nil then Ui.findScreen(root, "Rail") else nil
+	local toy = if rail ~= nil then rail:FindFirstChild("ToyButton") else nil
+	local jump = jumpButton()
+	if toy ~= nil and toy:IsA("GuiObject") and jump ~= nil and jump.Visible then
+		toy.Position = UDim2.new(1, -16, 0, jump.AbsolutePosition.Y - origin.Y - JUMP_GAP)
+	end
+end
+
+local function placeChip()
+	if Ui.isPhone() then
+		placeOnPhone()
+	else
+		dodgeJumpButton()
+	end
+end
+
 local function refresh()
 	local own = chip
 	if own == nil then
 		return
 	end
 	own.Visible = phase ~= "Results" and not Windows.anyOpen() and not UserInputService.OnScreenKeyboardVisible
-	dodgeJumpButton()
+	placeChip()
 	placePops()
 end
 
+-- Where the pill `index` places from the chip sits in the column: up from its bottom, or on a phone down
+-- from its top.
 local function slot(index: number): UDim2
+	if Ui.isPhone() then
+		return UDim2.new(1, 0, 0, index * POP_SLOT - POP_CLEAR)
+	end
 	return UDim2.new(1, 0, 1, -(index - 1) * POP_SLOT)
+end
+
+-- The move a fading pill makes away from the chip.
+local function drift(): UDim2
+	return UDim2.fromOffset(0, if Ui.isPhone() then POP_DRIFT else -POP_DRIFT)
 end
 
 local function destroyPop(pop: Frame)
@@ -214,7 +263,7 @@ local function fadePop(pop: Frame)
 			Tween.play(object, info, { Transparency = 1 })
 		end
 	end
-	Tween.play(pop, info, { Position = pop.Position + UDim2.fromOffset(0, -POP_DRIFT), BackgroundTransparency = 1 })
+	Tween.play(pop, info, { Position = pop.Position + drift(), BackgroundTransparency = 1 })
 	task.delay(POP_FADE + 0.02, function()
 		if pop.Parent ~= nil then
 			destroyPop(pop)
@@ -254,7 +303,7 @@ local function spawnPop(text: string, caption: string?, swatchName: string)
 		local older = live[index]
 		if fading[older] then
 			Tween.play(older, TweenInfo.new(POP_FADE, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-				Position = slot(index) + UDim2.fromOffset(0, -POP_DRIFT),
+				Position = slot(index) + drift(),
 				BackgroundTransparency = 1,
 			})
 		else
@@ -300,7 +349,7 @@ function Wallet.init(playerGui: PlayerGui)
 		if UserInputService.TouchEnabled then
 			task.spawn(function()
 				while true do
-					dodgeJumpButton()
+					placeChip()
 					placePops()
 					task.wait(0.5)
 				end
