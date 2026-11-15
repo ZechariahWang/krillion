@@ -52,8 +52,11 @@ function Economy.matchCash(roundsSurvived: number, won: boolean): number
 	return cash
 end
 
-function Economy.countsAsWin(participants: number): boolean
-	return participants >= 2
+-- A match is a Win for its winner when there was someone to beat. players: those who had an answer graded
+-- (someone who never answers does not count, so an alt cannot turn a lone run into a Win); bots: the bots
+-- that played.
+function Economy.countsAsWin(players: number, bots: number): boolean
+	return players >= 1 and players + bots >= 2
 end
 
 function Economy.canOfferRevive(revivesOwned: number, usedThisMatch: boolean, othersAlive: number): boolean

@@ -911,8 +911,8 @@ local function endMatch()
 		winner = found :: Player
 	end
 	local winnerName = "Nobody"
-	-- Only players count toward a Win (provenParticipants), so a lone player outlasting bots is not one.
-	local countsAsWin = Economy.countsAsWin(provenParticipants())
+	-- The winner is only ever a player (a bot left standing wins nothing): outlasting bots is a Win too.
+	local countsAsWin = Economy.countsAsWin(provenParticipants(), #bots)
 	if found ~= nil then
 		winnerName = nameOf(found)
 	end

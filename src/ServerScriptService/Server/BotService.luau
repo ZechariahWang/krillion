@@ -1,7 +1,7 @@
 --!strict
 -- Bots that top small matches up to GameConfig.Bots.FillTo. Bot ids are negative numbers (-1001, -1002, ...)
--- kept apart from Players, so the water cull never sees them; bots fire no MatchEvents and earn nothing,
--- and a match only counts as a Win with 2+ human participants (RoundService).
+-- kept apart from Players, so the water cull never sees them; bots fire no MatchEvents and earn nothing.
+-- A player who outlasts them has won the match (RoundService).
 -- Each bot stands on its pillar as a clone of one of the Templates.BotLooks characters (authored: R6, posed,
 -- anchored, joints kept), its root welded to the pillar so it rides every rise, with the head label players
 -- have and the idle animation players stand in. Templates.BotRig is the stand-in when BotLooks is missing.
