@@ -154,6 +154,17 @@ function BotService.sink(id: number)
 	end)
 end
 
+-- A player took this bot's pillar: its rig goes at once. The bot keeps its name for anything already shown.
+function BotService.leave(id: number)
+	local bot = bots[id]
+	local rig = if bot ~= nil then bot.rig else nil
+	if bot == nil or rig == nil then
+		return
+	end
+	bot.rig = nil
+	rig:Destroy()
+end
+
 -- Removes every bot (and any rig still standing) at the end of a match.
 function BotService.clear()
 	for _, bot in bots do

@@ -36,6 +36,7 @@ return function(test)
 		assert(BotBrain.fillCount(6, 4, 12) == 0)
 		assert(BotBrain.fillCount(1, 0, 12) == 0, "FillTo 0 turns bots off")
 		assert(BotBrain.fillCount(1, 4, 2) == 1, "never more pillars than the arena holds")
+		assert(BotBrain.fillCount(1, GameConfig.Bots.FillTo, GameConfig.Server.MaxPlayers) == 5, "a lone player gets five bots")
 	end)
 
 	test("bots: pickName skips taken names and numbers them once all are used", function()

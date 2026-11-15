@@ -121,4 +121,14 @@ return function(test)
 		local x, z = LateJoin.spot({ { 0, 0 } }, 16, 10)
 		assert(x == nil and z == nil)
 	end)
+
+	test("late join: the joiner takes the lowest standing bot's pillar, the first listed on a tie", function()
+		local bots = { { id = -1001, height = 30 }, { id = -1002, height = 12 }, { id = -1003, height = 12 } }
+		assert(LateJoin.pickBot(bots) == -1002)
+		assert(LateJoin.pickBot({ { id = -1004, height = 5 } }) == -1004)
+	end)
+
+	test("late join: with no bot left standing there is no pillar to take", function()
+		assert(LateJoin.pickBot({}) == nil)
+	end)
 end

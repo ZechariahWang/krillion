@@ -101,7 +101,8 @@ local GameConfig = {
 		Enabled = 1,
 		MaxRound = 2, -- joining is open up to and including this round
 		MinSecondsLeft = 8, -- in MaxRound, only while this many prompt seconds remain
-		ReserveSlots = 4, -- late joiners a match may take on top of its starters; their pillars go in free gaps
+		ReserveSlots = 4, -- with bots off: late joiners a match may take on top of its starters, in free gaps.
+		-- A match with bots takes a late joiner in place of a standing bot instead.
 	},
 	Schooling = {
 		Enabled = 0, -- off until Zechariah agrees: two players with the same answer each get Factor of the points
@@ -140,7 +141,7 @@ local GameConfig = {
 		ViewMetres = 230, -- how much of the scale the dive window shows at once
 	},
 	Bots = {
-		FillTo = 4, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
+		FillTo = 6, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
 		MinSkill = 0.15,
 		MaxSkill = 0.85,
 		NoAnswerBase = 0.06, -- chance a bot misses the prompt, plus NoAnswerSkill * (1 - skill)

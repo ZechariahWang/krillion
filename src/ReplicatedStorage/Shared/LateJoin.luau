@@ -84,6 +84,22 @@ function LateJoin.joinHeight(waterY: number, startHeight: number, minAliveHeight
 	return height
 end
 
+-- In a match filled with bots a late joiner takes a standing bot's pillar, so the ring keeps its shape:
+-- the lowest one (the first listed on a tie), so the joiner starts level with the back of the field.
+-- Nil when no bot is left standing.
+function LateJoin.pickBot(standing: { { id: number, height: number } }): number?
+	local lowest: { id: number, height: number }? = nil
+	for _, bot in standing do
+		if lowest == nil or bot.height < lowest.height then
+			lowest = bot
+		end
+	end
+	if lowest == nil then
+		return nil
+	end
+	return lowest.id
+end
+
 -- Distance to the nearest taken spot, and the sum of distances to all of them (the tie-break).
 local function distances(x: number, z: number, taken: { { number } }): (number, number)
 	local nearest = math.huge

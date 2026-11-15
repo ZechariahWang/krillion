@@ -62,6 +62,7 @@ local broadcastQueued = false
 -- Bots (negative number ids, see BotService) live in the match state but never in `platforms` or
 -- alivePlayers(), so the water cull, payouts and MatchEvents only ever see real players.
 local bots: { number } = {}
+local botFilled = false -- this match started with bots: a late joiner takes a bot's pillar
 local botPlatforms: { [number]: Part } = {}
 local botAnswers: { [number]: AnswerService.Submission } = {} -- bots locked in on the open prompt
 local botPending: { [number]: string } = {} -- answers bots will lock in later this prompt
@@ -153,8 +154,47 @@ local function lateJoinWindow(): boolean
 	return LateJoin.windowOpen(phase, round, if overtime then 0 else secondsLeft, GameConfig.LateJoin)
 end
 
+-- The bot whose pillar the next late joiner takes, or nil when none is left standing.
+local function replaceableBot(): number?
+	local state = match
+	if state == nil then
+		return nil
+	end
+	local standing = {}
+	for _, id in aliveBots() do
+		if botPlatforms[id] ~= nil then
+			table.insert(standing, { id = id, height = state.heights[id] })
+		end
+	end
+	return LateJoin.pickBot(standing)
+end
+
 local function lateJoinRoom(): boolean
+	if botFilled then
+		return replaceableBot() ~= nil
+	end
 	return participantCount < slotCount and MapService.hasFreeSpot()
+end
+
+-- Hands a standing bot's pillar to a late joiner at `height`: the bot is out of the match as if it never
+-- played, and the pillar stays where it is in the ring.
+local function takeBotPillar(state: MatchState.State, id: number, height: number): Part?
+	local platform = botPlatforms[id]
+	if platform == nil or platform.Parent == nil then
+		return nil
+	end
+	botPlatforms[id] = nil
+	botAnswers[id] = nil
+	botPending[id] = nil
+	local index = table.find(bots, id)
+	if index ~= nil then
+		table.remove(bots, index)
+	end
+	MatchState.removePlayer(state, id)
+	BotService.leave(id)
+	platform:SetAttribute("OwnerName", nil)
+	MapService.setPlatformTop(platform, height)
+	return platform
 end
 
 -- Whether this player may jump into the running match right now (drives the JUMP IN card).
@@ -531,6 +571,7 @@ local function startMatch()
 	end
 	local botCount = BotBrain.fillCount(#participants, GameConfig.Bots.FillTo, GameConfig.Server.MaxPlayers)
 	bots = BotService.fill(botCount, usedNames)
+	botFilled = #bots > 0
 	botPlatforms = {}
 	botAnswers = {}
 	botPending = {}
@@ -1010,7 +1051,15 @@ function RoundService.tryJoin(player: Player): (string, string)
 		return "closed", LateJoin.Messages.closed
 	end
 	local height = LateJoin.joinHeight(state.waterY, GameConfig.Water.StartHeight, MatchState.lowestAlive(state))
-	local platform = MapService.addPlatform(height)
+	local platform: Part? = nil
+	if botFilled then
+		local botId = replaceableBot()
+		if botId ~= nil then
+			platform = takeBotPillar(state, botId, height)
+		end
+	else
+		platform = MapService.addPlatform(height)
+	end
 	if platform == nil then
 		return "full", LateJoin.Messages.full
 	end

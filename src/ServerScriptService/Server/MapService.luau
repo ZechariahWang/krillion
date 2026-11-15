@@ -257,6 +257,15 @@ function MapService.glidePlatformTop(platform: Part, topY: number, seconds: numb
 	glideTokens[platform] = nil
 end
 
+-- Puts the pillar's standing surface at `topY` at once, ending any glide. Does not yield.
+function MapService.setPlatformTop(platform: Part, topY: number)
+	local lift = platform:FindFirstChild("Lift") :: AlignPosition
+	glideTokens[platform] = (glideTokens[platform] or 0) + 1
+	local target = Vector3.new(lift.Position.X, centerY(topY), lift.Position.Z)
+	lift.Position = target
+	platform.CFrame = CFrame.new(target)
+end
+
 function MapService.platformStandCFrame(platform: Part): CFrame
 	local lift = platform:FindFirstChild("Lift") :: AlignPosition
 	local topY = lift.Position.Y + GameConfig.Platform.Height / 2 + CAP_HEIGHT
