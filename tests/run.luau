@@ -35,6 +35,7 @@ local suites = {
 	require("./Cosmetics.test"),
 	require("./Tide.test"),
 	require("./AnswerStats.test"),
+	require("./AnswerMisses.test"),
 	require("./BotBrain.test"),
 	require("./Monetization.test"),
 	require("./PromptBank.test"),

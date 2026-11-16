@@ -8,7 +8,11 @@
 --   quest <user> [questId n]                list today's quests, or set one's progress
 --   tutorial <user> reset                   clear tutorialDone so the first-visit tutorial shows again
 --   stats <promptId>                        recorded answer counts for a prompt
---   flush                                   write pending answer counts now
+--   flush                                   write pending answer counts and refused answers now
+--   misses [studio]                         the prompt ids that have refused answers recorded
+--   misses <promptId> [n] [studio]          the n (20) most refused answers the bank still refuses; reads the
+--                                           live store, or this Studio's own test store with `studio`
+--   misses forget <promptId> <answer> [studio]   remove one stored refused answer (this one writes the live store)
 --   join <user>                             the JoinMatch path (late join), as if the player pressed JOIN
 --   erase <userId>                          delete everything saved for a user id (a right-to-erasure request)
 --   daily <user> <n>                        set the daily reward as if day n was claimed yesterday (0 clears it)
@@ -25,6 +29,7 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local Net = require(ReplicatedStorage.Shared.Net)
 local Quests = require(ReplicatedStorage.Shared.Quests)
+local AnswerMissService = require(script.Parent.AnswerMissService)
 local AnswerStatsService = require(script.Parent.AnswerStatsService)
 local DataService = require(script.Parent.DataService)
 local QuestService = require(script.Parent.QuestService)
@@ -223,7 +228,35 @@ end
 
 commands.flush = function()
 	AnswerStatsService.flush()
-	return "answer counts flushed"
+	AnswerMissService.flush()
+	return "answer counts and refused answers flushed"
+end
+
+-- Refused answers are read from the live store (reading changes nothing); Studio's own go to a test store.
+commands.misses = function(args)
+	local studio = false
+	local words = {}
+	for _, word in args do
+		if string.lower(word) == "studio" then
+			studio = true
+		else
+			table.insert(words, word)
+		end
+	end
+	if string.lower(words[1] or "") == "forget" then
+		local promptId = words[2]
+		local answer = table.concat(words, " ", 3)
+		if promptId == nil or answer == "" then
+			return "usage: misses forget <promptId> <answer> [studio]"
+		end
+		return AnswerMissService.forget(promptId, answer, studio)
+	end
+	local promptId = words[1]
+	if promptId == nil then
+		return AnswerMissService.prompts(studio)
+	end
+	local limit = math.clamp(wholeNumber(words[2]) or 20, 1, 100)
+	return AnswerMissService.describe(promptId, limit, studio)
 end
 
 -- Puts the daily reward where a test needs it: day n claimed yesterday, so today's claim is day n + 1.
@@ -263,7 +296,8 @@ commands.join = function(args)
 end
 
 local HELP = "commands: state, players, shells <user> <n>, boost <user> <Hint|ExtraTime> <n>, "
-	.. "quest <user> [questId n], tutorial <user> reset, stats <promptId>, flush, join <user>"
+	.. "quest <user> [questId n], tutorial <user> reset, stats <promptId>, flush, join <user>, "
+	.. "misses [promptId] [n] [studio], misses forget <promptId> <answer> [studio]"
 
 -- Accepts one command line or separate arguments: Invoke("shells -1 500") or Invoke("shells", -1, 500).
 local function run(...: any): string

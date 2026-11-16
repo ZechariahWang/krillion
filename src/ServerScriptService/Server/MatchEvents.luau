@@ -1,6 +1,6 @@
 --!strict
 -- Match moments other services react to (payouts, quests, rewards, stats) without RoundService knowing them.
--- RoundService and LobbyQuizService fire these; everyone else only connects. Handlers run synchronously
+-- RoundService, AnswerService and LobbyQuizService fire these; everyone else only connects. Handlers run synchronously
 -- on the match loop (see Signal): anything that yields (DataStores, waits) must task.spawn itself.
 -- Bots never fire these: every `player` argument is a real Player.
 
@@ -29,6 +29,9 @@ local MatchEvents = {
 	-- (player: Player, tier: string, points: number, promptId: string, corrected: string) for an accepted
 	-- warm-up answer in the lobby.
 	LobbyAnswered = Signal.new("LobbyAnswered"),
+	-- (player: Player, promptId: string, text: string) when the bank refuses what a player typed, in a
+	-- match or the lobby warm-up. `text` is as typed: not yet normalized, at most twice Answer.MaxLength.
+	AnswerRefused = Signal.new("AnswerRefused"),
 }
 
 return MatchEvents

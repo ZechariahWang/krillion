@@ -2,7 +2,7 @@
 -- Drives LobbyUi.LobbyQuiz: the warm-up prompt window that opens when you step into the semicircle in front of
 -- the snack shack and pays Shells while you wait, up to a daily cap. It is a window (Client/Windows): the X or
 -- stepping out closes it, and a match closes it from the server side.
--- Enter checks the answer, Enter again locks it in (like a match). A wrong answer is rejected right away and
+-- Enter locks the answer in; a fixed typo asks first (like a match). A wrong answer is rejected right away and
 -- the same prompt stays up for another try. A locked answer plays your dive full screen (the match's own
 -- DiveCards stage, through Reveal), then NEXT counts down. ConfirmChip is a Studio template cloned in, unless
 -- the place already has it authored.
@@ -187,15 +187,17 @@ end
 
 -- Answering -----------------------------------------------------------------------------------------------
 
-local function sendCheck(text: string)
+-- False when the press came too soon after the last one and nothing was sent.
+local function sendCheck(text: string): boolean
 	local now = os.clock()
 	if now - lastCheckAt < GameConfig.Answer.CheckMinInterval or now - lastWrongAt < GameConfig.Answer.RetryCooldown then
-		return
+		return false
 	end
 	lastCheckAt = now
 	checking = text
 	retried = false
 	Net.event("LobbyQuizCheck"):FireServer(text)
+	return true
 end
 
 -- Enter (or ANSWER) sends the answer: the server locks it in at once when the bank has it as typed. When it
@@ -214,8 +216,11 @@ local function submit()
 		Net.event("LobbyQuizAnswer"):FireServer(text)
 		return
 	end
-	sendCheck(text)
-	keepFocus()
+	-- A phone leaves its keyboard down once the answer is on its way (see Hud.onEnter).
+	local sent = sendCheck(text)
+	if not (sent and isTouch()) then
+		keepFocus()
+	end
 end
 
 local function wrongAnswer()

@@ -15,6 +15,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Signal = require(ReplicatedStorage.Shared.Signal)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
+local MatchEvents = require(script.Parent.MatchEvents)
 local PromptBank = require(ServerStorage.PromptBank)
 
 export type Prompt = AnswerMatcher.Prompt
@@ -270,6 +271,14 @@ function AnswerService.submitFor(id: number, text: string): Submission?
 	return graded
 end
 
+-- Notes text the bank refused for the open prompt (AnswerMissService counts it), unless it was no text at all.
+local function refused(player: Player, text: any)
+	local prompt = currentPrompt
+	if prompt ~= nil and AnswerService.isValidText(text) then
+		MatchEvents.AnswerRefused.fire(player, prompt.id, text)
+	end
+end
+
 -- Locks `graded` in as the player's answer and tells them, as an accepted submit.
 local function lock(player: Player, gate: AnswerGate.Gate, graded: Submission)
 	AnswerGate.lock(gate)
@@ -310,6 +319,7 @@ local function onCheck(player: Player, text: any)
 	AnswerGate.noteCheck(gate, now, graded ~= nil)
 	if graded == nil then
 		result:FireClient(player, { stage = "check", status = "invalid" })
+		refused(player, text)
 		return
 	end
 	if graded.sure then
@@ -341,6 +351,7 @@ local function onSubmit(player: Player, text: any)
 	if graded == nil then
 		AnswerGate.noteCheck(gate, now, false)
 		result:FireClient(player, { stage = "submit", accepted = false, status = "invalid" })
+		refused(player, text)
 		return
 	end
 	lock(player, gate, graded)

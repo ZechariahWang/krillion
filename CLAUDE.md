@@ -59,6 +59,14 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   entry for every "diet"/"zero sugar" variant; such an answer counts as the bank answer that is left.
   `lune run tests/check_prompt.luau <id> "typed" ...` checks one prompt file and prints how each typed answer
   is graded (tier, bank spelling, REFUSED): use it when adding answers.
+- Refused answers are counted per prompt (`Server/AnswerMissService`, rules in `Shared/AnswerMisses`, switch and
+  limits in `GameConfig.Answer`): counts only, no player attached, short answer-like text only (no sentences,
+  long numbers, emails or links), three per player per prompt per visit, at most 400 answers per prompt (over
+  that every count drops by one, so one-offs wash out and counts read "at least"). Live servers write the
+  `AnswerMisses_v1` DataStore; Studio writes `AnswerMisses_v1_Studio`. The Studio debug command `misses` lists
+  the prompts that have some, and `misses <promptId> [n]` the most refused answers the bank still refuses, read
+  from the live store (add `studio` for the test store); `misses forget <promptId> <answer>` removes one.
+  Harvest it now and then: add the right ones to the bank and they drop off the list.
 - Answering: Enter (or GO) locks an answer in at once when the bank has it as typed (exact, alias, article,
   plural, spacing, word spelling or order: `AnswerMatcher.resolve`'s third result, `sure`). Only an answer
   that needed a typo fixed or words dropped shows the confirm chip (DID YOU MEAN X?) and waits for a second
