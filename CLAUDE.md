@@ -82,7 +82,11 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   towards the head) and holds a UIScale named `DistanceScale`; `Client/BillboardScale` keeps it at authored
   size within 45 studs and shrinks it beyond. Give new labels one.
 - Loading screen: `ReplicatedFirst.LoadingScreen` (authored), with `ScreenInsets = None` and
-  `ClipToDeviceSafeArea` off so it covers the phone notch area.
+  `ClipToDeviceSafeArea` off so it covers the phone notch area. `Root.Center` (drawn for 980 x 600, shrunk
+  by its `Fit` scale) holds `Title` (two lines, each with a dark `...Shadow` copy behind it), `Tagline`,
+  `Track.Fill` (the `Shell` rides its end), `Status` and the three how-to-play pills in `Steps`.
+  `Root.Creatures` holds sea life icons whose `Bob` attribute is the pixels they rise and fall;
+  `Backdrop.Rays` are the light shafts. `ReplicatedFirst/Loading.client.luau` drives the bar and the motion.
 - StreamingEnabled is on. Client code must not cache streamed parts: a part that streams back in is a new instance
   (the next-level ring once showed only an arc). Read children when you use them, or watch `ChildAdded`.
   `Arena.SeaLife` swimmers are `Atomic`; `Arena.NextLevel` is `Persistent` (always on every client).
