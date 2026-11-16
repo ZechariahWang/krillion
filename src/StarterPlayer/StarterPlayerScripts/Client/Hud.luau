@@ -94,7 +94,7 @@ local lastCheckAt = -math.huge
 local lastWrongAt = -math.huge
 local lastBoostAt = -math.huge
 local checking: string? = nil -- the trimmed text of the check in flight
-local confirmed: string? = nil -- the trimmed text the server found in the bank; Enter again locks it in
+local confirmed: string? = nil -- the trimmed text the server matched after a typo fix; Enter again locks it in
 local submitting = false
 local retried = false
 local feedbackToken = 0
@@ -255,7 +255,7 @@ local function showConfirm(text: string, corrected: string)
 	feedback.Visible = false
 	local action = if isTouch() then "TAP LOCK IN" else "PRESS ENTER AGAIN"
 	if confirmText ~= nil then
-		confirmText.Text = "LOCK IN  " .. string.upper(corrected) .. "?  " .. action
+		confirmText.Text = "DID YOU MEAN  " .. string.upper(corrected) .. "?  " .. action
 	end
 	if confirmChip ~= nil then
 		Ui.pop(confirmChip)
@@ -487,7 +487,8 @@ local function sendCheck(text: string)
 	Net.event("CheckAnswer"):FireServer(text)
 end
 
--- Enter (or GO): the first press checks the answer; a second press with the same text locks it in.
+-- Enter (or GO) sends the answer: the server locks it in at once when the bank has it as typed. When it had
+-- to fix a typo it asks first, and a second press with the same text locks that in.
 local function onEnter()
 	if locked or submitting or outOfTime then
 		return
@@ -558,6 +559,7 @@ local function onSubmitResult(payload)
 	submitting = false
 	if payload.accepted then
 		locked = true
+		checking = nil
 		hideConfirm()
 		-- Autocorrect: show the answer in the bank's spelling, whatever was typed.
 		local corrected = payload.corrected or answerBox.Text

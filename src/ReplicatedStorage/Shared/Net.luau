@@ -53,7 +53,8 @@ export type RevealPayload = {
 	rows: { RevealRow },
 }
 
--- AnswerResult: stage "check" answers an Enter-to-check, stage "submit" answers a lock-in.
+-- AnswerResult: stage "check" answers an Enter that did not lock in (refused, or a typo fix to confirm);
+-- stage "submit" is a lock-in, which the first Enter gets when the bank has the answer as typed.
 export type AnswerResultPayload = {
 	stage: string, -- "check" | "submit"
 	status: string?, -- "valid" | "invalid" | "cooldown" | "limit" | "closed"

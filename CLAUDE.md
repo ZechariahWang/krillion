@@ -57,6 +57,12 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `Shared/AnswerMatcher` also matches word by word (doctor/dr, saint/st...: `WORD_FOLDS`), in any word order,
   and as a last resort drops `QUALIFIERS` (diet, zero, sugar, cherry...) from the ends, so the bank needs no
   entry for every "diet"/"zero sugar" variant; such an answer counts as the bank answer that is left.
+  `lune run tests/check_prompt.luau <id> "typed" ...` checks one prompt file and prints how each typed answer
+  is graded (tier, bank spelling, REFUSED): use it when adding answers.
+- Answering: Enter (or GO) locks an answer in at once when the bank has it as typed (exact, alias, article,
+  plural, spacing, word spelling or order: `AnswerMatcher.resolve`'s third result, `sure`). Only an answer
+  that needed a typo fixed or words dropped shows the confirm chip (DID YOU MEAN X?) and waits for a second
+  Enter. The match (`AnswerService`) and the warm-up quiz (`LobbyQuizService`) both work this way.
 - Templates cloned by code that are authored in Studio: `Templates.AnswerTag`, and `Templates.NameTag`, which
   is the head label (CosmeticService puts it on every Head, named `RareOrSinkName`; Roblox's own name display is off). Its
   `Main` is a bottom-anchored vertical list, so hidden rows collapse: `Afk`, `TitleText`, `NameText`. The

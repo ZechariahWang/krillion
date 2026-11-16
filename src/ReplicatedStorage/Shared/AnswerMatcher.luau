@@ -375,25 +375,27 @@ local function findFolded(prompt: Prompt, answer: string): (string?, string?)
 	return nil, nil
 end
 
--- Exact, alias, folds and typos for an already normalized answer.
-local function resolveNormalized(answer: string, prompt: Prompt): (string?, string?)
+-- Exact, alias, folds and typos for an already normalized answer. The third result is whether the answer
+-- is the player's own word: everything but a typo fix.
+local function resolveNormalized(answer: string, prompt: Prompt): (string?, string?, boolean)
 	local exact = findExact(prompt, answer)
 	if exact ~= nil then
-		return exact, answer
+		return exact, answer, true
 	end
 	local canonical = prompt.aliases[answer]
 	if canonical ~= nil then
 		local aliased = findExact(prompt, canonical)
 		if aliased ~= nil then
-			return aliased, canonical
+			return aliased, canonical, true
 		end
 		answer = canonical
 	end
 	local tier, spelling = findFolded(prompt, answer)
 	if tier ~= nil then
-		return tier, spelling
+		return tier, spelling, true
 	end
-	return findClosest(prompt, answer)
+	tier, spelling = findClosest(prompt, answer)
+	return tier, spelling, false
 end
 
 -- Returns the tier and the bank spelling for an accepted answer, or nil when it is refused.
@@ -401,14 +403,17 @@ end
 -- Lookups run strictest first: exact, alias, then the article, plural, space-less, word-spelling and
 -- word-order fallbacks, then typos, and last the same again with qualifier words ("diet", "zero") dropped
 -- from the ends. The existing pre-normalized bank entries therefore still match first.
-function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?)
+-- The third result, `sure`, is true when the bank has what the player typed (as an answer, an alias or one
+-- of the fallbacks that only respell it): that locks in at once. It is false when a typo was fixed or
+-- words were dropped, where the answer may not be the one they meant: they are asked first.
+function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?, boolean)
 	local answer = AnswerMatcher.normalize(text)
 	if #answer == 0 or #answer > GameConfig.Answer.MaxLength then
-		return nil, nil
+		return nil, nil, false
 	end
-	local tier, spelling = resolveNormalized(answer, prompt)
+	local tier, spelling, sure = resolveNormalized(answer, prompt)
 	if tier ~= nil then
-		return tier, spelling
+		return tier, spelling, sure
 	end
 	local function isAnswer(word: string): boolean
 		return findExact(prompt, word) ~= nil
@@ -416,10 +421,10 @@ function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?)
 	for _, core in withoutQualifiers(answer, isAnswer) do
 		tier, spelling = resolveNormalized(core, prompt)
 		if tier ~= nil then
-			return tier, spelling
+			return tier, spelling, false
 		end
 	end
-	return nil, nil
+	return nil, nil, false
 end
 
 function AnswerMatcher.match(text: string, prompt: Prompt): string?

@@ -1,8 +1,9 @@
 --!strict
 -- Receives match answers, validates them and grades them against the live prompt, with autocorrect.
--- Answering is two steps: CheckAnswer (Enter once) says whether the text is in the bank and shows its
--- spelling; SubmitAnswer (Enter again) re-grades and locks it in. Each player has their own deadline,
--- which a +10s boost or a late join can push past the prompt's base time.
+-- CheckAnswer (Enter) locks the answer in at once when the bank has it as typed. When it only matches after
+-- a typo fix or with words dropped, the player is shown the bank spelling first and SubmitAnswer (Enter
+-- again) re-grades and locks it in. Each player has their own deadline, which a +10s boost or a late join
+-- can push past the prompt's base time.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -23,6 +24,7 @@ export type Submission = {
 	tier: string?,
 	corrected: string?, -- the bank spelling, shown back to players instead of what they typed
 	points: number,
+	sure: boolean, -- the bank has it as typed (no typo fix, no dropped words), so it needs no second Enter
 }
 
 local RAW_LIMIT = GameConfig.Answer.MaxLength * 2
@@ -54,12 +56,12 @@ function AnswerService.isValidText(text: any): boolean
 end
 
 function AnswerService.grade(text: string, prompt: AnswerMatcher.Prompt): Submission
-	local tier, corrected = AnswerMatcher.resolve(text, prompt)
+	local tier, corrected, sure = AnswerMatcher.resolve(text, prompt)
 	local points = 0
 	if tier ~= nil then
 		points = Tiers.points(tier)
 	end
-	return { text = text, tier = tier, corrected = corrected, points = points }
+	return { text = text, tier = tier, corrected = corrected, points = points, sure = sure }
 end
 
 -- `seconds` is the prompt's normal answer time; per-player deadlines (extra time) build on it.
@@ -289,7 +291,8 @@ function AnswerService.lockIn(player: Player, answer: string): boolean
 	return true
 end
 
--- Enter once: is it in the bank, and how is it spelled? Never says the tier, and never locks anything.
+-- Enter: an answer the bank has as typed locks in here and now. One that needed a typo fixed or words
+-- dropped is sent back with its bank spelling, to be confirmed by a second Enter. Never says the tier.
 local function onCheck(player: Player, text: any)
 	local result = Net.event("AnswerResult")
 	local gate = gates[player]
@@ -307,6 +310,10 @@ local function onCheck(player: Player, text: any)
 	AnswerGate.noteCheck(gate, now, graded ~= nil)
 	if graded == nil then
 		result:FireClient(player, { stage = "check", status = "invalid" })
+		return
+	end
+	if graded.sure then
+		lock(player, gate, graded)
 		return
 	end
 	result:FireClient(player, { stage = "check", status = "valid", corrected = graded.corrected })
