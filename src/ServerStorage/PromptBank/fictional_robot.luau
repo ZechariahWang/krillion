@@ -24,7 +24,7 @@ return {
 			"arcee", "shockwave", "unicron", "galvatron", "bulkhead", "cliffjumper", "prowl", "jetfire", "devastator",
 			"megazord", "alpha 5", "calculon", "kryten", "cylon", "sentinel", "mettaton", "zenyatta", "gypsy danger",
 			"ig 11", "droideka", "auto", "android 18", "butter robot", "tik tok",
-			"metal gear rex", "mecha sonic", "gerty",
+			"mecha sonic", "gerty",
 		},
 		DeepCut = {
 			"metalhead",
@@ -32,6 +32,7 @@ return {
 			"dewey", "dot matrix", "metal mickey", "orisa", "r5d4", "bigweld", "rodney copperbottom", "maria",
 			"dum e", "tars", "gigolo joe",
 			"flexo",
+			"metal gear rex",
 		},
 		Mythic = {},
 	},

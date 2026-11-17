@@ -29,7 +29,7 @@ return {
 			"zebulon pike", "henry morton stanley", "nellie bly", "kit carson",
 			"robert ballard", "sylvia earle", "matthew flinders", "george mallory", "erik the red",
 			"john wesley powell", "reinhold messner", "mae jemison", "alan shepard",
-			"michael collins", "bear grylls", "jim lovell", "chris hadfield",
+			"michael collins", "bear grylls", "chris hadfield",
 		},
 		DeepCut = {
 			"pytheas", "hanno the navigator", "zhang qian", "xuanzang", "faxian", "ibn fadlan", "ibn jubayr", "al idrisi",
@@ -46,6 +46,7 @@ return {
 			"bjarni herjolfsson", "brendan the navigator", "semyon dezhnev", "yermak", "nicolas baudin",
 			"hubert wilkins",
 			"jeanne baret",
+			"jim lovell",
 		},
 		Mythic = {
 			"ahmad ibn majid", "ruy lopez de villalobos", "juan rodriguez cabrillo", "sebastian vizcaino", "juan de fuca",

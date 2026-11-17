@@ -12,7 +12,7 @@ return {
 		Schooler = {
 			"brahman", "charolais", "guernsey", "brown swiss", "ayrshire", "simmental", "limousin", "dexter",
 			"shorthorn", "galloway", "belted galloway", "zebu", "watusi", "red angus", "belgian blue",
-			"duroc", "yorkshire", "hampshire", "berkshire", "landrace", "tamworth", "large white", "kunekune",
+			"duroc", "yorkshire", "hampshire", "berkshire", "landrace", "tamworth", "kunekune",
 			"gloucestershire old spots", "mangalitsa", "saddleback", "iberian",
 			"suffolk", "dorset", "texel", "cheviot", "romney", "jacob", "rambouillet", "southdown", "shropshire",
 			"corriedale", "icelandic", "karakul", "herdwick", "shetland", "dorper", "katahdin",
@@ -34,8 +34,6 @@ return {
 			"dutch belted", "lowline", "british white", "chillingham", "pineywoods", "randall lineback",
 			"florida cracker", "maine anjou", "parthenaise", "gasconne", "asturiana", "retinta", "morucha",
 			"maremmana", "podolica", "grauvieh",
-			"welsh mountain", "black welsh mountain", "hampshire down", "milking shorthorn", "spanish goat",
-			"golden guernsey", "spotted",
 		},
 		DeepCut = {
 			"turopolje", "bazna", "cinta senese", "alentejano", "bisaro", "krskopolje",
@@ -46,6 +44,8 @@ return {
 			"gentile di puglia", "appenzell spitzhauben", "swiss white alpine", "peacock goat", "sable",
 			"tennessee meat goat", "kalahari red", "verata", "girgentana", "garganica", "orobica", "jonica",
 			"bagot", "old english goat", "british alpine", "cashgora", "sahelian",
+			"welsh mountain", "black welsh mountain", "hampshire down", "milking shorthorn", "spanish goat",
+			"golden guernsey", "spotted",
 		},
 		Mythic = {
 			"vorderwald", "hinterwald", "murnau werdenfelser", "pustertaler", "horro", "kuri",
@@ -54,6 +54,7 @@ return {
 		},
 	},
 	aliases = {
+		["large white"] = "yorkshire",
 		["black angus"] = "angus", ["aberdeen angus"] = "angus", ["holstein friesian"] = "holstein",
 		["friesian"] = "holstein", ["frisian"] = "holstein", ["jersey cow"] = "jersey",
 		["texas longhorn"] = "longhorn", ["longhorns"] = "longhorn", ["hereford cattle"] = "hereford",
@@ -106,7 +107,7 @@ return {
 		["saddleback pig"] = "saddleback", ["kunekune pig"] = "kunekune", ["kune kune pig"] = "kunekune",
 		["tamworth pigs"] = "tamworth", ["yorkshire pigs"] = "yorkshire", ["hampshire pigs"] = "hampshire",
 		["hamshire"] = "hampshire", ["duroc pigs"] = "duroc", ["landrace pigs"] = "landrace",
-		["american landrace"] = "landrace", ["large white pig"] = "large white", ["chester white pig"] = "chester white",
+		["american landrace"] = "landrace", ["large white pig"] = "yorkshire", ["chester white pig"] = "chester white",
 		["poland china pig"] = "poland china", ["american guinea hog"] = "guinea hog",
 		["gloucester old spot"] = "gloucestershire old spots",
 		["gloucestershire old spot"] = "gloucestershire old spots", ["pygmy goats"] = "pygmy",

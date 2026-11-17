@@ -15,7 +15,7 @@ return {
 			"ballista", "battering ram", "trident", "claymore", "short sword", "great sword", "knife",
 			"tomahawk", "boomerang", "nunchucks", "shuriken", "staff", "quarterstaff", "bo staff", "whip",
 			"stone axe", "flint knife", "spiked club", "bolas", "arrow", "pickaxe",
-			"cannon", "hatchet", "throwing knife",
+			"cannon", "hatchet",
 		},
 		Rare = {
 			"glaive", "poleaxe", "falchion", "zweihander", "bastard sword", "gladius", "spatha", "khopesh",
@@ -26,7 +26,8 @@ return {
 			"flamberge", "broad axe", "francisca", "sax", "xiphos", "kopis", "sarissa", "pilum", "hasta",
 			"lochaber axe", "shillelagh", "cudgel", "caltrops", "tonfa", "yumi", "kunai", "talwar", "jian", "dao",
 			"bokken", "guandao", "urumi", "katar", "khanda",
-			"greek fire", "siege tower", "labrys", "polearm", "epee", "war pick", "hand cannon",
+			"greek fire", "siege tower", "labrys", "polearm", "war pick",
+			"throwing knife",
 		},
 		DeepCut = {
 			"misericorde", "rondel dagger", "baselard", "cinquedea", "springald", "hwacha", "qiang", "jo",
@@ -34,6 +35,7 @@ return {
 			"plumbata", "spetum", "corseque", "fauchard", "mattock", "guisarme", "fustibalus", "manuballista",
 			"arcuballista", "polybolos", "oxybeles", "gastraphetes", "tekagi", "hanbo", "daikyu", "bhuj",
 			"sica", "pugio", "parazonium", "chu ko nu", "kakute", "aruval", "contus",
+			"epee", "hand cannon",
 		},
 		Mythic = {
 			"ahlspiess", "goedendag", "langseax", "tanegashima",

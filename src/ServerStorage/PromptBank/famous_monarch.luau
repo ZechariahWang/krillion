@@ -18,7 +18,6 @@ return {
 			"king george v", "king edward vii", "shaka zulu", "mansa musa", "ramesses ii", "nefertiti", "hatshepsut",
 			"cyrus the great", "montezuma",
 			"king arthur", "catherine the great", "peter the great",
-			"anne boleyn",
 		},
 		Rare = {
 			"kamehameha", "king harold", "king canute", "edward the confessor", "henry ii", "henry iv", "henry vi",
@@ -32,6 +31,7 @@ return {
 			"maria theresa", "akhenaten", "hammurabi", "croesus", "king midas", "king hussein", "king saul",
 			"sundiata keita", "atahualpa", "mswati iii", "queen silvia", "king abdullah ii",
 			"queen camilla", "catherine of aragon", "jane seymour", "king minos", "king priam", "queen esther", "nefertari",
+			"anne boleyn",
 		},
 		DeepCut = {
 			"ethelred the unready", "aethelstan", "edmund ironside", "edgar", "offa", "harold godwinson",
@@ -140,7 +140,7 @@ return {
 		["hatchepsut"] = "hatshepsut", ["nefertity"] = "nefertiti", ["queen mary of scots"] = "mary queen of scots",
 		["queen bess"] = "elizabeth i", ["richard the lionhearted"] = "richard the lionheart",
 		["queen elisabeth"] = "queen elizabeth ii", ["queen elizabeth the 2"] = "queen elizabeth ii",
-		["king james"] = "king james i", ["queen anne boleyn"] = "anne boleyn",
+		["queen anne boleyn"] = "anne boleyn",
 		["katherine of aragon"] = "catherine of aragon", ["queen catherine of aragon"] = "catherine of aragon",
 		["queen jane seymour"] = "jane seymour", ["katherine howard"] = "catherine howard",
 		["katherine parr"] = "catherine parr", ["camilla"] = "queen camilla",
