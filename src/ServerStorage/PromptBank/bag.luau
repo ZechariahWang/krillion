@@ -16,6 +16,7 @@ return {
 			"coin purse", "saddlebag", "gift bag", "goody bag", "overnight bag", "carry on bag", "bucket bag",
 			"evening bag", "wristlet", "hobo bag", "burlap sack", "mail bag", "body bag", "vacuum bag", "doggy bag",
 			"barf bag", "sandbag",
+			"ziploc bag", "money bag", "tool bag",
 		},
 		Rare = {
 			"birkin bag", "kelly bag", "baguette bag", "speedy bag", "neverfull", "barrel bag", "bowling bag",
@@ -24,9 +25,12 @@ return {
 			"knapsack", "haversack", "carpet bag", "gladstone bag", "reusable bag", "string bag", "cooler bag",
 			"boston bag", "holdall", "carryall", "valise", "portmanteau",
 			"feed bag",
+			"freezer bag", "kit bag", "tennis bag", "hockey bag", "gig bag", "stuff sack", "bivy bag", "go bag",
+			"bug out bag", "canvas bag",
 		},
 		DeepCut = {
 			"pochette", "cabas", "furoshiki", "musette", "gripsack", "chatelaine",
+			"ditty bag", "dilly bag",
 		},
 		Mythic = {
 			"scrip", "reticule", "minaudiere", "bindle",
@@ -69,5 +73,12 @@ return {
 		["garbage bag"] = "trash bag", ["sports bag"] = "gym bag", ["pocketbook"] = "purse", ["party bag"] = "goody bag",
 		["swag bag"] = "goody bag", ["waist bag"] = "fanny pack", ["belt bag"] = "fanny pack", ["net bag"] = "string bag",
 		["mesh bag"] = "string bag", ["weekender bag"] = "overnight bag", ["dopp kit"] = "toiletry bag",
+		["ziplock bag"] = "ziploc bag", ["ziploc"] = "ziploc bag", ["ziplock"] = "ziploc bag",
+		["carrier bag"] = "plastic bag", ["wash bag"] = "toiletry bag", ["washbag"] = "toiletry bag",
+		["waterproof bag"] = "dry bag", ["dry sack"] = "dry bag", ["goodie bag"] = "goody bag", ["kitbag"] = "kit bag",
+		["bivvy bag"] = "bivy bag", ["bivi bag"] = "bivy bag", ["money bags"] = "money bag", ["paper sack"] = "paper bag",
+		["tote bags"] = "tote bag", ["duffel bags"] = "duffel bag", ["dufflebag"] = "duffel bag",
+		["rucksacks"] = "rucksack", ["clutches"] = "clutch", ["hobo bags"] = "hobo bag", ["bin liner"] = "trash bag",
+		["grocery sack"] = "grocery bag", ["gunny sack"] = "burlap sack", ["satchel bag"] = "satchel",
 	},
 }

@@ -15,6 +15,7 @@ return {
 			"bouillabaisse", "cassoulet", "salade nicoise", "steak tartare", "duck confit", "pate",
 			"steak frites", "moules frites", "frog legs", "raclette", "quiche lorraine",
 			"omelette", "creme caramel", "hollandaise", "bechamel",
+			"french fries", "brie", "camembert", "filet mignon", "beignet",
 		},
 		Rare = {
 			"croquembouche", "clafoutis", "financier", "canele", "gougere", "opera cake", "tarte au citron",
@@ -30,6 +31,11 @@ return {
 			"navarin",
 			"pate en croute", "tartine", "pain de campagne", "ficelle", "baba", "savarin", "rouille", "pistou",
 			"soupe au pistou", "tourte", "tartiflette", "mont blanc", "gratin dauphinois", "pain perdu", "crepe suzette",
+			"roquefort", "comte", "reblochon", "chevre", "boursin", "dijon mustard", "lyonnaise potatoes", "pommes dauphine",
+			"duck a lorange", "cordon bleu", "chateaubriand", "entrecote", "steak au poivre", "lobster thermidor", "consomme",
+			"mirepoix", "creme anglaise", "creme patissiere", "creme fraiche", "chantilly cream", "parfait", "sorbet", "ganache",
+			"praline", "marron glace", "pain aux raisins", "chausson aux pommes", "beurre blanc", "remoulade", "vinaigrette",
+			"saucisson", "charcuterie", "coquilles saint jacques",
 		},
 		DeepCut = {
 			"andouillette", "boudin noir", "boudin blanc", "quenelle", "oeufs en meurette", "cervelle de canut",
@@ -39,6 +45,7 @@ return {
 			"marquise au chocolat", "puits d amour", "flan patissier", "langue de chat", "mendiant", "rocher", "bugnes",
 			"merveilles", "gaufre", "oreillettes", "nonnettes", "pain d epices", "hachis parmentier",
 			"salade de chevre chaud",
+			"tournedos rossini", "mornay", "espagnole", "bordelaise", "oeufs mayonnaise", "bourride", "tian",
 		},
 		Mythic = {
 			"tripes a la mode de caen", "lamproie a la bordelaise", "caillette", "poulet basquaise", "jambon persille",
@@ -63,5 +70,13 @@ return {
 		["ratatouile"] = "ratatouille", ["ratatoui"] = "ratatouille",
 		["duck leg confit"] = "duck confit", ["hachis"] = "hachis parmentier",
 		["vol au vents"] = "vol au vent", ["vol a vent"] = "vol au vent", ["endive au jambon"] = "gratin d endives",
+		["frites"] = "french fries", ["french toast"] = "pain perdu", ["french bread"] = "baguette",
+		["lobster bisque"] = "bisque", ["duck a l orange"] = "duck a lorange", ["pain au raisin"] = "pain aux raisins",
+		["chocolate croissant"] = "pain au chocolat", ["apple turnover"] = "chausson aux pommes",
+		["creme chantilly"] = "chantilly cream", ["bearnaise sauce"] = "bearnaise", ["hollandaise sauce"] = "hollandaise",
+		["bechamel sauce"] = "bechamel", ["coquille saint jacques"] = "coquilles saint jacques",
+		["chateau briand"] = "chateaubriand", ["crepes suzette"] = "crepe suzette", ["brie cheese"] = "brie",
+		["camembert cheese"] = "camembert", ["roquefort cheese"] = "roquefort", ["goat cheese"] = "chevre",
+		["dijon"] = "dijon mustard", ["beignets"] = "beignet", ["cheese fondue"] = "fondue",
 	},
 }

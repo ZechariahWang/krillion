@@ -26,6 +26,10 @@ return {
 			"fig pie", "grape pie", "raisin pie", "cranberry pie", "lemon chess pie", "persimmon pie",
 			"frito pie",
 			"banoffee pie",
+			"chocolate meringue pie", "butterscotch pie", "coconut custard pie", "icebox pie", "chocolate pecan pie",
+			"apple crumb pie", "chicken and mushroom pie", "meat and potato pie", "bacon and egg pie", "mince and cheese pie",
+			"bastilla", "black bottom pie", "chiffon pie", "smores pie", "sour cherry pie", "beef and ale pie",
+			"steak and ale pie", "chicken and ham pie",
 		},
 		DeepCut = {
 			"funeral pie", "squab pie", "mississippi mud pie", "montgomery pie",
@@ -33,6 +37,8 @@ return {
 			"coulibiac", "buko pie", "pawpaw pie", "chocolate chess pie", "rum cream pie", "transparent pie",
 			"mulberry pie", "kiwi pie", "saskatoon pie", "bedfordshire clanger", "pandowdy", "sonker",
 			"tarte tatin",
+			"melton mowbray pie", "lemon chiffon pie", "venison pie", "pigeon pie", "elderberry pie", "squash pie",
+			"rhubarb custard pie", "pie floater", "maple pie",
 		},
 		Mythic = {
 			"fidget pie", "rappie pie", "tarte au sucre", "cumberland rum nicky",
@@ -65,5 +71,11 @@ return {
 		["pecan pies"] = "pecan pie", ["pumpkin pies"] = "pumpkin pie", ["cherry pies"] = "cherry pie",
 		["tarte tatin pie"] = "tarte tatin", ["lime pie"] = "key lime pie", ["moonpie"] = "moon pie",
 		["concord grape pie"] = "grape pie",
+		["sugar pie"] = "tarte au sucre", ["kulebyaka"] = "coulibiac", ["egg custard pie"] = "custard pie",
+		["fishermans pie"] = "fish pie", ["beef pie"] = "meat pie", ["aussie meat pie"] = "meat pie",
+		["bastila"] = "bastilla", ["pastilla"] = "bastilla", ["bstilla"] = "bastilla",
+		["chocolate meringue"] = "chocolate meringue pie", ["butterscotch"] = "butterscotch pie",
+		["ice box pie"] = "icebox pie", ["s mores pie"] = "smores pie", ["banana pie"] = "banana cream pie",
+		["apple crumble pie"] = "apple crumb pie",
 	},
 }

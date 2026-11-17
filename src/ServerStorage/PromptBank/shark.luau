@@ -28,6 +28,7 @@ return {
 			"epaulette shark",
 			"sandbar shark",
 			"white tip shark",
+			"silvertip shark", "atlantic sharpnose shark", "smoothhound shark",
 		},
 		DeepCut = {
 			"bramble shark", "prickly shark", "kitefin shark", "sleeper shark", "pacific sleeper shark",
@@ -36,11 +37,14 @@ return {
 			"variegated catshark", "blind shark", "collared carpet shark", "cobbler wobbegong", "gulper shark",
 			"smalltooth sand tiger", "bignose shark", "daggernose shark",
 			"gummy shark", "whiskery shark", "copper shark", "broadfin shark", "milk shark", "ganges shark",
+			"tawny nurse shark", "speartooth shark", "nursehound", "small spotted catshark", "false catshark", "nervous shark",
+			"finetooth shark", "angular roughshark",
 		},
 		Mythic = {
 			"helicoprion", "cretoxyrhina", "xenacanthus", "stethacanthus", "cladoselache", "hybodus",
 			"megalolamna", "cow shark", "roughskin dogfish", "chain catshark",
 			"pocket shark", "taillight shark", "viper dogfish", "shortspine spurdog", "bluntnose spurdog",
+			"squalicorax", "edestus", "orthacanthus",
 		},
 	},
 	aliases = {
@@ -76,5 +80,13 @@ return {
 		["bluntnose sixgill shark"] = "sixgill shark",
 		["broadnose sevengill shark"] = "sevengill shark",
 		["spurdog"] = "spiny dogfish",
+		["white pointer"] = "great white", ["gray reef shark"] = "grey reef shark", ["bronze whaler"] = "copper shark",
+		["lesser spotted dogfish"] = "small spotted catshark", ["lanternshark"] = "lantern shark",
+		["smooth hound"] = "smoothhound shark", ["smoothhound"] = "smoothhound shark", ["silvertip"] = "silvertip shark",
+		["sharpnose shark"] = "atlantic sharpnose shark", ["tawny nurse"] = "tawny nurse shark",
+		["speartooth"] = "speartooth shark", ["angelshark"] = "angel shark", ["hammer head"] = "hammerhead",
+		["hammer head shark"] = "hammerhead", ["gray nurse shark"] = "sand tiger shark", ["tiger sharks"] = "tiger shark",
+		["whale sharks"] = "whale shark", ["bull sharks"] = "bull shark", ["nurse sharks"] = "nurse shark",
+		["lemon sharks"] = "lemon shark", ["goblin sharks"] = "goblin shark",
 	},
 }

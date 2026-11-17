@@ -20,13 +20,13 @@ return {
 			"morgana", "narissa", "ernesto de la cruz", "charles muntz", "waternoose", "pain and panic",
 			"flotsam and jetsam", "te ka", "stinky pete", "lucifer", "banzai", "ed", "chick hicks", "mor du",
 			"sir hiss", "lionheart", "shenzi", "medusa",
-			"iago", "davy jones",
+			"iago", "davy jones", "barbossa",
 		},
 		DeepCut = {
 			"sykes", "percival mcleach", "bowler hat guy", "hamsterviel", "stabbington brothers", "duke of weselton",
 			"grand duke of owls", "peg leg pete", "jasper", "horace", "si and am", "edgar", "the coachman",
 			"al mcwhiggin", "forte", "magica de spell", "lyle tiberius rourke",
-			"fagin", "barbossa", "drizella", "anastasia tremaine",
+			"fagin", "drizella", "anastasia tremaine",
 		},
 		Mythic = {
 			"fidget", "brom bones", "mr snoops", "the weasels",

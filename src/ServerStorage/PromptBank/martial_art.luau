@@ -23,6 +23,9 @@ return {
 			"kyokushin",
 			"tang soo do",
 			"kenpo",
+			"krabi krabong", "muay boran", "kun khmer", "shuai jiao", "chin na", "drunken boxing", "praying mantis",
+			"white crane", "eagle claw", "kumdo", "luta livre", "vale tudo", "historical european martial arts",
+			"bare knuckle boxing", "grappling", "kushti", "maculele",
 		},
 		DeepCut = {
 			"hwa rang do", "kuk sool won", "ashihara karate", "daido juku", "american kenpo", "lima lama",
@@ -31,10 +34,13 @@ return {
 			"schwingen", "tessenjutsu", "kusarigamajutsu", "sojutsu",
 			"silambam",
 			"hanbojutsu",
+			"kapap", "keysi fighting method", "defendu", "mau rakau", "shorin ryu", "bajiquan", "kosen judo", "aikijutsu",
+			"cornish wrestling", "gouren", "nippon kempo",
 		},
 		Mythic = {
 			"yabusame", "shurikenjutsu", "sikaran", "panantukan", "dumog", "malla yuddha", "vajra mushti",
 			"thang ta", "zulu stick fighting", "canne de combat",
+			"pradal serey", "muay chaiya", "kapu kuialua",
 		},
 	},
 	aliases = {
@@ -57,5 +63,11 @@ return {
 		["shorinji kenpo"] = "shorinji kempo", ["lethwei burmese boxing"] = "lethwei", ["burmese boxing"] = "lethwei",
 		["kali"] = "eskrima",
 		["stick fighting"] = "eskrima",
+		["sanshou"] = "sanda", ["ninjitsu"] = "ninjutsu", ["bagua zhang"] = "baguazhang", ["drunken fist"] = "drunken boxing",
+		["drunken kung fu"] = "drunken boxing", ["mantis"] = "praying mantis", ["gumdo"] = "kumdo", ["pehlwani"] = "kushti",
+		["bareknuckle"] = "bare knuckle boxing", ["bare knuckle"] = "bare knuckle boxing",
+		["hema"] = "historical european martial arts", ["krabi"] = "krabi krabong", ["krav"] = "krav maga",
+		["shorinryu"] = "shorin ryu", ["keysi"] = "keysi fighting method", ["khmer boxing"] = "kun khmer",
+		["cambodian boxing"] = "kun khmer",
 	},
 }

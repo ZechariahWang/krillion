@@ -14,7 +14,7 @@ return {
 			"black swan", "thorny devil", "goanna", "taipan", "inland taipan", "red kangaroo", "budgerigar",
 			"rainbow lorikeet", "funnel web spider", "redback spider", "box jellyfish", "bearded dragon",
 			"blue tongue skink", "thylacine", "huntsman spider", "great white shark", "magpie",
-			"cane toad",
+			"cane toad", "clownfish",
 		},
 		Rare = {
 			"bandicoot", "quoll", "potoroo", "bettong", "wallaroo", "pademelon", "bowerbird", "brown snake",
@@ -24,7 +24,7 @@ return {
 			"eastern grey kangaroo", "dugong", "leafy sea dragon", "blue ringed octopus", "irukandji jellyfish",
 			"stonefish", "freshwater crocodile", "barramundi", "murray cod", "yabby", "witchetty grub",
 			"black cockatoo", "little penguin", "tree kangaroo", "lyrebird", "wedge tailed eagle",
-			"clownfish", "cockatiel", "rosella", "zebra finch", "fairy wren", "shingleback lizard", "lace monitor",
+			"cockatiel", "rosella", "zebra finch", "fairy wren", "shingleback lizard", "lace monitor",
 			"green tree frog", "bluebottle", "whale shark", "tiger shark", "bull shark", "sea snake",
 			"giant cuttlefish", "manta ray", "humpback whale", "green sea turtle", "australian sea lion",
 			"southern hairy nosed wombat", "agile wallaby", "western grey kangaroo", "gouldian finch", "powerful owl",

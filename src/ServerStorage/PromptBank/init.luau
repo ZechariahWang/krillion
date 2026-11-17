@@ -189,6 +189,12 @@ local list: { Prompt } = {
 	require("@self/hospital_item"),
 	require("@self/garden_item"),
 	require("@self/sports_equipment"),
+	require("@self/africa_animal"),
+	require("@self/polar_animal"),
+	require("@self/rainforest_animal"),
+	require("@self/wedding_item"),
+	require("@self/office_item"),
+	require("@self/car_part"),
 }
 
 local byId: { [string]: Prompt } = {}

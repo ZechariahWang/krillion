@@ -20,7 +20,7 @@ return {
 		},
 		Rare = {
 			"dog man", "joseph king of dreams", "curse of the were rabbit", "bad guys 2", "gabbys dollhouse the movie",
-			"orion and the dark",
+			"orion and the dark", "spirit untamed", "megamind vs the doom syndicate",
 		},
 	},
 	aliases = {
@@ -46,5 +46,9 @@ return {
 		["wallace and gromit"] = "curse of the were rabbit", ["bee"] = "bee movie", ["mega mind"] = "megamind",
 		["captain underpants movie"] = "captain underpants", ["underpants"] = "captain underpants",
 		["gabbys dollhouse"] = "gabbys dollhouse the movie", ["joseph"] = "joseph king of dreams",
+		["sharktale"] = "shark tale", ["shrek two"] = "shrek 2", ["road to eldorado"] = "road to el dorado",
+		["trolls 1"] = "trolls",
+		["madagascar three"] = "madagascar 3", ["megamind doom syndicate"] = "megamind vs the doom syndicate",
+		["bad guys 1"] = "bad guys", ["untamed"] = "spirit untamed",
 	},
 }

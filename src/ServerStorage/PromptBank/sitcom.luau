@@ -19,7 +19,7 @@ return {
 			"boy meets world", "family matters", "cosby show", "married with children", "3rd rock from the sun",
 			"that 70s show", "everybody loves raymond", "nanny", "zoey 101", "thundermans", "henry danger", "shake it up",
 			"austin and ally", "jessie", "liv and maddie", "kenan and kel", "american dad", "bobs burgers", "king of the hill",
-			"futurama", "south park", "abbott elementary", "ted lasso", "last man standing", "2 broke girls", "goldbergs",
+			"suite life on deck", "rick and morty", "futurama", "south park", "abbott elementary", "ted lasso", "last man standing", "2 broke girls", "goldbergs",
 			"girl meets world", "mr bean", "sabrina the teenage witch", "unbreakable kimmy schmidt", "middle",
 		},
 		Rare = {
@@ -37,7 +37,9 @@ return {
 			"even stevens", "dog with a blog", "bunkd", "andi mack", "game shakers", "cory in the house", "ravens home",
 			"lab rats", "kickin it", "jonas", "big time rush", "danger force", "workaholics", "derry girls", "father ted",
 			"keeping up appearances", "absolutely fabulous", "what we do in the shadows", "fleabag", "silicon valley",
-			"cleveland show",
+			"cleveland show", "mom", "odd couple", "thick of it", "royle family", "good life", "phoenix nights", "catastrophe",
+			"ghosts", "life in pieces", "grace and frankie", "american housewife", "one day at a time", "drew carey show",
+			"archer", "big mouth", "boondocks", "proud family", "ranch",
 		},
 		DeepCut = {
 			"happy endings", "cougar town", "league", "better off ted", "party down", "reno 911", "letterkenny",
@@ -51,6 +53,10 @@ return {
 			"whos the boss", "clarissa explains it all", "pair of kings", "i didnt do it", "kc undercover", "bizaardvark",
 			"stuck in the middle", "sydney to the max", "bella and the bulldogs", "nicky ricky dicky and dawn",
 			"house of payne", "bernie mac show", "best friends whenever", "kevin can wait", "man with a plan",
+			"corner gas", "kath and kim", "yes prime minister", "men behaving badly", "fresh meat", "toast of london",
+			"motherland", "dinnerladies", "car share", "steptoe and son", "brittas empire", "hi de hi", "maude",
+			"welcome back kotter", "mr d", "silver spoons", "empty nest", "grace under fire", "hughleys",
+			"larry sanders show", "master of none", "unfabulous", "supah ninjas", "life with derek", "zeke and luther",
 		},
 		Mythic = {
 			"rising damp", "detectorists", "plebs", "two pints of lager", "goodnight sweetheart", "shrinking", "soap",
@@ -79,6 +85,9 @@ return {
 		["three company"] = "threes company", ["wills and grace"] = "will and grace", ["will n grace"] = "will and grace",
 		["i dream of genie"] = "i dream of jeannie", ["neds declassified"] = "neds declassified school survival guide",
 		["bunked"] = "bunkd", ["grown ish"] = "grownish", ["friday night dinners"] = "friday night dinner",
-		["in betweeners"] = "inbetweeners", ["fresh off boat"] = "fresh off the boat",
+		["in betweeners"] = "inbetweeners", ["fresh off boat"] = "fresh off the boat", ["seinfield"] = "seinfeld", ["frazier"] = "frasier",
+		["ricky and morty"] = "rick and morty", ["rick n morty"] = "rick and morty", ["ab fab"] = "absolutely fabulous",
+		["golden girl"] = "golden girls", ["dinner ladies"] = "dinnerladies", ["hi di hi"] = "hi de hi",
+		["kath n kim"] = "kath and kim",
 	},
 }

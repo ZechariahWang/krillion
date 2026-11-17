@@ -17,7 +17,7 @@ return {
 			"oyakodon", "katsudon", "hibachi", "spam musubi", "melon pan", "castella",
 			"anpan", "amazake", "furikake", "salmon roll", "dragon roll",
 			"spicy tuna roll", "rainbow roll", "hand roll", "temaki", "chirashi", "tamagoyaki", "dorayaki",
-			"mochi ice cream", "green tea", "sake",
+			"mochi ice cream", "green tea",
 		},
 		Rare = {
 			"oden", "yakiniku", "tsukemono", "umeboshi", "kitsune udon", "tantanmen", "tonkotsu ramen",
@@ -75,7 +75,6 @@ return {
 		["terriyaki"] = "teriyaki", ["teryaki"] = "teriyaki", ["sashimmi"] = "sashimi", ["wasabe"] = "wasabi",
 		["red bean paste"] = "anko", ["chashu pork"] = "chashu", ["buta no kakuni"] = "kakuni",
 		["ebi fry"] = "ebi furai", ["fried shrimp"] = "ebi furai", ["katsu sandwich"] = "katsu sando",
-		["sake rice wine"] = "sake", ["japanese rice wine"] = "sake",
 		["sea grapes"] = "umibudo", ["soba noodles"] = "soba",
 		["somen noodles"] = "somen", ["hakata tonkotsu"] = "hakata ramen", ["kobe"] = "wagyu", ["nigiri sushi"] = "nigiri",
 		["sushis"] = "sushi",

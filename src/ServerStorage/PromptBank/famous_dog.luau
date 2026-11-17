@@ -25,11 +25,11 @@ return {
 			"strelka", "taco bell chihuahua", "gnasher", "jock", "trusty", "sparky",
 		},
 		DeepCut = {
-			"dogtanian", "commander", "major", "champ", "sunny", "cosmo",
+			"dogtanian", "commander", "major", "champ",
 			"seaman", "comet", "brain", "barney", "belka", "spuds mackenzie", "pickles",
 		},
 		Mythic = {
-			"bamse", "gaspode",
+			"bamse", "gaspode", "sunny", "cosmo",
 		},
 	},
 	aliases = {

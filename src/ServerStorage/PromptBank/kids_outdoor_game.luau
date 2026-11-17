@@ -18,6 +18,7 @@ return {
 			"relay race", "obstacle course", "scavenger hunt", "double dutch", "conkers", "hot potato",
 			"crack the whip", "flashlight tag", "cat and mouse", "wiffle ball", "stoopball", "pickle", "steal the bacon",
 			"chicken fight", "piggyback race", "hula hoop", "skipping stones",
+			"water balloon fight", "easter egg hunt", "catch",
 		},
 		Rare = {
 			"chinese jump rope", "pick up sticks", "statues", "stuck in the mud", "shadow tag",
@@ -26,11 +27,14 @@ return {
 			"wheelbarrow race", "balloon race", "bean bag toss", "ring toss", "horseshoes", "croquet", "bocce",
 			"cornhole",
 			"water gun fight", "ghost tag", "marco polo",
+			"floor is lava", "gaga ball", "spikeball", "lawn darts", "ladder golf", "disc golf", "rounders", "miss mary mack",
+			"four corners",
 		},
 		DeepCut = {
 			"fox and hounds", "pitch penny", "pat a cake", "i sent a letter to my love", "drop the handkerchief",
 			"oranges and lemons", "farmer in the dell", "in and out the dusty bluebells", "hunt the slipper",
 			"queenie queenie who has the ball", "ringolevio", "buck buck", "kick the wicket", "tin can alley",
+			"prisoners base", "poison ball", "newcomb ball", "run sheep run",
 		},
 		Mythic = {
 			"skittles", "quoits", "tipcat", "hoop and stick",
@@ -66,5 +70,10 @@ return {
 		["treasure hunt"] = "scavenger hunt", ["bulldog"] = "british bulldog", ["tig"] = "tag", ["peever"] = "hopscotch",
 		["knucklebones"] = "jacks", ["five stones"] = "jacks", ["rundown"] = "pickle",
 		["pickle in the middle"] = "pickle",
+		["chase"] = "tag", ["tiggy"] = "tag", ["foursquare"] = "four square", ["giant steps"] = "mother may i",
+		["gagaball"] = "gaga ball", ["egg hunt"] = "easter egg hunt", ["playing catch"] = "catch", ["lava"] = "floor is lava",
+		["spike ball"] = "spikeball", ["frisbee golf"] = "disc golf", ["prisoner base"] = "prisoners base",
+		["tug o war"] = "tug of war", ["hide n go seek"] = "hide and seek", ["red rover red rover"] = "red rover",
+		["simon say"] = "simon says",
 	},
 }
