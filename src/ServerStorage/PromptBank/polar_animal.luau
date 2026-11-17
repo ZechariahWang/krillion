@@ -25,6 +25,7 @@ return {
 			"antarctic petrel", "cape petrel", "wandering albatross", "lions mane jellyfish", "icefish", "toothfish",
 			"arctic loon", "red throated loon", "sled dog", "husky", "greenland shark", "spectacled eider", "sea otter",
 			"sea butterfly", "sea angel",
+			"tundra swan", "raven", "peregrine falcon", "samoyed", "alaskan malamute",
 		},
 		DeepCut = {
 			"antarctic midge", "springtail", "tardigrade", "ross sea dragonfish", "antarctic silverfish", "crocodile icefish",
@@ -35,6 +36,7 @@ return {
 			"rough legged hawk", "arctic peregrine falcon", "sabines gull", "ross gull", "pomarine skua", "long tailed skua",
 			"thick billed murre", "black guillemot", "horned puffin", "tufted puffin", "crested auklet", "least auklet",
 			"parakeet auklet",
+			"wilsons storm petrel", "black browed albatross",
 		},
 		Mythic = {
 			"siberian lemming", "northern collared lemming", "snailfish", "arctic sculpin", "greenland halibut", "polar cod",
@@ -68,5 +70,12 @@ return {
 		["colossal squids"] = "colossal squid", ["giant squids"] = "giant squid", ["killer whale"] = "orca",
 		["beluga whale"] = "beluga", ["murre"] = "guillemot", ["common eider"] = "eider", ["antarctic krill"] = "krill",
 		["patagonian toothfish"] = "toothfish", ["stoat"] = "ermine",
+		["wolf"] = "arctic wolf", ["fox"] = "arctic fox", ["bear"] = "polar bear", ["hare"] = "arctic hare",
+		["owl"] = "snowy owl", ["starfish"] = "sea star", ["dovekie"] = "little auk", ["great skua"] = "skua",
+		["siberian husky"] = "husky", ["pintado petrel"] = "cape petrel", ["polar fox"] = "arctic fox",
+		["arctic owl"] = "snowy owl", ["ravens"] = "raven", ["malamute"] = "alaskan malamute",
+		["samoyeds"] = "samoyed", ["tundra swans"] = "tundra swan", ["swan"] = "tundra swan",
+		["ice bear"] = "polar bear", ["snow fox"] = "arctic fox", ["sea stars"] = "sea star",
+		["peregrine"] = "peregrine falcon",
 	},
 }

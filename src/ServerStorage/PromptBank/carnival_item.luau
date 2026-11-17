@@ -18,6 +18,7 @@ return {
 			"midway", "game booth", "tent", "acrobat", "fireworks", "pie eating contest", "tug of war", "dunk tank",
 			"photo booth", "sack race", "three legged race", "trapeze", "tightrope", "fire breather", "stilt walker",
 			"ringmaster", "lion tamer", "cake walk", "teacups", "pirate ship", "skee ball", "mini golf", "ticket booth",
+			"balloons", "candy", "ice cream", "french fries", "rides", "claw machine", "arcade", "magic show",
 		},
 		Rare = {
 			"drop tower", "zipper", "gravitron", "milk bottle toss", "duck pond", "shooting gallery", "guess your weight",
@@ -27,6 +28,8 @@ return {
 			"kiddie rides", "egg and spoon race", "pig race", "grandstand", "fair queen", "cow", "unicyclist",
 			"sword swallower", "bearded lady", "wheel of fortune", "coin toss", "ping pong toss",
 			"human cannonball", "contortionist", "knife thrower", "snake charmer", "sideshow", "carny", "calliope",
+			"climbing wall", "air hockey", "camel ride", "hayride", "corn maze", "churros", "puppet show", "parade",
+			"go karts", "bobbing for apples", "mechanical bull",
 		},
 		DeepCut = {
 			"plinko", "barker", "band organ", "hurdy gurdy", "dark ride", "hog calling", "greased pig",
@@ -84,5 +87,12 @@ return {
 		["cotton candy cone"] = "cotton candy", ["chair swing"] = "swing ride", ["midway barker"] = "barker",
 		["ghost train"] = "dark ride", ["mirror maze"] = "house of mirrors", ["freak show"] = "sideshow",
 		["motordrome"] = "wall of death",
+		["crane game"] = "claw machine", ["claw game"] = "claw machine", ["hammer game"] = "high striker",
+		["test of strength"] = "high striker", ["inflatables"] = "bounce house", ["slide"] = "giant slide",
+		["caramel apples"] = "caramel apple", ["hay ride"] = "hayride", ["hay rides"] = "hayride",
+		["apple bobbing"] = "bobbing for apples", ["go kart"] = "go karts", ["karts"] = "go karts",
+		["french fry"] = "french fries", ["fries"] = "french fries", ["balloon"] = "balloons",
+		["rock wall"] = "climbing wall", ["bull riding"] = "mechanical bull", ["arcade games"] = "arcade",
+		["magic tricks"] = "magic show", ["puppets"] = "puppet show", ["candies"] = "candy", ["churro"] = "churros",
 	},
 }

@@ -17,6 +17,7 @@ return {
 			"food coloring", "coconut", "pumpkin", "carrots", "white chocolate", "marshmallows", "cinnamon sugar",
 			"all purpose flour", "bread flour", "whole wheat flour", "granulated sugar", "caramel", "jam", "cherries",
 			"strawberries", "chocolate chunks", "heavy cream",
+			"nuts",
 		},
 		Rare = {
 			"cream of tartar", "almond extract", "ginger", "cloves", "allspice", "cardamom", "self rising flour",
@@ -30,6 +31,7 @@ return {
 			"orange zest", "orange juice", "lime juice", "poppy seeds", "sesame seeds", "sunflower seeds", "chia seeds",
 			"flax seeds", "rolled oats", "quick oats", "graham crackers", "oreos", "cookie crumbs", "sourdough starter",
 			"instant yeast", "active dry yeast", "brown rice flour", "potato starch",
+			"vinegar", "applesauce", "coconut milk", "almond milk", "coffee", "lemon extract", "cooking spray",
 		},
 		DeepCut = {
 			"potassium bicarbonate", "dutch process cocoa", "tonka bean",
@@ -43,6 +45,7 @@ return {
 			"fromage blanc", "quark", "clotted cream", "ghee", "cacao nibs", "praline paste", "marzipan", "almond paste",
 			"fondant", "royal icing", "candied peel", "candied ginger", "glace cherries", "angelica", "mixed spice",
 			"pumpkin pie spice", "star anise", "mace", "mahleb", "nigella seeds", "caraway seeds", "fennel seeds",
+			"peppermint extract", "custard powder",
 		},
 		Mythic = {
 			"hartshorn", "pearl ash", "saleratus", "isinglass",
@@ -85,5 +88,13 @@ return {
 		["agave nectar"] = "agave", ["ammonium carbonate"] = "hartshorn", ["baking ammonia"] = "hartshorn",
 		["ammonium bicarbonate"] = "hartshorn", ["hartshorn salt"] = "hartshorn",
 		["bakers ammonia"] = "hartshorn",
+		["unsalted butter"] = "butter", ["salted butter"] = "butter", ["sea salt"] = "salt", ["kosher salt"] = "salt",
+		["table salt"] = "salt", ["shredded coconut"] = "coconut", ["coconut flakes"] = "coconut",
+		["mini marshmallows"] = "marshmallows", ["pumpkin puree"] = "pumpkin", ["mashed bananas"] = "bananas",
+		["white vinegar"] = "vinegar", ["apple cider vinegar"] = "vinegar", ["apple sauce"] = "applesauce",
+		["vanilla bean paste"] = "vanilla paste", ["baking chocolate"] = "unsweetened chocolate",
+		["whole milk"] = "milk", ["skim milk"] = "milk", ["vanila"] = "vanilla", ["cinamon"] = "cinnamon",
+		["oatmeal"] = "oats", ["baking cocoa"] = "cocoa powder", ["unsweetened cocoa"] = "cocoa powder",
+		["bakers yeast"] = "yeast", ["large eggs"] = "eggs",
 	},
 }

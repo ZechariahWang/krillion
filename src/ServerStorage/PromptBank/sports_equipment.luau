@@ -24,6 +24,7 @@ return {
 			"flippers", "snorkel", "water skis", "wakeboard", "sled",
 			"cones", "tackling dummy", "water bottle", "headband", "wristband",
 			"knee pads", "elbow pads", "wrist guards", "rock climbing harness",
+			"sneakers",
 		},
 		Rare = {
 			"foil", "epee", "saber", "fencing mask", "fencing sword", "mallet", "pickleball paddle", "squash racket",
@@ -40,6 +41,9 @@ return {
 			"tennis net", "starting gun", "megaphone", "finish tape",
 			"chalk bag", "polo mallet", "croquet mallet", "luge", "bobsled", "carabiner", "protective cup",
 			"springboard", "cornhole board",
+			"catchers mitt", "batting gloves", "paddle board", "bodyboard", "batting cage", "batting tee",
+			"pitching machine", "climbing shoes", "crossbar", "pole vault pole", "corner flag", "toboggan",
+			"hand wraps", "goalie gloves",
 		},
 		DeepCut = {
 			"cesta", "polo helmet", "saddle", "bridle",
@@ -51,6 +55,7 @@ return {
 			"gymnastics ribbon",
 			"touring skis", "figure skates",
 			"speed skates", "bandy stick", "floorball stick", "snorkel mask",
+			"skimboard", "pull buoy",
 		},
 		Mythic = {
 			"bogu", "naginata", "kyudo bow", "tatami", "dohyo",
@@ -108,5 +113,12 @@ return {
 		["shinai"] = "kendo sword", ["yumi"] = "kyudo bow", ["sweeping broom"] = "curling broom",
 		["cochonnet"] = "petanque jack", ["caddie bag"] = "golf bag",
 		["rhythmic gymnastics ribbon"] = "gymnastics ribbon",
+		["catcher mitt"] = "catchers mitt", ["mitt"] = "glove", ["shoes"] = "sneakers",
+		["running shoes"] = "sneakers", ["stand up paddleboard"] = "paddle board", ["paddleboard"] = "paddle board",
+		["boogie board"] = "bodyboard", ["climbing shoe"] = "climbing shoes", ["vaulting pole"] = "pole vault pole",
+		["pole vault"] = "pole vault pole", ["bobsleigh"] = "bobsled", ["football helmet"] = "helmet",
+		["bike helmet"] = "helmet", ["batting glove"] = "batting gloves", ["volleyball net"] = "net",
+		["hockey net"] = "net", ["cross bar"] = "crossbar", ["boxing wraps"] = "hand wraps",
+		["batting machine"] = "pitching machine", ["batting cages"] = "batting cage", ["sneaker"] = "sneakers",
 	},
 }

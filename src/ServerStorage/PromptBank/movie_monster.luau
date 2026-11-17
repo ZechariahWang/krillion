@@ -14,8 +14,7 @@ return {
 			"jason voorhees", "michael myers", "pennywise", "mothra", "king ghidorah", "kraken", "bigfoot", "demogorgon",
 			"the babadook", "sully", "mike wazowski", "shrek", "dragon", "giant spider", "the grinch", "witch", "skeleton",
 			"smaug", "balrog", "gollum", "troll", "orc", "gargoyle", "the hulk", "medusa", "the terminator", "velociraptor",
-			"t rex", "megalodon", "cyclops", "creature from the black lagoon",
-			"ghoul",
+			"t rex", "megalodon", "cyclops", "creature from the black lagoon", "ghoul", "yeti",
 		},
 		Rare = {
 			"cthulhu", "the fly", "gamera", "tarantula", "bride of frankenstein", "nosferatu", "mogwai",
@@ -23,8 +22,7 @@ return {
 			"hannibal lecter", "graboid", "mechagodzilla", "rodan", "cujo", "audrey ii", "the headless horseman",
 			"dr jekyll and mr hyde", "the golem", "queen alien", "the rancor", "the mimic", "the creeper",
 			"the cloverfield monster", "chupacabra", "wendigo", "krampus", "the pale man", "the hydra", "sandworm",
-			"beetlejuice",
-			"pumpkinhead", "candyman", "swamp thing", "yeti", "boogeyman", "sarlacc", "wampa", "basilisk", "aragog",
+			"beetlejuice", "pumpkinhead", "candyman", "swamp thing", "boogeyman", "sarlacc", "wampa", "basilisk", "aragog",
 			"mothman", "critters", "anaconda", "piranha",
 		},
 		DeepCut = {

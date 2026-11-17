@@ -1,0 +1,57 @@
+--!strict
+return {
+	id = "movie_theater_item",
+	prompt = "Name something you see or buy at a movie theater",
+	answers = {
+		Plankton = {
+			"popcorn", "screen", "seats", "candy", "soda", "tickets",
+		},
+		TooClever = {
+			"3d glasses", "projector", "nachos", "trailers", "usher",
+		},
+		Schooler = {
+			"concession stand", "hot dog", "pretzel", "slushie", "icee", "m and ms", "skittles", "twizzlers",
+			"sour patch kids", "reeses pieces", "milk duds", "junior mints", "raisinets", "nerds", "gummy bears",
+			"popcorn bucket", "cup holder", "aisle", "exit sign", "curtain", "speakers", "ticket booth", "box office",
+			"posters", "previews", "credits", "recliner", "cup", "straw", "napkins", "butter", "salt", "cashier",
+			"popcorn machine", "soda fountain", "arcade", "lobby", "bathroom", "water", "cotton candy", "pizza",
+			"ice cream", "chocolate", "snacks", "drinks", "lights", "armrest", "carpet", "refills",
+		},
+		Rare = {
+			"whoppers", "goobers", "sno caps", "dots", "swedish fish", "red vines", "mike and ike", "hot tamales",
+			"jujubes", "dippin dots", "churro", "pretzel bites", "extra butter", "reserved seating", "rewards card",
+			"gift card", "standee", "projection booth", "imax", "dolby", "4dx", "rumble seats", "stadium seating",
+			"ticket stub", "kiosk", "showtimes board", "marquee", "now showing", "coming soon", "cup lids", "tray",
+			"popcorn seasoning", "candy bar", "hot chocolate", "coffee", "mints", "gum", "licorice", "caramel corn",
+			"kettle corn", "cheese nachos", "chicken tenders", "hamburger", "fries", "mozzarella sticks",
+			"souvenir cup", "popcorn tub", "collectible cup", "emergency exit", "step lights", "floor lights",
+		},
+		DeepCut = {
+			"film reel", "projectionist", "ticket taker", "ticket scanner", "sneeze guard", "popcorn warmer",
+			"butter dispenser", "slush machine", "candy case", "film canister", "surround sound", "subwoofer",
+			"reclining seats", "loveseats", "wheelchair spot", "captioning device", "audio description",
+		},
+		Mythic = {
+			"orchestra pit", "curtain call", "balcony", "mezzanine", "intermission", "newsreel", "cartoon short",
+		},
+	},
+	aliases = {
+		["popcorns"] = "popcorn", ["pop corn"] = "popcorn", ["chair"] = "seats", ["chairs"] = "seats",
+		["seat"] = "seats", ["ticket"] = "tickets", ["sweets"] = "candy", ["pop"] = "soda", ["coke"] = "soda",
+		["glasses"] = "3d glasses", ["3 d glasses"] = "3d glasses", ["nacho"] = "nachos", ["trailer"] = "trailers",
+		["hotdog"] = "hot dog", ["hotdogs"] = "hot dog", ["hot dogs"] = "hot dog", ["pretzels"] = "pretzel",
+		["slush"] = "slushie", ["slurpee"] = "slushie", ["slushies"] = "slushie", ["slushy"] = "slushie",
+		["icees"] = "icee", ["mms"] = "m and ms", ["m and m"] = "m and ms", ["mandms"] = "m and ms",
+		["twizzler"] = "twizzlers", ["skittle"] = "skittles", ["reese pieces"] = "reeses pieces",
+		["milk dud"] = "milk duds", ["raisinet"] = "raisinets", ["nerd"] = "nerds", ["gummy bear"] = "gummy bears",
+		["gummies"] = "gummy bears", ["bucket"] = "popcorn bucket", ["cupholder"] = "cup holder",
+		["cup holders"] = "cup holder", ["aisles"] = "aisle", ["exit"] = "exit sign", ["curtains"] = "curtain",
+		["speaker"] = "speakers", ["poster"] = "posters", ["movie poster"] = "posters", ["recliners"] = "recliner",
+		["cups"] = "cup", ["napkin"] = "napkins", ["cashiers"] = "cashier", ["snack"] = "snacks", ["drink"] = "drinks",
+		["armrests"] = "armrest", ["whopper"] = "whoppers", ["goober"] = "goobers", ["snocaps"] = "sno caps",
+		["sno cap"] = "sno caps", ["dippin dot"] = "dippin dots", ["churros"] = "churro", ["stub"] = "ticket stub",
+		["stubs"] = "ticket stub", ["kiosks"] = "kiosk", ["standees"] = "standee", ["i max"] = "imax",
+		["usherette"] = "usher", ["fry"] = "fries", ["french fries"] = "fries", ["tenders"] = "chicken tenders",
+		["big screen"] = "screen", ["movie screen"] = "screen",
+	},
+}

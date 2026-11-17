@@ -18,6 +18,7 @@ return {
 			"confit", "scald", "coddle", "pot roast", "hard boil", "soft boil", "slow roast", "gratin", "tempura",
 			"tandoor", "deglaze", "glaze", "blacken", "jerk", "spatchcock", "braai", "cook in foil", "reduce", "render",
 			"sweat",
+			"fricassee", "reverse sear",
 		},
 		DeepCut = {
 			"en papillote", "hot smoke", "cold smoke", "bain marie", "pan roast", "flash fry", "salt bake", "pit roast",
@@ -50,5 +51,11 @@ return {
 		["slow roasting"] = "slow roast", ["pan sear"] = "sear", ["shallow fry"] = "pan fry",
 		["spit roast"] = "rotisserie", ["double boil"] = "bain marie", ["earth oven"] = "pit roast",
 		["thermal circulator"] = "sous vide",
+		["baked"] = "bake", ["fried"] = "fry", ["boiled"] = "boil", ["grilled"] = "grill", ["roasted"] = "roast",
+		["steamed"] = "steam", ["smoked"] = "smoke", ["poached"] = "poach", ["stewed"] = "stew",
+		["braised"] = "braise", ["toasted"] = "toast", ["seared"] = "sear", ["sauteed"] = "saute",
+		["broiled"] = "broil", ["microwaved"] = "microwave", ["griddling"] = "griddle", ["oven"] = "bake",
+		["oven bake"] = "bake", ["wok"] = "stir fry", ["charcoal grill"] = "grill", ["flame grill"] = "grill",
+		["reverse searing"] = "reverse sear", ["stir fried"] = "stir fry", ["deep fried"] = "deep fry",
 	},
 }

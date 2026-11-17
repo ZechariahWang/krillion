@@ -1,0 +1,63 @@
+--!strict
+return {
+	id = "restaurant_item",
+	prompt = "Name something you see or use at a restaurant",
+	answers = {
+		Plankton = {
+			"menu", "table", "chair", "waiter", "food", "plate",
+		},
+		TooClever = {
+			"fork", "napkin", "bill", "tip", "chef", "cup",
+		},
+		Schooler = {
+			"waitress", "server", "host", "hostess", "cook", "kitchen", "knife", "spoon", "glass", "water", "straw",
+			"booth", "high chair", "kids menu", "crayons", "bread basket", "salt", "pepper", "salt shaker",
+			"pepper shaker", "tablecloth", "candle", "receipt", "credit card", "cash register", "tip jar",
+			"reservation", "cashier", "bar", "dessert", "appetizer", "entree", "drinks", "silverware", "coaster",
+			"toothpick", "mint", "fortune cookie", "takeout box", "doggy bag", "apron", "notepad", "tray", "bowl",
+			"sugar packets", "booster seat", "bib", "kids meal", "balloon", "bathroom", "fridge", "oven", "stove",
+			"grill", "dishwasher", "bread", "butter", "ketchup", "condiments", "soda", "coffee", "lemon", "ice",
+			"pitcher", "buffet", "counter", "stool", "drive thru", "patio",
+		},
+		Rare = {
+			"sommelier", "maitre d", "busser", "sous chef", "head chef", "line cook", "bartender", "salad bar",
+			"heat lamp", "ticket rail", "fryer", "specials board", "chalkboard", "bread plate", "butter knife",
+			"steak knife", "soup spoon", "dessert fork", "charger plate", "place setting", "ramekin", "carafe",
+			"hot sauce", "lemon wedge", "lazy susan", "wait list", "pager", "qr code menu", "tablet",
+			"comment card", "gift card", "loyalty card", "coupon", "gratuity", "hostess stand", "waiting area",
+			"outdoor seating", "bar stool", "sweetener", "creamer", "cutlery", "chopsticks", "wine glass",
+			"water glass", "salad fork", "side plate", "serving tray", "plate warmer", "walk in freezer",
+		},
+		DeepCut = {
+			"expo", "pass", "pos system", "receipt printer", "dish pit", "prep cook", "pastry chef", "saucier",
+			"garde manger", "fish knife", "bread service", "crumb scraper", "finger bowl", "table number",
+			"table tent", "wet nap", "menu holder", "dumbwaiter",
+		},
+		Mythic = {
+			"amuse bouche", "palate cleanser", "chefs table", "tasting menu", "prix fixe", "mise en place",
+			"brigade", "silent butler", "cloche", "fish fork", "demitasse",
+		},
+	},
+	aliases = {
+		["menus"] = "menu", ["tables"] = "table", ["chairs"] = "chair", ["waiters"] = "waiter", ["foods"] = "food",
+		["plates"] = "plate", ["forks"] = "fork", ["napkins"] = "napkin", ["check"] = "bill", ["tips"] = "tip",
+		["chefs"] = "chef", ["cups"] = "cup", ["waitresses"] = "waitress", ["servers"] = "server", ["cooks"] = "cook",
+		["knives"] = "knife", ["spoons"] = "spoon", ["glasses"] = "glass", ["straws"] = "straw", ["booths"] = "booth",
+		["highchair"] = "high chair", ["kid menu"] = "kids menu", ["children menu"] = "kids menu",
+		["crayon"] = "crayons", ["breadbasket"] = "bread basket", ["saltshaker"] = "salt shaker",
+		["candles"] = "candle", ["reservations"] = "reservation", ["cash"] = "cash register",
+		["appetizers"] = "appetizer", ["entrees"] = "entree", ["main course"] = "entree", ["starter"] = "appetizer",
+		["starters"] = "appetizer", ["drink"] = "drinks", ["utensils"] = "silverware", ["flatware"] = "silverware",
+		["toothpicks"] = "toothpick", ["mints"] = "mint", ["fortune cookies"] = "fortune cookie",
+		["to go box"] = "takeout box", ["takeout"] = "takeout box", ["to go bag"] = "doggy bag",
+		["doggie bag"] = "doggy bag", ["bowls"] = "bowl", ["sugar packet"] = "sugar packets", ["bibs"] = "bib",
+		["balloons"] = "balloon", ["restroom"] = "bathroom", ["restrooms"] = "bathroom", ["pitchers"] = "pitcher",
+		["maitre de"] = "maitre d", ["busboy"] = "busser", ["bus boy"] = "busser", ["executive chef"] = "head chef",
+		["bar tender"] = "bartender", ["all you can eat"] = "buffet", ["specials"] = "specials board",
+		["pagers"] = "pager", ["qr menu"] = "qr code menu", ["gift cards"] = "gift card", ["coupons"] = "coupon",
+		["stools"] = "stool", ["barstool"] = "bar stool", ["chopstick"] = "chopsticks",
+		["wine glasses"] = "wine glass", ["expeditor"] = "expo", ["point of sale"] = "pos system",
+		["pos"] = "pos system", ["wet wipes"] = "wet nap", ["ovens"] = "oven", ["tip jars"] = "tip jar",
+		["drive through"] = "drive thru", ["buzzer"] = "pager", ["hostess station"] = "hostess stand",
+	},
+}

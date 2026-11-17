@@ -14,6 +14,7 @@ return {
 			"spot the difference", "hidden picture", "word scramble", "math puzzle", "puzzle box", "minesweeper",
 			"cryptic crossword", "kakuro", "nonogram", "kenken", "mastermind", "cipher", "labyrinth", "peg solitaire",
 			"wordle",
+			"word puzzle",
 		},
 		Rare = {
 			"acrostic", "word ladder", "lateral thinking", "pentomino", "soma cube", "burr puzzle", "chinese rings",
@@ -21,12 +22,14 @@ return {
 			"rush hour", "logic grid", "magic square", "water jugs", "river crossing", "monty hall",
 			"mahjong solitaire", "word wheel", "pigpen cipher", "pyraminx", "megaminx", "skewb", "rubiks snake",
 			"number link", "flow free",
+			"chess puzzle", "3d puzzle", "mechanical puzzle",
 		},
 		DeepCut = {
 			"nurikabe", "masyu", "hitori", "kuromasu", "akari", "yajilin", "star battle", "norinori", "samurai sudoku",
 			"arrow sudoku", "thermo sudoku", "fillomino", "heyawake", "shikaku", "cross sums", "square one",
 			"mirror cube", "gear cube", "tetraminx", "knights tour", "eight queens", "seven bridges of konigsberg",
 			"zebra puzzle", "dissection puzzle", "packing puzzle", "polyomino",
+			"hidato", "cast puzzle",
 		},
 		Mythic = {
 			"kakurasu", "tatamibari", "tapa", "double choco", "country road", "mochikoro", "hamiltonian path",
@@ -64,5 +67,11 @@ return {
 		["baguenaudier"] = "chinese rings", ["zebra"] = "zebra puzzle", ["sam loyd"] = "sam loyd puzzle",
 		["cryptic"] = "cryptic crossword", ["hedge maze"] = "maze", ["doublet"] = "word ladder",
 		["einstein puzzle"] = "zebra puzzle",
+		["speed cube"] = "rubiks cube", ["3d jigsaw"] = "3d puzzle", ["number puzzle"] = "math puzzle",
+		["fox goose and grain"] = "river crossing", ["missionaries and cannibals"] = "river crossing",
+		["crypto quote"] = "cryptogram", ["pentominoes"] = "pentomino", ["chess problem"] = "chess puzzle",
+		["word puzzles"] = "word puzzle", ["mechanical puzzles"] = "mechanical puzzle",
+		["wolf goat and cabbage"] = "river crossing", ["sudoku puzzles"] = "sudoku",
+		["chess puzzles"] = "chess puzzle", ["jigsaw puzzles"] = "jigsaw",
 	},
 }

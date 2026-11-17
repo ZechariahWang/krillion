@@ -16,11 +16,13 @@ return {
 			"shu", "tefnut", "atum", "khonsu", "neith", "hapi", "min", "apis", "wadjet", "nekhbet", "taweret",
 			"bes", "khepri", "aten", "amun ra", "heqet", "serket", "meretseger", "mut", "montu", "nefertem",
 			"apep", "seshat", "anuket", "satet", "wepwawet", "sopdu", "babi", "ammit", "khnum", "geb", "nut",
+			"serapis", "maahes", "ra horakhty",
 		},
 		DeepCut = {
 			"khenti amentiu", "hedetet", "renenutet", "ruty", "tatenen", "shai", "heka", "hu", "sia", "qebehsenuef",
 			"duamutef", "imsety", "hapy", "mafdet", "menhit", "pakhet", "sah", "sokar", "unut", "werethekau",
 			"nehebkau", "kek", "heh", "nun", "amunet", "kauket", "naunet", "hatmehit", "bat", "anhur",
+			"harpocrates", "bennu", "mnevis", "heryshef", "sopdet", "meskhenet",
 		},
 		Mythic = {
 			"ihy", "iah", "ash", "andjety", "aker", "banebdjedet", "dedun", "mehen", "neper", "nepit", "qetesh",
@@ -45,5 +47,9 @@ return {
 		["heka magic"] = "heka", ["bes god"] = "bes", ["bisu"] = "bes", ["onuris"] = "anhur", ["inhur"] = "anhur",
 		["sobek crocodile"] = "sobek", ["kek god"] = "kek", ["wepwawet jackal"] = "wepwawet", ["upuaut"] = "wepwawet",
 		["opener of the ways"] = "wepwawet", ["pakhet lion"] = "pakhet", ["pasht"] = "pakhet",
+		["seth"] = "set", ["anqet"] = "anuket", ["anukis"] = "anuket", ["sothis"] = "sopdet", ["mahes"] = "maahes",
+		["tatjenen"] = "tatenen", ["nuit"] = "nut", ["seb"] = "geb", ["sarapis"] = "serapis",
+		["bennu bird"] = "bennu", ["arsaphes"] = "heryshef", ["re horakhty"] = "ra horakhty", ["amen ra"] = "amun ra",
+		["horus the child"] = "harpocrates",
 	},
 }

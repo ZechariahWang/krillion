@@ -18,6 +18,7 @@ return {
 			"get well card", "balloons", "mri machine", "ct scanner", "ultrasound",
 			"cotton swabs", "gauze", "hand sanitizer", "tweezers", "stitches", "ice pack",
 			"wristband", "visitors", "cafeteria", "gift shop", "tray",
+			"sheets", "tissues", "oxygen mask", "surgical instruments",
 		},
 		Rare = {
 			"anesthesiologist", "radiologist", "cardiologist", "oncologist", "neurologist", "pathologist", "intern",
@@ -29,6 +30,8 @@ return {
 			"clamp", "suction", "drain", "splint", "neck brace", "walker", "cane", "bed rail",
 			"medication cart", "crash cart", "tourniquet", "saline", "morphine", "antibiotics", "painkillers",
 			"otoscope", "reflex hammer", "forceps", "tongue depressor", "bedpan",
+			"face shield", "surgical cap", "shoe covers", "bedside table", "id badge", "inhaler", "nebulizer",
+			"medical records", "medical tape", "antiseptic", "disinfectant", "chapel", "security guard", "laboratory",
 		},
 		DeepCut = {
 			"laryngoscope", "bronchoscope", "endoscope", "laparoscope", "ophthalmoscope",
@@ -94,5 +97,11 @@ return {
 		["cardiac monitor"] = "heart monitor", ["stretcher bed"] = "stretcher", ["gurney"] = "stretcher",
 		["hoyer lift"] = "patient lift", ["sphygmomanometer"] = "blood pressure cuff",
 		["bilirubin light"] = "phototherapy lamp",
+		["sheet"] = "sheets", ["bed sheets"] = "sheets", ["tissue"] = "tissues", ["oxygen masks"] = "oxygen mask",
+		["hair net"] = "surgical cap", ["scrub cap"] = "surgical cap", ["face shields"] = "face shield",
+		["badge"] = "id badge", ["records"] = "medical records", ["lab"] = "laboratory", ["nebuliser"] = "nebulizer",
+		["puffer"] = "inhaler", ["surgical tools"] = "surgical instruments",
+		["medical instruments"] = "surgical instruments", ["tissue box"] = "tissues",
+		["side table"] = "bedside table", ["security"] = "security guard", ["disinfectant spray"] = "disinfectant",
 	},
 }
