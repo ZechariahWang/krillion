@@ -1,0 +1,55 @@
+--!strict
+return {
+	id = "bear_type",
+	prompt = "Name a type of bear",
+	answers = {
+		Plankton = {
+			"polar bear", "grizzly bear", "brown bear", "black bear", "panda",
+		},
+		TooClever = {
+			"sun bear", "kodiak bear", "sloth bear",
+		},
+		Schooler = {
+			"giant panda", "spectacled bear", "cave bear", "american black bear", "moon bear",
+		},
+		Rare = {
+			"andean bear", "asiatic black bear", "spirit bear", "cinnamon bear", "eurasian brown bear",
+			"himalayan brown bear", "short faced bear",
+		},
+		DeepCut = {
+			"syrian brown bear", "atlas bear", "ussuri brown bear", "kamchatka brown bear", "marsican brown bear",
+			"hokkaido brown bear", "formosan black bear", "japanese black bear", "mexican grizzly",
+			"florida black bear", "louisiana black bear", "gobi bear", "himalayan black bear",
+			"newfoundland black bear", "glacier bear", "blue bear",
+		},
+		Mythic = {
+			"baluchistan black bear", "alaska peninsula brown bear", "kenai brown bear",
+			"carpathian brown bear", "scandinavian brown bear",
+		},
+	},
+	aliases = {
+		["polar bears"] = "polar bear", ["ice bear"] = "polar bear", ["polarbear"] = "polar bear",
+		["grizzly"] = "grizzly bear", ["grizzlies"] = "grizzly bear", ["grizzly bears"] = "grizzly bear",
+		["brown bears"] = "brown bear", ["black bears"] = "black bear", ["pandas"] = "panda",
+		["panda bear"] = "panda",
+		["sun bears"] = "sun bear", ["malayan sun bear"] = "sun bear",
+		["kodiak"] = "kodiak bear", ["kodiak brown bear"] = "kodiak bear",
+		["sloth bears"] = "sloth bear", ["giant pandas"] = "giant panda",
+		["spectacled bears"] = "spectacled bear", ["cave bears"] = "cave bear",
+		["moon bears"] = "moon bear", 
+		["andean bears"] = "andean bear",
+		["kermode bear"] = "spirit bear", ["kermode"] = "spirit bear", ["white black bear"] = "spirit bear",
+		["cinnamon"] = "cinnamon bear", ["cinnamon black bear"] = "cinnamon bear",
+		["eurasian bear"] = "eurasian brown bear", ["european bear"] = "eurasian brown bear",
+		["himalayan bear"] = "himalayan brown bear", ["asian black bear"] = "asiatic black bear",
+		["short face bear"] = "short faced bear", ["giant short faced bear"] = "short faced bear",
+		["arctodus"] = "short faced bear", ["arctodus simus"] = "short faced bear",
+		["glacier bears"] = "glacier bear", ["blue bears"] = "blue bear",
+		["atlas bears"] = "atlas bear", ["syrian bear"] = "syrian brown bear",
+		["formosan bear"] = "formosan black bear", ["taiwanese black bear"] = "formosan black bear",
+		["japanese bear"] = "japanese black bear", ["mexican grizzly bear"] = "mexican grizzly",
+		["tibetan blue bear"] = "blue bear", ["yezo brown bear"] = "hokkaido brown bear",
+		["grisly bear"] = "grizzly bear", ["grizly"] = "grizzly bear", ["pollar bear"] = "polar bear",
+		["spectacle bear"] = "spectacled bear", ["spectacled"] = "spectacled bear",
+	},
+}

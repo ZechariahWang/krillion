@@ -1,0 +1,63 @@
+--!strict
+return {
+	id = "national_park",
+	prompt = "Name a US national park",
+	answers = {
+		Plankton = {
+			"yellowstone", "yosemite", "grand canyon", "zion", "great smoky mountains",
+		},
+		TooClever = {
+			"glacier", "arches", "acadia", "death valley", "grand teton",
+		},
+		Schooler = {
+			"joshua tree", "bryce canyon", "rocky mountain", "olympic", "mount rainier", "sequoia", "redwood",
+			"everglades", "denali", "badlands", "shenandoah", "crater lake", "carlsbad caverns", "hawaii volcanoes",
+			"big bend", "mesa verde", "mammoth cave", "kings canyon", "petrified forest", "white sands",
+		},
+		Rare = {
+			"capitol reef", "great basin", "great sand dunes", "theodore roosevelt", "isle royale", "dry tortugas",
+			"hot springs", "north cascades", "lassen volcanic", "katmai", "kenai fjords", "gateway arch", "saguaro",
+			"channel islands", "glacier bay", "canyonlands", "haleakala",
+		},
+		DeepCut = {
+			"american samoa", "congaree", "pinnacles", "guadalupe mountains", "new river gorge", "virgin islands",
+			"biscayne", "indiana dunes", "cuyahoga valley", "black canyon of the gunnison", "wind cave", "voyageurs",
+		},
+		Mythic = {
+			"kobuk valley", "lake clark", "gates of the arctic", "wrangell st elias",
+		},
+	},
+	aliases = {
+		["yellow stone"] = "yellowstone", ["yosemity"] = "yosemite", ["yosemite valley"] = "yosemite",
+		["the grand canyon"] = "grand canyon", ["smokies"] = "great smoky mountains",
+		["smoky mountains"] = "great smoky mountains", ["great smokey mountains"] = "great smoky mountains",
+		["smokey mountains"] = "great smoky mountains", ["glacier national park"] = "glacier",
+		["arches national park"] = "arches", ["tetons"] = "grand teton", ["the tetons"] = "grand teton",
+		["teton"] = "grand teton", ["rockies"] = "rocky mountain", ["rocky mountains"] = "rocky mountain",
+		["rainier"] = "mount rainier", ["mt rainier"] = "mount rainier", ["sequoias"] = "sequoia",
+		["redwoods"] = "redwood", ["redwood forest"] = "redwood", ["everglade"] = "everglades",
+		["carlsbad"] = "carlsbad caverns", ["carlsbad cavern"] = "carlsbad caverns", ["bryce"] = "bryce canyon",
+		["joshua trees"] = "joshua tree", ["mesa verd"] = "mesa verde", ["haleakala crater"] = "haleakala",
+		["volcanoes"] = "hawaii volcanoes", ["lassen"] = "lassen volcanic", ["new river"] = "new river gorge",
+		["black canyon"] = "black canyon of the gunnison", ["great sand dune"] = "great sand dunes",
+		["tortugas"] = "dry tortugas", ["mammoth caves"] = "mammoth cave", ["wrangell"] = "wrangell st elias",
+		["gates of arctic"] = "gates of the arctic", ["grand tetons"] = "grand teton",
+		["olympic national park"] = "olympic", ["badland"] = "badlands", ["denali park"] = "denali",
+		["mount mckinley"] = "denali", ["mckinley"] = "denali",
+		["theodore roosevelt national park"] = "theodore roosevelt", ["roosevelt"] = "theodore roosevelt",
+		["yellowstone national park"] = "yellowstone", ["yosemite national park"] = "yosemite",
+		["grand canyon national park"] = "grand canyon", ["zion national park"] = "zion",
+		["death valley national park"] = "death valley", ["joshua tree national park"] = "joshua tree",
+		["bryce canyon national park"] = "bryce canyon", ["acadia national park"] = "acadia",
+		["yosimite"] = "yosemite", ["arcadia"] = "acadia", ["death vally"] = "death valley",
+		["isle royal"] = "isle royale", ["saint elias"] = "wrangell st elias",
+		["wrangell saint elias"] = "wrangell st elias", ["st elias"] = "wrangell st elias",
+		["hawaii volcano"] = "hawaii volcanoes", ["kings canyon national park"] = "kings canyon",
+		["sequoia national park"] = "sequoia", ["mount rainier national park"] = "mount rainier",
+		["grand teton national park"] = "grand teton", ["everglades national park"] = "everglades",
+		["zions"] = "zion", ["glacier bay national park"] = "glacier bay",
+		["petrified forest national park"] = "petrified forest",
+		["great smoky mountains national park"] = "great smoky mountains",
+		["smoky mountain national park"] = "great smoky mountains",
+	},
+}

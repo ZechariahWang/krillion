@@ -1,0 +1,61 @@
+--!strict
+return {
+	id = "cooking_method",
+	prompt = "Name a way to cook food",
+	answers = {
+		Plankton = {
+			"bake", "fry", "boil", "grill", "roast", "microwave",
+		},
+		TooClever = {
+			"steam", "saute", "simmer", "broil", "barbecue",
+		},
+		Schooler = {
+			"deep fry", "stir fry", "pan fry", "toast", "poach", "smoke", "stew", "braise", "sear", "slow cook",
+			"pressure cook", "air fry", "blanch", "sous vide", "flambe", "caramelize", "scramble", "rotisserie",
+			"griddle", "char", "parboil", "baste",
+		},
+		Rare = {
+			"confit", "scald", "coddle", "pot roast", "hard boil", "soft boil", "slow roast", "gratin", "tempura",
+			"tandoor", "deglaze", "blacken", "jerk", "spatchcock", "braai", "cook in foil", "reduce", "render",
+			"sweat",
+			"fricassee", "reverse sear",
+		},
+		DeepCut = {
+			"en papillote", "hot smoke", "cold smoke", "bain marie", "pan roast", "flash fry", "salt bake", "pit roast",
+			"clay pot", "brulee", "shirr", "hangi", "pibil", "cook in banana leaf", "fire roast",
+		},
+		Mythic = {
+			"nixtamalize", "stone boil", "retort", "ohmic heating", "plank cook",
+		},
+	},
+	aliases = {
+		["baking"] = "bake", ["frying"] = "fry", ["boiling"] = "boil", ["grilling"] = "grill", ["roasting"] = "roast",
+		["microwaving"] = "microwave", ["steaming"] = "steam", ["sauteing"] = "saute", ["sautee"] = "saute",
+		["simmering"] = "simmer", ["broiling"] = "broil", ["bbq"] = "barbecue", ["barbeque"] = "barbecue",
+		["barbecuing"] = "barbecue", ["deep frying"] = "deep fry", ["deep fat fry"] = "deep fry",
+		["stir frying"] = "stir fry", ["stirfry"] = "stir fry", ["pan frying"] = "pan fry", ["toasting"] = "toast",
+		["poaching"] = "poach", ["smoking"] = "smoke", ["stewing"] = "stew", ["braising"] = "braise",
+		["searing"] = "sear", ["crockpot"] = "slow cook", ["slow cooker"] = "slow cook", ["slow cooking"] = "slow cook",
+		["instant pot"] = "pressure cook", ["pressure cooker"] = "pressure cook",
+		["pressure cooking"] = "pressure cook", ["air frying"] = "air fry", ["air fryer"] = "air fry",
+		["blanching"] = "blanch", ["sousvide"] = "sous vide", ["flambeing"] = "flambe", ["caramelise"] = "caramelize",
+		["caramelizing"] = "caramelize", ["basting"] = "baste", ["coddling"] = "coddle", ["spit"] = "rotisserie",
+		["hard boiled"] = "hard boil", ["soft boiled"] = "soft boil", ["charbroil"] = "char", ["charbroiling"] = "char",
+		["pot roasting"] = "pot roast", ["foil"] = "cook in foil", ["papillote"] = "en papillote",
+		["double boiler"] = "bain marie", ["water bath"] = "bain marie", ["pan searing"] = "sear",
+		["shallow frying"] = "pan fry", ["tandoori"] = "tandoor", ["umu"] = "hangi",
+		["spatchcocking"] = "spatchcock", ["rendering"] = "render", ["sweating"] = "sweat",
+		["blackening"] = "blacken", ["scrambling"] = "scramble", ["scalding"] = "scald", ["reducing"] = "reduce",
+		["parboiling"] = "parboil", ["creme brulee"] = "brulee", ["pit cooking"] = "pit roast",
+		["deglazing"] = "deglaze", ["tempura frying"] = "tempura", ["south african braai"] = "braai",
+		["slow roasting"] = "slow roast", ["pan sear"] = "sear", ["shallow fry"] = "pan fry",
+		["spit roast"] = "rotisserie", ["double boil"] = "bain marie", ["earth oven"] = "pit roast",
+		["thermal circulator"] = "sous vide",
+		["baked"] = "bake", ["fried"] = "fry", ["boiled"] = "boil", ["grilled"] = "grill", ["roasted"] = "roast",
+		["steamed"] = "steam", ["smoked"] = "smoke", ["poached"] = "poach", ["stewed"] = "stew",
+		["braised"] = "braise", ["toasted"] = "toast", ["seared"] = "sear", ["sauteed"] = "saute",
+		["broiled"] = "broil", ["microwaved"] = "microwave", ["griddling"] = "griddle", ["oven"] = "bake",
+		["oven bake"] = "bake", ["charcoal grill"] = "grill", ["flame grill"] = "grill",
+		["reverse searing"] = "reverse sear", ["stir fried"] = "stir fry", ["deep fried"] = "deep fry",
+	},
+}
