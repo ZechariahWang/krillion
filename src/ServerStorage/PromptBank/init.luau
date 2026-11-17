@@ -267,6 +267,8 @@ local retired: { [string]: boolean } = {
 	sausage = true,
 	lamp_type = true,
 	movie_monster = true,
+	famous_dog = true,
+	bird_of_prey = true,
 }
 
 local PromptBank = {
