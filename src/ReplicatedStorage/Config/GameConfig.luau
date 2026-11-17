@@ -41,7 +41,7 @@ local GameConfig = {
 		RingMaxRadius = 34, -- outermost pillar centre; the reef rim sits outside this
 		RiseSeconds = 1.1, -- one eased glide with a soft overshoot at the top
 		ConfettiMinPoints = 60,
-		WalkSpeed = 10, -- players stroll around their pillar top during a match; jumping stays off
+		WalkSpeed = 0, -- players stand still on their pillar during a match; jumping stays off
 	},
 	Answer = {
 		MaxLength = 40,
