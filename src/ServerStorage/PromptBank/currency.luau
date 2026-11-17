@@ -28,6 +28,7 @@ return {
 			"halfpenny", "half dollar", "silver dollar", "bitcoin cash", "chainlink", "stellar", "avalanche", "tron",
 			"toncoin", "pepe", "usd coin", "minecoins", "gil", "bells", "north korean won", "galleon", "bottle caps",
 			"zeni", "litecoin", "tether", "solana", "xrp",
+			"tix", "simoleon", "pokedollar",
 		},
 		DeepCut = {
 			"zloty", "forint", "baht", "dirham", "shekel", "ringgit", "afghani", "lek", "dram", "manat", "lari", "som",
@@ -44,6 +45,7 @@ return {
 			"barbados dollar", "guyana dollar", "kiribati dollar", "tuvaluan dollar", "cook islands dollar",
 			"seychelles rupee", "krugerrand", "maravedi", "knut", "sickle", "munny", "cruzeiro", "inti", "austral",
 			"cruzado", "sucre", "tolar", "lats", "litas", "kroon", "ecu", "septims",
+			"mesos", "latinum",
 		},
 		Mythic = {
 			"ngultrum", "kwacha", "lempira", "tugrik", "quetzal", "nakfa", "ouguiya", "vatu", "paanga", "tala",
@@ -129,5 +131,9 @@ return {
 		["irish pound"] = "punt", ["seychellois rupee"] = "seychelles rupee", ["guyanese dollar"] = "guyana dollar",
 		["barbadian dollar"] = "barbados dollar", ["taiwan dollar"] = "new taiwan dollar",
 		["bosnian mark"] = "convertible mark", ["usdt"] = "tether", ["binance coin"] = "bnb", ["peruvian sol"] = "sol",
+		["simoleons"] = "simoleon", ["tickets"] = "tix", ["roblox tickets"] = "tix", ["bitcion"] = "bitcoin",
+		["eruo"] = "euro", ["pessos"] = "peso", ["pesso"] = "peso", ["nickels"] = "nickel", ["dimes"] = "dime",
+		["quarters"] = "quarter", ["sheckle"] = "shekel", ["kroners"] = "krone", ["swiss franks"] = "swiss franc",
+		["wons"] = "won", ["zlotys"] = "zloty", ["pokedollars"] = "pokedollar",
 	},
 }

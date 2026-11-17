@@ -27,6 +27,7 @@ return {
 			"chacma baboon", "yellow baboon", "guinea baboon", "sooty mangabey", "grey cheeked mangabey",
 			"purple faced langur", "capped langur", "golden langur", "silvered leaf monkey", "dusky leaf monkey",
 			 "banded langur", "red shanked douc", "black snub nosed monkey",
+			"common marmoset", "golden monkey", "tantalus monkey", "guereza",
 		},
 		DeepCut = {
 			"pig tailed langur", "francois langur", "phayres leaf monkey", "tarai langur", "nilgiri langur",
@@ -40,6 +41,9 @@ return {
 			"black bearded saki", "black headed uakari", "ucayali uakari", "yellow tailed woolly monkey",
 			"humboldts woolly monkey", "buffy headed marmoset", "black tufted marmoset", "pied tamarin",
 			"red handed tamarin", "bare faced tamarin", "geoffroys tamarin", "pygmy tamarin", "buffy tufted marmoset",
+			"malbrouck", "mantled howler", "brown howler", "common squirrel monkey", "bolivian squirrel monkey",
+			"red faced spider monkey", "brown spider monkey", "geoffroys spider monkey", "wedge capped capuchin",
+			"sclaters guenon", "red eared guenon", "moor macaque", "formosan rock macaque",
 		},
 		Mythic = {
 			"popa langur", "delacours langur", "cat ba langur", "tonkin snub nosed monkey",
@@ -116,5 +120,14 @@ return {
 		["spectacled langur"] = "dusky leaf monkey",
 		["silvery lutung"] = "silvered leaf monkey",
 		["salongo monkey"] = "dryas monkey",
+		["swamp monkey"] = "allens swamp monkey", ["tufted capuchin"] = "brown capuchin",
+		["white headed capuchin"] = "white faced capuchin", ["crested black macaque"] = "celebes crested macaque",
+		["gibraltar macaque"] = "barbary macaque", ["taiwanese macaque"] = "formosan rock macaque",
+		["mantled guereza"] = "guereza", ["drills"] = "drill", ["macacque"] = "macaque", ["mackaque"] = "macaque",
+		["marmozet"] = "marmoset", ["marmaset"] = "marmoset", ["tamerin"] = "tamarin", ["babboon"] = "baboon",
+		["capuchen"] = "capuchin", ["capachin"] = "capuchin", ["squirel monkey"] = "squirrel monkey",
+		["spidermonkey"] = "spider monkey", ["howler monkeys"] = "howler monkey", ["titi monkeys"] = "titi monkey",
+		["mangaby"] = "mangabey", ["colubus"] = "colobus", ["probiscis monkey"] = "proboscis monkey",
+		["gelada baboon"] = "gelada", ["patas"] = "patas monkey",
 	},
 }

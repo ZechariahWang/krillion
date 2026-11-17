@@ -28,10 +28,10 @@ return {
 			"fire breath", "poison immunity", "poison touch", "venom", "metal control", "sand control",
 			"shadow control", "memory manipulation", "emotion control", "persuasion", "animal control",
 			"enhanced agility", "sonic boom", "energy absorption", "matter manipulation", "shadow travel",
-			"life force draining", "fear inducement", "chronokinesis", "super stamina", "danger sense",
-			"lava control", "metal skin", "vampirism", "werewolf transformation", "lie detection", "poison control",
+			"life force draining", "fear inducement", "chronokinesis", "super stamina", "danger sense", "lava control",
+			"metal skin", "vampirism", "werewolf transformation", "lie detection", "poison control",
 			"energy manipulation", "power negation", "fire immunity", "telescopic vision", "microscopic vision",
-			"resurrection", "omniscience", "omnipotence", "psionics", "crystal control", "optic blasts", "super durability",
+			"resurrection", "omniscience", "omnipotence", "psionics", "crystal control",
 		},
 		DeepCut = {
 			"biokinesis", "spatial manipulation", "density control", "kinetic absorption", "omnilingualism",
@@ -165,5 +165,7 @@ return {
 		["necromancer"] = "necromancy", ["raising the dead"] = "necromancy", ["speed force"] = "super speed",
 		["sonic speed"] = "super speed", ["super reflex"] = "super reflexes", ["enhanced reflexes"] = "super reflexes",
 		["danger sensing"] = "danger sense", ["sixth sense"] = "danger sense",
+		["optic blasts"] = "laser vision",
+		["super durability"] = "invulnerability",
 	},
 }

@@ -68,7 +68,7 @@ return {
 			"eurasian jay", "senegal parrot", "ring necked pheasant", "sapsucker", "red headed woodpecker",
 			"acorn woodpecker", "brown pelican", "white pelican", "shag", "auk", "oxpecker", "rhode island red",
 			"american kestrel", "common kestrel", "western meadowlark", "eastern meadowlark", "common loon",
-			"pied billed grebe", "great crested grebe", "northern harrier", "gouldian finch", "marsh tit",
+			"pied billed grebe", "northern harrier", "gouldian finch",
 		},
 		DeepCut = {
 			"kakapo", "shoebill", "hoatzin", "frogmouth", "tawny frogmouth", "oilbird", "tinamou", "motmot", "jacamar",
@@ -114,8 +114,9 @@ return {
 			"black skimmer", "laughing gull", "common tern", "caspian tern", "royal tern", "black tern", "black stork",
 			"wood stork", "painted stork", "belted kingfisher", "great hornbill", "rhinoceros hornbill",
 			"superb fairy wren", "australian magpie", "currawong", "corella", "sun conure", "quaker parrot",
-			"indian ringneck", "alexandrine parakeet", "military macaw", "spixs macaw", "swiftlet",
-			"black grouse", "junglefowl", "leghorn", "kori bustard", "black necked stilt", "phalarope", "red knot",
+			"indian ringneck", "alexandrine parakeet", "military macaw", "spixs macaw", "swiftlet", "black grouse",
+			"junglefowl", "leghorn", "kori bustard", "black necked stilt", "phalarope", "red knot", "marsh tit",
+			"great crested grebe",
 		},
 		Mythic = {
 			"kagu", "bateleur", "potoo", "sungrebe", "wryneck", "plains wanderer", "palmchat", "diving petrel",

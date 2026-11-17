@@ -15,6 +15,7 @@ return {
 			"sydney funnel web", "mexican redknee tarantula", "pink toe tarantula", "cobalt blue tarantula",
 			"tailless whip spider", "false widow", "giant house spider", "wandering spider", "lynx spider",
 			"brazilian wandering spider", "bird eating spider",
+			"joro spider",
 		},
 		Rare = {
 			"black house spider", "white tailed spider", "yellow sac spider", "grass spider", "cobweb spider",
@@ -26,6 +27,9 @@ return {
 			"bold jumping spider", "flower crab spider", "goldenrod crab spider", "giant crab spider", "wall spider",
 			"lace weaver", "trashline orb weaver", "spiny orb weaver", "bridge spider", "ant mimic spider",
 			"purseweb spider", "cave spider", "pirate spider", "assassin spider", "woodlouse spider",
+			"carolina wolf spider", "salmon pink birdeater", "texas brown tarantula", "desert blonde tarantula",
+			"pumpkin patch tarantula", "green orb spider", "hammock spider", "sheet web spider", "cat faced spider",
+			"black lace weaver", "ground spider", "dock spider",
 		},
 		DeepCut = {
 			"arrowshaped micrathena", "dewdrop spider", "green lynx spider", "magnolia green jumper", "marbled orb weaver",
@@ -34,6 +38,9 @@ return {
 			"hentz orb weaver", "giant lichen orb weaver", "brown house spider", "rain spider",
 			"flat rock spider", "button spider", "darwins bark spider", "bagheera kiplingi", "ladybird spider",
 			"red velvet spider", "feather legged spider", "hourglass spider", "long jawed orb weaver",
+			"gooty sapphire tarantula", "usambara baboon spider", "venezuelan suntiger tarantula",
+			"costa rican zebra tarantula", "goliath pinkfoot", "triangle spider", "six eyed sand spider",
+			"brazilian whiteknee tarantula",
 		},
 		Mythic = {
 			"tangled nest spider", "atrax", "missulena", "ray spider", "portia", "cribellate spider",
@@ -89,5 +96,15 @@ return {
 		["european wasp spider"] = "wasp spider",
 		["white tail spider"] = "white tailed spider",
 		["sheet weaver"] = "money spider",
+		["sun spider"] = "camel spider", ["wind scorpion"] = "camel spider", ["orbweaver"] = "orb weaver",
+		["rose hair tarantula"] = "chilean rose tarantula", ["pinktoe tarantula"] = "pink toe tarantula",
+		["pinktoe"] = "pink toe tarantula", ["golden silk orb weaver"] = "golden orb weaver",
+		["spiny backed orb weaver"] = "spiny orb weaver", ["tarantuala"] = "tarantula", ["tarentula"] = "tarantula",
+		["tarantual"] = "tarantula", ["black widdow"] = "black widow", ["wolf spiter"] = "wolf spider",
+		["huntsmen"] = "huntsman", ["hunstman"] = "huntsman", ["brown reclus"] = "brown recluse",
+		["brown reclues"] = "brown recluse", ["orb weaver spider"] = "orb weaver", ["sac spider"] = "yellow sac spider",
+		["joro"] = "joro spider", ["giant house"] = "giant house spider", ["dock spiders"] = "dock spider",
+		["cellar spiders"] = "cellar spider", ["daddy long leg"] = "cellar spider",
+		["trapdoor spiders"] = "trapdoor spider", ["water spiders"] = "water spider",
 	},
 }

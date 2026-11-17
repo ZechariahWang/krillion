@@ -15,6 +15,7 @@ return {
 			"cluster", "company", "congregation", "convocation", "crash", "murmuration", "business", "unkindness",
 			"skulk", "sleuth", "sloth", "sounder", "tower", "streak", "mischief", "romp", "caravan", "gang",
 			"array", "cete", "bloat", "cackle", "knot", "leap", "ambush", "rookery", "den",
+			"clan",
 		},
 		Rare = {
 			"gam", "bask", "charm", "conspiracy", "dazzle", "dole", "exaltation", "ostentation", "pace", "prickle",
@@ -25,12 +26,14 @@ return {
 			"hedge", "huddle", "gulp", "glaring", "drift", "congress", "chain", "clamour", "cast",
 			"bouquet", "bellowing", "drey", "fall", "float", "flush", "husk", "parcel", "quiver", "rout", "span",
 			"tiding", "troubling", "walk", "wisp",
+			"cloud", "bloom", "cohort", "barrel", "host", "committee", "flutter", "run", "cry",
 		},
 		DeepCut = {
 			"ascension", "bazaar", "bind", "blessing", "boogle", "bury", "cartload", "clutter", "coterie", "covert",
 			"crowd", "dissimulation", "dule", "fluther", "kettle", "kine", "kaleidoscope",
 			"lamentation", "leash", "mess", "mute", "pandemonium", "puddling", "rake", "rumpus", "shrewdness",
 			"skein", "sneak", "stud", "turmoil", "venom", "waddle", "wing", "bed", "sedge",
+			"singular", "pounce", "intrigue", "destruction", "scold", "deceit", "venue", "harras", "rag",
 		},
 		Mythic = {
 			"hum", "lepe", "mutation", "oubliette", "piteousness", "quarrel", "rabble", "shimmer", 
@@ -90,5 +93,11 @@ return {
 		["rafts"] = "raft",
 		["wakes"] = "wake",
 		["dray"] = "drey",
+		["troupe"] = "troop", ["labour"] = "labor", ["clamor"] = "clamour", ["clans"] = "clan",
+		["parlament"] = "parliament", ["parliment"] = "parliament", ["mischeif"] = "mischief", ["gaggel"] = "gaggle",
+		["unkindess"] = "unkindness", ["colonys"] = "colony", ["shivers"] = "shiver", ["kindles"] = "kindle",
+		["committees"] = "committee", ["clouds"] = "cloud", ["blooms"] = "bloom", ["sloths"] = "sloth", ["gams"] = "gam",
+		["tribes"] = "tribe", ["troupes"] = "troop", ["cohorts"] = "cohort", ["barrels"] = "barrel", ["hosts"] = "host",
+		["runs"] = "run",
 	},
 }

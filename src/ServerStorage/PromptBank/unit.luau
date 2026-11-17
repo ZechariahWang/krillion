@@ -54,6 +54,7 @@ return {
 			"imperial pint", "decimeter", "decagram", "hectogram", "centigram", "decaliter", "gigapascal", "kilonewton",
 			"kilovolt", "millivolt", "microfarad", "kiloohm", "megaohm", "millimeter of water", "fluid dram", "pound force",
 			"megajoule", "kilojoule", "microgram", "square centimeter", "square yard", "cubic yard", "lakh", "crore",
+			"kiloton", "megaton", "bakers dozen", "richter scale", "lunar distance",
 		},
 		DeepCut = {
 			"verst", "sazhen", "arshin", "li", "chi", "cun", "zhang", "mu", "jin", "liang", "tael", "catty", "picul", "ri",
@@ -78,6 +79,7 @@ return {
 			"martian sol", "lunar month", "synodic month", "sidereal month", "tropical year", "sidereal year", "julian year",
 			"julian day", "sidereal time", "atomic second", "leap year", "epact", "saros", "great year", "platonic year",
 			"kalpa", "yuga", "muhurta", "barn",
+			"gigaton",
 		},
 		Mythic = {
 			"beard second", "sheppey", "garn", "potrzebie", "millihelen", "donkeypower", "banana equivalent dose", "dog year",
@@ -169,5 +171,14 @@ return {
 		["gill imperial"] = "gill", ["barrel oil"] = "oil barrel", ["net ton"] = "short ton", ["gross ton"] = "long ton",
 		["faddan"] = "feddan", ["qantar"] = "kantar", ["chatak"] = "chhatank", ["chittak"] = "chhatank", ["ser"] = "seer",
 		["monme"] = "momme", ["jugerum"] = "iugerum",
+		["kilotonne"] = "kiloton", ["mbps"] = "megabits per second", ["kbps"] = "kilobits per second",
+		["gbps"] = "gigabits per second", ["milimeter"] = "millimeter", ["milimetre"] = "millimeter",
+		["centimiter"] = "centimeter", ["fahrenheight"] = "fahrenheit", ["fahrenhiet"] = "fahrenheit",
+		["mililiter"] = "milliliter", ["kilometers per hr"] = "kilometers per hour", ["lightyears"] = "light year",
+		["kilogrammes"] = "kilogram", ["secs"] = "second", ["mins"] = "minute",
+		["hrs"] = "hour", ["ppm"] = "parts per million", ["richter"] = "richter scale", ["arc minute"] = "arcminute",
+		["arc second"] = "arcsecond", ["metric horsepower"] = "horsepower", ["mega byte"] = "megabyte",
+		["giga byte"] = "gigabyte", ["tera byte"] = "terabyte", ["kilo byte"] = "kilobyte",
+		["kilowatt hr"] = "kilowatt hour", ["kilometer an hour"] = "kilometers per hour",
 	},
 }

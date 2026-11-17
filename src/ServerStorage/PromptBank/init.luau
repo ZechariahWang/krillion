@@ -237,6 +237,8 @@ local list: { Prompt } = {
 	require("@self/houseplant"),
 	require("@self/whale_dolphin"),
 	require("@self/chicken_breed"),
+	require("@self/livestock_breed"),
+	require("@self/ancient_weapon"),
 }
 
 local byId: { [string]: Prompt } = {}

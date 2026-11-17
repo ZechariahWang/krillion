@@ -30,7 +30,6 @@ return {
 			"three cushion billiards", "carom billiards", "bar billiards", "blackball", "kelly pool", "3x3 basketball",
 			"swingball", "blind football", "walking football", "speedball", "gaga ball", "footbag", "wall ball",
 			"wheelchair tennis", "indoor cricket", "stickball", "streetball", "sepak takraw", "jai alai",
-			"matkot", "frescobol",
 		},
 		DeepCut = {
 			"rackets", "eton fives", "rugby fives", "fives", "canoe polo", "bicycle polo", "horseball", "polocrosse",
@@ -45,7 +44,8 @@ return {
 			"ringball", "totem tennis", "trap ball", "bat and trap", "northern spell", "knur and spell", "slamball",
 			"power soccer", "walking netball", "walking cricket", "amputee football", "pool volleyball",
 			"water basketball", "inner tube water polo", "unicycle hockey", "gateball", "kwik cricket", "beach cricket",
-			"frontenis", "torball", "newcomb ball", "cycle ball", "yak polo", "camel polo", "chinlone",
+			"frontenis", "torball", "newcomb ball", "cycle ball", "yak polo", "camel polo", "chinlone", "matkot",
+			"frescobol",
 		},
 		Mythic = {
 			"ulama", "pitz", "kemari", "cuju", "harpastum", "episkyros", "lelo burti", "cestoball", "kronum",

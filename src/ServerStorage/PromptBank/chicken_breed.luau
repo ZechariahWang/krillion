@@ -11,10 +11,9 @@ return {
 		},
 		Schooler = {
 			"barred rock", "australorp", "cochin", "polish", "ameraucana", "easter egger", "araucana", "marans",
-			"new hampshire", "faverolles", "dorking", "sebright", "jersey giant", "welsummer", "minorca", "ancona",
-			"hamburg", "campine", "andalusian", "frizzle", "naked neck", "turken", "old english game", "malay",
-			"sumatra", "cornish", "red jungle fowl", "japanese bantam", "serama", "d uccle", "pekin", "sebastopol",
-			"golden comet", "sex link", "buff orpington",
+			"new hampshire", "faverolles", "jersey giant", "welsummer", "frizzle", "naked neck", "cornish",
+			"red jungle fowl", "japanese bantam", "serama", "d uccle", "pekin", "golden comet", "sex link",
+			"buff orpington",
 		},
 		Rare = {
 			"delaware", "dominique", "java", "chantecler", "buckeye", "holland", "lakenvelder", "houdan", "crevecoeur",
@@ -22,7 +21,9 @@ return {
 			"sultan", "orloff", "scots grey", "scots dumpy", "redcap", "ixworth", "norfolk grey", "sicilian buttercup",
 			"barnevelder", "bielefelder", "cream legbar", "legbar", "rosecomb", "ayam cemani", "swedish flower hen",
 			"fayoumi", "black star", "red star", "rhode island white", "booted bantam", "dutch bantam", "kadaknath",
-			"bresse", "marsh daisy", "appenzeller spitzhauben", "vorwerk", "sulmtaler", "brakel", "lamona",
+			"bresse", "marsh daisy", "appenzeller spitzhauben", "vorwerk", "sulmtaler", "brakel", "lamona", "campine",
+			"andalusian", "ancona", "sumatra", "minorca", "hamburg", "malay", "sebastopol", "old english game",
+			"sebright", "dorking",
 		},
 		DeepCut = {
 			"kraienkoppe", "altsteirer", "penedesenca", "empordanesa", "welbar", "ayam pelung", "ayam ketawa",
@@ -91,5 +92,6 @@ return {
 		["white leghorn"] = "leghorn",
 		["light sussex"] = "sussex",
 		["speckled sussex"] = "sussex",
+		["turken"] = "naked neck",
 	},
 }

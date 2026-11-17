@@ -57,6 +57,7 @@ return {
 			"terracotta", "saffron", "burnt orange", "vanilla", "raspberry", "cranberry", "marigold", "topaz", "ebony", "onyx",
 			"wheat", "seafoam", "cornflower blue", "blue gray",
 			"rose gold",
+			"pea green", "carrot orange", "ivory white", "leaf green",
 		},
 		DeepCut = {
 			"puce", "russet", "ecru", "fawn", "aubergine", "carmine", "cinnabar", "viridian", "mulberry",
@@ -154,5 +155,7 @@ return {
 		["pumpkin orange"] = "pumpkin", ["peach orange"] = "peach", ["ruby red"] = "ruby", ["cherry red"] = "cherry",
 		["wine red"] = "wine", ["tomato red"] = "tomato", ["metallic silver"] = "silver", ["metallic gold"] = "gold",
 		["sea blue"] = "ocean blue", ["blue grey"] = "blue gray", ["grey blue"] = "blue gray",
+		["fucshia"] = "fuchsia", ["chartreause"] = "chartreuse", ["vilolet"] = "violet", ["purlpe"] = "purple",
+		["bleu"] = "blue", ["silvar"] = "silver", ["cyan blue"] = "cyan",
 	},
 }

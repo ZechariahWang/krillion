@@ -68,6 +68,7 @@ return {
 			"ibibio", "efik", "kanuri", "nupe", "urhobo", "itsekiri", "northern sotho", "tigre", "bilen", "haryanvi",
 			"awadhi", "magahi", "marwari", "sylheti", "chittagonian", "rohingya", "kachin", "rakhine", "hinglish",
 			"singlish", "mando a",
+			"tumbuka",
 		},
 		DeepCut = {
 			"ubykh", "eyak", "yaghan", "kusunda", "ket", "hadza", "sandawe", "ju hoan", "taa", "nama", "burushaski",
@@ -89,6 +90,7 @@ return {
 			"klamath", "modoc", "maidu", "miwok", "ohlone", "slavey", "carrier", "north frisian", "saterland frisian",
 			"meankieli", "skolt sami", "inari sami", "lule sami", "south sami", "kildin sami", "enets", "selkup",
 			"nganasan", "dolgan", "alutiiq", "dena ina", "koyukon", "tanana", "ahtna", "tutchone", "kaska", "tagish",
+			"sango",
 		},
 		Mythic = {
 			"damin", "lardil", "yidiny", "dyirbal", "guugu yimithirr", "kayardild", "wik mungkan", "murrinh patha",
@@ -198,5 +200,9 @@ return {
 		["mandalorian"] = "mando a", ["shyriiwook"] = "wookiee", ["darija"] = "moroccan arabic",
 		["slovene"] = "slovenian", ["sepedi"] = "northern sotho", ["lallans"] = "scots", ["costanoan"] = "ohlone",
 		["orok"] = "uilta",
+		["castilian spanish"] = "spanish", ["simplified chinese"] = "chinese", ["traditional chinese"] = "chinese",
+		["norse"] = "old norse", ["chewa"] = "chichewa", ["gikuyu"] = "kikuyu", ["sinhalese"] = "sinhala",
+		["nepalese"] = "nepali", ["inuit"] = "inuktitut", ["portugeuse"] = "portuguese", ["arbic"] = "arabic",
+		["cantonease"] = "cantonese",
 	},
 }
