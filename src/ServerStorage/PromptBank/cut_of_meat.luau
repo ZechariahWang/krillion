@@ -1,0 +1,61 @@
+--!strict
+return {
+	id = "cut_of_meat",
+	prompt = "Name a cut of meat",
+	answers = {
+		Plankton = {
+			"steak", "bacon", "ribs", "ham", "ribeye", "sirloin", "chicken breast",
+		},
+		TooClever = {
+			"brisket", "tenderloin", "filet mignon", "t bone", "drumstick", "chicken wing",
+		},
+		Schooler = {
+			"porterhouse", "flank steak", "skirt steak", "new york strip", "chuck", "pork chop", "pork loin", "pork belly",
+			"spare ribs", "baby back ribs", "short ribs", "prime rib", "tomahawk", "chicken thigh", "lamb chop",
+			"leg of lamb", "rack of lamb", "pork shoulder", "oxtail", "rump", "shank", "ham hock", "gammon",
+			"hanger steak", "tri tip", "flat iron",
+		},
+		Rare = {
+			"cube steak", "london broil", "top sirloin", "top round", "picanha", "bavette", "tongue", "cheek", "neck",
+			"boston butt", "picnic shoulder", "country style ribs", "ham steak", "canadian bacon", "cutlet", "trotter",
+			"minute steak", "chuck eye", "sirloin tip", "knuckle", "topside", "silverside",
+		},
+		DeepCut = {
+			"denver steak", "bottom round", "eye of round", "chateaubriand", "tournedos", "flanken", "st louis ribs",
+			"rib tips", "ribeye cap", "short loin", "pork jowl", "saddle of lamb", "teres major", "oyster blade",
+			"feather blade",
+		},
+		Mythic = {
+			"zabuton", "vegas strip", "bistro filet", "mock tender", "spider steak", "merlot steak",
+			"baseball steak",
+		},
+	},
+	aliases = {
+		["steaks"] = "steak", ["rib"] = "ribs", ["rib eye"] = "ribeye", ["rib eye steak"] = "ribeye",
+		["ribeye steak"] = "ribeye", ["sirloin steak"] = "sirloin", ["breast"] = "chicken breast",
+		["chicken breasts"] = "chicken breast", ["beef brisket"] = "brisket", ["beef tenderloin"] = "tenderloin",
+		["pork tenderloin"] = "tenderloin", ["filet"] = "filet mignon", ["fillet steak"] = "filet mignon",
+		["fillet mignon"] = "filet mignon", ["tbone"] = "t bone", ["t bone steak"] = "t bone", ["drumsticks"] = "drumstick",
+		["chicken drumstick"] = "drumstick", ["wing"] = "chicken wing", ["wings"] = "chicken wing",
+		["chicken wings"] = "chicken wing", ["porterhouse steak"] = "porterhouse", ["flank"] = "flank steak",
+		["skirt"] = "skirt steak", ["ny strip"] = "new york strip", ["strip steak"] = "new york strip",
+		["strip loin"] = "new york strip", ["kansas city strip"] = "new york strip", ["chuck roast"] = "chuck",
+		["pork chops"] = "pork chop", ["belly"] = "pork belly", ["spareribs"] = "spare ribs",
+		["back ribs"] = "baby back ribs", ["baby back"] = "baby back ribs", ["short rib"] = "short ribs",
+		["tomahawk steak"] = "tomahawk", ["thigh"] = "chicken thigh", ["thighs"] = "chicken thigh",
+		["lamb chops"] = "lamb chop", ["lamb leg"] = "leg of lamb", ["pork butt"] = "boston butt",
+		["lamb shank"] = "shank", ["beef shank"] = "shank", ["shin"] = "shank", ["beef shin"] = "shank",
+		["hock"] = "ham hock", ["ham hocks"] = "ham hock", ["rump steak"] = "rump", ["rump roast"] = "rump",
+		["butchers steak"] = "hanger steak", ["tritip"] = "tri tip", ["tri tip roast"] = "tri tip",
+		["flat iron steak"] = "flat iron", ["cube steaks"] = "cube steak", ["flap steak"] = "bavette",
+		["bavette steak"] = "bavette", ["culotte"] = "picanha", ["coulotte"] = "picanha",
+		["rib roast"] = "prime rib", ["rump cap"] = "picanha", ["top sirloin cap"] = "picanha",
+		["cheeks"] = "cheek", ["pigs feet"] = "trotter", ["pig feet"] = "trotter", ["pigs trotter"] = "trotter",
+		["pork trotter"] = "trotter", ["trotters"] = "trotter", ["standing rib roast"] = "prime rib",
+		["spinalis"] = "ribeye cap", ["petite tender"] = "teres major", ["veal cutlet"] = "cutlet",
+		["cutlets"] = "cutlet", ["tongues"] = "tongue", ["oxtails"] = "oxtail", ["ox tail"] = "oxtail",
+		["tournedo"] = "tournedos", ["chateau briand"] = "chateaubriand", ["spare rib"] = "spare ribs",
+		["st louis style ribs"] = "st louis ribs", ["saint louis ribs"] = "st louis ribs", ["round steak"] = "top round",
+		["eye round"] = "eye of round", ["flanken ribs"] = "flanken",
+	},
+}

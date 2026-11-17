@@ -223,5 +223,9 @@ return {
 		["pelvic bone"] = "pelvis", ["rib bone"] = "rib", ["finger bone"] = "phalanges", ["toe bone"] = "phalanges",
 		["shin bone"] = "tibia", ["thigh bone"] = "femur", ["jaw bone"] = "mandible", ["breastbone"] = "sternum",
 		["ankle bone"] = "talus", ["wrist bone"] = "carpal", ["backbone"] = "spine",
+		["bridge of nose"] = "nose", ["eye ball"] = "eyeball", ["finger nails"] = "fingernail", ["toe nails"] = "toenail",
+		["ellbow"] = "elbow", ["elbo"] = "elbow", ["shoulderr"] = "shoulder", ["sholders"] = "shoulder", ["nek"] = "neck",
+		["stomack"] = "stomach", ["stomch"] = "stomach", ["forhead"] = "forehead", ["foreheed"] = "forehead",
+		["eye brows"] = "eyebrow", ["eye lashes"] = "eyelash", ["eye lids"] = "eyelid", ["foots"] = "foot", ["bums"] = "bottom",
 	},
 }

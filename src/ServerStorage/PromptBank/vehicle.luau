@@ -54,6 +54,7 @@ return {
 			"dirigible", "handcart", "pushcart", "electric skateboard", "onewheel", "shuttle bus", "commuter train", "pedal car",
 			"soapbox car", "riding lawn mower", "model t", "hummer", "air ambulance", "police helicopter", "hybrid car",
 			"self driving car", "batmobile", "delorean", "sherman tank", "tiger tank", "abrams", "main battle tank",
+			"private jet", "supercar", "classic car",
 		},
 		DeepCut = {
 			"velocipede", "draisine", "boneshaker", "quadricycle", "cyclecar", "microcar", "bubble car", "kei car", "qingqi",
@@ -81,6 +82,7 @@ return {
 			"wood chipper", "stump grinder", "tree spade", "knuckle boom", "telehandler", "aerial lift", "manlift", "drill rig",
 			"pile driver", "tunnel boring machine", "asphalt roller", "tar truck", "line painter", "road grader", "motor grader",
 			"pipe layer", "sideboom", "trenching machine",
+			"hypercar",
 		},
 		Mythic = {
 			"monowheel", "dicycle", "sinclair c5", "amphicar", "gyrocar", "aerocar", "flying platform", "rocket belt", "gyrobus",
@@ -186,5 +188,12 @@ return {
 		["hearse horse drawn"] = "hearse", ["penny farthing bike"] = "penny farthing", ["chiva"] = "chiva bus",
 		["mini sub"] = "midget submarine", ["capsule"] = "space capsule", ["x 1"] = "bell x 1",
 		["spaceplane"] = "space plane",
+		["vintage car"] = "classic car", ["antique car"] = "classic car", ["city bus"] = "bus", ["pontoon"] = "pontoon boat",
+		["airplain"] = "plane", ["aireplane"] = "plane", ["helicopeter"] = "helicopter", ["motorcyle"] = "motorcycle",
+		["bycicle"] = "bike", ["bicyle"] = "bike", ["bycycle"] = "bike", ["skatebord"] = "skateboard",
+		["tracktor"] = "tractor", ["policecar"] = "police car", ["icecream truck"] = "ice cream truck",
+		["limosine"] = "limousine", ["ambulanse"] = "ambulance", ["spacship"] = "spaceship",
+		["hotairballoon"] = "hot air balloon", ["trian"] = "train", ["trane"] = "train", ["excavater"] = "excavator",
+		["jet skis"] = "jet ski", ["gocart"] = "go kart",
 	},
 }

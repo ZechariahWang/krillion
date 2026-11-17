@@ -1,0 +1,62 @@
+--!strict
+return {
+	id = "sausage",
+	prompt = "Name a type of sausage",
+	answers = {
+		Plankton = {
+			"hot dog", "pepperoni", "bratwurst", "salami", "chorizo", "breakfast sausage", "italian sausage",
+		},
+		TooClever = {
+			"kielbasa", "bologna", "liverwurst", "andouille", "mortadella",
+		},
+		Schooler = {
+			"vienna sausage", "knockwurst", "bockwurst", "weisswurst", "currywurst", "blood sausage", "haggis",
+			"cumberland sausage", "lincolnshire sausage", "chipolata", "merguez", "boudin", "summer sausage",
+			"cocktail sausage", "turkey sausage", "chicken sausage",
+			"little smokies", "soppressata", "braunschweiger", "saveloy", "boerewors",
+		},
+		Rare = {
+			"nduja", "cervelat", "thuringer", "saucisson", "lap cheong", "longaniza", "sobrasada", "butifarra",
+			"morcilla", "fuet", "salchichon", "cacciatore", "cotechino", "krakauer", "mettwurst", "teewurst",
+			"nurnberger", "kabanos", "toulouse sausage", "andouillette", "lorne sausage", "sucuk", "loukaniko", "cevapi",
+			"hot link", "landjager", "linguica", "bierwurst", "bauernwurst", "kishka", "white pudding",
+		},
+		DeepCut = {
+			"finocchiona", "luganega", "zampone", "debrecener", "faggot", "oxford sausage", "glamorgan sausage",
+			"lukanka", "chistorra", "morteau", "montbeliard",
+			"fleischwurst", "jagdwurst", "kranjska klobasa", "pinkelwurst",
+		},
+		Mythic = {
+			"gelbwurst", "lyoner", "zungenwurst", "sai ua", "naem",
+		},
+	},
+	aliases = {
+		["hotdog"] = "hot dog", ["hot dogs"] = "hot dog", ["hotdogs"] = "hot dog", ["wiener"] = "hot dog",
+		["weiner"] = "hot dog", ["wieners"] = "hot dog", ["frank"] = "hot dog", ["franks"] = "hot dog",
+		["frankfurters"] = "hot dog", ["pepperonis"] = "pepperoni", ["brat"] = "bratwurst",
+		["brats"] = "bratwurst", ["bratwurst sausage"] = "bratwurst", ["salamis"] = "salami", ["chorizos"] = "chorizo",
+		["chourico"] = "chorizo", ["sausage"] = "breakfast sausage", ["sweet italian sausage"] = "italian sausage",
+		["hot italian sausage"] = "italian sausage", ["polish sausage"] = "kielbasa", ["kielbassa"] = "kielbasa",
+		["kielbasi"] = "kielbasa", ["baloney"] = "bologna", ["leberwurst"] = "liverwurst", ["liver sausage"] = "liverwurst",
+		["andouille sausage"] = "andouille", ["mortadela"] = "mortadella", ["viennas"] = "vienna sausage",
+		["blutwurst"] = "blood sausage", ["black pudding"] = "blood sausage", ["cumberland"] = "cumberland sausage",
+		["lincolnshire"] = "lincolnshire sausage", ["chipolatas"] = "chipolata", ["merguez sausage"] = "merguez",
+		["boudin blanc"] = "boudin", ["boudin noir"] = "blood sausage", ["cocktail sausages"] = "cocktail sausage",
+		["cocktail weenies"] = "cocktail sausage", ["lil smokies"] = "little smokies", ["little smokie"] = "little smokies",
+		["smokies"] = "little smokies", ["soppressata salami"] = "soppressata", ["sopressata"] = "soppressata",
+		["boer wors"] = "boerewors", ["nduja sausage"] = "nduja", ["thuringer sausage"] = "thuringer",
+		["thueringer"] = "thuringer", ["saucisson sec"] = "saucisson", ["chinese sausage"] = "lap cheong",
+		["lop cheong"] = "lap cheong", ["landjaeger"] = "landjager", ["sujuk"] = "sucuk", ["sudjuk"] = "sucuk",
+		["cevapcici"] = "cevapi", ["chevapchichi"] = "cevapi", ["kabanosy"] = "kabanos", ["cabanossi"] = "kabanos",
+		["toulouse"] = "toulouse sausage", ["haggis sausage"] = "haggis", ["breakfast sausages"] = "breakfast sausage",
+		["sausage links"] = "breakfast sausage", ["link sausage"] = "breakfast sausage",
+		["sausage patty"] = "breakfast sausage", ["genoa salami"] = "salami", ["botifarra"] = "butifarra",
+		["lucanica"] = "luganega", ["frankfurter"] = "hot dog", ["pork sausage"] = "breakfast sausage",
+		["pork sausages"] = "breakfast sausage", ["hot links"] = "hot link", ["morcilla sausage"] = "morcilla",
+		["knackwurst"] = "knockwurst", ["knockwurst sausage"] = "knockwurst", ["cotechino sausage"] = "cotechino",
+		["white sausage"] = "weisswurst", ["bavarian sausage"] = "weisswurst",
+		["nuremberg sausage"] = "nurnberger", ["nuernberger"] = "nurnberger",
+		["fleisch wurst"] = "fleischwurst", ["debreceni"] = "debrecener", ["luganega sausage"] = "luganega",
+		["faggots"] = "faggot", ["scotch lorne"] = "lorne sausage", ["square sausage"] = "lorne sausage",
+	},
+}

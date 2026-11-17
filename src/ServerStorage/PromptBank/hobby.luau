@@ -106,6 +106,8 @@ return {
 			"basket weaving", "ghost hunting", "jacks", "cross country skiing", "herping", "sledding",
 			"cloud watching",
 			"snooker", "bocce", "croquet", "lawn bowling", "rock painting",
+			"word search", "racquetball", "cornhole", "horseshoes", "bingo", "aerobics", "zumba", "tai chi", "dirt biking",
+			"trampoline", "debate", "restoring cars", "storytelling", "making slime",
 		},
 		DeepCut = {
 			"sword swallowing", "fire eating", "glass harmonica", "extreme ironing", "competitive yo yo",
@@ -142,6 +144,7 @@ return {
 			"twitching", "ant keeping", "freediving", "tree climbing", "upholstery", "ventriloquism", "speed typing",
 			"abacus", "busking", "cave diving", "forest bathing", "cryptozoology", "ufology", "nature journaling",
 			"boat building", "sheep shearing", "kyudo", "stone carving", "cartography", "dowsing",
+			"triathlon",
 		},
 		Mythic = {
 			"cheese rolling", "wife carrying", "toe wrestling", "shin kicking", "gurning", "caber tossing",
@@ -238,5 +241,14 @@ return {
 		["crosswords"] = "crossword puzzles", ["trading cards"] = "collecting cards", ["collecting comics"] = "comics",
 		["watching anime"] = "anime", ["brewing beer"] = "homebrewing", ["barbecue"] = "grilling",
 		["inline skating"] = "rollerblading", ["pool"] = "billiards",
+		["slime"] = "making slime", ["woodcarving"] = "whittling", ["horses"] = "horseback riding",
+		["collecting rocks"] = "rock collecting", ["cards"] = "card games", ["film making"] = "filmmaking",
+		["making music"] = "playing music", ["playing instruments"] = "playing music", ["surf"] = "surfing",
+		["exercising"] = "working out", ["baking cookies"] = "baking", ["readng"] = "reading", ["reding"] = "reading",
+		["drawng"] = "drawing", ["paiting"] = "painting", ["paintin"] = "painting",
+		["gamming"] = "gaming", ["cookin"] = "cooking", ["gardning"] = "gardening", ["fishin"] = "fishing",
+		["swiming"] = "swimming", ["dancin"] = "dancing", ["singin"] = "singing", ["photograpy"] = "photography",
+		["photograhy"] = "photography", ["sowing"] = "sewing", ["skateboardin"] = "skateboarding",
+		["rock climbin"] = "rock climbing", ["water color"] = "painting",
 	},
 }

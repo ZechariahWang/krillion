@@ -15,6 +15,7 @@ return {
 			"vinyl", "latex", "styrofoam", "tin", "brass", "bronze", "marble", "granite", "diamond", "linen", "velvet", "fur",
 			"bone", "straw", "canvas", "asphalt", "drywall", "plywood", "felt", "cloth", "fabric", "mud", "lead", "platinum",
 			"stainless steel", "cast iron", "fleece", "titanium",
+			"rock", "dirt", "tile", "coal",
 		},
 		Rare = {
 			"pewter", "tungsten", "kevlar", "spandex", "acrylic", "rayon", "neoprene", "silicone", "resin", "bakelite",
@@ -24,6 +25,9 @@ return {
 			"thatch", "tar", "mortar", "stucco", "terracotta", "earthenware", "stoneware", "bone china", "crystal",
 			"stained glass", "tempered glass", "zinc", "nickel", "chrome", "wrought iron", "sheet metal", "ivory", "cashmere",
 			"satin", "chiffon", "tweed", "corduroy", "suede", "mesh", "tulle", "lace", "microfiber", "cardstock", "wicker",
+			"gravel", "hemp", "flax", "hardwood", "oak", "pine", "faux leather", "foil", "carbon", "sterling silver",
+			"rose gold", "white gold", "ruby", "emerald", "sapphire", "obsidian", "flint", "chalk", "graphite", "yarn",
+			"thread", "wire", "charcoal", "sawdust", "rope", "hay", "sheepskin", "feathers",
 		},
 		DeepCut = {
 			"vellum", "bitumen", "cob", "celluloid", "shellac",
@@ -34,10 +38,13 @@ return {
 			"damask", "brocade", "organza", "taffeta", "muslin", "calico", "twill", "chambray",
 			"seersucker",
 			"masonite",
+			"cedar", "mahogany", "walnut", "teak", "maple", "mdf", "chipboard", "osb", "veneer", "mohair", "alpaca", "angora",
+			"viscose", "acetate", "magnesium", "cobalt", "lithium", "galvanized steel", "polymer",
 		},
 		Mythic = {
 			"ormolu", "shagreen", "vulcanite", "lignum vitae", "tabby", "pise", "oakum", "bast", "nankeen", "buckram",
 			"crinoline", "grosgrain", "moleskin", "sharkskin", "chamois",
+			"lyocell",
 		},
 	},
 	aliases = {
@@ -51,5 +58,15 @@ return {
 		["terra cotta"] = "terracotta", ["velour"] = "velvet", ["dry wall"] = "drywall", ["ply wood"] = "plywood",
 		["paper mache"] = "papier mache", ["fibreglass"] = "fiberglass", ["glass fiber"] = "fiberglass",
 		["plexiglass"] = "acrylic", ["lucite"] = "acrylic", ["xylonite"] = "celluloid",
+		["pleather"] = "faux leather", ["leatherette"] = "faux leather", ["aluminum foil"] = "foil",
+		["aluminium foil"] = "foil", ["tin foil"] = "foil", ["textile"] = "fabric", ["hard wood"] = "hardwood",
+		["rocks"] = "rock", ["soil"] = "dirt", ["tiles"] = "tile", ["gems"] = "diamond", ["emeralds"] = "emerald",
+		["rubies"] = "ruby", ["sapphires"] = "sapphire", ["oak wood"] = "oak", ["pine wood"] = "pine",
+		["cedar wood"] = "cedar", ["walnut wood"] = "walnut", ["teak wood"] = "teak", ["maple wood"] = "maple",
+		["particleboard"] = "particle board", ["chip board"] = "chipboard", ["plastik"] = "plastic", ["plasic"] = "plastic",
+		["metle"] = "metal", ["stele"] = "steel", ["coton"] = "cotton", ["leter"] = "leather", ["lether"] = "leather",
+		["conrete"] = "concrete", ["cardbord"] = "cardboard", ["carboard"] = "cardboard", ["glas"] = "glass",
+		["wod"] = "wood", ["yarns"] = "yarn", ["threads"] = "thread", ["wires"] = "wire", ["ropes"] = "rope",
+		["feather"] = "feathers", ["sterling"] = "sterling silver", ["stainless"] = "stainless steel",
 	},
 }

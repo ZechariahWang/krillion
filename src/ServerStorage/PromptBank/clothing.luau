@@ -182,5 +182,13 @@ return {
 		["reefer jacket"] = "peacoat", ["kamik"] = "mukluks", ["pheran"] = "phiran", ["ski mask"] = "balaclava",
 		["house shoes"] = "slippers", ["sport coat"] = "blazer", ["one piece swimsuit"] = "swimsuit",
 		["drysuit"] = "dry suit", ["pom pom hat"] = "bobble hat", ["skullcap"] = "yarmulke",
+		["gym shorts"] = "shorts", ["basketball shorts"] = "shorts", ["graphic tee"] = "t shirt",
+		["track pants"] = "sweatpants", ["button up"] = "button up shirt", ["halloween costume"] = "costume",
+		["converse"] = "sneaker", ["vans"] = "sneaker", ["nikes"] = "sneaker", ["jordans"] = "sneaker",
+		["air force 1s"] = "sneaker", ["swimming suit"] = "swimsuit", ["swim suit"] = "swimsuit", ["sweter"] = "sweater",
+		["hoddie"] = "hoodie", ["hodie"] = "hoodie", ["jackit"] = "jacket", ["scarfs"] = "scarf", ["pant"] = "pants",
+		["short"] = "shorts", ["coats"] = "coat", ["sweaters"] = "sweater", ["hoodies"] = "hoodie", ["caps"] = "cap",
+		["ties"] = "tie", ["belts"] = "belt", ["underwere"] = "underwear", ["unerwear"] = "underwear",
+		["legings"] = "leggings", ["tuxido"] = "tuxedo",
 	},
 }

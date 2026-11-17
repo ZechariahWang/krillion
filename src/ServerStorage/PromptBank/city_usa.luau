@@ -60,6 +60,8 @@ return {
 			"dublin", "cary", "tustin", "redlands", "alameda", "livermore", "pleasanton", "san rafael", "novato", "los gatos",
 			"menlo park", "ames", "waterloo", "council bluffs", "lodi", "tracy", "hanford", "cape may", "lake placid", "temple",
 			"burbank", "compton", "inglewood", "santa cruz", "huntington beach", "newport beach", "laguna beach",
+			"queens", "bronx", "staten island", "harlem", "englewood", "littleton", "castle rock", "broomfield", "cocoa beach",
+			"golden", "parker",
 		},
 		DeepCut = {
 			"kenosha", "racine", "oshkosh", "sheboygan", "eau claire", "la crosse", "appleton", "wausau", "janesville",
@@ -88,6 +90,7 @@ return {
 			"vista", "davie", "south gate", "beaverton", "sparks", "lees summit", "hesperia", "spokane valley", "alamo",
 			"sedalia", "hastings", "kearney", "grand island", "north platte", "scottsbluff", "oak bluffs", "asbury park",
 			"wildwood", "wisconsin dells", "bayonne", "paramus", "teaneck", "punxsutawney", "hershey", "deadwood", "cooperstown",
+			"chino", "menifee",
 		},
 		Mythic = {
 			"utqiagvik", "nome", "kotzebue", "bethel", "unalaska", "valdez", "seward", "homer", "wasilla", "palmer", "skagway",
@@ -143,5 +146,14 @@ return {
 		["carlsbad new mexico"] = "carlsbad", ["charleston sc"] = "charleston", ["florence sc"] = "florence",
 		["jacksonville nc"] = "jacksonville", ["oxford ms"] = "oxford", ["hot springs sd"] = "hot springs",
 		["hell michigan"] = "hell",
+		["san fransisco"] = "san francisco", ["san fransico"] = "san francisco", ["las vagas"] = "las vegas",
+		["albaquerque"] = "albuquerque", ["new orleons"] = "new orleans", ["indianapolus"] = "indianapolis",
+		["indy"] = "indianapolis", ["baltimor"] = "baltimore", ["minniapolis"] = "minneapolis", ["huston"] = "houston",
+		["chicagoo"] = "chicago", ["los angelas"] = "los angeles", ["los angeles california"] = "los angeles",
+		["denvor"] = "denver", ["phenix"] = "phoenix", ["orlanda"] = "orlando", ["memfis"] = "memphis",
+		["atlnata"] = "atlanta", ["san diago"] = "san diego", ["sacramento california"] = "sacramento",
+		["boston massachusetts"] = "boston", ["dalas"] = "dallas", ["austen"] = "austin", ["miame"] = "miami",
+		["louisville kentucky"] = "louisville", ["st louis missouri"] = "st louis", ["charlston"] = "charleston",
+		["savanna"] = "savannah", ["new york ny"] = "new york", ["the bronx"] = "bronx",
 	},
 }

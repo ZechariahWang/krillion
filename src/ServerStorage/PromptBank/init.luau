@@ -218,6 +218,10 @@ local list: { Prompt } = {
 	require("@self/landform"),
 	require("@self/pattern"),
 	require("@self/plant_part"),
+	require("@self/baby_animal"),
+	require("@self/cut_of_meat"),
+	require("@self/sausage"),
+	require("@self/apple_variety"),
 }
 
 local byId: { [string]: Prompt } = {}

@@ -44,6 +44,7 @@ return {
 			"bouncer",
 			"boxer", "golfer", "tennis player", "baseball player", "hockey player", "gymnast", "swimmer", "wrestler",
 			"personal assistant", "office worker", "marketing manager", "web designer",
+			"football player", "factory worker", "hacker",
 		},
 		Rare = {
 			"cobbler", "goldsmith", "silversmith", "watchmaker", "clockmaker", "luthier", "piano tuner", "lyricist",
@@ -100,6 +101,9 @@ return {
 			"line cook", "printer", "rabbi", "imam",
 			"bishop", "cosmonaut", "fishmonger", "chocolatier", "lighthouse keeper", "gondolier", "milkman",
 			"paperboy",
+			"warehouse worker", "diver", "deputy", "consultant", "analyst", "merchant", "vendor", "street vendor",
+			"sanitation worker", "fighter pilot", "navy seal", "retail worker", "telemarketer", "pest control",
+			"camp counselor", "pizza delivery", "scuba instructor",
 		},
 		DeepCut = {
 			"chimney sweep", "lamplighter", "town crier", "knocker upper", "ice cutter", "switchboard operator",
@@ -141,6 +145,7 @@ return {
 			"casting director", "location scout", "script supervisor", "best boy", "key grip", "embalmer",
 			"toy designer", "speechwriter", "rodeo clown", "sheep shearer", "gaucho", "bard", "scribe", "druid",
 			"human cannonball", "sword swallower", "stilt walker",
+			"stock clerk", "machine operator", "assembly line worker", "call center agent", "cia agent",
 		},
 		Mythic = {
 			"snake milker", "golf ball diver", "odor judge", "chicken sexer", "pet food taster", "water slide tester",
@@ -247,5 +252,15 @@ return {
 		["nurse assistant"] = "nursing assistant", ["pro wrestler"] = "wrestler", ["server"] = "waiter",
 		["stand up comedian"] = "comedian", ["wooden boat builder"] = "boatbuilder", ["yeoman warder"] = "beefeater",
 		["dinner lady"] = "lunch lady",
+		["professional gamer"] = "gamer", ["nfl player"] = "football player", ["mason"] = "stonemason",
+		["stocker"] = "stock clerk", ["doctr"] = "doctor", ["teachr"] = "teacher", ["firefigther"] = "firefighter",
+		["polic officer"] = "police officer", ["pilott"] = "pilot", ["astonaut"] = "astronaut", ["scientst"] = "scientist",
+		["sientist"] = "scientist", ["enginer"] = "engineer", ["engineeer"] = "engineer", ["dentst"] = "dentist",
+		["denist"] = "dentist", ["photografer"] = "photographer", ["carpanter"] = "carpenter",
+		["electrition"] = "electrician", ["electritian"] = "electrician", ["mecanic"] = "mechanic",
+		["mechanik"] = "mechanic", ["veternarian"] = "vet", ["vetenarian"] = "vet",
+		["pharmasist"] = "pharmacist", ["accountent"] = "accountant", ["janator"] = "janitor", ["waitor"] = "waiter",
+		["bartendar"] = "bartender", ["barrista"] = "barista", ["youtube"] = "youtuber", ["twitch streamer"] = "streamer",
+		["content creater"] = "content creator", ["computer programmer"] = "programmer",
 	},
 }

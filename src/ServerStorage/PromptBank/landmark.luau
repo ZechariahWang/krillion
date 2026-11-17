@@ -63,6 +63,7 @@ return {
 			"nile river", "amazon river", "great lakes", "lake baikal", "mount etna", "k2", "louvre pyramid",
 			"hollywood boulevard", "rodeo drive", "walk of fame", "universal studios", "disney world", "disneyland",
 			"london bridge", "british museum", "hyde park",
+			"mount vernon", "monticello",
 		},
 		Rare = {
 			"atomium", "manneken pis", "grand place", "belfry of bruges", "kinderdijk", "anne frank house",
@@ -135,6 +136,9 @@ return {
 			"torres del paine", "perito moreno glacier", "fitz roy", "tierra del fuego", "ushuaia",
 			"recoleta cemetery", "obelisco", "caminito", "casa rosada", "valparaiso", "atacama desert",
 			"valle de la luna", "el tatio geysers",
+			"royal albert hall", "hampton court palace", "coney island", "crazy horse memorial", "colonial williamsburg",
+			"rocky steps", "shakespeares globe", "canary wharf", "epcot", "faneuil hall", "freedom trail", "abbey road",
+			"prime meridian", "new york public library", "jamestown",
 		},
 		DeepCut = {
 			"sutro tower", "coit tower", "ferry building", "palace of fine arts", "painted ladies", "lombard street",
@@ -169,6 +173,8 @@ return {
 			"conwy castle", "caernarfon castle", "harlech castle", "beaumaris castle", "portmeirion",
 			"pontcysyllte aqueduct", "st davids cathedral", "pembroke castle", "pen y fan", "rhossili bay",
 			"worms head", "big pit",
+			"apollo theater", "valley forge", "fort mchenry", "bunker hill monument", "old north church", "paul revere house",
+			"salem witch museum",
 		},
 		Mythic = {
 			"bridge of the gods", "glienicke bridge", "remagen bridge", "ludendorff bridge", "arnhem bridge",
@@ -292,5 +298,16 @@ return {
 		["the little mermaid"] = "little mermaid", ["the gherkin"] = "gherkin",
 		["bixby creek bridge"] = "bixby bridge", ["midway museum"] = "uss midway", ["aoraki"] = "mount cook",
 		["white temple"] = "wat rong khun",
+		["globe theatre"] = "shakespeares globe", ["the globe"] = "shakespeares globe",
+		["globe theater"] = "shakespeares globe", ["coliseum rome"] = "colosseum", ["rome colosseum"] = "colosseum",
+		["colesseum"] = "colosseum", ["pantheon rome"] = "pantheon", ["trevi"] = "trevi fountain",
+		["old faithful geyser"] = "old faithful", ["yellowstone national park"] = "yellowstone",
+		["grand canyon national park"] = "grand canyon", ["mount rushmore south dakota"] = "mount rushmore",
+		["petra jordan"] = "petra", ["rialto"] = "rialto bridge", ["amalfi"] = "amalfi coast",
+		["london tower"] = "tower of london", ["eye of london"] = "london eye", ["statue of christ"] = "christ the redeemer",
+		["buckingham"] = "buckingham palace", ["windsor"] = "windsor castle", ["crazy horse"] = "crazy horse memorial",
+		["kew"] = "kew gardens", ["rockefeller"] = "rockefeller center", ["radio city"] = "radio city music hall",
+		["effiel tower"] = "eiffel tower", ["leaning tower of pizza"] = "leaning tower of pisa",
+		["arc de triumph"] = "arc de triomphe", ["arch de triomphe"] = "arc de triomphe", ["big ben tower"] = "big ben",
 	},
 }

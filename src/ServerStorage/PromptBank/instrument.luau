@@ -46,6 +46,7 @@ return {
 			"frame drum", "celtic harp", "concert harp", "jazz guitar", "flamenco guitar", "floor tom",
 			"bass ukulele", "contrabass clarinet", "timbales", "finger cymbals", "boomwhackers", "pump organ", "midi keyboard",
 			"sampler", "irish whistle", "twelve string guitar", "bodhran", "pipa",
+			"voice",
 		},
 		DeepCut = {
 			"uilleann pipes", "kantele", "cimbalom", "santoor", "sarod", "veena", "tanpura",
@@ -72,6 +73,7 @@ return {
 			"melodeon", "garmoshka", "trembita", "sopilka", "svyryl", "skudutis", "birbyne",
 			"native american flute", "nose flute", "tonette", "steel string guitar", "talk box", "vocoder", "kora",
 			"hurdy gurdy", "erhu", "shamisen",
+			"lap steel", "pedal steel", "spoons", "bones",
 		},
 		Mythic = {
 			"nyckelharpa", "talharpa", "tromba marina",
@@ -149,5 +151,8 @@ return {
 		["rebab"] = "rabab", ["baglama"] = "saz", ["kannel"] = "kantele", ["swanee whistle"] = "slide whistle",
 		["soprano recorder"] = "recorder", ["church bells"] = "bell", ["wooden flute"] = "flute",
 		["pedal harp"] = "concert harp",
+		["human voice"] = "voice", ["singing"] = "voice", ["baritone sax"] = "baritone saxophone", ["pino"] = "piano",
+		["guitarr"] = "guitar", ["viollin"] = "violin", ["flut"] = "flute", ["trumpt"] = "trumpet", ["ukelelee"] = "ukulele",
+		["tambourin"] = "tambourine", ["acordion"] = "accordion", ["bango"] = "banjo", ["recorder flute"] = "recorder",
 	},
 }
