@@ -55,8 +55,27 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Prompt bank: one module per prompt in `src/ServerStorage/PromptBank/`, listed in its `init.luau`;
   `tests/PromptBank.test.luau` guards it (normalized answers, no duplicates, aliases point at answers).
   `Shared/AnswerMatcher` also matches word by word (doctor/dr, saint/st...: `WORD_FOLDS`), in any word order,
-  and as a last resort drops `QUALIFIERS` (diet, zero, sugar, cherry...) from the ends, so the bank needs no
+  and as a last resort drops `QUALIFIERS` (diet, zero, sugar, cherry, red, baby, big...) from the ends, so the bank needs no
   entry for every "diet"/"zero sugar" variant; such an answer counts as the bank answer that is left.
+  `lune run tests/check_prompt.luau <id> "typed" ...` checks one prompt file and prints how each typed answer
+  is graded (tier, bank spelling, REFUSED); `--file <list>` probes hundreds at once and prints only the refused
+  and ask-first ones. `python tests/bank.py add|retier|remove|unalias <id> <json>` edits a prompt file safely
+  (locked, normalized, proven and checked after; Plankton and TooClever are curated and need `--allow-top`):
+  use these two when adding answers or moving them between tiers, not hand edits. `bank.py stats` shows sizes.
+  `AnswerMatcher` indexes a prompt once (`warm`, kept for the last 12) so grading a refused answer is a
+  millisecond or so, not tens: the bank tests guard that and a file size limit as the bank grows.
+- Refused answers are counted per prompt (`Server/AnswerMissService`, rules in `Shared/AnswerMisses`, switch and
+  limits in `GameConfig.Answer`): counts only, no player attached, short answer-like text only (no sentences,
+  long numbers, emails or links), three per player per prompt per visit, at most 400 answers per prompt (over
+  that every count drops by one, so one-offs wash out and counts read "at least"). Live servers write the
+  `AnswerMisses_v1` DataStore; Studio writes `AnswerMisses_v1_Studio`. The Studio debug command `misses` lists
+  the prompts that have some, and `misses <promptId> [n]` the most refused answers the bank still refuses, read
+  from the live store (add `studio` for the test store); `misses forget <promptId> <answer>` removes one.
+  Harvest it now and then: add the right ones to the bank and they drop off the list.
+- Answering: Enter (or GO) locks an answer in at once when the bank has it as typed (exact, alias, article,
+  plural, spacing, word spelling or order: `AnswerMatcher.resolve`'s third result, `sure`). Only an answer
+  that needed a typo fixed or words dropped shows the confirm chip (DID YOU MEAN X?) and waits for a second
+  Enter. The match (`AnswerService`) and the warm-up quiz (`LobbyQuizService`) both work this way.
 - Templates cloned by code that are authored in Studio: `Templates.AnswerTag`, and `Templates.NameTag`, which
   is the head label (CosmeticService puts it on every Head, named `RareOrSinkName`; Roblox's own name display is off). Its
   `Main` is a bottom-anchored vertical list, so hidden rows collapse: `Afk`, `TitleText`, `NameText`. The

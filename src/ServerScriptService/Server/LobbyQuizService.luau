@@ -2,9 +2,10 @@
 -- A personal prompt stream for anyone standing on the semicircle in front of the snack shack (Lobby.QuizZone's
 -- ArcCenter, Outward and Radius attributes describe it).
 -- Stepping in starts it, stepping out or the X (LobbyQuizStop) ends it, and a match pulls the player out of it
--- whatever they were doing. Answering is two steps like a match: LobbyQuizCheck
--- (Enter once) says whether the text is in the bank, LobbyQuizAnswer (Enter again) locks it in and pays
--- Shells by tier, up to a daily warm-up cap. Wrong answers can be retried until the prompt's time is up.
+-- whatever they were doing. Answering works like a match: LobbyQuizCheck (Enter) locks in and pays an
+-- answer the bank has as typed; one that needed a typo fixed is sent back to be confirmed, and
+-- LobbyQuizAnswer (Enter again) locks that in. Shells are paid by tier, up to a daily warm-up cap. Wrong
+-- answers can be retried until the prompt's time is up.
 -- After a result the client asks for the next prompt (LobbyQuizSkip), no sooner than NextDelaySeconds.
 
 local Players = game:GetService("Players")
@@ -128,7 +129,40 @@ local function clientStatus(status: string): string
 	return "closed"
 end
 
--- Enter once: is it in the bank, and how is it spelled? Never says the tier, and never pays.
+-- Locks a graded answer in as the prompt's result, pays it and tells the player.
+local function settle(player: Player, quiz: Quiz, graded: AnswerService.Submission, now: number)
+	local tier = graded.tier :: string
+	AnswerGate.lock(quiz.gate)
+	quiz.resultAt = now
+
+	-- Multiplier once, capped once, paid unmultiplied: VIP + 2x can never push past the daily cap.
+	local day = today()
+	local cap = GameConfig.Lobby.DailyShellCap
+	local earned = DataService.lobbyEarnedToday(player, day)
+	local cash, capped = 0, earned >= cap
+	if DataService.isLoaded(player) and not DataService.isReadOnly(player) then
+		cash, capped = Economy.lobbyPayout(graded.points, StoreService.cashMultiplier(player), earned, cap)
+		if cash > 0 then
+			StoreService.grantShells(player, cash, "warmup")
+			DataService.addLobbyEarned(player, day, cash)
+		end
+	end
+	Net.event("LobbyQuizResult"):FireClient(player, {
+		stage = "submit",
+		status = "valid",
+		tier = tier,
+		cash = cash,
+		corrected = graded.corrected,
+		capped = capped,
+		depth = Depth.metres(tier, graded.corrected),
+		earnedToday = earned + cash,
+		cap = cap,
+	})
+	MatchEvents.LobbyAnswered.fire(player, tier, graded.points, quiz.prompt.id, graded.corrected)
+end
+
+-- Enter: an answer the bank has as typed is locked in and paid at once. One that needed a typo fixed or
+-- words dropped is sent back with its bank spelling, to be confirmed by a second Enter. Never says the tier.
 local function onCheck(player: Player, text: any)
 	local result = Net.event("LobbyQuizResult")
 	local quiz = openQuiz(player)
@@ -147,6 +181,13 @@ local function onCheck(player: Player, text: any)
 	AnswerGate.noteCheck(quiz.gate, now, valid)
 	if graded == nil or graded.tier == nil then
 		result:FireClient(player, { stage = "check", status = "invalid", cash = 0 })
+		if graded ~= nil then
+			MatchEvents.AnswerRefused.fire(player, quiz.prompt.id, text)
+		end
+		return
+	end
+	if graded.sure then
+		settle(player, quiz, graded, now)
 		return
 	end
 	result:FireClient(player, { stage = "check", status = "valid", corrected = graded.corrected, cash = 0 })
@@ -170,35 +211,12 @@ local function onAnswer(player: Player, text: any)
 	if graded == nil or graded.tier == nil then
 		AnswerGate.noteCheck(quiz.gate, now, false)
 		result:FireClient(player, { stage = "submit", status = "invalid", cash = 0 })
+		if graded ~= nil then
+			MatchEvents.AnswerRefused.fire(player, quiz.prompt.id, text)
+		end
 		return
 	end
-	AnswerGate.lock(quiz.gate)
-	quiz.resultAt = now
-
-	-- Multiplier once, capped once, paid unmultiplied: VIP + 2x can never push past the daily cap.
-	local day = today()
-	local cap = GameConfig.Lobby.DailyShellCap
-	local earned = DataService.lobbyEarnedToday(player, day)
-	local cash, capped = 0, earned >= cap
-	if DataService.isLoaded(player) and not DataService.isReadOnly(player) then
-		cash, capped = Economy.lobbyPayout(graded.points, StoreService.cashMultiplier(player), earned, cap)
-		if cash > 0 then
-			StoreService.grantShells(player, cash, "warmup")
-			DataService.addLobbyEarned(player, day, cash)
-		end
-	end
-	result:FireClient(player, {
-		stage = "submit",
-		status = "valid",
-		tier = graded.tier,
-		cash = cash,
-		corrected = graded.corrected,
-		capped = capped,
-		depth = Depth.metres(graded.tier, graded.corrected),
-		earnedToday = earned + cash,
-		cap = cap,
-	})
-	MatchEvents.LobbyAnswered.fire(player, graded.tier, graded.points, quiz.prompt.id, graded.corrected)
+	settle(player, quiz, graded, now)
 end
 
 -- SKIP on an open prompt, or NEXT after a result. Prompts cannot be cycled faster than the gaps below;

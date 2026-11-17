@@ -127,47 +127,6 @@ local function allowedTypos(answer: string): number
 	return 2
 end
 
-local function findExact(prompt: Prompt, answer: string): string?
-	for _, tier in Tiers.List do
-		local accepted = prompt.answers[tier.name]
-		if accepted ~= nil then
-			for _, candidate in accepted do
-				if candidate == answer then
-					return tier.name
-				end
-			end
-		end
-	end
-	return nil
-end
-
--- The bank answer with the fewest typos, if any is within the allowance. A typo never fixes the first
--- letter: "bpple" is not "apple", so autocorrect cannot turn a guess into a different word.
-local function findClosest(prompt: Prompt, answer: string): (string?, string?)
-	local bestTier = nil
-	local bestAnswer = nil
-	local bestDistance = allowedTypos(answer) + 1
-	for _, tier in Tiers.List do
-		local accepted = prompt.answers[tier.name]
-		if accepted ~= nil then
-			for _, candidate in accepted do
-				-- The edit distance is at least the length gap, so far-off lengths skip the full comparison.
-				local lengthGap = math.abs(#candidate - #answer)
-				local distance = bestDistance
-				if lengthGap < bestDistance and string.byte(candidate, 1) == string.byte(answer, 1) then
-					distance = AnswerMatcher.distance(candidate, answer)
-				end
-				if distance < bestDistance then
-					bestDistance = distance
-					bestTier = tier.name
-					bestAnswer = candidate
-				end
-			end
-		end
-	end
-	return bestTier, bestAnswer
-end
-
 local ARTICLES = { "the ", "a ", "an " }
 
 local function stripArticle(answer: string): string
@@ -264,13 +223,16 @@ local FOLDS: { (string) -> { string } } = {
 
 -- Words that only say which version of a thing it is. When an answer is refused as typed, these are
 -- dropped from its start and end and the rest is tried again: "pepsi zero sugar" counts as "pepsi zero",
--- "cherry pepsi" as "pepsi". The answer then counts as the bank answer that is left.
+-- "cherry pepsi" as "pepsi", "red apple" as "apple". The answer then counts as the bank answer that is left.
 local QUALIFIERS: { [string]: boolean } = {}
 for _, word in {
 	"diet", "zero", "sugar", "free", "sugarfree", "light", "lite", "max", "original", "classic", "regular",
 	"plain", "mini", "large", "small", "fresh", "homemade", "flavored", "flavoured", "flavor", "flavour",
 	"cherry", "vanilla", "lime", "lemon", "orange", "grape", "strawberry", "raspberry", "peach", "mango",
 	"caffeine", "decaf", "iced", "can", "bottle", "of",
+	-- how big, how old, what colour: "red apple", "baby shark", "big cat" mean the thing they describe
+	"baby", "big", "giant", "little", "tiny", "young", "old", "wild", "domestic", "common",
+	"red", "green", "yellow", "blue", "black", "white", "brown", "pink", "purple", "gray", "grey",
 } do
 	QUALIFIERS[word] = true
 end
@@ -312,26 +274,54 @@ local function withoutQualifiers(answer: string, isAnswer: (string) -> boolean):
 	return forms
 end
 
-local function tierIndex(name: string): number
-	for index, tier in Tiers.List do
-		if tier.name == name then
-			return index
-		end
-	end
-	return math.huge
+local TIER_RANK: { [string]: number } = {}
+for position, tier in Tiers.List do
+	TIER_RANK[tier.name] = position
 end
 
-type Entry = { key: string, tier: string, spelling: string }
-type Candidate = { forms: { string }, tier: string, spelling: string }
+local function tierIndex(name: string): number
+	return TIER_RANK[name] or math.huge
+end
 
--- Every bank answer and alias, with the tier and bank spelling it stands for.
-local function entries(prompt: Prompt): { Entry }
-	local list: { Entry } = {}
+type Entry = { key: string, tier: string, spelling: string } -- a bank answer or alias, and what it stands for
+type Close = { answer: string, tier: string, length: number }
+
+-- What a prompt is looked up by, built once and kept (a refused answer used to walk every entry of the prompt
+-- five times over, which took tens of milliseconds on the largest prompts and froze the server for all
+-- players). Prompts do not change while the game runs.
+type Index = {
+	tierOf: { [string]: string }, -- bank answer -> its tier (the first tier that lists it)
+	folded: { { [string]: Entry } }, -- per entry of FOLDS: a form -> the entry that wins it
+	byFirst: { [number]: { Close } }, -- bank answers by first byte, in tier order, for the typo search
+}
+
+local MAX_INDEXES = 12 -- prompts kept indexed at once; the oldest goes first
+local indexes: { [Prompt]: Index } = {}
+local indexOrder: { Prompt } = {}
+
+local function buildIndex(prompt: Prompt): Index
+	local tierOf: { [string]: string } = {}
+	local byFirst: { [number]: { Close } } = {}
+	-- Every bank answer and alias, with the tier and bank spelling it stands for: answers in tier order,
+	-- then aliases in alphabetical order.
+	local pool: { Entry } = {}
 	for _, tier in Tiers.List do
 		local accepted = prompt.answers[tier.name]
 		if accepted ~= nil then
 			for _, candidate in accepted do
-				table.insert(list, { tier = tier.name, spelling = candidate, key = candidate })
+				if tierOf[candidate] == nil then
+					tierOf[candidate] = tier.name
+				end
+				table.insert(pool, { tier = tier.name, spelling = candidate, key = candidate })
+				local first = string.byte(candidate, 1)
+				if first ~= nil then
+					local bucket = byFirst[first]
+					if bucket == nil then
+						bucket = {}
+						byFirst[first] = bucket
+					end
+					table.insert(bucket, { answer = candidate, tier = tier.name, length = #candidate })
+				end
 			end
 		end
 	end
@@ -342,58 +332,107 @@ local function entries(prompt: Prompt): { Entry }
 	table.sort(aliasKeys)
 	for _, alias in aliasKeys do
 		local canonical = prompt.aliases[alias]
-		local tier = findExact(prompt, canonical)
+		local tier = tierOf[canonical]
 		if tier ~= nil then
-			table.insert(list, { tier = tier, spelling = canonical, key = alias })
+			table.insert(pool, { tier = tier, spelling = canonical, key = alias })
 		end
 	end
-	return list
-end
-
--- The first input form that any candidate shares wins; among candidates sharing it, the lowest tier.
-local function findFolded(prompt: Prompt, answer: string): (string?, string?)
-	local pool = entries(prompt)
-	for _, fold in FOLDS do
-		local folded: { Candidate } = {}
+	-- Among the entries sharing a form, the lowest tier wins, and the first of equals.
+	local folded: { { [string]: Entry } } = {}
+	for position, fold in FOLDS do
+		local map: { [string]: Entry } = {}
 		for _, entry in pool do
-			table.insert(folded, { forms = fold(entry.key), tier = entry.tier, spelling = entry.spelling })
-		end
-		for _, form in fold(answer) do
-			local best: Candidate? = nil
-			for _, candidate in folded do
-				if table.find(candidate.forms, form) ~= nil then
-					if best == nil or tierIndex(candidate.tier) < tierIndex(best.tier) then
-						best = candidate
-					end
+			for _, form in fold(entry.key) do
+				local held = map[form]
+				if held == nil or tierIndex(entry.tier) < tierIndex(held.tier) then
+					map[form] = entry
 				end
 			end
-			if best ~= nil then
-				return best.tier, best.spelling
+		end
+		folded[position] = map
+	end
+	return { tierOf = tierOf, folded = folded, byFirst = byFirst }
+end
+
+local function indexFor(prompt: Prompt): Index
+	local index = indexes[prompt]
+	if index ~= nil then
+		return index
+	end
+	index = buildIndex(prompt)
+	indexes[prompt] = index
+	table.insert(indexOrder, prompt)
+	if #indexOrder > MAX_INDEXES then
+		indexes[table.remove(indexOrder, 1) :: Prompt] = nil
+	end
+	return index
+end
+
+-- Builds a prompt's index now, so the first answer to it is not the one that waits.
+function AnswerMatcher.warm(prompt: Prompt)
+	indexFor(prompt)
+end
+
+-- The first input form that any entry shares wins; among entries sharing it, the lowest tier.
+local function findFolded(index: Index, answer: string): (string?, string?)
+	for position, fold in FOLDS do
+		local map = index.folded[position]
+		for _, form in fold(answer) do
+			local entry = map[form]
+			if entry ~= nil then
+				return entry.tier, entry.spelling
 			end
 		end
 	end
 	return nil, nil
 end
 
--- Exact, alias, folds and typos for an already normalized answer.
-local function resolveNormalized(answer: string, prompt: Prompt): (string?, string?)
-	local exact = findExact(prompt, answer)
+-- The bank answer with the fewest typos, if any is within the allowance. A typo never fixes the first
+-- letter: "bpple" is not "apple", so autocorrect cannot turn a guess into a different word.
+local function findClosest(index: Index, answer: string): (string?, string?)
+	local first = string.byte(answer, 1)
+	local bucket = if first ~= nil then index.byFirst[first] else nil
+	if bucket == nil then
+		return nil, nil
+	end
+	local bestTier = nil
+	local bestAnswer = nil
+	local bestDistance = allowedTypos(answer) + 1
+	for _, close in bucket do
+		-- The edit distance is at least the length gap, so far-off lengths skip the full comparison.
+		if math.abs(close.length - #answer) < bestDistance then
+			local distance = AnswerMatcher.distance(close.answer, answer)
+			if distance < bestDistance then
+				bestDistance = distance
+				bestTier = close.tier
+				bestAnswer = close.answer
+			end
+		end
+	end
+	return bestTier, bestAnswer
+end
+
+-- Exact, alias, folds and typos for an already normalized answer. The third result is whether the answer
+-- is the player's own word: everything but a typo fix.
+local function resolveNormalized(answer: string, prompt: Prompt, index: Index): (string?, string?, boolean)
+	local exact = index.tierOf[answer]
 	if exact ~= nil then
-		return exact, answer
+		return exact, answer, true
 	end
 	local canonical = prompt.aliases[answer]
 	if canonical ~= nil then
-		local aliased = findExact(prompt, canonical)
+		local aliased = index.tierOf[canonical]
 		if aliased ~= nil then
-			return aliased, canonical
+			return aliased, canonical, true
 		end
 		answer = canonical
 	end
-	local tier, spelling = findFolded(prompt, answer)
+	local tier, spelling = findFolded(index, answer)
 	if tier ~= nil then
-		return tier, spelling
+		return tier, spelling, true
 	end
-	return findClosest(prompt, answer)
+	tier, spelling = findClosest(index, answer)
+	return tier, spelling, false
 end
 
 -- Returns the tier and the bank spelling for an accepted answer, or nil when it is refused.
@@ -401,25 +440,29 @@ end
 -- Lookups run strictest first: exact, alias, then the article, plural, space-less, word-spelling and
 -- word-order fallbacks, then typos, and last the same again with qualifier words ("diet", "zero") dropped
 -- from the ends. The existing pre-normalized bank entries therefore still match first.
-function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?)
+-- The third result, `sure`, is true when the bank has what the player typed (as an answer, an alias or one
+-- of the fallbacks that only respell it): that locks in at once. It is false when a typo was fixed or
+-- words were dropped, where the answer may not be the one they meant: they are asked first.
+function AnswerMatcher.resolve(text: string, prompt: Prompt): (string?, string?, boolean)
 	local answer = AnswerMatcher.normalize(text)
 	if #answer == 0 or #answer > GameConfig.Answer.MaxLength then
-		return nil, nil
+		return nil, nil, false
 	end
-	local tier, spelling = resolveNormalized(answer, prompt)
+	local index = indexFor(prompt)
+	local tier, spelling, sure = resolveNormalized(answer, prompt, index)
 	if tier ~= nil then
-		return tier, spelling
+		return tier, spelling, sure
 	end
 	local function isAnswer(word: string): boolean
-		return findExact(prompt, word) ~= nil
+		return index.tierOf[word] ~= nil
 	end
 	for _, core in withoutQualifiers(answer, isAnswer) do
-		tier, spelling = resolveNormalized(core, prompt)
+		tier, spelling = resolveNormalized(core, prompt, index)
 		if tier ~= nil then
-			return tier, spelling
+			return tier, spelling, false
 		end
 	end
-	return nil, nil
+	return nil, nil, false
 end
 
 function AnswerMatcher.match(text: string, prompt: Prompt): string?

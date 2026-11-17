@@ -51,6 +51,9 @@ local GameConfig = {
 		CheckMinInterval = 0.35, -- seconds between Enter-to-check presses after a valid check
 		MaxChecksPerRound = 40, -- per player per prompt (and per lobby prompt)
 		DeadlineGrace = 0.5, -- network slack after a player's deadline before answers are refused
+		RecordMisses = 1, -- 1 counts refused answers per prompt (AnswerMissService), to find gaps in the bank; 0 turns it off
+		MissesPerPrompt = 3, -- different refused answers one player adds to one prompt per visit
+		MissCap = 400, -- different refused answers kept per prompt; the least refused are dropped
 	},
 	DayCycle = {
 		CycleSeconds = 720, -- one full day and night

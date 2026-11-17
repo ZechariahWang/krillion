@@ -231,6 +231,29 @@ return function(test)
 		assert(AnswerMatcher.match("diet doctor pespi", drinks) == nil, "pepsi and dr pepper are different drinks")
 	end)
 
+	test("colour, size and age words are dropped too, but only to find an answer that is not there as typed", function()
+		local animals = {
+			id = "test_animals",
+			prompt = "Name an animal",
+			answers = { Plankton = { "apple", "shark", "cat" }, Rare = { "red panda" } },
+			aliases = {},
+		}
+		local tier, spelling, sure = AnswerMatcher.resolve("red apple", animals)
+		assert(tier == "Plankton" and spelling == "apple" and sure == false, tostring(spelling))
+		assert(AnswerMatcher.match("baby shark", animals) == "Plankton")
+		assert(AnswerMatcher.match("big white cat", animals) == "Plankton")
+		assert(AnswerMatcher.match("red panda", animals) == "Rare", "listed as typed")
+		assert(AnswerMatcher.match("big wild", animals) == nil, "qualifiers alone")
+		local colours = {
+			id = "test_colours",
+			prompt = "Name a colour",
+			answers = { Plankton = { "red", "blue" }, Rare = { "navy" } },
+			aliases = {},
+		}
+		assert(AnswerMatcher.match("red blue", colours) == nil, "a colour that is an answer is never dropped")
+		assert(AnswerMatcher.match("big navy", colours) == "Rare", "size words still drop")
+	end)
+
 	test("a qualifier word that is an answer itself is not dropped", function()
 		local fruit = {
 			id = "test_fruit",
@@ -240,5 +263,41 @@ return function(test)
 		}
 		assert(AnswerMatcher.match("lemon lime", fruit) == nil)
 		assert(AnswerMatcher.match("fresh apple", fruit) == "Plankton")
+	end)
+
+	-- `sure` decides whether Enter locks in at once or asks first.
+	local function sure(text: string, prompt): boolean?
+		local tier, _, isSure = AnswerMatcher.resolve(text, prompt)
+		if tier == nil then
+			return nil
+		end
+		return isSure
+	end
+
+	test("an answer the bank has as typed is sure, however it is written", function()
+		local aliased = {
+			id = "test_aliased",
+			prompt = "Name a soft drink",
+			answers = { Plankton = { "coca cola", "ice cream" }, Schooler = { "the moon", "cherry" } },
+			aliases = { coke = "coca cola" },
+		}
+		assert(sure("Coca-Cola", aliased) == true, "exact")
+		assert(sure("COKE", aliased) == true, "alias")
+		assert(sure("the coca cola", aliased) == true, "article")
+		assert(sure("moon", aliased) == true, "article on the bank side")
+		assert(sure("cherries", aliased) == true, "plural")
+		assert(sure("icecream", aliased) == true, "spaces")
+		assert(sure("diet doctor pepper", drinks) == true, "word spelling")
+		assert(sure("cherry dr pepper", drinks) == true, "word order")
+	end)
+
+	test("a fixed typo or a dropped word is not sure, and a refused answer is neither", function()
+		assert(sure("peppsi", drinks) == false, "typo")
+		assert(sure("diet dr peper", drinks) == false, "typo in a longer answer")
+		assert(sure("vanilla pepsi", drinks) == false, "dropped qualifier")
+		assert(sure("pepsi zero sugar", drinks) == false, "dropped qualifier leaves another answer")
+		assert(sure("lemonade", drinks) == nil)
+		local _, _, isSure = AnswerMatcher.resolve("lemonade", drinks)
+		assert(isSure == false)
 	end)
 end

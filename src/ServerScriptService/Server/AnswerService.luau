@@ -1,8 +1,9 @@
 --!strict
 -- Receives match answers, validates them and grades them against the live prompt, with autocorrect.
--- Answering is two steps: CheckAnswer (Enter once) says whether the text is in the bank and shows its
--- spelling; SubmitAnswer (Enter again) re-grades and locks it in. Each player has their own deadline,
--- which a +10s boost or a late join can push past the prompt's base time.
+-- CheckAnswer (Enter) locks the answer in at once when the bank has it as typed. When it only matches after
+-- a typo fix or with words dropped, the player is shown the bank spelling first and SubmitAnswer (Enter
+-- again) re-grades and locks it in. Each player has their own deadline, which a +10s boost or a late join
+-- can push past the prompt's base time.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -14,6 +15,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Signal = require(ReplicatedStorage.Shared.Signal)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
+local MatchEvents = require(script.Parent.MatchEvents)
 local PromptBank = require(ServerStorage.PromptBank)
 
 export type Prompt = AnswerMatcher.Prompt
@@ -23,6 +25,7 @@ export type Submission = {
 	tier: string?,
 	corrected: string?, -- the bank spelling, shown back to players instead of what they typed
 	points: number,
+	sure: boolean, -- the bank has it as typed (no typo fix, no dropped words), so it needs no second Enter
 }
 
 local RAW_LIMIT = GameConfig.Answer.MaxLength * 2
@@ -54,12 +57,12 @@ function AnswerService.isValidText(text: any): boolean
 end
 
 function AnswerService.grade(text: string, prompt: AnswerMatcher.Prompt): Submission
-	local tier, corrected = AnswerMatcher.resolve(text, prompt)
+	local tier, corrected, sure = AnswerMatcher.resolve(text, prompt)
 	local points = 0
 	if tier ~= nil then
 		points = Tiers.points(tier)
 	end
-	return { text = text, tier = tier, corrected = corrected, points = points }
+	return { text = text, tier = tier, corrected = corrected, points = points, sure = sure }
 end
 
 -- `seconds` is the prompt's normal answer time; per-player deadlines (extra time) build on it.
@@ -116,7 +119,10 @@ function AnswerService.closeRound(): { [Player]: Submission }
 end
 
 function AnswerService.randomPrompt(exclude: { [string]: boolean }): AnswerMatcher.Prompt
-	return PromptBank.random(exclude)
+	local prompt = PromptBank.random(exclude)
+	-- Indexed now, while nobody is waiting on it: the first answer to a prompt would otherwise build it.
+	AnswerMatcher.warm(prompt)
+	return prompt
 end
 
 -- UserIds of everyone still in who has locked in an answer this prompt. A sunk player's answer is kept
@@ -268,6 +274,14 @@ function AnswerService.submitFor(id: number, text: string): Submission?
 	return graded
 end
 
+-- Notes text the bank refused for the open prompt (AnswerMissService counts it), unless it was no text at all.
+local function refused(player: Player, text: any)
+	local prompt = currentPrompt
+	if prompt ~= nil and AnswerService.isValidText(text) then
+		MatchEvents.AnswerRefused.fire(player, prompt.id, text)
+	end
+end
+
 -- Locks `graded` in as the player's answer and tells them, as an accepted submit.
 local function lock(player: Player, gate: AnswerGate.Gate, graded: Submission)
 	AnswerGate.lock(gate)
@@ -289,7 +303,8 @@ function AnswerService.lockIn(player: Player, answer: string): boolean
 	return true
 end
 
--- Enter once: is it in the bank, and how is it spelled? Never says the tier, and never locks anything.
+-- Enter: an answer the bank has as typed locks in here and now. One that needed a typo fixed or words
+-- dropped is sent back with its bank spelling, to be confirmed by a second Enter. Never says the tier.
 local function onCheck(player: Player, text: any)
 	local result = Net.event("AnswerResult")
 	local gate = gates[player]
@@ -307,6 +322,11 @@ local function onCheck(player: Player, text: any)
 	AnswerGate.noteCheck(gate, now, graded ~= nil)
 	if graded == nil then
 		result:FireClient(player, { stage = "check", status = "invalid" })
+		refused(player, text)
+		return
+	end
+	if graded.sure then
+		lock(player, gate, graded)
 		return
 	end
 	result:FireClient(player, { stage = "check", status = "valid", corrected = graded.corrected })
@@ -334,6 +354,7 @@ local function onSubmit(player: Player, text: any)
 	if graded == nil then
 		AnswerGate.noteCheck(gate, now, false)
 		result:FireClient(player, { stage = "submit", accepted = false, status = "invalid" })
+		refused(player, text)
 		return
 	end
 	lock(player, gate, graded)

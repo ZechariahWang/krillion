@@ -3,7 +3,13 @@ local AnswerMatcher = require("../src/ReplicatedStorage/Shared/AnswerMatcher")
 local Tiers = require("../src/ReplicatedStorage/Config/Tiers")
 local GameConfig = require("../src/ReplicatedStorage/Config/GameConfig")
 
+local fs = require("@lune/fs")
+
 local REQUIRED_TIERS = { "Plankton", "Schooler", "Rare" }
+-- A prompt is one ModuleScript: kept well inside what a script can hold, so the bank can grow without a surprise.
+local MAX_FILE_BYTES = 700000 -- a script holds 1,000,000 characters; the big answer run took author to 587 KB
+-- Refusing an answer walks the whole prompt, on the one thread every player shares.
+local MAX_REFUSAL_SECONDS = 0.1
 
 local function eachPrompt(check: (any) -> ())
 	for _, prompt in PromptBank.List do
@@ -58,6 +64,30 @@ return function(test)
 				for _, answer in list do
 					assert(#answer <= limit, prompt.id .. ": longer than " .. limit .. " characters: " .. answer)
 				end
+			end
+		end)
+	end)
+
+	test("prompt files stay small enough to be one script", function()
+		eachPrompt(function(prompt)
+			local size = #fs.readFile("src/ServerStorage/PromptBank/" .. prompt.id .. ".luau")
+			assert(size <= MAX_FILE_BYTES, prompt.id .. " is " .. size .. " bytes")
+		end)
+	end)
+
+	test("a refused answer is graded quickly even on the largest prompts", function()
+		local typed = { "zzqx", "diet frobnicate cherry", "the great wibbleton", "pepsi zero sugar lemon", "flibbertigibbet" }
+		eachPrompt(function(prompt)
+			AnswerMatcher.warm(prompt)
+			for _, text in typed do
+				-- the best of three, so one garbage-collection pause does not fail a run
+				local took = math.huge
+				for _ = 1, 3 do
+					local started = os.clock()
+					AnswerMatcher.resolve(text, prompt)
+					took = math.min(took, os.clock() - started)
+				end
+				assert(took <= MAX_REFUSAL_SECONDS, string.format("%s: %q took %.0f ms", prompt.id, text, took * 1000))
 			end
 		end)
 	end)

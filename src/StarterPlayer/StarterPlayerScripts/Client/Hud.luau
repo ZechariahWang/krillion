@@ -1,5 +1,5 @@
 --!strict
--- Drives StarterGui.Hud during a match: the answer box (Enter checks the answer, Enter again locks it in),
+-- Drives StarterGui.Hud during a match: the answer box (Enter locks the answer in; a fixed typo asks first),
 -- the Hint (locks the best unused answer in for you) and +10s boost chips, Shells, water meter,
 -- sudden-death card.
 -- The prompt, timer and alive count live in StarterGui.Status (see Status.luau); surge feedback in Tide.luau.
@@ -94,7 +94,7 @@ local lastCheckAt = -math.huge
 local lastWrongAt = -math.huge
 local lastBoostAt = -math.huge
 local checking: string? = nil -- the trimmed text of the check in flight
-local confirmed: string? = nil -- the trimmed text the server found in the bank; Enter again locks it in
+local confirmed: string? = nil -- the trimmed text the server matched after a typo fix; Enter again locks it in
 local submitting = false
 local retried = false
 local feedbackToken = 0
@@ -255,7 +255,7 @@ local function showConfirm(text: string, corrected: string)
 	feedback.Visible = false
 	local action = if isTouch() then "TAP LOCK IN" else "PRESS ENTER AGAIN"
 	if confirmText ~= nil then
-		confirmText.Text = "LOCK IN  " .. string.upper(corrected) .. "?  " .. action
+		confirmText.Text = "DID YOU MEAN  " .. string.upper(corrected) .. "?  " .. action
 	end
 	if confirmChip ~= nil then
 		Ui.pop(confirmChip)
@@ -475,19 +475,22 @@ end
 
 -- Answering -----------------------------------------------------------------------------------------------
 
-local function sendCheck(text: string)
+-- False when the press came too soon after the last one and nothing was sent.
+local function sendCheck(text: string): boolean
 	local now = os.clock()
 	if now - lastCheckAt < GameConfig.Answer.CheckMinInterval or now - lastWrongAt < GameConfig.Answer.RetryCooldown then
 		Ui.nudge(answerBox)
-		return
+		return false
 	end
 	lastCheckAt = now
 	checking = text
 	retried = false
 	Net.event("CheckAnswer"):FireServer(text)
+	return true
 end
 
--- Enter (or GO): the first press checks the answer; a second press with the same text locks it in.
+-- Enter (or GO) sends the answer: the server locks it in at once when the bank has it as typed. When it had
+-- to fix a typo it asks first, and a second press with the same text locks that in.
 local function onEnter()
 	if locked or submitting or outOfTime then
 		return
@@ -502,8 +505,12 @@ local function onEnter()
 		Net.event("SubmitAnswer"):FireServer(text)
 		return
 	end
-	sendCheck(text)
-	keepFocus()
+	-- A phone leaves its keyboard down once the answer is on its way: most answers lock in on this press,
+	-- and raising it only to drop it again makes it bounce. A wrong answer brings it back (wrongAnswer).
+	local sent = sendCheck(text)
+	if not (sent and isTouch()) then
+		keepFocus()
+	end
 end
 
 -- The text stays in the box, selected, so a typo is fixed and not retyped.
@@ -558,6 +565,7 @@ local function onSubmitResult(payload)
 	submitting = false
 	if payload.accepted then
 		locked = true
+		checking = nil
 		hideConfirm()
 		-- Autocorrect: show the answer in the bank's spelling, whatever was typed.
 		local corrected = payload.corrected or answerBox.Text

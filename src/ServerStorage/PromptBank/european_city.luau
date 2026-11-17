@@ -11,10 +11,10 @@ return {
 		},
 		Schooler = {
 			"marseille", "lyon", "nice", "hamburg", "frankfurt", "cologne", "birmingham", "glasgow", "turin",
-			"valencia", "porto", "geneva", "zurich", "cannes", "bordeaux", "toulouse", "leeds", "sheffield", "bristol",
-			"newcastle", "oxford", "cambridge", "brighton", "york", "bath", "cardiff", "belfast", "rotterdam",
-			"gothenburg", "bologna", "verona", "pisa", "genoa", "salzburg", "krakow", "stuttgart", "dusseldorf",
-			"malaga", "granada", "bilbao", "palermo", "bruges", "dubrovnik",
+			"valencia", "porto", "geneva", "zurich", "cannes", "bordeaux", "toulouse", "leeds", "sheffield",
+			"bristol", "newcastle", "oxford", "cambridge", "brighton", "york", "bath", "rotterdam",
+			"gothenburg", "bologna", "verona", "pisa", "genoa", "salzburg", "krakow", "stuttgart",
+			"dusseldorf", "malaga", "granada", "bilbao", "palermo", "bruges", "dubrovnik",
 		},
 		Rare = {
 			"antwerp", "ghent", "utrecht", "eindhoven", "the hague", "gdansk", "wroclaw", "poznan", "malmo", "aarhus",
