@@ -40,6 +40,7 @@ return {
 			"romantic adventure", "christmas comedy", "christmas romance", "musical drama", "musical romance", "fantasy horror",
 			"vampire horror", "zombie horror", "western drama", "war thriller", "disaster thriller", "political satire",
 			"teen romance", "parody", "spoof", "post apocalyptic",
+			"alien", "robot", "animal adventure",
 		},
 		Rare = {
 			"film gris", "poliziottesco", "euro crime", "heimatfilm", "rubble film", "new german cinema", "french new wave",
@@ -77,6 +78,7 @@ return {
 			"sword and sandal", "docudrama", "anthology", "experimental", "art house", "stoner comedy", "gross out comedy",
 			"body horror", "gothic horror", "gothic", "high fantasy", "dark fantasy", "killer shark", "eco horror",
 			"natural horror", "erotic drama", "erotic", "screwball comedy", "swashbuckler",
+			"artificial intelligence", "inspirational", "kids adventure",
 		},
 		DeepCut = {
 			"sword and planet", "planetary romance", "scientific romance", "lost world", "lost world adventure", "jungle film",
@@ -177,5 +179,15 @@ return {
 		["kitchen sink drama"] = "kitchen sink", ["kitchen sink realism"] = "kitchen sink",
 		["telenovela film"] = "telenovela", ["indie"] = "independent", ["silent"] = "silent film", ["dance film"] = "dance",
 		["music biopic"] = "biography",
+		["scary movies"] = "horror", ["funny movie"] = "comedy", ["childrens movie"] = "kids",
+		["love"] = "romance", ["love story movie"] = "love story", ["superheroes"] = "superhero",
+		["aliens"] = "alien invasion", ["apocalypse"] = "post apocalyptic", ["courtroom"] = "courtroom drama",
+		["zombie movie"] = "zombie", ["vampire movie"] = "vampire", ["heist movie"] = "heist", ["teen movie"] = "teen",
+		["family movie"] = "family", ["survival movie"] = "survival", ["time travel movie"] = "time travel",
+		["action adventure movie"] = "action adventure", ["fairy tales"] = "fairy tale", ["fairytales"] = "fairy tale",
+		["mocumentary"] = "mockumentary", ["comedy horror"] = "horror comedy", ["docudrama film"] = "docudrama",
+		["tv movie"] = "short film", ["coming of age movie"] = "coming of age", ["rommcom"] = "romantic comedy",
+		["acton"] = "action", ["adventer"] = "adventure", ["advenure"] = "adventure", ["romence"] = "romance",
+		["animashun"] = "animation",
 	},
 }

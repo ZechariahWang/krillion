@@ -13,7 +13,7 @@ return {
 			"poached egg", "hard boiled egg", "soft boiled egg", "sunny side up eggs", "over easy eggs",
 			"egg sandwich", "breakfast burrito", "breakfast sandwich", "frittata", "huevos rancheros", "egg roll",
 			"egg fried rice", "egg muffin", "egg casserole", "scotch egg", "pickled egg", "shakshuka", "egg tart",
-			"custard", "creme brulee", "meringue", "souffle", "carbonara", "egg foo young", "tamagoyaki",
+			"custard", "creme brulee", "meringue", "souffle", "egg foo young", "tamagoyaki",
 			"egg in a basket", "eggs florentine", "steak and eggs", "bacon and eggs", "egg and cheese",
 			"bacon egg and cheese", "egg bites", "egg white omelette", "denver omelette", "cheese omelette",
 			"veggie omelette", "spanish tortilla",
@@ -31,6 +31,7 @@ return {
 			"balut", "kwek kwek", "tortang talong", "roti telur", "huevos motulenos", "huevos divorciados", "huevos rotos",
 			"ovos moles", "fios de ovos",
 			"coddled eggs",
+			"carbonara",
 		},
 		DeepCut = {
 			"khai jiao", "khai palo", "khai luk khoei", "gyeran bbang", "dashimaki tamago", "tamago don",

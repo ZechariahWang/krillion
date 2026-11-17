@@ -17,7 +17,7 @@ return {
 			"rice bowl", "teriyaki bowl", "chicken fried rice", "shrimp fried rice",
 			"cilantro lime rice", "spam musubi", "california roll",
 			"curry rice", "pineapple fried rice",
-			"hibachi fried rice",
+			
 		},
 		Rare = {
 			"jollof rice", "kedgeree", "nasi goreng", "donburi", "gyudon", "katsudon", "oyakodon", "chirashi",
@@ -104,5 +104,6 @@ return {
 		["rizi bizi"] = "risi e bisi",
 		["pulao"] = "pilaf",
 		["jambalya"] = "jambalaya", ["paela"] = "paella", ["friedrice"] = "fried rice", ["fried rices"] = "fried rice", ["chinese fried rice"] = "fried rice", ["yakimeshi"] = "fried rice", ["brown rices"] = "brown rice", ["sushis"] = "sushi", ["burrito bowls"] = "burrito bowl", ["chipotle bowl"] = "burrito bowl", ["onigirri"] = "onigiri", ["onigiris"] = "onigiri", ["pokebowl"] = "poke bowl", ["poke"] = "poke bowl", ["poke bowls"] = "poke bowl", ["rice bowls"] = "rice bowl", ["cilantro rice"] = "cilantro lime rice", ["lime rice"] = "cilantro lime rice", ["hoppin johns"] = "hoppin john", ["california rolls"] = "california roll", ["jasmine"] = "jasmine rice", ["basmati"] = "basmati rice", ["uramaki"] = "sushi rolls", ["maki sushi"] = "sushi rolls", ["rice pilaf"] = "pilaf", ["garlic fried rice"] = "sinangag", ["khao niao"] = "sticky rice", ["sushi rice"] = "sushi", ["risotto milanese"] = "risotto alla milanese", ["seafood paella"] = "paella", ["mushroom risotto"] = "risotto", ["rice and chicken"] = "chicken and rice",
+		["hibachi fried rice"] = "fried rice",
 	},
 }

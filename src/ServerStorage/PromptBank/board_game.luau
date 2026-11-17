@@ -17,6 +17,7 @@ return {
 			"mouse trap", "trivial pursuit", "pictionary", "catan", "poker", "blackjack", "bingo", "mahjong",
 			"tic tac toe", "snap", "texas holdem", "cards against humanity", "simon", "bop it", "charades", "freecell",
 			"dungeons and dragons", "uno flip", "monopoly junior", "scrabble junior", "jumanji", "magic the gathering",
+			"happy families",
 		},
 		Rare = {
 			"egyptian ratscrew", "nertz", "euchre", "gin rummy", "cribbage", "bridge", "canasta", "pinochle",
@@ -49,6 +50,9 @@ return {
 			"taco cat goat cheese pizza", "happy salmon", "uno attack", "dos", "spider solitaire", "warhammer",
 			"pop up pirate", "cootie", "pitch", "authors", "palace", "dont wake daddy", "heads up",
 			"pyramid solitaire", "tripeaks",
+			"top trumps", "balderdash", "russian bank", "omaha poker", "five card draw", "seven card stud",
+			"dragon ball super card game", "star wars unlimited", "clank", "race for the galaxy", "heroquest", "talisman",
+			"mall madness", "pretty pretty princess", "dont spill the beans", "cloud nine", "bughouse",
 		},
 		DeepCut = {
 			"whist", "skat", "durak", "briscola", "scopa", "sheepshead", "hanabi", "the mind", "the crew", "6 nimmt",
@@ -67,6 +71,7 @@ return {
 			"fanorona", "pallanguzhi", "mu torere", "tak", "tikal", "terra mystica", "gaia project", "civilization",
 			"cosmic encounter", "game of thrones board game", "craps", "batak", "tarneeb", "pai sho", "hearthstone",
 			"kemps", "thirty one", "acey deucey",
+			"brass", "acquire", "el grande", "tapestry",
 		},
 		Mythic = {
 			"tichu", "cuttle", "hanafuda", "big two", "tien len", "belote", "terraforming mars", "twilight imperium",
@@ -80,6 +85,7 @@ return {
 			"crokinole", "carrom", "tiddlywinks", "pick up sticks", "knucklebones", "dreidel", "muggins",
 			"three card brag", "pope joan", "napoleon", "pishti", "legend of the five rings", "star wars destiny",
 			"one piece card game",
+			"the great dalmuti", "burraco", "scopone", "calabresella", "zwicker",
 		},
 	},
 	aliases = {
@@ -166,5 +172,15 @@ return {
 		["shesh besh"] = "backgammon", ["portes"] = "backgammon", ["nyout"] = "yut", ["spit"] = "speed",
 		["trash"] = "garbage", ["daifugo"] = "president", ["klaverjassen"] = "klaverjas",
 		["dnd"] = "dungeons and dragons", ["dominos"] = "dominoes",
+		["jengo"] = "jenga", ["yahtzie"] = "yahtzee", ["monapoly"] = "monopoly", ["monoply"] = "monopoly",
+		["checkres"] = "checkers", ["chutes and ladder"] = "chutes and ladders", ["oldmaid"] = "old maid",
+		["crazy eight"] = "crazy eights", ["klondike solitaire"] = "solitaire", ["patience"] = "solitaire",
+		["spider"] = "spider solitaire", ["yugioh cards"] = "yugioh", ["apple to apples"] = "apples to apples",
+		["exploding kitten"] = "exploding kittens", ["trivial pursuits"] = "trivial pursuit", ["majong"] = "mahjong",
+		["backgamon"] = "backgammon", ["lotto"] = "bingo", ["carcasonne"] = "carcassonne",
+		["bannanagrams"] = "bananagrams", ["headbandz"] = "headbanz", ["hedbanz"] = "headbanz",
+		["telestration"] = "telestrations", ["rummy kub"] = "rummikub", ["pairs"] = "memory", ["matching game"] = "memory",
+		["happy family"] = "happy families", ["top trump"] = "top trumps", ["oh heck"] = "oh hell", ["bunko"] = "bunco",
+		["japanese chess"] = "shogi", ["snap game"] = "snap", ["tiddly winks"] = "tiddlywinks", ["carom"] = "carrom",
 	},
 }

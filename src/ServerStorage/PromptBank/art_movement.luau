@@ -17,6 +17,8 @@ return {
 			"psychedelic art", "comic book art", "manga", "caricature", "sketch", "stick figure", "doodle",
 			"collage", "mosaic", "ceramics", "pottery", "origami", "calligraphy", "portrait", "landscape",
 			"still life", "mural",
+			"illustration", "pencil drawing", "ink drawing", "chalk art", "sand art", "wood carving", "paper mache",
+			"line art", "graphic design", "fine art", "modernism", "ai art", "tattoo art", "clay art", "glass art",
 		},
 		Rare = {
 			"post impressionism", "futurism", "constructivism", "op art", "bauhaus", "mannerism", "symbolism",
@@ -25,6 +27,10 @@ return {
 			"naive art", "neo expressionism", "conceptual art", "performance art", "installation art", "land art",
 			"assemblage", "vaporwave", "steampunk", "acrylic painting", "charcoal drawing", "pastel", "printmaking",
 			"etching", "lithography", "woodcut", "engraving", "fresco", "stained glass", "tapestry",
+			"airbrush", "spray paint art", "body painting", "face painting", "sand sculpture", "ice sculpture", "mixed media",
+			"digital painting", "linocut", "screen printing", "batik", "decoupage", "quilting", "embroidery", "macrame",
+			"cross stitch", "papercutting", "silhouette", "sumi e", "postmodernism", "romanesque", "fractal art", "ascii art",
+			"harlem renaissance", "neo impressionism", "impasto", "scrimshaw",
 		},
 		DeepCut = {
 			"tenebrism", "luminism", "tonalism", "precisionism", "vorticism", "rayonism", "orphism", "synthetism",
@@ -35,6 +41,7 @@ return {
 			"academic art", "biedermeier", "orientalism", "barbizon school", "hard edge painting",
 			"post painterly abstraction", "bay area figurative", "ashcan school", "stuckism", "ukiyo e",
 			"hudson river school", "light and space", "suprematism", "lowbrow",
+			"dutch golden age", "trompe l oeil", "grisaille", "anamorphic art", "chiaroscuro", "sfumato",
 		},
 		Mythic = {
 			"synchromism", "cubo futurism", "neo geo", "young british artists", "transavantgarde", "mono ha", "gutai",
@@ -83,5 +90,15 @@ return {
 		["neo plasticism"] = "de stijl",
 		["art brut"] = "outsider art",
 		["pop surrealism"] = "lowbrow",
+		["oil paintings"] = "oil painting", ["photograph"] = "photography", ["street arts"] = "street art",
+		["post modernism"] = "postmodernism", ["post modern"] = "postmodernism", ["post modern art"] = "postmodernism",
+		["pencil art"] = "pencil drawing", ["ai generated art"] = "ai art", ["baroc"] = "baroque",
+		["barroque"] = "baroque", ["romanticsm"] = "romanticism", ["impressionnism"] = "impressionism",
+		["expresionism"] = "expressionism", ["pop arts"] = "pop art", ["sculpting"] = "sculpture",
+		["sculpt"] = "sculpture", ["illustrations"] = "illustration", ["pencil drawings"] = "pencil drawing",
+		["digital paintings"] = "digital painting", ["paper mache art"] = "paper mache", ["clay"] = "clay art",
+		["glass"] = "glass art", ["surrealist art"] = "surrealism", ["cubist art"] = "cubism",
+		["abstract painting"] = "abstract", ["art nuveau"] = "art nouveau", ["anime art"] = "anime",
+		["cartoon art"] = "cartoon", ["stencil art"] = "street art", ["spray paint"] = "spray paint art",
 	},
 }

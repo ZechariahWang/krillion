@@ -28,7 +28,7 @@ return {
 			"gingerbread latte", "brown sugar shaken espresso", "coconut milk latte", "almond milk latte",
 			"salted caramel latte", "lavender latte", "rose latte", "cold foam cold brew",
 			"vanilla sweet cream cold brew", "iced cortado", "iced breve", "spanish latte", "thai iced coffee",
-			"indian filter coffee", "espresso martini", "bica", "meia de leite", "dirty chai", "verlangerter",
+			"indian filter coffee", "bica", "meia de leite", "dirty chai", "verlangerter",
 			"brauner", "bac xiu", "cafe liegeois", "batch brew", "cafe borgia", "iced caramel latte", "pistachio latte",
 			"chestnut praline latte", "caramel brulee latte", "eggnog latte", "maple latte", "honey latte",
 			"cinnamon latte", "mocha cold brew", "caramel cold brew", "irish cream latte", "vanilla cold brew",

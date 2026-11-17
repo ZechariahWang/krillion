@@ -66,7 +66,7 @@ return {
 			"empanada maker", "samosa maker", "pancake maker", "bubble waffle maker", "stroopwafel iron",
 			"churro maker", "corn dog maker", "pretzel maker", "bagel maker", "pita maker", "chapati maker",
 			"tandoor oven", "solar oven", "solar cooker",
-			"snow cone machine",
+			
 		},
 		DeepCut = {
 			"trouser press", "shoe polisher", "electric shoe polisher", "shoe buffer", "boot polisher", "lint remover",
@@ -170,5 +170,6 @@ return {
 		["steamer cooker"] = "steamer",
 		["toastor"] = "toaster", ["coffee makers"] = "coffee maker", ["stoves"] = "stove", ["freezers"] = "freezer", ["blenders"] = "blender", ["mixers"] = "mixer", ["juicers"] = "juicer", ["food processors"] = "food processor", ["rice cookers"] = "rice cooker", ["slow cookers"] = "slow cooker", ["instant pots"] = "instant pot", ["deep fat fryer"] = "deep fryer", ["fryer"] = "deep fryer", ["air fryers"] = "air fryer", ["toaster ovens"] = "toaster oven", ["waffle makers"] = "waffle maker", ["grills"] = "grill", ["dishwashers"] = "dishwasher", ["slushy machine"] = "slushie machine",
 		["refrigirator"] = "fridge", ["refrigerators"] = "fridge", ["french door fridge"] = "fridge",
+		["snow cone machine"] = "snow cone maker",
 	},
 }

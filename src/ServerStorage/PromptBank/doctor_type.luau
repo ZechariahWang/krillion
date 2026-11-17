@@ -17,6 +17,7 @@ return {
 			 "neurosurgeon", "emergency doctor", "physician",
 			"internist", "geriatrician", "ent",
 			
+			"family doctor", "general surgeon", "heart surgeon", "brain surgeon", "cosmetic dentist", "audiologist",
 		},
 		Rare = {
 			"immunologist", "rheumatologist", "neonatologist", "hospitalist", "proctologist", "periodontist",
@@ -28,6 +29,8 @@ return {
 			"reproductive endocrinologist", "medical examiner", "forensic pathologist", "infectious disease doctor",
 			"surgical oncologist", "radiation oncologist", "clinical psychologist", "neuropsychologist",
 			"cardiothoracic surgeon",
+			"medical oncologist", "homeopath", "neurointensivist", "primary care physician", "family physician",
+			"hospice doctor",
 		},
 		DeepCut = {
 			 "andrologist", "venereologist", "hepatologist", "diabetologist", "bariatric surgeon",
@@ -39,6 +42,7 @@ return {
 			"addiction specialist", "forensic psychiatrist", "geriatric psychiatrist", "sexologist", "urogynecologist",
 			"gynecologic oncologist", "maternal fetal medicine doctor", "fertility doctor",
 			"nuclear medicine doctor", "aerospace medicine doctor", "occupational medicine doctor", "travel medicine doctor",
+			"gerontologist", "dental surgeon", "pediatric endocrinologist",
 		},
 		Mythic = {
 			"phlebologist", "trichologist", "algologist",
@@ -81,5 +85,21 @@ return {
 		["proctology"] = "proctologist", ["butt doctor"] = "proctologist", ["gum doctor"] = "periodontist",
 		["root canal specialist"] = "endodontist", ["baby delivery doctor"] = "obstetrician",
 		["otolaryngologist"] = "ent",
+		["pediatricians"] = "pediatrician", ["cardiologists"] = "cardiologist", ["dermatologists"] = "dermatologist",
+		["tooth doctor"] = "dentist", ["teeth doctor"] = "dentist",
+		["foot doctor"] = "podiatrist", ["baby doctor"] = "pediatrician", ["womens doctor"] = "gynecologist",
+		["obgyn"] = "gynecologist", ["ob gyn"] = "gynecologist", ["ent specialist"] = "ent",
+		["sports doctor"] = "sports medicine doctor", ["emergency medicine doctor"] = "emergency doctor",
+		["medical doctor"] = "physician", ["neuro surgeon"] = "neurosurgeon", ["allergologist"] = "allergist",
+		["oral and maxillofacial surgeon"] = "oral surgeon", ["dermatalogist"] = "dermatologist",
+		["dermotologist"] = "dermatologist", ["cardiolagist"] = "cardiologist", ["pediatrition"] = "pediatrician",
+		["pediatritian"] = "pediatrician", ["pediatricion"] = "pediatrician", ["psychiatrist doctor"] = "psychiatrist",
+		["phsychiatrist"] = "psychiatrist", ["phychiatrist"] = "psychiatrist", ["surgen"] = "surgeon",
+		["dentest"] = "dentist", ["optomitrist"] = "optometrist", ["opthamologist doctor"] = "ophthalmologist",
+		["orthodentist"] = "orthodontist", ["neurologists"] = "neurologist", ["oncologists"] = "oncologist",
+		["gp doctor"] = "general practitioner", ["regular doctor"] = "general practitioner",
+		["normal doctor"] = "general practitioner", ["heart surgery doctor"] = "heart surgeon",
+		["cardiac doctor"] = "cardiologist", ["chiropracter"] = "chiropractor",
+		["anesthesiologist doctor"] = "anesthesiologist", ["anesthesiology"] = "anesthesiologist",
 	},
 }

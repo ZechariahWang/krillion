@@ -30,6 +30,7 @@ return {
 			"three cushion billiards", "carom billiards", "bar billiards", "blackball", "kelly pool", "3x3 basketball",
 			"swingball", "blind football", "walking football", "speedball", "gaga ball", "footbag", "wall ball",
 			"wheelchair tennis", "indoor cricket", "stickball", "streetball", "sepak takraw", "jai alai",
+			"matkot", "frescobol",
 		},
 		DeepCut = {
 			"rackets", "eton fives", "rugby fives", "fives", "canoe polo", "bicycle polo", "horseball", "polocrosse",
@@ -128,5 +129,14 @@ return {
 		["bowls"] = "lawn bowls", ["slowpitch softball"] = "softball", ["fastpitch softball"] = "softball",
 		["field lacrosse"] = "lacrosse", ["roundnet"] = "spikeball", ["faustball"] = "fistball", ["palin"] = "chueca",
 		["jeu de paume"] = "real tennis", ["bochas"] = "bocce", ["sepak raga"] = "sepak takraw",
+		["aussie rules football"] = "australian rules football", ["nfl football"] = "american football",
+		["foot ball"] = "football", ["bike polo"] = "bicycle polo", ["cycle polo"] = "bicycle polo",
+		["pool table"] = "pool", ["vollyball"] = "volleyball", ["baseballs"] = "baseball", ["socker"] = "soccer",
+		["spike ball"] = "spikeball", ["four square game"] = "four square", ["gaelic football game"] = "gaelic football",
+		["street soccer"] = "futsal", ["indoor soccer game"] = "indoor soccer", ["handball sport"] = "handball",
+		["polo sport"] = "polo", ["quidditch game"] = "quidditch", ["lacrose"] = "lacrosse",
+		["hockey ball"] = "field hockey", ["crocket"] = "croquet", ["snooker pool"] = "snooker", ["bolwing"] = "bowling",
+		["racketball"] = "racquetball", ["squash tennis"] = "squash", ["water polo sport"] = "water polo",
+		["kin ball sport"] = "kin ball", ["sepak takrow"] = "sepak takraw", ["kick volleyball"] = "sepak takraw",
 	},
 }

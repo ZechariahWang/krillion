@@ -14,6 +14,7 @@ return {
 			"blank verse", "concrete poem", "shape poem", "epigram", "riddle", "rap", "song lyrics", "prose poem",
 			"spoken word", "slam poem", "epitaph", "lullaby", "hymn", "psalm", "pastoral", "satire", "nonsense poem",
 			"sestina", "tercet", "dramatic monologue", "verse",
+			"nature poem", "funny poem", "war poem", "bio poem", "sad poem", "blackout poem",
 		},
 		Rare = {
 			"pantoum", "rubaiyat", "sijo", "renga", "haibun", "senryu", "kyrielle", "rondel", "rispetto",
@@ -24,6 +25,8 @@ return {
 			"ekphrastic poem", "confessional poem", "visual poem", "calligram", "tetractys", "etheree", "nonet",
 			"lune", "fib", "terzanelle", "clerihew", "triolet", "rondeau", "terza rima", "mock epic", "ballade",
 			"idyll", "epistle", "canto", "ghazal",
+			"protest poem", "birthday poem", "didactic poem", "dramatic poem", "verse novel", "skeltonic verse",
+			"occasional verse", "i am poem", "christmas poem", "valentine poem",
 		},
 		DeepCut = {
 			"ottava rima", "rime royal", "spenserian stanza", "ballad stanza",
@@ -33,6 +36,7 @@ return {
 			"roundelay", "madrigal", "sirventes", "planh", "alba", "canzone",
 			"canzonetta", "stornello", "strambotto", "frottola", "naani", "qasida", "masnavi", "nazm",
 			"muwashshah", "zajal", "choka", "sedoka", "katauta", "waka", "kyoka",
+			"quintilla",
 		},
 		Mythic = {
 			"gnomic verse", "skaldic poetry", "cynghanedd", "englyn", "awdl", "cywydd", "triban", "lipogram",
@@ -77,5 +81,18 @@ return {
 		["rhyme"] = "rhyming poem",
 		["free form"] = "free verse",
 		["threnos"] = "threnody",
+		["ballard"] = "ballad", ["limerik"] = "limerick", ["limeric"] = "limerick", ["sonet"] = "sonnet",
+		["acrostick"] = "acrostic", ["diamonte"] = "diamante", ["romantic poem"] = "love poem",
+		["funny poetry"] = "funny poem", ["humorous poem"] = "funny poem", ["nature poetry"] = "nature poem",
+		["war poetry"] = "war poem", ["name poem"] = "acrostic", ["epic poetry"] = "epic",
+		["narrative poetry"] = "narrative poem", ["limerick poem"] = "limerick", ["haiku poem"] = "haiku",
+		["sonnet poem"] = "sonnet", ["ode poem"] = "ode", ["ballad poem"] = "ballad",
+		["blackout poetry"] = "blackout poem", ["poem about love"] = "love poem", ["mock heroic"] = "mock epic",
+		["alphabet poem"] = "abecedarian", ["bio poems"] = "bio poem", ["free verse poetry"] = "free verse",
+		["hiku"] = "haiku", ["haikou"] = "haiku", ["elegy poem"] = "elegy", ["protest poetry"] = "protest poem",
+		["didactic poetry"] = "didactic poem", ["shape"] = "shape poem", ["sad poetry"] = "sad poem",
+		["cinquian"] = "cinquain", ["quatrian"] = "quatrain", ["sonnits"] = "sonnet", ["sapphic poem"] = "sapphic",
+		["terza"] = "terza rima", ["villanelle poem"] = "villanelle", ["tankah"] = "tanka",
+		["acrostics poem"] = "acrostic", ["pantoume"] = "pantoum",
 	},
 }

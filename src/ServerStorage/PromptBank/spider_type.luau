@@ -25,19 +25,19 @@ return {
 			"greenbottle blue tarantula", "orange baboon tarantula", "tiger rump tarantula", "regal jumping spider",
 			"bold jumping spider", "flower crab spider", "goldenrod crab spider", "giant crab spider", "wall spider",
 			"lace weaver", "trashline orb weaver", "spiny orb weaver", "bridge spider", "ant mimic spider",
-			"purseweb spider", "cave spider", "pirate spider", "assassin spider", "woodlouse spider", "sheet weaver",
+			"purseweb spider", "cave spider", "pirate spider", "assassin spider", "woodlouse spider",
 		},
 		DeepCut = {
 			"arrowshaped micrathena", "dewdrop spider", "green lynx spider", "magnolia green jumper", "marbled orb weaver",
 			"silver argiope", "banded garden spider", "black and yellow garden spider", "st andrews cross spider",
-			"giant huntsman spider", "badge huntsman", "brown huntsman", "cane toad spider", "tent web spider",
-			"hentz orb weaver", "giant lichen orb weaver", "brown house spider", "recluse weaver", "rain spider",
+			"giant huntsman spider", "badge huntsman", "brown huntsman", "tent web spider",
+			"hentz orb weaver", "giant lichen orb weaver", "brown house spider", "rain spider",
 			"flat rock spider", "button spider", "darwins bark spider", "bagheera kiplingi", "ladybird spider",
 			"red velvet spider", "feather legged spider", "hourglass spider", "long jawed orb weaver",
 		},
 		Mythic = {
 			"tangled nest spider", "atrax", "missulena", "ray spider", "portia", "cribellate spider",
-			"kleptoparasitic spider", "cave orb weaver", "cave tarantula", "sparassid", "gnaphosid", "uloborid",
+			"kleptoparasitic spider", "cave orb weaver", "sparassid", "gnaphosid", "uloborid",
 		},
 	},
 	aliases = {
@@ -88,5 +88,6 @@ return {
 		["diadem spider"] = "cross spider",
 		["european wasp spider"] = "wasp spider",
 		["white tail spider"] = "white tailed spider",
+		["sheet weaver"] = "money spider",
 	},
 }

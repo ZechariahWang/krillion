@@ -234,6 +234,9 @@ local list: { Prompt } = {
 	require("@self/spider_type"),
 	require("@self/animal_group"),
 	require("@self/shellfish"),
+	require("@self/houseplant"),
+	require("@self/whale_dolphin"),
+	require("@self/chicken_breed"),
 }
 
 local byId: { [string]: Prompt } = {}

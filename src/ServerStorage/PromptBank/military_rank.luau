@@ -19,6 +19,7 @@ return {
 			"air commodore", "flying officer", "pilot officer", "airman", "senior airman", "bombardier",
 			"gunnery sergeant", "master gunnery sergeant", "lieutenant junior grade", "commandant", "brigadier",
 			"centurion",
+			"sub lieutenant", "flight sergeant",
 		},
 		Rare = {
 			"chief master sergeant", "technical sergeant", "senior master sergeant", "airman first class",
@@ -31,6 +32,9 @@ return {
 			"quartermaster", "lance sergeant", "color sergeant", "regimental sergeant major",
 			"company sergeant major", "trooper", "sapper", "gunner", "fusilier", "rifleman", "guardsman",
 			"private second class", "subaltern",
+			"petty officer first class", "petty officer second class", "petty officer third class", "lance bombardier",
+			"master corporal", "warrant officer class one", "warrant officer class two", "shogun", "flight officer",
+			"commander in chief",
 		},
 		DeepCut = {
 			"lieutenant senior grade",
@@ -43,6 +47,7 @@ return {
 			"sergente", "caporale",
 			"marshal of the soviet union", "naik", "havildar", "subedar",
 			"jemadar", "risaldar", "subedar major", "naib subedar", "lance naik", "jawan", "sepoy",
+			"colonel general", "army general", "general of the armies", "admiral of the navy", "stabsfeldwebel",
 		},
 		Mythic = {
 			"surgeon general",
@@ -52,6 +57,7 @@ return {
 			"generalissimo", "aga", "pasha", "beylerbey", "voivode",
 			"hetman", "ataman", "esaul", "sotnik", "strategos",
 			"decurion", "optio", "tesserarius", "signifer", "aquilifer", "primus pilus",
+			"legate", "military tribune", "praefectus castrorum",
 		},
 	},
 	aliases = {
@@ -88,5 +94,16 @@ return {
 		["sargeant"] = "sergeant", ["admirals"] = "admiral", ["captains"] = "captain", ["majors"] = "major",
 		["colonels"] = "colonel", ["corporals"] = "corporal", ["commanders"] = "commander",
 		["master chief"] = "master chief petty officer",
+		["sgt"] = "sergeant", ["col"] = "colonel", ["gen"] = "general", ["lt gen"] = "lieutenant general",
+		["four star"] = "four star general", ["three star"] = "three star general", ["two star"] = "two star general",
+		["one star"] = "one star general", ["5 star"] = "five star general", ["colenel"] = "colonel",
+		["corperal"] = "corporal", ["leutenant"] = "lieutenant", ["lietenant"] = "lieutenant",
+		["lieutentant"] = "lieutenant", ["seargent"] = "sergeant", ["admirel"] = "admiral", ["comander"] = "commander",
+		["privet"] = "private", ["comandant"] = "commandant", ["sergeants"] = "sergeant",
+		["lieutenant generals"] = "lieutenant general", ["sargeant major"] = "sergeant major", ["generel"] = "general",
+		["captian"] = "captain", ["captin"] = "captain", ["majer"] = "major", ["brigadier generel"] = "brigadier general",
+		["second lt"] = "second lieutenant", ["first lt"] = "first lieutenant", ["sub lt"] = "sub lieutenant",
+		["commander and chief"] = "commander in chief", ["cic"] = "commander in chief",
+		["supreme commander"] = "commander in chief", ["commander in chief of the army"] = "commander in chief",
 	},
 }
