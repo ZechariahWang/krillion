@@ -200,7 +200,7 @@ return {
 		["skateboad"] = "skateboard", ["submrine"] = "submarine", ["sumbarine"] = "submarine",
 		["truk"] = "truck", ["trukc"] = "truck", ["tractr"] = "tractor", ["tracter"] = "tractor",
 		["fire trick"] = "fire truck", ["firetrk"] = "fire truck", ["limozine"] = "limousine",
-		["taxy"] = "taxi", ["taxxi"] = "taxi", ["tanc"] = "tank", ["rockit"] = "rocket", ["tran"] = "train",
+		["taxy"] = "taxi", ["taxxi"] = "taxi", ["tanc"] = "tank", ["rockit"] = "rocket",
 		["bote"] = "boat", ["yatch"] = "yacht", ["yaht"] = "yacht", ["hovercarft"] = "hovercraft",
 		["hoverkraft"] = "hovercraft", ["tricycel"] = "tricycle", ["trycycle"] = "tricycle", ["jeap"] = "jeep",
 		["snowmobil"] = "snowmobile", ["segwey"] = "segway", ["unicycel"] = "unicycle", ["ferrie"] = "ferry",

@@ -240,7 +240,7 @@ return {
 		["teecher"] = "teacher", ["nurce"] = "nurse", ["polis officer"] = "police officer",
 		["police oficer"] = "police officer", ["fire man"] = "firefighter", ["cheff"] = "chef",
 		["astranaut"] = "astronaut", ["loyer"] = "lawyer", ["dentis"] = "dentist", ["enginere"] = "engineer",
-		["piolt"] = "pilot", ["framer"] = "farmer", ["artst"] = "artist", ["acter"] = "actor", ["singor"] = "singer",
+		["piolt"] = "pilot", ["artst"] = "artist", ["acter"] = "actor", ["singor"] = "singer",
 		["musican"] = "musician", ["musishan"] = "musician", ["progammer"] = "programmer", ["acountant"] = "accountant",
 		["baristo"] = "barista", ["bakker"] = "baker", ["electrisian"] = "electrician", ["carpender"] = "carpenter",
 		["archetect"] = "architect", ["architech"] = "architect", ["hair dresser"] = "hairdresser",
