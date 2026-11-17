@@ -1,0 +1,60 @@
+--!strict
+return {
+	id = "camping_item",
+	prompt = "Name an item you take camping",
+	answers = {
+		Plankton = {
+			"tent", "sleeping bag", "flashlight", "marshmallows", "backpack", "lantern",
+		},
+		TooClever = {
+			"hammock", "compass", "pocket knife", "bug spray", "smores",
+		},
+		Schooler = {
+			"matches", "lighter", "firewood", "cooler", "camp stove", "pillow", "blanket", "map", "first aid kit",
+			"water bottle", "rope", "axe", "sunscreen", "tarp", "camp chair", "headlamp", "hot dogs", "binoculars",
+			"fishing rod", "hiking boots", "rain jacket", "poncho", "thermos", "batteries", "trash bags", "towel",
+			"toothbrush", "toilet paper", "frying pan", "cooking pot", "air mattress", "sleeping pad", "whistle",
+			"hatchet", "canteen", "sunglasses", "hat", "jacket", "socks", "bear spray", "roasting sticks",
+			"duct tape", "tent stakes", "paracord", "multitool", "utensils", "plates", "mug", "kettle", "cards",
+		},
+		Rare = {
+			"tent pegs", "groundsheet", "fire starter", "flint", "water filter", "trekking poles", "spork",
+			"mess kit", "dutch oven", "grill grate", "skewers", "trowel", "bear canister", "folding table",
+			"camp towel", "tent poles", "tent footprint", "sleeping bag liner", "rain fly", "bivy sack",
+			"dry bag", "stuff sack", "gps", "radio", "walkie talkie", "power bank", "solar charger", "camera",
+			"hand sanitizer", "wet wipes", "bandana", "gloves", "beanie", "long underwear", "camp shoes",
+			"cast iron skillet", "percolator", "camp mug", "lantern hook", "citronella candle",
+			"mosquito net", "insect repellent", "pocket stove", "fire pit", "folding saw", "shovel", "mallet",
+		},
+		DeepCut = {
+			"water purification tablets", "ferro rod", "tinder", "kindling", "emergency blanket", "signal mirror",
+			"bear bell", "carabiner", "stove fuel", "windscreen",
+			"camp saw", "ground cloth", "guy lines", "hammock straps", "tree straps", "rain tarp",
+		},
+		Mythic = {
+			"gaiters", "sit pad",
+		},
+	},
+	aliases = {
+		["tents"] = "tent", ["sleeping bags"] = "sleeping bag", ["flash light"] = "flashlight",
+		["torch"] = "flashlight", ["marshmallow"] = "marshmallows", ["marshmellows"] = "marshmallows",
+		["marshmellow"] = "marshmallows", ["back pack"] = "backpack", ["rucksack"] = "backpack",
+		["lanterns"] = "lantern", ["knife"] = "pocket knife", ["swiss army knife"] = "pocket knife",
+		["bugspray"] = "bug spray", ["smore"] = "smores", ["s mores"] = "smores", ["match"] = "matches",
+		["wood"] = "firewood", ["logs"] = "firewood", ["ice chest"] = "cooler", ["esky"] = "cooler",
+		["stove"] = "camp stove", ["portable stove"] = "camp stove", ["pillows"] = "pillow",
+		["blankets"] = "blanket", ["first aid"] = "first aid kit", ["medical kit"] = "first aid kit",
+		["water"] = "water bottle", ["sun screen"] = "sunscreen", ["sun cream"] = "sunscreen",
+		["tarpaulin"] = "tarp", ["chair"] = "camp chair", ["folding chair"] = "camp chair",
+		["head lamp"] = "headlamp", ["hotdogs"] = "hot dogs", ["hotdog"] = "hot dogs", ["binocular"] = "binoculars",
+		["boots"] = "hiking boots", ["raincoat"] = "rain jacket", ["flask"] = "thermos", ["battery"] = "batteries",
+		["bin bags"] = "trash bags", ["garbage bags"] = "trash bags", ["pan"] = "frying pan", ["pot"] = "cooking pot",
+		["airbed"] = "air mattress", ["sleeping mat"] = "sleeping pad", ["roasting stick"] = "roasting sticks",
+		["tent stake"] = "tent stakes", ["tent peg"] = "tent pegs", ["cord"] = "paracord", ["multi tool"] = "multitool",
+		["spoon"] = "utensils", ["fork"] = "utensils", ["playing cards"] = "cards", ["deck of cards"] = "cards",
+		["skewer"] = "skewers", ["walking poles"] = "trekking poles", ["hiking poles"] = "trekking poles",
+		["power pack"] = "power bank", ["mosquito repellent"] = "insect repellent",
+		["tent pole"] = "tent poles", ["life straw"] = "water filter", ["lifestraw"] = "water filter",
+		["fire steel"] = "ferro rod", ["space blanket"] = "emergency blanket", ["rainfly"] = "rain fly",
+	},
+}

@@ -65,6 +65,10 @@ return {
 			"blue footed booby", "sandhill crane", "whooping crane", "roseate spoonbill", "marabou stork",
 			"scarlet ibis", "greater flamingo", "chinstrap penguin", "african penguin", "atlantic puffin",
 			"hyacinth macaw", "rainbow lorikeet", "sulphur crested cockatoo",
+			"guinea fowl", "pileated woodpecker", "downy woodpecker", "passenger pigeon", "white stork", "crowned crane",
+			"ruby throated hummingbird", "toco toucan", "keel billed toucan", "stellers jay", "scrub jay", "carrion crow",
+			"american crow", "fairy wren", "eclectus parrot", "conure", "blue and gold macaw", "black cockatoo",
+			"amazon parrot", "ring billed gull",
 		},
 		DeepCut = {
 			"kakapo", "shoebill", "hoatzin", "frogmouth", "tawny frogmouth", "oilbird", "tinamou", "motmot",
@@ -111,6 +115,14 @@ return {
 			"moa", "elephant bird", "guineafowl", "golden pheasant", "argus pheasant", "brush turkey",
 			"jabiru", "saddle billed stork", "harlequin duck", "long tailed duck", "bar headed goose", "nene",
 			"magpie goose", "coal tit", "kittiwake",
+			"ivory billed woodpecker", "northern flicker", "sacred ibis", "glossy ibis", "white ibis", "sarus crane",
+			"demoiselle crane", "red crowned crane", "lesser flamingo", "chilean flamingo", "rufous hummingbird",
+			"bee hummingbird", "annas hummingbird", "gray jay", "green jay", "hooded crow", "barred owl", "spotted owl",
+			"boreal owl", "murre", "black skimmer", "laughing gull", "common tern", "caspian tern", "royal tern",
+			"black tern", "black stork", "wood stork", "painted stork", "belted kingfisher", "common kingfisher",
+			"great hornbill", "rhinoceros hornbill", "superb fairy wren", "australian magpie", "currawong", "corella",
+			"sun conure", "quaker parrot", "monk parakeet", "indian ringneck", "alexandrine parakeet", "military macaw",
+			"spixs macaw", "swiftlet", "jaeger",
 		},
 		Mythic = {
 			"kagu", "bateleur", "potoo", "sungrebe", "wryneck", "plains wanderer", "palmchat", "diving petrel",
@@ -135,6 +147,7 @@ return {
 			"malleefowl", "dartford warbler", "stone curlew", "water rail", "great skua", "storm petrel",
 			"manx shearwater", "palm cockatoo", "resplendent quetzal", "superb lyrebird", "satin bowerbird",
 			"king eider", "smew", "ruddy duck", "kelp goose", "emperor goose",
+			"hawk owl", "pigeon guillemot", "murrelet", "auklet", "little auk", "ivory gull", "gang gang cockatoo",
 		},
 	},
 	aliases = {
@@ -175,5 +188,8 @@ return {
 		["pengiun"] = "penguin", ["pengin"] = "penguin", ["ostridge"] = "ostrich",
 		["humingbird"] = "hummingbird", ["albatros"] = "albatross", ["budgy"] = "budgie",
 		["cockateel"] = "cockatiel", ["pelicans"] = "pelican", ["vultures"] = "vulture",
+		["common raven"] = "raven", ["laughing kookaburra"] = "kookaburra", ["ring necked parakeet"] = "indian ringneck",
+		["african grey"] = "african grey parrot", ["lovebirds"] = "lovebird", ["touraco"] = "turaco",
+		["cockerel"] = "chicken", ["bantam"] = "chicken", ["dovekie"] = "little auk",
 	},
 }

@@ -1,0 +1,62 @@
+--!strict
+return {
+	id = "european_city",
+	prompt = "Name a European city that is not a capital",
+	answers = {
+		Plankton = {
+			"barcelona", "milan", "venice", "manchester", "liverpool", "munich",
+		},
+		TooClever = {
+			"florence", "naples", "edinburgh", "seville", "istanbul",
+		},
+		Schooler = {
+			"marseille", "lyon", "nice", "hamburg", "frankfurt", "cologne", "birmingham", "glasgow", "turin",
+			"valencia", "porto", "geneva", "zurich", "cannes", "bordeaux", "toulouse", "leeds", "sheffield",
+			"bristol", "newcastle", "oxford", "cambridge", "brighton", "york", "bath", "cardiff", "belfast",
+			"rotterdam", "gothenburg", "bologna", "verona", "pisa", "genoa", "salzburg", "krakow", "bergen",
+			"stuttgart", "dusseldorf", "malaga", "granada", "bilbao", "palermo",
+		},
+		Rare = {
+			"antwerp", "bruges", "ghent", "utrecht", "eindhoven", "the hague", "gdansk", "wroclaw", "poznan",
+			"malmo", "aarhus", "odense", "tampere", "turku", "cork", "galway", "swansea", "nottingham",
+			"leicester", "southampton", "portsmouth", "plymouth", "dover", "aberdeen", "dundee", "inverness",
+			"nuremberg", "dresden", "leipzig", "bremen", "hanover", "heidelberg", "bonn", "essen", "dortmund",
+			"innsbruck", "graz", "linz", "basel", "lausanne", "lucerne", "lille", "nantes", "strasbourg",
+			"montpellier", "rennes", "grenoble", "avignon", "zaragoza", "san sebastian", "cordoba", "toledo",
+			"salamanca", "pamplona", "faro", "coimbra", "padua", "parma", "modena", "trieste", "bari",
+			"catania", "siena", "ravenna", "cagliari", "split", "dubrovnik", "thessaloniki", "plovdiv", "brno",
+			"ostrava", "lviv", "odessa", "kharkiv", "saint petersburg", "novgorod", "kazan", "gdynia",
+		},
+		DeepCut = {
+			"lodz", "katowice", "lublin", "szczecin", "bydgoszcz", "tartu", "daugavpils", "kaunas", "klaipeda",
+			"trondheim", "stavanger", "tromso", "uppsala", "linkoping", "orebro", "lund", "oulu", "espoo",
+			"vaasa", "limerick", "waterford", "kilkenny", "derry", "lisburn", "carlisle", "durham", "lincoln",
+			"norwich", "exeter", "truro", "wells", "ely", "salisbury", "winchester", "canterbury", "chester",
+			"lancaster", "perth", "stirling", "braga", "evora", "alicante", "murcia", "vigo",
+			"la coruna", "santander", "gijon", "oviedo", "burgos", "leon", "segovia", "cadiz", "jerez",
+			"bergamo", "brescia", "como", "lecce", "taranto", "perugia", "assisi", "pavia", "cremona", "mantua",
+			"zadar", "pula", "rijeka", "osijek", "novi sad", "nis", "varna", "burgas", "cluj napoca", "timisoara",
+			"brasov", "sibiu", "iasi", "constanta", "debrecen", "szeged", "pecs", "kosice", "maribor",
+			"maastricht", "groningen", "leiden", "delft", "haarlem", "breda", "tilburg", "arnhem", "nijmegen",
+		},
+		Mythic = {
+			"cuenca", "ronda", "monschau", "rothenburg", "bamberg", "freiburg", "kiel",
+			"lubeck", "rostock", "mainz", "trier", "wuppertal", "dijon", "colmar", "carcassonne", "albi",
+			"narbonne", "perpignan", "limoges", "poitiers", "le havre", "caen", "rouen", "amiens", "reims",
+		},
+	},
+	aliases = {
+		["barca"] = "barcelona", ["milano"] = "milan", ["venezia"] = "venice", ["man city"] = "manchester",
+		["munchen"] = "munich", ["muenchen"] = "munich", ["firenze"] = "florence", ["napoli"] = "naples",
+		["edinburg"] = "edinburgh", ["sevilla"] = "seville", ["marseilles"] = "marseille", ["koln"] = "cologne",
+		["koeln"] = "cologne", ["torino"] = "turin", ["oporto"] = "porto", ["geneve"] = "geneva",
+		["goteborg"] = "gothenburg", ["cracow"] = "krakow", ["genova"] = "genoa", ["nurnberg"] = "nuremberg",
+		["den haag"] = "the hague", ["hague"] = "the hague", ["danzig"] = "gdansk", ["breslau"] = "wroclaw",
+		["gent"] = "ghent", ["brugge"] = "bruges", ["anvers"] = "antwerp", ["st petersburg"] = "saint petersburg",
+		["leningrad"] = "saint petersburg", ["petersburg"] = "saint petersburg", ["dusseldorff"] = "dusseldorf",
+		["duesseldorf"] = "dusseldorf", ["lyons"] = "lyon",
+		["lviv ukraine"] = "lviv", ["lvov"] = "lviv", ["lwow"] = "lviv", ["kharkov"] = "kharkiv",
+		["la corunna"] = "la coruna", ["a coruna"] = "la coruna", ["san sebastian spain"] = "san sebastian",
+		["donostia"] = "san sebastian", ["londonderry"] = "derry", ["rothenberg"] = "rothenburg",
+	},
+}

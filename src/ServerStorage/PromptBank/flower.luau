@@ -110,6 +110,7 @@ return {
 			"carrion flower", "skunk cabbage", "red ginger", "shell ginger", "peace lily", "flamingo flower",
 			"glory lily", "pineapple lily", "eremurus", "touch me not", "jewelweed", "spanish bluebell",
 			"siberian squill", "parrot tulip", "triumph tulip", "darwin tulip",
+			"canterbury bells", "french marigold", "african marigold", "mexican sunflower",
 		},
 		Mythic = {
 			"victoria cruziana", "euryale", "medinilla", "lipstick plant", "goldfish plant", "flame violet",
@@ -128,6 +129,7 @@ return {
 			"catasetum", "caleana major", "corybas", "helmet orchid", "sauromatum", "helicodiceros",
 			"dead horse arum", "arisaema", "blue lotus", "sacred lotus", "string of hearts", "hoya carnosa",
 			"monkey face orchid", "swan orchid", "zygopetalum",
+			"pickerelweed",
 		},
 	},
 	aliases = {
@@ -200,5 +202,7 @@ return {
 		["lilly"] = "lily", ["orkid"] = "orchid", ["dandilion"] = "dandelion", ["lavander"] = "lavender",
 		["hydrangia"] = "hydrangea", ["blue bells"] = "bluebell", ["cherryblossom"] = "cherry blossom",
 		["amarylis"] = "amaryllis", ["cosmo"] = "cosmos",
+		["snapdragons"] = "snapdragon", ["day lily"] = "daylily", ["canna"] = "canna lily", ["squill"] = "scilla",
+		["desert pea"] = "sturts desert pea",
 	},
 }

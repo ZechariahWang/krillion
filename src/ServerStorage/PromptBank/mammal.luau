@@ -58,6 +58,7 @@ return {
 			"amur leopard", "sumatran tiger", "asiatic lion", "liger", "pampas cat", "andean cat",
 			"jungle cat", "leopard cat", "marbled cat", "iberian lynx", "eurasian lynx", "canada lynx",
 			"scottish wildcat",
+			"fawn", "stag", "ram", "plains zebra", "mountain zebra",
 		},
 		DeepCut = {
 			"solenodon", "tenrec", "desman", "moonrat", "gymnure", "elephant shrew", "treeshrew", "olingo",
@@ -86,6 +87,8 @@ return {
 			"steller sea lion", "california sea lion", "galapagos sea lion", "pacific walrus", "kermode bear",
 			"bamboo lemur", "pygmy slow loris", "philippine tarsier", "olive baboon", "hamadryas baboon",
 			"green monkey", "kipunji",
+			"dall sheep", "wisent", "onager", "kiang", "grevys zebra", "javan rhino", "sumatran rhino", "indian rhino",
+			"malayan tapir", "bairds tapir", "quagga", "przewalskis horse", "aurochs",
 		},
 		Mythic = {
 			"monito del monte", "yapok", "kowari", "mulgara", "ningaui", "falanouc", "kusimanse", "angwantibo",
@@ -179,5 +182,7 @@ return {
 		["bunny rabbit"] = "rabbit", ["sealion"] = "sea lion", ["orca whale"] = "killer whale",
 		["dolfin"] = "dolphin", ["dolphen"] = "dolphin", ["wale"] = "whale", ["lama"] = "llama",
 		["tasmanian"] = "tasmanian devil",
+		["koala bear"] = "koala", ["dromedary camel"] = "dromedary", ["grevy zebra"] = "grevys zebra",
+		["european bison"] = "wisent", ["przewalski horse"] = "przewalskis horse",
 	},
 }

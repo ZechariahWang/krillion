@@ -71,6 +71,8 @@ return {
 			"pulla", "tarta de queso", "turron", "water ice", "nice cream", "fried ice cream", "dessert pizza",
 			"strawberries and cream", "lemon posset", "sponge pudding", "treacle sponge", "steamed pudding",
 			"cornflake cake", "peppermint bark", "palmier", "tuile",
+			"gingersnap", "twinkie", "fudgesicle", "klondike bar", "flourless chocolate cake", "pralines", "monkey bread",
+			"pain au chocolat", "dirt cake", "sticky bun", "banana bread", "pumpkin bread",
 		},
 		DeepCut = {
 			"kardinalschnitte", "dobos torte", "esterhazy torte", "rigo jancsi", "kremes", "kremsnita",
@@ -103,6 +105,7 @@ return {
 			"pryaniki", "kartoshka", "baumkuchen", "rote grutze", "appeltaart", "vla", "bossche bol",
 			"tompouce", "zuger kirschtorte", "nusstorte", "mantecados", "brazo de gitano", "leche merengada",
 			"roscon de reyes",
+			"dippin dots", "tim tam", "dilly bar", "linzer cookie", "poke cake",
 		},
 		Mythic = {
 			"cendol", "ais kacang", "bubur cha cha", "kuih lapis", "klepon", "pandan cake", "kue putu",
@@ -176,5 +179,10 @@ return {
 		["ice creams"] = "ice cream", ["milkshakes"] = "milkshake", ["mud pie"] = "mississippi mud pie",
 		["cinnamon bun"] = "cinnamon roll", ["cinnamon buns"] = "cinnamon roll", ["fro yo"] = "frozen yogurt",
 		["cheesecakes"] = "cheesecake",
+		["chocolate chip cookies"] = "chocolate chip cookie", ["chocolate souffle"] = "souffle",
+		["cherry cobbler"] = "cobbler", ["glazed donut"] = "donut", ["jelly donut"] = "donut",
+		["truffle"] = "chocolate truffle", ["truffles"] = "chocolate truffle", ["brittle"] = "peanut brittle",
+		["buche de noel"] = "yule log", ["donut holes"] = "donut", ["gingersnaps"] = "gingersnap",
+		["sticky buns"] = "sticky bun", ["hot fudge sundae"] = "sundae",
 	},
 }

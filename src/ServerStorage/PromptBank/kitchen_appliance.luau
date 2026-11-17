@@ -94,6 +94,7 @@ return {
 			"bubble waffle maker", "stroopwafel iron", "churro maker", "corn dog maker", "bun steamer",
 			"pretzel maker", "bagel maker", "pita maker", "chapati maker", "tandoor oven", "solar oven",
 			"solar cooker",
+			"electric razor", "cotton candy machine",
 		},
 		DeepCut = {
 			"trouser press", "shoe polisher", "electric shoe polisher", "shoe buffer", "boot polisher",
@@ -130,6 +131,7 @@ return {
 			"moccamaster", "chemex", "siphon coffee maker", "turkish coffee maker", "vending machine",
 			"combi oven", "blast chiller", "proofing cabinet", "deck oven", "rack oven", "conveyor oven",
 			"salamander broiler", "chafing dish", "steam table",
+			"sump pump", "water softener", "electric wok",
 		},
 		Mythic = {
 			"kotatsu", "zojirushi", "takoyaki maker", "taiyaki maker", "yakitori grill", "konro", "shichirin",
@@ -175,5 +177,7 @@ return {
 		["vaccum cleaner"] = "vacuum cleaner", ["vaccuum cleaner"] = "vacuum cleaner",
 		["washing mashine"] = "washing machine", ["coffe maker"] = "coffee maker", ["hotplate"] = "hot plate",
 		["curling tongs"] = "curling iron", ["blendar"] = "blender", ["kettel"] = "kettle",
+		["shaver"] = "electric razor", ["rice maker"] = "rice cooker", ["pasta machine"] = "pasta maker",
+		["hot water heater"] = "water heater", ["stove top"] = "stovetop",
 	},
 }

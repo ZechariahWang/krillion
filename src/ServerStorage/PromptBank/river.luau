@@ -39,6 +39,7 @@ return {
 			"slaney", "erne", "blackwater", "usk", "taff", "towy", "teifi", "conwy", "nene", "welland",
 			"witham", "aire", "calder", "eden", "lune", "ribble", "irwell", "snowy river", "manawatu",
 			"buller", "rakaia", "sabarmati", "mahi", "luni", "bhagirathi", "alaknanda",
+			"rubicon",
 		},
 		DeepCut = {
 			"kolyma", "angara", "kama", "oka", "dniester", "prut", "tisza", "drava", "sava", "scheldt", "ems",
@@ -71,6 +72,7 @@ return {
 			"victoria river", "daly", "roper", "gilbert river", "flinders river", "norman river",
 			"mitchell river", "barwon", "condamine", "paroo", "warrego", "diamantina", "cooper creek", "finke",
 			"todd river",
+			"cape fear", "schuylkill", "atchafalaya", "shinano", "guadalupe",
 		},
 		Mythic = {
 			"indigirka", "olenyok", "anadyr", "pechora", "mezen", "northern dvina", "western dvina", "daugava",
@@ -97,6 +99,7 @@ return {
 			"anderson river", "horton river", "hanbury", "dubawnt", "caniapiscau", "koksoak", "george river",
 			"eastmain", "harricana", "nottaway", "broadback", "romaine", "natashquan", "moisie", "manicouagan",
 			"outardes", "betsiamites",
+			"yalu", "tumen", "drina", "sumida", "meramec", "juniata", "raritan",
 		},
 	},
 	aliases = {
@@ -133,5 +136,6 @@ return {
 		["magdalena river"] = "magdalena", ["hooghly"] = "ganges", ["mighty mississippi"] = "mississippi",
 		["thames river"] = "thames", ["river ganges"] = "ganges", ["yangtse"] = "yangtze",
 		["yangtzee"] = "yangtze", ["zaire"] = "congo", ["river seine"] = "seine",
+		["hangang"] = "han river", ["rubicon river"] = "rubicon", ["cape fear river"] = "cape fear",
 	},
 }

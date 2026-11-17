@@ -145,5 +145,6 @@ return {
 		["cock"] = "rooster", ["pony horse"] = "pony", ["farm cat"] = "barn cat", ["kitten"] = "cat",
 		["puppy"] = "dog", ["oxes"] = "ox", ["cattles"] = "cattle", ["piglets"] = "piglet",
 		["chicks"] = "chick", ["calves"] = "calf",
+		["honey bee"] = "bee", ["milk cow"] = "dairy cow", ["carabao"] = "water buffalo",
 	},
 }

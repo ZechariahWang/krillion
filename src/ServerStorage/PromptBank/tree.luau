@@ -96,6 +96,7 @@ return {
 			"california black oak", "oregon white oak", "garry oak", "hungarian oak", "kermes oak",
 			"valonia oak", "sugar pine tree", "pinon", "bunya bunya", "baobab fruit tree", "camel thorn",
 			"knobthorn", "leadwood", "jackalberry", "wild fig", "sycamore fig", "stinkwood", "sneezewood",
+			"white ash", "green ash", "rainbow eucalyptus",
 		},
 		Mythic = {
 			"dragon blood tree", "wollemi pine", "quiver tree", "kauri", "pohutukawa", "sausage tree",
@@ -189,5 +190,6 @@ return {
 		["mahogney"] = "mahogany", ["cyprus"] = "cypress", ["cypres"] = "cypress", ["magnolea"] = "magnolia",
 		["sicamore"] = "sycamore", ["sycamor"] = "sycamore", ["hickery"] = "hickory", ["dogwoods"] = "dogwood",
 		["chesnut"] = "chestnut", ["bamboo tree"] = "bamboo",
+		["crepe myrtle"] = "crape myrtle", ["yellow poplar"] = "tulip poplar", ["boxelder"] = "boxelder maple",
 	},
 }

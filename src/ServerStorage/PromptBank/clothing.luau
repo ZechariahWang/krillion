@@ -77,6 +77,7 @@ return {
 			"hosiery", "arm warmers", "girdle", "garter belt", "shapewear", "bustier", "negligee",
 			"base layer", "compression shirt", "compression shorts", "jockstrap", "niqab", "bridesmaid dress",
 			"skater skirt", "tulle skirt", "tennis skirt", "midi skirt", "wrap skirt",
+			"mules", "grass skirt",
 		},
 		DeepCut = {
 			"doublet", "hose", "jerkin", "ruff", "farthingale", "stomacher", "chemise", "kirtle", "surcoat",
@@ -100,6 +101,7 @@ return {
 			"tagelmust", "jilbab", "chador", "kokoshnik", "sarafan", "shapka", "glengarry", "pith helmet",
 			"jabot", "codpiece", "pantaloons", "shearling coat", "mink coat", "chambray shirt", "durag",
 			"jelly shoes", "teddy", "babydoll", "kanzu", "kipper tie",
+			"loincloth", "nightshirt", "housecoat", "drysuit", "burkini",
 		},
 		Mythic = {
 			"pourpoint", "tabi", "geta", "zori", "waraji", "jika tabi", "haori", "juban", "montsuki",
@@ -188,5 +190,7 @@ return {
 		["wellingtons"] = "rain boots", ["saree"] = "sari", ["burka"] = "burqa", ["kippah"] = "yarmulke",
 		["headscarf"] = "head scarf", ["pantys"] = "panties", ["jumpers"] = "jumper",
 		["swimmers"] = "swimsuit", ["nappy"] = "diaper", ["jumpsuits"] = "jumpsuit",
+		["aprons"] = "apron", ["uggs"] = "ugg boots", ["muffler"] = "scarf", ["culotte"] = "culottes",
+		["cycling shorts"] = "bike shorts", ["deck shoes"] = "boat shoes",
 	},
 }

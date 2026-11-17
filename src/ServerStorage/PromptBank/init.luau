@@ -146,6 +146,13 @@ local list: { Prompt } = {
 	require("@self/computer_part"),
 	require("@self/salty_snack"),
 	require("@self/rock_mineral"),
+	require("@self/disney_villain"),
+	require("@self/national_park"),
+	require("@self/famous_dog"),
+	require("@self/camping_item"),
+	require("@self/european_city"),
+	require("@self/australian_animal"),
+	require("@self/fictional_robot"),
 }
 
 local byId: { [string]: Prompt } = {}

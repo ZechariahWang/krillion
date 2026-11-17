@@ -79,6 +79,7 @@ return {
 			"french angelfish", "christmas tree worm", "feather duster worm", "fireworm", "bristle worm",
 			"sunflower sea star", "blue sea star", "pencil urchin", "heart urchin", "box crab", "rock crab",
 			"mole crab", "jonah crab", "wunderpus", "cranch squid", "japanese flying squid",
+			"king penguin",
 		},
 		DeepCut = {
 			"cookiecutter shark", "fangtooth", "lanternfish", "sea butterfly", "sea angel",
@@ -124,6 +125,8 @@ return {
 			"amphipod", "sea louse", "gervais beaked whale", "stejnegers beaked whale",
 			"longmans beaked whale", "shepherds beaked whale", "arnouxs beaked whale", "strap toothed whale",
 			"hubbs beaked whale", "spade toothed whale", "ginkgo toothed whale", "sowerbys beaked whale",
+			"gentoo penguin", "adelie penguin", "chinstrap penguin", "macaroni penguin", "rockhopper penguin", "pilot fish",
+			"hogfish",
 		},
 		Mythic = {
 			"vampire squid", "coelacanth", "sea pig", "siphonophore", "pyrosome", "comb jelly", "glass squid",
@@ -239,5 +242,6 @@ return {
 		["star fish"] = "starfish", ["mako"] = "mako shark", ["dorado"] = "mahi mahi",
 		["jelly fish"] = "jellyfish", ["bluewhale"] = "blue whale", ["killerwhale"] = "killer whale",
 		["whales"] = "whale", ["blue fin tuna"] = "bluefin tuna", ["zombie worm"] = "osedax",
+		["sharksucker"] = "remora", ["gentoo"] = "gentoo penguin", ["adelie"] = "adelie penguin",
 	},
 }

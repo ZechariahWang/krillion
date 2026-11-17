@@ -88,6 +88,7 @@ return {
 			"st catherines day", "st barbaras day", "st lucys day", "st nicholas eve", "st martins eve",
 			"st cecilias day", "st clements day", "st peters day", "st james day", "st marys day",
 			"st annes day", "st lawrence day", "st bartholomews day", "st matthews day",
+			"indigenous peoples day", "burning man", "coachella",
 		},
 		DeepCut = {
 			"up helly aa", "la tomatina", "tomatina", "running of the bulls", "san fermin", "las fallas",
@@ -124,6 +125,7 @@ return {
 			"osun osogbo", "ojude oba", "gelede", "egungun", "sigui", "imilchil", "moussem", "gnawa festival",
 			"new yam festival", "iri ji", "ofala", "harvest home", "harvest supper", "hunters moon",
 			"harvest moon", "blood moon", "corn moon",
+			"glastonbury", "woodstock", "lollapalooza", "maundy thursday", "holy saturday", "notting hill carnival",
 		},
 		Mythic = {
 			"bun festival", "cheung chau bun festival", "hungry ghost festival", "yue lan", "zhongyuan",
@@ -144,6 +146,7 @@ return {
 			"okuribi", "gozan no okuribi festival", "tenjin matsuri festival", "sanja matsuri festival",
 			"kanda matsuri festival", "jidai matsuri festival", "aoi matsuri festival",
 			"gion matsuri festival", "nebuta matsuri festival", "awa odori festival",
+			"bloomsday",
 		},
 	},
 	aliases = {
@@ -192,5 +195,8 @@ return {
 		["shavuos"] = "shavuot", ["ramzan"] = "ramadan", ["id"] = "eid", ["bakrid"] = "eid al adha",
 		["bakra eid"] = "eid al adha", ["id al adha"] = "eid al adha", ["id al fitr"] = "eid al fitr",
 		["muertos"] = "day of the dead",
+		["fall equinox"] = "autumn equinox", ["bastille"] = "bastille day", ["international workers day"] = "may day",
+		["womens day"] = "international womens day", ["rio carnival"] = "carnival",
+		["carnival of venice"] = "venice carnival",
 	},
 }

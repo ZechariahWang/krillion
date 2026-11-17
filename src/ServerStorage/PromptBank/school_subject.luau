@@ -178,5 +178,7 @@ return {
 		["scripture"] = "religious studies", ["phonics class"] = "phonics", ["calc"] = "calculus",
 		["lang arts"] = "language arts", ["sst"] = "social studies", ["woodshop class"] = "woodshop",
 		["math class"] = "math",
+		["computer"] = "computer science", ["biochem"] = "biochemistry",
+		["family and consumer sciences"] = "home economics",
 	},
 }
