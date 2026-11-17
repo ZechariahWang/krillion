@@ -10,10 +10,9 @@ return {
 			"peanut", "soybean", "lima bean",
 		},
 		Schooler = {
-			"navy bean", "baked beans", "refried beans", "snap pea", "snow pea", "split pea",
-			"black eyed pea", "edamame", "fava bean", "mung bean", "white bean", "red bean", "coffee bean",
-			"cocoa bean", "vanilla bean", "runner bean", "wax bean", "chili bean", "pork and beans",
-			"bean sprout", "black lentil", "brown lentil", "green lentil", "red lentil",
+			"navy bean", "baked beans", "refried beans", "split pea", "black eyed pea", "white bean",
+			"red bean", "runner bean", "wax bean", "chili bean", "pork and beans", "black lentil",
+			"brown lentil", "green lentil", "red lentil",
 		},
 		Rare = {
 			"borlotti bean", "cranberry bean", "flageolet", "haricot vert", "hyacinth bean", "moth bean",
@@ -24,7 +23,8 @@ return {
 			"kala chana", "tamarind", "alfalfa", "carob", "lupin", "romano bean", "pink bean", "fenugreek",
 			"kudzu", "vetch", "purple hull pea", "crowder pea", "black soybean", "dragon tongue bean",
 			"blue lake bean", "gigantes", "corona bean", "cannellini bean", "great northern bean",
-			"adzuki bean", "french lentil",
+			"adzuki bean", "french lentil", "edamame", "coffee bean", "cocoa bean", "vanilla bean",
+			"bean sprout", "snap pea", "snow pea", "fava bean", "mung bean",
 		},
 		DeepCut = {
 			"bambara groundnut", "grass pea", "guar bean", "tonka bean", "kabuli chickpea", "desi chickpea",
