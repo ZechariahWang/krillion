@@ -80,6 +80,7 @@ return {
 			"lake worthersee", "lake attersee", "lake traunsee", "lake egirdir", "lake beysehir",
 			"lake morskie oko", "lake rybinsk", "lake seliger", "lake teletskoye", "lake sarez", "lake bosten",
 			"lake kanas", "lake fuxian", "lake qiandao",
+			"lake wallenpaupack",
 		},
 		DeepCut = {
 			"lake eyre south", "lake torrens", "lake gairdner", "lake frome", "lake callabonna", "lake mackay",
@@ -166,5 +167,8 @@ return {
 		["lake titticaca"] = "lake titicaca", ["lake geneve"] = "lake geneva", ["lake powel"] = "lake powell",
 		["lake meade"] = "lake mead", ["great lake"] = "great lakes", ["lake champlaine"] = "lake champlain",
 		["lake pontchatrain"] = "lake pontchartrain", ["lake of woods"] = "lake of the woods",
+		["lake titikaka"] = "lake titicaca", ["lake baykal"] = "lake baikal",
+		["great salt"] = "great salt lake", ["salt lake utah"] = "great salt lake",
+		["lake pend d oreille"] = "lake pend oreille", ["lake tahoe nevada"] = "lake tahoe",
 	},
 }

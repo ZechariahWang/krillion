@@ -65,6 +65,10 @@ return {
 			"kapa haka", "siva afi", "sasa", "lakalaka", "meke", "corroboree", "bush dance", "juba",
 			"ring shout", "second line", "madison", "skank", "perreo", "dembow", "gqom", "shaku shaku",
 			"zanku", "bata", "tarraxinha", "tango nuevo", "jazz funk", "commercial dance",
+			"toosie slide", "savage dance", "take the l", "boogie down", "lean back", "the hammer", "scottish country dance",
+			"burlesque", "street jazz", "heels dance", "jerusalema", "amapiano dance", "hoop dance", "fancy dance",
+			"grass dance", "stomp dance", "jingle dance", "powwow", "eagle dance", "buffalo dance", "electric boogaloo",
+			"acro",
 		},
 		DeepCut = {
 			"lyrical hip hop", "contemporary jazz", "neoclassical ballet", "romantic ballet",
@@ -82,6 +86,7 @@ return {
 			"sattriya", "kamarinskaya", "hajdutanc", "pravo horo", "karsilamas", "zonaradikos", "pentozali",
 			"raas leela", "kolattam", "kummi", "koodiyattam", "oppana", "kolkali", "thiruvathira", "tamasha",
 			"koli dance", "lezim", "kalinda", "ayyala", "liwa", "harbiya",
+			"caramelldansen", "gwara gwara",
 		},
 		Mythic = {
 			"bergamasca", "canario", "passacaglia", "chaconne", "forlana", "siciliana", "morisca", "matachin",
@@ -158,5 +163,14 @@ return {
 		["sufi whirling"] = "whirling dervish", ["dervish"] = "whirling dervish", ["kozachok"] = "kazachok",
 		["syrtaki"] = "sirtaki", ["ice dancing"] = "ice dance", ["pole dancing"] = "pole dance",
 		["waltzing"] = "waltz", ["tangos"] = "tango",
+		["the nae nae"] = "nae nae", ["the stanky leg"] = "stanky leg", ["disco dancing"] = "disco", ["balet"] = "ballet",
+		["ballett"] = "ballet", ["ballay"] = "ballet", ["flamenko"] = "flamenco", ["macarana"] = "macarena",
+		["makarena"] = "macarena", ["bachatta"] = "bachata", ["merenge"] = "merengue", ["walz"] = "waltz",
+		["brakedance"] = "breakdance", ["break danceing"] = "breakdance", ["line danceing"] = "line dancing",
+		["ball room"] = "ballroom", ["foxtrott"] = "foxtrot",
+		["popping and locking"] = "popping", ["pop locking"] = "popping", ["poplocking"] = "popping",
+		["hammer time"] = "the hammer",
+		["toosie"] = "toosie slide", ["fancy shawl"] = "fancy dance", ["powwow dance"] = "powwow", ["pow wow"] = "powwow",
+		["hoop dancing"] = "hoop dance", ["grass dancing"] = "grass dance", ["stomp dancing"] = "stomp dance",
 	},
 }

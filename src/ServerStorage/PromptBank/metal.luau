@@ -78,6 +78,7 @@ return {
 			"transition metal", "rare earth metal", "platinum group metal", "tungsten carbide",
 			"depleted uranium", "zircaloy", "niobium titanium", "platinum iridium", "nordic gold",
 			"gold plate",
+			"mithril", "adamantium", "vibranium", "netherite",
 		},
 		DeepCut = {
 			"sodium potassium alloy", "nak", "galinstan", "fields metal", "woods metal", "roses metal",
@@ -99,6 +100,7 @@ return {
 			"silver coin", "copper ingot", "iron ingot", "steel beam", "steel cable", "steel wire",
 			"wire rope", "chain", "krugerrand", "sovereign", "bullion", "ferric iron", "ferrous iron",
 			"cupric", "cuprous", "stannous", "plumbous", "aurous", "argentic", "mercuric", "mercurous",
+			"unobtainium", "beskar", "valyrian steel", "adamantite", "uru",
 		},
 		Mythic = {
 			"eka silicon", "eka aluminium", "eka boron", "eka manganese", "ununennium", "unbinilium",
@@ -150,5 +152,9 @@ return {
 		["pottasium"] = "potassium", ["calcuim"] = "calcium", ["merkury"] = "mercury", ["mercery"] = "mercury",
 		["stell"] = "steel", ["stainles steel"] = "stainless steel", ["stainlesssteel"] = "stainless steel",
 		["mangnese"] = "manganese",
+		["alumium"] = "aluminum", ["aluminuim"] = "aluminum", ["magnisium"] = "magnesium", ["uranum"] = "uranium",
+		["coppper"] = "copper", ["vibranum"] = "vibranium", ["mithryl"] = "mithril", ["adamantine"] = "adamantium",
+		["adamantyne"] = "adamantium", ["mythril"] = "mithril", ["bras"] = "brass",
+		["bronse"] = "bronze",
 	},
 }

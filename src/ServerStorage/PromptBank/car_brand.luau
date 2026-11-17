@@ -28,6 +28,7 @@ return {
 			"leyland", "jensen motors", "lotus cars", "ariel atom", "bristol cars", "aston", "bentley motors",
 			"volga", "kamaz", "skoda auto", "aero", "ikarus", "raba", "polski fiat", "fso", "syrena",
 			"warszawa", "nysa", "bugatti automobiles", "covini",
+			"general motors", "stellantis", "xiaomi", "pininfarina", "daf", "iveco",
 		},
 		DeepCut = {
 			"saab", "holden", "mahindra", "ssangyong", "mercury", "rover", "triumph", "austin", "morris",
@@ -56,6 +57,9 @@ return {
 			"reliant motors", "bond", "bond bug", "sinclair", "gordon keeble", "peerless", "warwick", "marcos",
 			"elva", "lola", "cooper", "brabham", "tyrrell", "jaguar land rover", "tvr cars", "westfield",
 			"lotus seven", "caterham seven", "birkin", "dax", "ac", "ac cars", "ac cobra",
+			"czinger", "drako", "mullen", "lightyear", "sono motors", "zagato", "bertone", "bufori", "naza", "w motors",
+			"dendrobium", "arash", "rezvani", "mazzanti", "dallara", "tramontana", "caparo", "devel",
+			"ldv",
 		},
 		Mythic = {
 			"dacia", "proton", "tata", "perodua", "borgward", "wartburg", "zastava", "yugo", "tatra", "simca",
@@ -78,6 +82,7 @@ return {
 			"simson", "walter", "jawa", "zetor", "karosa", "avia", "liaz", "polonez", "goliath", "hansa",
 			"gutbrod", "maico", "zundapp", "fuldamobil", "heinkel", "peel", "scootacar", "berkeley", "gilbern",
 			"ascari", "pgo", "microlino", "tazzari", "bajaj", "ambassador", "icona",
+			"italdesign", "ghia", "apex motors", "estrema", "vencer", "tushek", "touring superleggera", "spania gta",
 		},
 	},
 	aliases = {
@@ -106,5 +111,17 @@ return {
 		["tezla"] = "tesla", ["lexis"] = "lexus", ["citron"] = "citroen", ["alpha romeo"] = "alfa romeo",
 		["bently"] = "bentley", ["bentlee"] = "bentley", ["cadilac"] = "cadillac", ["cadillack"] = "cadillac",
 		["caddilac"] = "cadillac", ["dodge ram"] = "ram",
+		["gm"] = "general motors", ["infinity"] = "infiniti", ["peugot"] = "peugeot", ["peugeout"] = "peugeot",
+		["renualt"] = "renault", ["reno"] = "renault", ["mazada"] = "mazda", ["subarau"] = "subaru",
+		["citreon"] = "citroen", ["bugati"] = "bugatti", ["tesler"] = "tesla",
+		["lamborghinni"] = "lamborghini", ["ferarri"] = "ferrari", ["mclaran"] = "mclaren",
+		["astin martin"] = "aston martin", ["lexuss"] = "lexus", ["toyoda"] = "toyota", ["nisan"] = "nissan",
+		["nissen"] = "nissan", ["chrysller"] = "chrysler", ["jeap"] = "jeep", ["doge"] = "dodge", ["suzuky"] = "suzuki",
+		["audie"] = "audi", ["oddi"] = "audi", ["hondai"] = "honda", ["fords"] = "ford", ["toyotas"] = "toyota",
+		["hondas"] = "honda", ["bmws"] = "bmw", ["teslas"] = "tesla",
+		["chrystler"] = "chrysler",
+		["alfa romero"] = "alfa romeo",
+		["smart car"] = "smart",
+		["hispano"] = "hispano suiza",
 	},
 }

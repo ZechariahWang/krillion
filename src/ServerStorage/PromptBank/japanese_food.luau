@@ -1,0 +1,60 @@
+--!strict
+return {
+	id = "japanese_food",
+	prompt = "Name a Japanese food",
+	answers = {
+		Plankton = {
+			"sushi", "ramen", "tempura", "teriyaki", "miso soup", "udon",
+		},
+		TooClever = {
+			"mochi", "onigiri", "matcha", "takoyaki", "sashimi", "dorayaki",
+		},
+		Schooler = {
+			"katsu", "tonkatsu", "yakitori", "gyoza", "edamame", "wasabi", "soba", "okonomiyaki", "bento",
+			"california roll", "dumplings", "yakisoba", "tofu", "nigiri", "maki", "sukiyaki", "shabu shabu",
+			"karaage", "chicken katsu", "katsu curry", "japanese curry", "taiyaki", "dango", "daifuku",
+			"pocky", "ramune", "unagi", "tamago", "natto", "seaweed", "nori", "panko", "ponzu", "gyudon",
+			"oyakodon", "katsudon", "teppanyaki", "hibachi", "spam musubi", "melon pan", "castella",
+			"anpan", "amazake", "furikake", "tempura shrimp", "salmon roll", "dragon roll",
+			"spicy tuna roll", "rainbow roll", "hand roll", "temaki", "chirashi", "tamagoyaki",
+		},
+		Rare = {
+			"oden", "yakiniku", "tsukemono", "umeboshi", "kitsune udon", "tantanmen", "tonkotsu ramen",
+			"miso ramen", "shoyu ramen", "shio ramen", "tsukemen", "okayu", "zosui", "chawanmushi", "gunkan",
+			"inari", "inarizushi", "uni", "ikura", "tobiko", "hamachi", "toro", "ebi", "tako", "ika",
+			"saba", "anago", "kakigori", "yokan", "manju", "senbei", "mitarashi dango", "warabimochi",
+			"monjayaki", "korokke", "menchi katsu", "hayashi rice", "omurice", "napolitan",
+			"nikujaga", "kinpira", "sunomono", "hiyayakko", "agedashi tofu", "shumai", "tebasaki",
+			"kushikatsu", "negima", "tsukune", "dashi", "mirin", "kombu", "shiso", "yuzu", "wagyu",
+			"fugu", "unadon", "tendon", "ochazuke",
+		},
+		DeepCut = {
+			"makizushi", "oshizushi", "temarizushi", "narezushi", "sasazushi", "kaisendon",
+			"hitsumabushi", "tonjiru", "nabe", "chanko nabe", "motsunabe", "mizutaki", "yudofu",
+			"shirataki", "konnyaku", "ganmodoki", "kamaboko", "narutomaki", "chikuwa", "hanpen", "satsuma age",
+			"tsukudani", "nukazuke", "takuan", "shiozake", "himono", "shirasu", "sakura mochi", "kashiwa mochi",
+			"kusa mochi", "kintsuba", "kuzumochi", "mizu yokan", "anmitsu", "goma dofu",
+			"hiyamugi", "somen", "hoto", "champon", "sara udon", "yaki udon", "kake udon",
+		},
+		Mythic = {
+			"shirako", "shiokara", "konowata", "tatami iwashi", "basashi", "kusaya", "funazushi",
+			"inago", "hachinoko", "natto gohan", "sansai", "fukujinzuke", "rakkyo", "tororo", "nameko",
+			"mentaiko", "karasumi", "ankimo", "kamameshi", "ekiben", "kurozu", "yubeshi",
+		},
+	},
+	aliases = {
+		["sushi roll"] = "maki", ["sushi rolls"] = "maki", ["ramen noodles"] = "ramen", ["rahmen"] = "ramen",
+		["teriyaki chicken"] = "teriyaki", ["miso"] = "miso soup",
+		["moche"] = "mochi", ["mochis"] = "mochi", ["onigiri rice ball"] = "onigiri", ["rice ball"] = "onigiri",
+		["rice balls"] = "onigiri", ["omusubi"] = "onigiri", ["matcha tea"] = "matcha", ["takoyaki balls"] = "takoyaki",
+		["octopus balls"] = "takoyaki", ["katsu chicken"] = "chicken katsu", ["pork katsu"] = "tonkatsu",
+		["pork cutlet"] = "tonkatsu", ["yakitory"] = "yakitori", ["gyozas"] = "gyoza", ["potstickers"] = "gyoza",
+		["pot stickers"] = "gyoza", ["wasabi paste"] = "wasabi", ["buckwheat noodles"] = "soba",
+		["japanese pancake"] = "okonomiyaki", ["bento box"] = "bento", ["california rolls"] = "california roll",
+		["calafornia roll"] = "california roll", ["udon noodles"] = "udon", ["eel"] = "unagi",
+		["seaweed snack"] = "nori", ["japanese beef"] = "wagyu", ["kobe beef"] = "wagyu",
+		["tamago sushi"] = "tamago", ["egg sushi"] = "tamago", ["pocky sticks"] = "pocky",
+		["rice cake"] = "mochi", ["tiger roll"] = "dragon roll", ["salmon nigiri"] = "nigiri",
+		["tuna sashimi"] = "sashimi",
+	},
+}

@@ -61,6 +61,9 @@ return {
 			"common carder bee", "rusty patched bumblebee", "western honey bee", "asian honey bee",
 			"giant honey bee", "sharpshooter", "pea aphid", "woolly aphid", "phylloxera", "adelgid", "kermes",
 			"cottony cushion scale", "san jose scale",
+			"cabbage looper", "mountain pine beetle", "tent caterpillar", "tiger swallowtail", "sulphur butterfly",
+			"clouded yellow", "small tortoiseshell", "common blue", "meadow brown", "gatekeeper", "speckled wood",
+			"marbled white", "large white", "small white", "harlequin ladybird",
 		},
 		DeepCut = {
 			"scorpionfly", "snakefly", "owlfly", "mantisfly", "hellgrammite", "firebrat", "bristletail",
@@ -89,6 +92,7 @@ return {
 			"carpenterworm", "wood leopard moth", "currant clearwing", "great black wasp",
 			"great golden digger wasp", "organ pipe mud dauber", "bumblebee moth", "hummingbird clearwing",
 			"snowberry clearwing",
+			"ringlet", "ruby tiger", "painted jezebel",
 		},
 		Mythic = {
 			"heelwalker", "rock crawler", "ice crawler", "zorapteran", "twisted wing parasite", "meganeura",
@@ -166,5 +170,14 @@ return {
 		["bumblebees"] = "bumblebee", ["honeybees"] = "honeybee", ["yellow jackets"] = "yellow jacket",
 		["stag beetles"] = "stag beetle", ["skeeter"] = "mosquito", ["water skeeter"] = "water strider",
 		["hoverflies"] = "hoverfly", ["caterpillars"] = "caterpillar", ["maggots"] = "maggot",
+		["lady bugs"] = "ladybug", ["ladybugs"] = "ladybug", ["dragonflies"] = "dragonfly", ["fireflies"] = "firefly",
+		["fireflys"] = "firefly", ["stinkbugs"] = "stink bug", ["mantises"] = "praying mantis",
+		["praying mantises"] = "praying mantis", ["buterfly"] = "butterfly", ["butterflie"] = "butterfly",
+		["butterfy"] = "butterfly", ["mosquitto"] = "mosquito", ["dragonfy"] = "dragonfly", ["cicado"] = "cicada",
+		["grasshoper"] = "grasshopper", ["catterpillar"] = "caterpillar", ["caterpiller"] = "caterpillar",
+		["cockroache"] = "cockroach", ["bumblebe"] = "bumblebee", ["dungbeetle"] = "dung beetle",
+		["dung beetles"] = "dung beetle", ["crane flies"] = "crane fly",
+		["tortoiseshell"] = "small tortoiseshell", ["pine beetle"] = "mountain pine beetle", ["looper"] = "cabbage looper",
+		["harlequin ladybug"] = "harlequin ladybird", ["asian ladybug"] = "asian lady beetle",
 	},
 }
