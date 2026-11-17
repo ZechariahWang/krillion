@@ -318,5 +318,13 @@ return {
 		["green asparagus"] = "asparagus", ["broccoli microgreens"] = "microgreens",
 		["sweet pea shoots"] = "pea shoots", ["chiltepin pepper"] = "chiltepin", ["tepin"] = "chiltepin",
 		["locoto"] = "rocoto",
+		["carott"] = "carrot", ["potatto"] = "potato", ["pototo"] = "potato", ["tomatto"] = "tomato",
+		["brocoly"] = "broccoli", ["cualiflower"] = "cauliflower", ["cucumbar"] = "cucumber", ["cumcumber"] = "cucumber",
+		["onyon"] = "onion", ["garlick"] = "garlic", ["gralic"] = "garlic", ["pumpkn"] = "pumpkin",
+		["pumking"] = "pumpkin", ["zuccini"] = "zucchini", ["zukini"] = "zucchini", ["cabbadge"] = "cabbage",
+		["aspargus"] = "asparagus", ["asparugus"] = "asparagus", ["eggplent"] = "eggplant",
+		["sweet potatoe"] = "sweet potato", ["sweet potatos"] = "sweet potato", ["turnup"] = "turnip",
+		["musroom"] = "mushroom", ["lima beans"] = "lima bean", ["halapeno"] = "jalapeno", ["jalepeno"] = "jalapeno",
+		["jalapino"] = "jalapeno",
 	},
 }

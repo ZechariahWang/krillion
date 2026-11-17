@@ -174,5 +174,12 @@ return {
 		["bramley apple"] = "bramley",
 		["crenshaw melon"] = "crenshaw",
 		["casaba melon"] = "casaba",
+		["orenge"] = "orange", ["strawberrie"] = "strawberry", ["strawbary"] = "strawberry", ["watermelen"] = "watermelon",
+		["water mellon"] = "watermelon", ["pinnapple"] = "pineapple", ["blueberrie"] = "blueberry",
+		["bluebery"] = "blueberry", ["rasperry"] = "raspberry", ["cherrie"] = "cherry", ["grappe"] = "grape",
+		["mangoe"] = "mango", ["manggo"] = "mango", ["cocnut"] = "coconut", ["cocunut"] = "coconut",
+		["pomegrante"] = "pomegranate", ["pomogranate"] = "pomegranate", ["pappaya"] = "papaya", ["apricote"] = "apricot",
+		["tanjerine"] = "tangerine", ["honeydue"] = "honeydew", ["grapefriut"] = "grapefruit", ["avocato"] = "avocado",
+		["dragon frut"] = "dragon fruit", ["kiwie"] = "kiwi", ["granny smith apple"] = "granny smith",
 	},
 }

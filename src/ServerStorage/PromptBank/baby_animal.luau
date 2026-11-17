@@ -55,7 +55,6 @@ return {
 		["baby eagle"] = "eaglet", ["baby bird"] = "fledgling", ["duckiling"] = "duckling",
 		["tadpol"] = "tadpole", ["jouey"] = "joey", ["bunnys"] = "bunny",
 		["kittin"] = "kitten", ["kitenn"] = "kitten", ["pupies"] = "puppy",
-		["chiks"] = "chick", ["piglit"] = "piglet", ["fauns"] = "fawn",
-		
+		["chiks"] = "chick", ["piglit"] = "piglet", 
 	},
 }
