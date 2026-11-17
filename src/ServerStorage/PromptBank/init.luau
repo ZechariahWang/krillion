@@ -118,6 +118,13 @@ local list: { Prompt } = {
 	require("@self/phone_app"),
 	require("@self/fairy_tale"),
 	require("@self/harry_potter_character"),
+	require("@self/breakfast_cereal"),
+	require("@self/cookie"),
+	require("@self/star_wars_character"),
+	require("@self/mario_character"),
+	require("@self/minecraft_mob"),
+	require("@self/tech_company"),
+	require("@self/clothing_brand"),
 }
 
 local byId: { [string]: Prompt } = {}

@@ -34,6 +34,7 @@ return {
 			"pharo", "ml", "batch", "xml", "snap", "openscad", "robotc", "simulink", "kodu",
 			"machine language", "masm", "mips", "wgsl", "sass", "scss", "xojo", "livecode", "blueprints",
 			"mel", "maxscript", "twine", "inform 7", "renpy", "c shell", "fish shell", "pl pgsql",
+			"json",
 		},
 		DeepCut = {
 			"elm", "purescript", "idris", "coq", "agda", "raku", "hack", "standard ml", "haxe", "vala", "nim",
@@ -51,6 +52,7 @@ return {
 			"pari gp", "spss syntax", "6502 assembly", "z80 assembly", "risc v assembly", "gpss", "mad",
 			"math matic", "comtran", "gambas", "logtalk", "picat", "unison", "roc", "grain", "inform", "tads",
 			"ink", "yarn spinner", "bibtex", "troff", "gremlin", "less", "pug", "haml", "stylus", "nushell",
+			"yaml", "markdown", "turing", "tiny basic",
 		},
 		Mythic = {
 			"malbolge", "intercal", "jovial", "mumps", "shakespeare", "chef", "unlambda", "thue", "golfscript",
@@ -120,5 +122,13 @@ return {
 		["batch script"] = "batch", ["cmd"] = "batch", ["bat"] = "batch", ["cs"] = "c sharp",
 		["gamemaker"] = "gml", ["game maker language"] = "gml", ["gamemaker language"] = "gml",
 		["spl"] = "shakespeare", ["hq9 plus"] = "hq9",
+		["binary"] = "machine code", ["javasript"] = "javascript", ["java scrip"] = "javascript",
+		["kotlen"] = "kotlin", ["rubi"] = "ruby", ["swfit"] = "swift", ["pascel"] = "pascal", ["peral"] = "perl",
+		["typescrip"] = "typescript", ["pyth0n"] = "python", ["python programming"] = "python",
+		["html css"] = "html", ["tinybasic"] = "tiny basic", ["yml"] = "yaml", ["md"] = "markdown",
+		["c plus plus language"] = "c plus plus", ["c sharp programming"] = "c sharp",
+		["java programming"] = "java", ["lua programming"] = "lua", ["scrach"] = "scratch", ["scrath"] = "scratch",
+		["rustt"] = "rust", ["sequel"] = "sql", ["kotlin language"] = "kotlin", ["ruby language"] = "ruby",
+		["python language"] = "python", ["java language"] = "java", ["golang language"] = "go",
 	},
 }

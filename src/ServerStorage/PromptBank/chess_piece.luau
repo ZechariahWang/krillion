@@ -42,5 +42,13 @@ return {
 		["dabbaba piece"] = "dabbaba", ["threeleaper piece"] = "threeleaper", ["three leaper"] = "threeleaper",
 		["berolina"] = "berolina pawn", ["berolina pawns"] = "berolina pawn", ["pown"] = "pawn",
 		["minister"] = "advisor", ["counsellor"] = "advisor", ["peasant"] = "pawn",
+		["rok"] = "rook", ["rooke"] = "rook", ["roook"] = "rook", ["biship"] = "bishop", ["bishap"] = "bishop",
+		["queeen"] = "queen", ["qeen"] = "queen", ["kight"] = "knight", ["knigth"] = "knight",
+		["nighth"] = "knight", ["horsie"] = "knight", ["pony"] = "knight", ["horses"] = "knight", ["pwan"] = "pawn",
+		["pawnn"] = "pawn", ["kng"] = "king", ["kingg"] = "king", ["vizir"] = "vizier", ["marshall"] = "marshal",
+		["rook piece"] = "rook", ["castle rook"] = "rook", ["chess king"] = "king", ["chess queen"] = "queen",
+		["chess knight"] = "knight", ["chess rook"] = "rook", ["chess bishop"] = "bishop", ["chess pawn"] = "pawn",
+		["the king"] = "king", ["the queen"] = "queen", ["the rook"] = "rook", ["the knight"] = "knight",
+		["the bishop"] = "bishop", ["the pawn"] = "pawn", ["priest"] = "bishop",
 	},
 }

@@ -55,6 +55,7 @@ return {
 			"montgomery cheddar", "vermont cheddar", "wisconsin cheddar", "fiore sardo", "pecorino sardo",
 			"cacioricotta", "bleu des causses", "saint felicien", "afuega l pitu", "bra", "hoop cheese",
 			"fromage d affinois", "beemster", "gouda boerenkaas", "cooleeney",
+			"provel", "chaumes", "rocamadour", "salers", "laguiole", "parrano",
 		},
 		Mythic = {
 			"taleggio", "reblochon", "vacherin mont dor", "stinking bishop", "cabrales", "castelmagno",
@@ -64,6 +65,7 @@ return {
 			"bandel", "queso anejo", "beyaz peynir", "tulum", "lor", "van otlu peyniri", "civil peyniri",
 			"mihalic", "ezine", "kars gravyeri", "kashar", "dil peyniri", "orgu peyniri", "queijo da serra",
 			"graviera naxou", "touloumisio", "xynotyro", "sfela", "ladotyri", "kopanisti", "batzos",
+			"sapsago",
 		},
 	},
 	aliases = {
@@ -110,5 +112,15 @@ return {
 		["manchago"] = "manchego", ["gamalost"] = "gammelost", ["brynza"] = "bryndza",
 		["fourme d ambert"] = "fourme dambert", ["pont l eveque"] = "pont leveque",
 		["chihuahua cheese"] = "queso chihuahua", ["queso cotija"] = "cotija",
+		["romano"] = "pecorino", ["reggiano"] = "parmesan", ["parmigiana"] = "parmesan",
+		["mont dor"] = "vacherin mont dor", ["farmer cheese"] = "farmers cheese", ["cheeze whiz"] = "cheez whiz",
+		["reccotta"] = "ricotta", ["provolonne"] = "provolone", ["colby jack cheese"] = "colby jack",
+		["bluecheese"] = "blue cheese", ["creamcheese"] = "cream cheese", ["cotage cheese"] = "cottage cheese",
+		["goatcheese"] = "goat cheese", ["halumi"] = "halloumi", ["stringcheese"] = "string cheese",
+		["cheedar"] = "cheddar", ["cheddarr"] = "cheddar", ["mozz"] = "mozzarella",
+		["mozzarella ball"] = "mozzarella", ["swiss cheeze"] = "swiss", ["goudaa"] = "gouda",
+		["fetta cheese"] = "feta", ["ementhal"] = "emmental", ["cheese slice"] = "american",
+		["cheese slices"] = "american", ["cheddar jack cheese"] = "cheddar jack",
+		["camembear cheese"] = "camembert", ["jalapeno jack"] = "pepper jack",
 	},
 }

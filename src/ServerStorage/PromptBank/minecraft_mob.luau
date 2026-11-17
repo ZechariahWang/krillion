@@ -1,0 +1,59 @@
+--!strict
+return {
+	id = "minecraft_mob",
+	prompt = "Name a Minecraft mob",
+	answers = {
+		Plankton = {
+			"creeper", "zombie", "skeleton", "enderman", "spider", "pig",
+		},
+		TooClever = {
+			"ender dragon", "wither", "villager", "iron golem",
+		},
+		Schooler = {
+			"cow", "sheep", "chicken", "horse", "wolf", "cat", "ocelot", "bat", "squid", "slime", "ghast", "blaze",
+			"zombie pigman", "piglin", "witch", "silverfish", "cave spider", "magma cube", "husk", "drowned", "phantom",
+			"pillager", "vindicator", "evoker", "warden", "allay", "axolotl", "bee", "fox", "panda", "polar bear", "llama",
+			"parrot", "turtle", "dolphin", "cod", "salmon", "pufferfish", "tropical fish", "rabbit", "mooshroom",
+			"snow golem", "donkey", "mule", "zombie villager", "guardian", "shulker", "strider", "hoglin", "goat", "frog",
+			"camel", "sniffer", "steve", "alex", "herobrine", "stray", "wither skeleton", "skeleton horse", "vex", "ravager",
+			"wandering trader", "glow squid",
+		},
+		Rare = {
+			"endermite", "zoglin", "piglin brute", "elder guardian", "trader llama", "zombie horse", "zombified piglin",
+			"tadpole", "armadillo", "breeze", "bogged", "illusioner", "killer bunny", "copper golem", "creaking",
+			"happy ghast", "nautilus", "zombie nautilus", "parched", "camel husk", "baby zombie", "chicken jockey",
+			"spider jockey", "skeleton trap horse", "giant", "pillager captain", "tamed wolf", "charged creeper",
+		},
+		DeepCut = {
+			"glare", "moobloom", "iceologer", "wildfire", "tuff golem", "rascal", "chillager", "nitwit", "librarian",
+			"cleric", "farmer", "fletcher", "shepherd", "butcher", "cartographer", "armorer", "toolsmith", "weaponsmith",
+			"leatherworker", "mason", "fisherman", "jeb sheep", "toast rabbit", "enderman jockey", "strider jockey",
+		},
+		Mythic = {
+			"mannequin",
+		},
+	},
+	aliases = {
+		["creepers"] = "creeper", ["zombies"] = "zombie", ["skeletons"] = "skeleton", ["endermen"] = "enderman",
+		["enderman mob"] = "enderman", ["spiders"] = "spider", ["pigs"] = "pig", ["enderdragon"] = "ender dragon",
+		["the ender dragon"] = "ender dragon", ["withers"] = "wither", ["villagers"] = "villager",
+		["iron golems"] = "iron golem", ["golem"] = "iron golem", ["cows"] = "cow", ["sheeps"] = "sheep",
+		["chickens"] = "chicken", ["horses"] = "horse", ["wolves"] = "wolf", ["dog"] = "wolf", ["cats"] = "cat",
+		["kitten"] = "cat", ["ocelots"] = "ocelot", ["bats"] = "bat", ["squids"] = "squid", ["slimes"] = "slime",
+		["ghasts"] = "ghast", ["blazes"] = "blaze", ["zombie pigmen"] = "zombie pigman",
+		["zombified pigman"] = "zombie pigman", ["piglins"] = "piglin", ["witches"] = "witch",
+		["silverfishes"] = "silverfish", ["cave spiders"] = "cave spider", ["magma cubes"] = "magma cube",
+		["magma"] = "magma cube", ["drowneds"] = "drowned", ["phantoms"] = "phantom", ["pillagers"] = "pillager",
+		["vindicators"] = "vindicator", ["evokers"] = "evoker", ["ravagers"] = "ravager", ["vexes"] = "vex",
+		["vexs"] = "vex", ["wardens"] = "warden", ["allays"] = "allay", ["axolotls"] = "axolotl", ["bees"] = "bee",
+		["foxes"] = "fox", ["pandas"] = "panda", ["polar bears"] = "polar bear", ["bear"] = "polar bear",
+		["llamas"] = "llama", ["parrots"] = "parrot", ["turtles"] = "turtle", ["dolphins"] = "dolphin", ["fish"] = "cod",
+		["puffer fish"] = "pufferfish", ["bunny"] = "rabbit", ["rabbits"] = "rabbit", ["mooshrooms"] = "mooshroom",
+		["mushroom cow"] = "mooshroom", ["snow golems"] = "snow golem", ["snowman"] = "snow golem", ["donkeys"] = "donkey",
+		["mules"] = "mule", ["guardians"] = "guardian", ["shulkers"] = "shulker", ["endermites"] = "endermite",
+		["hoglins"] = "hoglin", ["striders"] = "strider", ["wither skeletons"] = "wither skeleton", ["goats"] = "goat",
+		["frogs"] = "frog", ["camels"] = "camel", ["sniffers"] = "sniffer", ["armadillos"] = "armadillo",
+		["crepper"] = "creeper", ["creper"] = "creeper", ["enderdragon boss"] = "ender dragon", ["skelton"] = "skeleton",
+		["skellington"] = "skeleton", ["herobrine mob"] = "herobrine", ["steve player"] = "steve",
+	},
+}

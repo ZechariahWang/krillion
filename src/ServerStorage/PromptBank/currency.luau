@@ -35,6 +35,7 @@ return {
 			"croatian kuna", "slovenian tolar", "estonian kroon", "sixpence", "halfpenny", "half dollar",
 			"silver dollar", "bitcoin cash", "chainlink", "stellar", "avalanche", "tron", "toncoin", "pepe",
 			"usd coin", "binance coin", "minecoins", "gil", "bells", "israeli new shekel", "north korean won",
+			"galleon", "bottle caps", "septims", "zeni",
 		},
 		DeepCut = {
 			"zloty", "forint", "baht", "dirham", "shekel", "ringgit", "afghani", "lek", "dram", "manat",
@@ -52,6 +53,7 @@ return {
 			"salvadoran colon", "aruban florin", "netherlands antillean guilder", "barbados dollar",
 			"guyana dollar", "kiribati dollar", "tuvaluan dollar", "cook islands dollar", "seychelles rupee",
 			"eswatini lilangeni",
+			"krugerrand", "maravedi", "knut", "sickle", "munny",
 		},
 		Mythic = {
 			"ngultrum", "kwacha", "lempira", "tugrik", "quetzal", "nakfa", "ouguiya", "vatu", "paanga", "tala",
@@ -116,5 +118,17 @@ return {
 		["nepali rupee"] = "nepalese rupee", ["kazakh tenge"] = "kazakhstani tenge",
 		["macau pataca"] = "macanese pataca", ["laotian kip"] = "lao kip", ["burmese kyat"] = "myanmar kyat",
 		["emirati dirham"] = "uae dirham",
+		["leva"] = "lev", ["lei"] = "leu", ["usdc"] = "usd coin", ["shib"] = "shiba inu", ["xmr"] = "monero",
+		["ada"] = "cardano", ["dollar bill"] = "dollar", ["dollar bills"] = "dollar", ["uk pound"] = "pound",
+		["british pound sterling"] = "pound", ["gb pound"] = "pound", ["english pound"] = "pound",
+		["great british pound"] = "pound", ["canadian dollars"] = "canadian dollar",
+		["aus dollar"] = "australian dollar", ["mexican pesos"] = "mexican peso", ["doller"] = "dollar",
+		["dolar"] = "dollar", ["dollor"] = "dollar", ["ruppee"] = "rupee", ["rupie"] = "rupee",
+		["bitcon"] = "bitcoin", ["robox"] = "robux", ["robx"] = "robux", ["pund"] = "pound",
+		["canadian"] = "canadian dollar", ["australian"] = "australian dollar", ["mexican"] = "mexican peso",
+		["toonie"] = "canadian dollar", ["half penny"] = "halfpenny", ["galleons"] = "galleon", ["knuts"] = "knut",
+		["sickles"] = "sickle", ["krugerrands"] = "krugerrand", ["v buck"] = "vbucks", ["vbuck"] = "vbucks",
+		["yens"] = "yen", ["yuans"] = "yuan", ["euro coin"] = "euro", ["euro cent"] = "euro",
+		["us currency"] = "us dollar", ["american money"] = "us dollar", ["united states dollar"] = "us dollar",
 	},
 }

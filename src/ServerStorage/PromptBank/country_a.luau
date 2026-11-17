@@ -56,5 +56,12 @@ return {
 		["samoa american"] = "american samoa", ["ambazonian"] = "ambazonia",
 		["southern cameroons"] = "ambazonia", ["azawad republic"] = "azawad", ["adjaria"] = "adjara",
 		["ajaria"] = "adjara", ["algera"] = "algeria",
+		["straya"] = "australia", ["austraila"] = "australia", ["austalia"] = "australia",
+		["australi"] = "australia", ["aussie"] = "australia", ["afghanistann"] = "afghanistan",
+		["afgahanistan"] = "afghanistan", ["afghanistain"] = "afghanistan", ["azebaijan"] = "azerbaijan",
+		["azerbajian"] = "azerbaijan", ["azerbaidzhan"] = "azerbaijan", ["armenie"] = "armenia",
+		["algerie"] = "algeria", ["algeri"] = "algeria", ["argentinaa"] = "argentina", ["argentinan"] = "argentina",
+		["akrotiri"] = "akrotiri and dhekelia", ["dhekelia"] = "akrotiri and dhekelia",
+		["ascension"] = "ascension island", ["amer samoa"] = "american samoa", ["angolaa"] = "angola",
 	},
 }
