@@ -15,6 +15,7 @@ return {
 			"the babadook", "sully", "mike wazowski", "shrek", "dragon", "giant spider", "the grinch", "witch", "skeleton",
 			"smaug", "balrog", "gollum", "troll", "orc", "gargoyle", "the hulk", "medusa", "the terminator", "velociraptor",
 			"t rex", "megalodon", "cyclops", "creature from the black lagoon",
+			"ghoul",
 		},
 		Rare = {
 			"cthulhu", "the fly", "gamera", "tarantula", "bride of frankenstein", "nosferatu", "mogwai",
@@ -23,6 +24,8 @@ return {
 			"dr jekyll and mr hyde", "the golem", "queen alien", "the rancor", "the mimic", "the creeper",
 			"the cloverfield monster", "chupacabra", "wendigo", "krampus", "the pale man", "the hydra", "sandworm",
 			"beetlejuice",
+			"pumpkinhead", "candyman", "swamp thing", "yeti", "boogeyman", "sarlacc", "wampa", "basilisk", "aragog",
+			"mothman", "critters", "anaconda", "piranha",
 		},
 		DeepCut = {
 			"anguirus", "baragon", "gorgo", "reptilicus", "the giant behemoth", "the tingler", "gappa", "daimajin", "gyaos",
@@ -30,6 +33,7 @@ return {
 			"the morlocks", "the jersey devil", "the amphibian man", "calibos", "monster x", "the giant claw",
 			"the crawling eye", "orga", "zilla", "the host", "the deadly mantis", "them giant ants", "the 50 foot woman",
 			"bubba ho tep", "the jabberwock", "yog sothoth",
+			"muto", "skullcrawler",
 		},
 		Mythic = {
 			"varan", "kamacuras", "kamoebas", "ganimes", "bagan", "ymir", "king caesar", "gabara",
@@ -118,5 +122,9 @@ return {
 		["frankensteins monster"] = "frankenstein",
 		["the wolf man"] = "werewolf",
 		["xenomorph"] = "alien",
+		["sasquatch"] = "bigfoot", ["kong"] = "king kong", ["the boogeyman"] = "boogeyman",
+		["boogie man"] = "boogeyman", ["abominable snowman"] = "yeti", ["ghouls"] = "ghoul", ["piranhas"] = "piranha",
+		["the candyman"] = "candyman", ["xenomorph queen"] = "queen alien", ["swampthing"] = "swamp thing",
+		["brundlefly"] = "the fly", ["mutos"] = "muto", ["krakens"] = "kraken",
 	},
 }

@@ -23,6 +23,9 @@ return {
 			"inspector wexford", "mr moto", "agatha raisin", "rosa diaz", "bunk moreland", "mikael blomkvist", "veronica mars",
 			"inspector lestrade", "jake peralta", "olivia benson", "horatio caine", "gil grissom", "harry bosch", "jack reacher",
 			"jessica fletcher", "kojak", "nick and nora charles", "basil of baker street", "robert langdon",
+			"nate the great", "cam jansen", "phryne fisher", "eddie valiant", "rick deckard", "trixie belden",
+			"flavia de luce", "detective chimp", "jane tennison", "spenser", "remington steele", "jane rizzoli",
+			"kate beckett", "cole phelps", "l lawliet",
 		},
 		DeepCut = {
 			"albert campion", "roderick alleyn", "dr thorndyke", "sergeant cuff", "inspector bucket", "monsieur lecoq",
@@ -32,6 +35,8 @@ return {
 			"alex cross", "lincoln rhyme", "harry dresden", "jessica jones", "jimmy mcnulty", "rust cohle", "sarah lund",
 			"saga noren", "phoenix wright", "miles edgeworth", "jim bergerac", "inspector taggart", "inspector ghote",
 			"max carrados", "martin hewitt",
+			"kogoro mouri", "hajime kindaichi", "adam dalgliesh", "armand gamache", "jigsaw jones", "carl kolchak",
+			"the three investigators",
 		},
 		Mythic = {
 			"sexton blake", "inspector appleby", "gideon fell", "inspector french", "mr satterthwaite", "erast fandorin",
@@ -94,5 +99,12 @@ return {
 		["lord peter"] = "lord peter wimsey",
 		["inspector columbo"] = "columbo",
 		["fandorin"] = "erast fandorin",
+		["jacques clouseau"] = "inspector clouseau", ["shinichi kudo"] = "detective conan",
+		["detective dee"] = "judge dee", ["dalgliesh"] = "adam dalgliesh", ["gamache"] = "armand gamache",
+		["tennison"] = "jane tennison", ["deckard"] = "rick deckard", ["valiant"] = "eddie valiant",
+		["phryne"] = "phryne fisher", ["miss fisher"] = "phryne fisher", ["mr holmes"] = "sherlock holmes",
+		["sherlock homes"] = "sherlock holmes", ["sherlok holmes"] = "sherlock holmes",
+		["detective monk"] = "adrian monk", ["nate"] = "nate the great", ["kolchak"] = "carl kolchak",
+		["three investigators"] = "the three investigators", ["hercule"] = "hercule poirot",
 	},
 }

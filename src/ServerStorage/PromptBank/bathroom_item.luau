@@ -1,0 +1,61 @@
+--!strict
+return {
+	id = "bathroom_item",
+	prompt = "Name something you find in a bathroom",
+	answers = {
+		Plankton = {
+			"toilet", "sink", "shower", "bathtub", "toothbrush", "towel", "soap",
+		},
+		TooClever = {
+			"mirror", "toilet paper", "shampoo", "toothpaste", "plunger",
+		},
+		Schooler = {
+			"bath mat", "shower curtain", "conditioner", "body wash", "razor", "comb", "hairbrush", "hair dryer",
+			"scale", "faucet", "drain", "toilet brush", "trash can", "washcloth", "loofah", "sponge", "bubble bath",
+			"deodorant", "floss", "mouthwash", "cotton balls", "q tips", "tissues", "medicine cabinet", "bath bomb",
+			"toilet seat", "shower head", "bathrobe", "lotion", "tweezers", "nail clippers", "hand soap", "hand towel",
+			"bath towel", "rubber duck", "shaving cream", "tile", "sunscreen", "perfume", "makeup", "cologne",
+			"hair gel", "hair spray", "plug", "night light", "air freshener", "bidet",
+		},
+		Rare = {
+			"soap dish", "towel rack", "toothbrush holder", "toilet roll holder", "shower caddy", "shower cap",
+			"pumice stone", "bath salts", "bath oil", "bath pillow", "exhaust fan", "vanity", "bathroom cabinet",
+			"linen closet", "hamper", "laundry basket", "soap dispenser", "back scrubber", "nail file", "face wash",
+			"moisturizer", "toner", "hair tie", "hair clip", "curling iron", "flat iron", "epsom salt", "bath toys",
+			"toilet cleaner", "bleach", "squeegee", "grab bar", "hook", "shelf", "retainer", "scrunchie", "headband",
+			"toothpick", "lip balm", "eyedrops", "bandaid",
+		},
+		DeepCut = {
+			"bath caddy", "toilet tank", "overflow drain", "sink stopper", "p trap", "shower valve", "mouth guard",
+			"tongue scraper", "foot spa", "pedicure kit", "dental pick", "shaving brush", "safety razor",
+			"styptic pencil", "aftershave", "talcum powder", "exfoliator", "water pik", "denture cup",
+		},
+		Mythic = {
+			"grout", "tub spout", "bath thermometer",
+		},
+	},
+	aliases = {
+		["loo"] = "toilet", ["commode"] = "toilet", ["lavatory"] = "toilet", ["bath"] = "bathtub", ["tub"] = "bathtub",
+		["bath tub"] = "bathtub", ["toothbrushes"] = "toothbrush", ["tooth brush"] = "toothbrush", ["towels"] = "towel",
+		["bar of soap"] = "soap", ["soap bar"] = "soap", ["body soap"] = "soap", ["mirrors"] = "mirror",
+		["tp"] = "toilet paper", ["toilet roll"] = "toilet paper", ["loo roll"] = "toilet paper",
+		["bog roll"] = "toilet paper", ["tooth paste"] = "toothpaste", ["rug"] = "bath mat", ["bathmat"] = "bath mat",
+		["curtain"] = "shower curtain", ["blow dryer"] = "hair dryer", ["hairdryer"] = "hair dryer",
+		["blow drier"] = "hair dryer", ["scales"] = "scale", ["bathroom scale"] = "scale", ["tap"] = "faucet",
+		["taps"] = "faucet", ["plug hole"] = "drain", ["toilet scrubber"] = "toilet brush", ["bin"] = "trash can",
+		["rubbish bin"] = "trash can", ["garbage can"] = "trash can", ["wash cloth"] = "washcloth",
+		["flannel"] = "washcloth", ["bubblebath"] = "bubble bath", ["mouth wash"] = "mouthwash",
+		["dental floss"] = "floss", ["qtips"] = "q tips", ["cotton swabs"] = "q tips", ["kleenex"] = "tissues",
+		["tissue"] = "tissues", ["razors"] = "razor", ["combs"] = "comb", ["brush"] = "hairbrush",
+		["ducky"] = "rubber duck", ["rubber ducky"] = "rubber duck", ["duck"] = "rubber duck",
+		["medicine chest"] = "medicine cabinet", ["bath robe"] = "bathrobe", ["robe"] = "bathrobe",
+		["showerhead"] = "shower head", ["body lotion"] = "lotion", ["moisturiser"] = "moisturizer",
+		["handsoap"] = "hand soap", ["curling tongs"] = "curling iron", ["hair straightener"] = "flat iron",
+		["straightener"] = "flat iron", ["hair straighteners"] = "flat iron", ["washbasin"] = "sink",
+		["wash basin"] = "sink", ["basin"] = "sink", ["shower stall"] = "shower", ["towel bar"] = "towel rack",
+		["towel rail"] = "towel rack", ["band aid"] = "bandaid", ["bandage"] = "bandaid", ["eye drops"] = "eyedrops",
+		["hair elastic"] = "hair tie", ["shower gel"] = "body wash", ["u bend"] = "p trap", ["cistern"] = "toilet tank",
+		["trash bin"] = "trash can", ["waste basket"] = "trash can", ["bath toy"] = "bath toys",
+		["shower mat"] = "bath mat", ["bathtub toys"] = "bath toys", ["body scrub"] = "exfoliator",
+	},
+}

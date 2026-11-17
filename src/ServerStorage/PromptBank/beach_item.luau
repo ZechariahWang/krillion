@@ -17,6 +17,7 @@ return {
 			"dolphin", "fish", "shark", "sea turtle", "hermit crab", "sand dollar", "volleyball", "beach bag", "bonfire",
 			"marshmallows", "sand toys", "kayak", "paddleboard", "jet ski", "wetsuit", "tide", "dune", "reef", "coral", "whale",
 			"seal", "sea lion", "stingray", "seahorse", "hot dog", "popsicle", "treasure chest", "metal detector",
+			"ocean", "boat", "snacks", "sunset",
 		},
 		Rare = {
 			"lifeguard tower", "whistle", "buoy", "anchor", "fishing rod", "fishing net", "bait", "tackle box", "sea glass",
@@ -25,12 +26,16 @@ return {
 			"windsurfer", "skimboard", "beach cart", "windbreak", "rash guard", "sarong", "tote bag", "beach mat", "paddle ball",
 			"message in a bottle", "boardwalk", "snack bar", "tiki torch", "beach house", "cotton candy", "funnel cake",
 			"saltwater taffy", "popcorn", "life ring", "sunbed", "parasol", "cabana",
+			"lobster", "shrimp", "heron", "egret", "hammock", "beach tent", "water bottle", "swim cap", "water shoes",
+			"picnic basket", "speedboat", "canoe", "raft", "book", "camera", "tanning oil", "aloe vera", "sandbar",
+			"cliff", "shipwreck", "sand flea", "surfer", "visor", "air mattress", "beach flag",
 		},
 		DeepCut = {
 			"sea oats", "beach grass", "wrack line", "bladderwrack", "sargassum", "mermaids purse", "razor clam", "cockle",
 			"periwinkle", "whelk", "moon snail", "scallop", "cowrie", "man o war", "sea nettle", "moon jelly", "brittle star",
 			"pufferfish", "sanderling", "oystercatcher", "whimbrel", "willet", "turnstone", "skimmer", "groyne", "breakwater",
 			"jetty", "seawall", "surf rod", "sand spike", "rod holder", "mole crab", "ghost crab", "piping plover", "least tern",
+			"sea cucumber",
 		},
 		Mythic = {
 			"swash", "backwash", "sea stack", "sea arch", "blowhole",
@@ -155,5 +160,13 @@ return {
 		["pail"] = "bucket",
 		["lounger"] = "sunbed",
 		["sea foam"] = "foam",
+		["sea"] = "ocean", ["boats"] = "boat", ["snack"] = "snacks", ["sunsets"] = "sunset",
+		["beach umbrella"] = "umbrella", ["sand bucket"] = "bucket", ["rock pool"] = "tide pool",
+		["swim shorts"] = "swim trunks", ["board shorts"] = "swim trunks", ["swim fins"] = "flippers",
+		["beach hat"] = "sun hat", ["cap"] = "hat", ["lotion"] = "sunscreen", ["lobsters"] = "lobster",
+		["sand flies"] = "sand flea", ["inflatable"] = "air mattress", ["life guard tower"] = "lifeguard tower",
+		["beach tents"] = "beach tent", ["water bottles"] = "water bottle", ["books"] = "book",
+		["cameras"] = "camera", ["sailing boat"] = "sailboat", ["sail boat"] = "sailboat", ["egrets"] = "egret",
+		["herons"] = "heron",
 	},
 }

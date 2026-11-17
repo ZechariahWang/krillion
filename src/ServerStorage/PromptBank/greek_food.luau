@@ -31,12 +31,14 @@ return {
 			"paximadia",
 			"melitzanosalata",
 			"fasolada",
+			"bifteki", "halloumi", "rizogalo", "spanakorizo", "koulouri", "chicken souvlaki", "pork souvlaki",
 		},
 		DeepCut = {
 			"marides", "gopes", "lavraki", "tsipoura", "barbounia", "frikase", "patsas", "garides saganaki",
 			"strapatsada", "kagianas", "loukaniko", "pastourma", "sheftalia", "xynotyro", "ekmek kataifi",
 			"galaktopita", "amygdalota", "moustalevria", "petimezi", "koliva", "lagana", "tahinopita",
 			"mastiha", "sfakianopita", "kalitsounia", "dakos", "kritharoto", "makaronia me kima",
+			"tomatokeftedes", "lahanodolmades", "bouyiourdi",
 		},
 		Mythic = {
 			"hilopites", "avgotaraho", "kavourmas", "tsigareli", "tsakistes", "zymarika",
@@ -69,5 +71,11 @@ return {
 		["horiatiki"] = "greek salad",
 		["kritharaki"] = "orzo",
 		["lamb chops"] = "paidakia",
+		["gemista"] = "yemista", ["octopus"] = "htapodi", ["grilled octopus"] = "htapodi",
+		["souzoukakia"] = "soutzoukakia", ["dolmadakia"] = "dolmades", ["greek rice pudding"] = "rizogalo",
+		["paximadi"] = "paximadia", ["greek pita"] = "pita", ["pita bread"] = "pita",
+		["kalamata olive"] = "kalamata olives", ["olive"] = "olives", ["greek salads"] = "greek salad",
+		["greek burger"] = "bifteki", ["tiropitakia"] = "tiropita", ["kalamarakia"] = "kalamari",
+		["halloumi cheese"] = "halloumi", ["stuffed peppers"] = "yemista",
 	},
 }

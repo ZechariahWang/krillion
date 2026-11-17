@@ -14,6 +14,7 @@ return {
 			"lentil soup", "pilaf",
 			"lahmacun", "pide", "borek", "turkish delight", "mezze", "ayran", "tagine",
 			"doner kebab", "shish tawook", "harissa", "simit", "manti", "dondurma",
+			"zaatar",
 		},
 		Rare = {
 			"muhammara", "freekeh", "sumac", "umm ali", "basbousa", "maamoul", "qatayef", "iskender kebab",
@@ -31,6 +32,8 @@ return {
 			"kabsa",
 			"ful medames",
 			"adana kebab",
+			"lavash", "sabich", "zhug", "arayes", "halloumi", "dukkah", "baharat", "pickled turnips", "doogh",
+			"lokma", "kaak",
 		},
 		DeepCut = {
 			"hashweh", "kibbeh nayyeh", "kibbeh labaniyeh", "sheikh al mahshi", "fatayer",
@@ -38,6 +41,8 @@ return {
 			"testi kebab", "icli kofte", "mercimek koftesi", "cig kofte", "kuru fasulye", "bulgur pilavi",
 			"jareesh", "thareed", "saleeg", "samak harra", "sayadieh", "batinjan makdous", "kishk", "shishbarak",
 			"ouzi", "qidra", "fahsa", "mandi", "halawet el jibn",
+			"malawach", "jachnun", "amba", "karniyarik", "hunkar begendi", "kokorec", "kumpir", "balik ekmek",
+			"kuzu tandir", "sholeh zard", "turshi", "sabzi polo",
 		},
 		Mythic = {
 			"hummus bil lahme", "kibbeh bil sanieh", "lahm bi tahini", "zarb", "shuwaa", "pirpirim", "sabzi khordan",
@@ -77,5 +82,10 @@ return {
 		["dizi"] = "abgoosht",
 		["kafta"] = "kofta",
 		["lahm bi ajeen"] = "sfiha",
+		["zatar"] = "zaatar", ["zahtar"] = "zaatar", ["zaater"] = "zaatar", ["tamiya"] = "falafel",
+		["halawa"] = "halva", ["halwa"] = "halva", ["kunefe"] = "knafeh", ["kunefeh"] = "knafeh",
+		["ataif"] = "qatayef", ["dolmeh"] = "dolma", ["yalanji"] = "dolma", ["sambusa"] = "sambousek",
+		["sambousa"] = "sambousek", ["bourekas"] = "borek", ["halloumi cheese"] = "halloumi",
+		["lavash bread"] = "lavash", ["jahnun"] = "jachnun", ["malawah"] = "malawach",
 	},
 }

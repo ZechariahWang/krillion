@@ -24,11 +24,14 @@ return {
 			"trebonianus gallus", "carinus", "numerian", "constantius chlorus", "magnentius", "zeno", "anastasius",
 			"heraclius", "basil ii", "constantine xi", "leo i", "marcian", "valentinian iii", "theodosius ii",
 			"severus ii", "maximinus daza", "diadumenian", "pupienus", "balbinus", "gordian i", "gordian ii",
+			"valentinian ii", "justin i", "leo iii", "constantine v", "nikephoros ii phokas", "john tzimiskes",
+			"basil i", "manuel i komnenos", "alexios i komnenos", "michael viii palaiologos", "constantine vii",
 		},
 		Mythic = {
 			"aemilian", "hostilian", "quintillus", "florian", "vetranio", "magnus maximus", "eugenius", "avitus",
 			"majorian", "anthemius", "olybrius", "glycerius", "julius nepos", "petronius maximus", "basiliscus",
 			"phocas", "maurice", "volusianus", "libius severus", "leo ii", "tiberius ii",
+			"herennius etruscus", "constantius iii", "justin ii", "constantine iii",
 		},
 	},
 	aliases = {
@@ -48,5 +51,11 @@ return {
 		["emperor caligula"] = "caligula", ["emperor augustus"] = "augustus", ["emperor claudius"] = "claudius",
 		["claudius ii"] = "claudius gothicus", ["basil 2"] = "basil ii", ["valentinian 3"] = "valentinian iii",
 		["leo 1"] = "leo i",
+		["severus alexander"] = "alexander severus", ["valentinian 2"] = "valentinian ii", ["justin 1"] = "justin i",
+		["justin 2"] = "justin ii", ["constantine 3"] = "constantine iii", ["constantine 5"] = "constantine v",
+		["leo 3"] = "leo iii", ["basil 1"] = "basil i", ["alexios komnenos"] = "alexios i komnenos",
+		["alexius i"] = "alexios i komnenos", ["nicephorus phocas"] = "nikephoros ii phokas",
+		["john i tzimiskes"] = "john tzimiskes", ["aemilianus"] = "aemilian", ["gallus"] = "trebonianus gallus",
+		["philip arab"] = "philip the arab",
 	},
 }

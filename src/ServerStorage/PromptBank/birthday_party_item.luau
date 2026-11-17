@@ -15,6 +15,7 @@ return {
 			"hot dogs", "burgers", "fruit", "plates", "cups", "napkins", "forks", "tablecloth", "table", "chairs", "face paint",
 			"bounce house", "musical chairs", "pin the tail on the donkey", "glow sticks", "cotton candy", "fireworks",
 			"sparklers", "lights", "disco ball", "karaoke", "invitations",
+			"party games", "drinks", "chocolate", "guests",
 		},
 		Rare = {
 			"cake topper", "magician", "hide and seek", "charades", "bingo", "limbo", "simon says", "duck duck goose", "photos",
@@ -22,9 +23,13 @@ return {
 			"cake knife", "cake stand", "tiara", "sprinkles", "frosting", "paper plates", "plastic cups", "party poppers",
 			"confetti cannon", "balloon arch", "helium", "balloon animals", "foil balloons", "ice cream cake", "sheet cake",
 			"cake pops", "donuts", "chocolate fountain", "candy buffet", "dessert table", "bubbles",
+			"birthday song", "birthday boy", "birthday girl", "pass the parcel", "treasure hunt", "scavenger hunt",
+			"sandwiches", "pretzels", "lollipops", "veggie tray", "centerpieces", "gift table", "dj", "mascot",
+			"petting zoo", "pony rides", "camera", "speakers", "number candles", "dance floor",
 		},
 		DeepCut = {
 			"gift tags", "paper lanterns", "pom poms", "thank you cards", "bubble machine",
+			"guest book",
 		},
 		Mythic = {
 			"candle snuffer", "cake board", "fondant", "buttercream", "edible glitter", "fog machine",
@@ -105,5 +110,13 @@ return {
 		["party plates"] = "paper plates",
 		["candy table"] = "candy buffet",
 		["icing"] = "frosting",
+		["games"] = "party games", ["party game"] = "party games", ["drink"] = "drinks", ["guest"] = "guests",
+		["people"] = "guests", ["happy birthday song"] = "birthday song", ["sandwich"] = "sandwiches",
+		["pretzel"] = "pretzels", ["lollipop"] = "lollipops", ["sucker"] = "lollipops", ["suckers"] = "lollipops",
+		["centerpiece"] = "centerpieces", ["deejay"] = "dj", ["pony ride"] = "pony rides", ["speaker"] = "speakers",
+		["treat bags"] = "goody bag", ["loot bag"] = "goody bag", ["loot bags"] = "goody bag",
+		["birthday crown"] = "party crown", ["thank you notes"] = "thank you cards",
+		["scavenger hunts"] = "scavenger hunt", ["number candle"] = "number candles", ["paper hats"] = "party hats",
+		["sweets"] = "candy", ["mascots"] = "mascot",
 	},
 }

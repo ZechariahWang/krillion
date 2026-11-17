@@ -17,6 +17,7 @@ return {
 			"king herod", "ferdinand", "philip ii", "henry vii", "queen anne", "mary i", "king george vi",
 			"king george v", "king edward vii", "shaka zulu", "mansa musa", "ramesses ii", "nefertiti", "hatshepsut",
 			"cyrus the great", "montezuma",
+			"king arthur", "catherine the great", "peter the great",
 		},
 		Rare = {
 			"kamehameha", "king harold", "king canute", "edward the confessor", "henry ii", "henry iv", "henry vi",
@@ -26,6 +27,9 @@ return {
 			"harald v", "willem alexander", "queen maxima", "king felipe vi", "juan carlos", "queen rania",
 			"king salman", "queen noor", "liliuokalani", "zenobia", "queen nzinga", "pachacuti", "robert the bruce",
 			"macbeth",
+			"richard ii", "edward ii", "george ii", "george i", "lady jane grey", "frederick the great",
+			"maria theresa", "akhenaten", "hammurabi", "croesus", "king midas", "king hussein", "king saul",
+			"sundiata keita", "atahualpa", "mswati iii", "queen silvia", "king abdullah ii",
 		},
 		DeepCut = {
 			"ethelred the unready", "aethelstan", "edmund ironside", "edgar", "offa", "harold godwinson",
@@ -36,6 +40,9 @@ return {
 			"kenneth macalpin", "brian boru", "rhodri the great", "llywelyn the great", "owain glyndwr", "hywel dda",
 			"pepin the short", "clovis", "dagobert", "hugh capet", "philip augustus", "philip iv", "philip v",
 			"charles vii", "ivan the terrible", "matthias corvinus", "casimir iii", "jadwiga", "mieszko i",
+			"edward v", "edward the elder", "ludwig ii", "ashurbanipal", "narmer", "seti i", "thutmose iii",
+			"amenhotep iii", "amina of zazzau", "nezahualcoyotl", "ranavalona i", "mongkut", "king bhumibol",
+			"sargon of akkad", "king farouk",
 		},
 		Mythic = {
 			"childeric", "chilperic", "theodoric", "alaric", "attila", "odoacer", "genseric", "leovigild", "pelayo",
@@ -43,6 +50,7 @@ return {
 			"boris godunov", "boleslaw the brave", "ottokar ii", "wenceslaus", "sigismund", "tomislav", "stefan dusan",
 			"krum", "zog", "carol i", "kalakaua", "lunalilo", "moshoeshoe", "lobengula", "cetshwayo", "dingane",
 			"menelik ii", "ezana", "tewodros", "osei tutu", "sancho iii",
+			"sobhuza ii",
 		},
 	},
 	aliases = {
@@ -109,5 +117,15 @@ return {
 		["george 5"] = "king george v", ["james i"] = "king james i", ["james 1"] = "king james i",
 		["king james 1"] = "king james i", ["mary 1"] = "mary i", ["mary the first"] = "mary i",
 		["henry 4"] = "henry iv", ["henry 6"] = "henry vi", ["henry 2"] = "henry ii", ["edward 3"] = "edward iii",
+		["george 2"] = "george ii", ["george 1"] = "george i", ["richard 2"] = "richard ii",
+		["edward 2"] = "edward ii", ["king richard ii"] = "richard ii", ["jane grey"] = "lady jane grey",
+		["nine days queen"] = "lady jane grey", ["catherine ii"] = "catherine the great",
+		["catherine 2"] = "catherine the great", ["peter i"] = "peter the great", ["akhenaton"] = "akhenaten",
+		["king hammurabi"] = "hammurabi", ["midas"] = "king midas", ["saint louis"] = "louis ix",
+		["mad king ludwig"] = "ludwig ii", ["sundiata"] = "sundiata keita",
+		["empress catherine"] = "catherine the great", ["tsar peter"] = "peter the great",
+		["king hussein of jordan"] = "king hussein", ["bhumibol"] = "king bhumibol", ["amina"] = "amina of zazzau",
+		["king croesus"] = "croesus", ["pharaoh akhenaten"] = "akhenaten", ["old fritz"] = "frederick the great",
+		["edward 5"] = "edward v", ["ludwig 2"] = "ludwig ii",
 	},
 }

@@ -15,6 +15,7 @@ return {
 			"cucumber salad", "tomato salad", "bean salad", "chicken caesar salad", "wedge salad", "ambrosia salad",
 			"jello salad", "broccoli salad", "kale salad", "quinoa salad", "couscous salad", "thai salad",
 			"shrimp salad", "ham salad", "lettuce salad", "mixed salad",
+			"chopped salad", "vegetable salad", "seafood salad", "crab salad",
 		},
 		Rare = {
 			"panzanella", "larb", "papaya salad", "israeli salad", "shirazi salad",
@@ -28,6 +29,8 @@ return {
 			"bbq chicken salad",
 			"fattoush",
 			"seven layer salad",
+			"mediterranean salad", "southwest salad", "strawberry salad", "lobster salad", "salmon salad",
+			"steak salad", "pea salad", "chinese chicken salad", "german potato salad", "kani salad",
 		},
 		DeepCut = {
 			"salade lyonnaise", "salade landaise", "salade paysanne", "arabic salad", "kisir", "coban salad",
@@ -35,6 +38,7 @@ return {
 			"mimosa salad", "sunomono", "namasu", "gado gado", "rojak", "pecel", "urap", "kerabu", "nam tok",
 			"yam nua", "ensalada mixta", "salpicon", "mechouia", "taktouka", "zaalouk",
 			"salata baladi", "matbucha",
+			"kachumbari",
 		},
 		Mythic = {
 			"salade composee", "insalata di rinforzo", "insalata di mare", "cappon magro", "srpska salata",
@@ -71,5 +75,11 @@ return {
 		["thai papaya salad"] = "papaya salad", ["fruit salads"] = "fruit salad",
 		["rocket salad"] = "arugula salad",
 		["ensalada rusa"] = "russian salad",
+		["cesar salad"] = "caesar salad", ["cesar"] = "caesar salad", ["laab"] = "larb",
+		["layered salad"] = "seven layer salad", ["greek salads"] = "greek salad", ["potato salads"] = "potato salad",
+		["chopped"] = "chopped salad", ["crab"] = "crab salad", ["seafood"] = "seafood salad",
+		["vegetable"] = "vegetable salad", ["veggie salad"] = "vegetable salad", ["garden salads"] = "garden salad",
+		["mediterranean"] = "mediterranean salad", ["southwestern salad"] = "southwest salad",
+		["strawberry"] = "strawberry salad",
 	},
 }
