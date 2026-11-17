@@ -46,5 +46,16 @@ return {
 		["yearlings"] = "yearling", ["polliwogs"] = "tadpole", ["pollywogs"] = "tadpole", ["baby bunny"] = "bunny",
 		["glass eel"] = "elver", ["weanlings"] = "weanling", ["stirks"] = "stirk", ["kittys"] = "kitten",
 		["gosslings"] = "gosling", ["duckings"] = "duckling",
+		["baby dog"] = "puppy", ["baby cat"] = "kitten", ["baby cow"] = "calf",
+		["baby sheep"] = "lamb", ["baby pig"] = "piglet", ["baby duck"] = "duckling",
+		["baby chicken"] = "chick", ["baby bear"] = "cub", ["baby horse"] = "foal",
+		["baby goat"] = "kid", ["baby deer"] = "fawn", ["baby frog"] = "tadpole",
+		["baby swan"] = "cygnet", ["baby goose"] = "gosling", ["baby fish"] = "fry",
+		["baby lion"] = "cub", ["baby fox"] = "kit", ["baby owl"] = "owlet",
+		["baby eagle"] = "eaglet", ["baby bird"] = "fledgling", ["duckiling"] = "duckling",
+		["tadpol"] = "tadpole", ["jouey"] = "joey", ["bunnys"] = "bunny",
+		["kittin"] = "kitten", ["kitenn"] = "kitten", ["pupies"] = "puppy",
+		["chiks"] = "chick", ["piglit"] = "piglet", ["fauns"] = "fawn",
+		
 	},
 }

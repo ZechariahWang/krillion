@@ -99,5 +99,11 @@ return {
 		["committees"] = "committee", ["clouds"] = "cloud", ["blooms"] = "bloom", ["sloths"] = "sloth", ["gams"] = "gam",
 		["tribes"] = "tribe", ["troupes"] = "troop", ["cohorts"] = "cohort", ["barrels"] = "barrel", ["hosts"] = "host",
 		["runs"] = "run",
+		["wolf pack"] = "pack", ["murder of crows"] = "murder", ["pod of whales"] = "pod",
+		["pride of lions"] = "pride", ["herd of cows"] = "herd", ["flock of birds"] = "flock",
+		["flock of sheep"] = "flock", ["swarm of bees"] = "swarm", ["gagle of geese"] = "gaggle",
+		["parlament of owls"] = "parliament", ["colonie"] = "colony", ["herdd"] = "herd",
+		["flok"] = "flock", ["swarn"] = "swarm", ["prid"] = "pride",
+		["shcool"] = "school",
 	},
 }
