@@ -56,5 +56,13 @@ return {
 		["oakland seals"] = "california golden seals", ["maroons"] = "montreal maroons",
 		["quakers"] = "philadelphia quakers", ["utah hc"] = "utah mammoth", ["bulldogs"] = "quebec bulldogs",
 		["st pats"] = "toronto st pats", ["wanderers"] = "montreal wanderers", ["utah hockey club"] = "utah mammoth",
+		["wings"] = "red wings", ["nucks"] = "canucks", ["yotes"] = "coyotes", ["knights"] = "golden knights",
+		["hawks"] = "blackhawks", ["ny rangers"] = "rangers", ["ny islanders"] = "islanders", ["nyr"] = "rangers",
+		["nyi"] = "islanders", ["chicago black hawks"] = "blackhawks", ["new york americans"] = "brooklyn americans",
+		["hamilton bulldogs"] = "quebec bulldogs", ["toronto st patricks"] = "toronto st pats",
+		["vegas knights"] = "golden knights", ["phoenix yotes"] = "coyotes", ["arizona yotes"] = "coyotes",
+		["tb lightning"] = "lightning", ["broad street bullies"] = "flyers", ["les canadiens"] = "canadiens",
+		["blue jacket"] = "blue jackets", ["senator"] = "senators", ["golden knight"] = "golden knights",
+		["lightning bolts"] = "lightning",
 	},
 }

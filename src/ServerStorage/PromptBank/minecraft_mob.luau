@@ -12,22 +12,22 @@ return {
 		Schooler = {
 			"cow", "sheep", "chicken", "horse", "wolf", "cat", "ocelot", "bat", "squid", "slime", "ghast", "blaze",
 			"zombie pigman", "piglin", "witch", "silverfish", "cave spider", "magma cube", "husk", "drowned", "phantom",
-			"pillager", "vindicator", "evoker", "warden", "allay", "axolotl", "bee", "fox", "panda", "polar bear",
-			"llama", "parrot", "turtle", "dolphin", "cod", "salmon", "pufferfish", "tropical fish", "rabbit",
-			"mooshroom", "snow golem", "donkey", "mule", "zombie villager", "guardian", "shulker", "strider", "hoglin",
-			"goat", "frog", "camel", "sniffer", "stray", "wither skeleton", "wandering trader",
+			"pillager", "vindicator", "evoker", "warden", "allay", "axolotl", "bee", "fox", "panda", "polar bear", "llama",
+			"parrot", "turtle", "dolphin", "cod", "salmon", "pufferfish", "tropical fish", "rabbit", "mooshroom", "snow golem",
+			"donkey", "mule", "zombie villager", "guardian", "shulker", "strider", "hoglin", "goat", "frog", "camel", "sniffer",
+			"stray", "wither skeleton", "wandering trader", "herobrine", "chicken jockey",
 		},
 		Rare = {
-			"endermite", "zoglin", "piglin brute", "elder guardian", "trader llama", "zombie horse", "tadpole",
-			"armadillo", "breeze", "bogged", "illusioner", "killer bunny", "copper golem", "creaking", "happy ghast",
-			"nautilus", "zombie nautilus", "parched", "camel husk", "chicken jockey", "spider jockey", "giant",
-			"herobrine", "glow squid", "skeleton horse", "ravager", "vex",
+			"endermite", "zoglin", "piglin brute", "elder guardian", "trader llama", "zombie horse", "tadpole", "armadillo",
+			"breeze", "bogged", "illusioner", "killer bunny", "copper golem", "creaking", "happy ghast", "nautilus",
+			"zombie nautilus", "parched", "camel husk", "spider jockey", "giant", "glow squid", "skeleton horse", "ravager",
+			"vex",
 		},
 		DeepCut = {
-			"glare", "moobloom", "iceologer", "wildfire", "tuff golem", "rascal", "chillager", "strider jockey",
+			"glare", "wildfire", "tuff golem", "strider jockey",
 		},
 		Mythic = {
-			"mannequin",
+			"mannequin", "rascal", "chillager", "iceologer", "moobloom",
 		},
 	},
 	aliases = {

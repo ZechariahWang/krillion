@@ -177,6 +177,12 @@ local list: { Prompt } = {
 	require("@self/fictional_detective"),
 	require("@self/famous_explorer"),
 	require("@self/video_game_genre"),
+	require("@self/roman_emperor"),
+	require("@self/famous_pirate"),
+	require("@self/famous_monarch"),
+	require("@self/baking_ingredient"),
+	require("@self/cooking_method"),
+	require("@self/puzzle_type"),
 }
 
 local byId: { [string]: Prompt } = {}
