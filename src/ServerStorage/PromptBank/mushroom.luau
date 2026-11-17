@@ -94,6 +94,8 @@ return {
 			"beefsteak fungus", "oak bracket", "giant polypore", "blushing bracket", "birch polypore",
 			"razor strop", "tinder fungus", "hoof fungus", "amadou", "sulfur tuft", "pioppino",
 			"black poplar mushroom", "hon shimeji",
+			"lobster mushroom", "wine cap", "bearded tooth", "bleeding tooth", "violet coral", "jelly baby",
+			"yellow stagshorn", "verdigris agaric", "half free morel", "aspen bolete",
 		},
 		DeepCut = {
 			"coprinus comatus", "coprinopsis atramentaria", "common ink cap", "coprinellus micaceus",
@@ -202,5 +204,12 @@ return {
 		["chantrelle"] = "chanterelle", ["chanterel"] = "chanterelle", ["trufle"] = "truffle",
 		["toad stool"] = "toadstool", ["fly agarics"] = "fly agaric", ["oyster mushrooms"] = "oyster mushroom",
 		["enokis"] = "enoki", ["puffballs"] = "puffball", ["moldy"] = "mold",
+		["monkey head"] = "lions mane", ["monkey head mushroom"] = "lions mane", ["pom pom mushroom"] = "lions mane",
+		["morchella"] = "morel", ["shiitake mushrooms"] = "shiitake", ["portobello mushrooms"] = "portobello",
+		["portabella mushroom"] = "portabella", ["chanterelle mushroom"] = "chanterelle",
+		["morel mushroom"] = "morel", ["enoki mushrooms"] = "enoki", ["amanita mushroom"] = "amanita",
+		["poison mushroom"] = "poisonous mushroom", ["pheasant back"] = "dryads saddle",
+		["pheasant back mushroom"] = "dryads saddle", ["lobster"] = "lobster mushroom",
+		["devils tooth"] = "bleeding tooth",
 	},
 }

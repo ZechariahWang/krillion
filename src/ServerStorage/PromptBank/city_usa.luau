@@ -68,6 +68,10 @@ return {
 			"college station", "greeley", "mission viejo", "new bedford", "brockton", "quincy", "federal way",
 			"carson", "rio rancho", "orem", "lynn", "dodge city", "sandusky", "sioux city", "sun valley",
 			"provincetown", "bar harbor", "kennebunkport", "stowe", "hannibal",
+			"sunrise", "plantation", "deltona", "largo", "boynton beach", "vero beach", "fort pierce", "palm coast",
+			"dublin", "cary", "tustin", "redlands", "alameda", "livermore", "pleasanton", "san rafael", "novato",
+			"los gatos", "menlo park", "ames", "waterloo", "council bluffs", "lodi", "tracy", "hanford", "cape may",
+			"lake placid", "temple",
 		},
 		DeepCut = {
 			"kenosha", "racine", "oshkosh", "sheboygan", "eau claire", "la crosse", "appleton", "wausau",
@@ -103,6 +107,7 @@ return {
 			"jurupa valley", "hillsboro", "vista", "davie", "south gate", "beaverton", "sparks", "lees summit",
 			"hesperia", "spokane valley", "alamo", "sedalia", "hastings", "kearney", "grand island",
 			"north platte", "scottsbluff", "marthas vineyard", "oak bluffs",
+			"asbury park", "wildwood", "wisconsin dells", "bayonne", "paramus", "teaneck",
 		},
 		Mythic = {
 			"punxsutawney", "utqiagvik", "nome", "kotzebue", "bethel", "unalaska", "valdez", "seward", "homer",
@@ -152,5 +157,10 @@ return {
 		["chicogo"] = "chicago", ["philadelphea"] = "philadelphia", ["pheonix"] = "phoenix",
 		["sanfrancisco"] = "san francisco", ["seatle"] = "seattle", ["bostin"] = "boston",
 		["houstin"] = "houston", ["detriot"] = "detroit",
+		["sacremento"] = "sacramento", ["tuscon"] = "tucson", ["philidelphia"] = "philadelphia",
+		["phillidelphia"] = "philadelphia", ["cinncinati"] = "cincinnati", ["clevland"] = "cleveland",
+		["nashvile"] = "nashville", ["louisvile"] = "louisville", ["lasvegas"] = "las vegas",
+		["san antonia"] = "san antonio", ["new orleance"] = "new orleans", ["charlote"] = "charlotte",
+		["jacksonvile"] = "jacksonville", ["milwaukie"] = "milwaukee", ["new york new york"] = "new york",
 	},
 }

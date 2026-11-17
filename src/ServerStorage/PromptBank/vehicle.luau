@@ -25,6 +25,8 @@ return {
 			"tour bus", "party bus", "sedan", "hatchback", "coupe", "station wagon", "lorry",
 			"horse and carriage", "stagecoach", "chariot", "toboggan", "bobsled", "dog sled", "lunar rover",
 			"mars rover", "rocket ship", "locomotive", "freight train", "rollerblades",
+			"motorboat", "cargo ship", "stretch limo", "passenger plane", "passenger train", "electric car",
+			"fireboat",
 		},
 		Rare = {
 			"catamaran", "trimaran", "schooner", "galleon", "frigate", "destroyer", "aircraft carrier",
@@ -59,6 +61,8 @@ return {
 			"front loader", "wheel loader", "delivery van", "armored truck", "ladder truck", "bookmobile",
 			"baler", "crop duster", "turboprop", "dirigible", "handcart", "pushcart", "wheelbarrow",
 			"electric skateboard", "onewheel", "shuttle bus", "commuter train",
+			"pedal car", "soapbox car", "riding lawn mower", "model t", "hummer", "air ambulance",
+			"police helicopter", "hybrid car", "self driving car",
 		},
 		DeepCut = {
 			"velocipede", "draisine", "boneshaker", "quadricycle", "cyclecar", "microcar", "bubble car",
@@ -203,5 +207,10 @@ return {
 		["helicoptor"] = "helicopter", ["helecopter"] = "helicopter", ["motercycle"] = "motorcycle",
 		["motorcicle"] = "motorcycle", ["submarene"] = "submarine", ["bulldozzer"] = "bulldozer",
 		["bull dozer"] = "bulldozer", ["lime"] = "limousine",
+		["army tank"] = "tank", ["battle tank"] = "tank", ["fighter plane"] = "fighter jet",
+		["skidoo"] = "snowmobile", ["ski doo"] = "snowmobile", ["balloon"] = "hot air balloon",
+		["bomber plane"] = "bomber", ["fire boat"] = "fireboat", ["motor boat"] = "motorboat",
+		["stretch limousine"] = "stretch limo", ["electric vehicle"] = "electric car", ["ev"] = "electric car",
+		["tesla car"] = "electric car", ["ride on mower"] = "riding lawn mower",
 	},
 }

@@ -48,6 +48,8 @@ return {
 			"laundry hamper", "hamper", "patio table", "patio set", "garden table", "garden chair",
 			"bistro table", "camping chair", "beach chair", "plastic chair", "school chair", "booster seat",
 			"baby chair", "kids table", "toy box", "easel", "pool table", "pillow",
+			"side chair", "dining bench", "kitchen chair", "gun cabinet", "kitchen stool", "sofa chair",
+			"hall bench", "accent table", "accent cabinet", "toddler bed", "adjustable bed",
 		},
 		Rare = {
 			"tabouret", "whatnot stand", "jardiniere", "davenport desk", "kneehole desk", "pedestal desk",
@@ -172,5 +174,9 @@ return {
 		["lampshade"] = "lamp", ["ottomans"] = "ottoman", ["futons"] = "futon", ["hammocks"] = "hammock",
 		["cribs"] = "crib", ["mirrors"] = "mirror", ["rugs"] = "rug", ["lamps"] = "lamp",
 		["settee couch"] = "settee",
+		["dining room table"] = "dining table", ["computer chair"] = "office chair", ["tv tray"] = "tray table",
+		["tv trays"] = "tray table", ["tv armoire"] = "tv cabinet", ["bar stools"] = "bar stool",
+		["armchairs"] = "armchair", ["nightstands"] = "nightstand", ["dressing tables"] = "dressing table",
+		["wooden chair"] = "chair", ["kids bed"] = "toddler bed",
 	},
 }

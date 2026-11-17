@@ -30,6 +30,7 @@ return {
 			"candy bar", "dolly mixture", "drumstick", "haribo gold bears", "haribo goldbears", "tangfastics",
 			"starmix", "skittles sour", "airheads xtreme", "warheads extreme", "nerd clusters",
 			"gummy peach rings", "sour patch watermelon", "cherry sours", "cry babies", "pop rocks candy",
+			"peanut m and ms",
 		},
 		Rare = {
 			"good and plenty", "skor", "caramello", "mr goodbar", "krackel", "zero bar", "oh henry", "take 5",
@@ -71,6 +72,8 @@ return {
 			"chocolate covered raisins", "chocolate covered peanuts", "nonpareils", "peanut chews",
 			"payday bar", "snickers almond", "snickers peanut butter", "baby ruth bar",
 			"sweet and sour gummies",
+			"dove", "spree", "orbit", "extra gum", "hersheys hugs", "sour gummy bears", "nibs", "mega warheads",
+			"sour power",
 		},
 		DeepCut = {
 			"sky bar", "cherry mash", "idaho spud", "valomilk", "big hunk", "look bar", "mallo cup",
@@ -110,6 +113,7 @@ return {
 			"thorntons toffee", "mackintosh toffee", "mackintoshs", "toffee crisp bar", "penguin bar",
 			"club biscuit", "kit kat chunky", "kit kat bites", "kit kat gold", "kit kat ruby",
 			"ruby chocolate", "ruby kit kat", "bertie botts every flavour beans",
+			"lik m aid",
 		},
 		Mythic = {
 			"chicken dinner bar", "seafoam candy", "divinity", "penuche", "rock sugar", "barley sugar",
@@ -212,5 +216,10 @@ return {
 		["sour patch kid"] = "sour patch kids", ["twixx"] = "twix", ["milkyway"] = "milky way",
 		["toblerone bar"] = "toblerone", ["rocher"] = "ferrero rocher", ["lolly pop"] = "lollipop",
 		["lollies"] = "lollipop",
+		["tootsie"] = "tootsie roll", ["milkduds"] = "milk duds", ["butter finger"] = "butterfinger",
+		["babyruth"] = "baby ruth", ["airhead"] = "airheads", ["warhead"] = "warheads",
+		["haribo gummy bears"] = "gummy bears", ["gummy"] = "gummies", ["blow pops"] = "blow pop",
+		["dove chocolate"] = "dove", ["peanut m and m"] = "peanut m and ms", ["peanut mms"] = "peanut m and ms",
+		["hugs"] = "hersheys hugs", ["extra"] = "extra gum", ["hershey hugs"] = "hersheys hugs",
 	},
 }

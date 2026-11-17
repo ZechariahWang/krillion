@@ -80,6 +80,7 @@ return {
 			"victorian bonnet", "edwardian hat", "gibson girl hat", "flapper hat", "raffia hat",
 			"palm leaf hat", "lauhala hat", "farmer hat", "peasant cap", "milkmaid cap", "solar topi",
 			"sun helmet", "tropical helmet", "wolseley helmet", "bush helmet",
+			"earflap hat",
 		},
 		DeepCut = {
 			"bearskin cap", "grenadier cap", "mirliton", "hussar busby", "shako czapka", "czapka", "rogatywka",
@@ -178,5 +179,11 @@ return {
 		["soldier helmet"] = "combat helmet", ["astronaut helmet"] = "space helmet",
 		["paperboy hat"] = "newsboy cap", ["yamaka"] = "yarmulke", ["turbans"] = "turban", ["fezzes"] = "fez",
 		["visors"] = "visor", ["snapbacks"] = "snapback",
+		["ear flap hat"] = "earflap hat", ["golf hat"] = "golf cap", ["hunting hat"] = "hunting cap",
+		["fishing cap"] = "fisherman cap", ["fisherman hat"] = "fisherman cap", ["fishermans hat"] = "fisherman cap",
+		["army hat"] = "army cap", ["nurse hat"] = "nurse cap", ["mexican hat"] = "sombrero",
+		["ski hat"] = "winter hat", ["ski cap"] = "winter hat", ["newsie"] = "newsboy cap",
+		["flat bill"] = "flat brim", ["flatbrim"] = "flat brim", ["fedora hat"] = "fedora", ["beret hat"] = "beret",
+		["beenie"] = "beanie", ["fedorah"] = "fedora", ["berette"] = "beret", ["cowboy cap"] = "cowboy hat",
 	},
 }

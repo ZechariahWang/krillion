@@ -153,6 +153,12 @@ local list: { Prompt } = {
 	require("@self/european_city"),
 	require("@self/australian_animal"),
 	require("@self/fictional_robot"),
+	require("@self/household_chore"),
+	require("@self/canadian_city"),
+	require("@self/horse_breed"),
+	require("@self/famous_painting"),
+	require("@self/dreamworks_movie"),
+	require("@self/thai_korean_food"),
 }
 
 local byId: { [string]: Prompt } = {}

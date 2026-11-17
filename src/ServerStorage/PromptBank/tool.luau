@@ -33,6 +33,7 @@ return {
 			"glue gun", "staple gun", "nail gun", "soldering iron", "tweezers", "magnifying glass",
 			"flashlight", "torch", "stapler", "paintbrush", "sander", "jack", "wheelbarrow", "broom", "mop",
 			"dustpan", "ladder", "stepladder",
+			"drill bit", "wire brush", "paint roller", "paint scraper", "square", "ice pick",
 		},
 		Rare = {
 			"torx key", "torx driver", "star driver", "robertson screwdriver", "square drive", "pozidriv",
@@ -82,6 +83,7 @@ return {
 			"grindstone", "bench grinder", "reamer", "countersink", "brace and bit", "hand brace",
 			"push drill", "pipe cutter", "tubing cutter", "pipe bender", "plunger", "drain snake", "tamper",
 			"hedge trimmer", "hori hori",
+			"spring clamp", "pipe clamp", "f clamp", "rivet gun", "hand riveter",
 		},
 		DeepCut = {
 			"tinners snips", "aviation snips", "offset snips", "straight snips", "bulldog snips",
@@ -125,6 +127,7 @@ return {
 			"gimlet", "pin vise", "swage block", "anvil", "tongs", "bellows", "post vise", "leg vise",
 			"machine vise", "sine bar", "gauge block", "telescoping gauge", "post level", "box level",
 			"bevel protractor", "t bevel",
+			"tile nippers",
 		},
 		Mythic = {
 			"bodkin", "marlinspike", "fid", "serving mallet", "rigging knife", "caulking iron",
@@ -201,5 +204,9 @@ return {
 		["spanners"] = "spanner", ["drills"] = "drill", ["sissors"] = "scissors", ["chizel"] = "chisel",
 		["hamer"] = "hammer", ["pen knife"] = "pocket knife", ["wood plane"] = "plane",
 		["paint brush"] = "paintbrush", ["trowl"] = "trowel", ["hammer drill"] = "drill",
+		["stillson"] = "stillson wrench", ["bolt croppers"] = "bolt cutters", ["snips"] = "tin snips",
+		["tinsnips"] = "tin snips", ["ax"] = "axe", ["yard stick"] = "yardstick",
+		["phillips head screwdriver"] = "phillips screwdriver", ["pop riveter"] = "rivet gun",
+		["riveter"] = "hand riveter", ["rivet tool"] = "rivet gun", ["pop rivet gun"] = "rivet gun",
 	},
 }

@@ -86,6 +86,12 @@ return {
 			"sand tiger shark", "silky shark", "oceanic whitetip", "blue shark", "porbeagle", "salmon shark",
 			"bonnethead", "sandbar shark", "great hammerhead", "devil ray", "bat ray", "electric ray",
 			"thornback ray", "chimaera", "ratfish", "elephant shark",
+			"snakehead", "white perch", "white bass", "rock bass", "warmouth", "redear sunfish", "green sunfish",
+			"spotted bass", "sauger", "chain pickerel", "gizzard shad", "american eel", "gurnard", "pomfret",
+			"milkfish", "hilsa", "rohu", "black tetra", "bloodfin tetra", "sailfin molly", "dalmatian molly",
+			"jaguar cichlid", "gag grouper", "black grouper", "red grouper", "nassau grouper", "mutton snapper",
+			"cubera snapper", "porkfish", "bar jack", "murray cod", "golden perch", "luderick", "flathead",
+			"kingklip", "red mullet", "gilthead bream", "sea bream", "black sea bass",
 		},
 		DeepCut = {
 			"atlantic cod", "pacific cod", "pollock", "alaska pollock", "walleye pollock", "whiting", "hake",
@@ -182,5 +188,9 @@ return {
 		["yellow fin tuna"] = "yellowfin tuna", ["white shark"] = "great white shark",
 		["mackeral"] = "mackerel", ["herrin"] = "herring", ["sardines"] = "sardine", ["anchovies"] = "anchovy",
 		["dorey"] = "dory", ["eels"] = "eel",
+		["stingrays"] = "stingray", ["seahorses"] = "seahorse", ["baracuda"] = "barracuda", ["sun fish"] = "sunfish",
+		["sting rays"] = "stingray", ["pufferfishes"] = "pufferfish", ["snake head"] = "snakehead",
+		["northern snakehead"] = "snakehead", ["striped mullet"] = "mullet", ["snake head fish"] = "snakehead",
+		["gilt head bream"] = "gilthead bream",
 	},
 }
