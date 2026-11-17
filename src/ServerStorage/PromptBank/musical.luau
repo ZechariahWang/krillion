@@ -44,6 +44,7 @@ return {
 			"starlight express", "spamalot", "hello dolly", "gypsy", "hair", "pippin", "godspell",
 			"jesus christ superstar", "the color purple", "finding neverland", "the wiz", "tina",
 			"dreamgirls", "the producers", "a chorus line", "miss saigon", "funny girl",
+			"high school musical", "high school musical 2", "descendants", "camp rock", "moana",
 		},
 		DeepCut = {
 			"pal joey", "babes in arms", "lady in the dark", "of thee i sing", "gentlemen prefer blondes",
@@ -102,5 +103,8 @@ return {
 		["oklahoma musical"] = "oklahoma", ["joseph musical"] = "joseph", ["moulin rouge musical"] = "moulin rouge",
 		["jersey boys musical"] = "jersey boys", ["kinky boot"] = "kinky boots", ["billy elliott"] = "billy elliot",
 		["west side story musical"] = "west side story", ["the phantom"] = "phantom of the opera",
+		["hsm"] = "high school musical", ["hsm 2"] = "high school musical 2",
+		["hsm2"] = "high school musical 2", ["descendants the musical"] = "descendants",
+		["camp rock the musical"] = "camp rock", ["moana jr"] = "moana",
 	},
 }

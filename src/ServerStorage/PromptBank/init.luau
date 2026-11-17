@@ -281,6 +281,7 @@ local retired: { [string]: boolean } = {
 	famous_monarch = true,
 	famous_painting = true,
 	famous_scientist = true,
+	deer_or_antelope = true,
 }
 
 local PromptBank = {
