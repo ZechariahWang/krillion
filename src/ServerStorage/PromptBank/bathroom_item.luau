@@ -16,6 +16,7 @@ return {
 			"bathrobe", "lotion", "tweezers", "nail clippers", "hand soap", "hand towel", "rubber duck", "shaving cream", "tile",
 			"sunscreen", "perfume", "makeup", "cologne", "hair gel", "hair spray", "plug", "night light", "air freshener",
 			"bandaid",
+			"paper towels", "candles", "body spray", "nail polish",
 		},
 		Rare = {
 			"soap dish", "towel rack", "toothbrush holder", "toilet roll holder", "shower caddy", "shower cap", "pumice stone",
@@ -23,11 +24,15 @@ return {
 			"laundry basket", "soap dispenser", "back scrubber", "nail file", "face wash", "moisturizer", "toner", "hair tie",
 			"hair clip", "curling iron", "flat iron", "epsom salt", "bath toys", "toilet cleaner", "bleach", "squeegee",
 			"grab bar", "hook", "shelf", "retainer", "scrunchie", "headband", "toothpick", "lip balm", "eyedrops", "bidet",
+			"hand sanitizer", "cotton pads", "toilet lid", "electric razor", "electric toothbrush", "cleaning supplies",
+			"face mask", "shower door", "window", "baby powder", "petroleum jelly", "contact lenses", "step stool", "urinal",
+			"hand dryer", "paper towel dispenser", "plants",
 		},
 		DeepCut = {
 			"bath caddy", "toilet tank", "overflow drain", "sink stopper", "p trap", "shower valve", "mouth guard",
 			"tongue scraper", "foot spa", "pedicure kit", "dental pick", "shaving brush", "safety razor",
 			"styptic pencil", "aftershave", "talcum powder", "exfoliator", "water pik", "denture cup",
+			"nail brush", "heat lamp", "drain snake", "toilet auger", "contact lens solution",
 		},
 		Mythic = {
 			"grout", "tub spout", "bath thermometer",
@@ -56,5 +61,14 @@ return {
 		["waste basket"] = "trash can", ["bath toy"] = "bath toys", ["shower mat"] = "bath mat",
 		["bathtub toys"] = "bath toys", ["body scrub"] = "exfoliator", ["bath towel"] = "towel",
 		["hamper"] = "laundry basket",
+		["paper towel"] = "paper towels", ["candle"] = "candles", ["nail varnish"] = "nail polish",
+		["sanitizer"] = "hand sanitizer", ["cotton pad"] = "cotton pads", ["cotton rounds"] = "cotton pads",
+		["shaver"] = "electric razor", ["cleaning products"] = "cleaning supplies", ["face masks"] = "face mask",
+		["shower doors"] = "shower door", ["powder"] = "baby powder", ["talc"] = "talcum powder",
+		["vaseline"] = "petroleum jelly", ["contacts"] = "contact lenses", ["contact lens"] = "contact lenses",
+		["stool"] = "step stool", ["urinals"] = "urinal", ["hand drier"] = "hand dryer", ["hand dryers"] = "hand dryer",
+		["paper towel holder"] = "paper towel dispenser", ["plant"] = "plants", ["bath brush"] = "back scrubber",
+		["nailbrush"] = "nail brush", ["body mist"] = "body spray", ["heat lamps"] = "heat lamp", ["windows"] = "window",
+		["hairspray"] = "hair spray",
 	},
 }

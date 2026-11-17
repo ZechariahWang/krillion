@@ -37,6 +37,7 @@ return {
 			"worthless", "unloved", "blue", "mournful", "romantic", "pleased", "mellow", "carefree",
 			"empowered", "fearless", "ambitious", "jolly", "radiant", "amped", "energized", "fired up",
 			"distress", "interest", "grouchy", "unhappy",
+			"offended",
 		},
 		Rare = {
 			"apprehension", "trepidation", "unease", "agitation", "exasperation", "aggravation", "vexation",
@@ -70,6 +71,10 @@ return {
 			"upbeat", "cheery", "chipper", "bubbly", "glum", "somber", "wary", "edgy", "jumpy", "spooked", "freaked out",
 			"creeped out", "shaken", "frazzled", "flustered", "rattled", "irked", "salty", "cringe", "lovestruck", "smitten",
 			"zen", "dumbfounded", "flabbergasted", "speechless", "woe", "woeful", "gloating",
+			"fed up", "defiance", "uncertainty", "doubt", "humility", "intimidated", "impressed", "unimpressed", "defeated",
+			"vengeful", "troubled", "disturbed", "perturbed", "distraught", "aghast", "appalled", "antsy", "disgruntled",
+			"disheartened", "demoralized", "timid", "deflated", "jovial", "riled", "vexed", "nonchalant", "enamored",
+			"enchanted", "at ease", "at peace", "laid back",
 		},
 		DeepCut = {
 			"weltschmerz", "saudade", "hygge", "fernweh", "wanderlust", "hiraeth", "toska", "mono no aware",
@@ -87,6 +92,7 @@ return {
 			"tristesse", "cafard", "spleen", "pothos", "himeros", "eros", "storge", "phobos", "deimos",
 			"umbrage", "gladsome", "dolor", "cheesed off",
 			"gobsmacked", "discombobulated", "chuffed", "gutted",
+			"doleful", "lovelorn", "lugubrious", "flummoxed", "nonplussed", "befuddled", "besotted",
 		},
 		Mythic = {
 			"acedia", "limerence", "ambivalence", "philia", "agape", "metanoia", "apatheia", "thymos",
@@ -174,5 +180,9 @@ return {
 		["ataraxy"] = "ataraxia", ["pena ajena"] = "verguenza ajena", ["heimweh"] = "homesickness",
 		["mal du pays"] = "homesickness", ["lebensfreude"] = "joie de vivre", ["hate feeling"] = "hatred",
 		["hate"] = "hatred",
+		["vindictive"] = "vindictiveness", ["mirthful"] = "mirth", ["pining"] = "yearning", ["offence"] = "offended",
+		["unsure"] = "uncertainty", ["uncertain"] = "uncertainty", ["doubtful"] = "doubt", ["defiant"] = "defiance",
+		["humble"] = "humility", ["humbled"] = "humility", ["intimidation"] = "intimidated", ["repulsed"] = "repulsion",
+		["grossed out"] = "disgust", ["offending"] = "offended", ["impression"] = "impressed", ["enamoured"] = "enamored",
 	},
 }

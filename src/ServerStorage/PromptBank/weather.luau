@@ -60,6 +60,7 @@ return {
 			"shear line", "squall front", "cutoff high", "polar air mass", "arctic air mass", "maritime air mass",
 			"continental air mass", "tropical air mass", "prefrontal trough", "equatorial trough", "lee trough",
 			"monsoon depression", "tropical disturbance", "tropical low",
+			"wintry", "blistering", "flash freeze", "blowing dust",
 		},
 		DeepCut = {
 			"steam fog", "advection fog", "radiation fog", "upslope fog", "valley fog", "frost smoke",
@@ -231,5 +232,8 @@ return {
 		["below freezing"] = "freezing", ["spring showers"] = "showers", ["april showers"] = "showers",
 		["lightning strike"] = "lightning", ["clap of thunder"] = "thunderclap", ["black blizzard"] = "dust storm",
 		["snowroller"] = "snow roller", ["hailstorm supercell"] = "hailstorm",
+		["cloudy weather"] = "cloudy", ["wet weather"] = "wet", ["ice rain"] = "freezing rain",
+		["rain and snow"] = "wintry mix", ["snow and rain"] = "wintry mix", ["simoon"] = "simoom",
+		["thundery"] = "thundery showers",
 	},
 }

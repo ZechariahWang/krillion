@@ -16,13 +16,13 @@ return {
 		},
 		Rare = {
 			"confit", "scald", "coddle", "pot roast", "hard boil", "soft boil", "slow roast", "gratin", "tempura",
-			"tandoor", "deglaze", "glaze", "blacken", "jerk", "spatchcock", "braai", "cook in foil", "reduce", "render",
+			"tandoor", "deglaze", "blacken", "jerk", "spatchcock", "braai", "cook in foil", "reduce", "render",
 			"sweat",
 			"fricassee", "reverse sear",
 		},
 		DeepCut = {
 			"en papillote", "hot smoke", "cold smoke", "bain marie", "pan roast", "flash fry", "salt bake", "pit roast",
-			"tajine", "clay pot", "brulee", "shirr", "hangi", "pibil", "cook in banana leaf", "fire roast",
+			"clay pot", "brulee", "shirr", "hangi", "pibil", "cook in banana leaf", "fire roast",
 		},
 		Mythic = {
 			"nixtamalize", "stone boil", "retort", "ohmic heating", "plank cook",
@@ -43,8 +43,8 @@ return {
 		["hard boiled"] = "hard boil", ["soft boiled"] = "soft boil", ["charbroil"] = "char", ["charbroiling"] = "char",
 		["pot roasting"] = "pot roast", ["foil"] = "cook in foil", ["papillote"] = "en papillote",
 		["double boiler"] = "bain marie", ["water bath"] = "bain marie", ["pan searing"] = "sear",
-		["shallow frying"] = "pan fry", ["tandoori"] = "tandoor", ["umu"] = "hangi", ["tagine"] = "tajine",
-		["spatchcocking"] = "spatchcock", ["rendering"] = "render", ["glazing"] = "glaze", ["sweating"] = "sweat",
+		["shallow frying"] = "pan fry", ["tandoori"] = "tandoor", ["umu"] = "hangi",
+		["spatchcocking"] = "spatchcock", ["rendering"] = "render", ["sweating"] = "sweat",
 		["blackening"] = "blacken", ["scrambling"] = "scramble", ["scalding"] = "scald", ["reducing"] = "reduce",
 		["parboiling"] = "parboil", ["creme brulee"] = "brulee", ["pit cooking"] = "pit roast",
 		["deglazing"] = "deglaze", ["tempura frying"] = "tempura", ["south african braai"] = "braai",
@@ -55,7 +55,7 @@ return {
 		["steamed"] = "steam", ["smoked"] = "smoke", ["poached"] = "poach", ["stewed"] = "stew",
 		["braised"] = "braise", ["toasted"] = "toast", ["seared"] = "sear", ["sauteed"] = "saute",
 		["broiled"] = "broil", ["microwaved"] = "microwave", ["griddling"] = "griddle", ["oven"] = "bake",
-		["oven bake"] = "bake", ["wok"] = "stir fry", ["charcoal grill"] = "grill", ["flame grill"] = "grill",
+		["oven bake"] = "bake", ["charcoal grill"] = "grill", ["flame grill"] = "grill",
 		["reverse searing"] = "reverse sear", ["stir fried"] = "stir fry", ["deep fried"] = "deep fry",
 	},
 }

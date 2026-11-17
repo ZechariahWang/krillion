@@ -15,6 +15,7 @@ return {
 			"cat in the hat", "catbus", "luna", "artemis", "meowth", "mittens", "kitty softpaws", "oliver", "dinah",
 			"snagglepuss", "binx", "crookshanks", "snowball", "stimpy", "kovu", "jiji", "bob", "keyboard cat", "lil bub",
 			"pusheen", "doraemon",
+			"pete the cat", "gumball",
 		},
 		Rare = {
 			"maru", "orangey", "unsinkable sam", "felicette", "bagpuss", "mog", "slinky malinki", "rum tum tugger",
@@ -22,10 +23,12 @@ return {
 			"arlene", "kitty galore", "mr tinkles", "bastet", "tom kitten", "mrs chippy", "larry", "humphrey", "snarf",
 			"gatomon", "pyewacket", "sarabi", "zira", "grizabella", "macavity", "mr mistoffelees", "mr jinks", "snowbell",
 			"sassy", "mr bigglesworth", "mrs norris", "church", "jonesy", "lion o", "panthro", "cheetara", "choupette",
+			"milo", "sagwa", "splat the cat", "dewey readmore books", "kimba", "skippyjon jones",
 		},
 		DeepCut = {
 			"socks", "palmerston", "gladstone", "peta", "trim", "towser", "mehitabel", "bubastis", "pangur ban",
 			"greebo", "hodge", "tombili",
+			"tama", "kitty katswell", "stubbs",
 		},
 		Mythic = {
 			"wilberforce",
@@ -41,5 +44,8 @@ return {
 		["mistoffelees"] = "mr mistoffelees", ["mr tibbs"] = "sergeant tibbs", ["tibbs"] = "sergeant tibbs",
 		["luna the cat"] = "luna", ["artemis the cat"] = "artemis", ["sylvester the cat"] = "sylvester",
 		["grumpy"] = "grumpy cat", ["tardar sauce"] = "grumpy cat",
+		["pete cat"] = "pete the cat", ["gumball watterson"] = "gumball", ["tama cat"] = "tama",
+		["stubbs the cat"] = "stubbs", ["milo and otis"] = "milo", ["dewey"] = "dewey readmore books",
+		["splat"] = "splat the cat", ["skippyjon"] = "skippyjon jones", ["kimba the white lion"] = "kimba",
 	},
 }

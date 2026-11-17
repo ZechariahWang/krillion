@@ -15,6 +15,7 @@ return {
 			"guests", "family", "church", "altar", "aisle", "bench", "pew", "candles", "decorations", "invitation", "gifts",
 			"bow tie", "tie", "high heels", "crown", "limo", "car", "table", "chairs", "food", "buffet", "speech", "toast",
 			"kiss", "tears", "camera", "video", "band", "flower petals", "cupcakes", "favors", "tiara", "pearls", "jewelry",
+			"photos", "roses", "shoes", "drinks",
 		},
 		Rare = {
 			"centerpiece", "arch", "chuppah", "canopy", "tent", "guest book", "place card", "seating chart", "name tag",
@@ -25,6 +26,10 @@ return {
 			"getaway car", "just married sign", "tin cans", "rose petals", "aisle runner", "unity candle", "sand ceremony",
 			"bridal shower", "rehearsal dinner", "bridal party", "tiered cake", "fondant", "buttercream", "train",
 			"cathedral train", "engagement ring", "ring pillow",
+			"garter", "garter toss", "bouquet toss", "doves", "slideshow", "microphone", "speakers", "bartender", "cake stand",
+			"mother of the groom", "father of the groom", "junior bridesmaid", "videographer", "garland", "marriage license",
+			"marriage certificate", "witness", "gift table", "card box", "bridal suite", "reception hall", "ballroom", "venue",
+			"bubble machine", "fireworks", "desserts",
 		},
 		DeepCut = {
 			"cummerbund", "cufflinks", "pocket square", "waistcoat", "morning suit", "tailcoat", "cravat", "fascinator",
@@ -35,6 +40,7 @@ return {
 			"shuttle bus", "horse and carriage", "processional", "recessional", "wedding march", "hymn", "readings", "scripture",
 			"unity ceremony", "handfasting", "jumping the broom", "broom", "tea ceremony", "red envelope", "henna", "baraat",
 			"mandap", "sangeet", "kimono", "hanbok", "lehenga", "sari",
+			"something old", "something new", "something borrowed", "garter belt", "chiavari chairs", "kilt", "cake server",
 		},
 		Mythic = {
 			"ring box", "pew bow", "flower crown", "flower wall", "balloon arch", "neon sign", "light up letters", "monogram",
@@ -73,5 +79,13 @@ return {
 		["petals"] = "flower petals", ["wedding favors"] = "favors", ["tables"] = "table", ["mehndi"] = "henna",
 		["charger plate"] = "chargers", ["seating card"] = "escort cards", ["menu card"] = "menu",
 		["floral wall"] = "flower wall", ["cake charm"] = "cake pull", ["tiara comb"] = "hair comb",
+		["photo"] = "photos", ["pictures"] = "photos", ["rose"] = "roses", ["shoe"] = "shoes", ["drink"] = "drinks",
+		["dove"] = "doves", ["garters"] = "garter", ["wedding garter"] = "garter", ["throwing the bouquet"] = "bouquet toss",
+		["mic"] = "microphone", ["speaker"] = "speakers", ["bar tender"] = "bartender", ["witnesses"] = "witness",
+		["marriage licence"] = "marriage license", ["floral arch"] = "arch", ["flower arch"] = "arch",
+		["wedding party"] = "bridal party", ["wedding bouquet"] = "bouquet", ["videographers"] = "videographer",
+		["wedding photographer"] = "photographer", ["wedding vows"] = "vows", ["wedding venue"] = "venue",
+		["chiavari chair"] = "chiavari chairs", ["slide show"] = "slideshow", ["garlands"] = "garland",
+		["dessert"] = "desserts", ["firework"] = "fireworks", ["kilts"] = "kilt",
 	},
 }

@@ -18,9 +18,12 @@ return {
 			"little bear", "bear in the big blue house", "humphrey the bear", "bart the bear", "gruffi", "zummi", "cubbi",
 			"grammi", "sunni", "tummi", "teddy ruxpin", "bamse", "pudsey", "winnipeg", "big ted", "little ted", "iorek byrnison",
 			"bungle", "superted", "hair bear", "brer bear", "gentle ben", "wojtek", "misha",
+			"rilakkuma", "duffy", "sooty", "mordu", "beorn", "sugar bear", "fuzzy wuzzy", "chi chi", "tian tian",
+			"golden freddy", "coca cola polar bear",
 		},
 		DeepCut = {
 			"mr bean teddy",
+			"ling ling", "hsing hsing",
 		},
 		Mythic = {
 			"bruin",
@@ -36,5 +39,9 @@ return {
 		["lots o huggin bear"] = "lotso", ["lotso huggin bear"] = "lotso", ["rupert"] = "rupert bear", ["balloo"] = "baloo",
 		["teddy bears"] = "teddy bear", ["knut the polar bear"] = "knut", ["wojtek the bear"] = "wojtek",
 		["mishka"] = "misha", ["brother bear"] = "kenai",
+		["fazbear"] = "freddy fazbear", ["coca cola bear"] = "coca cola polar bear", ["mor du"] = "mordu",
+		["rilakuma"] = "rilakkuma", ["duffy the disney bear"] = "duffy", ["duffy bear"] = "duffy",
+		["fuzzy wuzzy bear"] = "fuzzy wuzzy", ["polar bear coke"] = "coca cola polar bear",
+		["coke bear"] = "coca cola polar bear",
 	},
 }

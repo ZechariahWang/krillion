@@ -205,6 +205,11 @@ local list: { Prompt } = {
 	require("@self/fridge_item"),
 	require("@self/movie_theater_item"),
 	require("@self/restaurant_item"),
+	require("@self/famous_mouse"),
+	require("@self/famous_dragon"),
+	require("@self/famous_horse"),
+	require("@self/famous_princess"),
+	require("@self/famous_fish"),
 }
 
 local byId: { [string]: Prompt } = {}

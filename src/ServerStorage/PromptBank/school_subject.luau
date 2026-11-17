@@ -30,6 +30,7 @@ return {
 			"vocal music", "digital art", "illustration", "creative arts", "arts", "computer class", "human geography",
 			"physical geography", "us government", "world cultures", "ancient civilizations", "military history",
 			"bookkeeping", "swimming", "athletics", "arithmetic",
+			"british history",
 		},
 		Rare = {
 			"anthropology", "archaeology", "linguistics", "classics", "ancient greek", "greek", "hebrew", "hindi",
@@ -61,6 +62,10 @@ return {
 			"ib psychology", "commerce", "shorthand", "stenography", "secretarial studies", "office skills",
 			"navigation", "seamanship", "demography", "climatology", "geomorphology", "economic geography",
 			"composition", "calculus 2", "yoga",
+			"industrial arts", "graphic arts", "informatics", "digital literacy", "digital citizenship", "media literacy",
+			"special education", "interior design", "business law", "advertising", "communications", "texas history",
+			"african history", "asian history", "technical theater", "playwriting", "screenwriting", "weight training",
+			"word processing", "jewelry making", "floral design", "mechanical drawing", "management",
 		},
 		DeepCut = {
 			"medieval history", "modern history", "horticulture", "forestry", "animal science", "equine studies",
@@ -98,6 +103,7 @@ return {
 			"songwriting", "sound engineering", "audio production", "stage management", "costume design", "set design",
 			"lighting design", "puppetry", "circus skills", "martial arts", "pilates", "outdoor pursuits",
 			"orienteering", "sailing", "rowing", "dance technique", "catalan", "afrikaans",
+			"upholstery", "blacksmithing", "woodturning", "cabinetmaking", "nature study",
 		},
 		Mythic = {
 			"paleontology", "entomology", "ornithology", "volcanology", "seismology", "glaciology", "calligraphy",
@@ -171,5 +177,13 @@ return {
 		["global history"] = "world history", ["modern languages"] = "foreign language",
 		["english as a second language"] = "esl", ["sport"] = "sports", ["business studies"] = "business",
 		["keyboarding"] = "typing", ["palaeography"] = "paleography", ["modern world history"] = "modern history",
+		["marine science"] = "marine biology", ["space science"] = "astronomy", ["health class"] = "health",
+		["calculus ab"] = "ap calculus", ["calculus bc"] = "ap calculus", ["calc ab"] = "ap calculus",
+		["calc bc"] = "ap calculus", ["ap calculus ab"] = "ap calculus", ["ap calculus bc"] = "ap calculus",
+		["further math"] = "further maths", ["algebra i"] = "algebra 1", ["algebra ii"] = "algebra 2",
+		["technology education"] = "technology", ["career education"] = "careers", ["geog"] = "geography",
+		["anatomy and physiology"] = "anatomy", ["sped"] = "special education", ["jewellery making"] = "jewelry making",
+		["tech theater"] = "technical theater", ["weightlifting"] = "weight training", ["typing class"] = "typing",
+		["texas history class"] = "texas history",
 	},
 }

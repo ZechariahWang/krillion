@@ -69,7 +69,7 @@ return {
 		["mondongo soup"] = "mondongo", ["chicha"] = "chicha morada", ["pintxos"] = "pinchos",
 		["patacones"] = "tostones", ["migas extremenas"] = "migas",
 		["lechon"] = "lechon asado", ["churros con chocolate"] = "churros", ["paella valenciana"] = "paella",
-		["arequipe"] = "dulce de leche", ["manjar"] = "dulce de leche", ["yucca"] = "yuca frita",
+		["arequipe"] = "dulce de leche", ["manjar"] = "dulce de leche",
 		["chicharrones"] = "chicharron", ["salchipapas"] = "salchipapa", ["natilla"] = "natillas",
 		["rice pudding"] = "arroz con leche", ["salted cod"] = "bacalao", ["suckling pig"] = "cochinillo",
 		["oxtail stew"] = "rabo de toro",

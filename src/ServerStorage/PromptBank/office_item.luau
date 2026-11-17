@@ -17,6 +17,7 @@ return {
 			"meeting room", "conference table", "projector", "screen", "headphones", "speaker", "tablet", "cup", "mug", "coffee",
 			"tea", "microwave", "fridge", "break room", "lanyard", "badge", "business card", "memo", "paperwork", "documents",
 			"swivel chair", "wifi router",
+			"cables", "notepad", "table", "shelf",
 		},
 		Rare = {
 			"hole punch", "rubber band", "thumbtack", "bulletin board", "clipboard", "label maker", "letter opener",
@@ -28,6 +29,9 @@ return {
 			"umbrella stand", "standing desk", "footrest", "ergonomic chair", "cushion", "partition", "name plate", "poster",
 			"certificate", "award", "trophy", "first aid kit", "fire extinguisher", "fire alarm", "exit sign", "smoke detector",
 			"thermostat", "air conditioner", "fan", "heater", "blinds", "carpet", "ceiling tile",
+			"couch", "coffee table", "toner", "ink cartridge", "sharpie", "pencil case", "speakerphone", "snacks", "candy bowl",
+			"toaster", "dishwasher", "kitchenette", "supply closet", "stationery", "ceiling light", "ethernet cable",
+			"server room", "modem", "company logo", "stress ball", "sink", "office supplies", "briefcase",
 		},
 		DeepCut = {
 			"flip chart", "easel", "overhead projector", "transparency", "laser pointer", "presentation clicker", "lectern",
@@ -37,6 +41,7 @@ return {
 			"pigeonhole", "punch clock", "key card", "key fob", "safe", "lockbox", "lateral file", "plan chest",
 			"drafting table", "light box", "laminator", "binding machine", "comb binder", "paper cutter", "cutting mat",
 			"box cutter", "dictaphone", "typewriter", "adding machine", "switchboard", "pager", "rotary phone",
+			"letterhead", "hdmi cable",
 		},
 		Mythic = {
 			"pneumatic tube", "carbon paper", "mimeograph", "microfiche reader", "microfilm", "stencil", "addressograph",
@@ -82,5 +87,15 @@ return {
 		["guillotine"] = "paper cutter", ["wall calendar"] = "calendar", ["desk calendar"] = "calendar",
 		["water dispenser"] = "water cooler", ["agenda"] = "planner", ["bulldog clip"] = "binder clip",
 		["paper punch"] = "hole punch", ["ditto machine"] = "mimeograph",
+		["wires"] = "cables", ["cable"] = "cables", ["cord"] = "cables", ["note pad"] = "notepad", ["notepads"] = "notepad",
+		["tables"] = "table", ["shelves"] = "shelf", ["couches"] = "couch", ["sofa"] = "couch", ["refrigerator"] = "fridge",
+		["printer ink"] = "ink cartridge", ["ink"] = "ink cartridge", ["toner cartridge"] = "toner",
+		["pencil cases"] = "pencil case", ["sharpies"] = "sharpie", ["briefcases"] = "briefcase", ["router"] = "wifi router",
+		["lights"] = "ceiling light", ["fluorescent lights"] = "ceiling light", ["hdmi"] = "hdmi cable",
+		["ethernet"] = "ethernet cable", ["snack"] = "snacks", ["label printer"] = "label maker",
+		["supplies"] = "office supplies", ["supply cabinet"] = "supply closet", ["supply room"] = "supply closet",
+		["stress balls"] = "stress ball", ["toasters"] = "toaster", ["logo"] = "company logo",
+		["dry erase board"] = "whiteboard", ["white board"] = "whiteboard", ["sinks"] = "sink", ["servers"] = "server room",
+		["modems"] = "modem", ["stationary"] = "stationery", ["letterheads"] = "letterhead",
 	},
 }
