@@ -102,7 +102,7 @@ local GameConfig = {
 	},
 	LateJoin = {
 		Enabled = 1,
-		MaxRound = 2, -- joining is open up to and including this round
+		MaxRound = 0, -- joining is open up to and including this round; 0 keeps every round open
 		MinSecondsLeft = 8, -- in MaxRound, only while this many prompt seconds remain
 		ReserveSlots = 4, -- with bots off: late joiners a match may take on top of its starters, in free gaps.
 		-- A match with bots takes a late joiner in place of a standing bot instead.
