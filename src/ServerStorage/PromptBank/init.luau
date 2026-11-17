@@ -269,6 +269,18 @@ local retired: { [string]: boolean } = {
 	movie_monster = true,
 	famous_dog = true,
 	bird_of_prey = true,
+	famous_mouse = true,
+	famous_fish = true,
+	famous_bear = true,
+	famous_primate = true,
+	famous_horse = true,
+	famous_cat = true,
+	famous_dragon = true,
+	famous_bird = true,
+	famous_pirate = true,
+	famous_monarch = true,
+	famous_painting = true,
+	famous_scientist = true,
 }
 
 local PromptBank = {
