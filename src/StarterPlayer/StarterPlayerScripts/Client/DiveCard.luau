@@ -143,7 +143,10 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
-local WIND_UP_METRES = 60 -- a pack whose deepest answer is shallower than this just sinks: no show for a short drop
+local WIND_UP_METRES = 1 -- every answered dive winds up and bursts, a common one too; NO ANSWER just sinks
+local PLUNGE_METRES = 55 -- your tag shoots this far past its resting place before it springs back (Plankton)...
+local PLUNGE_PER_TIER = 9 -- ...and this much further for every tier rarer
+local HIT_STOP = 0.14 -- a Rare or better answer freezes on impact this long before it plunges
 local INHALE = 0.09 -- every tag swells this much while the pack winds up under the surface...
 local EXHALE = 0.84 -- ...and snaps to this share of its size as it bursts, before springing back
 local CHARGE_SLOW = 0.17 -- seconds between the wind-up's clicks at its start
@@ -777,7 +780,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		placeStamp()
 		touchDown(own, 1.12)
 		stamp.Visible = true
-		stampScale.Scale = 2.2
+		stampScale.Scale = 2.2 + 0.8 * intensity
 		play(stampScale, TweenInfo.new(0.28 * speed, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 })
 		footer.Text = footerText()
 		local counterScale = counter:FindFirstChildOfClass("UIScale")
@@ -825,11 +828,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		if tierIndex >= Tiers.index("Rare") then
 			play(cardStroke, TweenInfo.new(0.3), { Color = tierColor })
 		end
+		if tierName == "Schooler" then
+			burst(if quick then 2 else 5)
+		end
 		if tierName == "Rare" then
-			burst(if quick then 3 else 6)
+			burst(if quick then 6 else 14)
 		end
 		if tierName == "DeepCut" then
-			burst(if quick then 6 else 12)
+			burst(if quick then 10 else 24)
 		end
 		-- A good answer's stamp keeps a slow pulse while the card holds, so the result has a moment.
 		if not isMythic and tierIndex >= Tiers.index("Rare") then
@@ -846,7 +852,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		if isMythic then
 			sound("Fanfare", 0.8, 1)
 			Fx.shakeOffset(frame, if quick then 5 else 12, 0.5)
-			burst(if quick then 14 else 30)
+			burst(if quick then 14 else 40)
+			-- A second wave, so the best answer of all keeps raining down.
+			task.delay(0.45 * speed, function()
+				if not destroyed then
+					burst(if quick then 8 else 26)
+					sound("Ping", 0.8, 1.6)
+				end
+			end)
 			play(
 				cardStroke,
 				TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 5, true),
@@ -905,6 +918,8 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local reach = SOFT_MIN
 	local leader: Diver? = nil -- the round's deepest answer, when other answers share the card
 	local leaderDeep = false -- it is Rare or better: the tags that stopped short drift away
+	local plunge = 0 -- metres your tag shoots past its resting place on landing (DivePack.overshoot)
+	local hitStop = 0 -- seconds it freezes on impact first
 	local burstAt = math.huge -- seconds into the dive the wind-up ends and the pack bursts down
 	local burst = false
 	local windUp = false -- the pack goes deep enough for the wind-up and burst to be played up
@@ -998,6 +1013,20 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			if leaderDeep then
 				glideDelay += WASH_LEAD * speed
 			end
+		end
+
+		-- Your tag lands with a plunge and a spring back, and the view stays on it until that has played out.
+		if hasAnswer and not quick then
+			local wanted = PLUNGE_METRES + PLUNGE_PER_TIER * (tierIndex - 1)
+			local room = DivePack.overshootRoom(slots, 1, spacing)
+			plunge = math.max(math.min(wanted, room, BOTTOM - own.slot.final), 0)
+			if tierIndex >= Tiers.index("Rare") then
+				hitStop = HIT_STOP
+			end
+			local spring = hitStop + DivePack.overshootSeconds()
+			focusDelay += spring
+			glideDelay += spring
+			settleTime += spring
 		end
 
 		-- `budget` squeezes the whole dive when its last tag would land too late, or when the view would
@@ -1124,6 +1153,9 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			local front = DivePack.front(elapsed, dropTime, sinkTime, reach, START_SKY)
 			for _, diver in divers do
 				local at = DivePack.position(front, diver.slot, spacing, soft)
+				if diver.own and diver.landed then
+					at += DivePack.overshoot(now - diver.landedAt - hitStop, plunge)
+				end
 				if not diver.landed and DivePack.landed(front, diver.slot, spacing, soft) then
 					diver.landed = true
 					diver.landedAt = now

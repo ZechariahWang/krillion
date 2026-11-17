@@ -22,6 +22,9 @@ local CARRY = 0.35
 local LAND_STEPS = 40 -- halvings when a landing time is searched for
 local LAND_SHARE = 0.6 -- a tag counts as landed once the pack is this share of `soft` past its resting place
 local OWN_LANE_ROOM = 2 -- spacings of push another tag takes on before it joins your lane
+local DIP_SECONDS = 0.7 -- your tag's plunge past its resting place and back
+local REBOUND_SECONDS = 0.45 -- then it springs up a little past its place
+local REBOUND_SHARE = 0.2 -- of the plunge
 
 local DivePack = {}
 
@@ -152,6 +155,46 @@ end
 -- Whether the tag has (all but) come to rest.
 function DivePack.landed(front: number, slot: Slot, spacing: number, soft: number): boolean
 	return front - slot.row * spacing >= slot.final + LAND_SHARE * soft
+end
+
+-- Seconds your tag's plunge and rebound take, from its landing.
+function DivePack.overshootSeconds(): number
+	return DIP_SECONDS + REBOUND_SECONDS
+end
+
+-- How far up the rebound goes, as a share of the plunge.
+function DivePack.reboundShare(): number
+	return REBOUND_SHARE
+end
+
+-- Metres your tag is drawn below its resting place `since` seconds after it lands: it keeps going down by
+-- `amplitude`, comes back up a little past its place, and settles there.
+function DivePack.overshoot(since: number, amplitude: number): number
+	if since <= 0 or since >= DivePack.overshootSeconds() then
+		return 0
+	end
+	if since < DIP_SECONDS then
+		return amplitude * math.sin(math.pi * since / DIP_SECONDS)
+	end
+	local after = since - DIP_SECONDS
+	return -REBOUND_SHARE * amplitude * math.sin(math.pi * after / REBOUND_SECONDS)
+end
+
+-- The largest plunge your tag (slots[own]) can take without coming within `spacing` of another tag in its
+-- lane: the one resting below it, or (on the rebound) the one behind it. math.huge when it is alone.
+function DivePack.overshootRoom(slots: { Slot }, own: number, spacing: number): number
+	local mine = slots[own]
+	local room = math.huge
+	for index, slot in slots do
+		if index ~= own and slot.lane == mine.lane then
+			if slot.final > mine.final then
+				room = math.min(room, slot.final - mine.final - spacing)
+			else
+				room = math.min(room, (mine.final - slot.final - spacing) / REBOUND_SHARE)
+			end
+		end
+	end
+	return math.max(room, 0)
 end
 
 -- Seconds until `landed` turns true for the tag, with the same numbers as `front`.
