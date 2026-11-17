@@ -55,10 +55,15 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Prompt bank: one module per prompt in `src/ServerStorage/PromptBank/`, listed in its `init.luau`;
   `tests/PromptBank.test.luau` guards it (normalized answers, no duplicates, aliases point at answers).
   `Shared/AnswerMatcher` also matches word by word (doctor/dr, saint/st...: `WORD_FOLDS`), in any word order,
-  and as a last resort drops `QUALIFIERS` (diet, zero, sugar, cherry...) from the ends, so the bank needs no
+  and as a last resort drops `QUALIFIERS` (diet, zero, sugar, cherry, red, baby, big...) from the ends, so the bank needs no
   entry for every "diet"/"zero sugar" variant; such an answer counts as the bank answer that is left.
   `lune run tests/check_prompt.luau <id> "typed" ...` checks one prompt file and prints how each typed answer
-  is graded (tier, bank spelling, REFUSED): use it when adding answers.
+  is graded (tier, bank spelling, REFUSED); `--file <list>` probes hundreds at once and prints only the refused
+  and ask-first ones. `python tests/bank.py add|retier|remove|unalias <id> <json>` edits a prompt file safely
+  (locked, normalized, proven and checked after; Plankton and TooClever are curated and need `--allow-top`):
+  use these two when adding answers or moving them between tiers, not hand edits. `bank.py stats` shows sizes.
+  `AnswerMatcher` indexes a prompt once (`warm`, kept for the last 12) so grading a refused answer is a
+  millisecond or so, not tens: the bank tests guard that and a file size limit as the bank grows.
 - Refused answers are counted per prompt (`Server/AnswerMissService`, rules in `Shared/AnswerMisses`, switch and
   limits in `GameConfig.Answer`): counts only, no player attached, short answer-like text only (no sentences,
   long numbers, emails or links), three per player per prompt per visit, at most 400 answers per prompt (over

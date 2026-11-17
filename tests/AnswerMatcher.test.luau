@@ -231,6 +231,29 @@ return function(test)
 		assert(AnswerMatcher.match("diet doctor pespi", drinks) == nil, "pepsi and dr pepper are different drinks")
 	end)
 
+	test("colour, size and age words are dropped too, but only to find an answer that is not there as typed", function()
+		local animals = {
+			id = "test_animals",
+			prompt = "Name an animal",
+			answers = { Plankton = { "apple", "shark", "cat" }, Rare = { "red panda" } },
+			aliases = {},
+		}
+		local tier, spelling, sure = AnswerMatcher.resolve("red apple", animals)
+		assert(tier == "Plankton" and spelling == "apple" and sure == false, tostring(spelling))
+		assert(AnswerMatcher.match("baby shark", animals) == "Plankton")
+		assert(AnswerMatcher.match("big white cat", animals) == "Plankton")
+		assert(AnswerMatcher.match("red panda", animals) == "Rare", "listed as typed")
+		assert(AnswerMatcher.match("big wild", animals) == nil, "qualifiers alone")
+		local colours = {
+			id = "test_colours",
+			prompt = "Name a colour",
+			answers = { Plankton = { "red", "blue" }, Rare = { "navy" } },
+			aliases = {},
+		}
+		assert(AnswerMatcher.match("red blue", colours) == nil, "a colour that is an answer is never dropped")
+		assert(AnswerMatcher.match("big navy", colours) == "Rare", "size words still drop")
+	end)
+
 	test("a qualifier word that is an answer itself is not dropped", function()
 		local fruit = {
 			id = "test_fruit",

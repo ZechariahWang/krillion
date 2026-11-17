@@ -119,7 +119,10 @@ function AnswerService.closeRound(): { [Player]: Submission }
 end
 
 function AnswerService.randomPrompt(exclude: { [string]: boolean }): AnswerMatcher.Prompt
-	return PromptBank.random(exclude)
+	local prompt = PromptBank.random(exclude)
+	-- Indexed now, while nobody is waiting on it: the first answer to a prompt would otherwise build it.
+	AnswerMatcher.warm(prompt)
+	return prompt
 end
 
 -- UserIds of everyone still in who has locked in an answer this prompt. A sunk player's answer is kept
