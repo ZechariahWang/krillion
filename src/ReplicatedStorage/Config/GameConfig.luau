@@ -11,7 +11,7 @@ local GameConfig = {
 		PromptSeconds = 25,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
 		PromptSecondsMin = 14,
-		RevealSeconds = 10.2, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
+		RevealSeconds = 11.2, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
 		SettleSeconds = 1, -- after the water settles, before the next prompt or the results: room for the callouts
 		ResultsSeconds = 8,
 		MaxRounds = 0, -- 0 means no cap: last player standing
@@ -131,10 +131,10 @@ local GameConfig = {
 		-- the deepest answer and crowns it (under 1.5 s), the card holds CardHoldSeconds, or what is left before
 		-- the rise, then shrinks away (0.25 s). It is always gone before the rise at RaiseDelaySeconds.
 		-- tests/Depth.test.luau keeps these in step with each other.
-		CardBudgetSeconds = 5.2,
+		CardBudgetSeconds = 6.2,
 		CardHoldSeconds = 2.5, -- long enough to enjoy the result and see who went deepest
-		RaiseDelaySeconds = 8.6, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 8.6, -- answer Shells and Mythic announcements land with the rise
+		RaiseDelaySeconds = 9.6, -- pillars start rising this long after the reveal, once your card is out of the way
+		PayoutDelaySeconds = 9.6, -- answer Shells and Mythic announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},

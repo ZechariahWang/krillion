@@ -197,6 +197,19 @@ function DivePack.overshootRoom(slots: { Slot }, own: number, spacing: number): 
 	return math.max(room, 0)
 end
 
+-- How many metres above its resting place your tag (slots[own]) may stop for a moment without coming within
+-- `spacing` of the tag behind it in its lane. math.huge when nothing is behind it.
+function DivePack.fakeRoom(slots: { Slot }, own: number, spacing: number): number
+	local mine = slots[own]
+	local room = math.huge
+	for index, slot in slots do
+		if index ~= own and slot.lane == mine.lane and slot.final <= mine.final then
+			room = math.min(room, mine.final - slot.final - spacing)
+		end
+	end
+	return math.max(room, 0)
+end
+
 -- Seconds until `landed` turns true for the tag, with the same numbers as `front`.
 function DivePack.landSeconds(
 	slot: Slot,

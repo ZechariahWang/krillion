@@ -147,6 +147,14 @@ local WIND_UP_METRES = 1 -- every answered dive winds up and bursts, a common on
 local PLUNGE_METRES = 55 -- your tag shoots this far past its resting place before it springs back (Plankton)...
 local PLUNGE_PER_TIER = 9 -- ...and this much further for every tier rarer
 local HIT_STOP = 0.14 -- a Rare or better answer freezes on impact this long before it plunges
+-- The fake-out: your tag stops just above its tier's line, as if it were an answer one tier commoner, holds
+-- there, trembles and snaps down to its real depth. The chance grows with rarity so it never gets predictable.
+local FAKE_CHANCE: { [string]: number } = { TooClever = 0.35, Schooler = 0.5, Rare = 0.65, DeepCut = 0.8, Mythic = 1 }
+local FAKE_MARGIN = 30 -- metres above your tier's line it stops, well inside the tier above (every band is 60 m or more)
+local FAKE_HOLD = 0.7 -- seconds it sits there
+local FAKE_TREMBLE = 0.3 -- the end of the hold, when it shakes
+local TREMBLE_X = 0.006 -- window widths it shakes by
+local SNAP_TIME = 0.28 -- the snap down to its real depth
 local INHALE = 0.09 -- every tag swells this much while the pack winds up under the surface...
 local EXHALE = 0.84 -- ...and snaps to this share of its size as it bursts, before springing back
 local CHARGE_SLOW = 0.17 -- seconds between the wind-up's clicks at its start
@@ -920,6 +928,10 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local leaderDeep = false -- it is Rare or better: the tags that stopped short drift away
 	local plunge = 0 -- metres your tag shoots past its resting place on landing (DivePack.overshoot)
 	local hitStop = 0 -- seconds it freezes on impact first
+	local fakeRise = 0 -- metres above its resting place your tag stops for the fake-out; 0 for none
+	local fakeLandedAt: number? = nil
+	local snapAt: number? = nil
+	local trembleTickAt = 0
 	local burstAt = math.huge -- seconds into the dive the wind-up ends and the pack bursts down
 	local burst = false
 	local windUp = false -- the pack goes deep enough for the wind-up and burst to be played up
@@ -1023,6 +1035,13 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			if tierIndex >= Tiers.index("Rare") then
 				hitStop = HIT_STOP
 			end
+			local chance = FAKE_CHANCE[tierName]
+			if chance ~= nil and tierInfo ~= nil and random:NextNumber() < chance then
+				local wanted = own.slot.final - (tierInfo.depthMin - FAKE_MARGIN)
+				if wanted > 0 and wanted <= DivePack.fakeRoom(slots, 1, spacing) then
+					fakeRise = wanted
+				end
+			end
 			local spring = hitStop + DivePack.overshootSeconds()
 			focusDelay += spring
 			glideDelay += spring
@@ -1039,9 +1058,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				last = math.max(last, DivePack.landSeconds(diver.slot, spacing, soft, dropTime, sinkTime, reach))
 			end
 			local pace = math.min(1, limit / last)
+			-- The fake-out's hold and snap delay your landing by up to this long, whatever the pace.
+			local fakeDelay = if fakeRise > 0 then FAKE_HOLD + SNAP_TIME else 0
+			local ownLands = DivePack.landSeconds(own.slot, spacing, soft, dropTime, sinkTime, reach)
+			if fakeDelay > 0 and limit > fakeDelay then
+				pace = math.min(pace, (limit - fakeDelay) / ownLands)
+			end
 			if leader ~= nil and leader ~= own then
-				local glide = glideDelay + GLIDE_SHARE * focusTime
-				local ownLands = DivePack.landSeconds(own.slot, spacing, soft, dropTime, sinkTime, reach)
+				local glide = glideDelay + GLIDE_SHARE * focusTime + fakeDelay
 				if limit > glide then
 					pace = math.min(pace, (limit - glide) / ownLands)
 				end
@@ -1135,6 +1159,50 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		end
 	end
 
+	-- Your tag during the fake-out: it stops `fakeRise` above its resting place with a thud, holds, trembles,
+	-- then snaps down and lands for real. Returns its metres now.
+	local function fakeOut(packAt: number, front: number, now: number): number
+		local stop = own.slot.final - fakeRise
+		local landedAt = fakeLandedAt
+		if landedAt == nil then
+			if packAt < stop then
+				return packAt
+			end
+			fakeLandedAt = now
+			sound("Thud", 0.45, 1.15)
+			local tagScale = own.scale
+			if tagScale ~= nil then
+				tagScale.Scale = own.rest * 1.06
+				play(tagScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = own.rest })
+			end
+			return stop
+		end
+		local snapped = snapAt
+		if snapped == nil then
+			local held = now - landedAt
+			if held >= FAKE_HOLD - FAKE_TREMBLE and now >= trembleTickAt then
+				local charge = math.clamp((held - (FAKE_HOLD - FAKE_TREMBLE)) / FAKE_TREMBLE, 0, 1)
+				trembleTickAt = now + 0.07
+				sound("Tick", 0.25 + 0.2 * charge, 1 + 0.8 * charge)
+			end
+			-- It snaps only once the pack has caught up, so the tags around it are where they belong.
+			if held >= FAKE_HOLD and DivePack.landed(front, own.slot, spacing, soft) then
+				snapAt = now
+				sound("Splash", 0.7, 1.3)
+			end
+			return stop
+		end
+		local u = math.clamp((now - snapped) / SNAP_TIME, 0, 1)
+		if u >= 1 then
+			own.landed = true
+			own.landedAt = now
+			ownLandedAt = now
+			task.spawn(land)
+			return own.slot.final
+		end
+		return stop + fakeRise * u * u
+	end
+
 	local function step(dt: number)
 		local now = os.clock()
 		if not ready and now - created >= diveDelay then
@@ -1153,6 +1221,10 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			local front = DivePack.front(elapsed, dropTime, sinkTime, reach, START_SKY)
 			for _, diver in divers do
 				local at = DivePack.position(front, diver.slot, spacing, soft)
+				if diver.own and fakeRise > 0 and not diver.landed then
+					diver.pos = fakeOut(at, front, now)
+					continue
+				end
 				if diver.own and diver.landed then
 					at += DivePack.overshoot(now - diver.landedAt - hitStop, plunge)
 				end
@@ -1318,6 +1390,10 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 					end
 				end
 				local x = diver.x
+				local fakeAt = fakeLandedAt
+				if diver.own and fakeAt ~= nil and snapAt == nil and now - fakeAt >= FAKE_HOLD - FAKE_TREMBLE then
+					x += math.sin(now * 70) * TREMBLE_X
+				end
 				local slideAt = spotAt
 				if diver == lead and slideAt ~= nil then
 					local u = math.min((now - slideAt) / SPOT_TIME, 1)

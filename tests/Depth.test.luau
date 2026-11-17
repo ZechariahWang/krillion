@@ -74,12 +74,14 @@ return function(test)
 		-- squeezed a little to fit). The crown pops (0.4 s), the result is read for at least a second, and
 		-- the card has left (0.35 s) before the pillars rise.
 		assert(deepest <= reveal.CardBudgetSeconds, "the deepest dive would be squeezed hard")
+		-- Your tag may also stop short a tier above, hold there and snap down (DiveCard's fake-out).
+		assert(deepest + 1 <= reveal.CardBudgetSeconds, "no room for the fake-out on a deep dive")
 		-- Your tag's plunge and spring back (DivePack.overshoot) plays out before the view moves on.
 		local settled = reveal.CardBudgetSeconds + DivePack.overshootSeconds()
 		assert(settled + 0.4 + 1 + 0.35 <= reveal.RaiseDelaySeconds, "the deepest dives leave no time to read the result")
 		assert(reveal.CardHoldSeconds >= 2, "the result is not held long enough to enjoy")
 		-- Room after the rise starts for the pillars to finish (and a beat), but the reveal does not drag.
 		assert(GameConfig.Round.RevealSeconds >= reveal.RaiseDelaySeconds + GameConfig.Platform.RiseSeconds + 0.4)
-		assert(GameConfig.Round.RevealSeconds <= 11, "the reveal drags")
+		assert(GameConfig.Round.RevealSeconds <= 12, "the reveal drags")
 	end)
 end

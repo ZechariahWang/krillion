@@ -252,4 +252,22 @@ return function(test)
 		local tight = DivePack.layout({ 100, 100, 100 }, 1, spacing, 2)
 		assert(DivePack.overshootRoom(tight, 2, spacing) == 0)
 	end)
+
+	test("your tag can stop short of its depth only where the tag behind it in its lane has room", function()
+		local spacing = 40
+		-- Nothing behind it: it may stop anywhere above.
+		local alone = DivePack.layout({ 200, 300 }, 2, spacing, 1)
+		assert(DivePack.fakeRoom(alone, 1, spacing) == math.huge)
+		-- One lane: a tag behind yours at 100 leaves 200 - 100 - 40 = 60 metres to stop short by.
+		local stacked = DivePack.layout({ 200, 100, 300 }, 1, spacing, 1)
+		local room = DivePack.fakeRoom(stacked, 1, spacing)
+		assert(math.abs(room - 60) < 1e-6, "room " .. room)
+		assert(stacked[1].final - room >= stacked[2].final + spacing - 1e-6)
+		-- A deeper tag below never limits it.
+		local below = DivePack.layout({ 200, 260 }, 1, spacing, 1)
+		assert(DivePack.fakeRoom(below, 1, spacing) == math.huge)
+		-- Packed tight there is no room.
+		local tight = DivePack.layout({ 100, 100 }, 1, spacing, 2)
+		assert(DivePack.fakeRoom(tight, 2, spacing) == 0)
+	end)
 end
