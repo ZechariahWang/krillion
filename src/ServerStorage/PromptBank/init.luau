@@ -165,6 +165,12 @@ local list: { Prompt } = {
 	require("@self/famous_painting"),
 	require("@self/dreamworks_movie"),
 	require("@self/thai_korean_food"),
+	require("@self/shark"),
+	require("@self/martial_art"),
+	require("@self/pie"),
+	require("@self/salad"),
+	require("@self/greek_food"),
+	require("@self/middle_eastern_food"),
 }
 
 local byId: { [string]: Prompt } = {}

@@ -38,5 +38,10 @@ return {
 		["russian federation"] = "russia", ["bahrein"] = "bahrain", ["lebonon"] = "lebanon", ["isreal"] = "israel",
 		["irak"] = "iraq", ["persia"] = "iran", ["japon"] = "japan", ["tailand"] = "thailand",
 		["thialand"] = "thailand",
+		["dprk"] = "north korea", ["rok"] = "south korea", ["lao"] = "laos", ["timor"] = "east timor",
+		["phillippines"] = "philippines", ["saudia arabia"] = "saudi arabia", ["kazahstan"] = "kazakhstan",
+		["turkmenstan"] = "turkmenistan", ["pakastan"] = "pakistan", ["bengladesh"] = "bangladesh",
+		["indonesa"] = "indonesia", ["korea south"] = "south korea", ["korea north"] = "north korea",
+		["chinese taipei"] = "taiwan", ["islamic republic of iran"] = "iran",
 	},
 }
