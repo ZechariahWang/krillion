@@ -115,6 +115,6 @@ return {
 		["asoka tano"] = "ahsoka tano", ["asoka"] = "ahsoka tano", ["storm troopers"] = "stormtrooper",
 		["din jarin"] = "din djarin", ["yoda master"] = "yoda", ["darth moul"] = "darth maul",
 		["kylo renn"] = "kylo ren", ["princess leah"] = "princess leia", ["sebulbas"] = "sebulba",
-		["anakin vader"] = "darth vader", ["mace windoo"] = "mace windu",
+		["mace windoo"] = "mace windu",
 	},
 }

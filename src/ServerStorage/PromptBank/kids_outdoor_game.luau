@@ -75,5 +75,6 @@ return {
 		["spike ball"] = "spikeball", ["frisbee golf"] = "disc golf", ["prisoner base"] = "prisoners base",
 		["tug o war"] = "tug of war", ["hide n go seek"] = "hide and seek", ["red rover red rover"] = "red rover",
 		["simon say"] = "simon says",
+		["hide and seak"] = "hide and seek", ["hide and seeking"] = "hide and seek", ["duck duck goos"] = "duck duck goose", ["hopscoch"] = "hopscotch", ["tetherbal"] = "tetherball", ["simon sais"] = "simon says", ["jumprope"] = "jump rope", ["jump ropes"] = "jump rope", ["tug a war"] = "tug of war", ["tug of wars"] = "tug of war", ["red light green light game"] = "red light green light", ["water balloons"] = "water balloon fight", ["dodge ball game"] = "dodgeball", ["capture the flag game"] = "capture the flag", ["freeze tag game"] = "freeze tag", ["sac race"] = "sack race", ["three leg race"] = "three legged race", ["leapfrogging"] = "leapfrog", ["tag you are it"] = "tag",
 	},
 }

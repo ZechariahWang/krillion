@@ -10,6 +10,7 @@ return {
 			"lava lamp", "disco ball", "fairy lights",
 		},
 		Schooler = {
+			"police light",
 			"floor lamp", "table lamp", "street light", "headlight", "spotlight", "floodlight", "candle", "headlamp",
 			"christmas lights", "string lights", "ceiling light", "traffic light", "led light", "neon light",
 			"fluorescent light", "tiki torch", "strobe light", "black light", "oil lamp", "bedside lamp",
@@ -63,5 +64,6 @@ return {
 		["edison light"] = "edison bulb", ["searchlights"] = "searchlight",
 		["miner lamp"] = "miners lamp", ["candelabrum"] = "candelabra", ["torchiere lamp"] = "torchiere",
 		["blinker"] = "turn signal", ["indicator"] = "turn signal",
+		["chandalier"] = "chandelier", ["flourescent light"] = "fluorescent light", ["florescent light"] = "fluorescent light", ["flashligt"] = "flashlight", ["lantren"] = "lantern", ["candel"] = "candle", ["flood lite"] = "floodlight", ["hanging light"] = "pendant light", ["ceiling lamp"] = "ceiling light", ["wall lamp"] = "sconce", ["wall light"] = "sconce", ["nightstand lamp"] = "bedside lamp", ["bicycle light"] = "bike light", ["camping lantern"] = "lantern", ["plasma ball"] = "plasma lamp", ["police lights"] = "police light", ["led strip"] = "light strip", ["lightblub"] = "light bulb", ["light bub"] = "light bulb", ["spot lamp"] = "spotlight",
 	},
 }

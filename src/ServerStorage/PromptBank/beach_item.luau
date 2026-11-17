@@ -10,6 +10,7 @@ return {
 			"crab", "sunglasses", "seaweed", "starfish", "lifeguard",
 		},
 		Schooler = {
+			"sandwiches", "scuba gear",
 			"water", "wave", "sandcastle", "shovel", "beach ball", "flip flops", "swimsuit", "swim trunks", "bikini", "hat",
 			"sun hat", "cooler", "beach chair", "blanket", "surfboard", "boogie board", "snorkel", "goggles", "flippers",
 			"float", "pool noodle", "life jacket", "seagull", "jellyfish", "driftwood", "rocks", "pebbles", "kite", "frisbee",
@@ -80,5 +81,6 @@ return {
 		["life guard tower"] = "lifeguard tower", ["beach tents"] = "beach tent", ["water bottles"] = "water bottle",
 		["books"] = "book", ["cameras"] = "camera", ["sailing boat"] = "sailboat", ["sail boat"] = "sailboat",
 		["egrets"] = "egret", ["herons"] = "heron", ["mole crab"] = "sand flea",
+		["sunscren"] = "sunscreen", ["sunglases"] = "sunglasses", ["umbrela"] = "umbrella", ["flipflops"] = "flip flops", ["swimming costume"] = "swimsuit", ["swim suit"] = "swimsuit", ["life gaurd"] = "lifeguard", ["lifegaurd"] = "lifeguard", ["sea gull"] = "seagull", ["seagul"] = "seagull", ["boogieboard"] = "boogie board", ["snorkle"] = "snorkel", ["snorkeling gear"] = "snorkel", ["sandcasle"] = "sandcastle", ["starfich"] = "starfish", ["beach blanket"] = "blanket", ["beach toys"] = "sand toys", ["inner tube"] = "float", ["pool float"] = "float", ["ocean waves"] = "wave", ["beach umbrellas"] = "umbrella", ["beach towels"] = "towel", ["sandwich"] = "sandwiches", ["scuba"] = "scuba gear", ["scuba diver"] = "scuba gear", ["cooler box"] = "cooler", ["esky"] = "cooler",
 	},
 }

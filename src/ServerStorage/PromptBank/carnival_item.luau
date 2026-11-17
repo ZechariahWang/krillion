@@ -10,6 +10,7 @@ return {
 			"bumper cars", "corn dog", "clown", "prizes",
 		},
 		Schooler = {
+			"fried dough",
 			"ring toss", "balloon darts", "whack a mole", "funhouse", "house of mirrors", "haunted house",
 			"caramel apple", "lemonade", "hot dog", "nachos", "pretzel", "face painting", "balloon animals", "juggler",
 			"magician", "fortune teller", "strongman", "high striker", "water gun game", "basketball hoop",
@@ -94,5 +95,6 @@ return {
 		["french fry"] = "french fries", ["fries"] = "french fries", ["balloon"] = "balloons",
 		["rock wall"] = "climbing wall", ["bull riding"] = "mechanical bull", ["arcade games"] = "arcade",
 		["magic tricks"] = "magic show", ["puppets"] = "puppet show", ["candies"] = "candy", ["churro"] = "churros",
+		["ferris wheal"] = "ferris wheel", ["farris wheel"] = "ferris wheel", ["ferres wheel"] = "ferris wheel", ["cottoncandy"] = "cotton candy", ["carosel"] = "carousel", ["carousal"] = "carousel", ["carrousel"] = "carousel", ["roler coaster"] = "roller coaster", ["bumpercars"] = "bumper cars", ["funnell cake"] = "funnel cake", ["carmel apple"] = "caramel apple", ["candied apple"] = "caramel apple", ["tilta whirl"] = "tilt a whirl", ["tiltawhirl"] = "tilt a whirl", ["sno cone"] = "snow cone", ["ski ball"] = "skee ball", ["ringtoss"] = "ring toss", ["dunking tank"] = "dunk tank", ["hall of mirror"] = "house of mirrors", ["merrygoround"] = "carousel", ["midway games"] = "game booth", ["balloon pop"] = "balloon darts",
 	},
 }

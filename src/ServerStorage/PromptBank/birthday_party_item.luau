@@ -10,6 +10,7 @@ return {
 			"pinata", "confetti", "clown", "streamers", "cupcakes",
 		},
 		Schooler = {
+			"juice boxes",
 			"decorations", "banner", "pizza", "party favors", "goody bag", "music", "cards", "wrapping paper", "ribbon", "bow",
 			"gift bag", "party horn", "juice", "soda", "punch", "lemonade", "chips", "candy", "snacks", "popcorn", "cookies",
 			"hot dogs", "burgers", "fruit", "plates", "cups", "napkins", "forks", "tablecloth", "table", "chairs", "face paint",
@@ -118,5 +119,6 @@ return {
 		["birthday crown"] = "party crown", ["thank you notes"] = "thank you cards",
 		["scavenger hunts"] = "scavenger hunt", ["number candle"] = "number candles", ["paper hats"] = "party hats",
 		["sweets"] = "candy", ["mascots"] = "mascot",
+		["ballons"] = "balloons", ["baloons"] = "balloons", ["ballon"] = "balloons", ["presants"] = "presents", ["candels"] = "candles", ["pinyata"] = "pinata", ["pinatta"] = "pinata", ["cup cakes"] = "cupcakes", ["streemers"] = "streamers", ["icecream"] = "ice cream", ["gift wrap"] = "wrapping paper", ["gift bags"] = "gift bag", ["juice box"] = "juice boxes", ["birthday balloons"] = "balloons", ["birthday presents"] = "presents", ["birthday decorations"] = "decorations", ["cakes"] = "cake", ["pizzas"] = "pizza", ["party decorations"] = "decorations",
 	},
 }
