@@ -20,11 +20,13 @@ return {
 			"morgana", "narissa", "ernesto de la cruz", "charles muntz", "waternoose", "pain and panic",
 			"flotsam and jetsam", "te ka", "stinky pete", "lucifer", "banzai", "ed", "chick hicks", "mor du",
 			"sir hiss", "lionheart", "shenzi", "medusa",
+			"iago", "davy jones",
 		},
 		DeepCut = {
 			"sykes", "percival mcleach", "bowler hat guy", "hamsterviel", "stabbington brothers", "duke of weselton",
 			"grand duke of owls", "peg leg pete", "jasper", "horace", "si and am", "edgar", "the coachman",
 			"al mcwhiggin", "forte", "magica de spell", "lyle tiberius rourke",
+			"fagin", "barbossa", "drizella", "anastasia tremaine",
 		},
 		Mythic = {
 			"fidget", "brom bones", "mr snoops", "the weasels",
@@ -52,5 +54,11 @@ return {
 		["the big bad wolf"] = "big bad wolf", ["wolf"] = "big bad wolf", ["mcleach"] = "percival mcleach",
 		["horace and jasper"] = "jasper", ["the grand duke"] = "grand duke of owls",
 		["grand duke"] = "grand duke of owls", ["grimhilde"] = "evil queen",
+		["pete"] = "peg leg pete", ["evil stepmother"] = "lady tremaine", ["stepmother"] = "lady tremaine",
+		["cinderellas stepmother"] = "lady tremaine", ["hector barbossa"] = "barbossa",
+		["captain barbossa"] = "barbossa", ["the queen of hearts"] = "queen of hearts",
+		["queen hearts"] = "queen of hearts", ["the queen"] = "evil queen", ["evil emperor zurg"] = "zurg",
+		["anastasia"] = "anastasia tremaine", ["sea witch"] = "ursula", ["shere kahn"] = "shere khan",
+		["sherekhan"] = "shere khan",
 	},
 }

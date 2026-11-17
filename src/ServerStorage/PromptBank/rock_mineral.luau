@@ -8,6 +8,7 @@ return {
 		},
 		TooClever = {
 			"basalt", "pumice", "slate", "coal",
+			"diamond",
 		},
 		Schooler = {
 			"lava rock", "shale", "gneiss", "schist", "flint", "chalk", "gypsum", "talc", "mica", "feldspar",
@@ -15,6 +16,8 @@ return {
 			"sedimentary rock", "igneous rock", "metamorphic rock", "jasper", "soapstone", "fluorite", "malachite",
 			"azurite", "galena", "clay", "cobblestone", "gravel", "boulder", "pebble", "river rock", "bedrock",
 			"iron ore",
+			"amethyst", "emerald", "ruby", "sapphire", "opal", "jade", "garnet", "topaz", "turquoise", "agate",
+			"onyx", "gold", "silver", "copper", "lapis lazuli", "rose quartz",
 		},
 		Rare = {
 			"gabbro", "peridotite", "dunite", "pegmatite", "syenite", "trachyte", "dacite", "scoria", "tufa",
@@ -30,6 +33,8 @@ return {
 			"uraninite", "carnotite", "autunite", "tuff", "conglomerate", "breccia", "dolomite", "quartzite",
 			"serpentine", "cinnabar", "corundum", "apatite", "travertine", "bluestone", "diorite", "andesite",
 			"rhyolite",
+			"citrine", "tourmaline", "moonstone", "peridot", "aquamarine", "beryl", "carnelian", "tanzanite",
+			"alexandrite", "sunstone", "smoky quartz", "amazonite", "kunzite", "morganite", "porphyry", "bloodstone",
 		},
 		DeepCut = {
 			"komatiite", "kimberlite", "carbonatite", "lamprophyre", "anorthosite", "norite", "troctolite",
@@ -44,6 +49,7 @@ return {
 			"petalite", "amblygonite", "phenakite", "euclase", "bertrandite", "danburite", "datolite", "prehnite",
 			"pectolite", "larimar", "sugilite", "charoite", "ammolite", "shungite", "moldavite", "tektite",
 			"fulgurite",
+			"sardonyx", "heliodor", "iolite", "spinel", "chrysoprase", "rhodolite",
 		},
 		Mythic = {
 			"grandidierite", "serendibite", "thulite", "chrome diopside", "diopside", "hedenbergite", "omphacite",
@@ -77,5 +83,14 @@ return {
 		["muscovite mica"] = "muscovite", ["biotite mica"] = "biotite", ["volcanic rock"] = "lava rock",
 		["rock salt"] = "halite", ["salt"] = "halite", ["idocrase"] = "vesuvianite", ["ramsayite"] = "lorenzenite",
 		["pitchblende"] = "uraninite",
+		["diamonds"] = "diamond", ["amethysts"] = "amethyst", ["amathyst"] = "amethyst", ["emeralds"] = "emerald",
+		["emrald"] = "emerald", ["rubies"] = "ruby", ["sapphires"] = "sapphire", ["saphire"] = "sapphire",
+		["opals"] = "opal", ["garnets"] = "garnet", ["topaz stone"] = "topaz", ["turqoise"] = "turquoise",
+		["turquois"] = "turquoise", ["agates"] = "agate", ["lapis"] = "lapis lazuli",
+		["lapiz lazuli"] = "lapis lazuli", ["fools gold"] = "pyrite", ["native gold"] = "gold",
+		["granites"] = "granite", ["sandstones"] = "sandstone", ["obsidians"] = "obsidian",
+		["aquamarines"] = "aquamarine", ["tourmalines"] = "tourmaline", ["citrines"] = "citrine",
+		["peridots"] = "peridot", ["moonstones"] = "moonstone", ["tiger eye"] = "tigers eye", ["spinels"] = "spinel",
+		["porphyries"] = "porphyry",
 	},
 }
