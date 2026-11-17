@@ -16,17 +16,21 @@ return {
 			"anastasia",
 		},
 		Rare = {
-			"princess atta", "princess irulan", "princess ozma", "princess eilonwy", "elena of avalor", "princess allura",
-			"princess beatrice", "princess eugenie", "princess amber", "princess anne", "princess margaret", "grace kelly",
-			"princess mononoke", "princess serenity", "princess elise", "princess midna", "princess skystar",
-			"anneliese", "namaari", "princess catherine", "princess kaguya",
+			"princess atta", "princess irulan", "princess ozma", "princess eilonwy", "elena of avalor",
+			"princess allura", "princess beatrice", "princess eugenie", "princess amber", "princess anne",
+			"princess margaret", "grace kelly", "princess mononoke", "princess serenity", "princess elise",
+			"princess midna", "princess skystar", "anneliese", "namaari", "princess catherine",
+			"princess kaguya", "princess shuri", "princess nausicaa", "princess yue", "princess azula",
+			"flame princess", "lumpy space princess", "princess starfire", "shera", "princess kitana",
+			"princess ember",
 		},
 		DeepCut = {
-			"princess garnet",
-			"princess sally", "princess leonor", "princess victoria", "princess madeleine", "princess kaiulani",
-			"princess erika", "princess rosella", "princess genevieve", "princess charlene", "princess tutu",
+			"princess garnet", "princess sally", "princess leonor", "princess victoria", "princess madeleine",
+			"princess kaiulani", "princess erika", "princess rosella", "princess genevieve",
+			"princess charlene", "princess tutu", "princess juliana",
 		},
-		Mythic = {},
+		Mythic = {
+		},
 	},
 	aliases = {
 		["peach"] = "princess peach", ["leia"] = "princess leia", ["zelda"] = "princess zelda", ["diana"] = "princess diana",
@@ -50,5 +54,7 @@ return {
 		["skystar"] = "princess skystar", ["kaguya"] = "princess kaguya", ["sally acorn"] = "princess sally",
 		["elise"] = "princess elise", ["briar rose"] = "aurora", ["queen elsa"] = "elsa",
 		["little mermaid"] = "ariel", ["princess anastasia"] = "anastasia", ["namaari of fang"] = "namaari",
+		["raiponse"] = "rapunzel", ["princess of wales"] = "princess catherine", ["adora"] = "shera",
+		["lsp"] = "lumpy space princess",
 	},
 }

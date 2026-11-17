@@ -10,14 +10,15 @@ return {
 			"golden knights", "kraken", "oilers", "flyers", "avalanche", "lightning",
 		},
 		Schooler = {
-			"islanders", "capitals", "devils", "flames", "canucks", "senators", "sabres", "hurricanes", "panthers",
-			"predators", "blues", "stars", "wild", "jets", "kings", "ducks", "sharks", "blue jackets", "coyotes",
+			"capitals", "devils", "flames", "canucks", "kings",
 		},
 		Rare = {
-			"whalers", "nordiques", "thrashers", "mighty ducks", "utah mammoth", "north stars",
+			"whalers", "nordiques", "thrashers", "mighty ducks", "utah mammoth", "north stars", "islanders",
+			"senators", "sabres", "hurricanes", "panthers", "predators", "blues", "stars", "coyotes",
 		},
 		DeepCut = {
 			"kansas city scouts", "cleveland barons", "california golden seals", "atlanta flames", "colorado rockies",
+			"wild", "jets", "ducks", "sharks", "blue jackets",
 		},
 		Mythic = {
 			"montreal maroons", "philadelphia quakers", "hamilton tigers", "brooklyn americans", "st louis eagles",
@@ -63,5 +64,14 @@ return {
 		["phoenix yotes"] = "coyotes", ["arizona yotes"] = "coyotes", ["tb lightning"] = "lightning",
 		["broad street bullies"] = "flyers", ["les canadiens"] = "canadiens", ["blue jacket"] = "blue jackets",
 		["senator"] = "senators", ["golden knight"] = "golden knights", ["lightning bolts"] = "lightning",
+		["boston"] = "bruins", ["tampa bay"] = "lightning", ["tampa"] = "lightning", ["florida"] = "panthers",
+		["ottawa"] = "senators", ["buffalo"] = "sabres", ["carolina"] = "hurricanes",
+		["nashville"] = "predators", ["st louis"] = "blues", ["dallas"] = "stars", ["minnesota"] = "wild",
+		["winnipeg"] = "jets", ["anaheim"] = "ducks", ["san jose"] = "sharks", ["columbus"] = "blue jackets",
+		["arizona"] = "coyotes", ["new jersey"] = "devils", ["washington"] = "capitals",
+		["calgary"] = "flames", ["vancouver"] = "canucks", ["edmonton"] = "oilers", ["seattle"] = "kraken",
+		["colorado"] = "avalanche", ["montreal"] = "canadiens", ["toronto"] = "maple leafs",
+		["pittsburgh"] = "penguins", ["detroit"] = "red wings", ["philadelphia"] = "flyers",
+		["chicago"] = "blackhawks", ["los angeles"] = "kings", ["utah mammoths"] = "utah mammoth",
 	},
 }

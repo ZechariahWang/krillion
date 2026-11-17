@@ -22,7 +22,19 @@ return {
 			"vernal fall", "nevada fall", "toketee falls", "latourell falls", "wahclella falls", "proxy falls",
 			"cascade de gavarnie", "ouzoud falls",
 			"mardalsfossen", "voringsfossen", "latefossen", "langfoss", "godafoss", "hraunfossar", "svartifoss",
-			"aldeyjarfoss", "glymur", "oxarafoss", "hengifoss", "kirkjufellsfoss",
+			"aldeyjarfoss", "glymur", "oxarafoss", "hengifoss", "kirkjufellsfoss", "lower yellowstone falls",
+			"upper yellowstone falls", "minnehaha falls", "silver falls", "fall creek falls",
+			"amicalola falls", "tallulah falls", "brandywine falls", "kaaterskill falls", "horsetail fall",
+			"bridalveil fall", "waimoku falls", "kuang si falls", "erawan falls", "pagsanjan falls",
+			"hunlen falls", "shannon falls", "dynjandi", "gooseberry falls", "seven falls", "dry falls",
+			"great falls", "koosah falls", "sahalie falls", "wallace falls", "metlako falls",
+		},
+		DeepCut = {
+			"hanakapiai falls", "sentinel falls", "illilouette fall", "ribbon fall", "tamanawas falls",
+			"punch bowl falls", "ponytail falls", "salt creek falls", "stewart falls", "munising falls",
+			"buttermilk falls", "burgess falls", "linville falls", "whitewater falls", "mist falls",
+			"tequendama falls", "tinago falls", "maria cristina falls", "mitchell falls", "wapta falls",
+			"virginia falls", "kjosfossen", "ramnefjellsfossen",
 		},
 	},
 	aliases = {
@@ -55,5 +67,7 @@ return {
 		["iguacu"] = "iguazu falls", ["iguacu falls"] = "iguazu falls", ["kaieteur"] = "kaieteur falls",
 		["cataratas iguazu"] = "iguazu falls", ["cataratas do iguacu"] = "iguazu falls",
 		["blue nile"] = "blue nile falls", ["tis abay"] = "blue nile falls", ["tis isat"] = "blue nile falls",
+		["niagra"] = "niagara falls", ["yosemite fall"] = "yosemite falls",
+		["bridalveil"] = "bridalveil fall",
 	},
 }

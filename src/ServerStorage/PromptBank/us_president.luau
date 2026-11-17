@@ -11,18 +11,19 @@ return {
 			"theodore roosevelt", "thomas jefferson", "bill clinton", "ronald reagan", "franklin d roosevelt",
 		},
 		Schooler = {
-			"george h w bush", "jimmy carter", "richard nixon", "gerald ford", "lyndon b johnson", "harry truman",
-			"dwight eisenhower", "herbert hoover", "calvin coolidge", "woodrow wilson", "ulysses s grant",
-			"andrew jackson", "john adams", "james madison", "james monroe",
+			"george h w bush", "jimmy carter", "richard nixon", "lyndon b johnson", "harry truman",
+			"dwight eisenhower", "woodrow wilson", "ulysses s grant", "andrew jackson", "john adams",
+			"james madison",
 		},
 		Rare = {
 			"john quincy adams", "william henry harrison", "grover cleveland", "william mckinley",
-			"william howard taft", "warren harding", "james garfield", "james polk", "zachary taylor", "andrew johnson",
-			"martin van buren",
+			"william howard taft", "warren harding", "martin van buren", "gerald ford", "herbert hoover",
+			"calvin coolidge", "james monroe",
 		},
 		DeepCut = {
 			"john tyler", "franklin pierce", "james buchanan", "rutherford hayes", "benjamin harrison",
-			"chester arthur", "millard fillmore",
+			"chester arthur", "millard fillmore", "zachary taylor", "james polk", "andrew johnson",
+			"james garfield",
 		},
 		Mythic = {
 		},
@@ -75,5 +76,8 @@ return {
 		["woodrow"] = "woodrow wilson", ["old hickory"] = "andrew jackson", ["grover"] = "grover cleveland",
 		["joe bidden"] = "joe biden", ["jimmy"] = "jimmy carter", ["james carter"] = "jimmy carter",
 		["james earl carter"] = "jimmy carter", ["lincoln abraham"] = "abraham lincoln",
+		["rosevelt"] = "franklin d roosevelt", ["rooselvelt"] = "franklin d roosevelt",
+		["rooseveld"] = "franklin d roosevelt", ["frankin roosevelt"] = "franklin d roosevelt",
+		["franklin rosevelt"] = "franklin d roosevelt", ["theodore rosevelt"] = "theodore roosevelt",
 	},
 }

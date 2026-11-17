@@ -12,6 +12,7 @@ return {
 		Schooler = {
 			"man o war", "american pharoah", "binky", "artax", "bullseye", "samson", "philippe", "joey", "boxer", "champion",
 			"sleipnir", "black stallion", "flicka", "hidalgo", "phar lap", "justify", "rocinante", "fury",
+			"nokk",
 		},
 		Rare = {
 			"war admiral", "citation", "affirmed", "seattle slew", "barbaro", "zenyatta", "smarty jones", "ruffian", "red rum",
@@ -20,15 +21,20 @@ return {
 			"foolish pleasure", "winning colors", "comanche", "traveller", "roach", "bree", "hwin", "khan",
 			"angus", "achilles", "agro", "sergeant reckless", "native dancer", "northern dancer", "winx",
 			"california chrome", "rachel alexandra", "whirlaway", "nijinsky", "tornado", "tony the wonder horse",
-			"ponyta", "rapidash", "clover", "minimus", "hickstead", "valegro", "snowman",
+			"ponyta", "rapidash", "clover", "minimus", "hickstead", "valegro", "snowman", "sitron",
+			"bojack horseman", "shadowmere", "frou frou", "black bess", "skeleton horse", "rainbow dash",
+			"applejack", "fluttershy", "rarity", "pinkie pie", "galileo", "black caviar", "flightline",
+			"enable", "tiger roll", "desert orchid", "dancing brave", "mill reef", "keldeo", "mudsdale",
 		},
 		DeepCut = {
-			"gringolet", "hasufel", "arod", "snowmane", "copenhagen",
-			"little sorrel", "sunday silence", "alydar", "sea the stars", "silver blaze", "misty", "svadilfari",
-			"mollie", "nelson", "cincinnati", "jolly jumper", "asfaloth", "fledge", "dream alliance", "sir barton",
-			"gallant fox", "omaha", "count fleet", "assault", "shetan", "topthorn", "babieca", "grani", "arion",
+			"gringolet", "hasufel", "arod", "snowmane", "copenhagen", "little sorrel", "sunday silence",
+			"alydar", "sea the stars", "silver blaze", "misty", "svadilfari", "mollie", "nelson",
+			"cincinnati", "jolly jumper", "asfaloth", "fledge", "dream alliance", "sir barton", "gallant fox",
+			"omaha", "count fleet", "assault", "shetan", "topthorn", "babieca", "grani", "arion",
+			"black jack", "zombie horse", "sham", "hyperion", "makybe diva", "denman", "best mate",
 		},
-		Mythic = {},
+		Mythic = {
+		},
 	},
 	aliases = {
 		["seabiscuit the horse"] = "seabiscuit", ["black beauty horse"] = "black beauty", ["spirit stallion"] = "spirit",
@@ -45,6 +51,10 @@ return {
 		["tony"] = "tony the wonder horse", ["washingtons horse"] = "nelson", ["grants horse"] = "cincinnati",
 		["mulans horse"] = "khan", ["belles horse"] = "philippe", ["hercules horse"] = "pegasus",
 		["woodys horse"] = "bullseye", ["toy story horse"] = "bullseye", ["lucky lukes horse"] = "jolly jumper",
-		["brave horse"] = "angus", ["shetan the black"] = "shetan",
+		["brave horse"] = "angus", ["shetan the black"] = "shetan", ["the nokk"] = "nokk",
+		["water horse"] = "nokk", ["horse from elsa"] = "nokk", ["frozen horse"] = "nokk",
+		["horse from frozen"] = "nokk", ["nokk from frozen"] = "nokk", ["pegasus from hercules"] = "pegasus",
+		["bojack"] = "bojack horseman", ["hans horse"] = "sitron", ["maximus from tangled"] = "maximus",
+		["hanss horse"] = "sitron",
 	},
 }

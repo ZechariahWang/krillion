@@ -12,17 +12,21 @@ return {
 		Schooler = {
 			"gus gus", "jaq", "basil", "bernard", "bianca", "angelina ballerina", "maisy", "tuffy", "nibbles",
 			"chuck e cheese", "monterey jack", "gadget hackwrench", "reepicheep", "despereaux", "itchy",
+			"pikachu", "sniffles",
 		},
 		Rare = {
-			"pixie", "dixie", "mrs brisby", "mrs tittlemouse", "hunca munca", "johnny town mouse", "timmy willie", "suzy",
-			"olivia flaversham", "algernon", "dormouse", "ralph s mouse", "topo gigio", "timothy q mouse", "mortimer mouse",
-			"roquefort", "geronimo stilton",
+			"pixie", "dixie", "mrs brisby", "mrs tittlemouse", "hunca munca", "johnny town mouse",
+			"timmy willie", "suzy", "olivia flaversham", "algernon", "dormouse", "ralph s mouse",
+			"topo gigio", "timothy q mouse", "mortimer mouse", "roquefort", "geronimo stilton", "hubie",
+			"bertie", "tanya mousekewitz", "celestine", "raichu", "morty fieldmouse", "ferdie fieldmouse",
+			"hiram flaversham",
 		},
 		DeepCut = {
-			"mr jingles", "mouse king", "mert", "perla", "dawson",
-			"matthias", "martin the warrior", "frederick", "chrysanthemum", "lilly",
+			"mr jingles", "mouse king", "mert", "perla", "dawson", "matthias", "martin the warrior",
+			"frederick", "chrysanthemum", "lilly", "pichu", "papa mousekewitz", "mrs mouse",
 		},
-		Mythic = {},
+		Mythic = {
+		},
 	},
 	aliases = {
 		["mickey"] = "mickey mouse", ["minnie"] = "minnie mouse", ["jerry mouse"] = "jerry", ["stuart"] = "stuart little",
@@ -37,6 +41,7 @@ return {
 		["ralph mouse"] = "ralph s mouse", ["basil of baker street"] = "basil", ["bernard and bianca"] = "bernard",
 		["tom and jerry"] = "jerry", ["gadget"] = "gadget hackwrench", ["monty"] = "monterey jack",
 		["geronimo"] = "geronimo stilton", ["pixie and dixie"] = "pixie", ["reepicheep the mouse"] = "reepicheep",
-		["stuart little mouse"] = "stuart little",
+		["stuart little mouse"] = "stuart little", ["feivel"] = "fievel",
+		["stewart little"] = "stuart little", ["pika"] = "pikachu", ["mickys nephew"] = "morty fieldmouse",
 	},
 }

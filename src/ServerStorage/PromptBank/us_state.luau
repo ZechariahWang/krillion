@@ -11,17 +11,16 @@ return {
 		},
 		Schooler = {
 			"illinois", "ohio", "michigan", "pennsylvania", "new jersey", "virginia", "north carolina",
-			"south carolina", "tennessee", "louisiana", "oregon", "utah", "massachusetts", "maryland",
-			"indiana", "kentucky", "alabama", "mississippi", "missouri", "wisconsin", "minnesota", "iowa",
-			"oklahoma", "kansas", "nebraska", "new mexico", "idaho", "montana", "wyoming", "maine",
-			"connecticut",
+			"south carolina", "tennessee", "louisiana", "oregon", "utah", "massachusetts", "alabama",
+			"missouri", "wisconsin", "minnesota", "oklahoma", "new mexico", "montana",
 		},
 		Rare = {
-			"arkansas", "west virginia", "new hampshire", "vermont", "rhode island", "delaware",
-			"north dakota", "south dakota",
+			"arkansas", "west virginia", "new hampshire", "rhode island", "maryland", "indiana", "kentucky",
+			"mississippi", "iowa", "kansas", "nebraska", "idaho", "wyoming", "maine", "connecticut",
 		},
 		DeepCut = {
-			"puerto rico", "district of columbia", "guam", "american samoa",
+			"puerto rico", "district of columbia", "guam", "american samoa", "delaware", "north dakota",
+			"south dakota", "vermont",
 		},
 		Mythic = {
 			"us virgin islands", "northern mariana islands",
