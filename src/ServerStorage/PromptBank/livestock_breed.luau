@@ -46,7 +46,7 @@ return {
 			"bagot", "old english goat", "british alpine", "cashgora", "sahelian",
 		},
 		Mythic = {
-			"vorderwald", "hinterwald", "murnau werdenfelser", "casta", "pustertaler", "horro", "kuri",
+			"vorderwald", "hinterwald", "murnau werdenfelser", "pustertaler", "horro", "kuri",
 			"romosinuano", "belmont red", "sanga", "jeju black", "mora romagnola",
 			 "bruna dels pirineus", "tyrolean grey",
 		},

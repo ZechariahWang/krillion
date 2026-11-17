@@ -213,6 +213,8 @@ local list: { Prompt } = {
 	require("@self/building"),
 	require("@self/store"),
 	require("@self/container"),
+	require("@self/bird_of_prey"),
+	require("@self/deer_or_antelope"),
 	require("@self/material"),
 	require("@self/exercise"),
 	require("@self/landform"),

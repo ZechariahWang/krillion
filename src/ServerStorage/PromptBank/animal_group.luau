@@ -36,7 +36,7 @@ return {
 			"singular", "pounce", "intrigue", "destruction", "scold", "deceit", "venue", "harras", "rag",
 		},
 		Mythic = {
-			"hum", "lepe", "mutation", "oubliette", "piteousness", "quarrel", "rabble", "shimmer", 
+			"hum", "lepe", "mutation", "piteousness", "quarrel", "rabble", "shimmer", 
 			"squadron", "swoop", "tittering", "trace", "wreck", "bob", "chattering",
 			"implausibility",
 			"worship",

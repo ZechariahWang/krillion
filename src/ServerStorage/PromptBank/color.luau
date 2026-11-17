@@ -62,7 +62,7 @@ return {
 		DeepCut = {
 			"puce", "russet", "ecru", "fawn", "aubergine", "carmine", "cinnabar", "viridian", "mulberry",
 			"burnt sienna", "burnt umber", "tawny", "prussian blue", "alizarin", "byzantium", "fulvous",
-			"celadon", "heliotrope", "citron", "carnelian", "cordovan", "bistre", "rufous", "ceil",
+			"celadon", "heliotrope", "citron", "carnelian", "cordovan", "bistre", "rufous", "ciel",
 			"coquelicot", "harlequin", "razzmatazz", "thistle", "wisteria", "amaranth", "bittersweet", "camel",
 			"flax", "moss green", "oxblood", "pewter", "pine green", "sangria", "shamrock", "tea green",
 			"xanthic", "zinnober", "kobicha", "lapis lazuli", "alabaster", "bone", "buff", "dun", "isabelline",
