@@ -14,7 +14,7 @@ return {
 			"cottage pie", "meat pie", "chocolate cream pie", "coconut cream pie", "custard pie",
 			"blackberry pie", "mince pie", "pork pie", "steak pie", "fish pie", "cream pie",
 			"raspberry pie", "rhubarb pie", "strawberry rhubarb pie", "boston cream pie", "french silk pie",
-			"chocolate pie", "ice cream pie", "frito pie", "banoffee pie", "whoopie pie", "cornish pasty",
+			"chocolate pie", "ice cream pie", "whoopie pie", "cornish pasty",
 			"quiche", "empanada", "pot pie",
 		},
 		Rare = {
@@ -24,15 +24,18 @@ return {
 			"sugar cream pie", "vinegar pie", "derby pie", "pineapple pie", "mango pie", "bumbleberry pie",
 			"dutch apple pie", "tamale pie", "scotch pie", "moon pie", "eel pie", "rabbit pie", "cheese and onion pie",
 			"fig pie", "grape pie", "raisin pie", "cranberry pie", "lemon chess pie", "persimmon pie",
+			"frito pie",
+			"banoffee pie",
 		},
 		DeepCut = {
-			"funeral pie", "squab pie", "mississippi mud pie", "concord grape pie", "montgomery pie",
+			"funeral pie", "squab pie", "mississippi mud pie", "montgomery pie",
 			"atlantic beach pie", "jefferson davis pie", "stack pie", "bridie", "mutton pie", "pastizzi", "pithivier",
 			"coulibiac", "buko pie", "pawpaw pie", "chocolate chess pie", "rum cream pie", "transparent pie",
 			"mulberry pie", "kiwi pie", "saskatoon pie", "bedfordshire clanger", "pandowdy", "sonker",
+			"tarte tatin",
 		},
 		Mythic = {
-			"fidget pie", "rappie pie", "tarte au sucre", "cumberland rum nicky", "tarte tatin", "lattice pie",
+			"fidget pie", "rappie pie", "tarte au sucre", "cumberland rum nicky",
 		},
 	},
 	aliases = {
@@ -58,8 +61,9 @@ return {
 		["chocolate"] = "chocolate pie", ["pot"] = "pot pie", ["meat"] = "meat pie", ["cream"] = "cream pie",
 		["hand"] = "hand pie", ["hand pies"] = "hand pie", ["spinach pie"] = "spanakopita", ["eel"] = "eel pie",
 		["rabbit"] = "rabbit pie", ["mutton"] = "mutton pie", ["stargazey pie"] = "stargazy pie",
-		["star gazy pie"] = "stargazy pie", ["stargazy"] = "stargazy pie", ["pasties pie"] = "cornish pasty",
+		["star gazy pie"] = "stargazy pie", ["stargazy"] = "stargazy pie",
 		["pecan pies"] = "pecan pie", ["pumpkin pies"] = "pumpkin pie", ["cherry pies"] = "cherry pie",
 		["tarte tatin pie"] = "tarte tatin", ["lime pie"] = "key lime pie", ["moonpie"] = "moon pie",
+		["concord grape pie"] = "grape pie",
 	},
 }

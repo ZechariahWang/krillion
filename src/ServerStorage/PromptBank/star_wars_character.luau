@@ -28,6 +28,7 @@ return {
 			"greef karga", "cara dune", "bib fortuna", "wedge antilles", "sebulba", "watto", "shmi skywalker",
 			"bail organa", "owen lars", "beru lars", "darth bane", "darth revan", "darth plagueis", "cal kestis",
 			"rose tico", "vice admiral holdo",
+			"kuiil", "armorer",
 		},
 		DeepCut = {
 			"ponda baba", "dr evazan", "figrin dan", "momaw nadon", "garindan", "ketwol", "kabe", "muftak", "tessek",
@@ -47,6 +48,9 @@ return {
 			"yarael poof", "tion medon", "wat tambor", "shu mai", "passel argente", "rune haako", "lott dod",
 			"queen jamillia", "sio bibble", "quarsh panaka", "ric olie", "sly moore", "orn free taa", "san hill",
 			"darth malak", "darth sion", "darth traya",
+			"ig 11", "peli motto", "migs mayfeld", "cobb vanth", "snap wexley", "paige tico", "r5 d4", "lor san tekka",
+			"unkar plutt", "teedo", "bendu", "admiral trench", "oola", "sy snootles", "tarfful", "lama su", "taun we",
+			"jocasta nu", "dexter jettster", "zam wesell", "tobias beckett", "qi ra", "enfys nest", "l3 37",
 		},
 		Mythic = {
 			"nomi sunrider", "ulic qel droma", "exar kun", "freedon nadd", "marka ragnos", "naga sadow", "ludo kressh",
@@ -92,5 +96,12 @@ return {
 		["mandalorian"] = "din djarin", ["wilhuff tarkin"] = "grand moff tarkin", ["gial ackbar"] = "admiral ackbar",
 		["sand people"] = "tusken raider", ["xizor"] = "prince xizor", ["grand admiral thrawn"] = "thrawn",
 		["commander cody"] = "cody", ["lieutenant dodonna"] = "general dodonna", ["kaan"] = "lord kaan",
+		["hera"] = "hera syndulla", ["wedge"] = "wedge antilles", ["biggs"] = "biggs darklighter",
+		["sheev palpatine"] = "emperor palpatine", ["obi"] = "obi wan kenobi", ["master yoda"] = "yoda",
+		["lord vader"] = "darth vader", ["c3p0"] = "c3po", ["chewbaca"] = "chewbacca", ["captain rex"] = "rex",
+		["clone captain rex"] = "rex", ["ventress"] = "asajj ventress", ["asajj"] = "asajj ventress", ["r2"] = "r2d2",
+		["mandalorian armorer"] = "armorer", ["beckett"] = "tobias beckett", ["jocasta"] = "jocasta nu",
+		["zam"] = "zam wesell", ["jek porkins"] = "porkins", ["peli"] = "peli motto", ["darth vadar"] = "darth vader",
+		["groku"] = "grogu", ["lama"] = "lama su", ["taun"] = "taun we", ["dexter"] = "dexter jettster",
 	},
 }

@@ -21,13 +21,19 @@ return {
 			"salon", "panic room", "root cellar", "crawl space", "mezzanine", "cloakroom", "butlers pantry",
 			"ballroom", "dressing room", "boudoir", "nook", "alcove", "annex", "granny flat", "studio", "darkroom",
 			"tv room", "media room", "wet room", "sauna", "steam room", "kitchenette",
+			"linen closet", "sewing room", "hobby room", "art room", "breakfast room", "shower room", "master suite",
+			"boiler room", "furnace room", "home bar", "trophy room", "gallery", "reading room", "snug", "reception room",
+			"lanai",
 		},
 		DeepCut = {
 			"buttery", "still room", "gunroom", "antechamber", "tack room", "orangery", "lumber room", "strongroom",
 			"turret room", "inglenook", "hearth room", "keeping room", "atrium",
+			"mechanical room", "great hall", "chapel", "servants hall", "housekeepers room", "schoolroom", "linen room",
+			"armoury", "washhouse",
 		},
 		Mythic = {
 			"scriptorium", "solar", "garderobe", "minstrels gallery", "oriel", "tablinum", "triclinium", "peristyle",
+			"long gallery", "oratory", "sleeping porch", "servery", "cubiculum", "exedra", "oecus",
 		},
 	},
 	aliases = {
@@ -50,5 +56,12 @@ return {
 		["theater room"] = "home theater", ["half bath"] = "powder room", ["garret"] = "attic",
 		["entryway"] = "foyer", ["larder"] = "pantry", ["solarium"] = "sunroom", ["in law suite"] = "granny flat",
 		["safe room"] = "panic room", ["withdrawing room"] = "drawing room", ["anteroom"] = "antechamber",
+		["toy room"] = "playroom", ["exercise room"] = "gym", ["home gym"] = "gym", ["guest bathroom"] = "bathroom",
+		["master bathroom"] = "bathroom", ["parlour"] = "parlor", ["formal dining room"] = "dining room",
+		["formal living room"] = "living room", ["eat in kitchen"] = "kitchen", ["entrance hall"] = "foyer",
+		["wine room"] = "wine cellar", ["en suite"] = "ensuite", ["utility"] = "utility room", ["water closet"] = "toilet",
+		["study room"] = "study", ["movie theater"] = "home theater", ["storage"] = "storage room",
+		["boys room"] = "kids room", ["girls room"] = "kids room", ["armory"] = "armoury", ["wash house"] = "washhouse",
+		["boiler"] = "boiler room",
 	},
 }

@@ -15,14 +15,12 @@ return {
 		},
 		Rare = {
 			"boston yanks", "canton bulldogs",
-			"new york yanks",
 		},
 		DeepCut = {
 			"providence steam roller", "portsmouth spartans", "rock island independents", "brooklyn dodgers",
 			"oorang indians", "frankford yellow jackets", "duluth eskimos", "dayton triangles", "akron pros",
 			"pottsville maroons",
-			"cleveland bulldogs", "buffalo all americans", "detroit panthers", "brooklyn lions", "muncie flyers",
-			"toledo maroons", "columbus tigers",
+			"new york yanks",
 		},
 		Mythic = {
 			"hartford blues", "cincinnati reds", "st louis gunners", "tonawanda kardex", "hammond pros",
@@ -32,6 +30,13 @@ return {
 			"kansas city cowboys", "minneapolis red jackets", "newark tornadoes", "cincinnati celts",
 			"detroit wolverines", "chicago tigers", "cleveland tigers", "buffalo rangers", "boston bulldogs",
 			"brooklyn tigers",
+			"cleveland bulldogs",
+			"buffalo all americans",
+			"detroit panthers",
+			"brooklyn lions",
+			"muncie flyers",
+			"toledo maroons",
+			"columbus tigers",
 		},
 	},
 	aliases = {

@@ -171,6 +171,12 @@ local list: { Prompt } = {
 	require("@self/salad"),
 	require("@self/greek_food"),
 	require("@self/middle_eastern_food"),
+	require("@self/movie_monster"),
+	require("@self/beach_item"),
+	require("@self/birthday_party_item"),
+	require("@self/fictional_detective"),
+	require("@self/famous_explorer"),
+	require("@self/video_game_genre"),
 }
 
 local byId: { [string]: Prompt } = {}

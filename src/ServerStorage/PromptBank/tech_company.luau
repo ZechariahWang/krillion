@@ -18,6 +18,7 @@ return {
 			"openai", "epic games", "valve", "activision", "ubisoft", "electronic arts", "sega", "atari", "instagram",
 			"whatsapp", "shopify", "intuit", "square", "stripe", "venmo", "doordash", "lyft", "sonos",
 			"western digital", "seagate", "blizzard", "rockstar", "mojang", "bethesda", "duolingo",
+			"riot games",
 		},
 		Rare = {
 			"sap", "vmware", "red hat", "mozilla", "opera", "brave", "duckduckgo", "twilio", "atlassian", "github",
@@ -31,6 +32,9 @@ return {
 			"signal", "viber", "skype", "icq", "aol", "netscape", "myspace", "palm", "compaq", "gateway",
 			"packard bell", "commodore", "amiga", "silicon graphics", "sun microsystems", "micron", "broadcom", "arm",
 			"msi", "steelseries", "hyperx", "anthropic", "texas instruments", "gigabyte", "kingston", "sandisk",
+			"yelp", "etsy", "wix", "squarespace", "godaddy", "tumblr", "vimeo", "robinhood", "coinbase", "bungie", "alienware",
+			"dji", "ericsson", "siemens", "tp link", "netgear", "instacart", "grubhub", "waze", "waymo", "soundcloud",
+			"pandora", "evernote", "trello", "deepmind", "anker", "belkin", "naughty dog", "napster", "linksys",
 		},
 		DeepCut = {
 			"arista", "juniper networks", "netapp", "pure storage", "nutanix", "citrix", "fortinet",
@@ -40,11 +44,16 @@ return {
 			"synopsys", "cadence", "mentor graphics", "xilinx", "altera", "lattice", "marvell", "nxp",
 			"stmicroelectronics", "infineon", "renesas", "analog devices", "skyworks", "qorvo", "cirrus logic",
 			"synaptics", "elan", "realtek", "mediatek", "unisoc", "hisilicon", "rockchip", "allwinner",
+			"plaid", "zapier", "canonical", "nzxt", "cooler master", "evga", "asrock", "ubiquiti", "zebra technologies",
+			"dassault systemes", "ansys", "teradata", "tibco", "creative technology", "ati",
 		},
 		Mythic = {
 			"cray", "burroughs", "unisys", "wang", "data general", "digital equipment", "borland", "novell", "lotus",
 			"wordperfect", "corel", "sybase", "informix", "ashton tate", "tandy", "osborne", "kaypro", "sinclair",
 			"acorn", "psion", "be inc", "general magic", "thinking machines", "ncr", "control data",
+			"compuserve", "prodigy", "altavista", "lycos", "excite", "geocities", "kazaa", "handspring", "next", "coleco",
+			"zilog", "mos technology", "fairchild semiconductor", "transmeta", "3dfx", "diamond multimedia", "matrox",
+			"s3 graphics", "cyrix",
 		},
 	},
 	aliases = {
@@ -66,5 +75,9 @@ return {
 		["xiaomi corporation"] = "xiaomi", ["nintendo of america"] = "nintendo", ["meta"] = "facebook",
 		["alphabet"] = "google", ["firefox"] = "mozilla", ["hewlett packard"] = "hp", ["arm holdings"] = "arm",
 		["dec"] = "digital equipment", ["spreadtrum"] = "unisoc",
+		["xbox"] = "microsoft", ["windows"] = "microsoft", ["chrome"] = "google", ["gmail"] = "google",
+		["android"] = "google", ["meta platforms"] = "facebook", ["riot"] = "riot games", ["steam"] = "valve",
+		["mircosoft"] = "microsoft", ["creative labs"] = "creative technology", ["uber eats"] = "uber",
+		["amazone"] = "amazon", ["lenevo"] = "lenovo", ["huawai"] = "huawei",
 	},
 }

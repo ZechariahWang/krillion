@@ -26,6 +26,7 @@ return {
 			"ice bro", "sledge bro", "buzzy beetle", "podoboo", "banzai bill", "fuzzy", "swoop", "pom pom",
 			"larry koopa", "morton koopa", "wendy o koopa", "iggy koopa", "roy koopa", "lemmy koopa",
 			"ludwig von koopa", "wart", "snifit", "bob omb buddy",
+			"koopa paratroopa", "paragoomba", "fludd", "shadow mario", "kremling", "peachette",
 		},
 		DeepCut = {
 			"bowyer", "terrapin", "smithy", "mack", "blargg", "porcupo", "eerie", "rip van fish", "torpedo ted",
@@ -35,6 +36,9 @@ return {
 			"bully", "chuckya", "heavy ho", "king whomp", "mips", "bubba", "eyerok", "mr i", "klepto", "tox box",
 			"scuttlebug", "piranha creeper", "mouser", "lubba", "kritter", "ostro", "albatoss", "cobrat", "clawgrip",
 			"tryclyde", "fryguy", "bony beetle", "pianta", "gooper blooper", "tubba blubba", "kent c koopa",
+			"kammy koopa", "kolorado", "count bleck", "dimentio", "tippi", "mr l", "queen bee", "bumpty", "cheep chomp",
+			"porcupuffer", "galoomba", "kiddy kong", "swanky kong", "krusha", "gnawty", "necky", "zinger", "baby donkey kong",
+			"pink gold peach",
 		},
 		Mythic = {
 			"krobat", "noki", "cataquack", "undergrunt", "rocky wrench", "spike top", "sumo bro",
@@ -58,5 +62,9 @@ return {
 		["lemmy"] = "lemmy koopa", ["ludwig"] = "ludwig von koopa", ["ludwig koopa"] = "ludwig von koopa",
 		["e gadd"] = "professor e gadd", ["bow"] = "lady bow", ["peasley"] = "prince peasley", ["sniffit"] = "snifit",
 		["muncher"] = "munchers", ["dry bones koopa"] = "dry bones", ["buzzy"] = "buzzy beetle",
+		["princess toadstool"] = "princess peach", ["toadstool"] = "princess peach", ["dixie"] = "dixie kong",
+		["cranky"] = "cranky kong", ["funky"] = "funky kong", ["kremlings"] = "kremling",
+		["paratroopa"] = "koopa paratroopa", ["parakoopa"] = "koopa paratroopa", ["paragoombas"] = "paragoomba",
+		["count blek"] = "count bleck", ["kammy"] = "kammy koopa",
 	},
 }

@@ -27,7 +27,6 @@ return {
 			"little fir tree", "ice maiden", "snegurochka", "momotaro", "urashima taro", "crane wife", "kaguya hime",
 			"tsarevitch ivan and the grey wolf",
 			"wolf and the seven young goats", "east of the sun and west of the moon", "stone soup", "three wishes",
-			"tam lin",
 		},
 		DeepCut = {
 			"white cat", "blue bird", "yellow dwarf", "green serpent", "sadko", "marya morevna",
@@ -43,6 +42,7 @@ return {
 			"godfather death", "devil with the three golden hairs", "clever elsie", "singing springing lark",
 			"sweet porridge", "clever gretel", "three little men in the wood", "ricky of the tuft", "three sillies",
 			"lazy jack", "little brother and little sister",
+			"tam lin",
 		},
 		Mythic = {
 			"boy who drew cats", "tongue cut sparrow", "snow woman", "mirror of matsuyama", "orange tree and the bee",

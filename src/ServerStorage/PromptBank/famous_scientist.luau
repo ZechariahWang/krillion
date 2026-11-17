@@ -17,7 +17,6 @@ return {
 			"rosalind franklin", "jonas salk", "aristotle", "benjamin franklin", "sigmund freud", "ivan pavlov",
 			"edward jenner", "george washington carver", "katherine johnson", "grace hopper", "mae jemison",
 			"rachel carson", "robert oppenheimer", "john dalton", "ernest rutherford", "ada lovelace",
-			"euclid",
 		},
 		Rare = {
 			"werner heisenberg", "erwin schrodinger", "enrico fermi", "robert boyle", "antoine lavoisier",
@@ -32,6 +31,7 @@ return {
 			"claude shannon", "john von neumann", "emmy noether", "srinivasa ramanujan", "wolfgang pauli",
 			"j j thomson", "james chadwick", "otto hahn", "robert goddard", "wernher von braun", "clyde tombaugh",
 			"amedeo avogadro", "sally ride",
+			"euclid",
 		},
 		DeepCut = {
 			"ibn al haytham", "ptolemy", "hipparchus", "eratosthenes", "anaximander", "democritus", "galen",
@@ -95,7 +95,7 @@ return {
 		["leeuwenhoek"] = "anton van leeuwenhoek", ["van leeuwenhoek"] = "anton van leeuwenhoek",
 		["hodgkin"] = "dorothy hodgkin", ["doudna"] = "jennifer doudna", ["penrose"] = "roger penrose",
 		["higgs"] = "peter higgs", ["koch"] = "robert koch", ["humboldt"] = "alexander von humboldt",
-		["hopper"] = "grace hopper", ["jemison"] = "mae jemison", ["johnson"] = "katherine johnson",
+		["hopper"] = "grace hopper", ["jemison"] = "mae jemison",
 		["carson"] = "rachel carson", ["salk"] = "jonas salk", ["rosalind"] = "rosalind franklin",
 		["galilei"] = "galileo galilei", ["einstien"] = "albert einstein", ["einstine"] = "albert einstein",
 		["isaac newtown"] = "isaac newton", ["hippocrates of kos"] = "hippocrates",

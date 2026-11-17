@@ -16,6 +16,7 @@ return {
 			"oreo cake", "tiramisu", "swiss roll", "yule log", "fondant cake", "sheet cake", "cinnamon roll cake",
 			"mug cake", "fudge cake", "rainbow cake", "unicorn cake", "smash cake", "lemon drizzle", "victoria sponge",
 			"battenberg", "king cake", "mooncake", "rum cake",
+			"funnel cake", "cookie cake",
 		},
 		Rare = {
 			"genoise", "chiffon cake", "madeira cake", "dundee cake", "simnel cake", "christmas cake", "lamington",
@@ -27,6 +28,8 @@ return {
 			"no bake cheesecake", "icebox cake", "poke cake", "dump cake", "hot milk cake", "butter cake",
 			"yellow cake", "white cake", "almond cake", "orange cake", "poppy seed cake", "coffee walnut cake",
 			"walnut cake",
+			"banana cake", "apple cake", "honey cake", "cherry cake", "blueberry cake", "pineapple cake", "peanut butter cake",
+			"caramel cake", "cookies and cream cake", "rock cake", "butterfly cake", "jaffa cake",
 		},
 		DeepCut = {
 			"fraisier", "gateau basque", "far breton", "bienenstich", "streuselkuchen", "prinzregententorte",
@@ -34,9 +37,12 @@ return {
 			"torta della nonna", "dulce de leche cake", "parkin", "bara brith", "barmbrack", "red velvet cheesecake",
 			"pandan cake", "ube cake", "mamon", "bibingka", "sans rival", "brazo de mercedes", "yema cake",
 			"mocha cake",
+			"princess cake", "charlotte", "kransekake", "kladdkaka", "financier", "canele", "tarta de santiago",
+			"bolo de rolo", "vasilopita", "seed cake", "kue lapis", "eccles cake",
 		},
 		Mythic = {
 			"rigo jancsi", "flodni", "sernik", "makowiec", "piernik",
+			"zuger kirschtorte", "bika ambon", "lardy cake", "banbury cake", "black bun", "tottenham cake", "genoa cake",
 		},
 	},
 	aliases = {
@@ -58,5 +64,11 @@ return {
 		["lemon drizzle cake"] = "lemon drizzle", ["bundt cakes"] = "bundt cake", ["panetone"] = "panettone",
 		["pavlova cake"] = "pavlova", ["stolen"] = "stollen", ["strawberry shortcake"] = "shortcake",
 		["mille crepe"] = "crepe cake",
+		["fairy cake"] = "cupcake", ["fairy cakes"] = "cupcake", ["funnel cakes"] = "funnel cake",
+		["cookie cakes"] = "cookie cake", ["lava cakes"] = "lava cake", ["mud cake"] = "mississippi mud cake",
+		["angel cake"] = "angel food cake", ["birthday cakes"] = "birthday cake", ["wedding cakes"] = "wedding cake",
+		["chocolate cakes"] = "chocolate cake", ["carrot cakes"] = "carrot cake", ["chocolate mousse cake"] = "mousse cake",
+		["jaffa cakes"] = "jaffa cake", ["princess torte"] = "princess cake", ["swedish princess cake"] = "princess cake",
+		["canneles"] = "canele",
 	},
 }

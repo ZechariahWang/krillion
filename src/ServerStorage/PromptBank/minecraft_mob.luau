@@ -58,5 +58,9 @@ return {
 		["fletcher"] = "villager", ["shepherd"] = "villager", ["butcher"] = "villager", ["cartographer"] = "villager",
 		["armorer"] = "villager", ["toolsmith"] = "villager", ["weaponsmith"] = "villager",
 		["leatherworker"] = "villager", ["mason"] = "villager", ["fisherman"] = "villager",
+		["sea turtle"] = "turtle", ["ender man"] = "enderman", ["ender mite"] = "endermite",
+		["zombie piglin"] = "zombie pigman", ["pigman"] = "zombie pigman", ["pig man"] = "zombie pigman",
+		["wither boss"] = "wither", ["cod fish"] = "cod", ["puffer"] = "pufferfish", ["cavespider"] = "cave spider",
+		["snowgolem"] = "snow golem", ["irongolem"] = "iron golem", ["elder guardians"] = "elder guardian",
 	},
 }
