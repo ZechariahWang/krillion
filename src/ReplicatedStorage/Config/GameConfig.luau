@@ -145,8 +145,8 @@ local GameConfig = {
 	},
 	Bots = {
 		FillTo = 6, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
-		MinSkill = 0.15,
-		MaxSkill = 0.85,
+		MinSkill = 0.05, -- bots trail players: about 14% of their answers reach Rare, players about 27%
+		MaxSkill = 0.5,
 		DelayMin = 0.25, -- bots answer between DelayMin and DelayMin + DelayRange of the prompt time
 		DelayRange = 0.6,
 	},
