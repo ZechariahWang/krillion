@@ -62,5 +62,13 @@ return {
 		["zombie piglin"] = "zombie pigman", ["pigman"] = "zombie pigman", ["pig man"] = "zombie pigman",
 		["wither boss"] = "wither", ["cod fish"] = "cod", ["puffer"] = "pufferfish", ["cavespider"] = "cave spider",
 		["snowgolem"] = "snow golem", ["irongolem"] = "iron golem", ["elder guardians"] = "elder guardian",
+		["axolotle"] = "axolotl", ["axolotol"] = "axolotl", ["axalotl"] = "axolotl", ["axolottle"] = "axolotl",
+		["endermam"] = "enderman", ["wardin"] = "warden", ["silver fish"] = "silverfish", ["pigilin"] = "piglin",
+		["magmacube"] = "magma cube", ["polarbear"] = "polar bear", ["mooshrum"] = "mooshroom",
+		["moo shroom"] = "mooshroom", ["ender drgon"] = "ender dragon", ["creaper"] = "creeper",
+		["skelleton"] = "skeleton", ["skeletin"] = "skeleton", ["zombee"] = "zombie", ["glowsquid"] = "glow squid",
+		["glow squids"] = "glow squid", ["zombie villagers"] = "zombie villager", ["creeper mob"] = "creeper",
+		["witherskeleton"] = "wither skeleton",
+		["cavespiders"] = "cave spider", ["baby villager"] = "villager", ["iron gollem"] = "iron golem",
 	},
 }

@@ -65,5 +65,13 @@ return {
 		["paratroopa"] = "koopa paratroopa", ["parakoopa"] = "koopa paratroopa", ["paragoombas"] = "paragoomba",
 		["count blek"] = "count bleck", ["kammy"] = "kammy koopa",
 		["cat mario"] = "mario",
+		["goombah"] = "goomba", ["gumba"] = "goomba", ["koopa trooper"] = "koopa troopa", ["toadet"] = "toadette",
+		["pirana plant"] = "piranha plant", ["piranah plant"] = "piranha plant", ["bullit bill"] = "bullet bill",
+		["shi guy"] = "shy guy", ["thwamp"] = "thwomp", ["chain chomper"] = "chain chomp", ["bloober"] = "blooper",
+		["cheap cheap"] = "cheep cheep", ["donkey cong"] = "donkey kong", ["princess peech"] = "princess peach",
+		["pricess peach"] = "princess peach", ["king krool"] = "king k rool", ["waluiggi"] = "waluigi",
+		["luiji"] = "luigi", ["birdoh"] = "birdo", ["warrio"] = "wario", ["yoshie"] = "yoshi",
+		["rosalyna"] = "rosalina", ["bowzer"] = "bowser", ["bowsr"] = "bowser", ["mario mario"] = "mario",
+		["dry bone"] = "dry bones", ["boo ghost"] = "boo", ["kamek koopa"] = "kamek",
 	},
 }
