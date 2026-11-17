@@ -100,6 +100,9 @@ local retried = false
 local feedbackToken = 0
 local lastRound = 0
 local lastPhase = ""
+local heldHeight: number? = nil -- your height before this round's answer, kept on the meter through the reveal
+local holdMeter = false -- true from the reveal until your pillar rises
+local meterPayload: Net.RoundStatePayload? = nil -- the latest state, for releasing the meter
 local inventory = { Hint = 0, ExtraTime = 0 }
 local timeLeftThisMatch: number? = nil -- +time uses left this match, once the server has said; nil is unknown
 local secondsLeft = 0 -- your own time left on the open prompt
@@ -633,7 +636,15 @@ end
 -- The marker turns red while you are still below that line, and the label above the meter says how far
 -- you have to rise to clear it, or by how much you are safe.
 local function updateMeter(payload)
-	local markerY = meterY(payload.height, payload.waterY)
+	-- The server sends your new height as the reveal starts; showing it then would spoil your tier, so the
+	-- meter keeps the old one until your pillar rises.
+	local height = payload.height
+	if holdMeter and payload.phase == "Reveal" and heldHeight ~= nil then
+		height = heldHeight
+	else
+		heldHeight = height
+	end
+	local markerY = meterY(height, payload.waterY)
 	Tween.play(marker, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, markerY) })
 	local showTarget = payload.phase == "Prompt" or payload.phase == "Reveal"
 	target.Visible = showTarget
@@ -641,7 +652,7 @@ local function updateMeter(payload)
 		local targetY = meterY(payload.waterY + payload.surge, payload.waterY)
 		Tween.play(target, Theme.Tween.Enter, { Position = UDim2.fromScale(0.5, targetY) })
 	end
-	local gap = payload.waterY + payload.surge - payload.height
+	local gap = payload.waterY + payload.surge - height
 	local willSink = gap > 0
 	local danger = showTarget and willSink
 	marker.BackgroundColor3 = if danger then Theme.Color.Red else Theme.Color.Cream
@@ -922,6 +933,17 @@ function Hud.onState(payload)
 	end
 
 	meter.Visible = payload.playing and not isTouch()
+	meterPayload = payload
+	if phase == "Reveal" and lastPhase ~= "Reveal" then
+		holdMeter = true
+		task.delay(GameConfig.Reveal.RaiseDelaySeconds, function()
+			holdMeter = false
+			local latest = meterPayload
+			if latest ~= nil and latest.phase == "Reveal" and latest.playing then
+				updateMeter(latest)
+			end
+		end)
+	end
 	if payload.playing then
 		updateMeter(payload)
 	end
