@@ -119,5 +119,11 @@ return {
 		["malahide"] = "malahide castle", ["chantilly"] = "chateau de chantilly", ["blois"] = "chateau de blois",
 		["chinon"] = "chateau de chinon", ["villandry"] = "chateau de villandry", ["cheverny"] = "chateau de cheverny",
 		["maschio angioino"] = "castel nuovo",
+		["neuschwanstien"] = "neuschwanstein castle", ["edinburg castle"] = "edinburgh castle",
+		["windsor castle england"] = "windsor castle", ["cinderella"] = "cinderella castle",
+		["sleeping beauty"] = "sleeping beauty castle", ["bran castle romania"] = "bran castle",
+		["carcasonne"] = "carcassonne", ["alhambra castle"] = "alhambra", ["himeji castle japan"] = "himeji castle",
+		["the tower of london"] = "tower of london", ["london tower"] = "tower of london",
+		["warwick castle uk"] = "warwick castle",
 	},
 }

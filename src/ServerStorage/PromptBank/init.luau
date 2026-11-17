@@ -244,6 +244,7 @@ local list: { Prompt } = {
 	require("@self/wild_cat"),
 	require("@self/chair_type"),
 	require("@self/bridge_type"),
+	require("@self/lamp_type"),
 }
 
 local byId: { [string]: Prompt } = {}

@@ -125,7 +125,6 @@ return {
 		["cap of rushes"] = "cap o rushes", ["ole lukoje"] = "ole lukoie",
 		["alice"] = "alice in wonderland",
 		["little tin soldier"] = "steadfast tin soldier",
-		["frozen"] = "snow queen",
 		["snowqueen"] = "snow queen",
 		["hansel and gretal"] = "hansel and gretel",
 		["cinderlla"] = "cinderella",
