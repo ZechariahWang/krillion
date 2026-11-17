@@ -21,7 +21,7 @@ return {
 			"sir hiss", "lionheart", "shenzi", "medusa", "iago", "davy jones", "barbossa", "screenslaver",
 			"professor z", "jackson storm", "darla", "winifred sanderson", "shego", "bill cipher",
 			"king magnifico", "mirage", "auto", "gabby gabby", "yokai", "ratigan", "madam mim", "stromboli",
-			"horned king", "chernabog", "shan yu",
+			"horned king", "chernabog", "shan yu", "fairy godmother",
 		},
 		DeepCut = {
 			"sykes", "percival mcleach", "bowler hat guy", "hamsterviel", "stabbington brothers",
@@ -66,5 +66,6 @@ return {
 		["maleficant"] = "maleficent", ["malificant"] = "maleficent", ["cruela"] = "cruella de vil",
 		["randall boggs"] = "randall", ["bill sykes"] = "sykes", ["drakken"] = "dr drakken",
 		["doctor drakken"] = "dr drakken", ["kim possible shego"] = "shego", ["lotsohuggin bear"] = "lotso",
+		["the fairy godmother"] = "fairy godmother", ["shrek fairy godmother"] = "fairy godmother",
 	},
 }
