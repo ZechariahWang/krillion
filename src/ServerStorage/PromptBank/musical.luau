@@ -1,7 +1,7 @@
 --!strict
 return {
 	id = "musical",
-	prompt = "Name a Broadway or theatre musical",
+	prompt = "Name a musical (stage or movie)",
 	answers = {
 		Plankton = {
 			"hamilton", "wicked", "the lion king", "frozen", "grease", "cats",
@@ -17,7 +17,7 @@ return {
 			"kinky boots", "moulin rouge", "hadestown", "the music man", "my fair lady", "singin in the rain",
 			"cabaret", "peter pan", "the wizard of oz", "little shop of horrors", "shrek",
 			"the addams family", "sweeney todd", "into the woods", "beetlejuice", "the prom", "anastasia",
-			"elf", "hercules", "tarzan", "rocky horror show",
+			"elf", "hercules", "tarzan", "rocky horror show", "the greatest showman", "encanto",
 		},
 		Rare = {
 			"carousel", "south pacific", "the king and i", "kiss me kate", "anything goes", "show boat",
@@ -44,7 +44,14 @@ return {
 			"starlight express", "spamalot", "hello dolly", "gypsy", "hair", "pippin", "godspell",
 			"jesus christ superstar", "the color purple", "finding neverland", "the wiz", "tina",
 			"dreamgirls", "the producers", "a chorus line", "miss saigon", "funny girl",
-			"high school musical", "high school musical 2", "descendants", "camp rock", "moana",
+			"high school musical", "high school musical 2", "descendants", "camp rock", "moana", "la la land",
+			"trolls", "trolls world tour", "sing", "sing 2", "teen beach movie", "zombies", "enchanted",
+			"frozen 2", "the muppets", "wonka", "willy wonka and the chocolate factory",
+			"high school musical 3", "camp rock 2", "descendants 2", "descendants 3", "the prince of egypt",
+			"tangled", "kpop demon hunters", "wish", "pitch perfect", "moana 2", "mamma mia here we go again",
+			"mulan", "pocahontas", "the princess and the frog", "the jungle book", "snow white",
+			"the nightmare before christmas", "grease 2", "mean girls 2024", "rocketman", "elvis",
+			"a star is born", "bohemian rhapsody",
 		},
 		DeepCut = {
 			"pal joey", "babes in arms", "lady in the dark", "of thee i sing", "gentlemen prefer blondes",
@@ -106,5 +113,10 @@ return {
 		["hsm"] = "high school musical", ["hsm 2"] = "high school musical 2",
 		["hsm2"] = "high school musical 2", ["descendants the musical"] = "descendants",
 		["camp rock the musical"] = "camp rock", ["moana jr"] = "moana",
+		["willy wonka"] = "willy wonka and the chocolate factory",
+		["mamma mia 2"] = "mamma mia here we go again", ["hsm 3"] = "high school musical 3",
+		["hsm3"] = "high school musical 3", ["high school musical senior year"] = "high school musical 3",
+		["k pop demon hunters"] = "kpop demon hunters",
+		["nightmare before christmas"] = "the nightmare before christmas",
 	},
 }
