@@ -32,6 +32,7 @@ local Lobby = require(script.Parent.Lobby)
 local Rail = require(script.Parent.Rail)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
+local Ui = require(script.Parent.Ui)
 
 local PET_ATTRIBUTE = "RareOrSinkPet"
 local PET_OFFSET = CFrame.new(2.6, 1.2, 2.2) -- beside and a little behind the owner's root part
@@ -54,6 +55,7 @@ local profile: Profile.Profile = Profile.new()
 local passes: { [string]: boolean } = {}
 local playing = false
 local toyButton: TextButton? = nil
+local playerGuiRef: PlayerGui? = nil
 local lastThrowAt = -math.huge
 local aimingUntil = 0
 local nudgedStarter = false
@@ -159,7 +161,8 @@ end
 local function refreshToyButton()
 	local button = toyButton
 	if button ~= nil then
-		button.Visible = equippedToy() ~= nil and not playing
+		local answersInCorner = playerGuiRef ~= nil and Ui.answersListCoversCorner(playerGuiRef)
+		button.Visible = equippedToy() ~= nil and not playing and not answersInCorner
 	end
 end
 
@@ -506,6 +509,8 @@ local function onState(payload)
 end
 
 function Market.init(playerGui: PlayerGui)
+	playerGuiRef = playerGui
+	Ui.watchAnswersList(playerGui, refreshToyButton)
 	petFolder = Instance.new("Folder")
 	petFolder.Name = "RareOrSinkPets"
 	petFolder.Parent = workspace
