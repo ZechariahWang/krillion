@@ -259,15 +259,34 @@ return function(test)
 		local alone = DivePack.layout({ 200, 300 }, 2, spacing, 1)
 		assert(DivePack.fakeRoom(alone, 1, spacing) == math.huge)
 		-- One lane: a tag behind yours at 100 leaves 200 - 100 - 40 = 60 metres to stop short by.
-		local stacked = DivePack.layout({ 200, 100, 300 }, 1, spacing, 1)
+		local stacked = DivePack.layout({ 200, 100 }, 1, spacing, 1)
 		local room = DivePack.fakeRoom(stacked, 1, spacing)
 		assert(math.abs(room - 60) < 1e-6, "room " .. room)
 		assert(stacked[1].final - room >= stacked[2].final + spacing - 1e-6)
-		-- A deeper tag below never limits it.
+		-- A deeper tag below it in its lane rules the fake-out out: your tag slides on its own and could reach it.
 		local below = DivePack.layout({ 200, 260 }, 1, spacing, 1)
-		assert(DivePack.fakeRoom(below, 1, spacing) == math.huge)
+		assert(DivePack.fakeRoom(below, 1, spacing) == 0)
 		-- Packed tight there is no room.
 		local tight = DivePack.layout({ 100, 100 }, 1, spacing, 2)
 		assert(DivePack.fakeRoom(tight, 2, spacing) == 0)
+	end)
+
+	test("the fake-out slide creeps first, never stops, and arrives still moving", function()
+		assert(DivePack.fakeSlide(0) == 0)
+		assert(math.abs(DivePack.fakeSlide(1) - 1) < 1e-9)
+		assert(DivePack.fakeSlide(-1) == 0 and DivePack.fakeSlide(2) == 1)
+		-- Slow at first, so it reads as having landed a tier short...
+		assert(DivePack.fakeSlide(0.5) < 0.2, "it leaves the fake spot too fast")
+		-- ...but always moving, and fastest at the end.
+		local previous = 0
+		local previousStep = 0
+		for step = 1, 100 do
+			local value = DivePack.fakeSlide(step / 100)
+			local moved = value - previous
+			assert(moved > 0, "it stopped at " .. step)
+			assert(moved >= previousStep - 1e-9, "it slowed down at " .. step)
+			previous = value
+			previousStep = moved
+		end
 	end)
 end

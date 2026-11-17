@@ -14,7 +14,7 @@ export type Slot = {
 -- The sink is a wind-up, then a burst. For HOLD_SHARE of it the pack only creeps CREEP_METRES under the surface;
 -- then it launches, at full speed within the first sixth of the burst (LAUNCH_POWER), and eases off towards
 -- the deepest answer (GLIDE_POWER) while keeping CARRY of its speed, so even the last tag lands with a thud.
-local HOLD_SHARE = 0.3
+local HOLD_SHARE = 0.22
 local CREEP_METRES = 5
 local LAUNCH_POWER = 1.35
 local GLIDE_POWER = 4
@@ -22,9 +22,10 @@ local CARRY = 0.35
 local LAND_STEPS = 40 -- halvings when a landing time is searched for
 local LAND_SHARE = 0.6 -- a tag counts as landed once the pack is this share of `soft` past its resting place
 local OWN_LANE_ROOM = 2 -- spacings of push another tag takes on before it joins your lane
-local DIP_SECONDS = 0.7 -- your tag's plunge past its resting place and back
-local REBOUND_SECONDS = 0.45 -- then it springs up a little past its place
+local DIP_SECONDS = 0.85 -- your tag's plunge past its resting place and back
+local REBOUND_SECONDS = 0.5 -- then it springs up a little past its place
 local REBOUND_SHARE = 0.2 -- of the plunge
+local SLIDE_CREEP = 0.18 -- the fake-out slide's speed as it leaves the fake spot, as a share of its average
 
 local DivePack = {}
 
@@ -198,16 +199,27 @@ function DivePack.overshootRoom(slots: { Slot }, own: number, spacing: number): 
 end
 
 -- How many metres above its resting place your tag (slots[own]) may stop for a moment without coming within
--- `spacing` of the tag behind it in its lane. math.huge when nothing is behind it.
+-- `spacing` of the tag behind it in its lane. math.huge when nothing is behind it, and 0 when a tag rests
+-- below it in its lane: the fake-out slides your tag on its own and could catch that one up.
 function DivePack.fakeRoom(slots: { Slot }, own: number, spacing: number): number
 	local mine = slots[own]
 	local room = math.huge
 	for index, slot in slots do
-		if index ~= own and slot.lane == mine.lane and slot.final <= mine.final then
+		if index ~= own and slot.lane == mine.lane then
+			if slot.final > mine.final then
+				return 0
+			end
 			room = math.min(room, mine.final - slot.final - spacing)
 		end
 	end
 	return math.max(room, 0)
+end
+
+-- The share of the way from the fake spot down to your tag's real depth, `u` (0..1) through the slide: a slow
+-- creep that never stops, gathering speed so it arrives still moving.
+function DivePack.fakeSlide(u: number): number
+	local t = math.clamp(u, 0, 1)
+	return SLIDE_CREEP * t + (1 - SLIDE_CREEP) * t * t * t
 end
 
 -- Seconds until `landed` turns true for the tag, with the same numbers as `front`.
