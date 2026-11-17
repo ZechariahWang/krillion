@@ -125,6 +125,13 @@ local list: { Prompt } = {
 	require("@self/minecraft_mob"),
 	require("@self/tech_company"),
 	require("@self/clothing_brand"),
+	require("@self/kids_tv_show"),
+	require("@self/book_series"),
+	require("@self/boat_ship"),
+	require("@self/cake"),
+	require("@self/room_in_house"),
+	require("@self/school_supply"),
+	require("@self/nursery_rhyme"),
 }
 
 local byId: { [string]: Prompt } = {}

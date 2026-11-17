@@ -64,6 +64,7 @@ return {
 			"charonosaurus", "mantellisaurus", "altirhinus", "euhelopus", "argyrosaurus", "puertasaurus",
 			"notocolossus", "qianzhousaurus", "bistahieversor", "proceratosaurus", "timurlengia",
 			"nanuqsaurus", "dicraeosaurus", "vagaceratops", "mojoceratops",
+			"meraxes", "ledumahadi", "sinosaurus", "bruhathkayosaurus", "paralititan", "enigmosaurus",
 		},
 		Mythic = {
 			"leaellynasaura", "minmi", "muttaburrasaurus", "nigersaurus", "sauroposeidon", "dracorex",
@@ -88,6 +89,7 @@ return {
 			"kunbarrasaurus", "animantarx", "montanoceratops", "udanoceratops", "sphaerotholus",
 			"colepiocephale", "goyocephale", "eolambia", "telmatosaurus", "talenkauen", "gasparinisaura",
 			"pantydraco", "seitaad", "miragaia", "paranthodon", "isaberrysaura", "alxasaurus", "ugrunaaluk",
+			"spicomellus", "vectaerovenator", "datanglong", "bahariasaurus",
 		},
 	},
 	aliases = {
@@ -120,5 +122,15 @@ return {
 		["triseratops"] = "triceratops", ["diplodicus"] = "diplodocus", ["allosaur"] = "allosaurus",
 		["carnotaur"] = "carnotaurus", ["gigantosaurus"] = "giganotosaurus", ["apatasaurus"] = "apatosaurus",
 		["barionyx"] = "baryonyx", ["iguanodons"] = "iguanodon",
+		["velocaraptor"] = "velociraptor", ["veloceraptor"] = "velociraptor", ["stegosaurous"] = "stegosaurus",
+		["brachiosaurous"] = "brachiosaurus", ["pterodactal"] = "pterodactyl", ["pterodactle"] = "pterodactyl",
+		["ankylosaurous"] = "ankylosaurus", ["parasaurolophis"] = "parasaurolophus",
+		["pachycephalasaurus"] = "pachycephalosaurus", ["dilophosaur"] = "dilophosaurus", ["t rexes"] = "t rex",
+		["t rex dino"] = "t rex", ["trex dinosaur"] = "t rex", ["dimetrodons"] = "dimetrodon",
+		["mosasaurs"] = "mosasaurus", ["plesiosaurs"] = "plesiosaur", ["pteradon"] = "pteranodon",
+		["pterodon"] = "pteranodon", ["giganotosaur"] = "giganotosaurus", ["argentinosaur"] = "argentinosaurus",
+		["tyrannosaurus rexes"] = "t rex", ["triceratopses"] = "triceratops", ["stegosauruses"] = "stegosaurus",
+		["brachiosauruses"] = "brachiosaurus", ["diplodocuses"] = "diplodocus", ["spinosauruses"] = "spinosaurus",
+		["utahraptors"] = "utahraptor", ["trexes"] = "t rex", ["apatosauras"] = "apatosaurus",
 	},
 }

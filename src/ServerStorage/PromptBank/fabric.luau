@@ -43,6 +43,7 @@ return {
 			"winceyette", "bunting", "velboa", "ninon", "kidskin", "shagreen", "kangaroo leather", "saffiano",
 			"bonded leather", "cork fabric", "spectra", "polyolefin", "pointelle", "plisse", "shibori",
 			"pinpoint oxford", "tattersall", "songket",
+			"knit", "crochet", "sequin", "polycotton", "elastic", "cotton blend", "wool blend",
 		},
 		DeepCut = {
 			"buckram", "ticking", "fustian", "crinoline", "nainsook", "dimity", "cretonne", "lisle",
@@ -60,6 +61,7 @@ return {
 			"manila hemp", "gunny", "icelandic wool", "wool crepe", "yak wool", "sea island cotton",
 			"end on end", "rib knit", "qiviut", "gazar", "sympatex", "haircloth", "horsehair", "borg",
 			"chikankari", "phulkari", "bandhani", "kalamkari", "jamdani", "kuba cloth", "korhogo cloth",
+			"stretch crepe", "swansdown", "cotton duck",
 		},
 		Mythic = {
 			"marquisette", "etamine", "crash", "cheviot", "shetland", "kasha", "tabaret", "tiffany",
@@ -70,6 +72,7 @@ return {
 			"chirimen", "nettle fabric", "soy silk", "milk fiber", "seacell", "orange fiber", "apple leather",
 			"ajrakh", "patola", "paithani", "xiangyunsha", "yunjin", "dowlas", "outing flannel",
 			"awning cloth", "elephant cord", "jumbo cord", "vectran", "zylon", "vinyon", "saran",
+			"hodden", "paramatta",
 		},
 	},
 	aliases = {
@@ -124,5 +127,19 @@ return {
 		["polyamide"] = "nylon", ["corderoy"] = "corduroy", ["cashmir"] = "cashmere",
 		["cashmire"] = "cashmere", ["flanel"] = "flannel", ["viscous"] = "viscose", ["chifon"] = "chiffon",
 		["woolen"] = "wool", ["cottons"] = "cotton", ["silks"] = "silk", ["velveteen fabric"] = "velveteen",
+		["terry"] = "terry cloth", ["tulle fabric"] = "tulle", ["poly"] = "polyester", ["poly cotton"] = "polycotton",
+		["poly blend"] = "polycotton", ["polyester cotton"] = "polycotton", ["stretch"] = "spandex",
+		["knitted"] = "knit", ["knit fabric"] = "knit", ["crocheted"] = "crochet", ["sequins"] = "sequin",
+		["sequined"] = "sequin", ["sequin fabric"] = "sequin", ["bemberg"] = "cupro", ["art silk"] = "rayon",
+		["artificial silk"] = "rayon", ["sheep wool"] = "wool", ["lamb leather"] = "lambskin",
+		["cow leather"] = "cowhide", ["real leather"] = "leather", ["genuine leather"] = "leather",
+		["full grain leather"] = "leather", ["top grain leather"] = "leather", ["elastic fabric"] = "elastic",
+		["taffetta"] = "taffeta", ["demin"] = "denim", ["denium"] = "denim", ["nilon"] = "nylon",
+		["cotten"] = "cotton", ["cottin"] = "cotton", ["linnen"] = "linen", ["woll"] = "wool", ["spandx"] = "spandex",
+		["spandax"] = "spandex", ["spanex"] = "spandex", ["fleese"] = "fleece", ["poleyster"] = "polyester",
+		["polyestor"] = "polyester", ["velvett"] = "velvet", ["cordory"] = "corduroy", ["corduory"] = "corduroy",
+		["shiffon"] = "chiffon", ["sattin"] = "satin", ["cashmear"] = "cashmere", ["tweeds"] = "tweed",
+		["fleeces"] = "fleece", ["denims"] = "denim", ["sherpa fleece"] = "sherpa", ["faux sherpa"] = "sherpa",
+		["wool blend fabric"] = "wool blend",
 	},
 }
