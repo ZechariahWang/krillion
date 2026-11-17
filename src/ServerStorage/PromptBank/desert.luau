@@ -30,6 +30,8 @@ return {
 			"kyzylkum", "dasht e kavir", "gibson", "tanami", "badain jaran", "tengger", "gurbantunggut",
 			"chalbi", "cholistan", "registan", "lop desert", "dasht e margo", "ulan buh", "nyiri", "taru",
 			"lompoul", "bledow", "deliblato sands", "odadahraun", "little karoo", "nama karoo",
+			"murzuq", "ubari", "tanezrouft", "grand erg oriental", "grand erg occidental", "erg chebbi", "calanscio",
+			"great sand sea", "amargosa", "carson", "gran desierto de altar",
 		},
 	},
 	aliases = {
@@ -56,5 +58,12 @@ return {
 		["patagonia desert"] = "patagonian", ["great karoo"] = "karoo", ["lut desert"] = "dasht e lut",
 		["kavir desert"] = "dasht e kavir", ["great salt desert"] = "dasht e kavir", ["moyunkum"] = "muyunkum",
 		["alashan"] = "alxa", ["alxa desert"] = "alxa",
+		["saharah"] = "sahara", ["sahra"] = "sahara", ["mojavi"] = "mojave", ["gobbi"] = "gobi", ["atakama"] = "atacama",
+		["kalihari"] = "kalahari", ["kalahri"] = "kalahari", ["namibian desert"] = "namib", ["sonora desert"] = "sonoran",
+		["sonora"] = "sonoran", ["chihuahua desert"] = "chihuahuan", ["negeb"] = "negev", ["an nafud"] = "nefud",
+		["ar rub al khali"] = "rub al khali", ["antartica"] = "antarctica", ["antarctia"] = "antarctica",
+		["antarctic"] = "antarctica", ["polar desert"] = "antarctica", ["artic"] = "arctic",
+		["dasht i lut"] = "dasht e lut", ["kizilkum"] = "kyzylkum", ["garagum"] = "karakum",
+		["kara kum desert"] = "karakum",
 	},
 }

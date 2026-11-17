@@ -25,6 +25,7 @@ return {
 			"convex polygon", "concave polygon", "figure eight", "heptagram", "speech bubble", "starburst",
 			"sunburst", "quarter circle", "hourglass", "arch", "rhombohedron", "parallelepiped",
 			"spherical cap", "golden spiral", "golden rectangle", "hyperbolic paraboloid", "saddle", "toroid",
+			"bell curve",
 		},
 		DeepCut = {
 			"octahedron", "dodecahedron", "ellipsoid", "chevron", "lune", "squircle", "obround", "tesseract",
@@ -42,6 +43,7 @@ return {
 			"dodecagram", "enneagram", "conic section", "sinusoid", "triangular bipyramid",
 			"truncated tetrahedron", "truncated cube", "pentagonal bipyramid", "spherical segment",
 			"spherical wedge", "elliptic paraboloid",
+			"acute triangle", "obtuse triangle", "octagonal pyramid", "heptagonal pyramid", "decagonal prism",
 		},
 		Mythic = {
 			"trapezium", "lemniscate", "cardioid", "deltoid", "astroid", "reuleaux triangle", "vesica piscis",
@@ -61,6 +63,9 @@ return {
 			"catalan solid", "dupin cyclide", "lituus", "fermat spiral", "spiral of theodorus",
 			"cyclic quadrilateral", "tangential quadrilateral", "bicentric quadrilateral", "torus knot",
 			"hopf link", "prismatoid",
+			"hendecagram", "truncated cuboctahedron", "triakis octahedron", "tetrakis hexahedron",
+			"deltoidal icositetrahedron", "disdyakis dodecahedron", "pentagonal icositetrahedron", "triakis icosahedron",
+			"deltoidal hexecontahedron", "pentagonal hexecontahedron",
 		},
 	},
 	aliases = {
@@ -90,5 +95,14 @@ return {
 		["hexegon"] = "hexagon", ["pentagone"] = "pentagon", ["circel"] = "circle", ["trianlge"] = "triangle",
 		["cirlce"] = "circle", ["rombus"] = "rhombus", ["paralellogram"] = "parallelogram",
 		["straight line"] = "line",
+		["round"] = "circle", ["pie slice"] = "sector", ["pill shape"] = "capsule", ["racetrack"] = "obround",
+		["sine wave"] = "sinusoid", ["sine curve"] = "sinusoid", ["pentacle"] = "pentagram",
+		["truncated pyramid"] = "frustum", ["great rhombicuboctahedron"] = "truncated cuboctahedron",
+		["normal curve"] = "bell curve", ["gaussian curve"] = "bell curve", ["bell shape"] = "bell curve",
+		["squre"] = "square", ["sqaure"] = "square", ["triangel"] = "triangle", ["trinagle"] = "triangle",
+		["rectagle"] = "rectangle", ["reactangle"] = "rectangle", ["cirkle"] = "circle", ["sircle"] = "circle",
+		["ovel"] = "oval", ["hexagone"] = "hexagon", ["octogone"] = "octagon", ["pyramide"] = "pyramid",
+		["cyllinder"] = "cylinder", ["spher"] = "sphere", ["cubee"] = "cube", ["pentogon"] = "pentagon",
+		["parralelogram"] = "parallelogram", ["trapezoyd"] = "trapezoid",
 	},
 }

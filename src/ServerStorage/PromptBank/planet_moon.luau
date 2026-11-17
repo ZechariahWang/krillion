@@ -38,6 +38,7 @@ return {
 			"eukelade", "cyllene", "kore", "herse", "dia", "valetudo", "eupheme", "ersa", "pandia", "prospero",
 			"setebos", "stephano", "trinculo", "cupid", "mab", "perdita", "francisco", "ferdinand", "margaret",
 			"halimede", "sao", "laomedeia", "psamathe", "neso", "hippocamp",
+			"mk2",
 		},
 	},
 	aliases = {
@@ -59,5 +60,11 @@ return {
 		["natural satellite"] = "moon", ["titan moon"] = "titan", ["europa moon"] = "europa",
 		["ganymede moon"] = "ganymede", ["callisto moon"] = "callisto", ["dactyl moon"] = "dactyl",
 		["didymoon"] = "dimorphos", ["trition"] = "triton", ["tytania"] = "titania", ["hyperian"] = "hyperion",
+		["arial"] = "ariel", ["umbrial"] = "umbriel", ["oberion"] = "oberon", ["nerede"] = "nereid",
+		["protius"] = "proteus", ["nyx"] = "nix", ["pasiphe"] = "pasiphae", ["lysithia"] = "lysithea",
+		["thetys"] = "tethys", ["phebe"] = "phoebe", ["promethius"] = "prometheus", ["helen"] = "helene",
+		["titiania"] = "titania", ["kalisto"] = "callisto", ["elera"] = "elara", ["rhia"] = "rhea", ["ria"] = "rhea",
+		["hyperon"] = "hyperion", ["enceledus moon"] = "enceladus", ["saturns moon titan"] = "titan",
+		["the moon of earth"] = "moon", ["earths satellite"] = "moon",
 	},
 }

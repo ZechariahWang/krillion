@@ -35,6 +35,7 @@ return {
 			"turdus solitarius", "honores friderici", "robur carolinum", "triangulum minus", "vespa", "apis",
 			"mons maenalus", "cancer minor", "gladii electorales saxonici", "sceptrum et manus iustitiae",
 			"cor caroli", "harpa georgii", "lilium", "corona firmiana",
+			"polophylax",
 		},
 	},
 	aliases = {
@@ -124,5 +125,11 @@ return {
 		["orion the hunter"] = "orion", ["the whale"] = "cetus", ["orrion"] = "orion",
 		["ofiuchus"] = "ophiuchus", ["centauras"] = "centaurus", ["lira"] = "lyra", ["bootis"] = "bootes",
 		["the water bearer"] = "aquarius",
+		["pegaso"] = "pegasus", ["perseous"] = "perseus", ["aurega"] = "auriga", ["canis majer"] = "canis major",
+		["scorpious"] = "scorpius", ["scorpeus"] = "scorpius", ["ursa majour"] = "ursa major",
+		["ursa majore"] = "ursa major", ["ursa minour"] = "ursa minor", ["cassiopea"] = "cassiopeia", ["drako"] = "draco",
+		["heracles"] = "hercules", ["geminii"] = "gemini", ["the great dipper"] = "ursa major",
+		["great dipper"] = "ursa major", ["the little dipper"] = "ursa minor", ["the little bear"] = "ursa minor",
+		["the southern cross"] = "crux",
 	},
 }

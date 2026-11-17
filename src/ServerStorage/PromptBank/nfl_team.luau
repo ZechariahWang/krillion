@@ -1,0 +1,63 @@
+--!strict
+return {
+	id = "nfl_team",
+	prompt = "Name an NFL team",
+	answers = {
+		Plankton = {
+			"cowboys", "patriots", "packers", "chiefs", "eagles", "steelers", "49ers",
+		},
+		TooClever = {
+			"bears", "raiders", "ravens", "bills", "seahawks", "dolphins", "giants",
+		},
+		Schooler = {
+			"jets", "broncos", "rams", "chargers", "vikings", "saints", "lions", "bengals", "browns", "texans",
+			"colts", "jaguars", "titans", "falcons", "panthers", "buccaneers", "cardinals", "commanders",
+		},
+		Rare = {
+			"boston yanks", "frankford yellow jackets", "canton bulldogs", "duluth eskimos", "pottsville maroons",
+			"dayton triangles", "akron pros",
+		},
+		DeepCut = {
+			"providence steam roller", "portsmouth spartans", "rock island independents", "staten island stapletons",
+			"brooklyn dodgers", "new york bulldogs", "oorang indians", "milwaukee badgers", "racine legion",
+			"columbus panhandles", "detroit heralds",
+		},
+		Mythic = {
+			"hartford blues", "cincinnati reds", "st louis gunners", "tonawanda kardex", "hammond pros",
+			"minneapolis marines", "evansville crimson giants", "kenosha maroons", "louisville brecks",
+			"orange tornadoes", "rochester jeffersons", "los angeles buccaneers",
+		},
+	},
+	aliases = {
+		["dallas cowboys"] = "cowboys", ["boys"] = "cowboys", ["cowboy"] = "cowboys",
+		["new england patriots"] = "patriots", ["pats"] = "patriots", ["boston patriots"] = "patriots",
+		["green bay packers"] = "packers", ["packer"] = "packers", ["kansas city chiefs"] = "chiefs",
+		["cheifs"] = "chiefs", ["chief"] = "chiefs", ["philadelphia eagles"] = "eagles", ["birds"] = "eagles",
+		["eagle"] = "eagles", ["pittsburgh steelers"] = "steelers", ["stealers"] = "steelers",
+		["steeler"] = "steelers", ["san francisco 49ers"] = "49ers", ["niners"] = "49ers", ["forty niners"] = "49ers",
+		["chicago bears"] = "bears", ["bear"] = "bears", ["decatur staleys"] = "bears", ["chicago staleys"] = "bears",
+		["las vegas raiders"] = "raiders", ["oakland raiders"] = "raiders", ["los angeles raiders"] = "raiders",
+		["raider"] = "raiders", ["baltimore ravens"] = "ravens", ["raven"] = "ravens", ["buffalo bills"] = "bills",
+		["bill"] = "bills", ["seattle seahawks"] = "seahawks", ["seahawk"] = "seahawks",
+		["miami dolphins"] = "dolphins", ["dolphin"] = "dolphins", ["new york giants"] = "giants",
+		["ny giants"] = "giants", ["giant"] = "giants", ["new york jets"] = "jets", ["ny jets"] = "jets",
+		["jet"] = "jets", ["new york titans"] = "jets", ["denver broncos"] = "broncos", ["bronco"] = "broncos",
+		["los angeles rams"] = "rams", ["la rams"] = "rams", ["st louis rams"] = "rams", ["cleveland rams"] = "rams",
+		["ram"] = "rams", ["los angeles chargers"] = "chargers", ["la chargers"] = "chargers",
+		["san diego chargers"] = "chargers", ["charger"] = "chargers", ["minnesota vikings"] = "vikings",
+		["viking"] = "vikings", ["new orleans saints"] = "saints", ["saint"] = "saints", ["detroit lions"] = "lions",
+		["lion"] = "lions", ["cincinnati bengals"] = "bengals", ["bengal"] = "bengals",
+		["cleveland browns"] = "browns", ["brown"] = "browns", ["houston texans"] = "texans", ["texan"] = "texans",
+		["indianapolis colts"] = "colts", ["baltimore colts"] = "colts", ["colt"] = "colts",
+		["jacksonville jaguars"] = "jaguars", ["jags"] = "jaguars", ["jaguar"] = "jaguars",
+		["tennessee titans"] = "titans", ["houston oilers"] = "titans", ["tennessee oilers"] = "titans",
+		["oilers"] = "titans", ["titan"] = "titans", ["atlanta falcons"] = "falcons", ["falcon"] = "falcons",
+		["carolina panthers"] = "panthers", ["panther"] = "panthers", ["tampa bay buccaneers"] = "buccaneers",
+		["bucs"] = "buccaneers", ["tampa bay"] = "buccaneers", ["tb bucs"] = "buccaneers",
+		["buccaneer"] = "buccaneers", ["arizona cardinals"] = "cardinals", ["phoenix cardinals"] = "cardinals",
+		["st louis cardinals"] = "cardinals", ["chicago cardinals"] = "cardinals", ["cardinal"] = "cardinals",
+		["washington commanders"] = "commanders", ["washington redskins"] = "commanders", ["redskins"] = "commanders",
+		["skins"] = "commanders", ["washington football team"] = "commanders", ["commies"] = "commanders",
+		["commander"] = "commanders",
+	},
+}

@@ -36,6 +36,7 @@ return {
 			"scratch race", "individual pursuit", "time trial", "tandem cycling", "sprint cycling",
 			"rugby union", "cross country running", "street skateboarding", "park skateboarding",
 			"dinghy sailing", "iqfoil", "formula kite",
+			"bouldering", "speed climbing", "lead climbing",
 		},
 		Mythic = {
 			"eventing", "jeu de paume", "motorboating", "roque", "rope climbing", "club swinging",
@@ -80,5 +81,14 @@ return {
 		["mountain bike racing"] = "mountain biking", ["shot putt"] = "shot put",
 		["table tenis"] = "table tennis", ["taekwando"] = "taekwondo", ["archary"] = "archery",
 		["power boating"] = "motorboating", ["powerboating"] = "motorboating",
+		["rock climbing"] = "sport climbing", ["race walk"] = "race walking", ["shot"] = "shot put",
+		["hammer"] = "hammer throw", ["javelin throwing"] = "javelin", ["high jumping"] = "high jump",
+		["long jumping"] = "long jump", ["hurdle"] = "hurdles", ["bicycling"] = "cycling", ["paddling"] = "canoeing",
+		["whitewater"] = "canoe slalom", ["slalom"] = "canoe slalom", ["synchro swimming"] = "artistic swimming",
+		["synchro"] = "artistic swimming", ["dive"] = "diving", ["400m hurdles"] = "hurdles", ["110m hurdles"] = "hurdles",
+		["pistol"] = "shooting", ["rifle"] = "shooting", ["shotgun"] = "shooting", ["swiming"] = "swimming",
+		["gymnasitcs"] = "gymnastics", ["gymnistics"] = "gymnastics", ["atheletics"] = "athletics",
+		["fencing sport"] = "fencing", ["wrestle"] = "wrestling", ["rugby 7"] = "rugby sevens", ["mixed relay"] = "relay",
+		["4x100"] = "relay", ["4x400"] = "relay",
 	},
 }
