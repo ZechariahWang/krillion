@@ -27,6 +27,26 @@ return function(test)
 		end
 	end)
 
+	test("retired prompts are real ids and are never picked", function()
+		for id in PromptBank.Retired do
+			assert(PromptBank.ById[id] ~= nil, "retired id " .. id .. " is not in the bank")
+		end
+		assert(next(PromptBank.Retired) ~= nil, "nothing is retired")
+		for _ = 1, 3000 do
+			local prompt = PromptBank.random({})
+			assert(not PromptBank.Retired[prompt.id], "picked retired " .. prompt.id)
+		end
+		-- With every live prompt excluded it falls back to a live one, never a retired one.
+		local everyLive = {}
+		for _, prompt in PromptBank.List do
+			if not PromptBank.Retired[prompt.id] then
+				everyLive[prompt.id] = true
+			end
+		end
+		local fallback = PromptBank.random(everyLive)
+		assert(not PromptBank.Retired[fallback.id], "fell back to retired " .. fallback.id)
+	end)
+
 	test("every answer tier is a real tier", function()
 		eachPrompt(function(prompt)
 			for tierName in prompt.answers do
