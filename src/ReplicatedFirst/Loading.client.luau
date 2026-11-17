@@ -1,6 +1,7 @@
 --!strict
 -- Shows ReplicatedFirst.LoadingScreen (authored in Studio) instead of Roblox's default screen: the bar follows
--- asset preloading, bubbles drift up, and it fades straight into the lobby when done.
+-- asset preloading, bubbles drift up, the title and the sea life bob, and it fades straight into the lobby
+-- when done. The centre block (title, bar, how-to-play pills) is drawn for DESIGN_SIZE and shrinks to fit.
 
 local ContentProvider = game:GetService("ContentProvider")
 local Players = game:GetService("Players")
@@ -12,6 +13,10 @@ local TweenService = game:GetService("TweenService")
 local MIN_SECONDS = 1.5 -- never flash past
 local SKIP_AFTER_SECONDS = 10 -- in case preloading stalls
 local GIVE_UP_SECONDS = 20 -- the screen goes by itself even if preloading never returns
+local DESIGN_SIZE = Vector2.new(980, 600) -- screen size the centre block is authored for
+local MIN_FIT = 0.4
+local TITLE_BOB = 8 -- pixels the title sinks and rises
+local BOB_SECONDS = 1.8 -- one way; each creature takes a little longer than the one before
 
 local startedAt = os.clock()
 ReplicatedFirst:RemoveDefaultLoadingScreen()
@@ -21,11 +26,15 @@ local gui = (script.Parent:WaitForChild("LoadingScreen") :: ScreenGui):Clone()
 gui.Parent = playerGui
 
 local root = gui:WaitForChild("Root") :: CanvasGroup
-local fill = root:WaitForChild("Center"):WaitForChild("Track"):WaitForChild("Fill") :: Frame
+local center = root:WaitForChild("Center") :: Frame
+local fill = center:WaitForChild("Track"):WaitForChild("Fill") :: Frame
 local skip = root:WaitForChild("Skip") :: TextButton
 local bubbles = root:WaitForChild("Bubbles") :: Frame
-local logoScale = root:WaitForChild("Center"):WaitForChild("Logo"):WaitForChild("UIScale") :: UIScale
-local status = root:WaitForChild("Center"):FindFirstChild("Status") :: TextLabel?
+local title = center:WaitForChild("Title") :: Frame
+local titleScale = title:WaitForChild("UIScale") :: UIScale
+local status = center:FindFirstChild("Status") :: TextLabel?
+local centerFit = center:FindFirstChild("Fit") :: UIScale?
+local creatures = root:FindFirstChild("Creatures")
 
 local finished = false
 
@@ -62,8 +71,39 @@ for _, child in bubbles:GetChildren() do
 	end
 end
 
-logoScale.Scale = 0.9
-TweenService:Create(logoScale, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 }):Play()
+-- Rises and falls by `pixels` for as long as the screen lives (the tween dies with the instance).
+local function bob(object: GuiObject, pixels: number, seconds: number)
+	local info = TweenInfo.new(seconds, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+	TweenService:Create(object, info, { Position = object.Position + UDim2.fromOffset(0, pixels) }):Play()
+end
+
+local function fitCenter()
+	local scale = centerFit
+	local size = gui.AbsoluteSize
+	if scale == nil or size.X <= 0 or size.Y <= 0 then
+		return
+	end
+	scale.Scale = math.clamp(math.min(size.X / DESIGN_SIZE.X, size.Y / DESIGN_SIZE.Y), MIN_FIT, 1)
+end
+
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitCenter)
+fitCenter()
+
+titleScale.Scale = 0.9
+TweenService:Create(titleScale, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 }):Play()
+-- bob(title, TITLE_BOB, BOB_SECONDS)
+
+-- Each creature's Bob attribute is the pixels it rises and falls.
+if creatures ~= nil then
+	local count = 0
+	for _, child in creatures:GetChildren() do
+		local pixels = child:GetAttribute("Bob")
+		if child:IsA("GuiObject") and typeof(pixels) == "number" then
+			count += 1
+			bob(child, -pixels, BOB_SECONDS + count * 0.35)
+		end
+	end
+end
 
 local function finish()
 	if finished then

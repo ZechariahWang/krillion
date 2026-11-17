@@ -1,0 +1,60 @@
+--!strict
+return {
+	id = "baby_animal",
+	prompt = "Name a word for a baby animal",
+	answers = {
+		Plankton = {
+			"puppy", "kitten", "calf", "cub", "chick", "lamb", "piglet",
+		},
+		TooClever = {
+			"joey", "tadpole", "fawn", "duckling", "bunny",
+		},
+		Schooler = {
+			"foal", "gosling", "pup", "hatchling", "fry", "cygnet", "larva", "caterpillar", "colt", "filly", "kit",
+			"fledgling", "whelp", "eaglet", "owlet", "kid", "nestling", "yearling", "maggot",
+		},
+		Rare = {
+			"leveret", "squab", "poult", "pullet", "cockerel", "hoglet", "cria", "elver", "nymph", "grub", "spiderling",
+			"smolt", "fingerling", "parr", "peachick", "puggle", "squeaker",
+		},
+		DeepCut = {
+			"shoat", "eyas", "alevin", "pinkie", "keet", "weaner",
+			"weanling", "stirk",
+		},
+		Mythic = {
+			"wriggler", "spat",
+			"nauplius", "zoea", "ephyra", "planula",
+		},
+	},
+	aliases = {
+		["puppies"] = "puppy", ["puppie"] = "puppy", ["pupy"] = "puppy",
+		["kittens"] = "kitten", ["kiten"] = "kitten", ["kitty"] = "kitten", ["kitties"] = "kitten",
+		["calves"] = "calf", ["cubs"] = "cub", ["chicks"] = "chick", ["lambs"] = "lamb", ["piglets"] = "piglet",
+		["pigglet"] = "piglet", ["joeys"] = "joey", ["tadpoles"] = "tadpole", ["polliwog"] = "tadpole",
+		["pollywog"] = "tadpole", ["fawns"] = "fawn", ["ducklings"] = "duckling", ["bunnies"] = "bunny",
+		["foals"] = "foal", ["goslings"] = "gosling", ["pups"] = "pup", ["hatchlings"] = "hatchling",
+		["cygnets"] = "cygnet", ["larvae"] = "larva", ["larvas"] = "larva", ["caterpillars"] = "caterpillar",
+		["catapillar"] = "caterpillar", ["colts"] = "colt", ["fillies"] = "filly", ["kits"] = "kit",
+		["fledglings"] = "fledgling", ["whelps"] = "whelp", ["eaglets"] = "eaglet", ["owlets"] = "owlet",
+		["kids"] = "kid", ["nestlings"] = "nestling", ["maggots"] = "maggot", ["leverets"] = "leveret",
+		["squabs"] = "squab", ["poults"] = "poult", ["pullets"] = "pullet", ["cockerels"] = "cockerel",
+		["hoglets"] = "hoglet", ["crias"] = "cria", ["elvers"] = "elver", ["nymphs"] = "nymph", ["grubs"] = "grub",
+		["pea chick"] = "peachick", ["pinky"] = "pinkie", ["pinkies"] = "pinkie", ["shoats"] = "shoat",
+		["eyass"] = "eyas", ["baby kangaroo"] = "joey",
+		["pigling"] = "piglet", ["pigglets"] = "piglet", ["puppys"] = "puppy", ["caterpiller"] = "caterpillar",
+		["catterpillar"] = "caterpillar", ["signet"] = "cygnet", ["fledgeling"] = "fledgling", ["calfs"] = "calf",
+		["yearlings"] = "yearling", ["polliwogs"] = "tadpole", ["pollywogs"] = "tadpole", ["baby bunny"] = "bunny",
+		["glass eel"] = "elver", ["weanlings"] = "weanling", ["stirks"] = "stirk", ["kittys"] = "kitten",
+		["gosslings"] = "gosling", ["duckings"] = "duckling",
+		["baby dog"] = "puppy", ["baby cat"] = "kitten", ["baby cow"] = "calf",
+		["baby sheep"] = "lamb", ["baby pig"] = "piglet", ["baby duck"] = "duckling",
+		["baby chicken"] = "chick", ["baby bear"] = "cub", ["baby horse"] = "foal",
+		["baby goat"] = "kid", ["baby deer"] = "fawn", ["baby frog"] = "tadpole",
+		["baby swan"] = "cygnet", ["baby goose"] = "gosling", ["baby fish"] = "fry",
+		["baby lion"] = "cub", ["baby fox"] = "kit", ["baby owl"] = "owlet",
+		["baby eagle"] = "eaglet", ["baby bird"] = "fledgling", ["duckiling"] = "duckling",
+		["tadpol"] = "tadpole", ["jouey"] = "joey", ["bunnys"] = "bunny",
+		["kittin"] = "kitten", ["kitenn"] = "kitten", ["pupies"] = "puppy",
+		["chiks"] = "chick", ["piglit"] = "piglet", 
+	},
+}

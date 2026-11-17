@@ -1,0 +1,61 @@
+--!strict
+return {
+	id = "roman_emperor",
+	prompt = "Name a Roman emperor",
+	answers = {
+		Plankton = {
+			"nero", "augustus", "caligula", "constantine", "marcus aurelius", "trajan",
+		},
+		TooClever = {
+			"hadrian", "commodus", "claudius", "tiberius",
+		},
+		Schooler = {
+			"titus", "domitian", "diocletian", "nerva", "antoninus pius", "septimius severus", "caracalla",
+			"theodosius", "justinian", "galba", "otho", "vitellius", "aurelian", "valerian", "julian",
+			"romulus augustulus", "elagabalus", "lucius verus", "honorius", "valentinian", "probus", "decius",
+			"gallienus", "maximian", "licinius", "vespasian",
+		},
+		Rare = {
+			"pertinax", "macrinus", "geta", "alexander severus", "maximinus thrax", "philip the arab", "constantius ii",
+			"constans", "constantine ii", "valens", "gratian", "arcadius", "jovian", "galerius", "maxentius", "tacitus",
+			"carus", "claudius gothicus", "gordian iii", "didius julianus",
+		},
+		DeepCut = {
+			"trebonianus gallus", "carinus", "numerian", "constantius chlorus", "magnentius", "zeno", "anastasius",
+			"heraclius", "basil ii", "constantine xi", "leo i", "marcian", "valentinian iii", "theodosius ii",
+			"severus ii", "maximinus daza", "diadumenian", "pupienus", "balbinus", "gordian i", "gordian ii",
+			"valentinian ii", "justin i", "leo iii", "constantine v", "nikephoros ii phokas", "john tzimiskes",
+			"basil i", "manuel i komnenos", "alexios i komnenos", "michael viii palaiologos", "constantine vii",
+		},
+		Mythic = {
+			"aemilian", "hostilian", "quintillus", "florian", "vetranio", "magnus maximus", "eugenius", "avitus",
+			"majorian", "anthemius", "olybrius", "glycerius", "julius nepos", "petronius maximus", "basiliscus",
+			"phocas", "maurice", "volusianus", "libius severus", "leo ii", "tiberius ii",
+			"herennius etruscus", "constantius iii", "justin ii", "constantine iii",
+		},
+	},
+	aliases = {
+		["emperor nero"] = "nero", ["caesar augustus"] = "augustus", ["octavian"] = "augustus",
+		["ceasar augustus"] = "augustus", ["constantine the great"] = "constantine", ["constantine i"] = "constantine",
+		["aurelius"] = "marcus aurelius", ["emperor trajan"] = "trajan", ["emperor hadrian"] = "hadrian",
+		["justinian i"] = "justinian", ["justinian the great"] = "justinian", ["julian the apostate"] = "julian",
+		["theodosius the great"] = "theodosius", ["theodosius i"] = "theodosius", ["caligua"] = "caligula",
+		["gaius caligula"] = "caligula", ["calligula"] = "caligula", ["tiberious"] = "tiberius",
+		["commodis"] = "commodus", ["diocletion"] = "diocletian", ["augustulus"] = "romulus augustulus",
+		["thrax"] = "maximinus thrax", ["heliogabalus"] = "elagabalus", ["vespasion"] = "vespasian",
+		["marcus aurelias"] = "marcus aurelius", ["antoninus"] = "antoninus pius", ["valentinian i"] = "valentinian",
+		["basil the bulgar slayer"] = "basil ii", ["constantine the last"] = "constantine xi",
+		["gordian 3"] = "gordian iii", ["gordian 1"] = "gordian i", ["gordian 2"] = "gordian ii",
+		["constantine 2"] = "constantine ii", ["constantius 2"] = "constantius ii", ["theodosius 2"] = "theodosius ii",
+		["marcus aurelius antoninus"] = "marcus aurelius", ["lucius septimius severus"] = "septimius severus",
+		["emperor caligula"] = "caligula", ["emperor augustus"] = "augustus", ["emperor claudius"] = "claudius",
+		["claudius ii"] = "claudius gothicus", ["basil 2"] = "basil ii", ["valentinian 3"] = "valentinian iii",
+		["leo 1"] = "leo i",
+		["severus alexander"] = "alexander severus", ["valentinian 2"] = "valentinian ii", ["justin 1"] = "justin i",
+		["justin 2"] = "justin ii", ["constantine 3"] = "constantine iii", ["constantine 5"] = "constantine v",
+		["leo 3"] = "leo iii", ["basil 1"] = "basil i", ["alexios komnenos"] = "alexios i komnenos",
+		["alexius i"] = "alexios i komnenos", ["nicephorus phocas"] = "nikephoros ii phokas",
+		["john i tzimiskes"] = "john tzimiskes", ["aemilianus"] = "aemilian", ["gallus"] = "trebonianus gallus",
+		["philip arab"] = "philip the arab",
+	},
+}
