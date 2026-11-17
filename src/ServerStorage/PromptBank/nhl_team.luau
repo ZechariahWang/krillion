@@ -1,0 +1,62 @@
+--!strict
+return {
+	id = "nhl_team",
+	prompt = "Name an NHL team",
+	answers = {
+		Plankton = {
+			"maple leafs", "bruins", "penguins", "blackhawks", "rangers", "canadiens", "red wings",
+		},
+		TooClever = {
+			"golden knights", "kraken", "oilers", "flyers", "avalanche", "lightning",
+		},
+		Schooler = {
+			"islanders", "capitals", "devils", "flames", "canucks", "senators", "sabres", "hurricanes", "panthers",
+			"predators", "blues", "stars", "wild", "jets", "kings", "ducks", "sharks", "blue jackets", "coyotes",
+		},
+		Rare = {
+			"whalers", "nordiques", "thrashers", "mighty ducks", "utah mammoth", "north stars",
+		},
+		DeepCut = {
+			"kansas city scouts", "cleveland barons", "california golden seals", "atlanta flames",
+			"colorado rockies", "utah hockey club",
+		},
+		Mythic = {
+			"montreal maroons", "philadelphia quakers", "hamilton tigers", "brooklyn americans", "st louis eagles",
+			"quebec bulldogs", "toronto arenas", "toronto st pats", "montreal wanderers", "pittsburgh pirates",
+		},
+	},
+	aliases = {
+		["toronto maple leafs"] = "maple leafs", ["leafs"] = "maple leafs", ["maple leaves"] = "maple leafs",
+		["maple leaf"] = "maple leafs", ["boston bruins"] = "bruins", ["bruin"] = "bruins",
+		["pittsburgh penguins"] = "penguins", ["pens"] = "penguins", ["penguin"] = "penguins",
+		["chicago blackhawks"] = "blackhawks", ["black hawks"] = "blackhawks", ["blackhawk"] = "blackhawks",
+		["new york rangers"] = "rangers", ["ranger"] = "rangers", ["montreal canadiens"] = "canadiens",
+		["habs"] = "canadiens", ["montreal canadians"] = "canadiens", ["canadians"] = "canadiens",
+		["detroit red wings"] = "red wings", ["redwings"] = "red wings", ["red wing"] = "red wings",
+		["vegas golden knights"] = "golden knights", ["vegas"] = "golden knights", ["seattle kraken"] = "kraken",
+		["edmonton oilers"] = "oilers", ["oiler"] = "oilers", ["philadelphia flyers"] = "flyers",
+		["flyer"] = "flyers", ["colorado avalanche"] = "avalanche", ["avs"] = "avalanche",
+		["tampa bay lightning"] = "lightning", ["bolts"] = "lightning", ["new york islanders"] = "islanders",
+		["isles"] = "islanders", ["islander"] = "islanders", ["washington capitals"] = "capitals",
+		["caps"] = "capitals", ["new jersey devils"] = "devils", ["devil"] = "devils",
+		["calgary flames"] = "flames", ["flame"] = "flames", ["vancouver canucks"] = "canucks",
+		["canuck"] = "canucks", ["ottawa senators"] = "senators", ["sens"] = "senators",
+		["buffalo sabres"] = "sabres", ["sabre"] = "sabres", ["carolina hurricanes"] = "hurricanes",
+		["canes"] = "hurricanes", ["hurricane"] = "hurricanes", ["florida panthers"] = "panthers",
+		["panther"] = "panthers", ["nashville predators"] = "predators", ["preds"] = "predators",
+		["st louis blues"] = "blues", ["dallas stars"] = "stars", ["star"] = "stars",
+		["minnesota wild"] = "wild", ["winnipeg jets"] = "jets", ["jet"] = "jets", ["los angeles kings"] = "kings",
+		["la kings"] = "kings", ["king"] = "kings", ["anaheim ducks"] = "ducks", ["duck"] = "ducks",
+		["san jose sharks"] = "sharks", ["shark"] = "sharks", ["columbus blue jackets"] = "blue jackets",
+		["bluejackets"] = "blue jackets", ["jackets"] = "blue jackets", ["arizona coyotes"] = "coyotes",
+		["phoenix coyotes"] = "coyotes", ["coyote"] = "coyotes", ["hartford whalers"] = "whalers",
+		["whaler"] = "whalers", ["quebec nordiques"] = "nordiques", ["atlanta thrashers"] = "thrashers",
+		["thrasher"] = "thrashers", ["anaheim mighty ducks"] = "mighty ducks", ["mighty duck"] = "mighty ducks",
+		["utah"] = "utah mammoth", ["mammoth"] = "utah mammoth", ["minnesota north stars"] = "north stars",
+		["north star"] = "north stars", ["scouts"] = "kansas city scouts", ["barons"] = "cleveland barons",
+		["golden seals"] = "california golden seals", ["california seals"] = "california golden seals",
+		["oakland seals"] = "california golden seals",
+		["maroons"] = "montreal maroons", ["quakers"] = "philadelphia quakers", ["utah hc"] = "utah hockey club",
+		["bulldogs"] = "quebec bulldogs", ["st pats"] = "toronto st pats", ["wanderers"] = "montreal wanderers",
+	},
+}

@@ -139,6 +139,13 @@ local list: { Prompt } = {
 	require("@self/jewelry"),
 	require("@self/musical"),
 	require("@self/bean_legume"),
+	require("@self/indian_food"),
+	require("@self/mlb_team"),
+	require("@self/nhl_team"),
+	require("@self/soccer_club"),
+	require("@self/computer_part"),
+	require("@self/salty_snack"),
+	require("@self/rock_mineral"),
 }
 
 local byId: { [string]: Prompt } = {}

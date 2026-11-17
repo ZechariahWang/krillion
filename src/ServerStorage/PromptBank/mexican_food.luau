@@ -21,7 +21,7 @@ return {
 			"cochinita pibil", "chiles rellenos", "enchiladas verdes", "enchiladas suizas", "pan dulce",
 			"concha", "cajeta", "atole", "agua fresca", "tostilocos", "esquites", "huarache", "pambazo",
 			"chalupa", "molletes", "nopales", "salsa verde", "salsa roja", "queso fundido", "taco de canasta",
-			"pozole rojo", "mole poblano", "birria taco",
+			"pozole rojo", "mole poblano",
 		},
 		DeepCut = {
 			"tlacoyo", "cemita", "chapulines", "escamoles", "taco de suadero", "pozole verde", "caldo de res",
@@ -48,8 +48,9 @@ return {
 		["pan de muertos"] = "pan de muerto", ["cheese quesadilla"] = "quesadilla", ["tres leche"] = "tres leches",
 		["chile con queso"] = "queso", ["cheese dip"] = "queso", ["fish tacos"] = "fish taco",
 		["soft tacos"] = "soft taco", ["crunchy taco"] = "hard shell taco", ["hard taco"] = "hard shell taco",
-		["tacos de canasta"] = "taco de canasta", ["birria tacos"] = "birria taco",
+		["tacos de canasta"] = "taco de canasta",
 		["tacos de suadero"] = "taco de suadero", ["tacos de cabeza"] = "taco de cabeza",
-		["tacos de sesos"] = "taco de sesos", ["chilaquile"] = "chilaquiles",
+		["tacos de sesos"] = "taco de sesos", ["chilaquile"] = "chilaquiles", ["birria tacos"] = "birria",
+		["birria taco"] = "birria",
 	},
 }
