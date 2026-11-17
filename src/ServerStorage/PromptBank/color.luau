@@ -157,5 +157,11 @@ return {
 		["sea blue"] = "ocean blue", ["blue grey"] = "blue gray", ["grey blue"] = "blue gray",
 		["fucshia"] = "fuchsia", ["chartreause"] = "chartreuse", ["vilolet"] = "violet", ["purlpe"] = "purple",
 		["bleu"] = "blue", ["silvar"] = "silver", ["cyan blue"] = "cyan",
+		["yelllow"] = "yellow", ["greeen"] = "green", ["oranje"] = "orange", ["blck"] = "black", ["whit"] = "white",
+		["pnik"] = "pink", ["gryy"] = "gray", ["turquiose"] = "turquoise", ["tuquoise"] = "turquoise",
+		["magnta"] = "magenta", ["maroan"] = "maroon", ["bage"] = "beige", ["viollet"] = "violet", ["lillac"] = "lilac",
+		["corel"] = "coral", ["ivery"] = "ivory", ["olove"] = "olive", ["navi"] = "navy", ["crimsan"] = "crimson",
+		["purpl"] = "purple", ["bluee"] = "blue", ["redd"] = "red", ["blackk"] = "black", ["greyy"] = "gray",
+		["lavandar"] = "lavender", ["indigoe"] = "indigo",
 	},
 }

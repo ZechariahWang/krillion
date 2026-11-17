@@ -169,5 +169,12 @@ return {
 		["inline skating"] = "rollerblading", ["greco roman"] = "greco roman wrestling",
 		["sand volleyball"] = "beach volleyball", ["indoor volleyball"] = "volleyball", ["frisbee golf"] = "disc golf",
 		["crew"] = "rowing", ["sprint"] = "sprinting",
+		["baskeball"] = "basketball", ["basketbll"] = "basketball", ["socer"] = "soccer", ["sokker"] = "soccer",
+		["tennnis"] = "tennis", ["golff"] = "golf", ["volleybll"] = "volleyball", ["voleyball"] = "volleyball",
+		["swimmng"] = "swimming", ["hokey"] = "hockey", ["baseballl"] = "baseball", ["basebal"] = "baseball",
+		["rugbee"] = "rugby", ["crickit"] = "cricket", ["cricet"] = "cricket", ["wrestlin"] = "wrestling",
+		["gymnastik"] = "gymnastics", ["gymnastcs"] = "gymnastics", ["skiiing"] = "skiing", ["archary"] = "archery",
+		["archry"] = "archery", ["fencin"] = "fencing", ["karatay"] = "karate", ["footbll"] = "football",
+		["futball"] = "football", ["skatebording"] = "skateboarding",
 	},
 }
