@@ -11,12 +11,13 @@ return {
 		},
 		Schooler = {
 			"illinois", "ohio", "michigan", "pennsylvania", "new jersey", "virginia", "north carolina",
-			"south carolina", "tennessee", "louisiana", "oregon", "utah", "massachusetts", "alabama",
-			"missouri", "wisconsin", "minnesota", "oklahoma", "new mexico", "montana",
+			"tennessee", "louisiana", "oregon", "massachusetts",
 		},
 		Rare = {
 			"arkansas", "west virginia", "new hampshire", "rhode island", "maryland", "indiana", "kentucky",
 			"mississippi", "iowa", "kansas", "nebraska", "idaho", "wyoming", "maine", "connecticut",
+			"south carolina", "utah", "alabama", "missouri", "wisconsin", "minnesota", "oklahoma",
+			"new mexico", "montana",
 		},
 		DeepCut = {
 			"puerto rico", "district of columbia", "guam", "american samoa", "delaware", "north dakota",

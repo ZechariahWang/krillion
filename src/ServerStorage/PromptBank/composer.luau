@@ -10,11 +10,8 @@ return {
 			"tchaikovsky", "vivaldi", "debussy",
 		},
 		Schooler = {
-			"brahms", "schubert", "schumann", "liszt", "handel", "haydn", "ravel", "wagner", "verdi",
-			"puccini", "rossini", "strauss", "johann strauss", "richard strauss", "rachmaninoff",
-			"stravinsky", "prokofiev", "shostakovich", "dvorak", "grieg", "mendelssohn", "bizet",
-			"saint saens", "camille saint saens", "satie", "elgar", "gershwin", "bernstein", "williams",
-			"zimmer", "pachelbel", "paganini", "orff",
+			"brahms", "schubert", "liszt", "handel", "haydn", "wagner", "verdi", "gershwin", "williams",
+			"zimmer",
 		},
 		Rare = {
 			"schoenberg", "bellini", "donizetti", "salieri", "clementi", "hummel", "czerny", "rameau",
@@ -28,6 +25,10 @@ return {
 			"barber", "mahler", "copland", "britten", "holst", "malcolm arnold", "gian carlo menotti",
 			"balakirev", "glazunov", "kabalevsky", "lalo", "honegger", "milhaud", "boulez", "ligeti",
 			"penderecki", "gorecki", "part", "tavener", "rutter", "messiaen", "kodaly", "janacek", "einaudi",
+			"schumann", "ravel", "puccini", "rossini", "strauss", "johann strauss", "richard strauss",
+			"rachmaninoff", "stravinsky", "prokofiev", "shostakovich", "dvorak", "grieg", "mendelssohn",
+			"bizet", "saint saens", "camille saint saens", "satie", "elgar", "bernstein", "pachelbel",
+			"paganini", "orff",
 		},
 		DeepCut = {
 			"hildegard of bingen", "hildegard", "tallis", "byrd", "dowland", "arne", "parry", "delius",

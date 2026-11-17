@@ -10,12 +10,9 @@ return {
 			"orb weaver", "funnel web", "trapdoor spider", "redback", "goliath birdeater", "crab spider",
 		},
 		Schooler = {
-			"house spider", "cellar spider", "money spider", "water spider", "fishing spider", "nursery web spider",
-			"hobo spider", "banana spider", "golden orb weaver", "peacock spider", "camel spider", "zebra spider",
-			"sydney funnel web", "mexican redknee tarantula", "pink toe tarantula", "cobalt blue tarantula",
-			"tailless whip spider", "false widow", "giant house spider", "wandering spider", "lynx spider",
-			"brazilian wandering spider", "bird eating spider",
-			"joro spider",
+			"house spider", "banana spider", "golden orb weaver", "peacock spider", "camel spider",
+			"zebra spider", "sydney funnel web", "pink toe tarantula", "cobalt blue tarantula", "false widow",
+			"wandering spider", "brazilian wandering spider", "bird eating spider", "joro spider",
 		},
 		Rare = {
 			"black house spider", "white tailed spider", "yellow sac spider", "grass spider", "cobweb spider",
@@ -29,7 +26,9 @@ return {
 			"purseweb spider", "cave spider", "pirate spider", "assassin spider", "woodlouse spider",
 			"carolina wolf spider", "salmon pink birdeater", "texas brown tarantula", "desert blonde tarantula",
 			"pumpkin patch tarantula", "green orb spider", "hammock spider", "sheet web spider", "cat faced spider",
-			"black lace weaver", "ground spider", "dock spider",
+			"black lace weaver", "ground spider", "dock spider", "cellar spider", "money spider",
+			"water spider", "fishing spider", "nursery web spider", "hobo spider",
+			"mexican redknee tarantula", "tailless whip spider", "giant house spider", "lynx spider",
 		},
 		DeepCut = {
 			"arrowshaped micrathena", "dewdrop spider", "green lynx spider", "magnolia green jumper", "marbled orb weaver",

@@ -12,7 +12,7 @@ return {
 		Schooler = {
 			"antz", "shark tale", "croods", "prince of egypt", "chicken run", "kung fu panda 2",
 			"kung fu panda 3", "madagascar 2", "how to train your dragon 2", "how to train your dragon 3",
-			"trolls world tour", "puss in boots the last wish", "boss baby family business",
+			"trolls world tour", "puss in boots the last wish",
 		},
 		Rare = {
 			"dog man", "joseph king of dreams", "curse of the were rabbit", "bad guys 2",
@@ -23,7 +23,7 @@ return {
 			"ruby gillman teenage kraken", "croods a new age", "shrek forever after", "trolls band together",
 			"kung fu panda 4", "wild robot", "shrek the third", "madagascar 3", "rise of the guardians",
 			"monsters vs aliens", "over the hedge", "chicken run dawn of the nugget",
-			"captain underpants the first epic movie",
+			"captain underpants the first epic movie", "boss baby family business",
 		},
 	},
 	aliases = {

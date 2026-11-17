@@ -10,11 +10,8 @@ return {
 			"proxima centauri", "alpha centauri", "rigel", "vega", "antares",
 		},
 		Schooler = {
-			"triangulum galaxy", "whirlpool galaxy", "sombrero galaxy", "pinwheel galaxy", "cartwheel galaxy",
-			"large magellanic cloud", "small magellanic cloud", "magellanic clouds", "aldebaran", "arcturus",
-			"capella", "procyon", "canopus", "altair", "deneb", "spica", "regulus", "pollux", "castor",
-			"fomalhaut", "bellatrix", "algol", "mira", "tau ceti", "barnards star", "trappist 1",
-			"eta carinae", "vy canis majoris", "uy scuti", "m87", "pleiades",
+			"whirlpool galaxy", "sombrero galaxy", "large magellanic cloud", "trappist 1", "vy canis majoris",
+			"uy scuti", "m87", "pleiades",
 		},
 		Rare = {
 			"alphard", "hamal", "diphda", "alpheratz", "mirach", "almach", "schedar", "caph", "kochab",
@@ -37,7 +34,10 @@ return {
 			"black eye galaxy", "sunflower galaxy", "antennae galaxies", "bodes galaxy", "centaurus a",
 			"cor caroli", "garnet star", "zeta reticuli", "epsilon indi", "mintaka", "alnilam", "alnitak",
 			"dubhe", "mizar", "alcor", "alpha centauri a", "alpha centauri b", "sirius b", "epsilon eridani",
-			"61 cygni", "rs ophiuchi", "luyten star",
+			"61 cygni", "rs ophiuchi", "luyten star", "triangulum galaxy", "pinwheel galaxy",
+			"cartwheel galaxy", "small magellanic cloud", "magellanic clouds", "aldebaran", "arcturus",
+			"capella", "procyon", "canopus", "altair", "deneb", "spica", "regulus", "pollux", "castor",
+			"fomalhaut", "bellatrix", "algol", "mira", "tau ceti", "barnards star", "eta carinae",
 		},
 		DeepCut = {
 			"wr 104", "earendel", "pistol star", "methuselah star", "gliese 581", "gliese 667c", "gliese 876",

@@ -10,10 +10,8 @@ return {
 			"bb8", "megatron", "iron giant", "terminator", "bender",
 		},
 		Schooler = {
-			"data", "johnny 5", "rosie", "marvin", "hal 9000", "robby the robot", "astro boy", "doraemon", "eve",
-			"k2so", "ultron", "vision", "mega man", "tin man", "chappie", "sonny", "ed 209", "gir", "starscream",
-			"soundwave", "jazz", "ironhide", "grimlock", "mechagodzilla", "gundam", "voltron", "clank", "glados",
-			"bastion", "metal sonic", "battle droid", "claptrap", "ratchet", "t1000",
+			"data", "johnny 5", "rosie", "marvin", "hal 9000", "astro boy", "doraemon", "eve", "ultron",
+			"vision", "mega man", "tin man", "gir", "starscream", "soundwave", "voltron", "glados", "t1000",
 			"robocop",
 		},
 		Rare = {
@@ -24,7 +22,9 @@ return {
 			"bulkhead", "cliffjumper", "prowl", "jetfire", "devastator", "megazord", "alpha 5", "calculon",
 			"kryten", "cylon", "sentinel", "mettaton", "zenyatta", "gypsy danger", "ig 11", "droideka",
 			"auto", "android 18", "butter robot", "tik tok", "mecha sonic", "gerty", "freddy fazbear",
-			"bonnie", "chica", "foxy", "chopper", "egg pawn", "portal turret",
+			"bonnie", "chica", "foxy", "chopper", "egg pawn", "portal turret", "robby the robot", "k2so",
+			"chappie", "sonny", "ed 209", "jazz", "ironhide", "grimlock", "mechagodzilla", "gundam", "clank",
+			"bastion", "metal sonic", "battle droid", "claptrap", "ratchet",
 		},
 		DeepCut = {
 			"metalhead", "skywarp", "thundercracker", "omega supreme", "blurr", "ultra magnus", "perceptor",

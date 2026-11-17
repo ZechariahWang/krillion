@@ -10,9 +10,8 @@ return {
 			"norbert", "falkor", "ender dragon", "elliott", "shenron",
 		},
 		Schooler = {
-			"hookfang", "stormfly", "light fury", "rhaegal", "viserion", "saphira", "alduin", "paarthurnax", "deathwing",
-			"haku", "sisu", "draco", "bahamut", "fafnir", "nidhogg", "tiamat", "spike", "hungarian horntail",
-			"charizard", "shrek dragon",
+			"hookfang", "stormfly", "light fury", "saphira", "deathwing", "haku", "draco", "bahamut", "spike",
+			"hungarian horntail", "charizard", "shrek dragon",
 		},
 		Rare = {
 			"malygos", "balerion", "vhagar", "meraxes", "caraxes", "syrax", "barf and belch", "ancalagon",
@@ -22,7 +21,8 @@ return {
 			"ladon", "garchomp", "salamence", "reshiram", "zekrom", "kyurem", "dialga", "palkia", "giratina",
 			"latias", "latios", "dratini", "dragonair", "flygon", "hydreigon", "goodra", "dragapult",
 			"haxorus", "porunga", "princess ember", "rathian", "teostra", "kushala daora", "jabberwocky",
-			"winged dragon of ra", "odahviing", "tsunami", "glory", "starflight", "clay", "sunny",
+			"winged dragon of ra", "odahviing", "tsunami", "glory", "starflight", "clay", "sunny", "rhaegal",
+			"viserion", "alduin", "paarthurnax", "sisu", "fafnir", "nidhogg", "tiamat",
 		},
 		DeepCut = {
 			"seath", "midir", "kalameet", "fin fang foom", "tintaglia", "vermithrax", "chrysophylax",

@@ -10,12 +10,8 @@ return {
 			"llama", "alpaca", "ox", "donkey", "rooster", "turkey",
 		},
 		Schooler = {
-			"goose", "hen", "bull", "calf", "lamb", "piglet", "foal", "pony", "mule", "rabbit", "cat", "dog",
-			"sheepdog", "cattle", "hog", "sow", "boar", "ram", "ewe", "kid", "billy goat", "nanny goat",
-			"chick", "cockerel", "gosling", "duckling", "stallion", "mare", "colt", "filly", "heifer",
-			"steer", "buffalo", "yak", "guinea fowl", "peacock", "bee", "guinea pig", "ostrich", "emu",
-			"farm dog", "border collie", "pigeon", "camel", "reindeer", "dairy cow", "clydesdale",
-			"workhorse", "livestock", "poultry", "angus", "highland cow", "holstein", "hereford",
+			"goose", "hen", "bull", "calf", "lamb", "piglet", "pony", "mule", "rabbit", "cat", "dog", "hog",
+			"boar", "ram", "chick", "duckling", "stallion", "mare", "buffalo", "peacock",
 		},
 		Rare = {
 			"jersey cow", "texas longhorn", "wagyu", "zebu", "red angus", "black angus", "yorkshire pig",
@@ -38,7 +34,11 @@ return {
 			"riding horse", "saddle horse", "carriage horse", "pot bellied pig", "herding dog", "farm horse",
 			"racehorse", "water buffalo", "drake", "bantam", "shepherd", "quail", "barn cat", "bison",
 			"capon", "wether", "hogget", "gilt", "barrow", "weaner", "tom turkey", "cob", "pen", "jenny",
-			"jack",
+			"jack", "foal", "sheepdog", "cattle", "sow", "ewe", "kid", "billy goat", "nanny goat", "cockerel",
+			"gosling", "colt", "filly", "heifer", "steer", "yak", "guinea fowl", "bee", "guinea pig",
+			"ostrich", "emu", "farm dog", "border collie", "pigeon", "camel", "reindeer", "dairy cow",
+			"clydesdale", "workhorse", "livestock", "poultry", "angus", "highland cow", "holstein",
+			"hereford",
 		},
 		DeepCut = {
 			"dutch belted", "wensleydale", "large black", "iberian pig", "bresse chicken", "naked neck",

@@ -10,12 +10,10 @@ return {
 			"felix the cat", "sylvester", "nyan cat", "grumpy cat", "salem", "pink panther", "tigger",
 		},
 		Schooler = {
-			"nala", "mufasa", "scar", "aslan", "tony the tiger", "shere khan", "bagheera", "rajah", "hobbes",
-			"duchess", "thomas omalley", "marie", "toulouse", "berlioz", "lucifer", "figaro", "heathcliff",
-			"azrael", "scratchy", "top cat", "cat in the hat", "catbus", "luna", "artemis", "meowth",
-			"mittens", "kitty softpaws", "oliver", "dinah", "snagglepuss", "binx", "crookshanks", "snowball",
-			"stimpy", "kovu", "jiji", "bob", "keyboard cat", "lil bub", "pusheen", "doraemon", "pete the cat",
-			"gumball", "catwoman", "tigress", "daniel tiger",
+			"nala", "mufasa", "scar", "aslan", "tony the tiger", "shere khan", "bagheera", "hobbes",
+			"duchess", "thomas omalley", "marie", "toulouse", "berlioz", "lucifer", "figaro",
+			"cat in the hat", "luna", "meowth", "mittens", "kitty softpaws", "crookshanks", "keyboard cat",
+			"pusheen", "doraemon", "catwoman", "tigress",
 		},
 		Rare = {
 			"maru", "orangey", "unsinkable sam", "felicette", "bagpuss", "mog", "slinky malinki", "rum tum tugger",
@@ -29,7 +27,10 @@ return {
 			"goose", "raymond", "chococat", "cat mario", "maxwell the cat", "bongo cat", "huh cat",
 			"chipi chipi cat", "oiia cat", "olivia benson", "meredith grey", "colonel meow", "nala cat",
 			"simons cat", "sprigatito", "litten", "incineroar", "skitty", "persian", "luxray", "glameow",
-			"purrloin", "meowscarada", "si and am", "bonkers", "smudge", "popcat", "tai lung",
+			"purrloin", "meowscarada", "si and am", "bonkers", "smudge", "popcat", "tai lung", "rajah",
+			"azrael", "heathcliff", "scratchy", "catbus", "artemis", "oliver", "dinah", "snagglepuss", "binx",
+			"snowball", "stimpy", "kovu", "jiji", "bob", "lil bub", "pete the cat", "gumball", "daniel tiger",
+			"top cat",
 		},
 		DeepCut = {
 			"palmerston", "gladstone", "peta", "trim", "towser", "mehitabel", "bubastis", "pangur ban",

@@ -10,14 +10,14 @@ return {
 			"greece", "sweden", "norway", "switzerland", "netherlands", "russia", "portugal", "poland",
 		},
 		Schooler = {
-			"belgium", "austria", "denmark", "finland", "scotland", "wales", "ukraine", "hungary",
-			"czech republic", "czechia", "romania", "turkey", "iceland", "croatia", "serbia", "bulgaria",
-			"slovakia", "slovenia", "lithuania", "latvia", "estonia",
+			"belgium", "austria", "denmark", "finland", "scotland", "wales", "ukraine", "turkey", "iceland",
 		},
 		Rare = {
 			"luxembourg", "monaco", "liechtenstein", "malta", "andorra", "san marino", "vatican city",
 			"belarus", "moldova", "albania", "north macedonia", "bosnia and herzegovina", "bosnia",
-			"montenegro", "kosovo", "northern ireland", "cyprus", "georgia",
+			"montenegro", "kosovo", "northern ireland", "cyprus", "georgia", "hungary", "czech republic",
+			"czechia", "romania", "croatia", "serbia", "bulgaria", "slovakia", "slovenia", "lithuania",
+			"latvia", "estonia",
 		},
 		DeepCut = {
 			"gibraltar", "isle of man", "jersey", "guernsey", "faroe islands", "armenia", "azerbaijan",

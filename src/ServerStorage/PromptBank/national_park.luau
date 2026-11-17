@@ -11,13 +11,14 @@ return {
 		},
 		Schooler = {
 			"joshua tree", "bryce canyon", "rocky mountain", "olympic", "mount rainier", "sequoia", "redwood",
-			"everglades", "denali", "badlands", "shenandoah", "crater lake", "carlsbad caverns", "hawaii volcanoes",
-			"big bend", "mesa verde", "mammoth cave", "kings canyon", "petrified forest", "white sands",
+			"everglades", "denali", "badlands", "shenandoah", "crater lake", "carlsbad caverns",
+			"hawaii volcanoes",
 		},
 		Rare = {
 			"capitol reef", "great basin", "great sand dunes", "theodore roosevelt", "isle royale", "dry tortugas",
 			"hot springs", "north cascades", "lassen volcanic", "katmai", "kenai fjords", "gateway arch", "saguaro",
 			"channel islands", "glacier bay", "canyonlands", "haleakala", "gateway arch national park",
+			"big bend", "mesa verde", "mammoth cave", "kings canyon", "petrified forest", "white sands",
 		},
 		DeepCut = {
 			"american samoa", "congaree", "pinnacles", "guadalupe mountains", "new river gorge",

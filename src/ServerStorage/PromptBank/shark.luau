@@ -11,8 +11,8 @@ return {
 		},
 		Schooler = {
 			"blacktip shark", "lemon shark", "thresher shark", "basking shark", "reef shark", "blue shark",
-			"cookiecutter shark", "angel shark", "leopard shark", "zebra shark", "sand tiger shark",
-			"greenland shark", "frilled shark", "wobbegong", "dogfish", "bamboo shark",
+			"cookiecutter shark", "leopard shark", "zebra shark", "sand tiger shark", "greenland shark",
+			"frilled shark",
 		},
 		Rare = {
 			"megamouth shark", "bonnethead shark", "oceanic whitetip", "tope shark", "porbeagle",
@@ -27,6 +27,7 @@ return {
 			"zebra bullhead shark", "japanese wobbegong", "whitefin hammerhead", "smalleye hammerhead",
 			"starry smoothhound", "great lanternshark", "lollipop catshark", "reticulated swellshark",
 			"marbled catshark", "leopard catshark", "sharpnose sevengill shark", "crested bullhead shark",
+			"angel shark", "wobbegong", "dogfish", "bamboo shark",
 		},
 		DeepCut = {
 			"bramble shark", "prickly shark", "kitefin shark", "sleeper shark", "pacific sleeper shark",

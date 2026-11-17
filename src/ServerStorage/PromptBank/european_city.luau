@@ -11,10 +11,10 @@ return {
 		},
 		Schooler = {
 			"marseille", "lyon", "nice", "hamburg", "frankfurt", "cologne", "birmingham", "glasgow", "turin",
-			"valencia", "porto", "geneva", "zurich", "cannes", "bordeaux", "toulouse", "leeds", "sheffield",
-			"bristol", "newcastle", "oxford", "cambridge", "brighton", "york", "bath", "rotterdam",
-			"gothenburg", "bologna", "verona", "pisa", "genoa", "salzburg", "krakow", "stuttgart",
-			"dusseldorf", "malaga", "granada", "bilbao", "palermo", "bruges", "dubrovnik",
+			"valencia", "porto", "geneva", "zurich", "cannes", "leeds", "sheffield", "bristol", "newcastle",
+			"oxford", "cambridge", "brighton", "york", "bath", "rotterdam", "bologna", "verona", "pisa",
+			"salzburg", "krakow", "stuttgart", "malaga", "granada", "bilbao", "palermo", "bruges",
+			"dubrovnik",
 		},
 		Rare = {
 			"antwerp", "ghent", "utrecht", "eindhoven", "the hague", "gdansk", "wroclaw", "poznan", "malmo", "aarhus",
@@ -34,7 +34,7 @@ return {
 			"valladolid", "cartagena", "rimini", "amalfi", "sorrento", "syracuse", "messina", "trento", "bolzano",
 			"liege", "leuven", "namur", "ostend", "pilsen", "olomouc", "karlovy vary", "funchal", "aveiro", "sintra",
 			"heraklion", "patras", "corfu", "rhodes", "aalborg", "lillehammer", "rovaniemi", "zakopane", "versailles",
-			"coventry", "st tropez",
+			"coventry", "st tropez", "bordeaux", "toulouse", "gothenburg", "genoa", "dusseldorf",
 		},
 		DeepCut = {
 			"lodz", "katowice", "lublin", "szczecin", "bydgoszcz", "tartu", "daugavpils", "kaunas", "klaipeda",

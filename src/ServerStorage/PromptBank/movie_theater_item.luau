@@ -11,12 +11,12 @@ return {
 		},
 		Schooler = {
 			"concession stand", "hot dog", "pretzel", "slushie", "icee", "m and ms", "skittles", "twizzlers",
-			"sour patch kids", "reeses pieces", "milk duds", "junior mints", "raisinets", "nerds", "gummy bears",
+			"sour patch kids", "reeses pieces", "milk duds", "junior mints", "nerds", "gummy bears",
 			"popcorn bucket", "cup holder", "aisle", "exit sign", "curtain", "speakers", "ticket booth",
 			"posters", "credits", "recliner", "cup", "straw", "napkins", "butter", "salt", "cashier",
-			"popcorn machine", "soda fountain", "arcade", "lobby", "bathroom", "water", "cotton candy", "pizza",
-			"ice cream", "chocolate", "snacks", "drinks", "lights", "armrest", "carpet", "refills",
-			"trash can", "stairs", "snickers", "kit kat", "reeses", "gummy worms", "jelly beans", "combo",
+			"popcorn machine", "soda fountain", "lobby", "bathroom", "water", "cotton candy", "pizza",
+			"ice cream", "chocolate", "snacks", "drinks", "lights", "snickers", "kit kat", "gummy worms",
+			"jelly beans", "combo",
 		},
 		Rare = {
 			"whoppers", "goobers", "sno caps", "dots", "swedish fish", "red vines", "mike and ike", "hot tamales", "jujubes",
@@ -26,6 +26,7 @@ return {
 			"hot chocolate", "coffee", "mints", "gum", "licorice", "caramel corn", "kettle corn", "chicken tenders", "hamburger",
 			"fries", "mozzarella sticks", "souvenir cup", "emergency exit", "step lights", "floor lights", "corn dog", "cookies",
 			"claw machine", "vending machine", "water fountain", "bar", "dbox", "screenx", "velvet rope", "will call", "ads",
+			"raisinets", "arcade", "armrest", "carpet", "refills", "trash can", "stairs", "reeses",
 		},
 		DeepCut = {
 			"film reel", "projectionist", "ticket taker", "ticket scanner", "sneeze guard", "popcorn warmer", "butter dispenser",

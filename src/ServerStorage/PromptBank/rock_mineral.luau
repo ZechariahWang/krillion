@@ -11,13 +11,11 @@ return {
 			"diamond", "ruby", "emerald", "gold",
 		},
 		Schooler = {
-			"lava rock", "shale", "gneiss", "schist", "flint", "chalk", "gypsum", "talc", "mica", "feldspar",
-			"calcite", "pyrite", "graphite", "halite", "sulfur", "magnetite", "hematite", "bauxite",
-			"sedimentary rock", "igneous rock", "metamorphic rock", "jasper", "soapstone", "fluorite", "malachite",
-			"azurite", "galena", "river rock", "bedrock",
-			"iron ore",
-			"amethyst", "sapphire", "opal", "jade", "garnet", "topaz", "turquoise", "agate",
-			"onyx", "silver", "copper", "lapis lazuli", "rose quartz",
+			"lava rock", "shale", "gneiss", "schist", "flint", "chalk", "gypsum", "talc", "mica", "calcite",
+			"pyrite", "graphite", "halite", "sulfur", "magnetite", "hematite", "sedimentary rock",
+			"igneous rock", "metamorphic rock", "jasper", "fluorite", "malachite", "river rock", "iron ore",
+			"amethyst", "sapphire", "opal", "jade", "garnet", "topaz", "turquoise", "agate", "onyx", "silver",
+			"copper", "lapis lazuli", "rose quartz",
 		},
 		Rare = {
 			"gabbro", "peridotite", "dunite", "pegmatite", "syenite", "trachyte", "dacite", "scoria", "tufa",
@@ -35,6 +33,7 @@ return {
 			"rhyolite",
 			"citrine", "tourmaline", "moonstone", "peridot", "aquamarine", "beryl", "carnelian", "tanzanite",
 			"alexandrite", "sunstone", "smoky quartz", "amazonite", "kunzite", "morganite", "porphyry", "bloodstone",
+			"feldspar", "bauxite", "soapstone", "azurite", "galena", "bedrock",
 		},
 		DeepCut = {
 			"komatiite", "kimberlite", "carbonatite", "lamprophyre", "anorthosite", "norite", "troctolite",

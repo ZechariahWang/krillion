@@ -10,16 +10,15 @@ return {
 			"mighty mouse", "fievel", "pinky", "brain", "danger mouse",
 		},
 		Schooler = {
-			"gus gus", "jaq", "basil", "bernard", "bianca", "angelina ballerina", "maisy", "tuffy", "nibbles",
-			"chuck e cheese", "monterey jack", "gadget hackwrench", "reepicheep", "despereaux", "itchy",
-			"pikachu", "sniffles",
+			"gus gus", "jaq", "basil", "bernard", "bianca", "angelina ballerina", "maisy", "chuck e cheese",
+			"monterey jack", "gadget hackwrench", "itchy", "pikachu",
 		},
 		Rare = {
 			"pixie", "dixie", "mrs brisby", "mrs tittlemouse", "hunca munca", "johnny town mouse",
 			"timmy willie", "suzy", "olivia flaversham", "algernon", "dormouse", "ralph s mouse",
 			"topo gigio", "timothy q mouse", "mortimer mouse", "roquefort", "geronimo stilton", "hubie",
 			"bertie", "tanya mousekewitz", "celestine", "raichu", "morty fieldmouse", "ferdie fieldmouse",
-			"hiram flaversham",
+			"hiram flaversham", "tuffy", "nibbles", "reepicheep", "despereaux", "sniffles",
 		},
 		DeepCut = {
 			"mr jingles", "mouse king", "mert", "perla", "dawson", "matthias", "martin the warrior",

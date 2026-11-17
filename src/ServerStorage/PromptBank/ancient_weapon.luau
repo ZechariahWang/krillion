@@ -11,11 +11,9 @@ return {
 		},
 		Schooler = {
 			"lance", "javelin", "longsword", "broadsword", "rapier", "scimitar", "katana", "cutlass", "saber",
-			"halberd", "pike", "flail", "morning star", "war hammer", "battle axe", "throwing axe", "sling",
-			"ballista", "battering ram", "trident", "claymore", "short sword", "great sword", "knife",
-			"tomahawk", "boomerang", "nunchucks", "shuriken", "staff", "quarterstaff", "bo staff", "whip",
-			"stone axe", "flint knife", "spiked club", "bolas", "arrow", "pickaxe",
-			"cannon", "hatchet",
+			"halberd", "flail", "morning star", "war hammer", "battle axe", "sling", "ballista",
+			"battering ram", "trident", "knife", "tomahawk", "boomerang", "nunchucks", "shuriken", "staff",
+			"whip", "arrow", "cannon",
 		},
 		Rare = {
 			"glaive", "poleaxe", "falchion", "zweihander", "bastard sword", "gladius", "spatha", "khopesh",
@@ -27,7 +25,9 @@ return {
 			"lochaber axe", "shillelagh", "cudgel", "caltrops", "tonfa", "yumi", "kunai", "talwar", "jian", "dao",
 			"bokken", "guandao", "urumi", "katar", "khanda",
 			"greek fire", "siege tower", "labrys", "polearm", "war pick",
-			"throwing knife",
+			"throwing knife", "pike", "throwing axe", "claymore", "short sword", "great sword",
+			"quarterstaff", "bo staff", "stone axe", "flint knife", "spiked club", "bolas", "pickaxe",
+			"hatchet",
 		},
 		DeepCut = {
 			"misericorde", "rondel dagger", "baselard", "cinquedea", "springald", "hwacha", "qiang", "jo",

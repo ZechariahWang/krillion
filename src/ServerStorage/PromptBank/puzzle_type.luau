@@ -10,10 +10,8 @@ return {
 			"riddle", "brain teaser", "logic puzzle", "tangram",
 		},
 		Schooler = {
-			"rebus", "cryptogram", "anagram", "tower of hanoi", "sliding puzzle", "connect the dots",
-			"spot the difference", "hidden picture", "word scramble", "math puzzle", "puzzle box", "minesweeper",
-			"cryptic crossword", "kakuro", "nonogram", "kenken", "mastermind", "cipher", "peg solitaire",
-			"wordle",
+			"anagram", "tower of hanoi", "sliding puzzle", "connect the dots", "spot the difference",
+			"hidden picture", "word scramble", "math puzzle", "puzzle box", "minesweeper", "wordle",
 			"word puzzle",
 		},
 		Rare = {
@@ -26,7 +24,8 @@ return {
 			"professors cube", "rubiks clock", "perplexus", "matchstick puzzle", "odd one out",
 			"jigsaw sudoku", "mini crossword", "number puzzle", "picture puzzle", "wooden puzzle",
 			"floor puzzle", "pipe puzzle", "trick question", "codeword", "connections", "twisty puzzle",
-			"string puzzle", "logic problem", "code breaking", "brain twister",
+			"string puzzle", "logic problem", "code breaking", "brain twister", "rebus", "cryptogram",
+			"cryptic crossword", "kakuro", "nonogram", "kenken", "mastermind", "cipher", "peg solitaire",
 		},
 		DeepCut = {
 			"nurikabe", "masyu", "hitori", "kuromasu", "akari", "yajilin", "star battle", "norinori",

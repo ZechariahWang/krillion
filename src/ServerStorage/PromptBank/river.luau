@@ -12,8 +12,7 @@ return {
 		Schooler = {
 			"thames", "yangtze", "danube", "ganges", "rhine", "seine", "missouri", "ohio", "hudson",
 			"colorado", "rio grande", "jordan", "yellow river", "mekong", "volga", "congo", "tigris",
-			"euphrates", "zambezi", "tiber", "columbia", "potomac", "st lawrence", "niger", "indus", "murray",
-			"yukon", "severn", "loire", "rhone", "mersey", "tennessee", "arkansas", "snake",
+			"euphrates", "zambezi", "columbia", "potomac", "st lawrence", "niger",
 		},
 		Rare = {
 			"brahmaputra", "clyde", "shannon", "po", "elbe", "oder", "vistula", "dnieper", "don", "ural",
@@ -28,6 +27,8 @@ return {
 			"chicago river", "orinoco", "red deer river", "bow river", "thompson river", "saint john river",
 			"lagan", "exe", "dart", "tamar", "stour", "wey", "kennet", "derwent", "great ouse", "wye",
 			"james", "illinois", "savannah", "yamuna", "narmada", "godavari", "flint river", "kentucky river",
+			"tiber", "indus", "murray", "yukon", "severn", "loire", "rhone", "mersey", "tennessee",
+			"arkansas", "snake",
 		},
 		DeepCut = {
 			"angara", "kama", "oka", "sava", "weser", "dordogne", "guadalquivir", "boyne", "cam", "helmand",

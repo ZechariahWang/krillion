@@ -11,12 +11,8 @@ return {
 			"thomas edison", "leonardo da vinci", "bill nye", "neil degrasse tyson", "alexander graham bell",
 		},
 		Schooler = {
-			"alexander fleming", "louis pasteur", "gregor mendel", "nicolaus copernicus", "johannes kepler",
-			"archimedes", "pythagoras", "alan turing", "carl sagan", "jane goodall", "michael faraday", "james watt",
-			"dmitri mendeleev", "max planck", "niels bohr", "richard feynman", "james clerk maxwell", "edwin hubble",
-			"rosalind franklin", "jonas salk", "aristotle", "benjamin franklin", "sigmund freud", "ivan pavlov",
-			"edward jenner", "george washington carver", "katherine johnson", "grace hopper", "mae jemison",
-			"rachel carson", "robert oppenheimer", "john dalton", "ernest rutherford", "ada lovelace",
+			"alexander fleming", "louis pasteur", "archimedes", "pythagoras", "alan turing", "carl sagan",
+			"jane goodall", "aristotle", "benjamin franklin", "robert oppenheimer",
 		},
 		Rare = {
 			"werner heisenberg", "erwin schrodinger", "enrico fermi", "robert boyle", "antoine lavoisier",
@@ -31,7 +27,11 @@ return {
 			"claude shannon", "john von neumann", "emmy noether", "srinivasa ramanujan", "wolfgang pauli",
 			"j j thomson", "james chadwick", "otto hahn", "robert goddard", "wernher von braun", "clyde tombaugh",
 			"amedeo avogadro", "sally ride",
-			"euclid",
+			"euclid", "gregor mendel", "nicolaus copernicus", "johannes kepler", "michael faraday",
+			"james watt", "dmitri mendeleev", "max planck", "niels bohr", "richard feynman",
+			"james clerk maxwell", "edwin hubble", "rosalind franklin", "jonas salk", "sigmund freud",
+			"ivan pavlov", "edward jenner", "george washington carver", "katherine johnson", "grace hopper",
+			"mae jemison", "rachel carson", "john dalton", "ernest rutherford", "ada lovelace",
 		},
 		DeepCut = {
 			"ibn al haytham", "ptolemy", "hipparchus", "eratosthenes", "anaximander", "democritus", "galen",

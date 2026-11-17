@@ -10,9 +10,8 @@ return {
 			"narwhal", "porpoise", "pilot whale",
 		},
 		Schooler = {
-			"gray whale", "fin whale", "minke whale", "right whale", "bowhead whale", "common dolphin",
-			"spinner dolphin", "river dolphin", "amazon river dolphin", "harbor porpoise", "sei whale", "baleen whale",
-			"false killer whale", "beaked whale", "dolphin", "whale",
+			"gray whale", "fin whale", "minke whale", "right whale", "common dolphin", "spinner dolphin",
+			"river dolphin", "amazon river dolphin", "harbor porpoise", "baleen whale", "dolphin", "whale",
 		},
 		Rare = {
 			"southern right whale", "north atlantic right whale", "bryde whale", "pygmy sperm whale",
@@ -28,7 +27,8 @@ return {
 			"northern minke whale", "yangtze river dolphin", "chinese river dolphin", "black dolphin",
 			"hector dolphin", "maui dolphin", "dwarf spinner dolphin", "long beaked common dolphin",
 			"short beaked common dolphin", "long finned pilot whale", "short finned pilot whale",
-			"melon head whale", "chinese white dolphin",
+			"melon head whale", "chinese white dolphin", "bowhead whale", "sei whale", "false killer whale",
+			"beaked whale",
 		},
 		DeepCut = {
 			"spectacled porpoise", "clymene dolphin", "northern right whale dolphin",

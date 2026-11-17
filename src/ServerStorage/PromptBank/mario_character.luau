@@ -10,11 +10,10 @@ return {
 			"wario", "donkey kong", "bowser jr", "daisy",
 		},
 		Schooler = {
-			"waluigi", "toadette", "rosalina", "koopa troopa", "goomba", "boo", "shy guy", "bob omb", "piranha plant",
-			"bullet bill", "lakitu", "diddy kong", "birdo", "kamek", "dry bones", "chain chomp", "king boo", "pauline", "cappy",
-			"captain toad", "toadsworth", "wiggler", "blooper", "cheep cheep", "thwomp", "hammer bro", "spiny", "koopa",
-			"magikoopa", "cranky kong", "dixie kong", "baby mario", "baby luigi", "baby peach", "baby daisy", "metal mario",
-			"dry bowser", "luma", "king k rool", "donkey kong jr", "ninji",
+			"waluigi", "toadette", "rosalina", "koopa troopa", "goomba", "boo", "shy guy", "bob omb",
+			"piranha plant", "bullet bill", "lakitu", "diddy kong", "birdo", "kamek", "dry bones",
+			"chain chomp", "king boo", "pauline", "cappy", "captain toad", "wiggler", "blooper", "thwomp",
+			"hammer bro", "spiny", "koopa", "magikoopa", "metal mario", "dry bowser", "king k rool",
 		},
 		Rare = {
 			"tatanga", "kamella", "tiny kong", "lanky kong", "chunky kong", "candy kong", "wrinkly kong", "squawks", "rambi",
@@ -25,7 +24,9 @@ return {
 			"nabbit", "mallow", "geno", "boomerang bro", "fire bro", "ice bro", "sledge bro", "buzzy beetle", "podoboo",
 			"banzai bill", "fuzzy", "swoop", "pom pom", "larry koopa", "morton koopa", "wendy o koopa", "iggy koopa",
 			"roy koopa", "lemmy koopa", "ludwig von koopa", "wart", "snifit", "bob omb buddy", "koopa paratroopa", "paragoomba",
-			"fludd", "shadow mario", "kremling", "peachette", "koopalings",
+			"fludd", "shadow mario", "kremling", "peachette", "koopalings", "toadsworth", "cheep cheep",
+			"cranky kong", "dixie kong", "baby luigi", "baby peach", "baby daisy", "luma", "donkey kong jr",
+			"ninji", "baby mario",
 		},
 		DeepCut = {
 			"bowyer", "terrapin", "smithy", "mack", "blargg", "porcupo", "eerie", "rip van fish", "torpedo ted", "bandit",

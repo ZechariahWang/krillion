@@ -10,13 +10,13 @@ return {
 			"mongolia", "nepal", "singapore", "philippines", "turkey",
 		},
 		Schooler = {
-			"vietnam", "indonesia", "malaysia", "pakistan", "bangladesh", "north korea", "saudi arabia",
-			"iran", "iraq", "israel", "sri lanka", "afghanistan", "taiwan", "cambodia",
-			"united arab emirates", "syria",
+			"vietnam", "indonesia", "pakistan", "north korea", "saudi arabia", "iran", "iraq", "israel",
+			"taiwan", "united arab emirates",
 		},
 		Rare = {
 			"brunei", "bahrain", "armenia", "azerbaijan", "georgia", "cyprus", "palestine", "hong kong",
-			"bhutan", "myanmar", "qatar", "kuwait", "jordan", "lebanon", "yemen", "kazakhstan",
+			"bhutan", "myanmar", "qatar", "kuwait", "jordan", "lebanon", "yemen", "kazakhstan", "malaysia",
+			"bangladesh", "sri lanka", "afghanistan", "cambodia", "syria",
 		},
 		DeepCut = {
 			"laos", "oman", "maldives", "uzbekistan", "turkmenistan", "tajikistan", "kyrgyzstan",

@@ -10,10 +10,10 @@ return {
 			"ender dragon", "wither", "villager", "iron golem",
 		},
 		Schooler = {
-			"cow", "sheep", "chicken", "horse", "wolf", "cat", "ocelot", "bat", "squid", "slime", "ghast",
-			"blaze", "zombie pigman", "piglin", "witch", "silverfish", "warden", "axolotl", "bee", "fox",
-			"panda", "polar bear", "llama", "parrot", "turtle", "dolphin", "rabbit", "mooshroom",
-			"snow golem", "donkey", "goat", "frog", "camel", "wither skeleton", "herobrine",
+			"cow", "sheep", "chicken", "horse", "wolf", "cat", "bat", "squid", "slime", "ghast", "blaze",
+			"zombie pigman", "piglin", "witch", "silverfish", "warden", "axolotl", "bee", "fox", "panda",
+			"polar bear", "llama", "parrot", "turtle", "dolphin", "rabbit", "mooshroom", "snow golem",
+			"donkey", "herobrine",
 		},
 		Rare = {
 			"endermite", "zoglin", "piglin brute", "elder guardian", "breeze", "bogged", "copper golem",
@@ -21,7 +21,8 @@ return {
 			"spider jockey", "giant", "glow squid", "skeleton horse", "ravager", "vex", "cave spider",
 			"wandering trader", "stray", "chicken jockey", "zombie villager", "cod", "tropical fish", "mule",
 			"hoglin", "shulker", "evoker", "vindicator", "magma cube", "strider", "guardian", "sniffer",
-			"husk", "phantom", "drowned", "pillager", "allay", "salmon", "pufferfish",
+			"husk", "phantom", "drowned", "pillager", "allay", "salmon", "pufferfish", "ocelot", "goat",
+			"frog", "camel", "wither skeleton",
 		},
 		DeepCut = {
 			"glare", "wildfire", "tuff golem", "strider jockey", "ravager jockey", "zombie horse", "tadpole",

@@ -10,11 +10,9 @@ return {
 			"venus flytrap", "bamboo", "orchid", "bonsai", "spider plant", "pothos",
 		},
 		Schooler = {
-			"peace lily", "rubber plant", "jade plant", "ivy", "fiddle leaf fig", "money tree", "african violet",
-			"philodendron", "zz plant", "boston fern", "christmas cactus", "poinsettia", "begonia", "geranium", "palm",
-			"yucca", "prickly pear", "barrel cactus", "bunny ear cactus", "string of pearls", "echeveria", "dracaena",
-			"bromeliad", "hibiscus", "lavender", "air plant", "pitcher plant", "areca palm", "kalanchoe",
-			"hens and chicks", "golden barrel cactus", "saguaro", "lucky bamboo", "ficus",
+			"peace lily", "rubber plant", "jade plant", "ivy", "fiddle leaf fig", "money tree",
+			"african violet", "philodendron", "zz plant", "boston fern", "christmas cactus", "poinsettia",
+			"palm", "bunny ear cactus", "string of pearls", "air plant", "lucky bamboo", "ficus",
 		},
 		Rare = {
 			"calathea", "prayer plant", "chinese evergreen", "dieffenbachia", "croton", "anthurium", "peperomia",
@@ -29,7 +27,9 @@ return {
 			"aeonium",
 			"sedum",
 			"string of dolphins",
-			"peacock plant",
+			"peacock plant", "begonia", "geranium", "yucca", "prickly pear", "barrel cactus", "echeveria",
+			"dracaena", "bromeliad", "hibiscus", "lavender", "pitcher plant", "areca palm", "kalanchoe",
+			"hens and chicks", "golden barrel cactus", "saguaro",
 		},
 		DeepCut = {
 			"radiator plant", "friendship plant", "watermelon peperomia", "rattlesnake plant", "stromanthe",

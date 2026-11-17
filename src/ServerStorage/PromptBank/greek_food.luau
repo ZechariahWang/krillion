@@ -10,8 +10,8 @@ return {
 			"tzatziki", "spanakopita", "dolmades", "greek yogurt",
 		},
 		Schooler = {
-			"pita", "kalamata olives", "olives", "pastitsio", "saganaki", "loukoumades", "halva", "avgolemono", "taramasalata",
-			"keftedes", "tiropita", "greek fries", "greek lemon potatoes", "orzo",
+			"pita", "kalamata olives", "olives", "saganaki", "loukoumades", "halva", "avgolemono",
+			"taramasalata", "keftedes", "tiropita", "greek fries", "greek lemon potatoes", "orzo",
 		},
 		Rare = {
 			"kleftiko", "stifado", "briam", "horta", "fava", "skordalia", "tirokafteri", "kolokithokeftedes", "bougatsa",
@@ -21,7 +21,7 @@ return {
 			"manouri", "ladotyri", "kopanisti", "xinomizithra", "karydopita", "portokalopita", "diples", "melomakarona",
 			"spoon sweets", "pasteli", "tsoureki", "vasilopita", "kataifi", "galaktoboureko", "koulourakia", "kourabiedes",
 			"revani", "paximadia", "melitzanosalata", "fasolada", "bifteki", "halloumi", "rizogalo", "spanakorizo", "koulouri",
-			"gigantes",
+			"gigantes", "pastitsio",
 		},
 		DeepCut = {
 			"marides", "gopes", "lavraki", "tsipoura", "barbounia", "frikase", "patsas", "garides saganaki", "strapatsada",

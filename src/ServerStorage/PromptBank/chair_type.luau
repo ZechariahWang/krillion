@@ -11,10 +11,8 @@ return {
 		},
 		Schooler = {
 			"dining chair", "lawn chair", "deck chair", "swivel chair", "beach chair", "camping chair",
-			"barber chair", "dentist chair", "lounge chair", "wingback chair", "adirondack chair",
-			"directors chair", "kitchen chair", "school chair", "papasan chair", "egg chair", "booster seat",
-			"chaise lounge", "stackable chair", "hanging chair", "massage chair", "club chair",
-			"accent chair", "bar chair",
+			"barber chair", "dentist chair", "lounge chair", "kitchen chair", "school chair", "egg chair",
+			"booster seat", "hanging chair", "massage chair", "bar chair",
 		},
 		Rare = {
 			"windsor chair", "glider", "tub chair", "slipper chair", "kneeling chair", "ergonomic chair",
@@ -26,7 +24,8 @@ return {
 			"butterfly chair", "peacock chair", "womb chair", "poang chair", "tolix chair", "cesca chair",
 			"ghost chair", "ear chair", "zero gravity chair", "bistro chair", "folding lawn chair",
 			"highback chair", "side chair", "porch swing", "vanity chair", "saucer chair", "rope chair",
-			"plastic chair",
+			"plastic chair", "wingback chair", "adirondack chair", "directors chair", "papasan chair",
+			"stackable chair", "club chair", "accent chair", "chaise lounge",
 		},
 		DeepCut = {
 			"slat back chair", "spindle back chair", "balloon back chair", "shield back chair",

@@ -11,14 +11,14 @@ return {
 		},
 		Schooler = {
 			"aphrodite", "ares", "hermes", "hera", "artemis", "demeter", "dionysus", "hephaestus",
-			"persephone", "hestia", "eros", "nike", "pan", "hecate", "cronus", "gaia", "helios", "prometheus",
-			"atlas", "nyx", "uranus",
+			"persephone", "eros", "pan",
 		},
 		Rare = {
 			"iris", "nemesis", "hypnos", "thanatos", "morpheus", "eos", "selene", "rhea", "eris", "asclepius",
 			"triton", "hebe", "tyche", "oceanus", "themis", "hyperion", "chaos", "hygieia", "amphitrite",
 			"leto", "epimetheus", "calliope", "thalia", "ganymede", "styx", "lethe", "psyche", "charon",
 			"adonis", "graces", "muses", "furies", "circe", "calypso", "kratos", "tartarus", "chronos",
+			"hestia", "nike", "hecate", "gaia", "helios", "prometheus", "atlas", "nyx", "uranus", "cronus",
 		},
 		DeepCut = {
 			"theia", "coeus", "phoebe", "crius", "iapetus", "mnemosyne", "metis", "dione", "erebus", "aether",

@@ -11,11 +11,9 @@ return {
 		},
 		Schooler = {
 			"bagel", "pita", "naan", "ciabatta", "rye", "brioche", "tortilla", "focaccia", "croissant",
-			"challah", "cornbread", "flatbread", "whole wheat", "multigrain", "texas toast", "english muffin",
-			"pumpernickel", "soda bread", "french bread", "italian bread", "dinner roll", "monkey bread",
-			"chapati", "roti", "toast", "breadsticks", "crescent roll", "matzo", "hot dog bun",
-			"hamburger bun", "sandwich bread", "whole grain bread", "bun", "roll", "wrap", "hawaiian bread",
-			"cinnamon bread", "pretzel", "cinnamon roll", "panini", "muffin", "garlic knot",
+			"cornbread", "flatbread", "whole wheat", "texas toast", "english muffin", "pumpernickel",
+			"french bread", "dinner roll", "toast", "hot dog bun", "hamburger bun", "bun", "roll", "wrap",
+			"pretzel", "cinnamon roll", "muffin",
 		},
 		Rare = {
 			"lavash", "injera", "panettone", "stollen", "pao de queijo", "bao", "arepa", "kaiser roll",
@@ -33,7 +31,10 @@ return {
 			"everything bread", "bruschetta", "fried bread", "crumpet", "paratha", "sub roll", "honey wheat",
 			"oat bread", "gluten free bread", "sweet bread", "pretzel bun", "wonder bread", "zucchini bread",
 			"raisin bread", "dark rye", "hoagie roll", "sprouted bread", "vienna bread", "pumpkin bread",
-			"cheese bread", "biscuit", "scone", "garlic knots", "boxty",
+			"cheese bread", "biscuit", "scone", "garlic knots", "boxty", "challah", "multigrain",
+			"soda bread", "italian bread", "monkey bread", "chapati", "roti", "breadsticks", "crescent roll",
+			"matzo", "sandwich bread", "whole grain bread", "hawaiian bread", "cinnamon bread", "panini",
+			"garlic knot",
 		},
 		DeepCut = {
 			"limpa", "epi", "ficelle", "stottie", "soda farl", "semmel", "hefezopf", "pain viennois",

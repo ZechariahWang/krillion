@@ -9,8 +9,7 @@ return {
 		Schooler = {
 			"pearl", "amethyst", "opal", "topaz", "jade", "garnet", "aquamarine", "turquoise", "onyx",
 			"peridot", "quartz", "amber", "citrine", "moonstone", "lapis lazuli", "agate", "tigers eye",
-			"coral", "jasper", "rose quartz", "tanzanite", "tourmaline", "zircon", "malachite", "bloodstone",
-			"carnelian", "sunstone", "blue topaz", "pyrite", "obsidian",
+			"coral", "rose quartz", "pyrite", "obsidian",
 		},
 		Rare = {
 			"alexandrite", "spinel", "kunzite", "morganite", "labradorite", "beryl", "chalcedony", "hematite",
@@ -31,7 +30,8 @@ return {
 			"blue agate", "crazy lace agate", "sea glass", "lava stone", "clear quartz", "cats eye",
 			"cubic zirconia", "smoky quartz", "fluorite", "black diamond", "sodalite", "champagne diamond",
 			"shungite", "angelite", "bumblebee jasper", "septarian", "astrophyllite", "chiastolite",
-			"tiffany stone",
+			"tiffany stone", "jasper", "tanzanite", "tourmaline", "zircon", "malachite", "bloodstone",
+			"carnelian", "sunstone", "blue topaz",
 		},
 		DeepCut = {
 			"apophyllite", "danburite", "spodumene", "hiddenite", "benitoite", "dioptase", "magnesite",

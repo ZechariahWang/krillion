@@ -10,8 +10,7 @@ return {
 			"pink lady", "mcintosh", "crabapple",
 		},
 		Schooler = {
-			"braeburn", "jonagold", "cosmic crisp", "jazz", "ambrosia", "envy", "empire", "bramley", "cox", "russet",
-			"winesap", "jonathan",
+			"braeburn", "jonagold", "cosmic crisp", "jazz", "ambrosia", "envy", "empire",
 		},
 		Rare = {
 			"cameo", "pacific rose", "kanzi", "snapdragon", "rubyfrost", "evercrisp", "zestar", "elstar", "gloster", "topaz",
@@ -19,6 +18,7 @@ return {
 			"pixie crunch", "autumn crisp", "rave", "firestorm", "sunrise", "rome", "cortland", "opal", "macoun", "spartan",
 			"idared", "paula red", "gravenstein", "northern spy", "ginger gold", "mutsu", "liberty", "akane", "sweetango",
 			"crimson crisp", "pazazz", "sugarbee", "kiku", "rockit", "goldrush", "snowsweet", "sweet sixteen",
+			"bramley", "cox", "russet", "winesap", "jonathan",
 		},
 		DeepCut = {
 			"ashmeads kernel", "pitmaston pineapple", "calville blanc", "reine des reinettes", "belle de boskoop", "annurca",

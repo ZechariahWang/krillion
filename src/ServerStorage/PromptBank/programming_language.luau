@@ -10,8 +10,8 @@ return {
 			"lua", "rust",
 		},
 		Schooler = {
-			"c sharp", "ruby", "go", "php", "swift", "kotlin", "scratch", "sql", "typescript", "dart", "html",
-			"css", "visual basic", "basic", "bash", "assembly", "pascal", "perl", "r", "matlab", "luau",
+			"c sharp", "ruby", "go", "php", "swift", "kotlin", "scratch", "sql", "typescript", "html", "css",
+			"luau",
 		},
 		Rare = {
 			"haskell", "scala", "fortran", "cobol", "elixir", "delphi", "objective c", "julia", "groovy",
@@ -21,7 +21,8 @@ return {
 			"processing", "latex", "qbasic", "quickbasic", "small basic", "sonic pi", "vb6", "g code",
 			"blockly", "alice", "ml", "batch", "snap", "kodu", "blueprints", "renpy", "json", "markdown",
 			"makecode", "pseudocode", "regex", "app inventor", "verse", "tynker", "machine code",
-			"scratch jr",
+			"scratch jr", "dart", "visual basic", "basic", "bash", "assembly", "pascal", "perl", "r",
+			"matlab",
 		},
 		DeepCut = {
 			"elm", "purescript", "idris", "coq", "agda", "raku", "hack", "standard ml", "haxe", "vala", "nim",

@@ -10,12 +10,11 @@ return {
 			"funny bone",
 		},
 		Schooler = {
-			"spine", "tibia", "humerus", "pelvis", "jaw", "collarbone", "ribcage", "patella", "vertebra",
-			"coccyx", "sternum", "scapula", "fibula",
+			"spine", "tibia", "humerus", "pelvis", "jaw", "collarbone", "ribcage", "patella",
 		},
 		Rare = {
 			"radius", "ulna", "sacrum", "phalanges", "metacarpals", "carpals", "tarsals", "metatarsals",
-			"talus", "calcaneus", "zygomatic",
+			"talus", "calcaneus", "zygomatic", "vertebra", "coccyx", "sternum", "scapula", "fibula",
 		},
 		DeepCut = {
 			"hyoid", "ischium", "pubis", "atlas", "axis", "scaphoid", "manubrium", "xiphoid process",

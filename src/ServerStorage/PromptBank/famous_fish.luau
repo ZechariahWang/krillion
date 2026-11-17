@@ -10,16 +10,16 @@ return {
 			"flounder", "magikarp", "gill", "bubbles", "cleo",
 		},
 		Schooler = {
-			"oscar", "lenny", "swimmy", "rainbow fish", "blinky", "charlie the tuna", "big mouth billy bass", "cheep cheep",
-			"destiny", "bloat", "gurgle", "deb", "flo", "sharky", "goldeen", "coral", "anchor", "chum", "mr ray", "angie",
-			"lola", "don lino", "gyarados", "mrs puff", "flotsam", "jetsam",
+			"oscar", "lenny", "swimmy", "rainbow fish", "blinky", "charlie the tuna", "big mouth billy bass",
+			"cheep cheep", "destiny", "deb", "flo", "sharky", "goldeen", "coral", "gyarados", "mrs puff",
 		},
 		Rare = {
 			"feebas", "wishiwashi", "jabberjaw", "seaking", "sharpedo", "milotic", "luvdisc", "remoraid", "carvanha", "mantine",
 			"bubble bass", "big bertha", "boss bass", "porcupuffer", "mr limpet", "kenny the shark", "frankie", "ponyo",
 			"daddy shark", "mommy shark", "perch perkins", "man ray", "kingdra", "horsea", "seadra", "blahaj",
 			"kine", "deep blue", "barboach", "whiscash", "tynamo", "eelektrik", "relicanth", "huntail",
-			"gorebyss", "stunfisk",
+			"gorebyss", "stunfisk", "bloat", "gurgle", "anchor", "chum", "mr ray", "angie", "lola",
+			"don lino", "flotsam", "jetsam",
 		},
 		DeepCut = {
 			"finneon", "lumineon", "basculin", "barraskewda", "arrokuda", "chinchou", "lanturn", "qwilfish", "alomomola",

@@ -10,10 +10,9 @@ return {
 			"cornish cross", "brahma", "sussex", "wyandotte",
 		},
 		Schooler = {
-			"barred rock", "australorp", "cochin", "polish", "ameraucana", "easter egger", "araucana", "marans",
-			"new hampshire", "faverolles", "jersey giant", "welsummer", "frizzle", "naked neck", "cornish",
-			"red jungle fowl", "japanese bantam", "serama", "d uccle", "pekin", "golden comet", "sex link",
-			"buff orpington",
+			"barred rock", "australorp", "cochin", "polish", "ameraucana", "easter egger", "marans",
+			"new hampshire", "jersey giant", "frizzle", "naked neck", "cornish", "serama", "pekin",
+			"golden comet", "sex link", "buff orpington",
 		},
 		Rare = {
 			"delaware", "dominique", "java", "chantecler", "buckeye", "holland", "lakenvelder", "houdan", "crevecoeur",
@@ -27,7 +26,8 @@ return {
 			"olive egger",
 			"isa brown",
 			"lohmann brown",
-			"freedom ranger",
+			"freedom ranger", "araucana", "faverolles", "welsummer", "red jungle fowl", "japanese bantam",
+			"d uccle",
 		},
 		DeepCut = {
 			"kraienkoppe", "altsteirer", "penedesenca", "empordanesa", "welbar", "ayam pelung", "ayam ketawa",

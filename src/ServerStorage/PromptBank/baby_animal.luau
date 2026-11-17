@@ -10,12 +10,13 @@ return {
 			"joey", "tadpole", "fawn", "duckling", "bunny",
 		},
 		Schooler = {
-			"foal", "gosling", "pup", "hatchling", "fry", "cygnet", "larva", "caterpillar", "colt", "filly", "kit",
-			"fledgling", "whelp", "eaglet", "owlet", "kid", "nestling", "yearling", "maggot", "pupa",
+			"foal", "gosling", "pup", "hatchling", "fry", "cygnet", "caterpillar", "colt", "filly", "kit",
+			"eaglet", "owlet", "kid",
 		},
 		Rare = {
 			"leveret", "squab", "poult", "pullet", "cockerel", "hoglet", "cria", "elver", "nymph", "grub",
 			"spiderling", "smolt", "fingerling", "parr", "peachick", "puggle", "squeaker", "porcupette",
+			"larva", "fledgling", "whelp", "nestling", "yearling", "maggot", "pupa",
 		},
 		DeepCut = {
 			"shoat", "eyas", "alevin", "pinkie", "keet", "weaner", "weanling", "stirk", "suckling", "hogget",

@@ -10,11 +10,10 @@ return {
 			"titanic", "kayak", "aircraft carrier", "speedboat",
 		},
 		Schooler = {
-			"rowboat", "motorboat", "fishing boat", "ferry", "tugboat", "battleship", "cargo ship", "raft", "gondola", "jet ski",
-			"paddle boat", "houseboat", "lifeboat", "steamboat", "barge", "tanker", "container ship", "destroyer", "dinghy",
-			"catamaran", "trawler", "viking ship", "galleon", "schooner", "clipper", "icebreaker", "hovercraft",
-			"inflatable boat", "pontoon boat", "frigate", "warship", "sailing ship", "steamship", "riverboat", "water taxi",
-			"jet boat", "dragon boat", "junk", "life raft",
+			"rowboat", "motorboat", "fishing boat", "ferry", "tugboat", "battleship", "cargo ship", "raft",
+			"gondola", "jet ski", "paddle boat", "houseboat", "lifeboat", "steamboat", "barge", "tanker",
+			"container ship", "destroyer", "dinghy", "catamaran", "viking ship", "galleon", "icebreaker",
+			"hovercraft", "inflatable boat", "pontoon boat", "warship", "sailing ship",
 		},
 		Rare = {
 			"cruiser", "corvette", "gunboat", "minesweeper", "patrol boat", "coast guard cutter", "dhow", "felucca", "caravel",
@@ -31,7 +30,8 @@ return {
 			"water bus", "shikara", "glass bottom boat", "party boat", "lightship", "iceboat", "showboat", "zodiac",
 			"rigid inflatable boat", "johnboat", "pram", "rowing shell", "umiak", "pirogue", "dredger", "hydroplane",
 			"duck boat", "landing craft", "factory ship", "ore carrier", "lake freighter", "flatboat", "towboat", "swan boat",
-			"banana boat", "whaler", "cutter", "sloop", "ketch", "sampan",
+			"banana boat", "whaler", "cutter", "sloop", "ketch", "sampan", "trawler", "schooner", "clipper",
+			"frigate", "steamship", "riverboat", "water taxi", "jet boat", "dragon boat", "junk", "life raft",
 		},
 		DeepCut = {
 			"cutty sark", "hms victory", "uss constitution", "bismarck", "yamato", "lusitania", "queen mary", "carpathia",

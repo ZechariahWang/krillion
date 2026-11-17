@@ -10,16 +10,16 @@ return {
 			"steam", "saute", "simmer", "broil", "barbecue",
 		},
 		Schooler = {
-			"deep fry", "stir fry", "pan fry", "toast", "poach", "smoke", "stew", "braise", "sear",
-			"slow cook", "pressure cook", "air fry", "blanch", "sous vide", "flambe", "caramelize",
-			"scramble", "rotisserie", "griddle", "char", "parboil", "baste", "oven roast", "campfire cook",
+			"deep fry", "stir fry", "pan fry", "toast", "poach", "smoke", "stew", "sear", "slow cook",
+			"pressure cook", "air fry", "scramble", "campfire cook",
 		},
 		Rare = {
 			"confit", "scald", "coddle", "pot roast", "hard boil", "soft boil", "slow roast", "gratin",
 			"tempura", "tandoor", "deglaze", "blacken", "jerk", "spatchcock", "braai", "cook in foil",
 			"reduce", "render", "sweat", "fricassee", "reverse sear", "marinate", "cure", "pickle", "ferment",
 			"dehydrate", "fondue", "oil poach", "teppanyaki", "batter fry", "dry roast", "pan broil",
-			"sun dry",
+			"sun dry", "braise", "blanch", "sous vide", "flambe", "caramelize", "rotisserie", "griddle",
+			"char", "parboil", "baste", "oven roast",
 		},
 		DeepCut = {
 			"en papillote", "hot smoke", "cold smoke", "bain marie", "pan roast", "flash fry", "salt bake",

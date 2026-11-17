@@ -10,9 +10,7 @@ return {
 			"osprey", "golden eagle", "peregrine falcon", "condor", "red tailed hawk",
 		},
 		Schooler = {
-			"kestrel", "harrier", "kite", "buzzard", "barn owl", "snowy owl", "harpy eagle", "sparrowhawk", "goshawk",
-			"merlin", "turkey vulture", "great horned owl", "coopers hawk", "sea eagle", "caracara", "secretarybird",
-			"california condor", "andean condor", "black vulture", "red kite", "gyrfalcon", "hobby", "red shouldered hawk",
+			"kestrel", "kite",
 		},
 		Rare = {
 			"tawny owl", "eagle owl", "little owl", "burrowing owl", "screech owl", "long eared owl", "short eared owl",
@@ -27,7 +25,10 @@ return {
 			"honey buzzard", "rough legged buzzard", "king vulture", "griffon vulture",
 			"egyptian vulture", "lappet faced vulture", "bearded vulture", "cinereous vulture",
 			"white backed vulture", "hooded vulture", "palm nut vulture", "crested caracara", "striated caracara",
-			"laughing falcon", "pygmy falcon", "spectacled owl", "pels fishing owl",
+			"laughing falcon", "pygmy falcon", "spectacled owl", "pels fishing owl", "harrier", "buzzard",
+			"barn owl", "snowy owl", "harpy eagle", "sparrowhawk", "goshawk", "merlin", "turkey vulture",
+			"great horned owl", "coopers hawk", "sea eagle", "caracara", "secretarybird", "california condor",
+			"andean condor", "black vulture", "red kite", "gyrfalcon", "hobby", "red shouldered hawk",
 		},
 		DeepCut = {
 			"grey faced buzzard", "long legged buzzard", "black shouldered kite",

@@ -10,9 +10,8 @@ return {
 			"anne bonny", "calico jack", "captain kidd", "barbossa", "davy jones",
 		},
 		Schooler = {
-			"black bart", "mary read", "jean lafitte", "ching shih", "will turner", "elizabeth swann", "smee", "zoro", "nami",
-			"sanji", "usopp", "chopper", "captain flint", "barbarossa", "stede bonnet", "edward low", "captain pugwash",
-			"gol d roger", "shanks", "whitebeard", "patchy the pirate", "tia dalma",
+			"black bart", "mary read", "will turner", "elizabeth swann", "smee", "zoro", "nami", "sanji",
+			"usopp", "chopper",
 		},
 		Rare = {
 			"charles vane", "grace omalley", "sam bellamy", "benjamin hornigold", "henry every", "thomas tew",
@@ -22,7 +21,9 @@ return {
 			"captain teague", "bootstrap bill", "portgas d ace", "jinbe", "pintel and ragetti", "mr gibbs",
 			"armando salazar", "flying dutchman", "crocodile", "sao feng", "angelica", "captain syrup",
 			"tetra", "captain gutt", "one eyed willy", "captain redbeard", "sir francis drake", "marco",
-			"captain flameheart", "pirate pete", "starkey",
+			"captain flameheart", "pirate pete", "starkey", "jean lafitte", "ching shih", "captain flint",
+			"barbarossa", "stede bonnet", "edward low", "captain pugwash", "gol d roger", "shanks",
+			"whitebeard", "patchy the pirate", "tia dalma",
 		},
 		DeepCut = {
 			"olivier levasseur", "roche braziliano", "christopher condent", "william dampier",

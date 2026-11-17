@@ -11,9 +11,7 @@ return {
 		},
 		Schooler = {
 			"birch", "willow", "cherry", "apple", "spruce", "fir", "cedar", "redwood", "sequoia", "elm",
-			"ash", "beech", "eucalyptus", "mahogany", "coconut", "orange", "lemon", "pear", "peach", "walnut",
-			"poplar", "aspen", "cypress", "magnolia", "banyan", "mango", "olive", "fig", "plum", "bamboo",
-			"avocado", "apricot", "lime", "christmas tree", "banana tree", "chestnut", "acacia", "dogwood",
+			"beech", "eucalyptus", "coconut", "christmas tree",
 		},
 		Rare = {
 			"hickory", "cottonwood", "juniper", "teak", "ebony", "hemlock", "jacaranda", "laurel",
@@ -33,7 +31,10 @@ return {
 			"rainbow eucalyptus", "fruit tree", "nut tree", "shade tree", "pummelo", "groot", "treant", "ent",
 			"horse chestnut", "rosewood", "gum tree", "blue spruce", "paper birch", "conifer", "deciduous",
 			"mangrove", "lilac", "pistachio", "cashew", "grapefruit", "pomegranate", "almond", "white ash",
-			"green ash", "scots pine", "ponderosa pine", "live oak",
+			"green ash", "scots pine", "ponderosa pine", "live oak", "ash", "mahogany", "orange", "lemon",
+			"pear", "peach", "walnut", "poplar", "aspen", "cypress", "magnolia", "banyan", "mango", "olive",
+			"fig", "plum", "bamboo", "avocado", "apricot", "lime", "banana tree", "chestnut", "acacia",
+			"dogwood",
 		},
 		DeepCut = {
 			"catalpa", "honey locust", "black locust", "buckeye", "sweetgum", "tupelo", "medlar",

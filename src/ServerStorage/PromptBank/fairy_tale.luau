@@ -12,13 +12,9 @@ return {
 		},
 		Schooler = {
 			"ugly duckling", "princess and the pea", "rumpelstiltskin", "frog prince", "puss in boots",
-			"gingerbread man", "emperors new clothes", "thumbelina", "ali baba and the forty thieves",
-			"pied piper of hamelin", "little match girl", "snow queen", "steadfast tin soldier",
-			"three billy goats gruff", "chicken little", "little red hen", "alice in wonderland", "sinbad the sailor",
-			"tom thumb", "elves and the shoemaker", "twelve dancing princesses", "golden goose",
-			"bremen town musicians", "brave little tailor", "bluebeard", "snow white and rose red", "wild swans",
-			"goose girl", "fisherman and his wife", "wizard of oz",
-			"nutcracker",
+			"gingerbread man", "emperors new clothes", "thumbelina", "pied piper of hamelin", "snow queen",
+			"three billy goats gruff", "chicken little", "little red hen", "alice in wonderland",
+			"wizard of oz", "nutcracker",
 		},
 		Rare = {
 			"donkeyskin", "juniper tree", "iron john", "seven ravens", "red shoes", "tinderbox", "nightingale",
@@ -27,6 +23,10 @@ return {
 			"little fir tree", "ice maiden", "snegurochka", "momotaro", "urashima taro", "crane wife", "kaguya hime",
 			"tsarevitch ivan and the grey wolf",
 			"wolf and the seven young goats", "east of the sun and west of the moon", "stone soup", "three wishes",
+			"ali baba and the forty thieves", "little match girl", "steadfast tin soldier",
+			"sinbad the sailor", "tom thumb", "elves and the shoemaker", "twelve dancing princesses",
+			"golden goose", "bremen town musicians", "brave little tailor", "bluebeard",
+			"snow white and rose red", "wild swans", "goose girl", "fisherman and his wife",
 		},
 		DeepCut = {
 			"white cat", "blue bird", "yellow dwarf", "green serpent", "sadko", "marya morevna",

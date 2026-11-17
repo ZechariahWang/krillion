@@ -7,10 +7,8 @@ return {
 			"niagara falls", "victoria falls", "angel falls", "iguazu falls", "yosemite falls", "horseshoe falls",
 		},
 		Schooler = {
-			"bridal veil falls", "american falls", "multnomah falls", "rainbow falls", "snoqualmie falls",
-			"havasu falls", "gullfoss", "skogafoss", "seljalandsfoss", "dettifoss", "kaieteur falls", "jog falls",
-			"dudhsagar falls", "plitvice falls", "rhine falls", "ruby falls", "shoshone falls", "akaka falls",
-			"burney falls", "twin falls", "dunns river falls", "montmorency falls", "athabasca falls",
+			"bridal veil falls", "american falls", "multnomah falls", "rainbow falls", "havasu falls",
+			"gullfoss", "skogafoss", "seljalandsfoss", "akaka falls", "twin falls", "dunns river falls",
 		},
 		Rare = {
 			"sutherland falls", "tugela falls", "detian falls", "ban gioc falls", "kegon falls", "nachi falls",
@@ -28,6 +26,9 @@ return {
 			"bridalveil fall", "waimoku falls", "kuang si falls", "erawan falls", "pagsanjan falls",
 			"hunlen falls", "shannon falls", "dynjandi", "gooseberry falls", "seven falls", "dry falls",
 			"great falls", "koosah falls", "sahalie falls", "wallace falls", "metlako falls",
+			"snoqualmie falls", "dettifoss", "kaieteur falls", "jog falls", "dudhsagar falls",
+			"plitvice falls", "rhine falls", "ruby falls", "shoshone falls", "burney falls",
+			"montmorency falls", "athabasca falls",
 		},
 		DeepCut = {
 			"hanakapiai falls", "sentinel falls", "illilouette fall", "ribbon fall", "tamanawas falls",

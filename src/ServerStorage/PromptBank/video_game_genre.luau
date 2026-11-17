@@ -10,11 +10,10 @@ return {
 			"sandbox", "simulation", "puzzle", "battle royale", "survival",
 		},
 		Schooler = {
-			"racing", "fighting", "platformer", "strategy", "fps", "mmo", "mmorpg", "open world", "stealth", "tycoon", "party",
-			"rhythm", "card game", "tower defense", "moba", "roguelike", "third person shooter", "real time strategy",
-			"turn based strategy", "action adventure", "action rpg", "city builder", "farming", "life simulation", "trivia",
-			"arcade", "idle", "clicker", "hack and slash", "beat em up", "text adventure", "point and click", "dating sim",
-			"endless runner", "obby",
+			"racing", "fighting", "platformer", "strategy", "fps", "mmo", "mmorpg", "open world", "stealth",
+			"tycoon", "party", "rhythm", "card game", "tower defense", "moba", "roguelike",
+			"third person shooter", "real time strategy", "action adventure", "city builder", "farming",
+			"trivia", "arcade", "idle", "clicker", "obby",
 		},
 		Rare = {
 			"roguelite", "soulslike", "looter shooter", "hero shooter", "tactical shooter", "auto battler", "deck builder", "4x",
@@ -29,7 +28,8 @@ return {
 			"wrestling game", "fishing game", "hunting game", "casino game", "creative", "social sim",
 			"pet sim", "battle arena", "vehicular combat", "action roguelike", "sandbox rpg",
 			"open world survival", "survival sandbox", "minigame collection", "trading card game",
-			"cooperative",
+			"cooperative", "turn based strategy", "action rpg", "life simulation", "hack and slash",
+			"beat em up", "text adventure", "point and click", "dating sim", "endless runner",
 		},
 		DeepCut = {
 			"immersive sim", "extraction shooter", "arena shooter", "boomer shooter", "survival crafting", "colony sim",

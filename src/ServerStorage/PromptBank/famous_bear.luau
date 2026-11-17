@@ -10,9 +10,9 @@ return {
 			"teddy bear", "po", "care bears", "gummy bear", "ted", "ice bear",
 		},
 		Schooler = {
-			"boo boo", "fozzie bear", "lotso", "kenai", "koda", "little john", "grizz", "mama bear", "papa bear", "baby bear",
-			"corduroy", "rupert bear", "cheer bear", "grumpy bear", "tenderheart bear", "funshine bear", "knut",
-			"berenstain bears", "boog", "golden freddy", "banjo", "pandy", "sitka",
+			"boo boo", "fozzie bear", "lotso", "kenai", "koda", "little john", "grizz", "mama bear",
+			"papa bear", "baby bear", "corduroy", "cheer bear", "grumpy bear", "tenderheart bear",
+			"funshine bear", "berenstain bears", "boog", "golden freddy",
 		},
 		Rare = {
 			"little bear", "bear in the big blue house", "humphrey the bear", "bart the bear", "gruffi",
@@ -23,7 +23,8 @@ return {
 			"share bear", "wish bear", "good luck bear", "birthday bear", "kuma", "kumamon", "elinor",
 			"vincent the bear", "cindy bear", "teddi barra", "champ bear", "friend bear", "harmony bear",
 			"secret bear", "baby hugs bear", "baby tugs bear", "thanks a lot bear", "korilakkuma", "bao bao",
-			"panda from we bare bears", "grizzly 399", "grams bear", "iofur raknison",
+			"panda from we bare bears", "grizzly 399", "grams bear", "iofur raknison", "rupert bear", "knut",
+			"banjo", "pandy", "sitka",
 		},
 		DeepCut = {
 			"mr bean teddy", "ling ling", "hsing hsing", "mei xiang", "bei bei", "jia jia", "bear 747",

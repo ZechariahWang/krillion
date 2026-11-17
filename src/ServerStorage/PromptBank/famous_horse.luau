@@ -10,9 +10,8 @@ return {
 			"trigger", "shadowfax", "maximus", "bucephalus", "epona", "mr ed",
 		},
 		Schooler = {
-			"man o war", "american pharoah", "binky", "artax", "bullseye", "samson", "philippe", "joey", "boxer", "champion",
-			"sleipnir", "black stallion", "flicka", "hidalgo", "phar lap", "justify", "rocinante", "fury",
-			"nokk",
+			"man o war", "american pharoah", "binky", "bullseye", "samson", "philippe", "joey", "boxer",
+			"champion", "black stallion", "flicka", "hidalgo", "fury",
 		},
 		Rare = {
 			"war admiral", "citation", "affirmed", "seattle slew", "barbaro", "zenyatta", "smarty jones", "ruffian", "red rum",
@@ -25,6 +24,7 @@ return {
 			"bojack horseman", "shadowmere", "frou frou", "black bess", "skeleton horse", "rainbow dash",
 			"applejack", "fluttershy", "rarity", "pinkie pie", "galileo", "black caviar", "flightline",
 			"enable", "tiger roll", "desert orchid", "dancing brave", "mill reef", "keldeo", "mudsdale",
+			"artax", "sleipnir", "phar lap", "justify", "rocinante", "nokk",
 		},
 		DeepCut = {
 			"gringolet", "hasufel", "arod", "snowmane", "copenhagen", "little sorrel", "sunday silence",

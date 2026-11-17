@@ -11,17 +11,16 @@ return {
 		},
 		Schooler = {
 			"mercedes", "audi", "nissan", "volkswagen", "chevrolet", "hyundai", "ferrari", "lamborghini",
-			"porsche", "jeep", "dodge", "kia", "mazda", "subaru", "lexus", "mitsubishi", "volvo", "jaguar",
-			"land rover", "rolls royce", "bentley", "maserati", "aston martin", "cadillac", "mini",
-			"chrysler", "gmc", "ram", "buick", "lincoln", "acura", "mclaren", "infiniti", "fiat", "suzuki",
-			"peugeot", "renault", "rivian", "alfa romeo", "lotus",
+			"porsche", "jeep", "dodge", "kia", "mazda", "subaru", "lexus", "volvo", "jaguar", "rolls royce",
 		},
 		Rare = {
 			"genesis", "polestar", "lucid", "citroen", "skoda", "seat", "opel", "vauxhall", "isuzu",
 			"daihatsu", "pontiac", "oldsmobile", "plymouth", "saturn", "hummer", "scion", "datsun",
 			"delorean", "smart", "byd", "mg", "geely", "cupra", "maybach", "abarth", "lancia",
 			"general motors", "hot wheels", "saab", "mercury", "lada", "shelby", "stellantis", "xiaomi",
-			"pininfarina", "daf", "iveco",
+			"pininfarina", "daf", "iveco", "mitsubishi", "land rover", "bentley", "maserati", "aston martin",
+			"cadillac", "mini", "chrysler", "gmc", "ram", "buick", "lincoln", "acura", "mclaren", "infiniti",
+			"fiat", "suzuki", "peugeot", "renault", "rivian", "alfa romeo", "lotus",
 		},
 		DeepCut = {
 			"holden", "mahindra", "ssangyong", "rover", "triumph", "austin", "morris", "studebaker",

@@ -11,7 +11,7 @@ return {
 		},
 		Schooler = {
 			"cougar", "black panther", "white tiger", "ocelot", "serval", "siberian tiger", "bengal tiger",
-			"african lion", "wildcat", "florida panther", "lioness", "tigress", "golden tiger",
+			"african lion", "lioness", "tigress", "golden tiger",
 		},
 		Rare = {
 			"jaguarundi", "sand cat", "pallas cat", "fishing cat", "leopard cat", "jungle cat", "golden cat",
@@ -22,7 +22,7 @@ return {
 			"arabian leopard", "indochinese tiger", "malayan tiger", "south china tiger", "asiatic lion",
 			"barbary lion", "cave lion", "american lion", "bornean clouded leopard", "scottish wildcat",
 			"white lion", "melanistic jaguar", "sundaic clouded leopard", "caracal", "liger",
-			"clouded leopard", "sabertooth",
+			"clouded leopard", "sabertooth", "florida panther", "wildcat",
 		},
 		DeepCut = {
 			"chinese mountain cat", "pantanal cat", "guigna", "javan leopard", "sri lankan leopard",

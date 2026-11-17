@@ -10,10 +10,9 @@ return {
 			"princess peach", "jasmine", "rapunzel", "moana", "princess leia", "princess zelda", "princess diana",
 		},
 		Schooler = {
-			"aurora", "mulan", "tiana", "pocahontas", "merida", "fiona", "princess daisy", "princess bubblegum",
-			"sofia the first", "raya", "vanellope", "giselle", "kida", "odette", "buttercup", "poppy", "twilight sparkle",
-			"rosalina", "celestia", "princess luna", "cadance", "tiger lily", "ruto", "mia thermopolis", "princess charlotte",
-			"anastasia",
+			"aurora", "mulan", "tiana", "pocahontas", "merida", "fiona", "princess daisy",
+			"princess bubblegum", "sofia the first", "raya", "vanellope", "giselle", "buttercup", "poppy",
+			"twilight sparkle", "rosalina", "celestia", "princess luna", "anastasia",
 		},
 		Rare = {
 			"princess atta", "princess irulan", "princess ozma", "princess eilonwy", "elena of avalor",
@@ -22,7 +21,8 @@ return {
 			"princess midna", "princess skystar", "anneliese", "namaari", "princess catherine",
 			"princess kaguya", "princess shuri", "princess nausicaa", "princess yue", "princess azula",
 			"flame princess", "lumpy space princess", "princess starfire", "shera", "princess kitana",
-			"princess ember",
+			"princess ember", "kida", "odette", "cadance", "tiger lily", "ruto", "mia thermopolis",
+			"princess charlotte",
 		},
 		DeepCut = {
 			"princess garnet", "princess sally", "princess leonor", "princess victoria", "princess madeleine",

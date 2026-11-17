@@ -10,13 +10,9 @@ return {
 			"fanny pack", "sleeping bag", "paper bag", "messenger bag", "tea bag", "bean bag", "punching bag",
 		},
 		Schooler = {
-			"shopping bag", "grocery bag", "gym bag", "school bag", "briefcase", "satchel", "clutch", "shoulder bag",
+			"shopping bag", "grocery bag", "gym bag", "school bag", "briefcase", "shoulder bag",
 			"crossbody bag", "rucksack", "trash bag", "sandwich bag", "suitcase", "beach bag", "diaper bag",
-			"laptop bag", "drawstring bag", "golf bag", "makeup bag", "lunch bag", "airbag", "sack", "pouch",
-			"coin purse", "saddlebag", "gift bag", "goody bag", "overnight bag", "carry on bag", "bucket bag",
-			"evening bag", "wristlet", "hobo bag", "burlap sack", "mail bag", "body bag", "vacuum bag", "doggy bag",
-			"barf bag", "sandbag",
-			"ziploc bag", "money bag", "tool bag",
+			"golf bag", "makeup bag", "lunch bag", "airbag", "sack", "pouch", "gift bag",
 		},
 		Rare = {
 			"birkin bag", "kelly bag", "baguette bag", "speedy bag", "neverfull", "barrel bag", "bowling bag",
@@ -27,7 +23,10 @@ return {
 			"go bag", "bug out bag", "canvas bag", "dust bag", "wheelie bag", "rolling suitcase",
 			"hard shell suitcase", "hiking bag", "hydration pack", "camelbak", "bike bag", "handlebar bag",
 			"swim bag", "mini backpack", "laundry bag", "vacuum seal bag", "belt pouch", "money belt",
-			"drawstring pouch", "pet carrier",
+			"drawstring pouch", "pet carrier", "satchel", "clutch", "laptop bag", "drawstring bag",
+			"coin purse", "saddlebag", "goody bag", "overnight bag", "carry on bag", "bucket bag",
+			"evening bag", "wristlet", "hobo bag", "burlap sack", "mail bag", "body bag", "vacuum bag",
+			"doggy bag", "barf bag", "sandbag", "ziploc bag", "money bag", "tool bag",
 		},
 		DeepCut = {
 			"pochette", "cabas", "furoshiki", "musette", "gripsack", "chatelaine", "ditty bag", "dilly bag",

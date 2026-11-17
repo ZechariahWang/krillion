@@ -10,10 +10,10 @@ return {
 			"attic", "dining room", "laundry room", "playroom",
 		},
 		Schooler = {
-			"hallway", "closet", "office", "study", "nursery", "pantry", "porch", "balcony", "den", "family room",
-			"guest room", "master bedroom", "game room", "man cave", "mudroom", "foyer", "toilet", "sunroom",
-			"library", "cellar", "bonus room", "home theater", "gym", "walk in closet", "utility room", "kids room",
-			"storage room", "wine cellar", "drawing room", "parlor", "powder room", "ensuite", "loft", "workshop",
+			"hallway", "closet", "office", "study", "nursery", "pantry", "porch", "balcony", "den",
+			"family room", "guest room", "master bedroom", "game room", "man cave", "mudroom", "foyer",
+			"toilet", "sunroom", "library", "cellar", "home theater", "gym", "walk in closet", "loft",
+			"workshop",
 		},
 		Rare = {
 			"conservatory", "scullery", "boot room", "vestibule", "landing", "box room", "breakfast nook", "great room",
@@ -23,7 +23,8 @@ return {
 			"steam room", "kitchenette", "linen closet", "sewing room", "hobby room", "art room", "breakfast room",
 			"shower room", "master suite", "boiler room", "furnace room", "home bar", "trophy room", "gallery", "reading room",
 			"snug", "reception room", "lanai",
-			"dinette",
+			"dinette", "bonus room", "utility room", "storage room", "wine cellar", "drawing room", "parlor",
+			"powder room", "ensuite", "kids room",
 		},
 		DeepCut = {
 			"buttery", "still room", "gunroom", "antechamber", "tack room", "orangery", "lumber room", "strongroom",

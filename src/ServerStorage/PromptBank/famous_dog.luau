@@ -10,13 +10,10 @@ return {
 			"toto", "odie", "beethoven", "marley", "bolt",
 		},
 		Schooler = {
-			"balto", "hachiko", "old yeller", "air bud", "lady", "tramp", "pongo", "perdita", "slinky dog", "bluey",
-			"blue", "chase", "marshall", "rubble", "skye", "rocky", "zuma", "everest", "brian griffin", "gromit",
-			"scrappy doo", "courage", "dug", "copper", "max", "cujo", "fluffy", "benji", "eddie",
-			"santas little helper", "spike", "bingo", "togo", "laika", "wishbone", "hooch", "krypto", "underdog",
-			"astro", "droopy", "snowy", "bo", "millie",
-			"doge", "dog man", "growlithe", "cheems", "isabelle", "muffin", "socks", "dodger", "gidget",
-			"arcanine",
+			"balto", "hachiko", "old yeller", "air bud", "lady", "tramp", "pongo", "slinky dog", "bluey",
+			"blue", "chase", "marshall", "rubble", "skye", "rocky", "zuma", "everest", "brian griffin",
+			"gromit", "scrappy doo", "courage", "dug", "copper", "max", "cujo", "benji", "eddie", "spike",
+			"bingo", "hooch", "krypto", "astro", "snowy", "doge", "dog man", "cheems",
 		},
 		Rare = {
 			"rin tin tin", "greyfriars bobby", "bobbie the wonder dog", "checkers", "fala", "sergeant stubby",
@@ -28,6 +25,8 @@ return {
 			"hank the cowdog", "porkchop", "ren", "hong kong phooey", "charlie dog", "hector the bulldog",
 			"annoying dog", "frank the pug", "boo the pomeranian", "houndoom", "houndour", "lillipup",
 			"yamper", "boltund", "poochyena", "mightyena", "furfrou", "rockruff", "bruiser", "uggie",
+			"perdita", "fluffy", "santas little helper", "togo", "laika", "wishbone", "underdog", "droopy",
+			"bo", "millie", "growlithe", "isabelle", "muffin", "socks", "dodger", "gidget", "arcanine",
 		},
 		DeepCut = {
 			"dogtanian", "commander", "major", "champ", "seaman", "comet", "brain", "barney", "belka",

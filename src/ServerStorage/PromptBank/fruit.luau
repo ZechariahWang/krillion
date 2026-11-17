@@ -11,11 +11,8 @@ return {
 		},
 		Schooler = {
 			"mango", "pear", "peach", "cherry", "pineapple", "watermelon", "kiwi", "lemon", "lime",
-			"blueberry", "raspberry", "blackberry", "plum", "melon", "green apple", "red apple",
-			"green grape", "red grape", "berry", "coconut", "grapefruit", "pomegranate", "apricot",
-			"tangerine", "avocado", "passion fruit", "papaya", "mandarin", "cantaloupe", "honeydew", "tomato",
-			"cranberry", "nectarine", "clementine", "fig", "granny smith", "honeycrisp", "red delicious",
-			"golden delicious",
+			"blueberry", "raspberry", "blackberry", "plum", "melon", "coconut", "grapefruit", "pomegranate",
+			"tangerine", "avocado", "passion fruit", "green apple", "green grape", "red apple", "red grape",
 		},
 		Rare = {
 			"currant", "blackcurrant", "redcurrant", "lingonberry", "tangelo", "ugli fruit", "loquat",
@@ -36,7 +33,9 @@ return {
 			"persimmon", "star fruit", "jackfruit", "date", "kumquat", "blood orange", "key lime", "plantain",
 			"soursop", "rambutan", "mangosteen", "pomelo", "yuzu", "breadfruit", "huckleberry", "olive",
 			"elderberry", "mulberry", "gooseberry", "acai", "quince", "tamarind", "boysenberry", "crabapple",
-			"prickly pear", "goji berry", "mcintosh", "casaba", "crenshaw", "cortland", "bramley",
+			"prickly pear", "goji berry", "mcintosh", "casaba", "crenshaw", "cortland", "bramley", "berry",
+			"apricot", "papaya", "mandarin", "cantaloupe", "honeydew", "tomato", "cranberry", "nectarine",
+			"clementine", "fig", "granny smith", "honeycrisp", "red delicious", "golden delicious",
 		},
 		DeepCut = {
 			"tamarillo", "feijoa", "sapote", "jujube", "noni", "hawthorn", "rosehip", "cara cara orange",

@@ -10,10 +10,9 @@ return {
 			"king louie", "harambe", "caesar", "cheeta",
 		},
 		Schooler = {
-			"mojo jojo", "marcel", "boots", "magilla gorilla", "koko", "dixie kong", "cranky kong", "funky kong",
-			"lanky kong", "tiny kong", "chunky kong", "candy kong", "donkey kong jr", "mighty joe young", "kerchak",
-			"terk", "kala", "grape ape", "sun wukong", "dr zaius", "cornelius", "zira", "bubbles", "mr teeny",
-			"hanuman", "mankey", "primeape", "infernape", "chimchar", "dart monkey", "johnny the gorilla",
+			"mojo jojo", "marcel", "boots", "koko", "dixie kong", "cranky kong", "funky kong", "lanky kong",
+			"tiny kong", "chunky kong", "candy kong", "donkey kong jr", "sun wukong", "dr zaius", "cornelius",
+			"zira", "bubbles",
 		},
 		Rare = {
 			"darwin", "maurice", "ham", "koba", "titano", "lancelot link", "mr nilsson", "judy", "bonzo",
@@ -22,7 +21,9 @@ return {
 			"aldo", "dexter", "enos", "jack the monkey", "ivan", "grookey", "thwackey", "rillaboom",
 			"three wise monkeys", "dunston", "super monkey", "rocket", "blue eyes", "noa", "ursus",
 			"annihilape", "manky kong", "kanzi", "david greybeard", "santino", "sock monkey", "chee chee",
-			"optimus primal", "evil monkey", "monchhichi", "travis the chimp",
+			"optimus primal", "evil monkey", "monchhichi", "travis the chimp", "magilla gorilla",
+			"mighty joe young", "kerchak", "terk", "kala", "grape ape", "mr teeny", "hanuman", "mankey",
+			"primeape", "infernape", "chimchar", "dart monkey", "johnny the gorilla",
 		},
 		DeepCut = {
 			"titus", "miss baker", "michael the gorilla", "wrinkly kong", "swanky kong", "kiddy kong",

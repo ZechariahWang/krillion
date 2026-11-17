@@ -10,12 +10,10 @@ return {
 			"windshield", "trunk", "headlight", "horn", "radio",
 		},
 		Schooler = {
-			"brakes", "window", "mirror", "bumper", "hood", "seat belt", "gas pedal", "brake pedal", "pedal", "dashboard",
-			"battery", "gas tank", "exhaust", "muffler", "wipers", "license plate", "gearshift", "transmission", "clutch",
-			"speedometer", "radiator", "spare tire", "rearview mirror", "side mirror", "airbag", "glove box", "cup holder",
-			"roof", "sunroof", "fender", "tail light", "brake light", "turn signal", "hubcap", "axle", "suspension", "spoiler",
-			"grille", "air conditioner", "heater", "ignition", "key", "fuel gauge", "odometer", "handle", "tailpipe",
-			"antenna", "gears",
+			"brakes", "window", "mirror", "bumper", "hood", "seat belt", "gas pedal", "brake pedal", "pedal",
+			"dashboard", "battery", "gas tank", "exhaust", "wipers", "license plate", "gearshift",
+			"speedometer", "radiator", "spare tire", "rearview mirror", "side mirror", "airbag", "glove box",
+			"cup holder", "roof", "sunroof", "tail light", "brake light", "turn signal", "spoiler", "key",
 		},
 		Rare = {
 			"alternator", "spark plug", "piston", "cylinder", "carburetor", "fuel pump", "fuel injector", "starter motor",
@@ -29,7 +27,9 @@ return {
 			"intercooler", "radiator cap", "gas cap", "washer fluid", "floor mat", "handbrake",
 			"wheel well", "hood ornament", "seat cover", "door lock", "engine oil", "undercarriage", "reverse light", "tread",
 			"air vents", "touchscreen", "speakers", "power steering", "air intake", "fuel door", "start button", "key fob",
-			"engine bay", "infotainment", "door panel",
+			"engine bay", "infotainment", "door panel", "muffler", "transmission", "clutch", "fender",
+			"hubcap", "axle", "suspension", "grille", "air conditioner", "heater", "ignition", "fuel gauge",
+			"odometer", "handle", "tailpipe", "antenna", "gears",
 		},
 		DeepCut = {
 			"cv joint", "tie rod", "ball joint", "control arm", "sway bar", "leaf spring", "torsion bar", "trailing arm",

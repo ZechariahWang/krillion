@@ -10,10 +10,9 @@ return {
 			"hades", "gaston", "evil queen", "queen of hearts",
 		},
 		Schooler = {
-			"shere khan", "dr facilier", "yzma", "mother gothel", "hans", "frollo", "ratigan", "lady tremaine",
-			"prince john", "kaa", "madam mim", "king candy", "syndrome", "randall", "lotso", "stromboli", "horned king",
-			"chernabog", "bellwether", "oogie boogie", "clayton", "shan yu", "hopper", "sid", "sheriff of nottingham",
-			"zurg", "dr doofenshmirtz", "big bad wolf",
+			"shere khan", "dr facilier", "yzma", "mother gothel", "hans", "frollo", "lady tremaine",
+			"prince john", "kaa", "king candy", "syndrome", "randall", "lotso", "bellwether", "oogie boogie",
+			"clayton", "hopper", "sid", "sheriff of nottingham", "zurg", "dr doofenshmirtz", "big bad wolf",
 		},
 		Rare = {
 			"ratcliffe", "honest john", "gideon", "monstro", "tamatoa", "judge doom", "gantu", "zira", "nuka",
@@ -21,7 +20,8 @@ return {
 			"flotsam and jetsam", "te ka", "stinky pete", "lucifer", "banzai", "ed", "chick hicks", "mor du",
 			"sir hiss", "lionheart", "shenzi", "medusa", "iago", "davy jones", "barbossa", "screenslaver",
 			"professor z", "jackson storm", "darla", "winifred sanderson", "shego", "bill cipher",
-			"king magnifico", "mirage", "auto", "gabby gabby", "yokai",
+			"king magnifico", "mirage", "auto", "gabby gabby", "yokai", "ratigan", "madam mim", "stromboli",
+			"horned king", "chernabog", "shan yu",
 		},
 		DeepCut = {
 			"sykes", "percival mcleach", "bowler hat guy", "hamsterviel", "stabbington brothers",
