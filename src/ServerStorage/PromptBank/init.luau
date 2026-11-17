@@ -230,6 +230,10 @@ local list: { Prompt } = {
 	require("@self/doctor_type"),
 	require("@self/military_rank"),
 	require("@self/poem_type"),
+	require("@self/monkey_type"),
+	require("@self/spider_type"),
+	require("@self/animal_group"),
+	require("@self/shellfish"),
 }
 
 local byId: { [string]: Prompt } = {}

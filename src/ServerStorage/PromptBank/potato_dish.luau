@@ -19,6 +19,7 @@ return {
 			"breakfast potatoes", "potato hash", "corned beef hash", "pierogi", "knish", "aloo gobi", "samosa",
 			"potato nachos", "loaded fries", "potato casserole",
 			"funeral potatoes", "potato dumplings",
+			"crinkle cut fries", "shoestring fries", "cajun fries", "potato bake", "potato cakes",
 		},
 		Rare = {
 			"colcannon", "champ", "rosti", "boxty", "bubble and squeak", "tartiflette", "dauphinoise potatoes",
@@ -31,6 +32,7 @@ return {
 			"schupfnudeln", "himmel und erde", "pytt i panna", "janssons frestelse", "aloo puri", "aloo jeera",
 			"llapingachos", "carapulcra", "ajiaco", "batata harra", "pommes souffle", "hash brown casserole",
 			"tater tot casserole",
+			"disco fries", "chip butty", "aloo sabzi", "bratkartoffeln", "potato leek soup", "potato chowder", "fadge",
 		},
 		DeepCut = {
 			"pommes sarladaises", "pommes pont neuf", "pommes macaire",
@@ -94,5 +96,6 @@ return {
 		["placki ziemniaczane"] = "potato pancakes",
 		["kartoffelsalat"] = "potato salad",
 		["kartoffelsuppe"] = "potato soup",
+		["french fry"] = "french fries", ["frenchfries"] = "french fries", ["franch fries"] = "french fries", ["mashed potatos"] = "mashed potatoes", ["mashed potatoe"] = "mashed potatoes", ["mash potatoes"] = "mashed potatoes", ["mash potato"] = "mashed potatoes", ["baked potatos"] = "baked potato", ["potato chip"] = "potato chips", ["kettle chips"] = "potato chips", ["tatertots"] = "tater tots", ["tator tots"] = "tater tots", ["poutines"] = "poutine", ["gnocchis"] = "gnocchi", ["potato gnocchi"] = "gnocchi", ["potatoe salad"] = "potato salad", ["potatoes salad"] = "potato salad", ["hashbrown"] = "hash browns", ["twice baked potatoes"] = "twice baked potato", ["loaded baked potatoes"] = "loaded baked potato", ["stuffed baked potato"] = "loaded baked potato", ["stuffed potato"] = "loaded baked potato", ["loaded potato soup"] = "potato soup", ["baked potato soup"] = "potato soup", ["potato patties"] = "potato pancakes", ["hasselback"] = "hasselback potatoes", ["scalloped potatos"] = "scalloped potatoes", ["potatoes gratin"] = "au gratin potatoes", ["gratin potatoes"] = "au gratin potatoes", ["cheesy potato"] = "cheesy potatoes", ["potato tots"] = "tater tots",
 	},
 }

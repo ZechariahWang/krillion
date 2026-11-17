@@ -34,6 +34,7 @@ return {
 			"school shoe", "work shoe", "safety shoe", "safety boots", "walking shoe", "rugby boots", "cricket shoes",
 			"rock climbing shoes", "quad skates", "ballerina flats", "ballet pump", "velcro shoes", "lace ups",
 			"light up shoes", "heelys", "hiking shoe", "water socks", "dad shoe", "ruby slippers", "glass slipper",
+			"puma", "reebok",
 		},
 		Rare = {
 			"nike dunk", "nike cortez", "nike blazer", "air jordan 1", "jordan 1", "air jordan 4", "air jordan 11",
@@ -323,5 +324,6 @@ return {
 		["bunny boots"] = "bunny boot", ["wading boots"] = "wading boot", ["snowshoes"] = "snowshoe",
 		["roman sandals"] = "roman sandal", ["scuffs"] = "scuff", ["slipper socks"] = "slipper sock",
 		["pampooties"] = "pampootie", ["brogans"] = "brogan", ["sabatons"] = "sabaton",
+		["tenis shoes"] = "tennis shoe", ["wellys"] = "wellington boot", ["converses"] = "converse", ["nike shoes"] = "sneaker", ["adidas shoes"] = "sneaker", ["crocs shoes"] = "crocs", ["sliders"] = "slide", ["water shoes"] = "water shoe", ["pantofles"] = "slipper",
 	},
 }

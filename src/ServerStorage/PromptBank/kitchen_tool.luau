@@ -211,5 +211,6 @@ return {
 		["paniyaram pan"] = "appam pan", ["meat cleaver"] = "cleaver", ["tamago pan"] = "tamagoyaki pan",
 		["oroshi grater"] = "oroshigane", ["daikon grater"] = "oroshigane", ["baking beans"] = "pie weights",
 		["pie bird"] = "pie funnel", ["tabletop grill"] = "electric grill", ["pot scrubber"] = "scrubber",
+		["pizza cuter"] = "pizza cutter", ["rolling pen"] = "rolling pin", ["mesuring cup"] = "measuring cup", ["ladels"] = "ladle", ["laddle"] = "ladle", ["pairing knife"] = "paring knife", ["drying rack"] = "dish rack", ["ice tray"] = "ice cube tray", ["sharpener"] = "knife sharpener", ["pots"] = "pot", ["pans"] = "pan", ["sheet pan"] = "baking sheet",
 	},
 }

@@ -21,6 +21,7 @@ return {
 			"piquillo", "espelette", "hungarian wax",
 			"red savina", "santa fe grande", "pequin", "guntur chili",
 			"manzano", "cheongyang", "gypsy pepper", "lunchbox pepper", "mini sweet pepper",
+			"cajun belle", "italian sweet pepper", "bullhorn pepper", "long hot pepper",
 		},
 		DeepCut = {
 			"chiltepin", "habanada", "aji limon", "aji dulce", "aji panca", "aji charapita",
@@ -80,5 +81,6 @@ return {
 		["bonnet pepper"] = "scotch bonnet", ["chile japones"] = "japones", 
 		["chile puya"] = "puya", ["chile morita"] = "morita",
 		["lemon drop"] = "aji limon",
+		["jalapeno peppers"] = "jalapeno", ["jalapeno chili"] = "jalapeno", ["habenero"] = "habanero", ["habinero"] = "habanero", ["cayene"] = "cayenne", ["cayenne chili"] = "cayenne", ["chipotles"] = "chipotle", ["ghost peppers"] = "ghost pepper", ["carolina reapers"] = "carolina reaper", ["scotch bonnets"] = "scotch bonnet", ["thai chilis"] = "thai chili", ["thai chillies"] = "thai chili", ["anaheim peppers"] = "anaheim", ["pepperoncinis"] = "pepperoncini", ["shishitos"] = "shishito", ["sweet bell pepper"] = "bell pepper", ["green bell peppers"] = "green bell pepper", ["red bell peppers"] = "red bell pepper", ["yellow bell peppers"] = "yellow bell pepper", ["orange bell peppers"] = "orange bell pepper", ["scorpion"] = "trinidad scorpion", ["piri piri pepper"] = "piri piri", ["pili pili"] = "piri piri", ["anaheim pepper"] = "anaheim",
 	},
 }

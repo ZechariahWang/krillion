@@ -18,6 +18,7 @@ return {
 			"bacon egg and cheese", "egg bites", "egg white omelette", "denver omelette", "cheese omelette",
 			"veggie omelette", "spanish tortilla",
 			"flan", "tea eggs", "egg curry",
+			"western omelette", "mushroom omelette", "spinach omelette", "egg in a hole", "egg on toast", "over medium eggs", "over hard eggs", "sausage egg and cheese", "ham and eggs",
 		},
 		Rare = {
 			"eggs royale", "eggs sardou", "migas", "menemen", "cilbir", "chawanmushi", "oyakodon", "omurice",
@@ -29,6 +30,7 @@ return {
 			"gyeran mari", "egg waffle", "tomato and egg stir fry", "martabak telur", "telur dadar",
 			"balut", "kwek kwek", "tortang talong", "roti telur", "huevos motulenos", "huevos divorciados", "huevos rotos",
 			"ovos moles", "fios de ovos",
+			"coddled eggs",
 		},
 		DeepCut = {
 			"khai jiao", "khai palo", "khai luk khoei", "gyeran bbang", "dashimaki tamago", "tamago don",
@@ -82,5 +84,6 @@ return {
 		["shirred eggs"] = "baked eggs",
 		["oeufs mollets"] = "eggs mollet",
 		["oeufs brouilles"] = "scrambled eggs",
+		["scrambled"] = "scrambled eggs", ["scramble eggs"] = "scrambled eggs", ["omlet"] = "omelette", ["omelete"] = "omelette", ["deviled"] = "deviled eggs", ["devil eggs"] = "deviled eggs", ["egg sandwhich"] = "egg sandwich", ["quice"] = "quiche", ["fritata"] = "frittata", ["eggs benny"] = "eggs benedict", ["souffle eggs"] = "souffle", ["suffle"] = "souffle", ["sufle"] = "souffle", ["carbonara pasta"] = "carbonara", ["spaghetti carbonara"] = "carbonara", ["pasta carbonara"] = "carbonara", ["poach egg"] = "poached egg", ["boil egg"] = "boiled egg", ["hard boil egg"] = "hard boiled egg", ["soft boil egg"] = "soft boiled egg", ["soft boiled"] = "soft boiled egg", ["hard boiled"] = "hard boiled egg", ["merengue"] = "meringue", ["meringues"] = "meringue", ["egg florentine"] = "eggs florentine", ["florentine eggs"] = "eggs florentine", ["eggs and bacon"] = "bacon and eggs", ["ham and egg"] = "ham and eggs", ["western omelet"] = "western omelette", ["one eyed jack"] = "egg in a basket", ["toad in a hole egg"] = "egg in a basket", ["bulls eye eggs"] = "egg in a basket", ["breakfast wrap"] = "breakfast burrito", ["dippy eggs"] = "soft boiled egg", ["egg and soldiers"] = "soft boiled egg", ["egg flower soup"] = "egg drop soup", ["crustless quiche"] = "quiche", ["tamago"] = "tamagoyaki", ["eggs mayo"] = "oeufs mayonnaise", ["egg mayo sandwich"] = "egg salad", ["egg mayo"] = "egg salad", ["egg mayonnaise"] = "egg salad", ["egg cheese sandwich"] = "egg and cheese",
 	},
 }

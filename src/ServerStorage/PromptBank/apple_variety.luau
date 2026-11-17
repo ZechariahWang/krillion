@@ -7,7 +7,7 @@ return {
 			"red delicious", "granny smith", "gala", "fuji", "honeycrisp", "golden delicious",
 		},
 		TooClever = {
-			"pink lady", "mcintosh", "crabapple", "caramel apple",
+			"pink lady", "mcintosh", "crabapple",
 		},
 		Schooler = {
 			"braeburn", "jonagold", "cosmic crisp", "jazz", "ambrosia", "envy", "empire", "bramley", "cox", "russet",
@@ -42,7 +42,7 @@ return {
 		["honey crisp"] = "honeycrisp", ["honeycrisp apple"] = "honeycrisp",
 		["golden delicious apple"] = "golden delicious", ["pink lady apple"] = "pink lady", ["cripps pink"] = "pink lady",
 		["macintosh"] = "mcintosh", ["mac"] = "mcintosh", ["mcintosh apple"] = "mcintosh", ["crab apple"] = "crabapple",
-		["crab apples"] = "crabapple", ["candy apple"] = "caramel apple", ["toffee apple"] = "caramel apple",
+		["crab apples"] = "crabapple",
 		["braeburn apple"] = "braeburn", ["jonagold apple"] = "jonagold", ["cosmic crisp apple"] = "cosmic crisp",
 		["jazz apple"] = "jazz", ["rome beauty"] = "rome", ["bramley seedling"] = "bramley", ["coxs orange pippin"] = "cox",
 		["cox orange pippin"] = "cox", ["coxs pippin"] = "cox", ["fuji apples"] = "fuji", ["gala apples"] = "gala",

@@ -204,5 +204,7 @@ return {
 		["kangra tea"] = "kangra", ["yak butter tea"] = "butter tea", ["tibetan butter tea"] = "butter tea",
 		["po cha"] = "butter tea", ["mongolian milk tea"] = "suutei tsai", ["noon chai"] = "kashmiri chai",
 		["honeybush tea"] = "honeybush", ["rooibos red"] = "rooibos", ["african red bush"] = "rooibos",
+		["lemon honey tea"] = "honey tea", ["yerba mate tea"] = "yerba mate",
+		["olong"] = "oolong", ["chi tea"] = "chai",
 	},
 }

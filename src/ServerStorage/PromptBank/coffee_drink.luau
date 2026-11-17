@@ -33,6 +33,7 @@ return {
 			"chestnut praline latte", "caramel brulee latte", "eggnog latte", "maple latte", "honey latte",
 			"cinnamon latte", "mocha cold brew", "caramel cold brew", "irish cream latte", "vanilla cold brew",
 			"triple espresso", "peppermint latte", "salted caramel mocha", "dirty latte", "coffee float",
+			"magic",
 		},
 		DeepCut = {
 			"einspanner", "marocchino", "carajillo", "espresso romano", "yuanyang", "corretto", "black eye", "dead eye",
@@ -99,5 +100,6 @@ return {
 		["cafe romano"] = "espresso romano", ["freddo cappuccino"] = "cappuccino freddo",
 		["filter kaapi"] = "indian filter coffee", ["qahwa"] = "arabic coffee", ["kopi susu"] = "es kopi susu",
 		["cafecito"] = "cafe cubano",
+		["frappuchino"] = "frappuccino", ["amaricano"] = "americano", ["americano coffee"] = "americano", ["espressos"] = "espresso", ["iced coffees"] = "iced coffee", ["ice latte"] = "iced latte", ["macchiatos"] = "macchiato", ["cappuccino coffee"] = "cappuccino", ["cappuccinos"] = "cappuccino", ["piccolo"] = "piccolo latte", ["con panna"] = "espresso con panna", ["flat white coffee"] = "flat white",
 	},
 }

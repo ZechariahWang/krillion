@@ -59,6 +59,7 @@ return {
 			"cocked hat", "biretta", "zucchetto", "wimple", "coif", "cowl", "snood", "bellboy hat", "chauffeur cap",
 			"stewardess hat", "sou wester", "scout hat", "bearskin", "pickelhaube", "cardinals hat", "papal tiara", "mitre",
 			"police helmet",
+			"tin foil hat", "spartan helmet", "knight helmet", "leprechaun hat",
 		},
 		DeepCut = {
 			"mirliton", "shako czapka", "czapka", "rogatywka", "konfederatka", "polish cap", "pilotka", "garrison cap",
@@ -172,5 +173,6 @@ return {
 		["miner helmet"] = "mining helmet", ["equestrian helmet"] = "riding helmet", ["pilot helmet"] = "flight helmet",
 		["bobby helmet"] = "police helmet", ["batting helmet"] = "baseball helmet", ["pirate tricorn"] = "pirate hat",
 		["napoleonic hat"] = "napoleon hat", ["propeller beanie"] = "propeller hat", ["magic hat"] = "magician hat",
+		["bannie"] = "beanie", ["cowboy had"] = "cowboy hat", ["fedorra"] = "fedora", ["sombraro"] = "sombrero", ["somberro"] = "sombrero", ["truckers hat"] = "trucker hat", ["trucker"] = "trucker hat", ["tilly hat"] = "bucket hat", ["wide brimmed hat"] = "sun hat", ["caps"] = "cap", ["witch"] = "witch hat", ["santa"] = "santa hat", ["pirate"] = "pirate hat", ["tinfoil hat"] = "tin foil hat", ["jester"] = "jester hat", ["elf"] = "elf hat", ["propeller cap"] = "propeller hat",
 	},
 }

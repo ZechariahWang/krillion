@@ -71,6 +71,7 @@ return {
 			"davenport", "morris chair", "barcelona chair", "wishbone chair", "parsons chair", "tulip chair",
 			"ladder back chair", "slipper chair", "tub chair", "barrel chair", "bucket seat", "hide a bed", "curio cabinet",
 			"banquette", "gurney", "hospital bed", "massage table", "exam table", "examination table", "lectern",
+			"waterbed", "bakers rack", "cedar chest", "lap desk", "saucer chair",
 		},
 		DeepCut = {
 			"bergere chair", "fauteuil", "fauteuil de bureau", "marquise", "voyeuse", "chaise a bras", "chaise percee",
@@ -150,5 +151,6 @@ return {
 		["kotatsu table"] = "kotatsu", ["chabudai table"] = "chabudai", ["byobu screen"] = "byobu",
 		["charpai bed"] = "charpoy", ["credenza cabinet"] = "credenza", ["cheval glass"] = "cheval mirror",
 		["media unit"] = "media console", ["wing chair"] = "wingback chair", ["eames lounge chair"] = "eames chair",
+		["chare"] = "chair", ["bookshelve"] = "bookshelf", ["dressor"] = "dresser", ["rocking chairs"] = "rocking chair", ["bean bags"] = "bean bag", ["love seats"] = "loveseat", ["china hutch"] = "china cabinet", ["beanbag chair"] = "bean bag", ["highchair"] = "high chair", ["file cabinet"] = "filing cabinet", ["papasan"] = "papasan chair",
 	},
 }

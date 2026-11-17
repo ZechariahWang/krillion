@@ -199,7 +199,7 @@ return {
 		["chocolate labrador"] = "labrador", ["golden lab"] = "labrador", ["west highland"] = "west highland terrier",
 		["japanese akita"] = "akita", ["teacup poodle"] = "poodle", ["teacup yorkie"] = "yorkshire terrier",
 		["peruvian hairless"] = "peruvian inca orchid", ["pocket pitbull"] = "pit bull", ["blue nose"] = "pit bull",
-		["white shepherd"] = "white swiss shepherd", ["american mastiff"] = "mastiff",
+		["white shepherd"] = "white swiss shepherd",
 		["cavalier king charles spaniel dog"] = "cavalier king charles spaniel", ["german shepherds"] = "german shepherd",
 		["golden retrievers"] = "golden retriever", ["chow chows"] = "chow chow", ["dobermans"] = "doberman",
 		["rottweilers"] = "rottweiler", ["yorkies"] = "yorkshire terrier", ["chihuahuaa"] = "chihuahua",

@@ -97,5 +97,6 @@ return {
 		["pansoti"] = "pansotti", ["scialatielli"] = "scialatelli", ["scilatielli"] = "scialatelli",
 		["umbrichelli"] = "umbricelli", ["cicatelli"] = "cecatelli", ["conchiglie rigate"] = "conchiglie",
 		["elicoidali"] = "eliche", ["spirali"] = "rotini",
+		["ravoli"] = "ravioli", ["spaghettis"] = "spaghetti", ["rotinni"] = "rotini", ["papardelle"] = "pappardelle", ["anjel hair"] = "angel hair", ["gnocci"] = "gnocchi", ["bowties"] = "farfalle", ["farfalle pasta"] = "farfalle",
 	},
 }
