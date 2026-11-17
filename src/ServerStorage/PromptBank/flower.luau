@@ -220,7 +220,7 @@ return {
 		["zinia"] = "zinnia", ["zinna"] = "zinnia", ["dalia"] = "dahlia", ["dahlea"] = "dahlia", ["dalhia"] = "dahlia",
 		["snap dragons"] = "snapdragon", ["bluebel"] = "bluebell", ["butter cup"] = "buttercup",
 		["buttercupp"] = "buttercup", ["lylac"] = "lilac", ["lilack"] = "lilac", ["wysteria"] = "wisteria",
-		["wistera"] = "wisteria", ["gardenea"] = "gardenia", ["gardena"] = "gardenia", ["magnola"] = "magnolia",
+		["wistera"] = "wisteria", ["gardenea"] = "gardenia", ["magnola"] = "magnolia",
 		["magnoila"] = "magnolia", ["hyacinthe"] = "hyacinth", ["hyancith"] = "hyacinth", ["rosse"] = "rose",
 		["roze"] = "rose", ["roase"] = "rose",
 	},

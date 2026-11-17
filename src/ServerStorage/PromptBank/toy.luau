@@ -256,5 +256,12 @@ return {
 		["barbie house"] = "barbie dream house", ["star wars"] = "star wars figures", ["spiderman"] = "spiderman figure",
 		["batman"] = "batman figure", ["superman"] = "superman figure", ["toy trucks"] = "toy truck", ["uno cards"] = "uno",
 		["candyland"] = "candy land",
+		["legoes"] = "lego", ["lgeo"] = "lego", ["barbee"] = "barbie", ["barby"] = "barbie",
+		["teddy beer"] = "teddy bear", ["tedy bear"] = "teddy bear", ["teady bear"] = "teddy bear", ["puzle"] = "puzzle",
+		["pazzle"] = "puzzle", ["pussle"] = "puzzle", ["jigsaw puzle"] = "jigsaw puzzle", ["hot weels"] = "hot wheels",
+		["hotwheel"] = "hot wheels", ["yoyoyo"] = "yo yo", ["fidgit spinner"] = "fidget toy",
+		["fidget spiner"] = "fidget toy", ["slimey"] = "slime", ["tamagochi"] = "tamagotchi", ["furbie"] = "furby",
+		["furbys"] = "furby", ["transformer"] = "transformers", ["frizbee"] = "frisbee", ["frisby"] = "frisbee",
+		["jinga"] = "jenga", ["slinkey"] = "slinky",
 	},
 }
