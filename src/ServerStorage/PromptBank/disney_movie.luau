@@ -75,6 +75,7 @@ return {
 			"102 dalmatians", "patchs london adventure", "treasure island", "who framed roger rabbit",
 			"inspector gadget", "george of the jungle", "newsies", "muppet treasure island", "the lone ranger",
 			"honey i blew up the kid", "splash", "the lizzie mcguire movie", "kim possible so the drama",
+			"phineas and ferb the movie", "the enchanted christmas",
 		},
 		DeepCut = {
 			"the cat from outer space", "the north avenue irregulars", "the apple dumpling gang", "candleshoe",
@@ -204,5 +205,13 @@ return {
 		["pocahontas 2"] = "pocahontas ii", ["the fox and the hound ii"] = "the fox and the hound 2",
 		["mufasa the lion king"] = "mufasa", ["peter pan return to neverland"] = "return to never land",
 		["duck tales the movie"] = "ducktales the movie", ["basil of baker street"] = "the great mouse detective",
+		["lady and the tramp 2019"] = "lady and the tramp",
+		["snow white and the seven dwarves"] = "snow white and the seven dwarfs",
+		["beauty and the beast 2"] = "the enchanted christmas",
+		["hunchback of notre dame 2"] = "the hunchback of notre dame ii",
+		["cinderella 3"] = "cinderella iii a twist in time", ["aladdin 2"] = "the return of jafar",
+		["aladdin 3"] = "aladdin and the king of thieves", ["lion king 3"] = "the lion king 1 and a half",
+		["the little mermaid 3"] = "ariels beginning", ["finding nemo 2"] = "finding dory",
+		["wreck it ralph 2"] = "ralph breaks the internet",
 	},
 }

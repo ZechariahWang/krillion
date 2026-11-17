@@ -77,6 +77,9 @@ return {
 			"pumpkinseed", "rudd", "tench", "chub", "barbel", "shovelnose sturgeon", "beluga sturgeon", "white sturgeon",
 			"royal gramma", "napoleon wrasse", "goliath grouper", "pollock", "whiting", "hake", "rockfish", "skipjack tuna",
 			"blue marlin", "mandarinfish", "stonefish", "arapaima", "wolf eel", "fugu", "oarfish",
+			"whitefish", "needlefish", "dolly varden", "kokanee", "grunt", "black crappie", "white crappie",
+			"pinfish", "oyster toadfish", "brill", "lizardfish", "longnose gar", "spotted gar", "black arowana",
+			"golden dorado", "kohaku", "sanke", "showa", "ocean perch", "ladyfish",
 		},
 		DeepCut = {
 			"atlantic cod", "pacific cod", "walleye pollock", "silver hake", "red hake", "white hake", "hoki", "ling", "tusk",
@@ -105,6 +108,9 @@ return {
 			"sculpin", "lumpfish", "lumpsucker", "snailfish", "mariana snailfish", "icefish", "crocodile icefish",
 			"antarctic toothfish", "chilean sea bass", "candiru", "payara", "giant gourami", "galaxy rasbora", "butterfly loach",
 			"viperfish", "fangtooth", "gulper eel", "ribbon eel",
+			"asagi", "shusui", "bekko", "utsuri", "ogon", "tancho", "leaf fish", "flashlight fish", "glassfish",
+			"rattail", "african lungfish", "australian lungfish", "featherback", "tambaqui", "black piranha",
+			"goliath tigerfish", "midshipman", "wreckfish", "megrim", "ayu", "pigfish",
 		},
 		Mythic = {
 			"barreleye", "pelican eel", "dragonfish", "stoplight loosejaw", "snipe eel", "ribbonfish", "blind cave fish",
@@ -169,5 +175,12 @@ return {
 		["volitans lionfish"] = "red lionfish", ["turkeyfish"] = "lionfish", ["reef stonefish"] = "stonefish",
 		["yellowtail damsel"] = "yellow tail damselfish", ["humphead wrasse"] = "napoleon wrasse", ["ricefish"] = "medaka",
 		["common carp"] = "carp",
+		["garfish"] = "gar", ["spoonbill"] = "paddlefish", ["mudfish"] = "bowfin", ["jewfish"] = "goliath grouper",
+		["buffalo fish"] = "bigmouth buffalo", ["slime eel"] = "hagfish", ["sea lamprey"] = "lamprey",
+		["elephantfish"] = "elephantnose fish", ["sweetfish"] = "ayu", ["nishikigoi"] = "koi",
+		["fancy goldfish"] = "goldfish", ["common goldfish"] = "goldfish", ["comet"] = "comet goldfish",
+		["fantail"] = "fantail goldfish", ["telescope"] = "telescope eye", ["celestial"] = "celestial eye",
+		["archer fish"] = "archerfish", ["asian arowana"] = "arowana", ["nile tilapia"] = "tilapia",
+		["red bellied pacu"] = "pacu", ["red piranha"] = "red bellied piranha",
 	},
 }

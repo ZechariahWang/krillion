@@ -40,6 +40,7 @@ return {
 			"cat noir", "ladybug", "captain carter", "us agent", "red robin", "batman beyond", "superwoman", "quake",
 			"red hulk", "morbius", "silver sable", "big daddy", "catboy", "owlette", "gekko", "dog man", "she ra", "tatsumaki",
 			"squirrel girl",
+			"bananaman", "superted", "flash gordon", "okoye", "jeff the land shark", "cosmo the spacedog",
 		},
 		DeepCut = {
 			"john stewart", "guy gardner", "kyle rayner", "jessica cruz", "saturn girl", "lightning lad", "cosmic boy",
@@ -60,6 +61,8 @@ return {
 			"miracleman", "terra", "wonder twins", "zan", "jayna", "the lone ranger", "zorro", "human target", "power ranger",
 			"red ranger", "blue ranger", "pink ranger", "green ranger", "black ranger", "yellow ranger", "white ranger",
 			"negasonic teenage warhead", "yukio", "mob", "endeavor", "hawks", "red riot", "zenitsu",
+			"battle beast", "eraser head", "froppy", "translucent", "alan scott", "simon baz", "colleen wing",
+			"nubia",
 		},
 		Mythic = {
 			"howard the duck", "devil dinosaur", "throg", "hit monkey", "sleepwalker", "elongated man", "metamorpho",
@@ -137,5 +140,7 @@ return {
 		["john constantine"] = "constantine", ["booster"] = "booster gold", ["bucky barnes"] = "winter soldier",
 		["archangel"] = "angel", ["shadowcat"] = "kitty pryde", ["rom spaceknight"] = "rom",
 		["hal jordan"] = "green lantern",
+		["spiderman 2099"] = "spider man 2099", ["baby groot"] = "groot", ["damian"] = "damian wayne",
+		["aizawa"] = "eraser head", ["tsuyu"] = "froppy", ["tsuyu asui"] = "froppy", ["jeff"] = "jeff the land shark",
 	},
 }

@@ -68,6 +68,7 @@ return {
 			"cardinal flower", "joe pye weed", "canterbury bells", "french marigold", "african marigold",
 			"mexican sunflower", "dianthus", "wallflower", "witch hazel", "butterfly bush", "balloon flower",
 			"pitcher plant", "peace lily", "corn poppy", "blue poppy", "ylang ylang", "bergamot",
+			"oriental lily", "asiatic lily", "casablanca lily",
 		},
 		DeepCut = {
 			"dracula orchid", "naked man orchid", "flying duck orchid", "laughing bumblebee orchid",
@@ -95,6 +96,7 @@ return {
 			"amazon lily", "brahma kamal", "neelakurinji", "carrion flower", "skunk cabbage", "red ginger",
 			"shell ginger", "pineapple lily", "eremurus", "touch me not", "jewelweed", "spanish bluebell",
 			"siberian squill", "parrot tulip", "triumph tulip", "darwin tulip", "pickerelweed",
+			"tree peony", "madonna lily", "regal lily", "martagon lily", "turks cap lily", "kowhai",
 		},
 		Mythic = {
 			"victoria cruziana", "euryale", "medinilla", "lipstick plant", "goldfish plant", "flame violet",
@@ -194,5 +196,15 @@ return {
 		["resurrection lily"] = "surprise lily", ["magic lily"] = "surprise lily", ["glory lily"] = "flame lily",
 		["gloriosa"] = "flame lily", ["pikake"] = "sampaguita", ["kokio"] = "hawaiian hibiscus",
 		["kadupul"] = "queen of the night", ["lithops"] = "living stones", ["ceanothus"] = "california lilac",
+		["wildflowers"] = "wildflower", ["red poppy"] = "poppy", ["rosebud"] = "rose", ["rose bush"] = "rose",
+		["wild violet"] = "violet", ["sweet violet"] = "violet", ["blue hydrangea"] = "hydrangea",
+		["johnny jump up"] = "viola", ["heartsease"] = "viola", ["wild pansy"] = "viola",
+		["busy lizzie"] = "impatiens", ["lilium"] = "lily", ["rosa"] = "rose", ["tulipa"] = "tulip",
+		["sweet olive"] = "osmanthus", ["tea olive"] = "osmanthus", ["mountain laurel"] = "kalmia",
+		["golden poppy"] = "california poppy", ["pink lady slipper"] = "lady slipper",
+		["shooting stars"] = "shooting star", ["wake robin"] = "trillium", ["monkey flower"] = "mimulus",
+		["indian blanket"] = "gaillardia", ["firewheel"] = "gaillardia", ["wild bergamot"] = "bee balm",
+		["baby blue eyes"] = "nemophila", ["ume"] = "plum blossom", ["red spider lily"] = "spider lily",
+		["lycoris"] = "spider lily", ["guernsey lily"] = "nerine", ["helianthus"] = "sunflower",
 	},
 }

@@ -20,6 +20,7 @@ return {
 		},
 		DeepCut = {
 			"mr jingles", "mouse king", "mert", "perla", "dawson",
+			"matthias", "martin the warrior", "frederick", "chrysanthemum", "lilly",
 		},
 		Mythic = {},
 	},
@@ -30,5 +31,12 @@ return {
 		["mighty"] = "mighty mouse", ["danger"] = "danger mouse", ["pinky and the brain"] = "pinky",
 		["nutcracker mouse king"] = "mouse king",
 		["tuffy mouse"] = "tuffy", ["mrs frisby"] = "mrs brisby", ["mortimer"] = "mortimer mouse",
+		["timothy"] = "timothy q mouse", ["timothy mouse"] = "timothy q mouse", ["jaq and gus"] = "jaq",
+		["pinky the mouse"] = "pinky", ["miss bianca"] = "bianca",
+		["angelina"] = "angelina ballerina", ["speedy gonzalez"] = "speedy gonzales",
+		["ralph mouse"] = "ralph s mouse", ["basil of baker street"] = "basil", ["bernard and bianca"] = "bernard",
+		["tom and jerry"] = "jerry", ["gadget"] = "gadget hackwrench", ["monty"] = "monterey jack",
+		["geronimo"] = "geronimo stilton", ["pixie and dixie"] = "pixie", ["reepicheep the mouse"] = "reepicheep",
+		["stuart little mouse"] = "stuart little",
 	},
 }

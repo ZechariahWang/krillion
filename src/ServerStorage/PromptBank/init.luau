@@ -214,6 +214,10 @@ local list: { Prompt } = {
 	require("@self/store"),
 	require("@self/container"),
 	require("@self/material"),
+	require("@self/exercise"),
+	require("@self/landform"),
+	require("@self/pattern"),
+	require("@self/plant_part"),
 }
 
 local byId: { [string]: Prompt } = {}

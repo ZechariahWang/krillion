@@ -75,6 +75,7 @@ return {
 			"cuttlefish", "mussel", "scallop", "barnacle", "krill", "mantis shrimp", "horseshoe crab", "sand dollar",
 			"sea snake", "sea slug", "leopard seal", "elephant seal", "porpoise", "portuguese man of war", "box jellyfish",
 			"blue ringed octopus", "ocean sunfish", "haddock",
+			"mosasaurus", "plesiosaur", "dunkleosteus", "african penguin", "galapagos penguin",
 		},
 		DeepCut = {
 			"cookiecutter shark", "fangtooth", "lanternfish", "sea butterfly", "sea angel", "crown of thorns starfish",
@@ -110,6 +111,10 @@ return {
 			"chinstrap penguin", "macaroni penguin", "rockhopper penguin", "hogfish", "basking shark", "goblin shark",
 			"greenland shark", "oarfish", "dumbo octopus", "colossal squid", "hagfish", "sawfish", "conch", "abalone",
 			"mimic octopus", "bowhead whale", "vampire squid", "coelacanth",
+			"magellanic penguin", "humboldt penguin", "yellow eyed penguin", "royal penguin", "little penguin",
+			"ichthyosaur", "liopleurodon", "basilosaurus", "helicoprion", "pygmy seahorse", "sea bunny", "sea sheep",
+			"red sea urchin", "purple sea urchin", "cauliflower jellyfish", "pink meanie", "sea apple", "toadfish",
+			"barrel sponge", "arrow crab",
 		},
 		Mythic = {
 			"sea pig", "siphonophore", "pyrosome", "comb jelly", "glass squid", "bobbit worm", "pom pom crab",
@@ -220,5 +225,9 @@ return {
 		["stingaree"] = "stingray", ["little tunny"] = "false albacore", ["nudibranch"] = "sea slug",
 		["black seadevil"] = "humpback anglerfish",
 		["giant oceanic manta"] = "manta ray",
+		["sea cow"] = "manatee", ["hippocampus"] = "seahorse", ["chilean sea bass"] = "patagonian toothfish",
+		["leatherback"] = "leatherback turtle", ["fairy penguin"] = "little penguin",
+		["blue penguin"] = "little penguin", ["goosefish"] = "monkfish", ["mosasaur"] = "mosasaurus",
+		["jackass penguin"] = "african penguin", ["plesiosaurus"] = "plesiosaur",
 	},
 }
