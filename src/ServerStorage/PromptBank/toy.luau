@@ -56,6 +56,7 @@ return {
 			"finger puppet", "hand puppet", "modeling clay", "slime", "xylophone", "harmonica", "maracas",
 			"tambourine", "pop it", "squishmallow", "stress ball", "rc helicopter", "ken doll",
 			"buzz lightyear", "woody", "power wheels", "fidget toy",
+			"bike", "monopoly", "uno", "connect four", "battleship", "candy land", "checkers",
 		},
 		Rare = {
 			"lite brite", "spirograph", "colorforms",
@@ -90,6 +91,8 @@ return {
 			"plasma ball", "dippy bird", "spy kit", "invisible ink pen", "decoder ring", "tin can phone",
 			"stomp rocket", "slingshot", "popgun", "pogs", "skylanders", "zhu zhu pets", "furreal friends",
 			"pillow pets", "build a bear", "webkinz", "jellycat", "chatty cathy", "baby alive", "tiny tears",
+			"monster truck", "slip n slide", "ring toss", "sticky hand", "boomerang", "paw patrol", "clue", "yahtzee",
+			"scrabble", "chutes and ladders", "dominoes", "guess who", "game of life",
 		},
 		DeepCut = {
 			"wooden toys", "wooden blocks", "alphabet blocks", "wooden train",
@@ -273,5 +276,14 @@ return {
 		["mego figures"] = "mego", ["kenner star wars"] = "kenner", ["evel knievel stunt cycle"] = "stunt cycle",
 		["gi joe action figures"] = "g i joe", ["fidget spinner"] = "fidget toy", ["spinner"] = "fidget toy",
 		["fidget spinners"] = "fidget toy",
+		["bicycle"] = "bike", ["slip and slide"] = "slip n slide", ["sticky hands"] = "sticky hand",
+		["hippity hop"] = "space hopper", ["pop its"] = "pop it", ["yo yos"] = "yo yo", ["slinkies"] = "slinky",
+		["clay"] = "modeling clay", ["dinosaur"] = "toy dinosaur", ["stuffed unicorn"] = "stuffed animal",
+		["stuffed dog"] = "stuffed animal", ["stuffed cat"] = "stuffed animal", ["stuffed bunny"] = "stuffed animal",
+		["airplane"] = "toy airplane", ["helicopter"] = "toy helicopter", ["soccer ball"] = "ball", ["football"] = "ball",
+		["basketball"] = "ball", ["baseball"] = "ball", ["tennis ball"] = "ball", ["bouncy balls"] = "bouncy ball",
+		["barbie house"] = "barbie dream house", ["star wars"] = "star wars figures", ["spiderman"] = "spiderman figure",
+		["batman"] = "batman figure", ["superman"] = "superman figure", ["toy trucks"] = "toy truck", ["uno cards"] = "uno",
+		["candyland"] = "candy land",
 	},
 }

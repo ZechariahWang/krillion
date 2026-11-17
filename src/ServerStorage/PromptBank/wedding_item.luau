@@ -37,10 +37,10 @@ return {
 			"corset", "something blue", "sixpence", "escort cards", "table numbers", "head table", "sweetheart table",
 			"dessert table", "candy bar", "welcome bags", "thank you card", "save the date", "rsvp card", "gift registry",
 			"grand march", "grand entrance", "father daughter dance", "mother son dance", "last dance", "sparkler send off",
-			"shuttle bus", "horse and carriage", "processional", "recessional", "wedding march", "hymn", "readings", "scripture",
-			"unity ceremony", "handfasting", "jumping the broom", "broom", "tea ceremony", "red envelope", "henna", "baraat",
-			"mandap", "sangeet", "kimono", "hanbok", "lehenga", "sari",
-			"something old", "something new", "something borrowed", "garter belt", "chiavari chairs", "kilt", "cake server",
+			"shuttle bus", "horse and carriage", "processional", "recessional", "wedding march", "hymn", "readings",
+			"scripture", "unity ceremony", "handfasting", "jumping the broom", "broom", "tea ceremony", "red envelope",
+			"henna", "baraat", "mandap", "sangeet", "kimono", "hanbok", "lehenga", "sari", "something old", "something new",
+			"something borrowed", "chiavari chairs", "kilt", "cake server",
 		},
 		Mythic = {
 			"ring box", "pew bow", "flower crown", "flower wall", "balloon arch", "neon sign", "light up letters", "monogram",
@@ -87,5 +87,6 @@ return {
 		["wedding photographer"] = "photographer", ["wedding vows"] = "vows", ["wedding venue"] = "venue",
 		["chiavari chair"] = "chiavari chairs", ["slide show"] = "slideshow", ["garlands"] = "garland",
 		["dessert"] = "desserts", ["firework"] = "fireworks", ["kilts"] = "kilt",
+		["garter belt"] = "garter",
 	},
 }

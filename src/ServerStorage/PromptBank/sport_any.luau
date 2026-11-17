@@ -78,6 +78,7 @@ return {
 			"blind football", "wall handball",
 			"paddleball", "matkot", "beach handball", "heptathlon", "steeplechase", "race walking", "modern pentathlon",
 			"pentathlon", "orienteering", "rounders", "skeleton", "trap shooting", "clay pigeon shooting",
+			"triple jump", "street hockey", "ball hockey", "canadian football", "arena football", "wallyball",
 		},
 		DeepCut = {
 			"buzkashi", "fierljeppen", "bog snorkelling", "cheese rolling", "wife carrying", "toe wrestling",
@@ -179,5 +180,11 @@ return {
 		["pingpong"] = "table tennis", ["ping pong"] = "table tennis", ["ten pin"] = "bowling",
 		["tenpin bowling"] = "bowling", ["ten pin bowling"] = "bowling", ["tenpin"] = "bowling",
 		["motorcycle speedway"] = "speedway",
+		["cross country"] = "cross country running", ["dirt biking"] = "motocross",
+		["tackle football"] = "american football", ["australian football"] = "australian rules football",
+		["lawn bowling"] = "lawn bowls", ["ax throwing"] = "axe throwing", ["skateboard"] = "skateboarding",
+		["inline skating"] = "rollerblading", ["greco roman"] = "greco roman wrestling",
+		["sand volleyball"] = "beach volleyball", ["indoor volleyball"] = "volleyball", ["frisbee golf"] = "disc golf",
+		["crew"] = "rowing", ["sprint"] = "sprinting",
 	},
 }

@@ -11,23 +11,21 @@ return {
 		},
 		Schooler = {
 			"boo boo", "fozzie bear", "lotso", "kenai", "koda", "little john", "grizz", "mama bear", "papa bear", "baby bear",
-			"corduroy", "rupert bear", "cheer bear", "grumpy bear", "tenderheart bear", "funshine bear", "bedtime bear",
-			"love a lot bear", "share bear", "wish bear", "good luck bear", "birthday bear", "knut", "berenstain bears", "boog",
+			"corduroy", "rupert bear", "cheer bear", "grumpy bear", "tenderheart bear", "funshine bear", "knut",
+			"berenstain bears", "boog", "golden freddy",
 		},
 		Rare = {
 			"little bear", "bear in the big blue house", "humphrey the bear", "bart the bear", "gruffi", "zummi", "cubbi",
-			"grammi", "sunni", "tummi", "teddy ruxpin", "bamse", "pudsey", "winnipeg", "big ted", "little ted", "iorek byrnison",
-			"bungle", "superted", "hair bear", "brer bear", "gentle ben", "wojtek", "misha",
-			"rilakkuma", "duffy", "sooty", "mordu", "beorn", "sugar bear", "fuzzy wuzzy", "chi chi", "tian tian",
-			"golden freddy", "coca cola polar bear",
+			"grammi", "sunni", "tummi", "teddy ruxpin", "bamse", "pudsey", "winnipeg", "big ted", "little ted",
+			"iorek byrnison", "bungle", "superted", "hair bear", "brer bear", "gentle ben", "wojtek", "misha", "rilakkuma",
+			"duffy", "sooty", "mordu", "beorn", "sugar bear", "fuzzy wuzzy", "chi chi", "tian tian", "coca cola polar bear",
+			"bedtime bear", "love a lot bear", "share bear", "wish bear", "good luck bear", "birthday bear",
 		},
 		DeepCut = {
 			"mr bean teddy",
 			"ling ling", "hsing hsing",
 		},
-		Mythic = {
-			"bruin",
-		},
+		Mythic = {},
 	},
 	aliases = {
 		["pooh bear"] = "winnie the pooh", ["winnie pooh"] = "winnie the pooh", ["winnie"] = "winnie the pooh",

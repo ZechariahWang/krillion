@@ -10,15 +10,14 @@ return {
 			"trigger", "shadowfax", "maximus", "bucephalus", "epona", "mr ed",
 		},
 		Schooler = {
-			"man o war", "american pharoah", "binky", "artax", "bullseye", "samson", "philippe", "buttercup", "joey",
-			"boxer", "champion", "sleipnir", "black stallion", "flicka", "hidalgo", "phar lap", "justify",
-			"rocinante", "traveller", "comanche", "fury", "khan", "roach", "bree", "hwin",
+			"man o war", "american pharoah", "binky", "artax", "bullseye", "samson", "philippe", "joey", "boxer", "champion",
+			"sleipnir", "black stallion", "flicka", "hidalgo", "phar lap", "justify", "rocinante", "fury",
 		},
 		Rare = {
-			"war admiral", "citation", "affirmed", "seattle slew", "barbaro", "zenyatta", "smarty jones", "ruffian",
-			"red rum", "frankel", "arkle", "shergar", "kelso", "cigar", "funny cide", "marengo", "incitatus",
-			"sefton", "topper", "buttermilk", "diablo", "brego", "bill the pony", "merrylegs", "ginger",
-			"dan patch", "eclipse", "kincsem", "foolish pleasure", "winning colors",
+			"war admiral", "citation", "affirmed", "seattle slew", "barbaro", "zenyatta", "smarty jones", "ruffian", "red rum",
+			"frankel", "arkle", "shergar", "kelso", "cigar", "funny cide", "marengo", "incitatus", "sefton", "topper",
+			"buttermilk", "diablo", "brego", "bill the pony", "merrylegs", "ginger", "dan patch", "eclipse", "kincsem",
+			"foolish pleasure", "winning colors", "comanche", "traveller", "roach", "bree", "hwin", "khan",
 		},
 		DeepCut = {
 			"gringolet", "hasufel", "arod", "snowmane", "copenhagen",

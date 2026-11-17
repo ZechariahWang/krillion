@@ -68,6 +68,7 @@ return {
 			"tabasco", "grilled vegetables", "roasted vegetables", "roasted tomatoes",
 			"marinated artichoke", "pickled peppers", "spicy salami", "cheddar jack", "paprika", "black pepper", "salt",
 			"mint", "dill", "fig", "pear", "capers", "crab", "gorgonzola", "kale",
+			"cheese curds",
 		},
 		DeepCut = {
 			"lardo", "coppa", "finocchiona", "lonza", "culatello", "salsiccia", "haggis", "black pudding",
@@ -200,5 +201,9 @@ return {
 		["yellow onion"] = "onion", ["white onion"] = "onion", ["sweet onion"] = "onion", ["bacon bits"] = "bacon",
 		["ham slices"] = "ham", ["diced ham"] = "ham", ["pepperoni cups"] = "pepperoni", ["dill pickles"] = "pickle",
 		["pickled red onions"] = "pickled onion", ["red sauce"] = "tomato sauce", ["garlic white sauce"] = "garlic sauce",
+		["red peppers"] = "red pepper", ["peperoncini"] = "pepperoncini", ["pepper flakes"] = "red pepper flakes",
+		["dill pickle"] = "pickle", ["pickle slices"] = "pickle", ["scrambled eggs"] = "scrambled egg",
+		["tuna fish"] = "tuna", ["crumbled bacon"] = "bacon", ["marshmallows"] = "marshmallow", ["ranch sauce"] = "ranch",
+		["shredded cheese"] = "cheese", ["cheese pizza"] = "cheese",
 	},
 }

@@ -11,13 +11,12 @@ return {
 		},
 		Schooler = {
 			"aurora", "mulan", "tiana", "pocahontas", "merida", "fiona", "princess daisy", "princess bubblegum",
-			"sofia the first", "raya", "vanellope", "giselle", "kida", "odette", "buttercup", "poppy",
-			"twilight sparkle", "rosalina", "celestia", "princess luna", "cadance", "tiger lily", "ruto",
-			"mia thermopolis", "princess charlotte", "princess anne", "princess margaret", "grace kelly",
+			"sofia the first", "raya", "vanellope", "giselle", "kida", "odette", "buttercup", "poppy", "twilight sparkle",
+			"rosalina", "celestia", "princess luna", "cadance", "tiger lily", "ruto", "mia thermopolis", "princess charlotte",
 		},
 		Rare = {
 			"princess atta", "princess irulan", "princess ozma", "princess eilonwy", "elena of avalor", "princess allura",
-			"princess beatrice", "princess eugenie", "princess amber",
+			"princess beatrice", "princess eugenie", "princess amber", "princess anne", "princess margaret", "grace kelly",
 		},
 		DeepCut = {
 			"princess garnet",

@@ -7,19 +7,19 @@ return {
 			"toothless", "smaug", "mushu", "drogon", "spyro", "puff the magic dragon",
 		},
 		TooClever = {
-			"norbert", "falkor", "ender dragon", "elliott", "shenron", "hungarian horntail",
+			"norbert", "falkor", "ender dragon", "elliott", "shenron",
 		},
 		Schooler = {
-			"hookfang", "stormfly", "meatlug", "cloudjumper", "light fury", "rhaegal", "viserion", "saphira", "alduin",
-			"paarthurnax", "deathwing", "haku", "sisu", "draco", "bahamut", "fafnir", "nidhogg", "tiamat", "glaurung",
-			"ancalagon", "kilgarrah", "temeraire", "spike", "eustace", "ysera", "alexstrasza", "onyxia", "scatha",
+			"hookfang", "stormfly", "light fury", "rhaegal", "viserion", "saphira", "alduin", "paarthurnax", "deathwing",
+			"haku", "sisu", "draco", "bahamut", "fafnir", "nidhogg", "tiamat", "spike", "hungarian horntail",
 		},
 		Rare = {
-			"malygos", "nozdormu", "balerion", "vhagar", "meraxes", "caraxes", "syrax", "silverwing", "tintaglia",
-			"vermithrax", "chrysophylax", "kalessin", "barf and belch", "icefyre",
+			"malygos", "balerion", "vhagar", "meraxes", "caraxes", "syrax", "barf and belch", "ancalagon", "glaurung",
+			"scatha", "kilgarrah", "temeraire", "eustace", "cloudjumper", "ysera", "alexstrasza", "onyxia", "meatlug",
 		},
 		DeepCut = {
-			"seath", "midir", "kalameet", "fin fang foom",
+			"seath", "midir", "kalameet", "fin fang foom", "tintaglia", "vermithrax", "chrysophylax", "kalessin", "icefyre",
+			"nozdormu", "silverwing",
 		},
 		Mythic = {},
 	},

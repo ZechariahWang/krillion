@@ -7,7 +7,7 @@ return {
 			"nemo", "dory", "marlin", "bruce", "jaws", "baby shark",
 		},
 		TooClever = {
-			"flounder", "magikarp", "wanda", "gill", "bubbles", "cleo",
+			"flounder", "magikarp", "gill", "bubbles", "cleo",
 		},
 		Schooler = {
 			"oscar", "lenny", "swimmy", "rainbow fish", "blinky", "charlie the tuna", "big mouth billy bass",
@@ -23,7 +23,7 @@ return {
 	aliases = {
 		["finding nemo"] = "nemo", ["nemo the clownfish"] = "nemo", ["dory the blue tang"] = "dory",
 		["marlin the clownfish"] = "marlin",
-		["flounder the fish"] = "flounder", ["wanda the fish"] = "wanda",
+		["flounder the fish"] = "flounder",
 		["cheepcheep"] = "cheep cheep", ["rainbowfish"] = "rainbow fish", ["billy bass"] = "big mouth billy bass",
 		["charlie tuna"] = "charlie the tuna", ["mister ray"] = "mr ray",
 	},

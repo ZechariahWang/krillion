@@ -22,13 +22,12 @@ return {
 			"old deuteronomy", "skimbleshanks", "jellylorum", "mungojerrie", "rumpleteazer", "sergeant tibbs", "nermal",
 			"arlene", "kitty galore", "mr tinkles", "bastet", "tom kitten", "mrs chippy", "larry", "humphrey", "snarf",
 			"gatomon", "pyewacket", "sarabi", "zira", "grizabella", "macavity", "mr mistoffelees", "mr jinks", "snowbell",
-			"sassy", "mr bigglesworth", "mrs norris", "church", "jonesy", "lion o", "panthro", "cheetara", "choupette",
-			"milo", "sagwa", "splat the cat", "dewey readmore books", "kimba", "skippyjon jones",
+			"sassy", "mr bigglesworth", "mrs norris", "church", "jonesy", "lion o", "panthro", "cheetara", "choupette", "milo",
+			"sagwa", "splat the cat", "dewey readmore books", "kimba", "skippyjon jones", "socks",
 		},
 		DeepCut = {
-			"socks", "palmerston", "gladstone", "peta", "trim", "towser", "mehitabel", "bubastis", "pangur ban",
-			"greebo", "hodge", "tombili",
-			"tama", "kitty katswell", "stubbs",
+			"palmerston", "gladstone", "peta", "trim", "towser", "mehitabel", "bubastis", "pangur ban", "greebo", "hodge",
+			"tombili", "tama", "kitty katswell", "stubbs",
 		},
 		Mythic = {
 			"wilberforce",

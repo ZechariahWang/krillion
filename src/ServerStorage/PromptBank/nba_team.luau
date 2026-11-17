@@ -21,7 +21,7 @@ return {
 		},
 		Mythic = {
 			"chicago stags", "providence steamrollers", "washington capitols", "st louis bombers", "toronto huskies",
-			"sheboygan red skins", "anderson packers", "waterloo hawks", "indianapolis jets", "detroit falcons",
+			"anderson packers", "waterloo hawks", "indianapolis jets", "detroit falcons",
 			"cleveland rebels", "pittsburgh ironmen",
 		},
 	},

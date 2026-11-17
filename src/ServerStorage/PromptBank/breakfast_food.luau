@@ -44,6 +44,7 @@ return {
 			"raspberries", "blackberries", "peanut butter and jelly sandwich", "cornbread", "jelly donut",
 			"boston cream donut", "powdered donuts", "chocolate donut", "cake donut", "maple bar", "cruller",
 			"donut holes", "long john", "old fashioned donut",
+			"tea",
 		},
 		Rare = {
 			"scrapple", "black pudding", "grilled tomato", "kippers", "kedgeree", "bubble and squeak", "fried bread",
@@ -89,6 +90,7 @@ return {
 			"nasi goreng", "roti prata", "pho", "banh mi", "banh cuon", "kimbap", "kimchi fried rice",
 			"pigs in a blanket", "peanut butter banana toast", "lemon poppy seed muffin", "zucchini bread",
 			"pumpkin bread", "lemon loaf", "cinnamon swirl", "cinnamon raisin bagel", "bagel sandwich",
+			"chocolate chip waffles",
 		},
 		DeepCut = {
 			"arepa", "gallo pinto", "mangu", "tostones", "pandesal", "tapsilog", "longsilog", "champorado",
@@ -319,5 +321,11 @@ return {
 		["sheng jian"] = "shengjian bao", ["manoushe"] = "manakish", ["manousheh"] = "manakish",
 		["kaya toast and eggs"] = "kaya toast", ["tahini and molasses"] = "pekmez and tahini",
 		["buckwheat porridge"] = "kasha", ["farina"] = "cream of wheat", ["fruit smoothie"] = "smoothie",
+		["rice krispy"] = "rice krispies", ["egg benedict"] = "eggs benedict", ["eggos"] = "eggo waffles",
+		["eggo waffle"] = "eggo waffles", ["danish pastry"] = "danish", ["cheese danish"] = "danish",
+		["kix cereal"] = "kix", ["oreo cereal"] = "oreo os", ["reese puffs"] = "reeses puffs",
+		["captain crunch berries"] = "cap n crunch", ["crunch berries"] = "cap n crunch",
+		["sausage egg and cheese sandwich"] = "sausage egg and cheese", ["egg and bacon"] = "eggs and bacon",
+		["life"] = "life cereal", ["chocolate chip waffle"] = "chocolate chip waffles",
 	},
 }

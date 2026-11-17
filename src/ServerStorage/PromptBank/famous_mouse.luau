@@ -4,22 +4,22 @@ return {
 	prompt = "Name a famous mouse (real or fictional)",
 	answers = {
 		Plankton = {
-			"mickey mouse", "minnie mouse", "jerry", "stuart little", "remy", "speedy gonzales",
+			"mickey mouse", "minnie mouse", "jerry", "stuart little", "speedy gonzales",
 		},
 		TooClever = {
 			"mighty mouse", "fievel", "pinky", "brain", "danger mouse",
 		},
 		Schooler = {
 			"gus gus", "jaq", "basil", "bernard", "bianca", "angelina ballerina", "maisy", "tuffy", "nibbles",
-			"chuck e cheese", "monterey jack", "gadget hackwrench", "topo gigio", "reepicheep", "despereaux",
-			"timothy q mouse", "itchy", "geronimo stilton", "roquefort", "mortimer mouse",
+			"chuck e cheese", "monterey jack", "gadget hackwrench", "reepicheep", "despereaux", "itchy",
 		},
 		Rare = {
-			"pixie", "dixie", "mrs brisby", "mrs tittlemouse", "hunca munca", "johnny town mouse", "timmy willie",
-			"suzy", "perla", "mert", "dawson", "olivia flaversham", "algernon", "dormouse", "ralph s mouse",
+			"pixie", "dixie", "mrs brisby", "mrs tittlemouse", "hunca munca", "johnny town mouse", "timmy willie", "suzy",
+			"olivia flaversham", "algernon", "dormouse", "ralph s mouse", "topo gigio", "timothy q mouse", "mortimer mouse",
+			"roquefort", "geronimo stilton",
 		},
 		DeepCut = {
-			"mr jingles", "mouse king",
+			"mr jingles", "mouse king", "mert", "perla", "dawson",
 		},
 		Mythic = {},
 	},
