@@ -16,6 +16,7 @@ return {
 			"mayfly", "bed bug", "stag beetle", "yellow jacket", "scarab beetle", "rhinoceros beetle", "luna moth",
 			"swallowtail", "mealworm", "silkworm", "glowworm", "killer bee", "fire ant", "army ant", "leafcutter ant",
 			"bullet ant", "carpenter ant", "carpenter bee", "lanternfly", "inchworm", "grub",
+			"hummingbird moth",
 		},
 		Rare = {
 			"water boatman", "backswimmer", "diving beetle", "whirligig beetle", "click beetle", "longhorn beetle",
@@ -54,6 +55,7 @@ return {
 			"red admiral", "cabbage white", "crane fly", "hoverfly", "lacewing", "midge", "woolly bear caterpillar",
 			"water bug", "german cockroach", "american cockroach", "paper wasp", "cabbage moth", "leaf insect", "mole cricket",
 			"water strider",
+			"bogong moth", "african bee", "mud wasp",
 		},
 		DeepCut = {
 			"scorpionfly", "snakefly", "owlfly", "mantisfly", "hellgrammite", "firebrat", "bristletail", "webspinner",
@@ -182,5 +184,15 @@ return {
 		["cimicid"] = "bed bug",
 		["hippoboscid"] = "louse fly",
 		["scarlet lily beetle"] = "lily beetle",
+		["prayer mantis"] = "praying mantis", ["praying mantus"] = "praying mantis", ["butterfily"] = "butterfly",
+		["butterflys"] = "butterfly", ["mosiquito"] = "mosquito", ["catapillar"] = "caterpillar",
+		["catepillar"] = "caterpillar", ["cockroche"] = "cockroach", ["cocroach"] = "cockroach", ["cicadia"] = "cicada",
+		["earwigs"] = "earwig", ["stick bugs"] = "stick insect", ["stink bugs"] = "stink bug", ["june bugs"] = "june bug",
+		["bedbugs"] = "bed bug", ["honey bees"] = "honeybee", ["house flies"] = "housefly", ["fruit flies"] = "fruit fly",
+		["fire flies"] = "firefly", ["lightning bugs"] = "firefly", ["lightening bug"] = "firefly",
+		["lightening bugs"] = "firefly", ["yellowjackets"] = "yellow jacket", ["mayflies"] = "mayfly",
+		["damselflies"] = "damselfly", ["glow worms"] = "glowworm", ["lacewings"] = "lacewing",
+		["monarchs"] = "monarch butterfly", ["killer bees"] = "killer bee", ["bullet ants"] = "bullet ant",
+		["leaf cutter ants"] = "leafcutter ant",
 	},
 }

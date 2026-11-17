@@ -21,6 +21,7 @@ return {
 			"fromage frais", "derby", "dubliner", "tillamook", "pimento cheese", "panela", "requeson", "leerdammer",
 			"bocconcini", "buffalo mozzarella", "farmers cheese", "applewood", "fior di latte", "wensleydale", "comte",
 			"oaxaca",
+			"chihuahua",
 		},
 		DeepCut = {
 			"port salut", "red leicester", "double gloucester", "cheshire", "caerphilly", "lancashire", "appenzeller",
@@ -116,5 +117,14 @@ return {
 		["fresh mozzarella"] = "mozzarella", ["smoked gouda"] = "gouda", ["smoked provolone"] = "provolone",
 		["cornish yarg"] = "yarg", ["mizithra"] = "myzithra", ["stracchino"] = "crescenza", ["danablu"] = "danish blue",
 		["gorgonzola dolce"] = "gorgonzola", ["tomme de savoie"] = "tomme", ["philadelphia"] = "cream cheese",
+		["mozzerela"] = "mozzarella", ["parmesian"] = "parmesan", ["swis"] = "swiss",
+		["monterey jack cheese"] = "monterey jack", ["monteray jack"] = "monterey jack", ["mascarpon"] = "mascarpone",
+		["camenbert"] = "camembert", ["halloumi cheese"] = "halloumi", ["hallomi"] = "halloumi", ["gruyre"] = "gruyere",
+		["gryuere"] = "gruyere", ["emmentaler cheese"] = "emmental", ["stilton cheese"] = "stilton",
+		["rocquefort"] = "roquefort", ["cheese strings"] = "string cheese", ["string cheeses"] = "string cheese",
+		["babybell"] = "babybel", ["baby bel"] = "babybel", ["velvetta"] = "velveeta", ["colbyjack"] = "colby jack",
+		["muenester"] = "muenster", ["mueinster"] = "muenster", ["paneir"] = "paneer",
+		["queso fresco cheese"] = "queso fresco", ["burata"] = "burrata", ["jarlsburg"] = "jarlsberg",
+		["havartie"] = "havarti", ["harvarti"] = "havarti", ["harvati"] = "havarti", ["cojita"] = "cotija",
 	},
 }

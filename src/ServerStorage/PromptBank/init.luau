@@ -222,6 +222,10 @@ local list: { Prompt } = {
 	require("@self/cut_of_meat"),
 	require("@self/sausage"),
 	require("@self/apple_variety"),
+	require("@self/pepper"),
+	require("@self/rice_dish"),
+	require("@self/potato_dish"),
+	require("@self/egg_dish"),
 }
 
 local byId: { [string]: Prompt } = {}

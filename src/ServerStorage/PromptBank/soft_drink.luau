@@ -129,5 +129,13 @@ return {
 		["dr browns cel ray"] = "cel ray", ["d and g ginger beer"] = "d and g", ["mauby drink"] = "mauby",
 		["sorrel drink"] = "sorrel", ["malta hatuey"] = "hatuey", ["kola champan"] = "kola champagne",
 		["champagne cola"] = "kola champagne", ["appletizer"] = "appletiser",
+		["pepis"] = "pepsi", ["pepsy"] = "pepsi", ["spirte"] = "sprite", ["spite"] = "sprite", ["fantta"] = "fanta",
+		["dr pepr"] = "dr pepper", ["dr peppr"] = "dr pepper",
+		["root bear"] = "root beer", ["rootbear"] = "root beer", ["ginger al"] = "ginger ale",
+		["ginger ales"] = "ginger ale", ["creamsoda"] = "cream soda", ["cherry coca cola"] = "cherry coke",
+		["zero coke"] = "coke zero", ["diet cokes"] = "diet coke", ["barq"] = "barqs", ["schwepps"] = "schweppes",
+		["schwepes"] = "schweppes", ["canadadry"] = "canada dry", ["inca cola"] = "inca kola", ["inka kola"] = "inca kola",
+		["irn bruu"] = "irn bru", ["irn brew"] = "irn bru", ["iron brew"] = "irn bru", ["lucazade"] = "lucozade",
+		["moxy"] = "moxie", ["ramunes"] = "ramune",
 	},
 }

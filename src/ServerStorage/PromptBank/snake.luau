@@ -174,5 +174,7 @@ return {
 		["calabar ground python"] = "calabar boa", ["sumatran short tailed python"] = "blood python",
 		["african rock python"] = "rock python", ["regal python"] = "reticulated python",
 		["dasypeltis"] = "egg eating snake",
+		["ratlesnake"] = "rattlesnake", ["pythen"] = "python", ["blackmamba"] = "black mamba", ["coper head"] = "copperhead",
+		["western diamondback rattlesnake"] = "western diamondback",
 	},
 }

@@ -16,6 +16,7 @@ return {
 			"neapolitan", "cake", "funfetti", "confetti cake", "pralines and cream", "chocolate fudge",
 			"chocolate peanut butter", "sweet cream", "pina colada", "brownie batter", "cookie monster", "mint oreo",
 			"raspberry sherbet", "double chocolate", "chocolate mint", "marshmallow",
+			"brownie", "turtle", "key lime",
 		},
 		Rare = {
 			"dulce de leche", "tiramisu", "strawberry cheesecake", "red velvet", "cake batter", "moose tracks",
@@ -45,6 +46,7 @@ return {
 			"chocolate hazelnut", "snickers", "candy cane", "pumpkin pie", "hot fudge", "vanilla fudge",
 			"chocolate almond", "peanut butter cup", "chunky monkey", "cherry garcia", "phish food", "sorbet",
 			"sherbet", "gelato",
+			"sesame", "dole whip", "kulfi", "lemon custard",
 		},
 		DeepCut = {
 			"ube", "taro", "red bean", "lychee", "pandan", "guava", "jackfruit", "pomegranate", "fig", "tamarind",
@@ -59,6 +61,7 @@ return {
 			"lulo", "borojo", "acai", "guarana", "taro boba", "lemongrass", "black pepper", "pink peppercorn",
 			"chili chocolate", "mexican chocolate", "cinnamon chili", "habanero", "smoked vanilla", "bacon caramel",
 			"gorgonzola", "ricotta honey", "manuka honey", "orange blossom honey",
+			"amarena", "baklava",
 		},
 		Mythic = {
 			"durian", "tiger tail", "hokey pokey", "wasabi", "bubble tea", "dragon fruit", "black currant",
@@ -114,5 +117,17 @@ return {
 		["toasted marshmallow"] = "marshmallow", ["boba"] = "bubble tea", ["doce de leite"] = "dulce de leche",
 		["guanabana"] = "soursop", ["dates"] = "date", ["pandan coconut"] = "coconut pandan", ["nocciola"] = "hazelnut",
 		["speculoos"] = "cookie butter", ["biscoff"] = "cookie butter", ["caramel swirl"] = "caramel",
+		["choco"] = "chocolate", ["chocklate"] = "chocolate", ["stawberry"] = "strawberry", ["strawberries"] = "strawberry",
+		["cookiedough"] = "cookie dough", ["pecans"] = "pecan", ["pistaschio"] = "pistachio", ["carmal"] = "caramel",
+		["caramal"] = "caramel", ["salt caramel"] = "salted caramel", ["coconuts"] = "coconut", ["coco nut"] = "coconut",
+		["bananas"] = "banana", ["cherries"] = "cherry", ["lemons"] = "lemon", ["peaches"] = "peach",
+		["raspberries"] = "raspberry", ["blueberries"] = "blueberry", ["blackberries"] = "blackberry", ["mangos"] = "mango",
+		["mangoes"] = "mango", ["brownies"] = "brownie", ["moca"] = "mocha", ["mochas"] = "mocha",
+		["marshmellow"] = "marshmallow", ["marshmallows"] = "marshmallow", ["napolitan"] = "neapolitan",
+		["neapolitian"] = "neapolitan", ["neopolitian"] = "neapolitan", ["pralines"] = "pralines and cream",
+		["rainbow sherbert"] = "rainbow sherbet", ["dulce"] = "dulce de leche", ["dulce de lece"] = "dulce de leche",
+		["moosetracks"] = "moose tracks", ["moose track"] = "moose tracks", ["roccy road"] = "rocky road",
+		["rocky rode"] = "rocky road", ["hazel nut"] = "hazelnut", ["nutela"] = "nutella", ["spearmint"] = "mint",
+		["birthday"] = "birthday cake",
 	},
 }
