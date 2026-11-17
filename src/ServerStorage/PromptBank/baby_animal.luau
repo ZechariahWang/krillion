@@ -19,9 +19,11 @@ return {
 		},
 		DeepCut = {
 			"shoat", "eyas", "alevin", "pinkie", "keet", "weaner",
+			"weanling", "stirk",
 		},
 		Mythic = {
 			"wriggler", "spat",
+			"nauplius", "zoea", "ephyra", "planula",
 		},
 	},
 	aliases = {
@@ -39,5 +41,10 @@ return {
 		["hoglets"] = "hoglet", ["crias"] = "cria", ["elvers"] = "elver", ["nymphs"] = "nymph", ["grubs"] = "grub",
 		["pea chick"] = "peachick", ["pinky"] = "pinkie", ["pinkies"] = "pinkie", ["shoats"] = "shoat",
 		["eyass"] = "eyas", ["baby kangaroo"] = "joey",
+		["pigling"] = "piglet", ["pigglets"] = "piglet", ["puppys"] = "puppy", ["caterpiller"] = "caterpillar",
+		["catterpillar"] = "caterpillar", ["signet"] = "cygnet", ["fledgeling"] = "fledgling", ["calfs"] = "calf",
+		["yearlings"] = "yearling", ["polliwogs"] = "tadpole", ["pollywogs"] = "tadpole", ["baby bunny"] = "bunny",
+		["glass eel"] = "elver", ["weanlings"] = "weanling", ["stirks"] = "stirk", ["kittys"] = "kitten",
+		["gosslings"] = "gosling", ["duckings"] = "duckling",
 	},
 }

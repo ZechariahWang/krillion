@@ -77,6 +77,7 @@ return {
 			"tibetan turquoise", "royston turquoise", "blue chalcedony", "pink chalcedony", "mtorolite",
 			"lithium quartz", "lemurian quartz", "phantom quartz", "herkimer diamond", "carbonado", "rough diamond",
 			"hope diamond", "cullinan", "koh i noor", "mali garnet", "umbalite", "turritella agate", "vivianite",
+			"wavellite", "herderite",
 		},
 		Mythic = {
 			"taaffeite", "musgravite", "grandidierite", "jeremejevite", "poudretteite", "serendibite", "painite",
@@ -154,5 +155,11 @@ return {
 		["spessartite"] = "spessartine", ["hessonite garnet"] = "hessonite", ["demantoid garnet"] = "demantoid",
 		["tsavorite garnet"] = "tsavorite", ["burmite"] = "burmese amber", ["carnelian agate"] = "carnelian",
 		["welo opal"] = "ethiopian opal", ["andean opal"] = "peruvian opal",
+		["smokey quartz"] = "smoky quartz", ["emralds"] = "emerald", ["tigers eyes"] = "tigers eye",
+		["cat eye gem"] = "cats eye", ["opaal"] = "opal", ["diamnd"] = "diamond", ["diamod"] = "diamond",
+		["ruby gem"] = "ruby", ["emerald gem"] = "emerald", ["sapphire gem"] = "sapphire", ["topaz gem"] = "topaz",
+		["opal gem"] = "opal", ["rose quartzes"] = "rose quartz", ["amethest"] = "amethyst", ["amethyste"] = "amethyst",
+		["aquamarene"] = "aquamarine", ["peridoti"] = "peridot", ["tanzenite stone"] = "tanzanite", ["garnit"] = "garnet",
+		["turqouise stone"] = "turquoise", ["lapis lazuli stone"] = "lapis lazuli", ["moonstone stone"] = "moonstone",
 	},
 }

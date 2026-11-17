@@ -14,11 +14,13 @@ return {
 			"spare ribs", "baby back ribs", "short ribs", "prime rib", "tomahawk", "chicken thigh", "lamb chop", "leg of lamb",
 			"rack of lamb", "pork shoulder", "oxtail", "rump", "shank", "ham hock", "gammon", "hanger steak", "tri tip",
 			"flat iron",
+			"turkey leg", "turkey breast", "chicken leg",
 		},
 		Rare = {
 			"cube steak", "london broil", "top sirloin", "top round", "picanha", "bavette", "tongue", "cheek", "neck",
 			"boston butt", "picnic shoulder", "country style ribs", "ham steak", "canadian bacon", "cutlet", "trotter",
 			"minute steak", "chuck eye", "sirloin tip", "knuckle", "topside", "silverside",
+			"loin", "round", "plate", "duck breast", "lamb shoulder", "lamb loin", "veal chop", "veal shank", "back bacon",
 		},
 		DeepCut = {
 			"denver steak", "bottom round", "eye of round", "chateaubriand", "tournedos", "flanken", "st louis ribs",
@@ -54,5 +56,12 @@ return {
 		["tongues"] = "tongue", ["oxtails"] = "oxtail", ["ox tail"] = "oxtail", ["tournedo"] = "tournedos",
 		["chateau briand"] = "chateaubriand", ["spare rib"] = "spare ribs", ["st louis style ribs"] = "st louis ribs",
 		["saint louis ribs"] = "st louis ribs", ["eye round"] = "eye of round", ["flanken ribs"] = "flanken",
+		["fillet"] = "filet mignon", ["picnic ham"] = "picnic shoulder", ["country ribs"] = "country style ribs",
+		["jowl"] = "pork jowl", ["streaky bacon"] = "bacon", ["pig foot"] = "trotter", ["beef ribs"] = "short ribs",
+		["beef short ribs"] = "short ribs", ["beef cheek"] = "cheek", ["beef tongue"] = "tongue", ["beef chuck"] = "chuck",
+		["chuck steak"] = "chuck", ["beef round"] = "round", ["beef flank"] = "flank steak", ["beef plate"] = "plate",
+		["beef loin"] = "loin", ["round roast"] = "round", ["hanger"] = "hanger steak", ["onglet"] = "hanger steak",
+		["entrecote"] = "ribeye", ["fore rib"] = "prime rib", ["forerib"] = "prime rib", ["turkey legs"] = "turkey leg",
+		["chicken legs"] = "chicken leg", ["turkey breasts"] = "turkey breast", ["duck breasts"] = "duck breast",
 	},
 }

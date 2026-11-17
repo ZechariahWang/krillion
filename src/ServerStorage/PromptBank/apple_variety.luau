@@ -18,6 +18,7 @@ return {
 			"santana", "red prince", "pinova", "fiesta", "discovery", "lady apple", "honeygold", "criterion", "smitten",
 			"pixie crunch", "autumn crisp", "rave", "firestorm", "sunrise", "rome", "cortland", "opal", "macoun", "spartan",
 			"idared", "paula red", "gravenstein", "northern spy", "ginger gold", "mutsu", "liberty", "akane", "sweetango",
+			"crimson crisp", "pazazz", "sugarbee", "kiku", "rockit", "goldrush", "snowsweet", "sweet sixteen",
 		},
 		DeepCut = {
 			"ashmeads kernel", "pitmaston pineapple", "calville blanc", "reine des reinettes", "belle de boskoop", "annurca",
@@ -26,9 +27,13 @@ return {
 			"brown snout", "darcy spice", "cornish gilliflower", "ellisons orange", "hubbardston nonesuch", "baldwin",
 			"arkansas black", "rhode island greening", "golden russet", "roxbury russet", "laxton superb",
 			"worcester pearmain", "egremont russet", "wealthy", "yellow transparent", "newtown pippin",
+			"york imperial", "haralson", "wolf river", "duchess of oldenburg", "lodi", "beauty of bath", "james grieve",
+			"lord lambourne", "grenadier", "arthur turner", "charles ross", "golden noble", "peasgoods nonsuch",
+			"grimes golden", "king david", "ben davis", "fameuse", "black twig", "red windsor",
 		},
 		Mythic = {
 			"api noir", "winter banana", "pomme grise", "knobbed russet", "white winter pearmain", "sops of wine",
+			"gano", "tolman sweet", "black gilliflower", "tydemans late orange",
 		},
 	},
 	aliases = {
@@ -53,5 +58,10 @@ return {
 		["cortland apple"] = "cortland", ["pinata"] = "pinova", ["sunrise apple"] = "sunrise", ["rave apple"] = "rave",
 		["dabinett apple"] = "dabinett", ["foxwhelp apple"] = "foxwhelp", ["cameo apple"] = "cameo",
 		["kanzi apple"] = "kanzi", ["envy apples"] = "envy",
+		["royal gala"] = "gala", ["red gala"] = "gala", ["red fuji"] = "fuji", ["aztec fuji"] = "fuji",
+		["granny"] = "granny smith", ["stayman winesap"] = "winesap", ["stayman"] = "winesap",
+		["bramleys seedling"] = "bramley", ["bramleys"] = "bramley", ["gold rush"] = "goldrush", ["snow apple"] = "fameuse",
+		["pinklady"] = "pink lady", ["red delicous"] = "red delicious", ["golden delicous"] = "golden delicious",
+		["pink ladies"] = "pink lady", ["galas"] = "gala", ["fujis"] = "fuji",
 	},
 }

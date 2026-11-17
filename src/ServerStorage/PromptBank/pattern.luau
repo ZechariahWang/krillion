@@ -26,7 +26,7 @@ return {
 			"anchors", "speckle", "twill", "pinwheel", "starburst", "sunburst", "scallop", "ogee", "arabesque", "sprig",
 			"gun club check", "black watch",
 			"fishnet", "mottled", "color block", "block print", "moroccan tile", "reptile print", "crocodile print", "brindle",
-			"optical illusion", "speckled", "splatter", "butterflies", "daisies", "roses", "sunflowers", "pineapples",
+			"optical illusion", "butterflies", "daisies", "roses", "sunflowers", "pineapples",
 			"cherries", "pixel", "palm leaves",
 		},
 		DeepCut = {
@@ -86,7 +86,7 @@ return {
 		["zigzags"] = "zigzag", ["zig zag pattern"] = "zigzag", ["abstract pattern"] = "abstract",
 		["geometric pattern"] = "geometric", ["geometrics"] = "geometric", ["rainbow stripes"] = "rainbow",
 		["rainbows"] = "rainbow", ["hexagon pattern"] = "hexagons", ["honey comb"] = "honeycomb",
-		["paint splatters"] = "paint splatter", ["splatters"] = "splatter", ["tortoise shell"] = "tortoiseshell",
+		["paint splatters"] = "paint splatter", ["splatters"] = "paint splatter", ["tortoise shell"] = "tortoiseshell",
 		["tortoiseshell print"] = "tortoiseshell", ["gradients"] = "gradient", ["ombre print"] = "ombre",
 		["fishnets"] = "fishnet", ["speckles"] = "speckle", ["speckle print"] = "speckle", ["plaid print"] = "plaid",
 		["floral print"] = "floral", ["floral pattern"] = "floral", ["flower pattern"] = "floral",
@@ -95,5 +95,7 @@ return {
 		["snake skin"] = "snakeskin", ["sailor stripes"] = "breton stripe", ["vertical stripes"] = "stripes",
 		["horizontal stripes"] = "stripes", ["wavy lines"] = "waves", ["wavy"] = "waves", ["chequerboard"] = "checkers",
 		["vertical stripe"] = "stripes", ["horizontal stripe"] = "stripes",
+		["speckled"] = "speckle",
+		["splatter"] = "paint splatter",
 	},
 }

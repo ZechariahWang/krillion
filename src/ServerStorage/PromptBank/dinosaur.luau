@@ -83,6 +83,7 @@ return {
 			"colepiocephale", "goyocephale", "eolambia", "telmatosaurus", "talenkauen", "gasparinisaura", "pantydraco",
 			"seitaad", "miragaia", "paranthodon", "isaberrysaura", "alxasaurus", "ugrunaaluk", "spicomellus",
 			"vectaerovenator", "datanglong", "bahariasaurus",
+			"diamantinasaurus", "savannasaurus", "australotitan", "wintonotitan",
 		},
 	},
 	aliases = {
@@ -123,5 +124,14 @@ return {
 		["tyrannosaurus rexes"] = "t rex", ["triceratopses"] = "triceratops", ["stegosauruses"] = "stegosaurus",
 		["brachiosauruses"] = "brachiosaurus", ["diplodocuses"] = "diplodocus", ["spinosauruses"] = "spinosaurus",
 		["utahraptors"] = "utahraptor", ["trexes"] = "t rex", ["apatosauras"] = "apatosaurus",
+		["mososaurus"] = "mosasaurus", ["moasaurus"] = "mosasaurus", ["t rexs"] = "t rex",
+		["stegosaurs"] = "stegosaurus", ["brontosaurs"] = "brontosaurus", ["dylophosaurus"] = "dilophosaurus",
+		["carnotarus"] = "carnotaurus", ["carnatorus"] = "carnotaurus", ["spinosaurous"] = "spinosaurus",
+		["spinosarus"] = "spinosaurus", ["allosaures"] = "allosaurus", ["triceratopes"] = "triceratops",
+		["dimetradon"] = "dimetrodon", ["pterodactyle"] = "pterodactyl", ["pteradactyls"] = "pterodactyl",
+		["utah raptors"] = "utahraptor", ["microraptors"] = "microraptor", ["dilophosaurus dinosaur"] = "dilophosaurus",
+		["apatosaurus dinosaur"] = "apatosaurus", ["velociraptor dinosaur"] = "velociraptor", ["iguanadons"] = "iguanodon",
+		["giganotosaurs"] = "giganotosaurus", ["spinosaurus dinosaur"] = "spinosaurus",
+		["stegosaurus dinosaur"] = "stegosaurus",
 	},
 }

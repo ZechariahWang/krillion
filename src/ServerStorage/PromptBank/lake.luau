@@ -63,6 +63,7 @@ return {
 			"rainy lake", "lake kabetogama", "lake namakan", "lake saganaga", "lake las vegas", "walden pond",
 			"lake kawaguchi", "lake ashi", "poyang lake", "dongting lake", "tai lake", "qinghai lake", "pangong lake",
 			"dal lake", "tonle sap", "inle lake", "lake merritt", "lake tenaya", "lake tuz",
+			"salton sea",
 		},
 		DeepCut = {
 			"lake torrens", "lake gairdner", "lake frome", "lake callabonna", "lake mackay", "lake amadeus",
@@ -80,6 +81,8 @@ return {
 			"lake shala", "lake abijatta", "lake hayk", "lake hawassa", "lake logipi", "lake jipe", "lake chala",
 			"lake duluti", "lake kitangiri", "lake chilwa", "lake malombe", "lake otjikoto", "lake fundudzi", "lake sibaya",
 			"lake st lucia", "lake gariep", "lake langano", "lake ziway",
+			"lake managua", "lake chapala", "lake poopo", "lake mjosa", "lake nahuel huapi", "lake llanquihue",
+			"lake argentino",
 		},
 		Mythic = {
 			"lake kaindy", "lake karachay", "lake natron", "lake nyos", "lake monoun", "lake retba", "lake tele",
@@ -155,5 +158,14 @@ return {
 		["lac saint jean"] = "lake st john", ["lac memphremagog"] = "lake memphremagog",
 		["lac des deux montagnes"] = "lake of two mountains", ["lake ozark"] = "lake of the ozarks",
 		["karachay"] = "lake karachay", ["lake eyre south"] = "lake eyre",
+		["lake superiour"] = "lake superior", ["lake mitchigan"] = "lake michigan", ["lake erey"] = "lake erie",
+		["lake ontairo"] = "lake ontario", ["lake tahow"] = "lake tahoe", ["lake tohoe"] = "lake tahoe",
+		["lake tahoo"] = "lake tahoe", ["lake viktoria"] = "lake victoria", ["lake titicacca"] = "lake titicaca",
+		["lake titicaka"] = "lake titicaca", ["lake baikel"] = "lake baikal", ["lake baical"] = "lake baikal",
+		["loch nes"] = "loch ness", ["loch ness monster"] = "loch ness", ["nessie"] = "loch ness",
+		["lake nessie"] = "loch ness", ["lake placed"] = "lake placid", ["lake lousie"] = "lake louise",
+		["lake luise"] = "lake louise", ["crater lake oregon"] = "crater lake", ["lake genava"] = "lake geneva",
+		["great salt lake utah"] = "great salt lake", ["lake mead nevada"] = "lake mead",
+		["lake tanganika"] = "lake tanganyika", ["lake nassar"] = "lake nasser", ["lake tahoe california"] = "lake tahoe",
 	},
 }

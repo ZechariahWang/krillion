@@ -21,10 +21,10 @@ return {
 			"stomata", "cuticle", "epidermis", "cortex", "pith", "vascular bundle", "lenticel", "bract", "spathe", "spadix",
 			"catkin", "inflorescence", "floret", "rosette", "tepal", "perianth", "gynoecium", "androecium", "endosperm",
 			"embryo", "radicle", "plumule", "hilum", "seed coat", "aril", "bulbil", "corm", "stolon", "offshoot", "sucker",
-			"scape", "awn", "glume", "bole", "burl", "stump", "lateral root", "aerial root", "prop root", "buttress root",
+			"scape", "awn", "glume", "burl", "stump", "lateral root", "aerial root", "prop root", "buttress root",
 			"root cap", "root tip", "nodule", "mycorrhiza", "internode", "axil", "bud scale", "leaflet", "stipule",
 			"prickle", "burr", "cork", "pollen sac", "pollen grain", "pollen tube", "nectary", "leaf margin", "leaf sheath",
-			"flower bud", "lateral bud", "terminal bud", "apical bud", "leaf bud", "rootstock", "rootlet", "leaf scar",
+			"flower bud", "lateral bud", "terminal bud", "leaf bud", "rootstock", "rootlet", "leaf scar",
 			"seed head",
 		},
 		DeepCut = {
@@ -33,7 +33,7 @@ return {
 			"haustorium", "rhizoid", "thallus", "gemma", "sclerenchyma", "collenchyma", "parenchyma", "periderm", "phelloderm",
 			"cork cambium", "pericycle", "endodermis", "casparian strip",
 			"pericarp", "exocarp", "mesocarp", "endocarp", "spikelet", "panicle", "culm", "ligule", "coleoptile", "tiller",
-			"axillary bud", "bud scar", "umbel", "corymb", "bast", "cyme", "stele", "tonoplast",
+			"bud scar", "umbel", "corymb", "bast", "cyme", "stele", "tonoplast",
 		},
 		Mythic = {
 			"exine", "intine", "tapetum", "nucellus", "micropyle", "funiculus", "chalaza", "synergid", "antipodal", "pappus",
@@ -79,5 +79,8 @@ return {
 		["cell walls"] = "cell wall", ["tracheids"] = "tracheid", ["spikelets"] = "spikelet", ["panicles"] = "panicle",
 		["culms"] = "culm", ["tillers"] = "tiller", ["sporangia"] = "sporangium", ["root hairs"] = "root hair",
 		["root tips"] = "root tip", ["leaf margins"] = "leaf margin", ["leaf edge"] = "leaf margin", ["sprig"] = "twig",
+		["axillary bud"] = "lateral bud",
+		["apical bud"] = "terminal bud",
+		["bole"] = "trunk",
 	},
 }

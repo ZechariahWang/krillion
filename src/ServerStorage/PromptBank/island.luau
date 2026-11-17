@@ -26,6 +26,7 @@ return {
 			"cozumel", "sanibel", "padre island", "kodiak island", "treasure island", "fraser island",
 			"kangaroo island", "isla margarita", "haiti", "bahamas", "cayman islands", "azores", "new zealand",
 			"coney island", "hilton head", "papua new guinea", "isles of scilly",
+			"canary islands",
 		},
 		Rare = {
 			"victoria island", "ellesmere island", "cape breton", "fuerteventura", "la palma", "la gomera",
@@ -81,6 +82,8 @@ return {
 			"gili islands", "koh phi phi", "koh tao", "koh phangan", "nusa penida", "sentosa", "andaman islands", "hvar",
 			"brac", "korcula", "devils island", "goree island", "angel island", "santa cruz island", "bikini atoll",
 			"ometepe", "ambergris caye", "caye caulker", "fernando de noronha", "robben island",
+			"channel islands", "florida keys", "mustang island", "cumberland island", "sullivans island", "sea island",
+			"virgin islands",
 		},
 		DeepCut = {
 			"bear island", "kolguyev", "vaygach", "kotelny", "bolshevik island", "october revolution island",
@@ -211,5 +214,12 @@ return {
 		["queen charlotte islands"] = "haida gwaii", ["isla holbox"] = "holbox", ["tuhua"] = "mayor island",
 		["whakaari"] = "white island", ["whenua hou"] = "codfish island", ["makaro"] = "ward island",
 		["matiu"] = "somes island", ["sentinel island"] = "north sentinel",
+		["oahu island"] = "oahu", ["maui island"] = "maui", ["fiji islands"] = "fiji", ["jekyll"] = "jekyll island",
+		["isle of capri"] = "capri", ["sint eustatius"] = "statia", ["tahity"] = "tahiti",
+		["jamaca"] = "jamaica", ["madagasgar"] = "madagascar", ["madagasar"] = "madagascar", ["greeenland"] = "greenland",
+		["ice land"] = "iceland", ["greenlan"] = "greenland", ["tasmanya"] = "tasmania", ["sicilly"] = "sicily",
+		["sardina"] = "sardinia", ["carsica"] = "corsica", ["santorni"] = "santorini", ["mykanos"] = "mykonos",
+		["borabora"] = "bora bora", ["bora bora island"] = "bora bora", ["puerto rico island"] = "puerto rico",
+		["hispanola"] = "hispaniola", ["bahama"] = "bahamas",
 	},
 }

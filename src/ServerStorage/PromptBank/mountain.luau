@@ -59,6 +59,8 @@ return {
 			"meije", "aiguille du midi", "grandes jorasses", "aiguille verte", "dru", "gran sasso", "corno grande",
 			"monte cimone", "marmolada", "tre cime", "civetta", "pelmo", "antelao", "sorapiss", "mount moriah",
 			"pumori", "mount ida", "mount nebo",
+			"mount agung", "mount kerinci", "mount ontake", "mount asama", "mount unzen", "mount hakusan", "mount charleston",
+			"mount gerizim",
 		},
 		Mythic = {
 			"tirich mir", "ushba", "pobeda peak", "belukha", "khan tengri", "ismoil somoni peak", "jengish chokusu",
@@ -159,5 +161,13 @@ return {
 		["vinson massif"] = "vinson", ["volcan tupungato"] = "tupungato", ["volcan lanin"] = "lanin",
 		["neblina"] = "pico da neblina", ["lycabettus"] = "mount lycabettus",
 		["pao de acucar"] = "sugarloaf mountain", ["cerro fitz roy"] = "fitz roy", ["gerlach"] = "gerlachovsky",
+		["kailash"] = "mount kailash", ["kosciusko"] = "kosciuszko", ["mount fujiyama"] = "fuji", ["fuji san"] = "fuji",
+		["mount fuji japan"] = "fuji", ["mount etna sicily"] = "etna", ["mount vesuvius italy"] = "vesuvius",
+		["mount olympus greece"] = "olympus", ["mount ararat turkey"] = "ararat", ["mount sinai egypt"] = "sinai",
+		["pikes peak colorado"] = "pikes peak", ["half dome yosemite"] = "half dome",
+		["el capitan yosemite"] = "el capitan", ["grand teton wyoming"] = "grand teton", ["mauna kea hawaii"] = "mauna kea",
+		["mount katahdin maine"] = "mount katahdin", ["mount mckinley alaska"] = "denali", ["scafell"] = "scafell pike",
+		["matterhorn peak"] = "matterhorn", ["mount everst"] = "everest", ["kilimanjaro tanzania"] = "kilimanjaro",
+		["mount rainer"] = "rainier", ["mount st helen"] = "st helens",
 	},
 }

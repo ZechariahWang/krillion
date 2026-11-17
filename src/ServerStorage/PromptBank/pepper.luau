@@ -23,7 +23,7 @@ return {
 			"manzano", "cheongyang", "gypsy pepper", "lunchbox pepper", "mini sweet pepper",
 		},
 		DeepCut = {
-			"chiltepin", "habanada", "lemon drop", "aji limon", "aji dulce", "aji panca", "aji charapita",
+			"chiltepin", "habanada", "aji limon", "aji dulce", "aji panca", "aji charapita",
 			"aji cristal", "chilaca", "fatalii", "bishops crown", "chocolate habanero",
 			"caribbean red", "madame jeanette", "komodo dragon", "dorset naga",
 			"trinidad moruga scorpion", "7 pot", "pot primo", "apocalypse scorpion", "pepper x", "dragons breath",
@@ -57,7 +57,7 @@ return {
 		["guajillo pepper"] = "guajillo", ["pasilla pepper"] = "pasilla", ["chile de arbol"] = "arbol",
 		["aji amarillo pepper"] = "aji amarillo", ["cubanelle pepper"] = "cubanelle", ["peppadews"] = "peppadew",
 		["aleppo pepper"] = "aleppo",
-		["naga jolokia"] = "naga viper",
+		["naga jolokia"] = "ghost pepper",
 		["bhut jolokia"] = "ghost pepper",
 		["scorpion pepper"] = "trinidad scorpion",
 		["anaheim chili"] = "anaheim",
@@ -79,5 +79,6 @@ return {
 		["purple jalapeno pepper"] = "purple jalapeno", ["peter peppers"] = "peter pepper",
 		["bonnet pepper"] = "scotch bonnet", ["chile japones"] = "japones", 
 		["chile puya"] = "puya", ["chile morita"] = "morita",
+		["lemon drop"] = "aji limon",
 	},
 }
