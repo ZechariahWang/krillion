@@ -26,6 +26,7 @@ return {
 			"cozumel", "sanibel", "padre island", "kodiak island", "treasure island", "fraser island",
 			"kangaroo island", "isla margarita", "haiti", "bahamas", "cayman islands", "azores", "new zealand",
 			"coney island", "nassau", "hilton head", "papua new guinea", "isles of scilly",
+			"robben island",
 		},
 		Rare = {
 			"victoria island", "ellesmere island", "cape breton", "fuerteventura", "la palma", "la gomera",
@@ -78,6 +79,9 @@ return {
 			"cayo coco", "cayo largo", "cayo santa maria", "varadero", "tortuga", "ile a vache", "navassa",
 			"gonave", "saona", "aruba island", "curacao island", "brownsea island", "hayling island",
 			"canvey island", "sheppey", "rousay", "kuril islands", "iwo jima", "marquesas", "tuamotus",
+			"gili islands", "koh phi phi", "koh tao", "koh phangan", "nusa penida", "sentosa", "andaman islands", "hvar",
+			"brac", "korcula", "devils island", "goree island", "angel island", "santa cruz island", "bikini atoll",
+			"ometepe", "ambergris caye", "caye caulker", "fernando de noronha",
 		},
 		DeepCut = {
 			"bear island", "kolguyev", "vaygach", "kotelny", "bolshevik island", "october revolution island",
@@ -111,6 +115,7 @@ return {
 			"lasqueti", "gambier", "keats island", "anvil island", "iturup", "kunashir", "sado island",
 			"awaji island", "chichijima", "chuuk", "funafuti", "campobello island", "vinalhaven",
 			"wolfe island", "south bass island", "midway atoll", "palmyra atoll",
+			"hashima island",
 		},
 		Mythic = {
 			"bishops rock", "rockall", "hans island", "clipperton island", "peter i island", "scott island",
@@ -184,6 +189,10 @@ return {
 		["isle of white"] = "isle of wight", ["great brittain"] = "great britain",
 		["the maldives"] = "maldives", ["the bahamas"] = "bahamas", ["falklands"] = "falkland islands",
 		["faroes"] = "faroe islands", ["madegascar"] = "madagascar", ["greenand"] = "greenland",
+		["phi phi"] = "koh phi phi", ["phi phi islands"] = "koh phi phi", ["ko tao"] = "koh tao",
+		["ko phangan"] = "koh phangan", ["koh pha ngan"] = "koh phangan", ["gili"] = "gili islands",
+		["gili trawangan"] = "gili islands", ["bikini"] = "bikini atoll", ["robben"] = "robben island",
+		["gunkanjima"] = "hashima island", ["battleship island"] = "hashima island", 
 		["tasmanian"] = "tasmania", ["jamacia"] = "jamaica", ["icland"] = "iceland", ["maldive"] = "maldives",
 	},
 }

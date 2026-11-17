@@ -42,6 +42,8 @@ return {
 			"historian", "editor", "app developer", "game designer", "voice actor", "songwriter", "novelist",
 			"sommelier", "makeup artist", "screenwriter", "choreographer", "narrator", "conductor", "tattoo artist",
 			"bouncer",
+			"boxer", "golfer", "tennis player", "baseball player", "hockey player", "gymnast", "swimmer", "wrestler",
+			"personal assistant", "office worker", "marketing manager", "web designer",
 		},
 		Rare = {
 			"cobbler", "goldsmith", "silversmith", "watchmaker", "clockmaker", "luthier", "piano tuner", "lyricist",
@@ -93,7 +95,8 @@ return {
 			"occupational therapist", "speech therapist", "paralegal", "dental hygienist", "optician", "orthodontist",
 			"mortician", "midwife", "priest", "pastor", "butler", "chauffeur", "monk", "nun", "pastry chef",
 			"sous chef", "cheerleader", "mascot", "valet", "doorman", "concierge", "bellhop", "auditor",
-			"statistician", "exterminator", "astrologer", "fortune teller", "line cook", "printer", "rabbi", "imam",
+			"executive assistant", "sales associate", "investor", "day trader", "pro wrestler", "ambulance driver",
+			"mma fighter", "nursing assistant", "statistician", "exterminator", "astrologer", "fortune teller", "line cook", "printer", "rabbi", "imam",
 			"bishop", "cosmonaut", "fishmonger", "chocolatier", "lighthouse keeper", "gondolier", "milkman",
 			"paperboy",
 		},
@@ -239,5 +242,7 @@ return {
 		["sea captain"] = "ship captain", ["toji"] = "sake brewer", ["vintner"] = "winemaker",
 		["urushi artist"] = "lacquer artist", ["sports coach"] = "coach", ["pop star"] = "singer",
 		["ballet dancer"] = "ballerina",
+		["golf player"] = "golfer", ["ufc fighter"] = "mma fighter", ["mixed martial artist"] = "mma fighter",
+		["trader"] = "day trader", ["nurse assistant"] = "nursing assistant", ["wrestling"] = "wrestler",
 	},
 }

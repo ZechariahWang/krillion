@@ -94,6 +94,8 @@ return {
 			"mudpuppy", "slow worm", "gharial", "whites tree frog", "african clawed frog", "blue poison dart frog",
 			"golden poison frog", "ornate horned frog", "horned frog", "gray tree frog", "american green tree frog",
 			"strawberry poison dart frog", "siren",
+			"eyelash viper", "rhinoceros viper", "water snake", "blue belly lizard", "plumed basilisk",
+			"yellow bellied sea snake",
 		},
 		DeepCut = {
 			"mexican black kingsnake", "california kingsnake", "scarlet kingsnake", "scarlet snake",
@@ -198,6 +200,9 @@ return {
 		},
 	},
 	aliases = {
+		["aligator"] = "alligator", ["geko"] = "gecko", ["salamandar"] = "salamander",
+		["komodo dragons"] = "komodo dragon", ["axolotls"] = "axolotl", ["rattlesnakes"] = "rattlesnake",
+		["water snakes"] = "water snake", ["eyelash pit viper"] = "eyelash viper", ["turtoise"] = "tortoise",
 		["croc"] = "crocodile", ["gator"] = "alligator", ["dragon"] = "komodo dragon", ["komodo"] = "komodo dragon",
 		["turtles"] = "turtle", ["tortoises"] = "tortoise", ["snakes"] = "snake", ["lizards"] = "lizard",
 		["frogs"] = "frog", ["toads"] = "toad", ["newts"] = "newt", ["salamanders"] = "salamander",

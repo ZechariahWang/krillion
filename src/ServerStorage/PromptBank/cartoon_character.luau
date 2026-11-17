@@ -55,6 +55,7 @@ return {
 			"cyborg", "beast boy", "robin", "saitama", "levi ackerman", "eren yeager", "mikasa", "killua", "gon",
 			"kuromi", "cinnamoroll", "samurai jack", "rocko", "marlin", "crush", "bruce", "dug", "linguini",
 			"kristoff", "sven", "lady", "tramp", "cruella de vil", "mowgli", "bagheera", "shere khan",
+			"batman", "superman", "spider man", "totoro", "bender", "mr incredible", "hiccup", "gojo",
 		},
 		Rare = {
 			"pete", "launchpad mcquack", "gizmoduck", "kit cloudkicker", "olive oyl", "bluto", "wimpy", "sweet pea",
@@ -93,6 +94,12 @@ return {
 			"beth smith", "summer smith", "jerry smith", "elmo", "cookie monster", "kermit", "big bird", "grover",
 			"miss piggy", "oscar the grouch", "bert", "ernie", "count von count", "littlefoot", "cera", "ducky",
 			"petrie", "gordon", "toby", "diesel", "fat controller",
+			"elastigirl", "frozone", "edna mode", "forky", "lotso", "bo peep", "king julien", "kowalski", "melman",
+			"shifu", "tigress", "oogway", "manny", "astrid", "leela", "fry", "professor farnsworth", "beavis",
+			"butthead", "daria", "peter rabbit", "babar", "tintin", "asterix", "obelix", "miffy", "moomintroll",
+			"pippi longstocking", "maya the bee", "ponyo", "chihiro", "no face", "calcifer", "haku", "kiki", "sukuna",
+			"yuji itadori", "denji", "anya forger", "zero two", "natsu", "lelouch", "spike spiegel", "yugi muto",
+			"asuna", "kirito", "tony the tiger", "toucan sam", "mr peanut", "kool aid man",
 		},
 		DeepCut = {
 			"sheldon", "grape ape", "mr jinks", "wally gator", "peter potamus", "valerie", "sabrina",
@@ -220,6 +227,12 @@ return {
 		["kyle"] = "kyle broflovski", ["bluey heeler"] = "bluey", ["marshall paw patrol"] = "marshall",
 		["chase paw patrol"] = "chase", ["dot warner"] = "dot", ["grandpa lou"] = "lou pickles",
 		["cat boy"] = "catboy", ["the great gazoo"] = "great gazoo", ["dudley doright"] = "dudley do right",
+		["spiderman"] = "spider man", ["bat man"] = "batman", ["super man"] = "superman",
+		["my neighbor totoro"] = "totoro", ["gojo satoru"] = "gojo", ["bob parr"] = "mr incredible",
+		["helen parr"] = "elastigirl", ["tony tiger"] = "tony the tiger", ["kool aid"] = "kool aid man",
+		["philip j fry"] = "fry", ["king julian"] = "king julien", ["master oogway"] = "oogway",
+		["master shifu"] = "shifu", ["kaonashi"] = "no face", ["yuji"] = "yuji itadori", ["itadori"] = "yuji itadori",
+		["anya"] = "anya forger", ["natsu dragneel"] = "natsu", ["butt head"] = "butthead",
 		["scotsman"] = "the scotsman", ["koosalagoop"] = "koosalagoopagoop", ["emperor aku"] = "aku",
 	},
 }

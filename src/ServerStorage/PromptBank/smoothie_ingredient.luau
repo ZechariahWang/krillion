@@ -54,6 +54,8 @@ return {
 			"butternut squash", "broccoli", "romaine", "swiss chard", "collard greens", "arugula", "lettuce",
 			"pumpkin spice", "pear juice", "mango juice", "peach juice", "white grape juice",
 			"sunflower seeds", "pumpkin seeds", "sesame seeds", "hazelnuts", "pistachios",
+			"nut milk", "baby spinach", "mixed greens", "vanilla ice cream", "frozen spinach", "frozen cherries",
+			"frozen raspberries", "pineapple chunks", "green apple",
 		},
 		Rare = {
 			"cucumber water", "aloe vera", "aloe vera juice", "aloe juice", "sea buckthorn",
@@ -104,6 +106,7 @@ return {
 			"ashwagandha", "bee pollen", "probiotic powder", "psyllium husk", "irish moss", "sea moss gel",
 			"hemp protein", "rice protein", "casein", "egg white", "hazelnut spread", "cookie butter",
 			"almond extract", "blue spirulina", "pitaya powder", "royal jelly",
+			"watercress",
 		},
 		DeepCut = {
 			"sea buckthorn berries", "haskap", "haskap berry", "honeyberry", "saskatoon berry", "serviceberry",
@@ -184,6 +187,12 @@ return {
 		["kefir milk"] = "kefir", ["coconut cream milk"] = "coconut cream", ["almonds milk"] = "almond milk",
 		["almond"] = "almonds", ["spinich"] = "spinach", ["blubery"] = "blueberry",
 		["strawbery"] = "strawberry", ["coconut yoghurt"] = "coconut yogurt", ["oat"] = "oats",
+		["beetroot"] = "beet", ["beets"] = "beet", ["blue berries"] = "blueberry", ["strawberrys"] = "strawberry",
+		["bannana"] = "banana", ["pinapple"] = "pineapple", ["pineaple"] = "pineapple", ["avacado"] = "avocado",
+		["tumeric"] = "turmeric", ["cinamon"] = "cinnamon", ["chia seed"] = "chia seeds", ["flax seed"] = "flax seeds",
+		["hemp seed"] = "hemp seeds", ["ice cube"] = "ice cubes", ["peanut"] = "peanuts", ["walnut"] = "walnuts",
+		["cashew"] = "cashews", ["pecan"] = "pecans", ["soya milk"] = "soy milk", ["cow milk"] = "milk",
+		["dairy milk"] = "milk", ["pomegranates"] = "pomegranate", ["pears"] = "pear", ["cherrys"] = "cherries",
 		["peanut butter smoothie"] = "peanut butter", ["milk alternative"] = "almond milk",
 	},
 }

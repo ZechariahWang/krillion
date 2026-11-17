@@ -1,0 +1,62 @@
+--!strict
+return {
+	id = "kids_outdoor_game",
+	prompt = "Name a playground or outdoor game kids play",
+	answers = {
+		Plankton = {
+			"tag", "hide and seek", "hopscotch", "red light green light", "dodgeball", "capture the flag",
+		},
+		TooClever = {
+			"kickball", "jump rope", "simon says", "freeze tag", "duck duck goose", "tug of war",
+		},
+		Schooler = {
+			"four square", "leapfrog", "tetherball", "marbles", "jacks", "sardines", "kick the can", "red rover",
+			"mother may i", "king of the hill", "ring around the rosie", "london bridge", "keep away", "monkey in the middle",
+			"wall ball", "sack race", "egg and spoon race", "three legged race", "limbo", "stickball", "handball", "spud",
+			"british bulldog", "ghost in the graveyard", "manhunt", "sharks and minnows", "what time is it mr wolf",
+			"grandmothers footsteps", "cops and robbers", "follow the leader", "blind mans bluff", "water balloon toss",
+			"relay race", "obstacle course", "scavenger hunt", "treasure hunt", "double dutch", "conkers", "hot potato",
+			"crack the whip", "flashlight tag", "cat and mouse", "wiffle ball", "stoopball", "pickle", "steal the bacon",
+			"chicken fight", "piggyback race", "hula hoop", "skipping stones", "hide and go seek",
+		},
+		Rare = {
+			"elastic jump rope", "chinese jump rope", "pick up sticks", "statues", "stuck in the mud", "bulldog", "shadow tag",
+			"sock tag", "tunnel tag", "chain tag", "blob tag", "ultimate frisbee", "kick ball", "dodge ball", "skully",
+			"stick ball", "horse", "around the world", "pickle in the middle", "rundown", "crab soccer", "crab walk race",
+			"wheelbarrow race", "balloon race", "bean bag toss", "ring toss", "horseshoes", "croquet", "bocce", "cornhole",
+			"water gun fight", "ghost tag", "marco polo",
+		},
+		DeepCut = {
+			"fox and hounds", "pitch penny", "pat a cake", "i sent a letter to my love", "drop the handkerchief",
+			"oranges and lemons", "farmer in the dell", "in and out the dusty bluebells", "hunt the slipper", "tig",
+			"queenie queenie who has the ball", "ringolevio", "buck buck", "kick the wicket", "tin can alley",
+		},
+		Mythic = {
+			"peever", "skittles", "quoits", "tipcat", "hoop and stick", "knucklebones", "five stones",
+		},
+	},
+	aliases = {
+		["tag game"] = "tag", ["hide n seek"] = "hide and seek", ["hopscotch game"] = "hopscotch",
+		["red light"] = "red light green light", ["green light red light"] = "red light green light",
+		["ctf"] = "capture the flag", ["skipping"] = "jump rope", ["skipping rope"] = "jump rope",
+		["jumping rope"] = "jump rope", ["rope jumping"] = "jump rope", ["freezetag"] = "freeze tag",
+		["duck duck grey duck"] = "duck duck goose", ["duck duck gray duck"] = "duck duck goose",
+		["4 square"] = "four square", ["leap frog"] = "leapfrog", ["tether ball"] = "tetherball", ["marble"] = "marbles",
+		["jack"] = "jacks", ["sardine"] = "sardines", ["kick can"] = "kick the can", ["mother may i game"] = "mother may i",
+		["ring a ring o roses"] = "ring around the rosie", ["ring around the rosy"] = "ring around the rosie",
+		["ring a ring of roses"] = "ring around the rosie", ["monkey in middle"] = "monkey in the middle",
+		["piggy in the middle"] = "monkey in the middle", ["sack races"] = "sack race", ["potato sack race"] = "sack race",
+		["egg and spoon"] = "egg and spoon race", ["three legged"] = "three legged race",
+		["3 legged race"] = "three legged race", ["man hunt"] = "manhunt", ["sharks and minows"] = "sharks and minnows",
+		["mr wolf"] = "what time is it mr wolf", ["what time is it mr fox"] = "what time is it mr wolf",
+		["grandmas footsteps"] = "grandmothers footsteps", ["grandmother footsteps"] = "grandmothers footsteps",
+		["cops and robber"] = "cops and robbers", ["cops n robbers"] = "cops and robbers",
+		["blind mans buff"] = "blind mans bluff", ["relay"] = "relay race", ["relay races"] = "relay race",
+		["scavenger"] = "scavenger hunt", ["double dutch jump rope"] = "double dutch", ["conker"] = "conkers",
+		["hot potatoe"] = "hot potato", ["flashlight"] = "flashlight tag", ["wiffleball"] = "wiffle ball",
+		["whiffle ball"] = "wiffle ball", ["hula hoops"] = "hula hoop", ["hulahoop"] = "hula hoop",
+		["tetherballs"] = "tetherball", ["ice breaker"] = "sharks and minnows", ["hopskotch"] = "hopscotch",
+		["hop scotch"] = "hopscotch", ["capture flag"] = "capture the flag", ["jump roping"] = "jump rope",
+		["leap frog game"] = "leapfrog", ["kick the can game"] = "kick the can", ["catch"] = "keep away",
+	},
+}

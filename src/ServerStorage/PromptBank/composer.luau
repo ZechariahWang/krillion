@@ -83,7 +83,7 @@ return {
 			"cecile chaminade", "franz lehar", "lehar", "arthur sullivan", "sullivan", "bruch", "max bruch",
 			"humperdinck", "engelbert humperdinck", "weber", "carl maria von weber", "dukas", "paul dukas",
 			"leroy anderson", "nino rota", "henry mancini", "michael giacchino", "alan menken",
-			"ramin djawadi", "vangelis", "gesualdo", "carlo gesualdo", "allegri", "gregorio allegri",
+			"ramin djawadi", "vangelis", "malcolm arnold", "gian carlo menotti", "menotti", "gesualdo", "carlo gesualdo", "allegri", "gregorio allegri",
 		},
 		DeepCut = {
 			"josquin des prez", "josquin", "ockeghem", "johannes ockeghem", "dufay", "guillaume dufay",
@@ -132,7 +132,8 @@ return {
 			"takemitsu", "ryuichi sakamoto", "sakamoto", "nobuo uematsu", "koji kondo", "yiruma",
 			"yann tiersen", "max steiner", "alan silvestri", "thomas newman", "alexandre desplat",
 			"harry gregson williams", "bear mccreary", "ola gjeilo", "caroline shaw", "emmerich kalman",
-			"franz von suppe", "suppe",
+			"franz von suppe", "suppe", "olafur arnalds", "joseph bologne", "chevalier de saint georges",
+			"jean francaix", "francaix", "nikolai kapustin", "kapustin", "marin marais", "marais",
 		},
 		Mythic = {
 			"hans rott", "rott", "franz schmidt", "alexander zemlinsky", "zemlinsky", "franz schreker",
@@ -157,7 +158,7 @@ return {
 			"auric", "georges auric", "kalinnikov", "ippolitov ivanov", "gretchaninov", "sviridov",
 			"marschner", "lortzing", "flotow", "otto nicolai", "wolf ferrari", "peter cornelius",
 			"carl reinecke", "roger quilter", "isabella leonarda", "francesca caccini",
-			"elisabeth jacquet de la guerre", "maria teresa agnesi",
+			"elisabeth jacquet de la guerre", "maria teresa agnesi", "rued langgaard", "vincent persichetti", "persichetti",
 		},
 	},
 	aliases = {
@@ -203,6 +204,7 @@ return {
 		["list"] = "liszt", ["brams"] = "brahms", ["shubert"] = "schubert", ["haendel"] = "handel",
 		["mendelson"] = "mendelssohn", ["shoenberg"] = "schoenberg", ["shostokovich"] = "shostakovich",
 		["rimsky korsakoff"] = "rimsky korsakov", ["moussorgsky"] = "mussorgsky", ["dvorjak"] = "dvorak",
-		["dworzak"] = "dvorak", ["strauss ii"] = "johann strauss",
+		["dworzak"] = "dvorak", ["strauss ii"] = "johann strauss", ["ferenc liszt"] = "liszt", ["tschaikovsky"] = "tchaikovsky",
+		["rachmaninoff sergei"] = "rachmaninoff", ["bartok bela"] = "bartok",
 	},
 }

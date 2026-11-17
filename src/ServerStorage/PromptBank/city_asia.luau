@@ -60,6 +60,9 @@ return {
 			"jericho", "diyarbakir", "duhok", "fallujah", "ramadi", "samarra", "tikrit", "george town", "malacca",
 			"naha", "new taipei", "gurugram", "novosibirsk", "yekaterinburg", "hue", "wuxi", "changchun", "taoyuan",
 			"koh samui", "phu quoc", "langkawi", "himeji", "fukushima", "noida", "thane", "nashik", "khajuraho",
+			"raipur", "jabalpur", "meerut", "kota", "ayodhya", "ujjain", "mathura", "ooty", "navi mumbai", "nainital",
+			"mussoorie", "kolhapur", "vellore", "tsukuba", "yokosuka", "narita", "atami", "kawagoe", "funabashi",
+			"lapu lapu", "legazpi", "hodeidah",
 		},
 		DeepCut = {
 			"matsumoto", "kurashiki", "toyama", "fukui", "gifu", "tsu", "otsu", "wakayama", "tottori", "matsue",
@@ -154,6 +157,9 @@ return {
 		["bangcock"] = "bangkok", ["beijin"] = "beijing", ["tokio"] = "tokyo", ["dehli"] = "delhi",
 		["newdelhi"] = "delhi", ["bagdad"] = "baghdad", ["djakarta"] = "jakarta", ["pnom penh"] = "phnom penh",
 		["khorat"] = "nakhon ratchasima", ["singapor"] = "singapore", ["new delhi"] = "delhi",
-		["tripoli lebanon"] = "tripoli", ["kerbala"] = "karbala", ["al khobar"] = "khobar", ["olgii"] = "ulgii",
+		["tripoli lebanon"] = "tripoli", ["nay pyi taw"] = "naypyidaw", ["naypyitaw"] = "naypyidaw", ["new taipei city"] = "new taipei",
+		["ulan batar"] = "ulaanbaatar", ["calcuta"] = "kolkata", ["bengaluru india"] = "bangalore",
+		["hodeida"] = "hodeidah", ["al hudaydah"] = "hodeidah", ["lapulapu"] = "lapu lapu",
+		["kerbala"] = "karbala", ["al khobar"] = "khobar", ["olgii"] = "ulgii",
 	},
 }

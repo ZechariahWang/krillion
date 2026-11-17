@@ -54,6 +54,8 @@ return {
 			"taxidermy", "street photography", "film photography", "paper airplanes", "cardistry", "funko pops",
 			"sandcastle building", "cookie decorating", "candy making", "sushi making", "sourdough",
 			"book collecting", "sticker collecting", "astronomy",
+			"darts", "billiards", "pool", "meditation", "pilates", "watching anime", "watching youtube",
+			"learning languages", "hanging out with friends",
 		},
 		Rare = {
 			"lock picking", "urban exploration", "parkour", "slacklining", "letterboxing", "orienteering",
@@ -103,6 +105,7 @@ return {
 			"pickling", "fermenting", "winemaking", "competitive eating", "sign language", "knot tying", "morse code",
 			"basket weaving", "ghost hunting", "jacks", "cross country skiing", "herping", "sledding",
 			"cloud watching",
+			"snooker", "bocce", "croquet", "lawn bowling", "rock painting",
 		},
 		DeepCut = {
 			"sword swallowing", "fire eating", "glass harmonica", "extreme ironing", "competitive yo yo",
@@ -179,6 +182,9 @@ return {
 		["star gazing"] = "stargazing", ["cosplaying"] = "cosplay", ["dnd"] = "dungeons and dragons",
 		["d and d"] = "dungeons and dragons", ["ttrpg"] = "tabletop rpgs", ["rpg"] = "role playing games",
 		["3d printer"] = "3d printing", ["hula hoop"] = "hula hooping", ["mtg"] = "magic the gathering",
+		["playing pool"] = "pool", ["playing darts"] = "darts", ["meditating"] = "meditation", ["anime watching"] = "watching anime",
+		["wood burning"] = "pyrography", ["language learning"] = "learning languages", ["bocce ball"] = "bocce",
+		["hanging out"] = "hanging out with friends", ["billiard"] = "billiards", ["pilate"] = "pilates",
 		["pokemon"] = "pokemon cards", ["metal detector"] = "metal detecting", ["scuba"] = "scuba diving",
 		["snorkelling"] = "snorkeling", ["stamp collection"] = "stamp collecting",
 		["coin collection"] = "coin collecting", ["programming games"] = "game development", ["sketch"] = "sketching",

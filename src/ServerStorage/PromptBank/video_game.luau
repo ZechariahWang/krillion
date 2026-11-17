@@ -35,7 +35,7 @@ return {
 			"metal gear solid", "star fox", "rayman", "tomb raider", "diablo", "starcraft", "age of empires",
 			"civilization", "simcity", "roller coaster tycoon", "the oregon trail", "cult of the lamb",
 			"untitled goose game", "dont starve", "slime rancher", "poppy playtime",
-			"bendy and the ink machine", "hello neighbor", "granny", "super mario maker", "mario and luigi",
+			"dead by daylight", "destiny 2", "bendy and the ink machine", "hello neighbor", "granny", "super mario maker", "mario and luigi",
 			"paper mario", "yoshis island", "donkey kong country", "gta", "yoshi", "bejeweled", "stumble guys",
 		},
 		Rare = {
@@ -94,6 +94,9 @@ return {
 			"super mario world", "super mario sunshine", "new super mario bros", "conkers bad fur day",
 			"super meat boy", "little nightmares", "shovel knight", "metro exodus", "dying light",
 			"dead island", "the walking dead", "life is strange", "telltale games",
+			"warframe", "brawlhalla", "escape from tarkov", "plague inc", "monument valley", "2048", "pou",
+			"my singing monsters", "my talking tom", "hay day", "paper io", "omori", "stray", "bloons td 6",
+			"resident evil 4", "super mario 3d world",
 		},
 		DeepCut = {
 			"lemmings", "worms", "populous", "dungeon keeper", "theme hospital", "theme park",
@@ -231,6 +234,10 @@ return {
 		["smash"] = "super smash bros", ["super smash brothers"] = "super smash bros",
 		["assassin creed"] = "assassins creed", ["stardew"] = "stardew valley", ["kart"] = "mario kart",
 		["gta online"] = "grand theft auto", ["apex"] = "apex legends", ["clash"] = "clash of clans",
+		["dbd"] = "dead by daylight", ["tarkov"] = "escape from tarkov", ["bloons"] = "bloons td 6",
+		["bloons td"] = "bloons td 6", ["overwatch 2"] = "overwatch", ["mario kart 8"] = "mario kart",
+		["mario kart 8 deluxe"] = "mario kart", ["destiny2"] = "destiny 2", ["terraria game"] = "terraria",
+		["teraria"] = "terraria", ["undertail"] = "undertale", ["mario kart wii"] = "mario kart",
 		["brawl"] = "brawl stars", ["candycrush"] = "candy crush", ["angrybirds"] = "angry birds",
 	},
 }

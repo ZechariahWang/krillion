@@ -185,6 +185,8 @@ return {
 		["raichu pokemon"] = "raichu", ["eevee evolution"] = "eevee", ["evee"] = "eevee",
 		["farfetch d"] = "farfetchd", ["sirfetch d"] = "sirfetchd", ["pickachu"] = "pikachu", ["pikchu"] = "pikachu",
 		["mewtoo"] = "mewtwo", ["snorlex"] = "snorlax", ["lucaro"] = "lucario", ["bulbosaur"] = "bulbasaur",
+		["psiduck"] = "psyduck", ["rayquasa"] = "rayquaza", ["eevie"] = "eevee", ["charazard"] = "charizard",
+		["vapereon"] = "vaporeon", ["umbrion"] = "umbreon", ["gardivoir"] = "gardevoir", ["greninga"] = "greninja",
 		["geodood"] = "geodude", ["magickarp"] = "magikarp", ["raichoo"] = "raichu", ["venasaur"] = "venusaur",
 	},
 }
