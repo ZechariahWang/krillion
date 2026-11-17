@@ -13,7 +13,6 @@ return {
 			"gray whale", "fin whale", "minke whale", "right whale", "bowhead whale", "common dolphin",
 			"spinner dolphin", "river dolphin", "amazon river dolphin", "harbor porpoise", "sei whale", "baleen whale",
 			"false killer whale", "beaked whale", "dolphin", "whale",
-			"toothed whale",
 		},
 		Rare = {
 			"southern right whale", "north atlantic right whale", "bryde whale", "pygmy sperm whale",
@@ -26,6 +25,7 @@ return {
 			"pacific white sided dolphin", "white beaked dolphin", "atlantic white sided dolphin", "franciscana",
 			"burmeisters porpoise", "dusky dolphin",
 			"pygmy blue whale",
+			"toothed whale",
 		},
 		DeepCut = {
 			"spectacled porpoise", "clymene dolphin", "northern right whale dolphin", "southern right whale dolphin",
@@ -103,7 +103,6 @@ return {
 		["orca whale"] = "orca",
 		["cachalot"] = "sperm whale",
 		["greenland whale"] = "bowhead whale",
-		["humpback dolphin"] = "indo pacific humpback dolphin",
 		["dolfin"] = "dolphin",
 		["dolphine"] = "dolphin",
 		["belugas"] = "beluga",
@@ -120,8 +119,6 @@ return {
 		["minky whale"] = "minke whale",
 		["pigmy sperm whale"] = "pygmy sperm whale",
 		["beaked"] = "beaked whale",
-		["blue"] = "blue whale",
-		["fin"] = "fin whale",
 		["spotted dolphins"] = "spotted dolphin",
 		["humpback whales"] = "humpback whale",
 	},

@@ -20,12 +20,14 @@ return {
 			"franky", "brook", "buggy", "trafalgar law", "captain jake", "jacquotte delahaye", "rachel wall", "howell davis",
 			"edward england", "billy bones", "ben gunn", "israel hands", "captain teague", "bootstrap bill", "portgas d ace",
 			"jinbe", "pintel and ragetti", "mr gibbs",
+			"armando salazar",
 		},
 		DeepCut = {
 			"olivier levasseur", "roche braziliano", "christopher condent", "william dampier", "eustace the monk",
 			"laurens de graaf", "sayyida al hurra", "henry jennings", "charles gibbs", "john phillips", "bartholomew sharp",
 			"pirate captain", "captain feathersword", "kaido", "big mom", "boa hancock", "black caesar", "jeanne de clisson",
 			"robert surcouf", "kanhoji angre", "piet heyn", "eustass kid", "doflamingo", "arlong", "dragut",
+			"izzy", "cubby", "skully",
 		},
 		Mythic = {
 			"anne dieu le veut", "thomas cavendish", "jack ward", "bartholomew portugues",
@@ -60,5 +62,12 @@ return {
 		["jean laffite"] = "jean lafitte", ["ussop"] = "usopp", ["red haired shanks"] = "shanks",
 		["cheng shih"] = "ching shih", ["pintel"] = "pintel and ragetti", ["ragetti"] = "pintel and ragetti",
 		["donquixote doflamingo"] = "doflamingo", ["eustass captain kid"] = "eustass kid", ["teague"] = "captain teague",
+		["captain salazar"] = "armando salazar", ["salazar"] = "armando salazar",
+		["long john sliver"] = "long john silver", ["long jon silver"] = "long john silver",
+		["captain blackbeard"] = "blackbeard", ["pirate blackbeard"] = "blackbeard", ["blackbeerd"] = "blackbeard",
+		["capt hook"] = "captain hook", ["captain hoook"] = "captain hook", ["captain sparrow"] = "jack sparrow",
+		["barbosa"] = "barbossa", ["captain barbosa"] = "barbossa", ["davey jones"] = "davy jones",
+		["monkey luffy"] = "luffy", ["captain henry morgan"] = "captain morgan", ["ching shi"] = "ching shih",
+		["madame ching"] = "ching shih",
 	},
 }

@@ -29,6 +29,7 @@ return {
 			"zebulon pike", "henry morton stanley", "nellie bly", "kit carson",
 			"robert ballard", "sylvia earle", "matthew flinders", "george mallory", "erik the red",
 			"john wesley powell", "reinhold messner", "mae jemison", "alan shepard",
+			"michael collins", "bear grylls", "jim lovell", "chris hadfield",
 		},
 		DeepCut = {
 			"pytheas", "hanno the navigator", "zhang qian", "xuanzang", "faxian", "ibn fadlan", "ibn jubayr", "al idrisi",
@@ -44,6 +45,7 @@ return {
 			"ludwig leichhardt", "charles sturt", "john mcdouall stuart", "otto sverdrup", "helge ingstad",
 			"bjarni herjolfsson", "brendan the navigator", "semyon dezhnev", "yermak", "nicolas baudin",
 			"hubert wilkins",
+			"jeanne baret",
 		},
 		Mythic = {
 			"ahmad ibn majid", "ruy lopez de villalobos", "juan rodriguez cabrillo", "sebastian vizcaino", "juan de fuca",
@@ -94,5 +96,17 @@ return {
 		["juan ponce de leon"] = "ponce de leon", ["henry the navigator"] = "prince henry the navigator",
 		["erik the viking"] = "erik the red", ["eric the red"] = "erik the red", ["alan shepherd"] = "alan shepard",
 		["sverdrup"] = "otto sverdrup", ["leichhardt"] = "ludwig leichhardt",
+		["christopher colombus"] = "christopher columbus", ["christoper columbus"] = "christopher columbus",
+		["cristobal colon"] = "christopher columbus", ["magellen"] = "magellan", ["magelan"] = "magellan",
+		["neil armstong"] = "neil armstrong", ["neal armstrong"] = "neil armstrong",
+		["amelia earheart"] = "amelia earhart", ["ameila earhart"] = "amelia earhart",
+		["vasco de gama"] = "vasco da gama", ["hernan cortez"] = "hernan cortes", ["cortez"] = "hernan cortes",
+		["ponce deleon"] = "ponce de leon", ["pizzaro"] = "francisco pizarro", ["amerigo vespuci"] = "amerigo vespucci",
+		["roald amundson"] = "roald amundsen", ["walter raley"] = "walter raleigh",
+		["jaques cartier"] = "jacques cartier", ["daniel boon"] = "daniel boone", ["davy crocket"] = "davy crockett",
+		["jacque cousteau"] = "jacques cousteau", ["yuri gargarin"] = "yuri gagarin", ["ibn batuta"] = "ibn battuta",
+		["ibn battutah"] = "ibn battuta", ["david livingston"] = "david livingstone",
+		["captain james cook"] = "captain cook", ["marco pollo"] = "marco polo", ["tenzing"] = "tenzing norgay",
+		["buzz aldren"] = "buzz aldrin",
 	},
 }

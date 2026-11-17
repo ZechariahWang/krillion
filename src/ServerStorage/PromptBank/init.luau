@@ -241,6 +241,8 @@ local list: { Prompt } = {
 	require("@self/chicken_breed"),
 	require("@self/livestock_breed"),
 	require("@self/ancient_weapon"),
+	require("@self/wild_cat"),
+	require("@self/chair_type"),
 }
 
 local byId: { [string]: Prompt } = {}

@@ -27,6 +27,7 @@ return {
 			"grand duke of owls", "peg leg pete", "jasper", "horace", "si and am", "edgar", "the coachman",
 			"al mcwhiggin", "forte", "magica de spell", "lyle tiberius rourke",
 			"fagin", "drizella", "anastasia tremaine",
+			"abis mal", "mozenrath", "amos slade", "alameda slim", "dr drakken",
 		},
 		Mythic = {
 			"fidget", "brom bones", "mr snoops", "the weasels",
@@ -60,5 +61,8 @@ return {
 		["queen hearts"] = "queen of hearts", ["the queen"] = "evil queen", ["evil emperor zurg"] = "zurg",
 		["anastasia"] = "anastasia tremaine", ["sea witch"] = "ursula", ["shere kahn"] = "shere khan",
 		["sherekhan"] = "shere khan",
+		["maleficant"] = "maleficent", ["malificant"] = "maleficent", ["cruela"] = "cruella de vil",
+		["randall boggs"] = "randall", ["bill sykes"] = "sykes", ["drakken"] = "dr drakken",
+		["doctor drakken"] = "dr drakken",
 	},
 }

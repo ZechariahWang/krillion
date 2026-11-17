@@ -24,12 +24,14 @@ return {
 			"arcee", "shockwave", "unicron", "galvatron", "bulkhead", "cliffjumper", "prowl", "jetfire", "devastator",
 			"megazord", "alpha 5", "calculon", "kryten", "cylon", "sentinel", "mettaton", "zenyatta", "gypsy danger",
 			"ig 11", "droideka", "auto", "android 18", "butter robot", "tik tok",
+			"metal gear rex", "mecha sonic", "gerty",
 		},
 		DeepCut = {
 			"metalhead",
 			"skywarp", "thundercracker", "omega supreme", "blurr", "ultra magnus", "perceptor", "case",
 			"dewey", "dot matrix", "metal mickey", "orisa", "r5d4", "bigweld", "rodney copperbottom", "maria",
 			"dum e", "tars", "gigolo joe",
+			"flexo",
 		},
 		Mythic = {},
 	},
@@ -53,5 +55,8 @@ return {
 		["metaton"] = "mettaton", ["mettaton ex"] = "mettaton", ["tiktok"] = "tik tok", ["tik tok of oz"] = "tik tok",
 		["r5 d4"] = "r5d4", ["bulk head"] = "bulkhead", ["cliff jumper"] = "cliffjumper", ["hotrod"] = "rodimus prime",
 		["dume"] = "dum e", ["hot rod"] = "rodimus prime", ["t800"] = "terminator",
+		["wall ee"] = "wall e", ["r2"] = "r2d2", ["bender rodriguez"] = "bender",
+		["bender bending rodriguez"] = "bender", ["number 5"] = "johnny 5", ["number five"] = "johnny 5",
+		["clap trap"] = "claptrap",
 	},
 }

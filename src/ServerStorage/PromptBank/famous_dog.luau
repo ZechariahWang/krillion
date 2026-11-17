@@ -48,7 +48,6 @@ return {
 		["taco bell dog"] = "taco bell chihuahua", ["three headed dog"] = "cerberus", ["kerberos"] = "cerberus",
 		["zero the ghost dog"] = "zero", ["sparky the dog"] = "sparky", ["hagrids dog"] = "fang",
 		["fang the dog"] = "fang", ["rolf"] = "rowlf", ["rowlf the dog"] = "rowlf", ["hachikko"] = "hachiko",
-		["lady and the tramp"] = "lady",
 		["snoopy dog"] = "snoopy",
 		["pluto the dog"] = "pluto",
 		["goofy dog"] = "goofy",

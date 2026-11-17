@@ -180,5 +180,7 @@ return {
 		["theodore"] = "theodore nott", ["nott"] = "theodore nott", ["thorfinn"] = "thorfinn rowle",
 		["rowle"] = "thorfinn rowle", ["rosier"] = "evan rosier", ["ogden"] = "bob ogden",
 		["ronan the centaur"] = "ronan", ["bane the centaur"] = "bane",
+		["hermione grainger"] = "hermione granger", ["dumbledore"] = "albus dumbledore", ["hagird"] = "rubeus hagrid",
+		["flamel"] = "nicolas flamel", ["nicholas flamel"] = "nicolas flamel",
 	},
 }

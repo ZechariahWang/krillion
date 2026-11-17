@@ -128,7 +128,6 @@ return {
 		["bishops cap cactus"] = "bishops cap",
 		["pachira"] = "money tree",
 		["aglaonema"] = "chinese evergreen",
-		["lily"] = "peace lily",
 		["thanksgiving cactus"] = "christmas cactus",
 		["cast iron"] = "cast iron plant",
 		["aspidistra"] = "cast iron plant",

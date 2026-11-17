@@ -15,6 +15,7 @@ return {
 			"ballista", "battering ram", "trident", "claymore", "short sword", "great sword", "knife",
 			"tomahawk", "boomerang", "nunchucks", "shuriken", "staff", "quarterstaff", "bo staff", "whip",
 			"stone axe", "flint knife", "spiked club", "bolas", "arrow", "pickaxe",
+			"cannon", "hatchet", "throwing knife",
 		},
 		Rare = {
 			"glaive", "poleaxe", "falchion", "zweihander", "bastard sword", "gladius", "spatha", "khopesh",
@@ -25,6 +26,7 @@ return {
 			"flamberge", "broad axe", "francisca", "sax", "xiphos", "kopis", "sarissa", "pilum", "hasta",
 			"lochaber axe", "shillelagh", "cudgel", "caltrops", "tonfa", "yumi", "kunai", "talwar", "jian", "dao",
 			"bokken", "guandao", "urumi", "katar", "khanda",
+			"greek fire", "siege tower", "labrys", "polearm", "epee", "war pick", "hand cannon",
 		},
 		DeepCut = {
 			"misericorde", "rondel dagger", "baselard", "cinquedea", "springald", "hwacha", "qiang", "jo",
@@ -62,5 +64,14 @@ return {
 		["pila"] = "pilum", ["cudgels"] = "cudgel", ["chakrams"] = "chakram", ["kamas"] = "kama",
 		["sickles"] = "sickle", ["scythes"] = "scythe", ["tonfas"] = "tonfa", ["kunais"] = "kunai",
 		["tulwar"] = "talwar", ["pugio dagger"] = "pugio",
+		["throwing knives"] = "throwing knife", ["battle ram"] = "battering ram", ["samurai sword"] = "katana",
+		["ninja sword"] = "katana", ["roman sword"] = "gladius", ["gladiator sword"] = "gladius",
+		["ball and chain"] = "flail", ["mace and chain"] = "flail", ["jevelin"] = "javelin", ["javlin"] = "javelin",
+		["scimiter"] = "scimitar", ["cutlas"] = "cutlass", ["claymoor"] = "claymore", ["trebuchett"] = "trebuchet",
+		["trebuchette"] = "trebuchet", ["catapault"] = "catapult", ["catapolt"] = "catapult", ["dager"] = "dagger",
+		["daggar"] = "dagger", ["halbred"] = "halberd", ["rapeir"] = "rapier", ["pole arm"] = "polearm",
+		["cannons"] = "cannon", ["hatchets"] = "hatchet", ["war axe"] = "battle axe", ["battle axes"] = "battle axe",
+		["long bows"] = "longbow", ["longbows"] = "longbow", ["cross bow"] = "crossbow",
+		["morning stars"] = "morning star", ["tridents"] = "trident",
 	},
 }

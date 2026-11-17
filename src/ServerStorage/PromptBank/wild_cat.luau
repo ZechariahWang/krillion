@@ -1,0 +1,61 @@
+--!strict
+return {
+	id = "wild_cat",
+	prompt = "Name a wild cat",
+	answers = {
+		Plankton = {
+			"lion", "tiger", "cheetah", "leopard", "jaguar", "panther",
+		},
+		TooClever = {
+			"snow leopard", "mountain lion", "lynx", "bobcat",
+		},
+		Schooler = {
+			"cougar", "black panther", "white tiger", "ocelot", "serval", "caracal", "liger", "clouded leopard",
+			"siberian tiger", "bengal tiger", "african lion", "wildcat", "sabertooth",
+		},
+		Rare = {
+			"puma", "margay", "jaguarundi", "sand cat", "pallas cat", "fishing cat", "leopard cat", "jungle cat",
+			"golden cat", "marbled cat", "rusty spotted cat", "black footed cat", "geoffroys cat", "kodkod",
+			"oncilla", "pampas cat", "andean mountain cat", "iberian lynx", "eurasian lynx", "canada lynx",
+			"bay cat", "flat headed cat", "amur leopard", "sumatran tiger", "tigon", "african wildcat",
+			"european wildcat", "african golden cat", "asian golden cat", "persian leopard", "arabian leopard",
+			"indochinese tiger", "malayan tiger", "south china tiger", "amur tiger", "asiatic lion",
+			"barbary lion", "cave lion", "american lion", "bornean clouded leopard", "scottish wildcat",
+			"florida panther",
+		},
+		DeepCut = {
+			"chinese mountain cat", "pantanal cat", "guigna", "javan leopard", "sri lankan leopard",
+			"indian leopard", "african leopard", "iriomote cat", "tsushima cat", "asiatic cheetah", "king cheetah",
+			"masai lion", "transvaal lion", "white lion", "balinese tiger", "javan tiger", "caspian tiger",
+		},
+		Mythic = {
+			"amur leopard cat", "formosan clouded leopard",
+		},
+	},
+	aliases = {
+		["lions"] = "lion", ["tigers"] = "tiger", ["cheetahs"] = "cheetah", ["leopards"] = "leopard",
+		["jaguars"] = "jaguar", ["panthers"] = "panther", ["pather"] = "panther", ["cheeta"] = "cheetah",
+		["cheetas"] = "cheetah", ["leapord"] = "leopard", ["jagaur"] = "jaguar", ["linx"] = "lynx",
+		["lynxes"] = "lynx", ["bobcats"] = "bobcat", ["bob cat"] = "bobcat", ["ocelots"] = "ocelot",
+		["servals"] = "serval", ["caracals"] = "caracal", ["cougars"] = "cougar", ["couger"] = "cougar",
+		["pumas"] = "puma", ["catamount"] = "mountain lion", ["snow leopards"] = "snow leopard",
+		["snowleopard"] = "snow leopard", ["ounce"] = "snow leopard", ["clouded leopards"] = "clouded leopard",
+		["sunda clouded leopard"] = "bornean clouded leopard", ["black leopard"] = "black panther",
+		["black jaguar"] = "black panther", ["white bengal tiger"] = "white tiger",
+		["bengal white tiger"] = "white tiger", ["royal bengal tiger"] = "bengal tiger",
+		["indian tiger"] = "bengal tiger", ["amur tigers"] = "amur tiger", ["saber tooth"] = "sabertooth",
+		["saber toothed tiger"] = "sabertooth", ["sabre toothed tiger"] = "sabertooth",
+		["sabertooth tiger"] = "sabertooth", ["saber tooth tiger"] = "sabertooth", ["smilodon"] = "sabertooth",
+		["pallass cat"] = "pallas cat", ["manul"] = "pallas cat", ["desert cat"] = "sand cat",
+		["jaguarondi"] = "jaguarundi", ["eyra cat"] = "jaguarundi", ["geoffroy cat"] = "geoffroys cat",
+		["wild cat"] = "wildcat", ["tigons"] = "tigon", ["ligers"] = "liger",
+		["golden cats"] = "golden cat", ["temmincks golden cat"] = "asian golden cat",
+		["siberian lynx"] = "eurasian lynx", ["european lynx"] = "eurasian lynx", ["northern lynx"] = "eurasian lynx",
+		["spanish lynx"] = "iberian lynx", ["pardel lynx"] = "iberian lynx", ["panthera leo"] = "lion",
+		["panthera tigris"] = "tiger", ["panthera pardus"] = "leopard", ["panthera onca"] = "jaguar",
+		["acinonyx jubatus"] = "cheetah", ["puma concolor"] = "cougar", ["andean cat"] = "andean mountain cat",
+		["indian lion"] = "asiatic lion", ["persian lion"] = "asiatic lion", ["caucasian leopard"] = "persian leopard",
+		["white lions"] = "white lion", ["tiger cat"] = "oncilla", ["colocolo"] = "pampas cat",
+		["eurasian wildcat"] = "european wildcat",
+	},
+}
