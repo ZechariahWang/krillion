@@ -102,6 +102,14 @@ class Bank:
             start = lines.index("\tanswers = {")
         except ValueError:
             raise ValueError("no '\\tanswers = {' line")
+        # An empty tier written on one line (`Mythic = {},`) becomes a header and a closing line, the form
+        # every edit below works on.
+        i = start + 1
+        while i < len(lines) and lines[i] != "\t},":
+            empty = re.match(r"^\t\t(\w+) = \{\},$", lines[i])
+            if empty is not None:
+                lines[i : i + 1] = ["\t\t%s = {" % empty.group(1), "\t\t},"]
+            i += 1
         end = next((i for i in range(start + 1, len(lines)) if lines[i] == "\t},"), None)
         if end is None:
             raise ValueError("answers block is not closed")
