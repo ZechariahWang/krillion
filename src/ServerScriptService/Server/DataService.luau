@@ -85,6 +85,9 @@ DataService.PROFILE_STORE = PROFILE_STORE
 -- (player: Player) once the player's profile is loaded and the first ProfileChanged has gone out.
 DataService.ProfileLoaded = Signal.new("ProfileLoaded")
 
+-- (player: Player) the first time the player's tutorialDone turns true; reopening the tutorial never fires it.
+DataService.TutorialFinished = Signal.new("TutorialFinished")
+
 function DataService.keyFor(userId: number): string
 	return "profile_" .. userId
 end
@@ -586,8 +589,13 @@ function DataService.setTutorialDone(player: Player)
 	if current == nil or current.tutorialDone then
 		return
 	end
+	local profile = DataService.get(player)
+	local wasDone = profile ~= nil and profile.tutorialDone
 	current.tutorialDone = true
 	DataService.changed(player)
+	if not wasDone then
+		DataService.TutorialFinished.fire(player)
+	end
 end
 
 -- The player's background music choice from Settings; saved with the profile.

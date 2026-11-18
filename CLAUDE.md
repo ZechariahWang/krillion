@@ -15,6 +15,12 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - Do not author an instance in Studio while a `model.json` still owns it: Rojo reverts it on a later sync. Delete the
   `model.json` first, with Rojo disconnected. Remaining ones: `ReplicatedStorage/Remotes/*`, `Templates/{BotRig,Confetti,DiveCard,HowRareBoard,HowToBoard,Trails,leaderstats}`, `Sounds`.
 - `ServerStorage.UIArchive` keeps the UI as it was before the style bake (2026-11-05). Reference only.
+- The look is the stud style from the StudUIPack kit (2026-11-18; `ServerStorage.StudUIPackRef` holds the kit's
+  ScreenGui, reference only): square faces with a darker lip band, a faint white `Stud` tile overlay and a white
+  top `Highlight` rim (both kept under their siblings' ZIndex), dark see-through panels with a light-blue inner
+  rim, studded colour headers, the red-orange X, white Gotham Heavy text with near-black outlines. Colours are
+  `Theme.Chunky.Color`. `ServerStorage.UIArchiveStudBefore` is the UI before it; `ServerStorage.StudKit` is the
+  Studio-only helper that applied it (no game code uses it).
 - Modes: the rising-water mode is live. Crab Craze (tried 2026-11-10 to 13) is kept at git tag
   `mode/crab-craze`, with Studio copies of its authored pieces in `ServerStorage.CrabCrazeInstances`
   (reference only). Keep Studio-only archives as direct children of ServerStorage: Rojo deletes Studio-only
@@ -147,8 +153,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   ViewportFrame; its Camera is made by `Client/DiveCard` because a Camera in a template does not replicate).
   A late joiner takes the lowest standing bot's pillar (`LateJoin.pickBot`), so the ring of six never
   changes; with no bot left standing the match is full. Joining is open at any round (`LateJoin.MaxRound = 0`),
-  and someone arriving mid-match is put in automatically (`RoundService` autoJoinOnArrival); the JUMP IN card
-  is for the rest. `Templates.BotRig` is only the stand-in when
+  and someone arriving mid-match is put in automatically (`RoundService` autoJoinOnArrival), except a
+  first-time player: they stay in the lobby for the tutorial, and finishing it (`DataService.TutorialFinished`)
+  puts them in once (`LateJoin.arrivalAction`). The JUMP IN card is for the rest. `Templates.BotRig` is only the stand-in when
   `BotLooks` is missing. A bot answers every prompt. A player who outlasts the bots has a Win (`Economy.countsAsWin`).
 - Toys: a player who is not in a match throws their equipped toy with the THROW key or T. While spectating
   it goes at whoever they are watching, a player or a bot, at any distance; otherwise they pick a lobby player
@@ -212,8 +219,8 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
 - Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
-  wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar circle right of
-  the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye circle right of that: it is always
+  wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar tile right of
+  the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye tile right of that: it is always
   there in the lobby, opens the spectate bar (`GameUi.Spectate.SpectateBar`, driven by `Client/Lobby`) when a
   match has anyone left in it, and says so when there is nobody to watch. Bots can be watched: the camera
   follows the rig's Head on its pillar, and the pillar's `OwnerName` attribute gives the name. A player who sinks lands in the lobby with no
@@ -236,15 +243,17 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   sections): the section keys under `Sections` carry `Kind` (Featured | Slots | Chests | Shells | Passes |
   Specials) and, for Slots, a comma list in `Slots`; `Tools` holds the search box and filter keys. `ShopUi`
   drives both; the rail SHOP and ITEMS keys open them. Robux items (passes, Shell packs, specials) have their
-  own STORE window (`LobbyUi.Store`).
+  own STORE window (`LobbyUi.Store`), laid out like the stud kit's store: no toolbar (hidden), one wide card
+  per row with the buy key on the right, a `Heading.SectionTitle` that ShopUi fills with the open section's
+  name (any window may carry one), and the section keys as tiles hanging outside the panel's right edge.
 - Water meter (`Hud.WaterMeter`, desktop only): the blue fill is the water now, `Marker` is your pillar top
   and `Target` (yellow) is where the water will be after this round's surge. Optional authored labels that
   `Hud` drives: `Marker.Label` (YOU), `Target.Label` (WATER RISES TO HERE), each put on the far side of its
   line from the other, and `Need` above the meter (RISE +x in red, or SAFE +x in green).
 - Screen corners: the Roblox player list owns the top-right, so keep it clear. The top-left holds the Settings
-  gear, matching Roblox's own buttons: a 44 px circle, RGB(18, 18, 21) at 0.08 transparency, 8 px after
+  gear: a 44 px dark stud tile, the size of Roblox's own buttons, 8 px after
   `GuiService.TopbarInset.Min.X` and 2 px above its bottom. On a phone (`Ui.isPhone`) the gear, Help and
-  Watch circles go to the top-right instead, counted in from `TopbarInset.Max.X` with the gear in the
+  Watch tiles go to the top-right instead, counted in from `TopbarInset.Max.X` with the gear in the
   corner, clear of the status bar; a phone shows no player list there. On a phone the Shells chip hangs
   under them (`Client/Wallet` placeOnPhone), the THROW key hangs under the chip, and the Shells pop-ups drop
   in below both; neither shows while the player is on a pillar, where the match strip has the top to itself,

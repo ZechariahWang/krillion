@@ -79,6 +79,18 @@ function LateJoin.canJoin(ctx: Context): string
 	return "joined"
 end
 
+-- What to do with someone arriving mid-match: "wait" for their profile, leave them in the lobby for the
+-- "tutorial" (finishing it joins them), or "join". A read-only placeholder never shows the tutorial.
+function LateJoin.arrivalAction(loaded: boolean, readOnly: boolean, tutorialDone: boolean): string
+	if not loaded then
+		return "wait"
+	end
+	if readOnly or tutorialDone then
+		return "join"
+	end
+	return "tutorial"
+end
+
 -- A late joiner starts StartHeight over the water, or level with the lowest pillar still in the match if
 -- that is higher, so they are never ahead of anyone who has been answering.
 function LateJoin.joinHeight(waterY: number, startHeight: number, minAliveHeight: number?): number

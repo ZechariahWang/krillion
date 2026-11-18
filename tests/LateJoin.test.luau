@@ -143,4 +143,12 @@ return function(test)
 	test("late join: with no bot left standing there is no pillar to take", function()
 		assert(LateJoin.pickBot({}) == nil)
 	end)
+
+	test("late join: an arrival waits for the profile, does the tutorial first, else joins", function()
+		assert(LateJoin.arrivalAction(false, false, false) == "wait")
+		assert(LateJoin.arrivalAction(true, false, false) == "tutorial")
+		assert(LateJoin.arrivalAction(true, false, true) == "join")
+		-- A read-only placeholder never shows the tutorial, so it joins.
+		assert(LateJoin.arrivalAction(true, true, false) == "join")
+	end)
 end

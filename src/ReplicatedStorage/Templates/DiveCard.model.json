@@ -78,7 +78,7 @@
             "CornerRadius": {
               "UDim": [
                 0,
-                24
+                0
               ]
             }
           }
@@ -146,7 +146,7 @@
             "CornerRadius": {
               "UDim": [
                 0,
-                24
+                0
               ]
             }
           }
@@ -157,9 +157,9 @@
           "properties": {
             "ApplyStrokeMode": "Border",
             "Color": [
-              0.0392,
-              0.0784,
-              0.1569
+              0.0588,
+              0.0588,
+              0.0588
             ],
             "Thickness": 3,
             "LineJoinMode": "Round"
@@ -209,7 +209,7 @@
                 "CornerRadius": {
                   "UDim": [
                     0,
-                    16
+                    0
                   ]
                 }
               }
@@ -220,9 +220,9 @@
               "properties": {
                 "ApplyStrokeMode": "Border",
                 "Color": [
-                  0.0392,
-                  0.0784,
-                  0.1569
+                  0.0588,
+                  0.0588,
+                  0.0588
                 ],
                 "Thickness": 3,
                 "LineJoinMode": "Round"
@@ -274,7 +274,7 @@
                 "CornerRadius": {
                   "UDim": [
                     0,
-                    16
+                    0
                   ]
                 }
               }
@@ -285,9 +285,9 @@
               "properties": {
                 "ApplyStrokeMode": "Border",
                 "Color": [
-                  0.0392,
-                  0.0784,
-                  0.1569
+                  0.0588,
+                  0.0588,
+                  0.0588
                 ],
                 "Thickness": 3,
                 "LineJoinMode": "Round"
@@ -476,8 +476,8 @@
                 "BorderSizePixel": 0,
                 "TextScaled": true,
                 "FontFace": {
-                  "family": "rbxasset://fonts/families/FredokaOne.json",
-                  "weight": "Regular",
+                  "family": "rbxasset://fonts/families/GothamSSm.json",
+                  "weight": "Heavy",
                   "style": "Normal"
                 },
                 "TextColor3": [
@@ -519,9 +519,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Contextual",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 3,
                     "LineJoinMode": "Round"
@@ -576,7 +576,7 @@
                 "CornerRadius": {
                   "UDim": [
                     0,
-                    18
+                    0
                   ]
                 }
               }
@@ -587,9 +587,9 @@
               "properties": {
                 "ApplyStrokeMode": "Border",
                 "Color": [
-                  0.0392,
-                  0.0784,
-                  0.1569
+                  0.0588,
+                  0.0588,
+                  0.0588
                 ],
                 "Thickness": 3.5,
                 "LineJoinMode": "Round"
@@ -770,7 +770,7 @@
                         "BorderSizePixel": 0,
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/BuilderSans.json",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
                           "weight": "Bold",
                           "style": "Normal"
                         },
@@ -897,8 +897,8 @@
                         "BorderSizePixel": 0,
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -940,9 +940,9 @@
                           "properties": {
                             "ApplyStrokeMode": "Contextual",
                             "Color": [
-                              0.0392,
-                              0.0784,
-                              0.1569
+                              0.0588,
+                              0.0588,
+                              0.0588
                             ],
                             "Thickness": 1.5,
                             "LineJoinMode": "Round"
@@ -1034,8 +1034,8 @@
                         "BorderSizePixel": 0,
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -1077,9 +1077,9 @@
                           "properties": {
                             "ApplyStrokeMode": "Contextual",
                             "Color": [
-                              0.0392,
-                              0.0784,
-                              0.1569
+                              0.0588,
+                              0.0588,
+                              0.0588
                             ],
                             "Thickness": 1.5,
                             "LineJoinMode": "Round"
@@ -1171,8 +1171,8 @@
                         "BorderSizePixel": 0,
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -1214,9 +1214,9 @@
                           "properties": {
                             "ApplyStrokeMode": "Contextual",
                             "Color": [
-                              0.0392,
-                              0.0784,
-                              0.1569
+                              0.0588,
+                              0.0588,
+                              0.0588
                             ],
                             "Thickness": 1.5,
                             "LineJoinMode": "Round"
@@ -1308,8 +1308,8 @@
                         "BorderSizePixel": 0,
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -1351,9 +1351,9 @@
                           "properties": {
                             "ApplyStrokeMode": "Contextual",
                             "Color": [
-                              0.0392,
-                              0.0784,
-                              0.1569
+                              0.0588,
+                              0.0588,
+                              0.0588
                             ],
                             "Thickness": 1.5,
                             "LineJoinMode": "Round"
@@ -1445,8 +1445,8 @@
                         "BorderSizePixel": 0,
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -1488,9 +1488,9 @@
                           "properties": {
                             "ApplyStrokeMode": "Contextual",
                             "Color": [
-                              0.0392,
-                              0.0784,
-                              0.1569
+                              0.0588,
+                              0.0588,
+                              0.0588
                             ],
                             "Thickness": 1.5,
                             "LineJoinMode": "Round"
@@ -1582,8 +1582,8 @@
                         "BorderSizePixel": 0,
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -1625,9 +1625,9 @@
                           "properties": {
                             "ApplyStrokeMode": "Contextual",
                             "Color": [
-                              0.0392,
-                              0.0784,
-                              0.1569
+                              0.0588,
+                              0.0588,
+                              0.0588
                             ],
                             "Thickness": 1.5,
                             "LineJoinMode": "Round"
@@ -2073,9 +2073,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Border",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 2,
                     "LineJoinMode": "Round"
@@ -2131,8 +2131,8 @@
                     "BorderSizePixel": 0,
                     "TextScaled": true,
                     "FontFace": {
-                      "family": "rbxasset://fonts/families/FredokaOne.json",
-                      "weight": "Regular",
+                      "family": "rbxasset://fonts/families/GothamSSm.json",
+                      "weight": "Heavy",
                       "style": "Normal"
                     },
                     "TextColor3": [
@@ -2177,8 +2177,8 @@
                     "BorderSizePixel": 0,
                     "TextScaled": true,
                     "FontFace": {
-                      "family": "rbxasset://fonts/families/FredokaOne.json",
-                      "weight": "Regular",
+                      "family": "rbxasset://fonts/families/GothamSSm.json",
+                      "weight": "Heavy",
                       "style": "Normal"
                     },
                     "TextColor3": [
@@ -2275,9 +2275,9 @@
                       "properties": {
                         "ApplyStrokeMode": "Border",
                         "Color": [
-                          0.0392,
-                          0.0784,
-                          0.1569
+                          0.0588,
+                          0.0588,
+                          0.0588
                         ],
                         "Thickness": 2,
                         "LineJoinMode": "Round"
@@ -2403,8 +2403,8 @@
                         },
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -2520,9 +2520,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Border",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 3,
                     "LineJoinMode": "Round"
@@ -2578,8 +2578,8 @@
                     "BorderSizePixel": 0,
                     "TextScaled": true,
                     "FontFace": {
-                      "family": "rbxasset://fonts/families/FredokaOne.json",
-                      "weight": "Regular",
+                      "family": "rbxasset://fonts/families/GothamSSm.json",
+                      "weight": "Heavy",
                       "style": "Normal"
                     },
                     "TextColor3": [
@@ -2675,9 +2675,9 @@
                       "properties": {
                         "ApplyStrokeMode": "Border",
                         "Color": [
-                          0.0392,
-                          0.0784,
-                          0.1569
+                          0.0588,
+                          0.0588,
+                          0.0588
                         ],
                         "Thickness": 2,
                         "LineJoinMode": "Round"
@@ -2757,8 +2757,8 @@
                         },
                         "TextScaled": true,
                         "FontFace": {
-                          "family": "rbxasset://fonts/families/FredokaOne.json",
-                          "weight": "Regular",
+                          "family": "rbxasset://fonts/families/GothamSSm.json",
+                          "weight": "Heavy",
                           "style": "Normal"
                         },
                         "TextColor3": [
@@ -2837,9 +2837,9 @@
               "properties": {
                 "ApplyStrokeMode": "Border",
                 "Color": [
-                  0.0392,
-                  0.0784,
-                  0.1569
+                  0.0588,
+                  0.0588,
+                  0.0588
                 ],
                 "Thickness": 3,
                 "LineJoinMode": "Round"
@@ -2890,8 +2890,8 @@
                 "BorderSizePixel": 0,
                 "TextScaled": true,
                 "FontFace": {
-                  "family": "rbxasset://fonts/families/FredokaOne.json",
-                  "weight": "Regular",
+                  "family": "rbxasset://fonts/families/GothamSSm.json",
+                  "weight": "Heavy",
                   "style": "Normal"
                 },
                 "TextColor3": [
@@ -2937,9 +2937,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Contextual",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 2,
                     "LineJoinMode": "Round"
@@ -2957,8 +2957,8 @@
             "BorderSizePixel": 0,
             "TextScaled": true,
             "FontFace": {
-              "family": "rbxasset://fonts/families/FredokaOne.json",
-              "weight": "Regular",
+              "family": "rbxasset://fonts/families/GothamSSm.json",
+              "weight": "Heavy",
               "style": "Normal"
             },
             "TextColor3": [
@@ -3004,9 +3004,9 @@
               "properties": {
                 "ApplyStrokeMode": "Contextual",
                 "Color": [
-                  0.0392,
-                  0.0784,
-                  0.1569
+                  0.0588,
+                  0.0588,
+                  0.0588
                 ],
                 "Thickness": 3.5,
                 "LineJoinMode": "Round"
@@ -3026,8 +3026,8 @@
             "BorderSizePixel": 0,
             "TextScaled": true,
             "FontFace": {
-              "family": "rbxasset://fonts/families/FredokaOne.json",
-              "weight": "Regular",
+              "family": "rbxasset://fonts/families/GothamSSm.json",
+              "weight": "Heavy",
               "style": "Normal"
             },
             "TextColor3": [
@@ -3073,9 +3073,9 @@
               "properties": {
                 "ApplyStrokeMode": "Contextual",
                 "Color": [
-                  0.0392,
-                  0.0784,
-                  0.1569
+                  0.0588,
+                  0.0588,
+                  0.0588
                 ],
                 "Thickness": 2,
                 "LineJoinMode": "Round"
@@ -3179,7 +3179,7 @@
                     "CornerRadius": {
                       "UDim": [
                         0,
-                        18
+                        0
                       ]
                     }
                   }
@@ -3190,9 +3190,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Border",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 4,
                     "LineJoinMode": "Round"
@@ -3232,7 +3232,7 @@
                     "CornerRadius": {
                       "UDim": [
                         0,
-                        18
+                        0
                       ]
                     }
                   }
@@ -3243,9 +3243,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Border",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 4,
                     "LineJoinMode": "Round"
@@ -3340,8 +3340,8 @@
                     "BorderSizePixel": 0,
                     "TextScaled": true,
                     "FontFace": {
-                      "family": "rbxasset://fonts/families/FredokaOne.json",
-                      "weight": "Regular",
+                      "family": "rbxasset://fonts/families/GothamSSm.json",
+                      "weight": "Heavy",
                       "style": "Normal"
                     },
                     "TextColor3": [
@@ -3383,9 +3383,9 @@
                       "properties": {
                         "ApplyStrokeMode": "Contextual",
                         "Color": [
-                          0.0392,
-                          0.0784,
-                          0.1569
+                          0.0588,
+                          0.0588,
+                          0.0588
                         ],
                         "Thickness": 3.5,
                         "LineJoinMode": "Round"
@@ -3493,7 +3493,7 @@
                     "CornerRadius": {
                       "UDim": [
                         0,
-                        14
+                        0
                       ]
                     }
                   }
@@ -3504,9 +3504,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Border",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 3,
                     "LineJoinMode": "Round"
@@ -3546,7 +3546,7 @@
                     "CornerRadius": {
                       "UDim": [
                         0,
-                        14
+                        0
                       ]
                     }
                   }
@@ -3557,9 +3557,9 @@
                   "properties": {
                     "ApplyStrokeMode": "Border",
                     "Color": [
-                      0.0392,
-                      0.0784,
-                      0.1569
+                      0.0588,
+                      0.0588,
+                      0.0588
                     ],
                     "Thickness": 3,
                     "LineJoinMode": "Round"
@@ -3654,8 +3654,8 @@
                     "BorderSizePixel": 0,
                     "TextScaled": true,
                     "FontFace": {
-                      "family": "rbxasset://fonts/families/FredokaOne.json",
-                      "weight": "Regular",
+                      "family": "rbxasset://fonts/families/GothamSSm.json",
+                      "weight": "Heavy",
                       "style": "Normal"
                     },
                     "TextColor3": [
@@ -3697,9 +3697,9 @@
                       "properties": {
                         "ApplyStrokeMode": "Contextual",
                         "Color": [
-                          0.0392,
-                          0.0784,
-                          0.1569
+                          0.0588,
+                          0.0588,
+                          0.0588
                         ],
                         "Thickness": 2.5,
                         "LineJoinMode": "Round"

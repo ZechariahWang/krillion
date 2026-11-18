@@ -156,7 +156,7 @@ local function needShort(payload): string
 		return tinted("ANY", Theme.Tier.Plankton)
 	end
 	local tierColors: { [string]: Color3 } = Theme.Tier :: any
-	return tinted("NEED " .. string.upper(Tiers.ByName[need].label) .. "+", tierColors[need] or Theme.Color.Cream)
+	return tinted("NEED " .. string.upper(Tiers.ByName[need].label) .. "+", tierColors[need] or Theme.Color.Text)
 end
 
 -- "RARE+ TO SURVIVE" in the tier colour, "SAFE THIS ROUND" in green, "GO FOR A MYTHIC" when nothing is enough.
@@ -170,7 +170,7 @@ local function needHint(payload): string
 		return tinted("ANY ANSWER SURVIVES", Theme.Tier.Plankton)
 	end
 	local tierColors: { [string]: Color3 } = Theme.Tier :: any
-	return tinted(string.upper(Tiers.ByName[need].label) .. "+ TO SURVIVE", tierColors[need] or Theme.Color.Cream)
+	return tinted(string.upper(Tiers.ByName[need].label) .. "+ TO SURVIVE", tierColors[need] or Theme.Color.Text)
 end
 
 local function updateTide(payload)
@@ -318,7 +318,7 @@ function Status.onState(payload)
 	end
 	local phase = payload.phase
 	lastPayload = payload
-	secondaryText.TextColor3 = Theme.Color.Cream
+	secondaryText.TextColor3 = Theme.Color.Text
 	updateTide(payload)
 	announceSpecial(payload)
 	if phase == "Results" or phase == "Waiting" then

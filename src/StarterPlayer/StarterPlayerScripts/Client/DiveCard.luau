@@ -141,8 +141,9 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 local FILL_LAYOUT = {
 	headerTop = 0.022, -- below Roblox's top bar (added in pixels); the status chips and Shells chip hide meanwhile
 	headerHeight = 0.085,
-	windowTop = 0.12, -- the water spans the card's full width from here
-	windowHeight = 0.71,
+	windowTop = 0.135, -- the water starts here, a clear gap under the header
+	windowHeight = 0.695,
+	windowSide = 0.03, -- card width kept clear of the water on each side
 	stampY = 0.73, -- inside the window, clear of the depth counter under it
 	counterY = 0.868,
 	counterHeight = 0.055,
@@ -436,9 +437,9 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		header.Size = UDim2.fromScale(header.Size.X.Scale, layout.headerHeight)
 		headerLip.Position = UDim2.new(headerLip.Position.X.Scale, 0, layout.headerTop + lipDrop, inset)
 		headerLip.Size = UDim2.fromScale(headerLip.Size.X.Scale, layout.headerHeight)
-		window.Position = UDim2.new(0, 0, layout.windowTop, inset)
-		window.Size = UDim2.new(1, 0, layout.windowHeight, -inset)
-		-- Edge to edge: the window has no frame of its own either.
+		window.Position = UDim2.new(layout.windowSide, 0, layout.windowTop, inset)
+		window.Size = UDim2.new(1 - 2 * layout.windowSide, 0, layout.windowHeight, -inset)
+		-- The window has no frame of its own either.
 		local windowStroke = window:FindFirstChild("Border")
 		if windowStroke ~= nil and windowStroke:IsA("UIStroke") then
 			windowStroke.Enabled = false

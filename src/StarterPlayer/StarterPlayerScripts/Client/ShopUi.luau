@@ -124,6 +124,7 @@ type Window = {
 	cashText: TextLabel,
 	titleLabel: TextLabel?,
 	title: string,
+	sectionTitle: TextLabel?, -- optional heading over the grid that names the open section
 	grid: ScrollingFrame,
 	template: Frame,
 	emptyLabel: TextLabel?,
@@ -880,6 +881,9 @@ function renderWindow(w: Window)
 	if section == nil then
 		return
 	end
+	if w.sectionTitle ~= nil then
+		w.sectionTitle.Text = section.button.Text
+	end
 	local entries = entriesFor(section)
 	if w.inventory then
 		-- What you own comes first; the rest follows in catalogue order.
@@ -1061,6 +1065,7 @@ local function bindWindow(playerGui: PlayerGui, name: string, inventory: boolean
 	local title = panel:FindFirstChild("Title")
 	local titleLabel = if title ~= nil and title:IsA("TextLabel") then title else nil
 	local empty = grid:FindFirstChild("Empty")
+	local heading = panel:FindFirstChild("SectionTitle", true)
 	local w: Window = {
 		name = name,
 		inventory = inventory,
@@ -1072,6 +1077,7 @@ local function bindWindow(playerGui: PlayerGui, name: string, inventory: boolean
 		cashText = panel:WaitForChild("CashText") :: TextLabel,
 		titleLabel = titleLabel,
 		title = if titleLabel ~= nil then titleLabel.Text else "",
+		sectionTitle = if heading ~= nil and heading:IsA("TextLabel") then heading else nil,
 		grid = grid,
 		template = grid:WaitForChild("ItemTemplate") :: Frame,
 		emptyLabel = if empty ~= nil and empty:IsA("TextLabel") then empty else nil,
