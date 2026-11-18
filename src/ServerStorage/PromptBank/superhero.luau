@@ -1305,6 +1305,6 @@ return {
 		["shadowcat"] = "kitty pryde", ["rom spaceknight"] = "rom", ["hal jordan"] = "green lantern",
 		["spiderman 2099"] = "spider man 2099", ["eraser head"] = "eraserhead",
 		["outsiders"] = "the outsiders", ["metal men"] = "the metal men", ["impossibles"] = "the impossibles",
-		["sunboy"] = "sun boy",
+		["sunboy"] = "sun boy", ["big blue"] = "superman",
 	},
 }
