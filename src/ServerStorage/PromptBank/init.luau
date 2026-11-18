@@ -255,6 +255,7 @@ local list: { Prompt } = {
 	require("@self/loud_thing"),
 	require("@self/collectible"),
 	require("@self/bedtime_activity"),
+	require("@self/pair_thing"),
 }
 
 local byId: { [string]: Prompt } = {}
@@ -298,6 +299,7 @@ local retired: { [string]: boolean } = {
 	nfl_team = true,
 	national_park = true,
 	nba_team = true,
+	dreamworks_movie = true,
 }
 
 local PromptBank = {
