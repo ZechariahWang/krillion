@@ -75,6 +75,9 @@ return {
 			"travel adapter", "electric candle", "slot car", "rc plane", "game controller", "gaming chair",
 			"gaming keyboard", "rgb lights", "incubator", "christmas inflatable", "animatronic",
 			"steering wheel", "card reader", "supercomputer", "walkman", "joystick", "defibrillator",
+			"fish tank heater", "spotlight", "floodlight", "digital photo frame", "ps5 controller",
+			"xbox controller", "streaming stick", "foot warmer", "yogurt maker", "hand blender", "ssd",
+			"food dehydrator",
 		},
 		DeepCut = {
 			"van de graaff generator", "oscilloscope", "power supply", "kiln", "egg incubator", "brooder",
@@ -227,6 +230,12 @@ return {
 		["toy train"] = "electric train", ["type c"] = "phone charger", ["usb a"] = "phone charger",
 		["psu"] = "power supply", ["induction cooker"] = "induction cooktop",
 		["electric stove top"] = "stove", ["stove top"] = "stove", ["car"] = "electric car",
-		["cars"] = "electric car",
+		["cars"] = "electric car", ["android phone"] = "phone", ["gaming laptop"] = "laptop",
+		["cooktop"] = "stove", ["stick blender"] = "hand blender",
+		["toasted sandwich maker"] = "sandwich maker", ["indoor grill"] = "electric grill",
+		["ac adapter"] = "power adapter", ["curling tongs"] = "curling iron",
+		["home theatre"] = "home theater", ["photo frame digital"] = "digital photo frame",
+		["induction hob"] = "induction cooktop", ["adaptor"] = "power adapter",
+		["usb c charger"] = "phone charger",
 	},
 }

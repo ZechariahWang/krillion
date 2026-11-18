@@ -29,7 +29,7 @@ return {
 			"security guard", "elderly people", "mom", "dad", "rails", "hoop", "twigs", "water", "wind",
 			"trampoline", "basketball", "people", "sun", "sky", "clouds", "sunshine", "stairs", "steps",
 			"slope", "insects", "bugs", "snakes", "berries", "balloons", "party", "birthday party", "chairs",
-			"creek", "pool", "apple tree", "palm tree", "golf course", "volleyball",
+			"creek", "pool", "apple tree", "palm tree", "golf course", "volleyball", "picnic basket",
 		},
 		Rare = {
 			"sundial", "pavilion", "amphitheater", "bandstand", "war memorial", "monument", "obelisk",
@@ -84,7 +84,7 @@ return {
 			"putt putt", "ferris wheel", "rocking horse", "tire swing", "treehouse", "zip line", "hopscotch",
 			"bamboo", "guitarist", "singer", "carnival", "fair", "wedding", "pier", "dock", "stall", "cooler",
 			"sandcastle", "hammock", "mini golf", "wasp", "lizard", "cricket", "sequoia", "redwood", "magpie",
-			"goat", "sheep",
+			"goat", "sheep", "valley", "orchard", "campsite", "charging station",
 		},
 		DeepCut = {
 			"arbor", "rotunda", "folly", "grotto", "cairn", "standing stones", "ornamental lake", "arboretum",
@@ -255,6 +255,14 @@ return {
 		["entrance gate"] = "entrance", ["dog leash"] = "leash", ["dog water bowl"] = "dog bowl",
 		["water bowl"] = "dog bowl", ["birds nest"] = "nest", ["birch tree"] = "birch",
 		["fallen tree"] = "fallen log", ["tree roots"] = "roots", ["bocce court"] = "bocce ball",
-		["horseshoe pit"] = "horseshoes", ["pickleball court"] = "pickleball",
+		["horseshoe pit"] = "horseshoes", ["pickleball court"] = "pickleball", ["woodland"] = "forest",
+		["picnic hamper"] = "picnic basket", ["bicycle rack"] = "bike rack", ["bike stand"] = "bike rack",
+		["cricket ground"] = "cricket pitch", ["petanque"] = "boules",
+		["outdoor exercise machine"] = "outdoor gym", ["canadian goose"] = "goose",
+		["snack stand"] = "snack bar", ["outdoor stage"] = "stage", ["wooden sign"] = "sign",
+		["sprinkler system"] = "sprinkler", ["skating rink"] = "ice rink", ["ice skating"] = "ice rink",
+		["spray park"] = "splash pad", ["phone charging station"] = "charging station",
+		["bicycle lane"] = "bike path", ["sidewalk chalk"] = "chalk", ["visitors centre"] = "visitor center",
+		["bubble wand"] = "bubbles", ["mom with stroller"] = "stroller", ["camping"] = "campsite",
 	},
 }

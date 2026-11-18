@@ -57,7 +57,7 @@ return {
 			"exercise bike", "digital scale", "thermometer", "metal detector", "sewing kit", "button jar",
 			"suspenders", "army jacket", "duffel coat", "leather jacket", "chinos", "khakis", "sherwani",
 			"kurta", "bowling shirt", "rugby shirt", "baseball jersey", "tape recorder", "transistor radio",
-			"steam deck", "vr controller", "sofa",
+			"steam deck", "vr controller", "sofa", "robot", "clown", "hospital bed", "bus", "handheld game",
 		},
 		DeepCut = {
 			"tailcoat", "morning coat", "frock coat", "nehru jacket", "mess jacket", "dinner jacket",
@@ -73,7 +73,7 @@ return {
 			"modular synth", "reel to reel", "8 track player", "vinyl player", "lighting desk",
 			"game show buzzer", "buzz wire", "electronic chess", "chess computer", "speak and spell",
 			"casio keyboard", "g shock", "data bank watch", "financial calculator", "stamp machine",
-			"elliptical", "hearing aid", "barong tagalog", "guayabera",
+			"elliptical", "hearing aid", "barong tagalog", "guayabera", "ventilator", "bandoneon",
 		},
 		Mythic = {
 			"pearl diver shirt", "tally counter", "clicker counter", "spirometer", "glucose meter",
@@ -242,5 +242,11 @@ return {
 		["ticket vending machine"] = "ticket machine", ["electric razor"] = "electric shaver",
 		["remote control car"] = "rc car", ["f1 steering wheel"] = "formula 1 steering wheel",
 		["radio clock"] = "clock radio", ["stage lighting console"] = "lighting desk",
+		["remote for tv"] = "remote", ["ticket machine at station"] = "ticket machine",
+		["puffer jacket"] = "jacket", ["chef jacket"] = "chefs jacket", ["pilot cockpit"] = "cockpit",
+		["plane controls"] = "cockpit", ["steering wheel buttons"] = "steering wheel",
+		["dial pad"] = "keypad", ["elevator button"] = "elevator", ["toy robot"] = "robot",
+		["weighing scale"] = "digital scale", ["bathroom scale"] = "digital scale",
+		["tv remote control"] = "remote", ["rc car remote"] = "remote", ["scale"] = "digital scale",
 	},
 }

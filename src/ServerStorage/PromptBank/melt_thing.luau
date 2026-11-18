@@ -52,7 +52,7 @@ return {
 			"ice cream truck", "lava lamp", "volcano", "road", "flip flops", "vinyl record", "rubber band",
 			"silicone", "velveeta", "werthers", "candy apple", "caramel apple", "madame tussauds",
 			"klondike bar", "choco taco", "dum dums", "jelly babies", "jujubes", "styrofoam cup",
-			"jelly shoes", "tungsten", "heart", "frozen custard", "ice sheet", "lava",
+			"jelly shoes", "tungsten", "heart", "frozen custard", "ice sheet", "lava", "toy soldier", "rock",
 		},
 		DeepCut = {
 			"pitch", "sulfur", "selenium", "gallium", "caesium", "francium", "bismuth", "indium", "galinstan",
@@ -214,6 +214,13 @@ return {
 		["candle stub"] = "candle", ["wax crayon"] = "crayon", ["crayon wax"] = "crayon",
 		["crayola crayons"] = "crayon", ["sealing wax"] = "wax seal", ["wax sculpture"] = "wax figure",
 		["wax doll"] = "wax figure", ["ice carving"] = "ice sculpture", ["glue gun sticks"] = "glue stick",
-		["cheese fondue"] = "fondue", ["plastic toys"] = "plastic",
+		["cheese fondue"] = "fondue", ["plastic toys"] = "plastic", ["rocks"] = "rock",
+		["crayola"] = "crayon", ["witch of the west"] = "wicked witch", ["snow pile"] = "snow",
+		["snowfield"] = "snow", ["ice in the sun"] = "ice", ["ice on the road"] = "ice",
+		["ice on a pond"] = "ice", ["ice flow"] = "ice floe", ["choc ice"] = "ice cream",
+		["calippo"] = "popsicle", ["solero"] = "popsicle", ["twister"] = "popsicle",
+		["bingsu"] = "shaved ice", ["gelato cone"] = "gelato", ["army men"] = "toy soldier",
+		["green army men"] = "toy soldier", ["plastic army men"] = "toy soldier",
+		["toy soldiers"] = "toy soldier",
 	},
 }
