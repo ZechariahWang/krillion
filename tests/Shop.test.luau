@@ -158,26 +158,4 @@ return function(test)
 		assert(not Shop.matches(entry({ owned = true }), filter({ hideOwned = true })))
 		assert(Shop.matches(entry({ owned = false }), filter({ hideOwned = true })))
 	end)
-
-	test("a Shells item above the player's level cannot be bought, even with the Shells", function()
-		local Levels = require("../src/ReplicatedStorage/Shared/Levels")
-		local locked = nil
-		for _, item in Cosmetics.List do
-			if Cosmetics.source(item) == "shells" and Levels.requiredLevel(item) > 1 then
-				locked = item
-				break
-			end
-		end
-		assert(locked ~= nil, "catalogue needs a Shells item that needs a level")
-		local profile = Profile.fromStored(nil)
-		profile.cash = locked.price * 10
-		assert(Shop.canBuyWithCash(profile, locked) ~= true)
-		local need = Levels.requiredLevel(locked)
-		local xp = 0
-		for level = 1, need - 1 do
-			xp += Levels.costOf(level)
-		end
-		profile.xp = xp
-		assert(Shop.canBuyWithCash(profile, locked) == true)
-	end)
 end

@@ -3,7 +3,7 @@
 ## Why
 
 Players need a reason to play one more match and to come back: a number that only goes up, shown to
-everyone, that opens better shop items as it grows. Part of a retention push (weekly boards, the answer
+everyone. Part of a retention push (weekly boards, the answer
 collection and the Prompt of the Day follow, each designed on its own).
 
 ## What the player sees
@@ -14,8 +14,6 @@ collection and the Prompt of the Day follow, each designed on its own).
   boosts docked on it move up by the bar's height.
 - On a level up: the bar fills, flashes and starts over, a toast reads `LEVEL 13!`, and 50 Shells pop in
   the wallet as usual.
-- Shop: a Shells item above the player's level shows its buy key greyed with `LV 10` (and a lock icon if
-  one is authored). A tap explains the level needed. The server refuses the buy.
 
 ## Rules (all numbers in `GameConfig.Levels`)
 
@@ -23,15 +21,12 @@ collection and the Prompt of the Day follow, each designed on its own).
   +100 for a match that counts as a Win. The warm-up quiz gives none.
 - Level 1 to 2 costs 100 XP; each next level costs 25 more. No cap.
 - 50 Shells per level gained, unmultiplied (`grantShells`).
-- Shells items need a level by rarity: Common 1, Rare 5, Epic 10, Legendary 20, Mythic 30. Robux, pass,
-  reward and chest-only items never lock. Owned items stay owned. Chests can still drop locked items.
 - Existing players with no saved `xp` start at 150 XP per finished game plus 100 per Win.
 
 ## Approaches
 
-- **Chosen: a rarity rule.** One config table covers every item, including future ones.
-- Per-item levels: more control, but 86 items to set by hand and every new one after. Rejected by the user.
-- Locking Robux items too: stronger pull but blocks buyers. Rejected by the user.
+Shop items locked by level (by rarity, Shells items only) were built and then dropped by the user
+(2026-11-18): levels are status plus Shells only.
 
 ## Build
 
@@ -39,11 +34,10 @@ collection and the Prompt of the Day follow, each designed on its own).
 - `Profile.xp`: a delta like `wins`; a stored profile without it is given the starting XP in `fromStored`.
 - `Server/LevelService`: listens to `MatchEvents` (AnswerGraded, RoundSurvived, MatchFinished), adds XP,
   pays Shells and toasts on a level up, refreshes the name tag.
-- `Shop.canBuyWithCash` checks the level, so the server and the shop UI agree.
 - `BotBrain.level(roll)` gives each bot a level, weighted towards low.
-- The level bar and the lock badge are authored in Studio; `Client/Wallet` and `ShopUi` fill them.
+- The level bar is authored in Studio (`SharedUi.Wallet.Chip.LevelBar`); `Client/Wallet` fills it.
 - XP goes to the client in the ProfileChanged payload.
 
 ## Left to the builder
 
-The exact look of the bar and lock badge within the stud style; the bot level spread.
+The exact look of the bar within the stud style; the bot level spread.

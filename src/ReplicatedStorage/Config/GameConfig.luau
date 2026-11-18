@@ -203,8 +203,6 @@ local GameConfig = {
 		RoundSurvivedXp = 20, -- answers give their tier's points (Tiers) as XP
 		WinXp = 100,
 		ShellsPerLevel = 50,
-		-- Shells items need this level to buy; Robux, pass, reward and chest-only items never lock.
-		RarityLevel = { Common = 1, Rare = 5, Epic = 10, Legendary = 20, Mythic = 30 },
 		-- A saved profile from before levels starts with this much XP per finished game and per Win.
 		StartPerGame = 150,
 		StartPerWin = 100,
@@ -235,7 +233,6 @@ table.freeze(GameConfig.Bots)
 table.freeze(GameConfig.Revive)
 table.freeze(GameConfig.Toys)
 table.freeze(GameConfig.Leaderboard)
-table.freeze(GameConfig.Levels.RarityLevel)
 table.freeze(GameConfig.Levels)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)

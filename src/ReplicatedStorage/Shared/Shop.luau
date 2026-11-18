@@ -2,7 +2,6 @@
 -- Shop rules shared by the server (which enforces them) and the client (which greys out buttons).
 local Cosmetics = require("../Config/Cosmetics")
 local Profile = require("./Profile")
-local Levels = require("./Levels")
 
 local FEATURED_COUNT = 4
 
@@ -20,20 +19,12 @@ function Shop.owns(profile: Profile.Profile, item: Cosmetics.Item, passes: { [st
 	return false
 end
 
--- Whether the player's level is below what the item needs.
-function Shop.lockedByLevel(profile: Profile.Profile, item: Cosmetics.Item): boolean
-	return Levels.levelOf(profile.xp) < Levels.requiredLevel(item)
-end
-
 -- Only plain Shells items: never Robux, pass, reward or chest-only ones.
 function Shop.canBuyWithCash(profile: Profile.Profile, item: Cosmetics.Item): boolean
 	if Cosmetics.source(item) ~= "shells" then
 		return false
 	end
 	if profile.owned[item.id] == true then
-		return false
-	end
-	if Shop.lockedByLevel(profile, item) then
 		return false
 	end
 	return profile.cash >= item.price

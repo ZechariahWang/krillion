@@ -1,8 +1,7 @@
 --!strict
--- Player levels: XP to level, progress through a level, and the level a shop item needs.
+-- Player levels: XP to level and progress through a level.
 -- Pure, so Lune tests can require it. Numbers are GameConfig.Levels.
 local GameConfig = require("../Config/GameConfig")
-local Cosmetics = require("../Config/Cosmetics")
 local Tiers = require("../Config/Tiers")
 
 local RULES = GameConfig.Levels
@@ -40,14 +39,6 @@ end
 -- How many levels going from `before` to `after` XP crosses.
 function Levels.gained(before: number, after: number): number
 	return Levels.levelOf(after) - Levels.levelOf(before)
-end
-
-function Levels.requiredLevel(item: Cosmetics.Item): number
-	if Cosmetics.source(item) ~= "shells" then
-		return 1
-	end
-	local byRarity: { [string]: number } = RULES.RarityLevel :: any
-	return byRarity[item.rarity] or 1
 end
 
 function Levels.answerXp(tier: string?): number

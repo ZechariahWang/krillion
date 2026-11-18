@@ -438,9 +438,6 @@ local function onShopResult(payload)
 		return
 	end
 	local message = SHOP_MESSAGES[payload.status]
-	if payload.status == "level" and type(payload.level) == "number" then
-		message = "REACH LEVEL " .. payload.level .. " TO BUY THAT"
-	end
 	if message ~= nil then
 		Toasts.show(message, "bad")
 	end

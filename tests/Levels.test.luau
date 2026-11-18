@@ -1,17 +1,7 @@
 local Levels = require("../src/ReplicatedStorage/Shared/Levels")
-local Cosmetics = require("../src/ReplicatedStorage/Config/Cosmetics")
 local GameConfig = require("../src/ReplicatedStorage/Config/GameConfig")
 
 local RULES = GameConfig.Levels
-
-local function firstItem(source: string, rarity: string?)
-	for _, item in Cosmetics.List do
-		if Cosmetics.source(item) == source and (rarity == nil or item.rarity == rarity) then
-			return item
-		end
-	end
-	error("catalogue has no " .. source .. " item of rarity " .. tostring(rarity))
-end
 
 return function(test)
 	test("a level costs the first level's XP plus one step per level after it", function()
@@ -48,26 +38,6 @@ return function(test)
 		assert(Levels.gained(0, first - 1) == 0)
 		assert(Levels.gained(first - 1, first) == 1)
 		assert(Levels.gained(0, first + Levels.costOf(2) + Levels.costOf(3)) == 3)
-	end)
-
-	test("a Shells item needs the level its rarity sets", function()
-		for rarity, level in RULES.RarityLevel do
-			for _, item in Cosmetics.List do
-				if Cosmetics.source(item) == "shells" and item.rarity == rarity then
-					assert(Levels.requiredLevel(item) == level, item.id)
-				end
-			end
-		end
-		local epic = firstItem("shells", "Epic")
-		assert(Levels.requiredLevel(epic) > 1)
-	end)
-
-	test("Robux items never need a level", function()
-		for _, item in Cosmetics.List do
-			if Cosmetics.source(item) ~= "shells" then
-				assert(Levels.requiredLevel(item) == 1, item.id)
-			end
-		end
 	end)
 
 	test("answer XP follows the tier and a missing answer gives none", function()
