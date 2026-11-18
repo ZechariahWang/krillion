@@ -20,7 +20,7 @@ return {
 			"birthday card", "brochure", "flyer", "menu", "diaper", "curtain", "sweatshirt", "tie", "suit",
 			"apron", "washcloth", "cape", "robe", "pillow", "quilt", "sleeping bag", "crepe", "pancake",
 			"omelette", "burrito", "origami crane", "paper boat", "paper hat", "paper cup", "piece of paper",
-			"book",
+			"book", "ruler",
 		},
 		Rare = {
 			"accordion", "bellows", "concertina", "folding knife", "swiss army knife", "folding bike",
@@ -60,6 +60,11 @@ return {
 			"spanish fan", "dog ear", "dishcloth", "atlas", "partition", "changing mat", "folding ruler",
 			"carpenters rule", "sunglasses", "reading glasses", "straight razor", "newspaper hat",
 			"gate leg table", "card table", "trestle table", "game board", "treadmill", "door",
+			"notebook paper", "cardstock", "poster board", "yardstick", "shower curtain", "burp cloth",
+			"face towel", "tights", "polo", "sweatpants", "tracksuit", "cloak", "ziploc bag", "crescent roll",
+			"bun", "screen door", "knees", "elbow", "ears", "mat", "milk carton", "bunting", "banner",
+			"booklet", "program", "packaging", "rag", "rug", "carpet", "vest", "tank top", "swimsuit",
+			"comic book", "manual",
 		},
 		DeepCut = {
 			"furoshiki", "tenugui", "leporello", "concertina book", "sensu", "miura ori", "z fold", "c fold",
@@ -233,5 +238,8 @@ return {
 		["kerchief"] = "bandana", ["broadsheet"] = "newspaper", ["tabloid"] = "newspaper",
 		["waterbomb"] = "waterbomb tessellation", ["kirigami card"] = "kirigami", ["bike"] = "folding bike",
 		["knife"] = "folding knife", ["folding glasses"] = "glasses", ["phone"] = "flip phone",
+		["pj"] = "pajamas", ["knee"] = "knees", ["ear"] = "ears", ["bathing suit"] = "swimsuit",
+		["instruction manual"] = "manual", ["macbook"] = "laptop", ["laptop screen"] = "laptop",
+		["comic"] = "comic book", ["cake batter"] = "batter", ["carton"] = "milk carton",
 	},
 }
