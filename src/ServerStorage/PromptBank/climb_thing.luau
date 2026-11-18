@@ -47,7 +47,8 @@ return {
 			"warped wall", "helter skelter", "picnic table", "goalpost", "diving tower", "sky tower",
 			"shanghai tower", "sand pile", "appalachians", "cat tree", "tire swing", "spanish steps",
 			"rocky steps", "fallen tree", "mom", "balcony", "window sill", "jungle", "suspension bridge",
-			"brooklyn bridge", "cheerleader pyramid", "grandstand", "stadium",
+			"brooklyn bridge", "cheerleader pyramid", "grandstand", "stadium", "log", "ropes course",
+			"pirate ship", "birch tree", "olympus mons", "climbing hold",
 		},
 		DeepCut = {
 			"via ferrata", "ziggurat", "mayan temple", "chichen itza", "machu picchu", "angkor wat",
@@ -198,5 +199,11 @@ return {
 		["pile of dirt"] = "dirt mound", ["fire lookout"] = "fire tower", ["lookout tower"] = "watchtower",
 		["big rock"] = "boulder", ["climbing net"] = "cargo net", ["rope net"] = "cargo net",
 		["net"] = "cargo net", ["construction crane"] = "crane", ["electricity pylon"] = "pylon",
+		["high ropes"] = "ropes course", ["rope course"] = "ropes course", ["climbing gym"] = "climbing wall",
+		["scaffolding frame"] = "scaffolding", ["swimming pool ladder"] = "pool ladder",
+		["loft ladder"] = "attic ladder", ["sailboat mast"] = "mast", ["banyan"] = "banyan tree",
+		["willow"] = "willow tree", ["weeping willow"] = "willow tree", ["church steeple"] = "steeple",
+		["telephone tower"] = "cell tower", ["cat tower"] = "cat tree", ["kitchen stool"] = "step stool",
+		["holds"] = "climbing hold", ["hold"] = "climbing hold", ["logs"] = "log",
 	},
 }

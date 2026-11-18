@@ -27,7 +27,7 @@ return {
 			"cookie jar", "can of beans", "can of soup", "tissue box", "faucet", "car window", "car boot",
 			"car hood", "remote control", "bag of sweets", "shampoo bottle", "video game", "pen", "folder",
 			"bag", "document", "wrapped gift", "shop", "roblox", "minecraft", "youtube", "mason jar",
-			"tuna can", "canned food",
+			"tuna can", "canned food", "computer",
 		},
 		Rare = {
 			"oyster", "clam", "mussel", "pistachio", "pomegranate", "tangerine", "jack in the box",
@@ -79,7 +79,8 @@ return {
 			"sardine tin", "fortune cookie", "spray can", "zip file", "almond", "nut", "satsuma",
 			"grapefruit", "lychee", "cake box", "burger box", "happy meal", "sippy cup", "food container",
 			"tic tac", "mind", "heart", "chips", "spreadsheet", "twitter", "facebook", "supermarket", "mall",
-			"flower", "picture", "photo", "tiktok", "instagram",
+			"flower", "picture", "photo", "tiktok", "instagram", "invitation", "tiffin", "sticker pack",
+			"passion fruit", "can of worms", "valve", "cd case", "sachet",
 		},
 		DeepCut = {
 			"lockbox", "reliquary", "cryptex", "bulkhead door", "cattle gate", "kissing gate", "lych gate",
@@ -251,6 +252,13 @@ return {
 		["chapstick"] = "lip balm", ["venetian blinds"] = "blinds", ["gift wrap"] = "wrapping paper",
 		["parasol"] = "umbrella", ["flask"] = "thermos", ["toothpaste tube"] = "toothpaste",
 		["savings account"] = "bank account", ["rosebud"] = "bud", ["venetian blind"] = "blinds",
-		["gift wrapping"] = "wrapping paper",
+		["gift wrapping"] = "wrapping paper", ["soda"] = "soda can", ["milk"] = "milk carton",
+		["cereal"] = "cereal box", ["snack bag"] = "chip bag", ["birthday gift"] = "gift",
+		["pc"] = "computer", ["paint"] = "paint can", ["burger wrapper"] = "wrapper",
+		["ketchup packet"] = "sauce packet", ["medicine kit"] = "first aid kit", ["vault door"] = "vault",
+		["disc drive"] = "cd tray", ["battery door"] = "battery cover", ["stove door"] = "oven door",
+		["bookshelf door"] = "secret door", ["bookcase door"] = "secret door", ["garden gate"] = "gate",
+		["eyes open"] = "your eyes", ["curtains open"] = "curtains", ["mirror cabinet"] = "medicine cabinet",
+		["water tap"] = "tap", ["post"] = "mail", ["tiffin box"] = "tiffin",
 	},
 }

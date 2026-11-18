@@ -18,7 +18,7 @@ return {
 			"photo", "grocery list", "sunscreen", "hair clip", "gloves", "hat", "ring", "watch", "toothbrush",
 			"dental floss", "deodorant", "pad", "candy wrapper", "note", "penny", "quarter", "napkin",
 			"camera", "bubble gum", "pencil case", "raincoat", "beanie", "mittens", "keychain",
-			"handkerchief", "flashlight",
+			"handkerchief", "flashlight", "jewelry", "gummy bears",
 		},
 		Rare = {
 			"bandana", "fidget spinner", "fidget toy", "rubber band", "safety pin", "sewing kit",
@@ -55,7 +55,8 @@ return {
 			"fidget ring", "toy soldier", "prepaid card", "change purse", "card holder", "quran", "primer",
 			"lip liner", "eyebrow pencil", "powder", "sim tool", "to do list", "yen", "pounds",
 			"octopus card", "gem", "first aid kit", "remote control", "makeup bag", "bottle", "dictionary",
-			"season ticket", "sticky notes",
+			"season ticket", "sticky notes", "mp3 player", "nintendo ds", "airtag", "bindi", "claw clip",
+			"barrette", "jelly beans", "toffee", "eye mask",
 		},
 		DeepCut = {
 			"worry stone", "matchbook", "glucose meter", "smelling salts", "spare batteries", "opera glasses",
@@ -245,5 +246,13 @@ return {
 		["small toy"] = "toy", ["kohl"] = "eyeliner", ["antiseptic"] = "wet wipes",
 		["carrier bag"] = "tote bag", ["ski lift ticket"] = "ski pass", ["reward card"] = "loyalty card",
 		["sticky note"] = "sticky notes", ["post its"] = "sticky notes", ["post it"] = "sticky notes",
+		["jewellery"] = "jewelry", ["fidget"] = "fidget toy", ["cards deck"] = "deck of cards",
+		["digital pet"] = "tamagotchi", ["tourist map"] = "map", ["bus map"] = "map", ["pocket map"] = "map",
+		["air tag"] = "airtag", ["tile tracker"] = "airtag", ["face wipes"] = "wet wipes",
+		["makeup wipes"] = "wet wipes", ["clips"] = "hair clip", ["haribo"] = "gummy bears",
+		["gummies"] = "gummy bears", ["sleep mask"] = "eye mask", ["access card"] = "key card",
+		["handheld fan"] = "hand fan", ["mini fan"] = "hand fan", ["paper fan"] = "hand fan",
+		["breath freshener"] = "breath spray", ["asthma pump"] = "inhaler", ["fluff"] = "lint",
+		["pocket lint"] = "lint",
 	},
 }
