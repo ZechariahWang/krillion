@@ -11,9 +11,9 @@ return {
 		},
 		Schooler = {
 			"tortilla", "chimichanga", "tostada", "taquito", "burrito bowl", "chips and salsa", "queso",
-			"refried beans", "mexican rice", "pico de gallo", "elote", "pozole", "flan", "tres leches", "carnitas",
-			"carne asada", "al pastor", "barbacoa", "chorizo", "soft taco", "hard shell taco", "breakfast burrito",
-			"empanada", "horchata", "sopapilla", "mole", "birria", "fish taco", "taco salad", "ceviche", "torta",
+			"refried beans", "mexican rice", "pico de gallo", "elote", "flan", "tres leches", "carne asada",
+			"soft taco", "hard shell taco", "breakfast burrito", "empanada", "horchata", "fish taco",
+			"taco salad",
 		},
 		Rare = {
 			"huevos rancheros", "chilaquiles", "tlayuda", "sope", "gordita", "flautas", "menudo", "tinga",
@@ -21,7 +21,8 @@ return {
 			"cajeta", "atole", "agua fresca", "tostilocos", "esquites", "huarache", "pambazo", "chalupa", "molletes",
 			"nopales", "salsa verde", "salsa roja", "queso fundido", "taco de canasta", "mole poblano", "tortilla soup",
 			"quesabirria", "arroz con leche", "bunuelos", "chicharron", "paletas", "mangonada", "polvorones",
-			"sincronizada", "tacos dorados", "charro beans", "chamoy", "tajin",
+			"sincronizada", "tacos dorados", "charro beans", "chamoy", "tajin", "pozole", "carnitas",
+			"al pastor", "barbacoa", "chorizo", "sopapilla", "mole", "birria", "ceviche", "torta",
 		},
 		DeepCut = {
 			"tlacoyo", "cemita", "chapulines", "escamoles", "taco de suadero", "caldo de res", "sopa de lima",

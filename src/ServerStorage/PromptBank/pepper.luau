@@ -10,10 +10,9 @@ return {
 			"scotch bonnet", "serrano", "thai chili", "poblano",
 		},
 		Schooler = {
-			"red bell pepper", "green bell pepper", "yellow bell pepper", "orange bell pepper", "banana pepper",
-			"chili pepper", "cherry pepper", "pimento", "paprika", "anaheim", "chipotle", "ancho", "birds eye chili",
-			"pepperoncini", "red chili", "green chili", "sweet pepper", "hot pepper", "tabasco pepper",
-			"trinidad scorpion", "hatch chili", "shishito", "padron", "piri piri",
+			"red bell pepper", "green bell pepper", "yellow bell pepper", "orange bell pepper",
+			"banana pepper", "chili pepper", "paprika", "anaheim", "chipotle", "pepperoncini", "red chili",
+			"green chili", "sweet pepper", "hot pepper",
 		},
 		Rare = {
 			"guajillo", "pasilla", "arbol", "cascabel", "mulato", "aji amarillo", "fresno", "cubanelle", "rocoto",
@@ -21,7 +20,9 @@ return {
 			"piquillo", "espelette", "hungarian wax",
 			"red savina", "santa fe grande", "pequin", "guntur chili",
 			"manzano", "cheongyang", "gypsy pepper", "lunchbox pepper", "mini sweet pepper",
-			"cajun belle", "italian sweet pepper", "bullhorn pepper", "long hot pepper",
+			"cajun belle", "italian sweet pepper", "bullhorn pepper", "long hot pepper", "cherry pepper",
+			"pimento", "ancho", "birds eye chili", "tabasco pepper", "trinidad scorpion", "hatch chili",
+			"shishito", "padron", "piri piri",
 		},
 		DeepCut = {
 			"chiltepin", "habanada", "aji limon", "aji dulce", "aji panca", "aji charapita",

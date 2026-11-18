@@ -10,9 +10,7 @@ return {
 			"bronze", "platinum", "titanium",
 		},
 		Schooler = {
-			"brass", "zinc", "lead", "tin", "nickel", "mercury", "tungsten", "uranium", "lithium",
-			"magnesium", "sodium", "potassium", "calcium", "cobalt", "stainless steel", "white gold",
-			"rose gold", "vibranium", "netherite",
+			"brass", "zinc", "lead", "tin", "nickel", "mercury", "stainless steel", "white gold", "rose gold",
 		},
 		Rare = {
 			"alloy steel", "surgical steel", "orichalcum", "14k gold", "18k gold", "24k gold", "silicon",
@@ -23,7 +21,8 @@ return {
 			"yellow gold", "damascus steel", "tool steel", "mild steel", "galvanized steel", "adamantium",
 			"ruthenium", "indium", "zirconium", "molybdenum", "polonium", "francium", "electrum", "nichrome",
 			"invar", "monel", "inconel", "duralumin", "gunmetal", "nitinol", "spring steel",
-			"high speed steel", "tinplate", "amalgam", "pot metal", "nickel silver",
+			"high speed steel", "tinplate", "amalgam", "pot metal", "nickel silver", "tungsten", "uranium",
+			"lithium", "magnesium", "sodium", "potassium", "calcium", "cobalt", "vibranium", "netherite",
 		},
 		DeepCut = {
 			"meteoric iron", "beskar", "valyrian steel", "adamantite", "structural steel", "crimtane",

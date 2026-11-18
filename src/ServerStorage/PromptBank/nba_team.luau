@@ -10,14 +10,14 @@ return {
 			"76ers", "raptors", "spurs", "bucks", "nuggets", "thunder",
 		},
 		Schooler = {
-			"clippers", "rockets", "mavericks", "suns", "cavaliers", "pistons", "pacers", "hawks", "hornets", "magic",
-			"wizards", "jazz", "trail blazers", "kings", "timberwolves", "grizzlies", "pelicans",
+			"clippers", "rockets", "mavericks", "suns", "cavaliers",
 		},
 		Rare = {
-			"supersonics",
+			"supersonics", "pistons", "pacers", "hawks", "hornets", "magic", "wizards", "jazz",
+			"trail blazers",
 		},
 		DeepCut = {
-			"indianapolis olympians",
+			"indianapolis olympians", "kings", "timberwolves", "grizzlies", "pelicans",
 		},
 		Mythic = {
 			"chicago stags", "providence steamrollers", "washington capitols", "st louis bombers", "toronto huskies",

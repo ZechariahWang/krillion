@@ -10,17 +10,17 @@ return {
 			"bears", "raiders", "ravens", "bills", "seahawks", "dolphins", "giants",
 		},
 		Schooler = {
-			"jets", "broncos", "rams", "chargers", "vikings", "saints", "lions", "bengals", "browns", "texans", "colts",
-			"jaguars", "titans", "falcons", "panthers", "buccaneers", "cardinals", "commanders",
+			"broncos", "rams", "vikings", "saints", "lions",
 		},
 		Rare = {
-			"boston yanks", "canton bulldogs",
+			"boston yanks", "canton bulldogs", "jets", "chargers", "bengals", "colts", "falcons",
+			"buccaneers", "browns",
 		},
 		DeepCut = {
 			"providence steam roller", "portsmouth spartans", "rock island independents", "brooklyn dodgers",
 			"oorang indians", "frankford yellow jackets", "duluth eskimos", "dayton triangles", "akron pros",
 			"pottsville maroons",
-			"new york yanks",
+			"new york yanks", "texans", "jaguars", "titans", "panthers", "cardinals", "commanders",
 		},
 		Mythic = {
 			"hartford blues", "cincinnati reds", "st louis gunners", "tonawanda kardex", "hammond pros",
@@ -79,6 +79,6 @@ return {
 		["pittsburgh pirates"] = "steelers", ["dallas texans"] = "chiefs",
 		["dolfins"] = "dolphins", ["phins"] = "dolphins", ["seahawks seattle"] = "seahawks", ["cowbows"] = "cowboys",
 		["pittsburg steelers"] = "steelers", ["bengles"] = "bengals", ["49 ers"] = "49ers",
-		["san francisco forty niners"] = "49ers",
+		["san francisco forty niners"] = "49ers", ["tampa"] = "buccaneers", ["fins"] = "dolphins",
 	},
 }

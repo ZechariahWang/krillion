@@ -10,10 +10,10 @@ return {
 			"algeria", "afghanistan",
 		},
 		Schooler = {
-			"albania", "angola", "armenia", "azerbaijan", "america",
+			"albania", "america",
 		},
 		Rare = {
-			"andorra", "antarctica", "antigua and barbuda", "aruba",
+			"andorra", "antarctica", "antigua and barbuda", "aruba", "angola", "armenia", "azerbaijan",
 		},
 		DeepCut = {
 			"anguilla", "american samoa", "aland islands", "artsakh", "aotearoa", "american virgin islands",

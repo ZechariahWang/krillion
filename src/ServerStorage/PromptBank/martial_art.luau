@@ -11,7 +11,7 @@ return {
 		},
 		Schooler = {
 			"brazilian jiu jitsu", "kickboxing", "mma", "sumo", "ninjutsu", "tai chi", "fencing", "wing chun",
-			"hapkido", "kendo", "sambo", "savate", "jeet kune do", "shaolin kung fu",
+			"kendo", "shaolin kung fu",
 		},
 		Rare = {
 			"iaido", "kyudo", "eskrima", "silat", "systema", "bokator", "lethwei", "sanda", "baguazhang",
@@ -25,7 +25,8 @@ return {
 			"kenpo",
 			"krabi krabong", "muay boran", "kun khmer", "shuai jiao", "chin na", "drunken boxing", "praying mantis",
 			"white crane", "eagle claw", "kumdo", "luta livre", "vale tudo", "historical european martial arts",
-			"bare knuckle boxing", "grappling", "kushti", "maculele",
+			"bare knuckle boxing", "grappling", "kushti", "maculele", "hapkido", "sambo", "savate",
+			"jeet kune do",
 		},
 		DeepCut = {
 			"hwa rang do", "kuk sool won", "ashihara karate", "daido juku", "american kenpo", "lima lama",

@@ -11,10 +11,7 @@ return {
 		},
 		Schooler = {
 			"denim", "polyester", "leather", "linen", "nylon", "velvet", "satin", "cashmere", "suede",
-			"fleece", "lace", "tweed", "flannel", "corduroy", "rayon", "canvas", "felt", "chiffon", "jersey",
-			"burlap", "tulle", "mesh", "acrylic", "terry cloth", "faux fur", "velour", "mohair", "hemp",
-			"bamboo", "gauze", "sheepskin", "cowhide", "khaki", "latex", "knit", "cloth", "yarn",
-			"microfiber", "plush", "kevlar",
+			"fleece", "lace", "tweed", "flannel", "corduroy", "canvas", "felt", "mesh",
 		},
 		Rare = {
 			"angora", "taffeta", "brocade", "seersucker", "gabardine", "chambray", "poplin", "cheesecloth",
@@ -39,7 +36,10 @@ return {
 			"recycled polyester", "teflon", "blanket", "dishcloth", "washcloth", "bed sheet", "tea towel",
 			"napkin", "handkerchief", "comforter", "drapery", "doormat", "afghan", "rag", "pillowcase",
 			"woven", "velcro", "fox fur", "embroidery", "patchwork", "rope", "string", "shearling", "organza",
-			"twill", "muslin", "thread", "plaid", "curtain", "cotton blend", "wool blend",
+			"twill", "muslin", "thread", "plaid", "curtain", "cotton blend", "wool blend", "rayon", "chiffon",
+			"jersey", "burlap", "tulle", "acrylic", "terry cloth", "faux fur", "velour", "mohair", "hemp",
+			"bamboo", "gauze", "sheepskin", "cowhide", "khaki", "latex", "knit", "cloth", "yarn",
+			"microfiber", "plush", "kevlar",
 		},
 		DeepCut = {
 			"buckram", "ticking", "crinoline", "scrim", "baize", "ottoman", "sailcloth", "cavalry twill",

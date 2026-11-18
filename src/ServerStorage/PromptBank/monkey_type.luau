@@ -10,12 +10,9 @@ return {
 			"proboscis monkey", "macaque", "marmoset", "snow monkey", "golden lion tamarin",
 		},
 		Schooler = {
-			"rhesus monkey", "colobus", "tamarin", "vervet monkey", "langur", "gelada", "titi monkey", "owl monkey",
-			"woolly monkey", "pygmy marmoset", "emperor tamarin", "barbary macaque", "japanese macaque", "green monkey",
-			"night monkey", "red colobus", "black and white colobus", "golden snub nosed monkey", "drill", "patas monkey",
-			"guenon", "mangabey", "saki", "uakari", "bald uakari", "hanuman langur", "cotton top tamarin",
-			"white faced capuchin", "red howler monkey", "diana monkey", "olive baboon", "hamadryas baboon",
-			"crab eating macaque", "pig tailed macaque", "lion tailed macaque", "douc langur",
+			"rhesus monkey", "colobus", "tamarin", "vervet monkey", "owl monkey", "woolly monkey",
+			"pygmy marmoset", "japanese macaque", "black and white colobus", "golden snub nosed monkey",
+			"drill", "white faced capuchin", "red howler monkey",
 		},
 		Rare = {
 			"geoffroys marmoset", "black howler monkey", "brown capuchin",
@@ -27,7 +24,11 @@ return {
 			"chacma baboon", "yellow baboon", "guinea baboon", "sooty mangabey", "grey cheeked mangabey",
 			"purple faced langur", "capped langur", "golden langur", "silvered leaf monkey", "dusky leaf monkey",
 			 "banded langur", "red shanked douc", "black snub nosed monkey",
-			"common marmoset", "golden monkey", "tantalus monkey", "guereza",
+			"common marmoset", "golden monkey", "tantalus monkey", "guereza", "gelada", "titi monkey",
+			"barbary macaque", "green monkey", "night monkey", "red colobus", "patas monkey", "guenon",
+			"mangabey", "saki", "uakari", "bald uakari", "hanuman langur", "cotton top tamarin",
+			"diana monkey", "olive baboon", "hamadryas baboon", "crab eating macaque", "pig tailed macaque",
+			"lion tailed macaque", "douc langur", "emperor tamarin", "langur",
 		},
 		DeepCut = {
 			"pig tailed langur", "francois langur", "phayres leaf monkey", "tarai langur", "nilgiri langur",

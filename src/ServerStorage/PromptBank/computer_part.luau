@@ -10,12 +10,10 @@ return {
 			"gpu", "ssd", "power supply", "fan",
 		},
 		Schooler = {
-			"graphics card", "speaker", "webcam", "microphone", "headset", "headphones", "printer", "scanner", "usb",
-			"cable", "charger", "case", "cd drive", "dvd drive", "floppy disk", "battery", "touchpad", "trackpad",
-			"joystick", "modem", "router", "hdmi cable", "power cable", "heat sink", "cooler", "sound card",
-			"network card", "flash drive", "memory card", "sd card", "ethernet port", "hdmi port", "power button",
-			"mouse pad",
-			"external hard drive",
+			"graphics card", "speaker", "webcam", "microphone", "headset", "headphones", "printer", "scanner",
+			"usb", "cable", "charger", "case", "cd drive", "dvd drive", "floppy disk", "battery", "touchpad",
+			"trackpad", "joystick", "router", "hdmi cable", "power cable", "heat sink", "cooler",
+			"sound card", "flash drive", "memory card", "sd card", "external hard drive",
 		},
 		Rare = {
 			"thermal paste", "liquid cooler", "nvme", "m2 drive", "sata cable", "expansion card", "pci slot",
@@ -30,6 +28,7 @@ return {
 			"microchip", "dongle", "power adapter", "thermal pad", "led strip", "hinge", "fingerprint reader", "numpad",
 			"spacebar", "usb c port", "audio jack", "side panel", "touch screen", "barcode scanner", "plotter", "3d printer",
 			"wrist rest", "monitor arm", "ribbon cable", "sata ssd", "reset button", "io panel", "diode", "led",
+			"modem", "network card", "ethernet port", "hdmi port", "power button", "mouse pad",
 		},
 		DeepCut = {
 			"uefi chip", "heat pipe", "vapor chamber", "backplate", "riser cable", "sli bridge", "dimm", "so dimm",

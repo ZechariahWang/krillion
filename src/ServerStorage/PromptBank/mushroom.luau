@@ -10,10 +10,8 @@ return {
 			"oyster mushroom", "chanterelle", "porcini", "cremini", "enoki", "yeast", "mold",
 		},
 		Schooler = {
-			"king oyster", "lions mane", "reishi", "cordyceps", "chaga", "puffball", "giant puffball",
-			"death cap", "magic mushroom", "penicillium", "mildew", "lichen", "mycelium", "bread mold",
-			"black mold", "green mold", "blue mold", "white mold", "wild mushroom", "poisonous mushroom",
-			"fungi", "fungus", "mega mushroom", "edible mushroom",
+			"death cap", "magic mushroom", "mildew", "black mold", "wild mushroom", "poisonous mushroom",
+			"fungi", "fungus", "mega mushroom", "edible mushroom", "blue mold", "green mold", "white mold",
 		},
 		Rare = {
 			"pink oyster", "golden oyster", "blue oyster", "white beech mushroom", "lobster mushroom",
@@ -36,7 +34,9 @@ return {
 			"gyromitra", "the sickener", "deadly webcap", "webcap", "funnel cap", "brittlegill",
 			"saffron milk cap", "st georges mushroom", "horse mushroom", "slippery jack", "birch bolete",
 			"birds nest fungus", "dryads saddle", "ghost fungus", "jelly ear", "tree ear", "cloud ear",
-			"nameko", "wood blewit", "witches butter", "summer truffle",
+			"nameko", "wood blewit", "witches butter", "summer truffle", "king oyster", "lions mane",
+			"reishi", "cordyceps", "chaga", "puffball", "giant puffball", "penicillium", "lichen", "mycelium",
+			"bread mold",
 		},
 		DeepCut = {
 			"golden teacher", "magic truffle", "western destroying angel", "chiodini", "bootlace fungus",

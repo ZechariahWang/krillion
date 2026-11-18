@@ -11,13 +11,9 @@ return {
 		},
 		Schooler = {
 			"neurologist", "oncologist", "ophthalmologist", "radiologist", "anesthesiologist", "podiatrist",
-			"gynecologist", "obstetrician", "urologist", "orthopedist", "plastic surgeon", "psychologist",
-			 "pathologist", "endocrinologist",
-			"gastroenterologist", "pulmonologist", "nephrologist", "allergist", "hematologist",
-			 "neurosurgeon", "emergency doctor", "physician",
-			"internist", "geriatrician", "ent",
-			
-			"family doctor", "general surgeon", "heart surgeon", "brain surgeon", "cosmetic dentist", "audiologist",
+			"gynecologist", "obstetrician", "plastic surgeon", "psychologist", "allergist", "neurosurgeon",
+			"emergency doctor", "physician", "ent", "family doctor", "general surgeon", "heart surgeon",
+			"brain surgeon",
 		},
 		Rare = {
 			"immunologist", "rheumatologist", "neonatologist", "hospitalist", "proctologist", "periodontist",
@@ -28,7 +24,9 @@ return {
 			"palliative care doctor", "intensivist", "perinatologist", "reproductive endocrinologist",
 			"medical examiner", "forensic pathologist", "infectious disease doctor", "surgical oncologist",
 			"radiation oncologist", "clinical psychologist", "neuropsychologist", "cardiothoracic surgeon",
-			"medical oncologist", "homeopath", "neurointensivist", "hospice doctor",
+			"medical oncologist", "homeopath", "neurointensivist", "hospice doctor", "pathologist",
+			"endocrinologist", "gastroenterologist", "pulmonologist", "nephrologist", "hematologist",
+			"internist", "geriatrician", "cosmetic dentist", "audiologist", "urologist", "orthopedist",
 		},
 		DeepCut = {
 			"andrologist", "venereologist", "hepatologist", "diabetologist", "bariatric surgeon", "hand surgeon",

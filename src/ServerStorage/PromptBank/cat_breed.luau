@@ -10,10 +10,8 @@ return {
 			"ragdoll", "scottish fold", "munchkin",
 		},
 		Schooler = {
-			"british shorthair", "american shorthair", "russian blue", "abyssinian", "birman", "burmese",
-			"himalayan", "exotic shorthair", "norwegian forest cat", "siberian", "savannah", "devon rex",
-			"cornish rex", "oriental shorthair", "manx", "bombay", "turkish angora", "egyptian mau", "lion",
-			"tiger", "cheetah", "leopard", "jaguar", "cougar", "black panther", "ocelot",
+			"british shorthair", "russian blue", "abyssinian", "siberian", "savannah", "lion", "tiger",
+			"cheetah", "leopard", "black panther", "cougar", "jaguar", "ocelot",
 		},
 		Rare = {
 			"singapura", "burmilla", "lykoi", "colorpoint shorthair", "european shorthair", "javanese",
@@ -22,7 +20,9 @@ return {
 			"outdoor cat", "lap cat", "brown cat", "blue cat", "silver cat", "tom cat", "liger",
 			"tortoiseshell tabby", "korat", "havana brown", "somali", "american bobtail", "japanese bobtail",
 			"selkirk rex", "chartreux", "toyger", "american curl", "balinese", "ocicat", "tonkinese",
-			"ginger tom", "ragamuffin", "snowshoe", "turkish van",
+			"ginger tom", "ragamuffin", "snowshoe", "turkish van", "american shorthair", "birman", "burmese",
+			"himalayan", "exotic shorthair", "norwegian forest cat", "devon rex", "cornish rex",
+			"oriental shorthair", "manx", "bombay", "turkish angora", "egyptian mau",
 		},
 		DeepCut = {
 			"turkish vankedisi", "chinese mountain cat", "tigon", "iberian lynx", "eurasian lynx",

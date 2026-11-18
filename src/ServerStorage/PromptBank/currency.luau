@@ -10,9 +10,8 @@ return {
 			"bitcoin", "robux", "vbucks",
 		},
 		Schooler = {
-			"yen", "peso", "rupee", "yuan", "franc", "swiss franc", "mexican peso", "indian rupee", "cent",
-			"penny", "nickel", "dime", "quarter", "cash", "money", "ruble", "canadian dollar",
-			"australian dollar", "coins", "ethereum", "dogecoin",
+			"yen", "peso", "rupee", "yuan", "franc", "cent", "penny", "nickel", "dime", "quarter", "money",
+			"coins",
 		},
 		Rare = {
 			"won", "krona", "rand", "real", "krone", "dinar", "riyal", "rial", "rupiah", "dong", "shilling",
@@ -32,6 +31,8 @@ return {
 			"koruna", "naira", "taka", "bottle caps", "fiver", "tenner", "bands", "play money", "fake money",
 			"zimbabwean dollar", "new zealand dollar", "hong kong dollar", "singapore dollar", "tether",
 			"solana", "xrp", "litecoin", "south korean won", "lira", "tix", "simoleon", "pokedollar",
+			"swiss franc", "mexican peso", "indian rupee", "cash", "ruble", "canadian dollar",
+			"australian dollar", "ethereum", "dogecoin",
 		},
 		DeepCut = {
 			"afghani", "lek", "dram", "manat", "lari", "som", "tenge", "denar", "cedi", "birr", "kip", "riel",

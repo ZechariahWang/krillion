@@ -11,13 +11,9 @@ return {
 		},
 		Schooler = {
 			"brahman", "charolais", "guernsey", "brown swiss", "ayrshire", "simmental", "limousin", "dexter",
-			"shorthorn", "galloway", "belted galloway", "zebu", "watusi", "red angus", "belgian blue",
-			"duroc", "yorkshire", "hampshire", "berkshire", "landrace", "tamworth", "kunekune",
-			"gloucestershire old spots", "mangalitsa", "saddleback", "iberian",
-			"suffolk", "dorset", "texel", "cheviot", "romney", "jacob", "rambouillet", "southdown", "shropshire",
-			"corriedale", "icelandic", "karakul", "herdwick", "shetland", "dorper", "katahdin",
-			"nubian", "alpine", "saanen", "toggenburg", "lamancha", "pygmy", "nigerian dwarf", "kiko", "cashmere",
-			"oberhasli", "pygora",
+			"shorthorn", "belted galloway", "zebu", "watusi", "red angus", "duroc", "yorkshire", "hampshire",
+			"berkshire", "landrace", "tamworth", "kunekune", "suffolk", "dorset", "shetland", "nubian",
+			"alpine", "saanen", "pygmy", "nigerian dwarf",
 		},
 		Rare = {
 			"devon", "red poll", "sussex", "lincoln red", "welsh black", "piedmontese", "chianina", "romagnola",
@@ -33,7 +29,10 @@ return {
 			"droughtmaster", "braford", "pinzgauer", "senepol", "bonsmara", "nguni", "afrikaner", "tuli", "boran",
 			"dutch belted", "lowline", "british white", "chillingham", "pineywoods", "randall lineback",
 			"florida cracker", "maine anjou", "parthenaise", "gasconne", "asturiana", "retinta", "morucha",
-			"maremmana", "podolica", "grauvieh",
+			"maremmana", "podolica", "grauvieh", "galloway", "belgian blue", "gloucestershire old spots",
+			"mangalitsa", "saddleback", "iberian", "texel", "cheviot", "romney", "jacob", "rambouillet",
+			"southdown", "shropshire", "corriedale", "icelandic", "karakul", "herdwick", "dorper", "katahdin",
+			"toggenburg", "lamancha", "kiko", "cashmere", "oberhasli", "pygora",
 		},
 		DeepCut = {
 			"turopolje", "bazna", "cinta senese", "alentejano", "bisaro", "krskopolje",

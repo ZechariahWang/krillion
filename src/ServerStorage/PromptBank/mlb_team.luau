@@ -10,15 +10,16 @@ return {
 			"astros", "padres", "mariners", "blue jays",
 		},
 		Schooler = {
-			"phillies", "cardinals", "white sox", "tigers", "angels", "rangers", "orioles", "rays", "royals", "twins",
-			"brewers", "reds", "pirates", "rockies", "marlins", "nationals", "guardians", "athletics", "diamondbacks",
+			"phillies", "cardinals", "white sox", "tigers", "angels", "rangers",
 		},
 		Rare = {
-			"expos", "indians", "senators", "colt 45s", "devil rays", "browns",
+			"expos", "indians", "senators", "colt 45s", "devil rays", "browns", "orioles", "rays", "royals",
+			"twins", "brewers", "reds", "pirates",
 		},
 		DeepCut = {
 			"seattle pilots", "cleveland spiders", "boston beaneaters", "brooklyn bridegrooms",
-			"new york highlanders",
+			"new york highlanders", "rockies", "marlins", "nationals", "guardians", "athletics",
+			"diamondbacks",
 		},
 		Mythic = {
 			"louisville colonels", "baltimore terrapins", "brooklyn tip tops", "buffalo blues", "kansas city packers",
@@ -69,6 +70,14 @@ return {
 		["redlegs"] = "reds", ["cincinnati redlegs"] = "reds", ["los angeles angels of anaheim"] = "angels",
 		["boston americans"] = "red sox", ["pittsburgh alleghenys"] = "pirates", ["st louis perfectos"] = "cardinals",
 		["new york gothams"] = "giants", ["arizona dbacks"] = "diamondbacks", ["washington nats"] = "nationals",
-		["rocks"] = "rockies",
+		["rocks"] = "rockies", ["boston"] = "red sox", ["tampa"] = "rays", ["tampa bay"] = "rays",
+		["baltimore"] = "orioles", ["kansas city"] = "royals", ["minnesota"] = "twins",
+		["milwaukee"] = "brewers", ["cincinnati"] = "reds", ["pittsburgh"] = "pirates",
+		["colorado"] = "rockies", ["miami"] = "marlins", ["washington"] = "nationals",
+		["cleveland"] = "guardians", ["oakland"] = "athletics", ["arizona"] = "diamondbacks",
+		["seattle"] = "mariners", ["houston"] = "astros", ["detroit"] = "tigers", ["texas"] = "rangers",
+		["toronto"] = "blue jays", ["philadelphia"] = "phillies", ["st louis"] = "cardinals",
+		["san diego"] = "padres", ["san francisco"] = "giants", ["atlanta"] = "braves", ["as"] = "athletics",
+		["os"] = "orioles", ["oriels"] = "orioles",
 	},
 }

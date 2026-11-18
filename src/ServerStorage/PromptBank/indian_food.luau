@@ -10,10 +10,10 @@ return {
 			"chai", "tandoori chicken", "mango lassi", "paneer",
 		},
 		Schooler = {
-			"dal", "roti", "paratha", "pakora", "dosa", "idli", "korma", "vindaloo", "saag paneer", "palak paneer",
-			"chana masala", "aloo gobi", "gulab jamun", "lassi", "poori", "bhaji", "onion bhaji", "raita", "chutney",
-			"papadum", "paneer tikka", "kulfi", "kebab", "masala dosa", "basmati rice", "mango chutney",
-			"butter naan", "garlic naan",
+			"dal", "roti", "paratha", "pakora", "dosa", "idli", "korma", "vindaloo", "saag paneer",
+			"palak paneer", "chana masala", "aloo gobi", "gulab jamun", "lassi", "poori", "bhaji",
+			"onion bhaji", "raita", "chutney", "papadum", "paneer tikka", "kulfi", "kebab", "masala dosa",
+			"basmati rice", "butter naan", "garlic naan",
 		},
 		Rare = {
 			"sambar", "vada", "uttapam", "thali", "kofta", "malai kofta", "dal makhani", "tarka dal", "aloo paratha",
@@ -29,7 +29,7 @@ return {
 			"filter coffee", "paan", "ghee", "garam masala", "murukku", "namkeen", "bhujia", "sev", "chikki",
 			"motichoor ladoo", "besan ladoo", "payasam", "rava dosa", "paper dosa", "rava idli", "bonda", "bajji",
 			"malai tikka", "chicken lollipop", "hara bhara kebab", "bread pakora", "anda bhurji", "masala omelette",
-			"batata vada", "fish fry", "missi roti", "kahwa", "jhalmuri", "puttu", "aamras",
+			"batata vada", "fish fry", "missi roti", "kahwa", "jhalmuri", "puttu", "aamras", "mango chutney",
 		},
 		DeepCut = {
 			"bhuna", "dopiaza", "pasanda", "balti", "kadhi", "thepla", "puran poli", "misal pav", "upma", "poha",

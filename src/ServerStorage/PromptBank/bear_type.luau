@@ -10,17 +10,21 @@ return {
 			"sun bear", "kodiak bear", "sloth bear",
 		},
 		Schooler = {
-			"giant panda", "spectacled bear", "cave bear", "american black bear", "moon bear",
+			"giant panda", "spectacled bear", "cave bear", "american black bear", "moon bear", "grolar bear",
+			"pizzly bear",
 		},
 		Rare = {
 			"andean bear", "asiatic black bear", "spirit bear", "cinnamon bear", "eurasian brown bear",
-			"himalayan brown bear", "short faced bear",
+			"himalayan brown bear", "short faced bear", "european brown bear", "alaskan brown bear",
+			"siberian brown bear", "california grizzly", "eastern black bear",
 		},
 		DeepCut = {
-			"syrian brown bear", "atlas bear", "ussuri brown bear", "kamchatka brown bear", "marsican brown bear",
-			"hokkaido brown bear", "formosan black bear", "japanese black bear", "mexican grizzly",
-			"florida black bear", "louisiana black bear", "gobi bear", "himalayan black bear",
-			"newfoundland black bear", "glacier bear", "blue bear",
+			"syrian brown bear", "atlas bear", "ussuri brown bear", "kamchatka brown bear",
+			"marsican brown bear", "hokkaido brown bear", "formosan black bear", "japanese black bear",
+			"mexican grizzly", "florida black bear", "louisiana black bear", "gobi bear",
+			"himalayan black bear", "newfoundland black bear", "glacier bear", "blue bear",
+			"bornean sun bear", "tibetan brown bear", "mexican black bear", "etruscan bear",
+			"yellowstone grizzly", "barren ground grizzly",
 		},
 		Mythic = {
 			"baluchistan black bear", "alaska peninsula brown bear", "kenai brown bear",
@@ -51,5 +55,8 @@ return {
 		["tibetan blue bear"] = "blue bear", ["yezo brown bear"] = "hokkaido brown bear",
 		["grisly bear"] = "grizzly bear", ["grizly"] = "grizzly bear", ["pollar bear"] = "polar bear",
 		["spectacle bear"] = "spectacled bear", ["spectacled"] = "spectacled bear",
+		["alaskan grizzly"] = "alaskan brown bear", ["hybrid bear"] = "grolar bear",
+		["polar grizzly"] = "grolar bear", ["grizzly polar bear"] = "grolar bear",
+		["siberian bear"] = "siberian brown bear", ["arctic bear"] = "polar bear",
 	},
 }

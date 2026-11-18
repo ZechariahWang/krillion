@@ -11,12 +11,12 @@ return {
 		},
 		Schooler = {
 			"lisbon", "dublin", "prague", "brussels", "oslo", "stockholm", "copenhagen", "helsinki", "warsaw",
-			"budapest", "edinburgh", "kyiv",
+			"budapest", "kyiv",
 		},
 		Rare = {
 			"bern", "reykjavik", "belgrade", "zagreb", "bucharest", "sofia", "minsk", "luxembourg", "monaco",
 			"cardiff", "belfast", "vatican city", "san marino", "nicosia", "tbilisi", "yerevan", "baku",
-			"ankara", "valletta", "vaduz",
+			"ankara", "valletta", "vaduz", "edinburgh",
 		},
 		DeepCut = {
 			"ljubljana", "bratislava", "vilnius", "tallinn", "riga", "sarajevo", "pristina", "torshavn",

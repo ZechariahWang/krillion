@@ -146,7 +146,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `StarterCharacterScripts.Animate.idle`), the head label players have, and that look as their dive card picture (`PeerTag.Avatar.View`, a
   ViewportFrame; its Camera is made by `Client/DiveCard` because a Camera in a template does not replicate).
   A late joiner takes the lowest standing bot's pillar (`LateJoin.pickBot`), so the ring of six never
-  changes; with no bot left standing the match is full. `Templates.BotRig` is only the stand-in when
+  changes; with no bot left standing the match is full. Joining is open at any round (`LateJoin.MaxRound = 0`),
+  and someone arriving mid-match is put in automatically (`RoundService` autoJoinOnArrival); the JUMP IN card
+  is for the rest. `Templates.BotRig` is only the stand-in when
   `BotLooks` is missing. A bot answers every prompt. A player who outlasts the bots has a Win (`Economy.countsAsWin`).
 - Toys: a player who is not in a match throws their equipped toy with the THROW key or T. While spectating
   it goes at whoever they are watching, a player or a bot, at any distance; otherwise they pick a lobby player
@@ -241,7 +243,9 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   Watch circles go to the top-right instead, counted in from `TopbarInset.Max.X` with the gear in the
   corner, clear of the status bar; a phone shows no player list there. On a phone the Shells chip hangs
   under them (`Client/Wallet` placeOnPhone), the THROW key hangs under the chip, and the Shells pop-ups drop
-  in below both; neither shows while the player is on a pillar, where the match strip has the top to itself. Toasts stack in the bottom-left
+  in below both; neither shows while the player is on a pillar, where the match strip has the top to itself,
+  or while the answers list (`GameUi.Reveal.List`, also top-right) shows (`Ui.answersListCoversCorner`).
+  A phone draws the chip and the answers list at 80% through their UIScale's `Rest` attribute. Toasts stack in the bottom-left
   (past the match water meter, above the touch thumbstick). The bottom-right column, from the
   bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.

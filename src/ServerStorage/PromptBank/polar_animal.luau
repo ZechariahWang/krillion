@@ -10,11 +10,9 @@ return {
 			"emperor penguin", "orca", "narwhal", "snowy owl", "reindeer",
 		},
 		Schooler = {
-			"arctic wolf", "arctic hare", "caribou", "musk ox", "beluga", "leopard seal", "harp seal", "elephant seal",
-			"weddell seal", "adelie penguin", "king penguin", "chinstrap penguin", "gentoo penguin", "puffin", "snow goose",
-			"lemming", "ermine", "wolverine", "moose", "humpback whale", "blue whale", "krill", "arctic tern", "albatross",
-			"skua", "sea lion", "fur seal", "bearded seal", "ringed seal", "harbor seal", "arctic ground squirrel", "lynx",
-			"bowhead whale", "minke whale", "sperm whale", "snowy sheathbill", "rockhopper penguin", "macaroni penguin",
+			"arctic wolf", "arctic hare", "caribou", "musk ox", "beluga", "leopard seal", "harp seal",
+			"elephant seal", "king penguin", "puffin", "lemming", "wolverine", "moose", "humpback whale",
+			"blue whale", "krill", "albatross", "sea lion", "lynx", "sperm whale",
 		},
 		Rare = {
 			"ptarmigan", "arctic char", "arctic cod", "snow bunting", "gyrfalcon", "snowshoe hare", "arctic skua",
@@ -25,7 +23,10 @@ return {
 			"antarctic petrel", "cape petrel", "wandering albatross", "lions mane jellyfish", "icefish", "toothfish",
 			"arctic loon", "red throated loon", "sled dog", "husky", "greenland shark", "spectacled eider", "sea otter",
 			"sea butterfly", "sea angel",
-			"tundra swan", "raven", "peregrine falcon", "samoyed", "alaskan malamute",
+			"tundra swan", "raven", "peregrine falcon", "samoyed", "alaskan malamute", "weddell seal",
+			"adelie penguin", "chinstrap penguin", "gentoo penguin", "snow goose", "ermine", "arctic tern",
+			"skua", "fur seal", "bearded seal", "ringed seal", "harbor seal", "arctic ground squirrel",
+			"bowhead whale", "minke whale", "snowy sheathbill", "rockhopper penguin", "macaroni penguin",
 		},
 		DeepCut = {
 			"antarctic midge", "springtail", "tardigrade", "ross sea dragonfish", "antarctic silverfish", "crocodile icefish",

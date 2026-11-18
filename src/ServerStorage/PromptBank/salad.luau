@@ -10,11 +10,9 @@ return {
 			"cobb salad", "caprese salad", "coleslaw", "chicken salad",
 		},
 		Schooler = {
-			"pasta salad", "egg salad", "tuna salad", "chef salad", "spinach salad", "waldorf salad", "taco salad",
-			"macaroni salad", "tabbouleh", "nicoise salad", "house salad", "side salad", "green salad", "cucumber salad",
-			"tomato salad", "bean salad", "chicken caesar salad", "wedge salad", "ambrosia salad", "jello salad",
-			"broccoli salad", "kale salad", "quinoa salad", "couscous salad", "thai salad", "shrimp salad", "ham salad",
-			"chopped salad", "seafood salad", "crab salad",
+			"pasta salad", "egg salad", "tuna salad", "chef salad", "spinach salad", "waldorf salad",
+			"taco salad", "macaroni salad", "house salad", "side salad", "green salad", "cucumber salad",
+			"tomato salad", "chicken caesar salad", "ambrosia salad",
 		},
 		Rare = {
 			"panzanella", "larb", "papaya salad", "israeli salad", "shirazi salad",
@@ -30,6 +28,9 @@ return {
 			"seven layer salad",
 			"mediterranean salad", "southwest salad", "strawberry salad", "lobster salad", "salmon salad",
 			"steak salad", "pea salad", "chinese chicken salad", "german potato salad", "kani salad",
+			"tabbouleh", "nicoise salad", "bean salad", "couscous salad", "thai salad", "shrimp salad",
+			"ham salad", "chopped salad", "seafood salad", "crab salad", "wedge salad", "jello salad",
+			"broccoli salad", "kale salad", "quinoa salad",
 		},
 		DeepCut = {
 			"salade lyonnaise", "salade landaise", "salade paysanne", "arabic salad", "kisir", "coban salad",

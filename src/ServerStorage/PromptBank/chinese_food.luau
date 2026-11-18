@@ -12,14 +12,8 @@ return {
 		Schooler = {
 			"wonton", "wonton soup", "sweet and sour chicken", "general tsos chicken", "kung pao chicken",
 			"sesame chicken", "beef and broccoli", "mapo tofu", "hot and sour soup", "egg drop soup",
-			"crab rangoon", "fortune cookie", "chop suey", "chow fun",
-			"char siu", "xiao long bao", "potstickers", "congee", "bubble tea", "mongolian beef",
-			"sweet and sour pork", "szechuan chicken", "moo shu pork",
-			"rice noodles", "noodles", "tofu", "lettuce wrap", "spare ribs",
-			"honey chicken", "lemon chicken", "cashew chicken", "white rice",
-			"egg tart", "mooncake",
-			"scallion pancake", "bok choy",
-			"egg foo young",
+			"crab rangoon", "fortune cookie", "chop suey", "potstickers", "congee", "bubble tea",
+			"mongolian beef", "rice noodles", "noodles", "tofu", "spare ribs", "white rice",
 		},
 		Rare = {
 			"har gow", "siu mai", "cheung fun", "turnip cake", "taro cake", "lotus root",
@@ -36,7 +30,10 @@ return {
 			"mongolian chicken", "honey walnut shrimp", "sweet and sour shrimp", "singapore noodles", "shanghai noodles",
 			"chinese broccoli", "roast duck", "soy sauce chicken", "char siu bao", "pineapple bun", "almond cookie",
 			"fried wontons", "beef noodle soup", "hand pulled noodles", "prawn crackers", "sticky rice", "red bean paste",
-			"soy milk", "wor wonton soup", "shrimp with lobster sauce",
+			"soy milk", "wor wonton soup", "shrimp with lobster sauce", "chow fun", "char siu",
+			"xiao long bao", "sweet and sour pork", "szechuan chicken", "moo shu pork", "lettuce wrap",
+			"honey chicken", "lemon chicken", "cashew chicken", "egg tart", "mooncake", "scallion pancake",
+			"bok choy", "egg foo young",
 		},
 		DeepCut = {
 			"zhajiangmian", "chongqing noodles", "chongqing hot pot", "yuxiang rousi", "shuizhu niurou",

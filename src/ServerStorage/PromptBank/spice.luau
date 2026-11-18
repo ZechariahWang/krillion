@@ -12,10 +12,7 @@ return {
 		Schooler = {
 			"oregano", "paprika", "ginger", "garlic", "parsley", "cumin", "mint", "thyme", "rosemary",
 			"nutmeg", "turmeric", "chili", "cloves", "chili powder", "curry powder", "sage", "dill",
-			"cilantro", "peppermint", "garlic powder", "bay leaf", "chives", "allspice", "italian seasoning",
-			"taco seasoning", "cajun seasoning", "old bay", "lemon pepper", "garlic salt", "sea salt",
-			"pumpkin pie spice", "red pepper", "kosher salt", "cardamom", "coriander", "saffron",
-			"onion powder", "red pepper flakes", "mustard",
+			"cilantro", "garlic salt", "lemon pepper", "red pepper",
 		},
 		Rare = {
 			"anise", "tarragon", "marjoram", "lemongrass", "garam masala", "caraway", "spearmint", "lavender",
@@ -34,6 +31,9 @@ return {
 			"fajita seasoning", "chili seasoning", "chicken seasoning", "all purpose seasoning",
 			"steak seasoning", "poultry seasoning", "bbq rub", "everything bagel seasoning", "seasoning salt",
 			"celery salt", "rock salt", "mixed herbs", "onion salt", "jalapeno", "fennel", "star anise",
+			"peppermint", "garlic powder", "bay leaf", "chives", "allspice", "italian seasoning",
+			"taco seasoning", "cajun seasoning", "old bay", "sea salt", "pumpkin pie spice", "kosher salt",
+			"cardamom", "coriander", "saffron", "onion powder", "red pepper flakes", "mustard",
 		},
 		DeepCut = {
 			"sumac", "mace", "galangal", "tamarind", "savory", "chervil", "sorrel", "lemon verbena",

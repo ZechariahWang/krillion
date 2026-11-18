@@ -595,6 +595,33 @@ function Ui.findScreen(playerGui: PlayerGui, name: string): Frame?
 	return nil
 end
 
+-- Phones: the answers list (GameUi.Reveal.List) shares the top-right corner with the Shells chip and the
+-- THROW key, so they step aside while it shows.
+function Ui.answersListCoversCorner(playerGui: PlayerGui): boolean
+	if not Ui.isPhone() then
+		return false
+	end
+	local screen = Ui.findScreen(playerGui, "Reveal")
+	if screen == nil or not screen.Visible then
+		return false
+	end
+	local list = screen:FindFirstChild("List")
+	return list ~= nil and list:IsA("GuiObject") and list.Visible
+end
+
+-- Calls `changed` whenever the answers list or its screen shows or hides.
+function Ui.watchAnswersList(playerGui: PlayerGui, changed: () -> ())
+	task.spawn(function()
+		local screen = Ui.screen(playerGui, "Reveal", WAIT_SECONDS)
+		local list = if screen ~= nil then screen:WaitForChild("List", WAIT_SECONDS) else nil
+		if screen == nil or list == nil then
+			return
+		end
+		screen:GetPropertyChangedSignal("Visible"):Connect(changed)
+		list:GetPropertyChangedSignal("Visible"):Connect(changed)
+	end)
+end
+
 -- Screens with the "BelowTopbar" attribute keep clear of the Roblox top bar. Studio has no top bar, so they
 -- are authored flush with the top and moved down here by the real inset, again whenever the top bar changes
 -- (it is still 0 while the top bar loads).

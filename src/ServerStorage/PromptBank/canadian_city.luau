@@ -10,9 +10,8 @@ return {
 			"quebec city", "winnipeg", "victoria", "halifax",
 		},
 		Schooler = {
-			"hamilton", "mississauga", "regina", "saskatoon", "niagara falls", "kingston", "london", "windsor", "st johns",
-			"kelowna", "brampton", "surrey", "burnaby", "oshawa", "waterloo", "kitchener", "whitehorse", "yellowknife",
-			"fredericton", "charlottetown", "moncton", "thunder bay",
+			"hamilton", "mississauga", "regina", "saskatoon", "niagara falls", "kingston", "london",
+			"windsor", "st johns", "kelowna", "brampton", "surrey",
 		},
 		Rare = {
 			"laval", "gatineau", "sherbrooke", "barrie", "guelph", "kamloops", "nanaimo", "lethbridge", "red deer", "sudbury",
@@ -23,7 +22,8 @@ return {
 			"dartmouth",
 			"whitby", "newmarket", "aurora", "longueuil", "levis", "chicoutimi", "north vancouver", "new westminster",
 			"maple ridge", "port coquitlam", "white rock", "port moody", "west vancouver", "airdrie", "st albert",
-			"spruce grove",
+			"spruce grove", "burnaby", "oshawa", "waterloo", "kitchener", "whitehorse", "yellowknife",
+			"fredericton", "charlottetown", "moncton", "thunder bay",
 		},
 		DeepCut = {
 			"grande prairie", "fort mcmurray", "timmins", "saguenay", "drummondville", "granby", "lloydminster", "prince albert",

@@ -26,6 +26,7 @@ local POP_CLEAR = 10 -- pixels of a slot left clear between two pills
 local PHONE_SIDE = 8 -- phones: pixels from the right end of the top bar to the chip, as the top bar buttons keep
 local PHONE_TOP = 10 -- phones: pixels from the bottom of the top bar to the chip under its buttons
 local PHONE_STACK_GAP = 12 -- phones: pixels between the chip and the THROW key under it
+local PHONE_CHIP_SCALE = 0.8 -- phones: the chip's size, so its shell bubble stays clear of the THROW key
 local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter screens scale them down
 local MIN_FIT = 0.65
 local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
@@ -238,8 +239,11 @@ local function refresh()
 	end
 	-- A phone's match strip (prompt, answer bar, boosts) needs the top of the screen to itself.
 	local inMatchOnPhone = playing and Ui.isPhone()
+	local root = playerGuiRef
+	local answersInCorner = root ~= nil and Ui.answersListCoversCorner(root)
 	own.Visible = phase ~= "Results"
 		and not inMatchOnPhone
+		and not answersInCorner
 		and not Windows.anyOpen()
 		and not UserInputService.OnScreenKeyboardVisible
 	placeChip()
@@ -353,6 +357,7 @@ end
 function Wallet.init(playerGui: PlayerGui)
 	playerGuiRef = playerGui
 	Windows.Changed.connect(refresh)
+	Ui.watchAnswersList(playerGui, refresh)
 	UserInputService:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(refresh)
 	counter:GetPropertyChangedSignal("Value"):Connect(function()
 		setAmount(counter.Value)
@@ -372,6 +377,12 @@ function Wallet.init(playerGui: PlayerGui)
 		end
 		gui = found
 		chip = ownChip
+		local chipScale = ownChip:FindFirstChildOfClass("UIScale")
+		if Ui.isPhone() and chipScale ~= nil then
+			-- Ui.bump settles at "Rest", so the count-up bounce keeps the smaller size.
+			chipScale:SetAttribute("Rest", PHONE_CHIP_SCALE)
+			chipScale.Scale = PHONE_CHIP_SCALE
+		end
 		-- The touch controls appear with the character and move with the screen: follow them.
 		if UserInputService.TouchEnabled then
 			task.spawn(function()

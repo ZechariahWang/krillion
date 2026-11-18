@@ -10,10 +10,8 @@ return {
 			"olympus mons", "mount rushmore",
 		},
 		Schooler = {
-			"k2", "denali", "mont blanc", "matterhorn", "olympus", "vesuvius", "etna", "st helens", "rainier",
-			"sinai", "ararat", "table mountain", "mauna kea", "mauna loa", "kilauea", "pikes peak",
-			"krakatoa", "mount doom", "rocky mountains", "alps", "himalayas", "andes",
-			"appalachian mountains", "hood", "smoky mountains",
+			"k2", "denali", "mont blanc", "matterhorn", "olympus", "vesuvius", "etna", "st helens",
+			"mount doom", "rocky mountains", "alps", "himalayas", "andes", "appalachian mountains",
 		},
 		Rare = {
 			"kangchenjunga", "lhotse", "jungfrau", "mount kenya", "kosciuszko", "mount cook", "kinabalu",
@@ -27,7 +25,8 @@ return {
 			"canadian rockies", "volcano", "uluru", "eiger", "whitney", "elbrus", "aconcagua", "snowdon",
 			"ben nevis", "shasta", "annapurna", "grand teton", "pen y fan", "huangshan", "mount royal",
 			"montserrat", "camelback mountain", "lookout mountain", "sakurajima", "zugspitze", "mount horeb",
-			"maroon bells", "mount of the holy cross",
+			"maroon bells", "mount of the holy cross", "rainier", "sinai", "ararat", "table mountain",
+			"mauna kea", "mauna loa", "kilauea", "pikes peak", "krakatoa", "hood", "smoky mountains",
 		},
 		DeepCut = {
 			"gasherbrum", "broad peak", "nuptse", "ama dablam", "rakaposhi", "masherbrum", "cerro torre",

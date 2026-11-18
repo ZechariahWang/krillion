@@ -10,11 +10,11 @@ return {
 			"steel", "concrete", "leather", "cotton", "brick", "cardboard",
 		},
 		Schooler = {
-			"iron", "gold", "silver", "aluminum", "copper", "wool", "stone", "clay", "plaster", "foam", "ceramic", "porcelain",
-			"silk", "nylon", "polyester", "denim", "cement", "sand", "ice", "bamboo", "cork", "wax", "fiberglass",
-			"carbon fiber", "vinyl", "latex", "styrofoam", "tin", "brass", "bronze", "marble", "granite", "diamond", "linen",
-			"velvet", "fur", "bone", "straw", "canvas", "asphalt", "drywall", "plywood", "felt", "fabric", "mud", "lead",
-			"platinum", "stainless steel", "cast iron", "fleece", "titanium", "dirt", "tile", "coal",
+			"iron", "gold", "silver", "aluminum", "copper", "wool", "stone", "clay", "foam", "ceramic",
+			"porcelain", "silk", "nylon", "polyester", "denim", "cement", "sand", "ice", "bamboo", "cork",
+			"wax", "vinyl", "latex", "styrofoam", "brass", "bronze", "marble", "granite", "diamond", "linen",
+			"velvet", "fur", "bone", "straw", "canvas", "plywood", "felt", "fabric", "mud", "platinum",
+			"stainless steel", "fleece", "dirt", "tile", "coal",
 		},
 		Rare = {
 			"pewter", "tungsten", "kevlar", "spandex", "acrylic", "rayon", "neoprene", "silicone", "resin", "bakelite",
@@ -27,7 +27,8 @@ return {
 			"gravel", "hemp", "flax", "hardwood", "oak", "pine", "faux leather", "foil", "carbon", "sterling silver",
 			"rose gold", "white gold", "ruby", "emerald", "sapphire", "obsidian", "flint", "chalk", "graphite", "yarn",
 			"thread", "wire", "charcoal", "sawdust", "rope", "hay", "sheepskin", "feathers", "cedar", "mahogany", "walnut",
-			"teak", "maple", "mdf", "alpaca", "galvanized steel", "veneer",
+			"teak", "maple", "mdf", "alpaca", "galvanized steel", "veneer", "asphalt", "drywall", "cast iron",
+			"plaster", "fiberglass", "carbon fiber", "tin", "lead", "titanium",
 		},
 		DeepCut = {
 			"vellum", "bitumen", "cob", "celluloid", "shellac", "baleen", "sinew", "catgut", "polypropylene", "polycarbonate",

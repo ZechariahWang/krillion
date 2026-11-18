@@ -10,13 +10,10 @@ return {
 			"pinata", "confetti", "clown", "streamers", "cupcakes",
 		},
 		Schooler = {
-			"juice boxes",
-			"decorations", "banner", "pizza", "party favors", "goody bag", "music", "cards", "wrapping paper", "ribbon", "bow",
-			"gift bag", "party horn", "juice", "soda", "punch", "lemonade", "chips", "candy", "snacks", "popcorn", "cookies",
-			"hot dogs", "burgers", "fruit", "plates", "cups", "napkins", "forks", "tablecloth", "table", "chairs", "face paint",
-			"bounce house", "musical chairs", "pin the tail on the donkey", "glow sticks", "cotton candy", "fireworks",
-			"sparklers", "lights", "disco ball", "karaoke", "invitations", "party games", "drinks", "chocolate", "guests",
-			"friends", "family",
+			"juice boxes", "decorations", "banner", "pizza", "party favors", "goody bag", "music", "cards",
+			"wrapping paper", "ribbon", "gift bag", "party horn", "juice", "soda", "lemonade", "chips",
+			"candy", "snacks", "popcorn", "cookies", "plates", "cups", "napkins", "face paint",
+			"bounce house", "musical chairs", "pin the tail on the donkey", "invitations", "party games",
 		},
 		Rare = {
 			"cake topper", "magician", "hide and seek", "charades", "bingo", "limbo", "simon says", "duck duck goose", "photos",
@@ -26,7 +23,9 @@ return {
 			"chocolate fountain", "candy buffet", "dessert table", "bubbles", "birthday song", "birthday boy", "birthday girl",
 			"pass the parcel", "treasure hunt", "scavenger hunt", "sandwiches", "pretzels", "lollipops", "veggie tray",
 			"centerpieces", "gift table", "dj", "mascot", "petting zoo", "pony rides", "camera", "speakers", "number candles",
-			"dance floor",
+			"dance floor", "bow", "burgers", "forks", "tablecloth", "table", "chairs", "cotton candy",
+			"disco ball", "drinks", "chocolate", "punch", "hot dogs", "fruit", "glow sticks", "fireworks",
+			"sparklers", "lights", "karaoke", "guests", "friends", "family",
 		},
 		DeepCut = {
 			"gift tags", "paper lanterns", "pom poms", "thank you cards", "bubble machine",

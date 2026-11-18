@@ -207,4 +207,86 @@ return function(test)
 			end
 		end
 	end)
+
+	test("your tag plunges past its resting place, springs back up a little and settles", function()
+		local amplitude = 50
+		assert(DivePack.overshoot(-0.1, amplitude) == 0)
+		assert(DivePack.overshoot(0, amplitude) == 0)
+		local deepest = 0
+		local highest = 0
+		local deepestAt = 0
+		local previous = 0
+		local seconds = DivePack.overshootSeconds()
+		for step = 1, 300 do
+			local since = seconds * step / 300
+			local value = DivePack.overshoot(since, amplitude)
+			assert(math.abs(value - previous) <= amplitude * 0.06, "the spring jumped at " .. since)
+			previous = value
+			if value > deepest then
+				deepest = value
+				deepestAt = since
+			end
+			highest = math.min(highest, value)
+		end
+		assert(math.abs(deepest - amplitude) < 0.5, "it dips by the amplitude: " .. deepest)
+		assert(deepestAt < 0.5, "the dip is a quick plunge")
+		assert(highest < 0 and highest >= -DivePack.reboundShare() * amplitude - 1e-6, "a small rebound: " .. highest)
+		assert(DivePack.overshoot(seconds, amplitude) == 0)
+		assert(DivePack.overshoot(seconds + 1, amplitude) == 0)
+		assert(seconds >= 0.8 and seconds <= 1.4)
+	end)
+
+	test("your tag's plunge never reaches the tags in its lane", function()
+		local spacing = 40
+		-- Alone in its lane: nothing limits it.
+		local alone = DivePack.layout({ 100, 300 }, 2, spacing, 1)
+		assert(DivePack.overshootRoom(alone, 1, spacing) == math.huge)
+		-- One lane: a deeper tag below yours and a shallower one behind it.
+		local stacked = DivePack.layout({ 200, 300, 120 }, 1, spacing, 1)
+		local own = stacked[1]
+		local room = DivePack.overshootRoom(stacked, 1, spacing)
+		assert(room < math.huge)
+		assert(own.final + room <= stacked[2].final - spacing + 1e-6, "the plunge reaches the tag below")
+		assert(own.final - DivePack.reboundShare() * room >= stacked[3].final + spacing - 1e-6, "the rebound reaches the tag behind")
+		-- Packed tight there is no room at all.
+		local tight = DivePack.layout({ 100, 100, 100 }, 1, spacing, 2)
+		assert(DivePack.overshootRoom(tight, 2, spacing) == 0)
+	end)
+
+	test("your tag can stop short of its depth only where the tag behind it in its lane has room", function()
+		local spacing = 40
+		-- Nothing behind it: it may stop anywhere above.
+		local alone = DivePack.layout({ 200, 300 }, 2, spacing, 1)
+		assert(DivePack.fakeRoom(alone, 1, spacing) == math.huge)
+		-- One lane: a tag behind yours at 100 leaves 200 - 100 - 40 = 60 metres to stop short by.
+		local stacked = DivePack.layout({ 200, 100 }, 1, spacing, 1)
+		local room = DivePack.fakeRoom(stacked, 1, spacing)
+		assert(math.abs(room - 60) < 1e-6, "room " .. room)
+		assert(stacked[1].final - room >= stacked[2].final + spacing - 1e-6)
+		-- A deeper tag below it in its lane rules the fake-out out: your tag slides on its own and could reach it.
+		local below = DivePack.layout({ 200, 260 }, 1, spacing, 1)
+		assert(DivePack.fakeRoom(below, 1, spacing) == 0)
+		-- Packed tight there is no room.
+		local tight = DivePack.layout({ 100, 100 }, 1, spacing, 2)
+		assert(DivePack.fakeRoom(tight, 2, spacing) == 0)
+	end)
+
+	test("the fake-out slide creeps first, never stops, and arrives still moving", function()
+		assert(DivePack.fakeSlide(0) == 0)
+		assert(math.abs(DivePack.fakeSlide(1) - 1) < 1e-9)
+		assert(DivePack.fakeSlide(-1) == 0 and DivePack.fakeSlide(2) == 1)
+		-- Slow at first, so it reads as having landed a tier short...
+		assert(DivePack.fakeSlide(0.5) < 0.2, "it leaves the fake spot too fast")
+		-- ...but always moving, and fastest at the end.
+		local previous = 0
+		local previousStep = 0
+		for step = 1, 100 do
+			local value = DivePack.fakeSlide(step / 100)
+			local moved = value - previous
+			assert(moved > 0, "it stopped at " .. step)
+			assert(moved >= previousStep - 1e-9, "it slowed down at " .. step)
+			previous = value
+			previousStep = moved
+		end
+	end)
 end

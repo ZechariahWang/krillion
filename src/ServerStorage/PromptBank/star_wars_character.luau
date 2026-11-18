@@ -10,11 +10,9 @@ return {
 			"r2d2", "c3po", "obi wan kenobi", "emperor palpatine", "boba fett", "grogu",
 		},
 		Schooler = {
-			"anakin skywalker", "rex", "kylo ren", "rey", "finn", "poe dameron", "bb8", "lando calrissian",
-			"jabba the hutt", "darth maul", "count dooku", "general grievous", "mace windu", "padme amidala",
-			"qui gon jinn", "jar jar binks", "jango fett", "ahsoka tano", "din djarin", "captain phasma",
-			"snoke", "admiral ackbar", "wicket", "greedo", "grand moff tarkin", "clone trooper",
-			"stormtrooper", "ewok", "wookiee", "jawa", "battle droid",
+			"anakin skywalker", "rex", "kylo ren", "rey", "finn", "bb8", "lando calrissian", "jabba the hutt",
+			"darth maul", "count dooku", "general grievous", "mace windu", "jar jar binks", "jango fett",
+			"ahsoka tano", "din djarin", "admiral ackbar", "clone trooper", "stormtrooper", "ewok", "wookiee",
 		},
 		Rare = {
 			"plo koon", "ki adi mundi", "shaak ti", "kit fisto", "aayla secura", "luminara unduli",
@@ -28,7 +26,9 @@ return {
 			"maz kanata", "jyn erso", "cassian andor", "k2so", "chirrut imwe", "orson krennic", "bossk",
 			"general hux", "greef karga", "cara dune", "bib fortuna", "wedge antilles", "sebulba", "watto",
 			"shmi skywalker", "bail organa", "owen lars", "beru lars", "darth bane", "darth revan",
-			"darth plagueis", "cal kestis", "rose tico", "vice admiral holdo", "kuiil", "armorer",
+			"darth plagueis", "cal kestis", "rose tico", "vice admiral holdo", "kuiil", "armorer", "snoke",
+			"greedo", "grand moff tarkin", "wicket", "jawa", "battle droid", "qui gon jinn", "poe dameron",
+			"captain phasma", "padme amidala",
 		},
 		DeepCut = {
 			"ponda baba", "dr evazan", "figrin dan", "momaw nadon", "garindan", "ketwol", "kabe", "muftak",

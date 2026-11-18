@@ -8,10 +8,10 @@ local GameConfig = {
 		IntermissionSeconds = 10,
 		IntroFadeSeconds = 0.35, -- screens fade to black this long before the teleport onto the pillars
 		StartCountdownSeconds = 3, -- the 3-2-1 on the pillars before round 1
-		PromptSeconds = 20,
+		PromptSeconds = 25,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
-		PromptSecondsMin = 10,
-		RevealSeconds = 7.5, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
+		PromptSecondsMin = 14,
+		RevealSeconds = 11.2, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
 		SettleSeconds = 1, -- after the water settles, before the next prompt or the results: room for the callouts
 		ResultsSeconds = 8,
 		MaxRounds = 0, -- 0 means no cap: last player standing
@@ -41,7 +41,7 @@ local GameConfig = {
 		RingMaxRadius = 34, -- outermost pillar centre; the reef rim sits outside this
 		RiseSeconds = 1.1, -- one eased glide with a soft overshoot at the top
 		ConfettiMinPoints = 60,
-		WalkSpeed = 10, -- players stroll around their pillar top during a match; jumping stays off
+		WalkSpeed = 0, -- players stand still on their pillar during a match; jumping stays off
 	},
 	Answer = {
 		MaxLength = 40,
@@ -102,7 +102,7 @@ local GameConfig = {
 	},
 	LateJoin = {
 		Enabled = 1,
-		MaxRound = 2, -- joining is open up to and including this round
+		MaxRound = 0, -- joining is open up to and including this round; 0 keeps every round open
 		MinSecondsLeft = 8, -- in MaxRound, only while this many prompt seconds remain
 		ReserveSlots = 4, -- with bots off: late joiners a match may take on top of its starters, in free gaps.
 		-- A match with bots takes a late joiner in place of a standing bot instead.
@@ -131,10 +131,10 @@ local GameConfig = {
 		-- the deepest answer and crowns it (under 1.5 s), the card holds CardHoldSeconds, or what is left before
 		-- the rise, then shrinks away (0.25 s). It is always gone before the rise at RaiseDelaySeconds.
 		-- tests/Depth.test.luau keeps these in step with each other.
-		CardBudgetSeconds = 3.6,
-		CardHoldSeconds = 1.5, -- long enough to read the result and see who went deepest
-		RaiseDelaySeconds = 5.9, -- pillars start rising this long after the reveal, once your card is out of the way
-		PayoutDelaySeconds = 5.9, -- answer Shells and Mythic announcements land with the rise
+		CardBudgetSeconds = 6.2,
+		CardHoldSeconds = 2.5, -- long enough to enjoy the result and see who went deepest
+		RaiseDelaySeconds = 9.6, -- pillars start rising this long after the reveal, once your card is out of the way
+		PayoutDelaySeconds = 9.6, -- answer Shells and Mythic announcements land with the rise
 		StatsMinTotal = 40, -- real "1 in N" needs at least this many recorded answers for the prompt
 		EstimatedOneIn = 1, -- 1: show a labelled estimate until real data exists; 0: show the tier blurb
 	},
@@ -145,9 +145,7 @@ local GameConfig = {
 	},
 	Bots = {
 		FillTo = 6, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
-		-- A bot aims for tier 1 + 4 * skill (BotBrain.chooseTier): 0.05..0.5 is Plankton to Schooler, with the odd
-		-- Rare, so a player who thinks of an uncommon answer usually outlasts them.
-		MinSkill = 0.05,
+		MinSkill = 0.05, -- bots trail players: about 14% of their answers reach Rare, players about 27%
 		MaxSkill = 0.5,
 		DelayMin = 0.25, -- bots answer between DelayMin and DelayMin + DelayRange of the prompt time
 		DelayRange = 0.6,

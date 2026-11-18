@@ -10,11 +10,8 @@ return {
 			"bark", "thorn", "fruit", "bud",
 		},
 		Schooler = {
-			"twig", "pollen", "nectar", "sap", "bulb", "pistil", "stamen", "sepal", "needle", "cone", "vine", "tendril",
-			"canopy", "crown", "shoot", "sprout", "seedling", "tuber", "rhizome", "spine", "pod", "husk", "shell", "peel", "pit",
-			"kernel", "node", "cotyledon", "chloroplast", "xylem", "phloem", "anther", "stigma", "ovary", "style", "filament",
-			"ovule", "taproot", "root hair", "tree ring", "heartwood", "sapwood", "cambium", "foliage", "frond", "stipe",
-			"wood", "flower head", "leaf tip", "root system", "cell wall", "vacuole",
+			"twig", "pollen", "nectar", "sap", "bulb", "pistil", "stamen", "needle", "cone", "vine", "canopy",
+			"sprout", "seedling", "spine", "pod", "shell", "peel", "pit", "wood",
 		},
 		Rare = {
 			"calyx", "corolla", "carpel", "receptacle", "peduncle", "pedicel", "petiole", "leaf blade", "leaf vein", "midrib",
@@ -25,7 +22,10 @@ return {
 			"root cap", "root tip", "nodule", "mycorrhiza", "internode", "axil", "bud scale", "leaflet", "stipule",
 			"prickle", "burr", "cork", "pollen sac", "pollen grain", "pollen tube", "nectary", "leaf margin", "leaf sheath",
 			"flower bud", "lateral bud", "terminal bud", "leaf bud", "rootstock", "rootlet", "leaf scar",
-			"seed head",
+			"seed head", "sepal", "tendril", "crown", "shoot", "tuber", "rhizome", "husk", "kernel", "node",
+			"cotyledon", "chloroplast", "xylem", "phloem", "anther", "stigma", "ovary", "style", "filament",
+			"ovule", "taproot", "root hair", "tree ring", "heartwood", "sapwood", "cambium", "foliage",
+			"frond", "stipe", "flower head", "leaf tip", "root system", "cell wall", "vacuole",
 		},
 		DeepCut = {
 			"lamina", "rachis", "pinna", "pinnule", "sorus", "sporangium", "spore", "prothallus", "gametophyte", "sporophyte",

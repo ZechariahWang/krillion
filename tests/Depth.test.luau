@@ -1,4 +1,5 @@
 local Depth = require("../src/ReplicatedStorage/Shared/Depth")
+local DivePack = require("../src/ReplicatedStorage/Shared/DivePack")
 local GameConfig = require("../src/ReplicatedStorage/Config/GameConfig")
 local Tiers = require("../src/ReplicatedStorage/Config/Tiers")
 
@@ -67,16 +68,20 @@ return function(test)
 	test("a dive has time for its wind-up and burst, and every dive fits the reveal", function()
 		local reveal = GameConfig.Reveal
 		local deepest = Depth.diveSeconds(GameConfig.Depth.MaxMetres, false)
-		assert(deepest >= 2.8, "the deepest dive is over too fast: " .. deepest)
-		assert(Depth.diveSeconds(40, false) >= 1.5, "a shallow dive is over too fast")
+		assert(deepest >= 4.2, "the deepest dive is over too fast: " .. deepest)
+		assert(Depth.diveSeconds(40, false) >= 2.3, "a shallow dive is over too fast")
 		-- Every tag lands, and the view reaches the deepest answer, inside the card's budget (a deep pack is
 		-- squeezed a little to fit). The crown pops (0.4 s), the result is read for at least a second, and
 		-- the card has left (0.35 s) before the pillars rise.
 		assert(deepest <= reveal.CardBudgetSeconds, "the deepest dive would be squeezed hard")
-		assert(reveal.CardBudgetSeconds + 0.4 + 1 + 0.35 <= reveal.RaiseDelaySeconds, "the deepest dives leave no time to read the result")
-		assert(reveal.CardHoldSeconds >= 1, "the result is not held long enough to read")
-		-- Room after the rise starts for the pillars to finish (and a beat), but the reveal stays brisk.
+		-- Your tag may also stop short a tier above, hold there and snap down (DiveCard's fake-out).
+		assert(deepest + 1 <= reveal.CardBudgetSeconds, "no room for the fake-out on a deep dive")
+		-- Your tag's plunge and spring back (DivePack.overshoot) plays out before the view moves on.
+		local settled = reveal.CardBudgetSeconds + DivePack.overshootSeconds()
+		assert(settled + 0.4 + 1 + 0.35 <= reveal.RaiseDelaySeconds, "the deepest dives leave no time to read the result")
+		assert(reveal.CardHoldSeconds >= 2, "the result is not held long enough to enjoy")
+		-- Room after the rise starts for the pillars to finish (and a beat), but the reveal does not drag.
 		assert(GameConfig.Round.RevealSeconds >= reveal.RaiseDelaySeconds + GameConfig.Platform.RiseSeconds + 0.4)
-		assert(GameConfig.Round.RevealSeconds <= 8, "the reveal drags")
+		assert(GameConfig.Round.RevealSeconds <= 12, "the reveal drags")
 	end)
 end

@@ -12,11 +12,7 @@ return {
 		Schooler = {
 			"phoenix", "griffin", "centaur", "werewolf", "vampire", "fairy", "troll", "pegasus", "minotaur",
 			"cyclops", "hydra", "sphinx", "medusa", "goblin", "elf", "dwarf", "giant", "ogre", "yeti",
-			"genie", "leprechaun", "gnome", "pixie", "cerberus", "harpy", "siren", "satyr", "gargoyle",
-			"basilisk", "golem", "demon", "orc", "hobbit", "ghoul", "titan", "wendigo", "ghost", "zombie",
-			"mummy", "angel", "ent", "witch", "wizard", "skeleton", "monster", "alien", "grim reaper",
-			"santa claus", "easter bunny", "tooth fairy", "frankenstein", "zeus", "chimera", "merman",
-			"kitsune",
+			"genie", "leprechaun", "ghost",
 		},
 		Rare = {
 			"gorgon", "imp", "faun", "nymph", "dryad", "manticore", "hippogriff", "mothman", "jackalope",
@@ -44,7 +40,11 @@ return {
 			"elder guardian", "manbearpig", "totoro", "no face", "cryptid", "digimon", "scarecrow",
 			"koraidon", "miraidon", "rumpelstiltskin", "hela", "thumbelina", "icarus", "odysseus", "theseus",
 			"smurf", "babadook", "dumbledore", "tin man", "mercury", "treant", "wyvern", "chupacabra",
-			"revenant", "aswang", "kobold",
+			"revenant", "aswang", "kobold", "gnome", "pixie", "cerberus", "harpy", "siren", "satyr",
+			"gargoyle", "basilisk", "golem", "demon", "orc", "hobbit", "ghoul", "titan", "wendigo", "zombie",
+			"mummy", "angel", "ent", "witch", "wizard", "skeleton", "monster", "alien", "grim reaper",
+			"santa claus", "easter bunny", "tooth fairy", "frankenstein", "zeus", "chimera", "merman",
+			"kitsune",
 		},
 		DeepCut = {
 			"kelpie", "qilin", "undine", "sylph", "scylla", "charybdis", "roc", "simurgh", "garuda", "naga",

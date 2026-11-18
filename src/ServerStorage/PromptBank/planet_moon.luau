@@ -10,11 +10,12 @@ return {
 			"europa", "titan",
 		},
 		Schooler = {
-			"io", "ganymede", "callisto", "phobos", "deimos", "enceladus", "triton", "charon",
+			"io", "ganymede", "callisto", "phobos",
 		},
 		Rare = {
 			"mimas", "rhea", "iapetus", "dione", "tethys", "hyperion", "phoebe", "miranda", "ariel",
 			"umbriel", "titania", "oberon", "nereid", "nix", "amalthea", "puck", "proteus", "pandora",
+			"deimos", "enceladus", "triton", "charon",
 		},
 		DeepCut = {
 			"janus", "epimetheus", "prometheus", "atlas", "pan", "helene", "telesto", "calypso", "daphnis",

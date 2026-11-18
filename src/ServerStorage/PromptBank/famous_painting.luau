@@ -10,12 +10,10 @@ return {
 			"sunflowers", "creation of adam", "kiss", "birth of venus", "water lilies",
 		},
 		Schooler = {
-			"guernica", "night watch", "las meninas", "american gothic", "nighthawks", "whistlers mother",
-			"great wave off kanagawa", "impression sunrise", "dogs playing poker", "blue boy", "son of man",
-			"campbells soup cans", "girl with a balloon", "card players", "washington crossing the delaware",
-			"garden of earthly delights", "cafe terrace at night", "old guitarist", "irises", "two fridas", "arnolfini portrait",
-			"hay wain", "liberty leading the people", "school of athens", "sistine chapel ceiling", "lady with an ermine",
-			"madonna of the rocks",
+			"guernica", "night watch", "american gothic", "nighthawks", "whistlers mother",
+			"great wave off kanagawa", "impression sunrise", "dogs playing poker", "blue boy",
+			"campbells soup cans", "girl with a balloon", "cafe terrace at night", "irises",
+			"school of athens", "sistine chapel ceiling",
 		},
 		Rare = {
 			"raft of the medusa", "wanderer above the sea of fog", "luncheon of the boating party", "olympia",
@@ -28,6 +26,9 @@ return {
 			"calling of saint matthew", "la grande jatte", "red room", "dance", "harmony in red", "blue nude", "joy of life",
 			"bathers at asnieres", "nude descending a staircase", "nightmare", "haystacks", "rouen cathedral", "poppy field",
 			"dance at le moulin de la galette", "wheat field with cypresses", "portrait of dr gachet", "last judgment",
+			"las meninas", "son of man", "card players", "washington crossing the delaware",
+			"garden of earthly delights", "old guitarist", "two fridas", "arnolfini portrait", "hay wain",
+			"liberty leading the people", "lady with an ermine", "madonna of the rocks",
 		},
 		DeepCut = {
 			"anatomy lesson of dr tulp", "art of painting", "rokeby venus", "tempest", "lovers", "treachery of images",

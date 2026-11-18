@@ -1137,6 +1137,36 @@ function RoundService.snapshot(): { [string]: any }
 	}
 end
 
+-- Someone arriving mid-match is put straight onto a standing bot's pillar, so they never wait in the lobby
+-- for the match to end. It waits for their character, then tries a few times while it finishes loading;
+-- a full match or AFK leaves them in the lobby with the JUMP IN card as before.
+local AUTO_JOIN_SETTLE = 2 -- seconds after the first character appears, so the spawn has placed it
+local AUTO_JOIN_TRIES = 5
+local AUTO_JOIN_RETRY = 1.5
+
+local function autoJoinOnArrival(player: Player)
+	task.spawn(function()
+		if player.Character == nil then
+			player.CharacterAdded:Wait()
+		end
+		task.wait(AUTO_JOIN_SETTLE)
+		for _ = 1, AUTO_JOIN_TRIES do
+			if player.Parent == nil or not inMatchPhase() then
+				return
+			end
+			local status, message = RoundService.tryJoin(player)
+			if status == "joined" then
+				Net.event("JoinResult"):FireClient(player, { status = status, message = message })
+				return
+			end
+			if status ~= "not_ready" then
+				return
+			end
+			task.wait(AUTO_JOIN_RETRY)
+		end
+	end)
+end
+
 function RoundService.start()
 	Net.event("ReviveUse").OnServerEvent:Connect(onReviveUse)
 	StoreService.registerProduct(Products.ReviveNow.productId, onReviveBought)
@@ -1189,6 +1219,7 @@ function RoundService.start()
 		watchPlayer(player)
 	end
 	Players.PlayerAdded:Connect(watchPlayer)
+	Players.PlayerAdded:Connect(autoJoinOnArrival)
 	WaterService.startCullLoop(function()
 		if phase == "Prompt" or phase == "Reveal" or phase == "Surge" then
 			return alivePlayers()

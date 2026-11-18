@@ -60,6 +60,18 @@ return function(test)
 		assert(not LateJoin.windowOpen("Prompt", 1, 20, OFF))
 	end)
 
+	test("late join: MaxRound 0 keeps every round open in every match phase", function()
+		local any = { Enabled = 1, MaxRound = 0, MinSecondsLeft = 8, ReserveSlots = 4 }
+		for _, round in { 1, 3, 9, 40 } do
+			assert(LateJoin.windowOpen("Prompt", round, 1, any), "prompt " .. round)
+			assert(LateJoin.windowOpen("Reveal", round, 0, any), "reveal " .. round)
+			assert(LateJoin.windowOpen("Surge", round, 0, any), "surge " .. round)
+		end
+		assert(not LateJoin.windowOpen("Results", 5, 10, any))
+		assert(not LateJoin.windowOpen("Intermission", 0, 10, any))
+		assert(not LateJoin.windowOpen("Prompt", 5, 20, { Enabled = 0, MaxRound = 0, MinSecondsLeft = 8, ReserveSlots = 4 }))
+	end)
+
 	test("late join: joinHeight is StartHeight over the water or the lowest alive pillar", function()
 		assert(LateJoin.joinHeight(2, 6, nil) == 8)
 		assert(LateJoin.joinHeight(2, 6, 5) == 8)
