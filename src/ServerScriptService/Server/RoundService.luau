@@ -483,7 +483,8 @@ local function restore(player: Player, kind: string)
 	MatchState.revive(state, player, above)
 	platforms[player] = platform
 	sunkPlatforms[player] = nil
-	AnswerService.allow(player)
+	-- Back mid-prompt, they get the whole answer time, not what was left of it.
+	AnswerService.allow(player, true)
 	MapService.riseBurst(platform)
 	broadcastState()
 	setServerAttributes()

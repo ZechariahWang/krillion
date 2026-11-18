@@ -31,8 +31,10 @@ local FEEDBACK_SECONDS = 1.5
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
 local WAIT_SECONDS = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
-local BOOST_GAP = 8 -- pixels between the Shells chip and the boost buttons above it
-local BOOST_EDGE = 16 -- pixels from the screen edges when there is no Shells chip to stand on
+local BOOST_GAP = 8 -- pixels between the boost buttons and what they stand on
+-- Desktop: the boost buttons stand centred over the answer bar, above the line that shows over it (the
+-- confirm chip, feedback or prompt echo: up to 34 px tall, 8 px above the bar).
+local BOOST_ABOVE_BAR = 8 + 34 + BOOST_GAP
 local BOOST_MIN_SCALE = 0.6 -- the smallest the boost buttons shrink to on a short screen
 local BOOST_DESIGN_HEIGHT = 820 -- screen height the boost buttons are drawn for
 local BOOST_DESKTOP_SCALE = 1.4 -- desktop shows the boost buttons this much larger than authored
@@ -43,7 +45,6 @@ local PRICE_OWNED = Color3.fromRGB(255, 255, 255)
 
 local INVALID_TEXT = "WE DON'T KNOW THAT ONE  |  TRY ANOTHER"
 local SAVE_TEXT = "YOUR SAVE IS STILL LOADING  |  TRY AGAIN SOON"
-local CONFIRM_SECONDS = 3 -- how long a Robux chip waits for the second tap that opens the purchase
 local MIN_BUY_SECONDS = 6 -- with less time than this left, a purchase could not finish in time to be used
 local AUTO_LOCK_SECONDS = 1 -- a checked answer still in the box this close to the end is locked in for you
 local BOOST_MESSAGES: { [string]: string } = {
@@ -104,8 +105,6 @@ local inventory = { Hint = 0, ExtraTime = 0 }
 local timeLeftThisMatch: number? = nil -- +time uses left this match, once the server has said; nil is unknown
 local secondsLeft = 0 -- your own time left on the open prompt
 local saveFailed = false -- the profile did not load: nothing can be bought until it does
-local armedKind: string? = nil -- the Robux chip tapped once, waiting for the confirming tap
-local armedUntil = 0
 local cash = 0
 local uses: Net.BoostUses = { Hint = 0, ExtraTime = 0 }
 local ready = false -- GameUi.Hud and its children were found; every handler is a no-op until then
@@ -286,27 +285,8 @@ local function boostsShown(): boolean
 	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
 end
 
--- The Shells chip in the bottom-right corner (SharedUi.Wallet.Chip), while it shows.
-local function shellsChip(): GuiObject?
-	local screen = Ui.findScreen(playerGui, "Wallet")
-	local chip = if screen ~= nil then screen:FindFirstChild("Chip") else nil
-	if screen ~= nil and screen.Visible and chip ~= nil and chip:IsA("GuiObject") and chip.Visible and chip.AbsoluteSize.X > 0 then
-		return chip
-	end
-	return nil
-end
-
--- The chip's top edge without the bump its UIScale may be playing, so the boosts never jiggle with it.
--- The chip is anchored at its bottom, so a bump only moves its top.
-local function restingTop(object: GuiObject): number
-	local scale = object:FindFirstChildOfClass("UIScale")
-	local factor = if scale ~= nil and scale.Scale > 0 then scale.Scale / Ui.rest(object) else 1
-	local bottom = object.AbsolutePosition.Y + object.AbsoluteSize.Y
-	return bottom - object.AbsoluteSize.Y / factor
-end
-
--- The boost buttons stand in the bottom-right column, right above the Shells chip, right edges lined up,
--- and shrink with the screen height like the rest of the column.
+-- The boost buttons stand centred above the answer bar, where the player is already looking, and shrink
+-- with the screen height.
 local function fitBoostBar()
 	local bar = boostBar
 	if bar == nil then
@@ -326,15 +306,10 @@ local function fitBoostBar()
 		scale.Scale = BOOST_MIN_SCALE
 		return
 	end
-	local right = gui.AbsoluteSize.X - BOOST_EDGE
-	local bottom = gui.AbsoluteSize.Y - BOOST_EDGE
-	local chip = shellsChip()
-	if chip ~= nil then
-		right = chip.AbsolutePosition.X + chip.AbsoluteSize.X - origin.X
-		bottom = restingTop(chip) - origin.Y - BOOST_GAP
-	end
-	bar.AnchorPoint = Vector2.new(1, 1)
-	bar.Position = UDim2.fromOffset(math.floor(right + 0.5), math.floor(bottom + 0.5))
+	local centre = answerBar.AbsolutePosition.X + answerBar.AbsoluteSize.X / 2 - origin.X
+	local bottom = answerBar.AbsolutePosition.Y - origin.Y - BOOST_ABOVE_BAR
+	bar.AnchorPoint = Vector2.new(0.5, 1)
+	bar.Position = UDim2.fromOffset(math.floor(centre + 0.5), math.floor(bottom + 0.5))
 	if height > 0 then
 		local fit = math.clamp(height / BOOST_DESIGN_HEIGHT, BOOST_MIN_SCALE, 1)
 		scale.Scale = fit * BOOST_DESKTOP_SCALE
@@ -368,8 +343,7 @@ function refreshBoosts()
 		elseif cost ~= nil and cash >= cost then
 			chip.price.Text = shellPrice
 		elseif product.productId ~= 0 then
-			local armed = armedKind == kind and os.clock() < armedUntil
-			chip.price.Text = if armed then "TAP AGAIN" else "R$ " .. product.robux
+			chip.price.Text = "R$ " .. product.robux
 			priceColor = PRICE_ROBUX
 		else
 			chip.price.Text = shellPrice
@@ -440,16 +414,7 @@ local function useBoost(kind: string)
 		deny("NOT ENOUGH TIME LEFT TO BUY ONE")
 		return
 	end
-	if armedKind ~= kind or now >= armedUntil then
-		armedKind = kind
-		armedUntil = now + CONFIRM_SECONDS
-		local name = if kind == "Hint" then "A HINT" else "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
-		showFeedback(name .. " COSTS " .. product.robux .. " ROBUX  |  TAP AGAIN TO BUY")
-		refreshBoosts()
-		task.delay(CONFIRM_SECONDS, refreshBoosts)
-		return
-	end
-	armedKind = nil
+	-- One tap opens Roblox's purchase dialog, which asks the player to confirm.
 	MarketplaceService:PromptProductPurchase(Players.LocalPlayer, product.productId)
 end
 
@@ -722,18 +687,14 @@ local function bindExtras()
 	end
 	local bar = adopt("BoostBar")
 	if bar ~= nil then
-		-- Out of the answer bar and into the bottom-right column above the Shells chip.
+		-- Out of the answer bar (which clips) and onto the Hud, centred above the bar.
 		bar.Parent = gui
 		boostBar = bar
 		bindChip(bar, "Hint", "HintButton")
 		bindChip(bar, "ExtraTime", "TimeButton")
 		gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
-		local wallet = Ui.screen(playerGui, "Wallet", WAIT_SECONDS)
-		local chip = if wallet ~= nil then wallet:WaitForChild("Chip", WAIT_SECONDS) else nil
-		if chip ~= nil and chip:IsA("GuiObject") then
-			chip:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
-			chip:GetPropertyChangedSignal("Visible"):Connect(fitBoostBar)
-		end
+		answerBar:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
+		answerBar:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
 		refreshBoosts()
 	end
 end
@@ -941,7 +902,6 @@ function Hud.onState(payload)
 		checking = nil
 		lastWrongAt = -math.huge
 		uses = { Hint = 0, ExtraTime = 0 }
-		armedKind = nil
 		-- A new match starts the +time count again.
 		if payload.round < lastRound or payload.round <= 1 then
 			timeLeftThisMatch = nil

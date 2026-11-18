@@ -145,8 +145,10 @@ local GameConfig = {
 	},
 	Bots = {
 		FillTo = 6, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
-		MinSkill = 0.15,
-		MaxSkill = 0.85,
+		-- A bot aims for tier 1 + 4 * skill (BotBrain.chooseTier): 0.05..0.5 is Plankton to Schooler, with the odd
+		-- Rare, so a player who thinks of an uncommon answer usually outlasts them.
+		MinSkill = 0.05,
+		MaxSkill = 0.5,
 		DelayMin = 0.25, -- bots answer between DelayMin and DelayMin + DelayRange of the prompt time
 		DelayRange = 0.6,
 	},
