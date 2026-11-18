@@ -226,7 +226,8 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
   its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
   wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar tile right of
-  the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye tile right of that: it is always
+  the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye tile right of that (on a screen
+  too narrow for the row beside the status bar, both stack under the gear instead): it is always
   there in the lobby, opens the spectate bar (`GameUi.Spectate.SpectateBar`, driven by `Client/Lobby`) when a
   match has anyone left in it, and says so when there is nobody to watch. Bots can be watched: the camera
   follows the rig's Head on its pillar, and the pillar's `OwnerName` attribute gives the name. A player who sinks lands in the lobby with no
