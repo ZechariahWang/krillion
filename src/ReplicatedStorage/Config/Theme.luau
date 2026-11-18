@@ -49,11 +49,11 @@ local Theme = {
 	},
 	-- Chunky display text for titles, numbers, buttons and callouts; Body for sub-lines and rows.
 	Font = {
-		Display = Font.new("rbxasset://fonts/families/FredokaOne.json"),
-		Body = Font.new("rbxasset://fonts/families/BuilderSans.json", Enum.FontWeight.Bold),
+		Display = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Heavy),
+		Body = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
 		Legacy = Font.new("rbxasset://fonts/families/Roboto.json", Enum.FontWeight.Bold),
 	},
-	Outline = Color3.fromRGB(10, 20, 40), -- dark navy text outline (UIStroke, Contextual)
+	Outline = Color3.fromRGB(15, 15, 15), -- near-black text outline (UIStroke, Contextual)
 	Stroke = { -- outline thickness in pixels
 		Title = 3,
 		Label = 2,
@@ -73,20 +73,20 @@ local Theme = {
 		Danger = Color3.fromRGB(255, 84, 84),
 		Good = Color3.fromRGB(70, 214, 110),
 	},
-	-- The chunky toy look for big pop-ups (callouts, revive, results): saturated fills
-	-- shaded lighter at the top and darker at the bottom, a hard darker lip band along the bottom edge,
-	-- thick dark borders, big corners and big outlined FredokaOne text. Model.json files cannot require
-	-- Theme, so the values are spelled out for them:
-	--   Outline  #180F34 (UIStroke Border on panels and buttons, Contextual on text)
-	--   Border 4 px (panels), 3 px (buttons); text outline 3-4 px; corners 22 px (panels), 14 px (buttons)
-	--   Lip: 8 px band on panels, 6 px on buttons, using the colour's Lip value
-	--   Pink   #FF7CC0 > #E8378F, lip #A81E63      Purple #A47BFF > #6C3FE6, lip #4423A3
-	--   Lime   #9BF25F > #4FC632, lip #2F861C      Gold   #FFD95E > #FFA41F, lip #BF6A06
-	--   Sky    #74D4FF > #2E9BFF, lip #1C62B5      Red    #FF8270 > #E83B3B, lip #A11F26
-	--   Deep fills: Sea #2F7FE0 > #1A47A0 (lip #10306E), Grape #6A45DB > #3D2394 (lip #28166A),
-	--   Berry #D9468F > #932063 (lip #641343)
+	-- The stud look (the StudUIPack kit): square faces shaded lighter at the top and darker at the bottom,
+	-- a hard darker lip band along the bottom edge, near-black borders, a faint stud texture and white
+	-- Gotham Heavy text with a near-black outline. Model.json files cannot require Theme, so the values are
+	-- spelled out for them:
+	--   Outline  #0F0F0F (UIStroke Border on panels and buttons, Contextual on text)
+	--   Border 4 px (panels), 3 px (buttons); text outline 3-4 px; no corners
+	--   Lip: the bottom 10% of a face, using the colour's Lip value
+	--   Pink   #FF7E79 > #FF2F92, lip #8C1950      Purple #FF40FF > #9437FF, lip #511E8C
+	--   Lime   #D4FB79 > #00D200, lip #007300      Gold   #FFFB00 > #FF9300, lip #8C5000
+	--   Sky    #00FDFF > #0096FF, lip #00528C      Red    #FF9300 > #FF2600, lip #8C1400
+	--   Deep fills: Sea #0096FF > #0050C8 (lip #002C6E), Grape #9437FF > #4A1C9E (lip #280F56),
+	--   Berry #FF2F92 > #A0105A (lip #580831)
 	Chunky = {
-		Outline = Color3.fromHex("180F34"),
+		Outline = Color3.fromHex("0F0F0F"),
 		Border = 4,
 		ButtonBorder = 3,
 		TextStroke = 3.5,
@@ -96,15 +96,15 @@ local Theme = {
 		Lip = 8,
 		ButtonLip = 6,
 		Color = {
-			Pink = { Top = Color3.fromHex("FF7CC0"), Bottom = Color3.fromHex("E8378F"), Lip = Color3.fromHex("A81E63") },
-			Purple = { Top = Color3.fromHex("A47BFF"), Bottom = Color3.fromHex("6C3FE6"), Lip = Color3.fromHex("4423A3") },
-			Lime = { Top = Color3.fromHex("9BF25F"), Bottom = Color3.fromHex("4FC632"), Lip = Color3.fromHex("2F861C") },
-			Gold = { Top = Color3.fromHex("FFD95E"), Bottom = Color3.fromHex("FFA41F"), Lip = Color3.fromHex("BF6A06") },
-			Sky = { Top = Color3.fromHex("74D4FF"), Bottom = Color3.fromHex("2E9BFF"), Lip = Color3.fromHex("1C62B5") },
-			Red = { Top = Color3.fromHex("FF8270"), Bottom = Color3.fromHex("E83B3B"), Lip = Color3.fromHex("A11F26") },
-			Sea = { Top = Color3.fromHex("2F7FE0"), Bottom = Color3.fromHex("1A47A0"), Lip = Color3.fromHex("10306E") },
-			Grape = { Top = Color3.fromHex("6A45DB"), Bottom = Color3.fromHex("3D2394"), Lip = Color3.fromHex("28166A") },
-			Berry = { Top = Color3.fromHex("D9468F"), Bottom = Color3.fromHex("932063"), Lip = Color3.fromHex("641343") },
+			Pink = { Top = Color3.fromHex("FF7E79"), Bottom = Color3.fromHex("FF2F92"), Lip = Color3.fromHex("8C1950") },
+			Purple = { Top = Color3.fromHex("FF40FF"), Bottom = Color3.fromHex("9437FF"), Lip = Color3.fromHex("511E8C") },
+			Lime = { Top = Color3.fromHex("D4FB79"), Bottom = Color3.fromHex("00D200"), Lip = Color3.fromHex("007300") },
+			Gold = { Top = Color3.fromHex("FFFB00"), Bottom = Color3.fromHex("FF9300"), Lip = Color3.fromHex("8C5000") },
+			Sky = { Top = Color3.fromHex("00FDFF"), Bottom = Color3.fromHex("0096FF"), Lip = Color3.fromHex("00528C") },
+			Red = { Top = Color3.fromHex("FF9300"), Bottom = Color3.fromHex("FF2600"), Lip = Color3.fromHex("8C1400") },
+			Sea = { Top = Color3.fromHex("0096FF"), Bottom = Color3.fromHex("0050C8"), Lip = Color3.fromHex("002C6E") },
+			Grape = { Top = Color3.fromHex("9437FF"), Bottom = Color3.fromHex("4A1C9E"), Lip = Color3.fromHex("280F56") },
+			Berry = { Top = Color3.fromHex("FF2F92"), Bottom = Color3.fromHex("A0105A"), Lip = Color3.fromHex("580831") },
 		},
 		-- How much bigger than authored each pop-up shows (UIScale), before it is shrunk to fit the screen.
 		Grow = {
