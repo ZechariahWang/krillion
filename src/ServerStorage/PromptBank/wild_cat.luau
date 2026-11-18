@@ -11,7 +11,7 @@ return {
 		},
 		Schooler = {
 			"cougar", "black panther", "white tiger", "ocelot", "serval", "siberian tiger", "bengal tiger",
-			"african lion", "lioness", "tigress", "golden tiger",
+			"african lion", "lioness", "tigress", "caracal", "liger", "clouded leopard",
 		},
 		Rare = {
 			"jaguarundi", "sand cat", "pallas cat", "fishing cat", "leopard cat", "jungle cat", "golden cat",
@@ -21,15 +21,15 @@ return {
 			"european wildcat", "african golden cat", "asian golden cat", "persian leopard",
 			"arabian leopard", "indochinese tiger", "malayan tiger", "south china tiger", "asiatic lion",
 			"barbary lion", "cave lion", "american lion", "bornean clouded leopard", "scottish wildcat",
-			"white lion", "melanistic jaguar", "sundaic clouded leopard", "caracal", "liger",
-			"clouded leopard", "sabertooth", "florida panther", "wildcat",
+			"white lion", "melanistic jaguar", "sundaic clouded leopard", "sabertooth", "florida panther",
+			"wildcat", "margay",
 		},
 		DeepCut = {
 			"chinese mountain cat", "pantanal cat", "guigna", "javan leopard", "sri lankan leopard",
 			"indian leopard", "african leopard", "iriomote cat", "tsushima cat", "asiatic cheetah",
 			"king cheetah", "masai lion", "transvaal lion", "balinese tiger", "javan tiger", "caspian tiger",
 			"colo colo", "tigrina", "northern tiger cat", "southern tiger cat", "asian leopard cat",
-			"eastern cougar", "florida cougar", "margay",
+			"eastern cougar", "florida cougar", "golden tiger",
 		},
 		Mythic = {
 			"amur leopard cat", "formosan clouded leopard",
@@ -63,5 +63,12 @@ return {
 		["indian lion"] = "asiatic lion", ["persian lion"] = "asiatic lion",
 		["caucasian leopard"] = "persian leopard", ["white lions"] = "white lion",
 		["colocolo"] = "pampas cat", ["eurasian wildcat"] = "european wildcat",
+		["sumatran"] = "sumatran tiger", ["bengal"] = "bengal tiger", ["swamp cat"] = "jungle cat",
+		["little spotted cat"] = "tigrina", ["gir lion"] = "asiatic lion", ["asian lion"] = "asiatic lion",
+		["saber toothed cat"] = "sabertooth", ["sabre tooth"] = "sabertooth", ["lynx rufus"] = "bobcat",
+		["bobcat lynx rufus"] = "bobcat", ["leopardess"] = "leopard", ["desert lynx"] = "caracal",
+		["caracal lynx"] = "caracal", ["canadian lynx"] = "canada lynx",
+		["borneo clouded leopard"] = "bornean clouded leopard", ["pantera"] = "panther",
+		["lion female"] = "lioness", ["highland tiger"] = "scottish wildcat",
 	},
 }

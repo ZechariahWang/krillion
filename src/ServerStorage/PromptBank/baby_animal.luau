@@ -16,7 +16,7 @@ return {
 		Rare = {
 			"leveret", "squab", "poult", "pullet", "cockerel", "hoglet", "cria", "elver", "nymph", "grub",
 			"spiderling", "peachick", "puggle", "squeaker", "larva", "fledgling", "whelp", "nestling",
-			"yearling", "maggot", "pupa", "heifer",
+			"yearling", "maggot", "pupa",
 		},
 		DeepCut = {
 			"shoat", "eyas", "alevin", "pinkie", "keet", "weaner", "weanling", "stirk", "suckling", "hogget",
