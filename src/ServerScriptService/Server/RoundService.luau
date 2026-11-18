@@ -1139,10 +1139,19 @@ end
 
 -- Someone arriving mid-match is put straight onto a standing bot's pillar, so they never wait in the lobby
 -- for the match to end. It waits for their character, then tries a few times while it finishes loading;
--- a full match or AFK leaves them in the lobby with the JUMP IN card as before.
+-- a full match or AFK leaves them in the lobby with the JUMP IN card as before. A first-time player stays
+-- in the lobby for the tutorial instead, and finishing it joins them (onTutorialFinished).
 local AUTO_JOIN_SETTLE = 2 -- seconds after the first character appears, so the spawn has placed it
 local AUTO_JOIN_TRIES = 5
 local AUTO_JOIN_RETRY = 1.5
+
+local function arrivalAction(player: Player): string
+	local loaded = DataService.isLoaded(player)
+	local readOnly = DataService.isReadOnly(player)
+	local profile = DataService.get(player)
+	local tutorialDone = profile ~= nil and profile.tutorialDone
+	return LateJoin.arrivalAction(loaded, readOnly, tutorialDone)
+end
 
 local function autoJoinOnArrival(player: Player)
 	task.spawn(function()
@@ -1154,7 +1163,14 @@ local function autoJoinOnArrival(player: Player)
 			if player.Parent == nil or not inMatchPhase() then
 				return
 			end
-			local status, message = RoundService.tryJoin(player)
+			local action = arrivalAction(player)
+			if action == "tutorial" then
+				return
+			end
+			local status, message = "not_ready", ""
+			if action == "join" then
+				status, message = RoundService.tryJoin(player)
+			end
 			if status == "joined" then
 				Net.event("JoinResult"):FireClient(player, { status = status, message = message })
 				return
@@ -1163,6 +1179,19 @@ local function autoJoinOnArrival(player: Player)
 				return
 			end
 			task.wait(AUTO_JOIN_RETRY)
+		end
+	end)
+end
+
+-- One try when a first-time player finishes the tutorial; a failure leaves them the JUMP IN card.
+local function onTutorialFinished(player: Player)
+	task.spawn(function()
+		if player.Parent == nil or not inMatchPhase() then
+			return
+		end
+		local status, message = RoundService.tryJoin(player)
+		if status == "joined" then
+			Net.event("JoinResult"):FireClient(player, { status = status, message = message })
 		end
 	end)
 end
@@ -1220,6 +1249,7 @@ function RoundService.start()
 	end
 	Players.PlayerAdded:Connect(watchPlayer)
 	Players.PlayerAdded:Connect(autoJoinOnArrival)
+	DataService.TutorialFinished.connect(onTutorialFinished)
 	WaterService.startCullLoop(function()
 		if phase == "Prompt" or phase == "Reveal" or phase == "Surge" then
 			return alivePlayers()
