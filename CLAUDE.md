@@ -243,7 +243,9 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   sections): the section keys under `Sections` carry `Kind` (Featured | Slots | Chests | Shells | Passes |
   Specials) and, for Slots, a comma list in `Slots`; `Tools` holds the search box and filter keys. `ShopUi`
   drives both; the rail SHOP and ITEMS keys open them. Robux items (passes, Shell packs, specials) have their
-  own STORE window (`LobbyUi.Store`).
+  own STORE window (`LobbyUi.Store`), laid out like the stud kit's store: no toolbar (hidden), one wide card
+  per row with the buy key on the right, a `Heading.SectionTitle` that ShopUi fills with the open section's
+  name (any window may carry one), and the section keys as tiles hanging outside the panel's right edge.
 - Water meter (`Hud.WaterMeter`, desktop only): the blue fill is the water now, `Marker` is your pillar top
   and `Target` (yellow) is where the water will be after this round's surge. Optional authored labels that
   `Hud` drives: `Marker.Label` (YOU), `Target.Label` (WATER RISES TO HERE), each put on the far side of its
