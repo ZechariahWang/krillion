@@ -41,6 +41,12 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   claim; the rules are `Shared/Daily` and the week is `GameConfig.Daily.Days`. One claim per UTC day, a missed
   day starts over, day 7 opens a free chest. The window opens on the tab by itself once a session while a
   claim waits. The debug command `daily <user> <n>` sets the state for a test.
+- Levels: XP (`profile.xp`, a delta) from match answers (the tier's points), rounds survived and Wins
+  (`Server/LevelService`; rules `Shared/Levels`, numbers `GameConfig.Levels`). Each level pays Shells. The level
+  shows in the head label's name row (`[12] name`; bots get one from `BotBrain.level`) and on the level bar
+  (`SharedUi.Wallet.Chip.LevelBar`: `Fill`, `Label`), which hangs under the Shells chip; `Client/Wallet` lifts
+  the chip and what stacks on it by the bar's height. Levels lock nothing in the shop. A profile saved before
+  levels gets XP for its games and Wins (`Profile.startingXp`).
 - A user's saved data can be deleted with the Studio debug command `erase <userId>` (`DataService.erase`).
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
 - Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
@@ -260,7 +266,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   or while the answers list (`GameUi.Reveal.List`, also top-right) shows (`Ui.answersListCoversCorner`).
   A phone draws the chip and the answers list at 80% through their UIScale's `Rest` attribute. Toasts stack in the bottom-left
   (past the match water meter, above the touch thumbstick). The bottom-right column, from the
-  bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
+  bottom: the level bar, the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.
 - Icons are ImageLabels authored in Studio; text never carries an emoji. The artwork lives once in
   `ReplicatedStorage.Templates.Icons` (one ImageLabel per name: `Shell`, `Trophy`, `Fish`...). An icon beside

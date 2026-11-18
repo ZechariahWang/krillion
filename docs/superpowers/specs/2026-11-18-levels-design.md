@@ -30,7 +30,7 @@ Shop items locked by level (by rarity, Shells items only) were built and then dr
 
 ## Build
 
-- `Shared/Levels` (pure, tested): level from XP with progress, the level an item needs, the name-row text.
+- `Shared/Levels` (pure, tested): level from XP with progress and the name-row text.
 - `Profile.xp`: a delta like `wins`; a stored profile without it is given the starting XP in `fromStored`.
 - `Server/LevelService`: listens to `MatchEvents` (AnswerGraded, RoundSurvived, MatchFinished), adds XP,
   pays Shells and toasts on a level up, refreshes the name tag.
