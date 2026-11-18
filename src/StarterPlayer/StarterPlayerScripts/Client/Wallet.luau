@@ -19,15 +19,15 @@ local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local MAX_POPS = 4
-local POP_SLOT = 64 -- pixels between stacked pills; the newest sits closest to the chip
-local POP_GAP = 12 -- pixels between the chip and the first pill
+local POP_SLOT = 70 -- pixels between stacked pills; the newest sits closest to the chip
+local POP_GAP = 16 -- pixels between the chip and the first pill
 local POP_HOLD = 1.4
 local POP_FADE = 0.3
 local POP_DRIFT = 18 -- pixels a pill moves away from the chip while it fades
 local POP_CLEAR = 10 -- pixels of a slot left clear between two pills
 local PHONE_SIDE = 8 -- phones: pixels from the right end of the top bar to the chip, as the top bar buttons keep
 local PHONE_TOP = 10 -- phones: pixels from the bottom of the top bar to the chip under its buttons
-local PHONE_STACK_GAP = 12 -- phones: pixels between the chip and the THROW key under it
+local PHONE_STACK_GAP = 16 -- phones: pixels between the chip and the THROW key under it
 local PHONE_CHIP_SCALE = 0.8 -- phones: the chip's size, so its shell bubble stays clear of the THROW key
 local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter screens scale them down
 local MIN_FIT = 0.65
@@ -175,7 +175,7 @@ local function placePops()
 	end
 end
 
-local JUMP_GAP = 8 -- pixels between Roblox's touch jump button and the chip above it
+local JUMP_GAP = 16 -- pixels between Roblox's touch jump button and the chip above it
 local chipRest: UDim2? = nil
 local toyRest: UDim2? = nil
 
