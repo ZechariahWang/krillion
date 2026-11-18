@@ -177,6 +177,7 @@ function Rail.init(playerGui: PlayerGui)
 		end
 		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeHelp)
 		help:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
+		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
 		placeHelp()
 	end
 	-- The spectate eye sits next to it. Client/Lobby shows it while a match is running and connects it.
@@ -190,6 +191,7 @@ function Rail.init(playerGui: PlayerGui)
 		end
 		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeWatch)
 		watch:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeWatch)
+		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeWatch)
 		placeWatch()
 	end
 	Windows.Changed.connect(refresh)
