@@ -13,8 +13,7 @@ return {
 			"iron", "gold", "silver", "aluminum", "copper", "wool", "stone", "clay", "foam", "ceramic",
 			"porcelain", "silk", "nylon", "polyester", "denim", "cement", "sand", "ice", "bamboo", "cork",
 			"wax", "vinyl", "latex", "styrofoam", "brass", "bronze", "marble", "granite", "diamond", "linen",
-			"velvet", "fur", "bone", "straw", "canvas", "plywood", "felt", "fabric", "mud", "platinum",
-			"stainless steel", "fleece", "dirt", "tile", "coal", "string", "bark",
+			"fur", "bone", "straw", "canvas", "fabric", "mud", "stainless steel", "dirt", "tile",
 		},
 		Rare = {
 			"pewter", "tungsten", "kevlar", "spandex", "acrylic", "rayon", "neoprene", "silicone", "resin", "bakelite",
@@ -33,6 +32,7 @@ return {
 			"hardboard", "birch", "pumice", "alabaster", "epoxy", "polyurethane", "muslin", "twill", "mohair",
 			"angora", "magnesium", "cobalt", "lithium", "polymer", "gypsum", "travertine", "taffeta",
 			"organza", "calico", "brocade", "damask", "basalt", "cellulose", "polypropylene", "polycarbonate",
+			"platinum", "bark", "string", "coal", "velvet", "felt", "fleece", "plywood",
 		},
 		DeepCut = {
 			"vellum", "bitumen", "cob", "celluloid", "shellac", "baleen", "sinew", "catgut", "terrazzo",

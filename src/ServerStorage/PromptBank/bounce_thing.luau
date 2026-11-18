@@ -40,6 +40,7 @@ return {
 			"koosh ball", "yo yo", "antelope", "jack in the box", "shock absorber", "air mattress",
 			"squash ball", "racquetball", "cricket ball", "lacrosse ball", "wiffle ball", "handball",
 			"rugby ball", "hacky sack", "medicine ball", "stress ball", "baby bouncer", "springboard",
+			"gummy bear",
 		},
 		DeepCut = {
 			"sliotar", "hurling ball", "shinty ball", "gaelic football", "rounders ball", "stoolball",
@@ -201,6 +202,8 @@ return {
 		["shocks"] = "shock absorber", ["car suspension"] = "shock absorber",
 		["paddle ball toy"] = "paddleball", ["bungee"] = "bungee jumping", ["trampolining"] = "trampoline",
 		["gridiron ball"] = "american football", ["bungee cord"] = "bungee jumping",
-		["bungees"] = "bungee jumping",
+		["bungees"] = "bungee jumping", ["hackey sack"] = "hacky sack", ["kid goat"] = "goat",
+		["person on the moon"] = "astronaut", ["jack in a box"] = "jack in the box",
+		["bouncer ball"] = "bouncy ball", ["trampoline shoes"] = "moon shoes", ["bad cheque"] = "cheque",
 	},
 }
