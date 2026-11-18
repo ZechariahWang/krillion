@@ -12,6 +12,7 @@ local RunService = game:GetService("RunService")
 
 local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local Signal = require(ReplicatedStorage.Shared.Signal)
 
 local PROFILE_STORE = "Profile_v1"
@@ -150,6 +151,10 @@ local function updateLeaderstats(player: Player, profile: Profile.Profile)
 	-- "Shells" is the player-list name; "Cash" is the old Studio template's, kept as a fallback.
 	local shells = (stats:FindFirstChild("Shells") or stats:FindFirstChild("Cash")) :: IntValue?
 	local best = stats:FindFirstChild("Best") :: IntValue?
+	local level = stats:FindFirstChild("Level") :: IntValue?
+	if level ~= nil then
+		level.Value = Levels.levelOf(profile.xp)
+	end
 	if wins ~= nil then
 		wins.Value = profile.wins
 	end

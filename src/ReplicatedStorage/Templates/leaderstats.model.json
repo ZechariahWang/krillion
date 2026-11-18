@@ -12,6 +12,10 @@
     {
       "name": "Best",
       "className": "IntValue"
+    },
+    {
+      "name": "Level",
+      "className": "IntValue"
     }
   ]
 }
