@@ -1368,5 +1368,6 @@ return {
 		["hiperyon moon"] = "hyperion", ["desperina"] = "despina", ["fibi"] = "phoebe", ["eeo"] = "io",
 		["fibi moon"] = "phoebe", ["janice"] = "janus", ["oberion"] = "oberon", ["thetys"] = "tethys",
 		["titiania"] = "titania", ["hyperon"] = "hyperion", ["the moon of earth"] = "moon",
+		["mimas death star"] = "mimas",
 	},
 }
