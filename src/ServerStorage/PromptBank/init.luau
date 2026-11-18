@@ -261,6 +261,7 @@ local list: { Prompt } = {
 	require("@self/screen_thing"),
 	require("@self/park_thing"),
 	require("@self/plug_in_thing"),
+	require("@self/melt_thing"),
 }
 
 local byId: { [string]: Prompt } = {}
@@ -310,6 +311,7 @@ local retired: { [string]: boolean } = {
 	sea_or_gulf = true,
 	monkey_type = true,
 	pepper = true,
+	horse_breed = true,
 }
 
 local PromptBank = {
