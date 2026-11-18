@@ -12,13 +12,12 @@ return {
 		},
 		Schooler = {
 			"george h w bush", "jimmy carter", "richard nixon", "dwight eisenhower", "ulysses s grant",
-			"andrew jackson", "john adams",
+			"andrew jackson", "john adams", "harry truman", "woodrow wilson", "gerald ford", "james madison",
 		},
 		Rare = {
 			"john quincy adams", "william henry harrison", "grover cleveland", "william mckinley",
-			"william howard taft", "warren harding", "martin van buren", "gerald ford", "herbert hoover",
-			"calvin coolidge", "james monroe", "lyndon b johnson", "woodrow wilson", "james madison",
-			"harry truman",
+			"william howard taft", "warren harding", "martin van buren", "herbert hoover", "calvin coolidge",
+			"james monroe", "lyndon b johnson",
 		},
 		DeepCut = {
 			"john tyler", "franklin pierce", "james buchanan", "rutherford hayes", "benjamin harrison",
@@ -79,5 +78,6 @@ return {
 		["rosevelt"] = "franklin d roosevelt", ["rooselvelt"] = "franklin d roosevelt",
 		["rooseveld"] = "franklin d roosevelt", ["frankin roosevelt"] = "franklin d roosevelt",
 		["franklin rosevelt"] = "franklin d roosevelt", ["theodore rosevelt"] = "theodore roosevelt",
+		["george bush jr"] = "george w bush",
 	},
 }

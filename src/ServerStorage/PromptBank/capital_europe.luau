@@ -11,16 +11,15 @@ return {
 		},
 		Schooler = {
 			"lisbon", "dublin", "prague", "brussels", "oslo", "stockholm", "copenhagen", "helsinki", "warsaw",
-			"budapest", "kyiv",
+			"budapest", "kyiv", "edinburgh", "bern", "reykjavik", "belgrade", "bucharest", "cardiff",
 		},
 		Rare = {
-			"bern", "reykjavik", "belgrade", "zagreb", "bucharest", "sofia", "minsk", "luxembourg", "monaco",
-			"cardiff", "belfast", "vatican city", "san marino", "nicosia", "tbilisi", "yerevan", "baku",
-			"ankara", "valletta", "vaduz", "edinburgh",
+			"zagreb", "sofia", "minsk", "luxembourg", "monaco", "belfast", "vatican city", "san marino",
+			"nicosia", "tbilisi", "yerevan", "baku", "ankara", "valletta", "vaduz", "ljubljana", "bratislava",
+			"vilnius", "tallinn", "riga", "sarajevo", "tirana", "skopje",
 		},
 		DeepCut = {
-			"ljubljana", "bratislava", "vilnius", "tallinn", "riga", "sarajevo", "pristina", "torshavn",
-			"douglas", "gibraltar", "westminster", "tirana", "skopje", "podgorica", "chisinau",
+			"pristina", "torshavn", "douglas", "gibraltar", "westminster", "podgorica", "chisinau",
 			"andorra la vella",
 		},
 		Mythic = {

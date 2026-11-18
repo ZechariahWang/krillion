@@ -12,18 +12,20 @@ return {
 		Schooler = {
 			"antz", "shark tale", "croods", "prince of egypt", "chicken run", "kung fu panda 2",
 			"kung fu panda 3", "madagascar 2", "how to train your dragon 2", "how to train your dragon 3",
-			"trolls world tour", "puss in boots the last wish",
+			"trolls world tour", "puss in boots the last wish", "kung fu panda 4", "madagascar 3",
+			"shrek the third", "shrek forever after", "croods a new age", "wild robot",
+			"trolls band together", "boss baby family business",
 		},
 		Rare = {
-			"dog man", "joseph king of dreams", "curse of the were rabbit", "bad guys 2",
-			"gabbys dollhouse the movie", "orion and the dark", "spirit untamed",
-			"megamind vs the doom syndicate", "turbo", "mr peabody and sherman", "abominable", "home",
-			"sinbad legend of the seven seas", "flushed away", "road to el dorado",
-			"spirit stallion of the cimarron", "penguins of madagascar", "captain underpants",
-			"ruby gillman teenage kraken", "croods a new age", "shrek forever after", "trolls band together",
-			"kung fu panda 4", "wild robot", "shrek the third", "madagascar 3", "rise of the guardians",
-			"monsters vs aliens", "over the hedge", "chicken run dawn of the nugget",
-			"captain underpants the first epic movie", "boss baby family business",
+			"dog man", "bad guys 2", "turbo", "mr peabody and sherman", "abominable", "home",
+			"road to el dorado", "spirit stallion of the cimarron", "penguins of madagascar",
+			"captain underpants", "rise of the guardians", "monsters vs aliens", "over the hedge",
+			"chicken run dawn of the nugget", "captain underpants the first epic movie", "shrek 5",
+		},
+		DeepCut = {
+			"joseph king of dreams", "curse of the were rabbit", "gabbys dollhouse the movie",
+			"orion and the dark", "spirit untamed", "megamind vs the doom syndicate",
+			"ruby gillman teenage kraken", "sinbad legend of the seven seas", "flushed away",
 		},
 	},
 	aliases = {
@@ -55,5 +57,7 @@ return {
 		["bad guys 1"] = "bad guys", ["untamed"] = "spirit untamed", ["the croods"] = "croods",
 		["the prince of egypt"] = "prince of egypt", ["chicken run 2"] = "chicken run dawn of the nugget",
 		["dreamworks gabbys dollhouse"] = "gabbys dollhouse the movie",
+		["madagascar 3 europes most wanted"] = "madagascar 3",
+		["spirit stallion"] = "spirit stallion of the cimarron",
 	},
 }

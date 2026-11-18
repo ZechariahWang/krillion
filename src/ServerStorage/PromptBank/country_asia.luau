@@ -11,16 +11,15 @@ return {
 		},
 		Schooler = {
 			"vietnam", "indonesia", "pakistan", "north korea", "saudi arabia", "iran", "iraq", "israel",
-			"taiwan", "united arab emirates",
+			"taiwan", "united arab emirates", "malaysia", "bangladesh", "afghanistan",
 		},
 		Rare = {
 			"brunei", "bahrain", "armenia", "azerbaijan", "georgia", "cyprus", "palestine", "hong kong",
-			"bhutan", "myanmar", "qatar", "kuwait", "jordan", "lebanon", "yemen", "kazakhstan", "malaysia",
-			"bangladesh", "sri lanka", "afghanistan", "cambodia", "syria",
+			"bhutan", "myanmar", "qatar", "kuwait", "jordan", "lebanon", "yemen", "kazakhstan", "sri lanka",
+			"cambodia", "syria", "laos", "maldives",
 		},
 		DeepCut = {
-			"laos", "oman", "maldives", "uzbekistan", "turkmenistan", "tajikistan", "kyrgyzstan",
-			"east timor", "macau",
+			"oman", "uzbekistan", "turkmenistan", "tajikistan", "kyrgyzstan", "east timor", "macau",
 		},
 		Mythic = {
 		},
@@ -44,6 +43,8 @@ return {
 		["phillippines"] = "philippines", ["saudia arabia"] = "saudi arabia", ["kazahstan"] = "kazakhstan",
 		["turkmenstan"] = "turkmenistan", ["pakastan"] = "pakistan", ["bengladesh"] = "bangladesh",
 		["indonesa"] = "indonesia", ["korea south"] = "south korea", ["korea north"] = "north korea",
-		["chinese taipei"] = "taiwan", ["islamic republic of iran"] = "iran",
+		["chinese taipei"] = "taiwan", ["islamic republic of iran"] = "iran", ["kyrgyz"] = "kyrgyzstan",
+		["singapor"] = "singapore", ["banglades"] = "bangladesh", ["mynamar"] = "myanmar",
+		["camboda"] = "cambodia",
 	},
 }
