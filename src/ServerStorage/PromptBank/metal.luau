@@ -43,7 +43,7 @@ return {
 			"chrome vanadium", "chrome steel", "vanadium steel", "nickel steel", "tungsten steel",
 			"tin alloy", "lead alloy", "silver alloy", "platinum alloy", "uru", "high tensile steel",
 			"medium carbon steel", "tungsten alloy", "titanium steel", "molybdenum steel", "chromium steel",
-			"post transition metal", "toledo steel", "chromoly steel", "inner transition metal", "lodestone",
+			"post transition metal", "toledo steel", "chromoly steel", "inner transition metal",
 			"cobalt alloy", "vanadium alloy", "chromium alloy", "lithium alloy", "uranium alloy", "soft iron",
 			"promethium", "protactinium", "curium", "berkelium", "fermium", "mendelevium", "nobelium",
 			"lawrencium", "technetium", "hastelloy", "babbitt", "type metal", "constantan", "manganin",
@@ -1070,6 +1070,8 @@ return {
 		["electrolytic tough pitch copper"] = "etp copper", ["phosphorus deoxidized copper"] = "dhp copper",
 		["copper tellurium"] = "tellurium copper", ["copper sulfur"] = "sulfur copper",
 		["free cutting copper"] = "free machining copper", ["bidri alloy"] = "bidri",
-		["tumbaga alloy"] = "tumbaga", ["pakfong"] = "nickel silver",
+		["tumbaga alloy"] = "tumbaga", ["pakfong"] = "nickel silver", ["tinfoil"] = "aluminum",
+		["tin foil"] = "aluminum", ["aluminum foil"] = "aluminum", ["foil"] = "aluminum",
+		["copper wire"] = "copper", ["gold bar"] = "gold", ["gold leaf"] = "gold", ["irridium"] = "iridium",
 	},
 }

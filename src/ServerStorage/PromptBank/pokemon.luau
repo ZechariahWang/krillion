@@ -1673,5 +1673,6 @@ return {
 		["septile"] = "sceptile", ["raquaza"] = "rayquaza", ["genger"] = "gengar",
 		["jiggly puff"] = "jigglypuff", ["mew 2"] = "mewtwo", ["charmandor"] = "charmander",
 		["snorlaxx"] = "snorlax", ["greninjah"] = "greninja", ["lugiah"] = "lugia",
+		["blastoize"] = "blastoise",
 	},
 }

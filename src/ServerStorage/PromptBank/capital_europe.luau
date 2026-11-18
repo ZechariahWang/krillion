@@ -16,11 +16,11 @@ return {
 		Rare = {
 			"zagreb", "sofia", "minsk", "luxembourg", "monaco", "belfast", "vatican city", "san marino",
 			"nicosia", "tbilisi", "yerevan", "baku", "ankara", "valletta", "vaduz", "ljubljana", "bratislava",
-			"vilnius", "tallinn", "riga", "sarajevo", "tirana", "skopje",
+			"vilnius", "tallinn", "riga", "sarajevo", "tirana", "skopje", "the hague", "podgorica",
+			"chisinau", "pristina", "andorra la vella",
 		},
 		DeepCut = {
-			"pristina", "torshavn", "douglas", "gibraltar", "westminster", "podgorica", "chisinau",
-			"andorra la vella",
+			"torshavn", "douglas", "gibraltar", "westminster",
 		},
 		Mythic = {
 			"cetinje", "astana", "banja luka", "nafplio", "comrat", "grozny", "edirne", "bursa", "kragujevac",
@@ -582,6 +582,6 @@ return {
 		["city of douglas"] = "douglas", ["san marino city"] = "san marino",
 		["city of luxembourg"] = "luxembourg", ["monaco ville"] = "monaco", ["monaco city"] = "monaco",
 		["pristina kosovo"] = "pristina", ["prishtine"] = "pristina", ["ankara turkey"] = "ankara",
-		["pecs"] = "pec",
+		["pecs"] = "pec", ["den haag"] = "the hague",
 	},
 }
