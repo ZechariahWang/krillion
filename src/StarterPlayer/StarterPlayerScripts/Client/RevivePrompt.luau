@@ -85,6 +85,15 @@ function RevivePrompt.init(playerGui: PlayerGui)
 	useText = use.Text
 	ready = true
 	Ui.pressable(use)
+	-- X turns the offer down: the card goes as if its time ran out.
+	local close = card:FindFirstChild("CloseButton")
+	if close ~= nil and close:IsA("GuiButton") then
+		Ui.pressable(close)
+		close.MouseButton1Click:Connect(function()
+			token += 1
+			hide()
+		end)
+	end
 	use.MouseButton1Click:Connect(function()
 		local current = offer
 		if not gui.Visible or current == nil then
