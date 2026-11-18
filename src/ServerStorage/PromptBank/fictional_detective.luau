@@ -10,9 +10,9 @@ return {
 			"hercule poirot", "dr watson", "shaggy",
 		},
 		Schooler = {
-			"velma", "fred", "daphne", "encyclopedia brown", "the hardy boys", "miss marple", "sam spade", "philip marlowe",
-			"inspector clouseau", "dick tracy", "magnum pi", "adrian monk", "detective pikachu", "ace ventura", "benoit blanc",
-			"detective conan", "columbo",
+			"velma", "fred", "daphne", "encyclopedia brown", "the hardy boys", "miss marple", "sam spade",
+			"philip marlowe", "inspector clouseau", "dick tracy", "detective pikachu", "ace ventura",
+			"benoit blanc", "detective conan", "columbo",
 		},
 		Rare = {
 			"lord peter wimsey", "father brown", "inspector morse", "kinsey millhone", "precious ramotswe", "kurt wallander",
@@ -25,7 +25,7 @@ return {
 			"jessica fletcher", "kojak", "nick and nora charles", "basil of baker street", "robert langdon",
 			"nate the great", "cam jansen", "phryne fisher", "eddie valiant", "rick deckard", "trixie belden",
 			"flavia de luce", "detective chimp", "jane tennison", "spenser", "remington steele", "jane rizzoli",
-			"kate beckett", "cole phelps", "l lawliet",
+			"kate beckett", "cole phelps", "l lawliet", "magnum pi", "adrian monk",
 		},
 		DeepCut = {
 			"albert campion", "roderick alleyn", "dr thorndyke", "sergeant cuff", "inspector bucket", "monsieur lecoq",

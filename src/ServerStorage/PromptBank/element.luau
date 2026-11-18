@@ -10,15 +10,15 @@ return {
 			"plutonium", "helium", "silver", "uranium",
 		},
 		Schooler = {
-			"nitrogen", "copper", "sodium", "calcium", "neon", "aluminum", "silicon", "chlorine", "sulfur",
-			"potassium", "magnesium", "lead", "tin", "nickel", "mercury", "zinc", "lithium", "phosphorus",
-			"titanium", "platinum",
+			"nitrogen", "copper", "sodium", "calcium", "neon", "aluminum", "chlorine", "sulfur", "lead",
+			"tin", "mercury", "zinc",
 		},
 		Rare = {
 			"radium", "fluorine", "boron", "chromium", "arsenic", "manganese", "beryllium", "bromine",
 			"xenon", "cadmium", "thorium", "selenium", "barium", "tungsten", "bismuth", "gallium", "krypton",
 			"cobalt", "iodine", "strontium", "cesium", "radon", "antimony", "palladium", "francium", "argon",
-			"oganesson",
+			"oganesson", "silicon", "potassium", "magnesium", "nickel", "lithium", "phosphorus", "titanium",
+			"platinum",
 		},
 		DeepCut = {
 			"germanium", "rubidium", "rhodium", "iridium", "osmium", "tantalum", "thallium", "polonium",

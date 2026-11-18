@@ -98,8 +98,8 @@ function PlayerService.hasCharacter(player: Player): boolean
 	return humanoid.Health > 0
 end
 
--- On a pillar you can stroll around its top (invisible walls from MapService hold you on) but not jump,
--- so nobody falls off by accident or hops onto a neighbour's pillar.
+-- On a pillar you stand still (GameConfig.Platform.WalkSpeed) and cannot jump, so nobody falls off by
+-- accident or hops onto a neighbour's pillar. The lobby gives the normal walk and jump back.
 local function setMovement(player: Player, onPillar: boolean)
 	local character = player.Character
 	if character == nil then

@@ -10,11 +10,9 @@ return {
 			"white tailed deer", "caribou", "impala", "wildebeest",
 		},
 		Schooler = {
-			"mule deer", "red deer", "fallow deer", "roe deer", "sika deer", "muntjac", "springbok", "kudu", "eland",
-			"oryx", "gemsbok", "pronghorn", "thomsons gazelle", "grants gazelle", "sable antelope",
-			"roan antelope", "hartebeest", "topi", "waterbuck", "nyala", "bongo", "dik dik", "duiker", "klipspringer",
-			"saiga", "chital", "sambar", "chamois",
-			"blackbuck", "lesser kudu", "giant eland", "bushbuck", "reedbuck", "steenbok",
+			"mule deer", "red deer", "fallow deer", "roe deer", "sika deer", "muntjac", "springbok", "kudu",
+			"eland", "oryx", "gemsbok", "pronghorn", "thomsons gazelle", "grants gazelle", "sable antelope",
+			"blackbuck",
 		},
 		Rare = {
 			"pere davids deer", "water deer", "musk deer", "pudu", "brocket", "marsh deer", "pampas deer", "huemul",
@@ -24,7 +22,9 @@ return {
 			"red forest duiker", "zebra duiker", "rhebok", "red hartebeest", "black wildebeest", "blue wildebeest",
 			"roosevelt elk", "tule elk", "irish elk", "woodland caribou", "tibetan antelope",
 			"mongolian gazelle", "goitered gazelle", "dorcas gazelle", "dama gazelle", "mountain gazelle",
-			"sand gazelle", "speke gazelle", "red fronted gazelle", "cuvier gazelle",
+			"sand gazelle", "speke gazelle", "red fronted gazelle", "cuvier gazelle", "roan antelope",
+			"hartebeest", "topi", "waterbuck", "nyala", "bongo", "dik dik", "duiker", "klipspringer", "saiga",
+			"chital", "sambar", "chamois", "lesser kudu", "giant eland", "bushbuck", "reedbuck", "steenbok",
 		},
 		DeepCut = {
 			"kirk dik dik", "pygmy antelope", "four horned antelope", "nilgai", "mountain nyala", "lesser nyala",

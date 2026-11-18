@@ -1,5 +1,5 @@
 --!strict
--- Late join near the start of a match: when the window is open, whether a player may jump in, how high
+-- Late join into a running match: when the window is open, whether a player may jump in, how high
 -- their pillar starts and where it stands. Pure (no Roblox APIs), so Lune tests can require it.
 
 export type Config = {
@@ -44,11 +44,16 @@ end
 
 -- Rounds before MaxRound are open in every match phase, so the card does not blink off at the reveal.
 -- MaxRound itself is open only while its prompt still has MinSecondsLeft (pass 0 in overtime).
+-- MaxRound 0 means no last round: every round is open in every match phase.
 function LateJoin.windowOpen(phase: string, round: number, secondsLeft: number, cfg: Config): boolean
-	if cfg.Enabled ~= 1 or round < 1 or round > cfg.MaxRound then
+	if cfg.Enabled ~= 1 or round < 1 then
 		return false
 	end
-	if round < cfg.MaxRound then
+	local noLimit = cfg.MaxRound == 0
+	if not noLimit and round > cfg.MaxRound then
+		return false
+	end
+	if noLimit or round < cfg.MaxRound then
 		return phase == "Prompt" or phase == "Reveal" or phase == "Surge"
 	end
 	return phase == "Prompt" and secondsLeft >= cfg.MinSecondsLeft

@@ -11,12 +11,9 @@ return {
 		},
 		Schooler = {
 			"foghorn leghorn", "mumble", "daisy duck", "huey", "dewey", "louie", "chicken little", "pidgey",
-			"toucan sam", "blu", "jewel", "kevin", "hei hei", "sam the eagle", "falco", "archimedes", "fawkes",
-			"plucky duck", "darkwing duck", "howard the duck", "pingu", "opus", "scuttle", "ugly duckling",
-			"mother goose", "henny penny", "little red hen", "jemima puddle duck", "launchpad mcquack",
-			"webby vanderquack", "chilly willy", "heckle", "jeckle", "nigel", "kazooie", "tux", "ginger",
-			"articuno", "zapdos", "moltres", "the penguin", "duolingo owl", "red", "chuck", "bomb",
-			"mighty eagle", "kowalski", "skipper", "gunter", "feathers mcgraw", "twitter bird",
+			"toucan sam", "blu", "jewel", "hei hei", "fawkes", "plucky duck", "darkwing duck", "pingu",
+			"opus", "ugly duckling", "articuno", "zapdos", "moltres", "the penguin", "duolingo owl", "red",
+			"chuck", "bomb", "mighty eagle", "kowalski", "skipper", "twitter bird",
 		},
 		Rare = {
 			"pedro", "nico", "hooty", "blathers", "celeste", "errol", "pigwidgeon", "wol", "gladstone gander", "della duck",
@@ -26,7 +23,10 @@ return {
 			"mordecai", "mockingjay", "gwaihir", "chocobo", "cucco", "mr owl", "king dedede", "mr ping", "master crane",
 			"lord shen", "gyro gearloose", "gizmoduck", "camilla the chicken", "hoots the owl", "maltese falcon", "pico", "piper",
 			"captain flint", "rico", "three eyed raven", "farfetchd", "doduo", "spearow", "noctowl", "staraptor", "talonflame",
-			"duck hunt duck", "minecraft chicken", "dodo",
+			"duck hunt duck", "minecraft chicken", "dodo", "kevin", "sam the eagle", "falco", "archimedes",
+			"howard the duck", "scuttle", "mother goose", "henny penny", "little red hen",
+			"jemima puddle duck", "launchpad mcquack", "webby vanderquack", "chilly willy", "heckle",
+			"jeckle", "nigel", "kazooie", "tux", "ginger", "gunter", "feathers mcgraw",
 		},
 		DeepCut = {
 			"flit", "medli", "wilbur", "storm the albatross", "wave the swallow", "flintheart glomgold",

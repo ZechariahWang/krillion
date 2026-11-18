@@ -10,13 +10,9 @@ return {
 			"gazpacho", "ceviche",
 		},
 		Schooler = {
-			"patatas bravas", "churrasco", "feijoada", "chimichurri", "tres leches", "dulce de leche", "alfajor",
-			"plantains", "tostones", "maduros", "mofongo", "ropa vieja", "cuban sandwich", "croquetas",
-			"pan con tomate", "chorizo", "jamon serrano", "manchego", "pupusa", "pao de queijo",
-			"brigadeiro", "coxinha", "picanha", "acai bowl", "arroz con pollo",
-			"black beans and rice", "cafe con leche",
-			"arepa",
-			"tortilla espanola", "jamon iberico",
+			"patatas bravas", "churrasco", "feijoada", "chimichurri", "tres leches", "dulce de leche",
+			"plantains", "tostones", "croquetas", "chorizo", "jamon serrano", "pupusa", "acai bowl",
+			"arroz con pollo", "black beans and rice", "cafe con leche", "arepa", "tortilla espanola",
 		},
 		Rare = {
 			"fabada", "pulpo a la gallega", "calamares", "albondigas", "fideua", "salmorejo", "cocido madrileno",
@@ -31,7 +27,9 @@ return {
 			"medianoche", "turron", "hallaca", "tembleque", "migas", "pimientos de padron", "pernil", "yuca frita",
 			"pinchos", "lomo saltado", "inca kola", "mate",
 			"sofrito", "adobo", "arroz con leche", "chicharron", "natillas", "salchipapa", "pan de yuca",
-			"rabo de toro", "cochinillo", "quinoa", "bife de chorizo", "bacalao",
+			"rabo de toro", "cochinillo", "quinoa", "bife de chorizo", "bacalao", "alfajor", "maduros",
+			"mofongo", "ropa vieja", "cuban sandwich", "pan con tomate", "manchego", "pao de queijo",
+			"coxinha", "jamon iberico", "brigadeiro", "picanha",
 		},
 		DeepCut = {
 			"rocoto relleno", "tacu tacu", "tiradito", "leche de tigre", "arroz chaufa", "picarones",

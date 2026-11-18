@@ -10,12 +10,10 @@ return {
 			"chick fil a", "popeyes", "five guys", "in n out", "chipotle", "panda express", "whataburger",
 		},
 		Schooler = {
-			"starbucks", "dunkin", "sonic", "arbys", "dairy queen", "jack in the box", "papa johns", "little caesars",
-			"carls jr", "hardees", "culvers", "jimmy johns", "panera", "qdoba", "wingstop", "buffalo wild wings",
-			"shake shack", "white castle", "krispy kreme", "tim hortons", "nandos", "greggs", "jersey mikes",
-			"firehouse subs", "zaxbys", "raising canes", "del taco", "el pollo loco", "long john silvers",
-			"churchs chicken", "bojangles", "baskin robbins", "cold stone", "jamba juice", "auntie annes", "cinnabon",
-			"a and w", "steak n shake", "checkers", "jollibee", "quiznos",
+			"starbucks", "dunkin", "sonic", "arbys", "dairy queen", "jack in the box", "papa johns",
+			"little caesars", "carls jr", "hardees", "panera", "wingstop", "buffalo wild wings",
+			"krispy kreme", "tim hortons", "jersey mikes", "raising canes", "baskin robbins", "jamba juice",
+			"cinnabon", "a and w",
 		},
 		Rare = {
 			"habit burger", "freddys", "rallys", "fatburger", "smashburger", "round table pizza", "baja fresh",
@@ -30,7 +28,10 @@ return {
 			"blimpie", "charleys cheesesteaks", "pei wei", "bonchon",
 			"wayback burgers",
 			"costa coffee",
-			"peets coffee", "mrs fields",
+			"peets coffee", "mrs fields", "culvers", "jimmy johns", "qdoba", "shake shack", "white castle",
+			"nandos", "greggs", "firehouse subs", "zaxbys", "del taco", "el pollo loco", "long john silvers",
+			"churchs chicken", "bojangles", "cold stone", "auntie annes", "steak n shake", "checkers",
+			"jollibee", "quiznos",
 		},
 		DeepCut = {
 			"zippys", "tommys", "pinks hot dogs", "roy rogers", "dog haus", "bareburger", "burgerville", "tastee freez",

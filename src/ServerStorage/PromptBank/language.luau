@@ -11,12 +11,9 @@ return {
 		},
 		Schooler = {
 			"italian", "portuguese", "russian", "arabic", "hindi", "korean", "mandarin", "cantonese", "dutch",
-			"greek", "hebrew", "turkish", "polish", "swedish", "norwegian", "danish", "finnish", "irish",
-			"welsh", "scottish gaelic", "vietnamese", "thai", "indonesian", "tagalog", "filipino", "urdu",
-			"bengali", "persian", "swahili", "zulu", "afrikaans", "hungarian", "czech", "romanian",
-			"ukrainian", "icelandic", "esperanto", "american sign language", "hawaiian", "elvish",
-			"morse code", "braille", "java", "lua", "binary", "spanglish", "latin american spanish",
-			"wookiee",
+			"greek", "hebrew", "turkish", "polish", "swedish", "irish", "vietnamese", "thai", "filipino",
+			"urdu", "bengali", "persian", "swahili", "esperanto", "american sign language", "hawaiian",
+			"elvish", "morse code", "braille",
 		},
 		Rare = {
 			"sicilian", "flemish", "scots", "swiss german", "javanese", "hmong", "berber", "phoenician",
@@ -44,6 +41,9 @@ return {
 			"dagbani", "mossi", "dioula", "tiv", "ibibio", "efik", "kanuri", "nupe", "urhobo", "itsekiri",
 			"northern sotho", "tigre", "bilen", "haryanvi", "awadhi", "magahi", "marwari", "sylheti",
 			"chittagonian", "rohingya", "kachin", "rakhine", "hinglish", "singlish", "mandoa", "tumbuka",
+			"norwegian", "danish", "finnish", "welsh", "scottish gaelic", "indonesian", "tagalog", "zulu",
+			"afrikaans", "hungarian", "czech", "romanian", "ukrainian", "icelandic", "java", "lua", "binary",
+			"spanglish", "latin american spanish", "wookiee",
 		},
 		DeepCut = {
 			"ket", "hadza", "sandawe", "ju hoan", "taa", "nama", "burushaski", "rotokas", "silbo gomero",

@@ -11,9 +11,7 @@ return {
 		},
 		Schooler = {
 			"hexagon", "pentagon", "diamond", "cube", "sphere", "cylinder", "cone", "pyramid", "octagon",
-			"crescent", "trapezoid", "line", "plus", "curve", "arc", "zigzag", "wave", "lightning bolt",
-			"cloud", "shield", "dot", "flower", "leaf", "snowflake", "question mark", "exclamation mark",
-			"arrow", "cross", "spiral", "parallelogram", "blob",
+			"crescent", "trapezoid", "arrow", "cross", "parallelogram",
 		},
 		Rare = {
 			"prism", "semicircle", "kite", "hemisphere", "cuboid", "triangular prism", "tetrahedron",
@@ -32,7 +30,9 @@ return {
 			"spider web", "division sign", "greater than sign", "less than sign", "domino", "shuriken",
 			"bone", "bar", "mountain", "right triangle", "isosceles triangle", "scalene triangle",
 			"equilateral triangle", "dodecahedron", "ring", "dome", "arrowhead", "loop", "clover", "s shape",
-			"c shape", "v shape", "x shape", "u shape", "minus sign", "equals sign", "squiggle",
+			"c shape", "v shape", "x shape", "u shape", "minus sign", "equals sign", "squiggle", "line",
+			"plus", "curve", "arc", "zigzag", "wave", "lightning bolt", "cloud", "shield", "dot", "flower",
+			"leaf", "snowflake", "question mark", "exclamation mark", "spiral", "blob",
 		},
 		DeepCut = {
 			"chevron", "squircle", "dodecagon", "icosahedron", "octagram", "rounded rectangle", "trefoil",

@@ -10,11 +10,8 @@ return {
 			"creme brulee", "quiche", "eclair", "french onion soup", "souffle", "french toast",
 		},
 		Schooler = {
-			"pain au chocolat", "brioche", "profiterole", "madeleine", "fondue", "foie gras", "croque monsieur", "croque madame",
-			"tarte tatin", "mille feuille", "chocolate mousse", "coq au vin", "beef bourguignon", "bouillabaisse", "cassoulet",
-			"salade nicoise", "steak tartare", "duck confit", "pate", "steak frites", "moules frites", "frog legs", "raclette",
-			"quiche lorraine", "omelette", "creme caramel", "hollandaise", "bechamel", "brie", "camembert", "filet mignon",
-			"beignet",
+			"pain au chocolat", "brioche", "profiterole", "madeleine", "fondue", "foie gras",
+			"croque monsieur", "chocolate mousse", "frog legs", "omelette", "brie", "camembert",
 		},
 		Rare = {
 			"croquembouche", "clafoutis", "financier", "canele", "gougere", "opera cake", "tarte au citron", "paris brest",
@@ -29,7 +26,10 @@ return {
 			"cordon bleu", "chateaubriand", "entrecote", "steak au poivre", "lobster thermidor", "consomme", "mirepoix",
 			"creme anglaise", "creme patissiere", "creme fraiche", "chantilly cream", "parfait", "sorbet", "ganache", "praline",
 			"marron glace", "pain aux raisins", "chausson aux pommes", "beurre blanc", "remoulade", "vinaigrette", "saucisson",
-			"charcuterie", "coquilles saint jacques",
+			"charcuterie", "coquilles saint jacques", "croque madame", "tarte tatin", "mille feuille",
+			"coq au vin", "beef bourguignon", "bouillabaisse", "cassoulet", "salade nicoise", "steak tartare",
+			"duck confit", "pate", "steak frites", "moules frites", "raclette", "quiche lorraine",
+			"creme caramel", "hollandaise", "bechamel", "filet mignon", "beignet",
 		},
 		DeepCut = {
 			"andouillette", "boudin noir", "boudin blanc", "quenelle", "oeufs en meurette", "cervelle de canut", "tete de veau",

@@ -10,14 +10,15 @@ return {
 			"algeria", "tanzania", "madagascar", "libya", "tunisia", "sudan", "uganda",
 		},
 		Schooler = {
-			"senegal", "zimbabwe", "zambia", "angola", "mozambique", "cameroon", "namibia", "botswana",
-			"ivory coast", "somalia", "mali", "rwanda", "congo", "democratic republic of the congo",
-			"republic of the congo", "niger", "chad", "malawi", "sierra leone", "liberia",
+			"senegal", "zimbabwe", "angola", "mozambique", "cameroon", "namibia", "botswana", "ivory coast",
+			"somalia", "congo",
 		},
 		Rare = {
 			"burkina faso", "benin", "togo", "guinea", "gambia", "mauritania", "gabon", "equatorial guinea",
 			"central african republic", "south sudan", "burundi", "djibouti", "lesotho", "eswatini",
-			"mauritius", "seychelles", "comoros", "cape verde", "wakanda", "eritrea",
+			"mauritius", "seychelles", "comoros", "cape verde", "wakanda", "eritrea", "zambia", "mali",
+			"rwanda", "democratic republic of the congo", "republic of the congo", "niger", "chad", "malawi",
+			"sierra leone", "liberia",
 		},
 		DeepCut = {
 			"guinea bissau", "sao tome and principe", "western sahara", "zamunda", "zanzibar", "somaliland",

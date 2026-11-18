@@ -10,12 +10,9 @@ return {
 			"hermit crab", "prawn", "scallop", "mussel", "krill",
 		},
 		Schooler = {
-			"conch", "barnacle", "king crab", "snow crab", "blue crab", "dungeness crab", "abalone", "whelk", "cockle",
-			"langoustine", "spiny lobster", "rock lobster", "maine lobster", "limpet", "periwinkle", "razor clam",
-			"geoduck", "quahog", "giant clam", "tiger prawn", "coconut crab", "fiddler crab", "spider crab",
-			"stone crab", "soft shell crab", "ghost crab", "mantis shrimp", "brine shrimp", "pistol shrimp",
-			"horseshoe crab", "pill bug", "sea snail", "littleneck clam", "bay scallop", "sea scallop", "pacific oyster",
-			 "copepod", "amphipod", "isopod", "slipper lobster", "yabby", "sand flea", "water flea",
+			"conch", "barnacle", "king crab", "snow crab", "blue crab", "dungeness crab", "abalone",
+			"spiny lobster", "maine lobster", "giant clam", "tiger prawn", "coconut crab", "fiddler crab",
+			"soft shell crab", "horseshoe crab",
 		},
 		Rare = {
 			"cleaner shrimp", "cherrystone clam", "surf clam", "manila clam", "softshell clam",
@@ -29,6 +26,11 @@ return {
 			"green crab", "shore crab", "edible crab", "blue swimmer crab", "land crab", "freshwater crab",
 			"christmas island red crab", "king scallop", "queen scallop", "flat oyster", "rock oyster", "glass shrimp",
 			"peppermint shrimp", "sand shrimp", "amano shrimp", "cherry shrimp", "giant isopod", "pipi", "european lobster",
+			"whelk", "cockle", "langoustine", "rock lobster", "limpet", "periwinkle", "razor clam", "geoduck",
+			"quahog", "spider crab", "stone crab", "ghost crab", "mantis shrimp", "brine shrimp",
+			"pistol shrimp", "pill bug", "sea snail", "littleneck clam", "bay scallop", "sea scallop",
+			"pacific oyster", "copepod", "amphipod", "isopod", "slipper lobster", "yabby", "sand flea",
+			"water flea",
 		},
 		DeepCut = {
 			"goose barnacle", "acorn barnacle", "piddock", "shipworm", "file clam", "ark clam",

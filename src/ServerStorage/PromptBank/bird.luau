@@ -11,12 +11,7 @@ return {
 		},
 		Schooler = {
 			"sparrow", "crow", "robin", "seagull", "duck", "swan", "goose", "hawk", "falcon", "cardinal",
-			"blue jay", "woodpecker", "turkey", "dove", "raven", "vulture", "bluebird", "canary", "parakeet",
-			"cockatoo", "macaw", "stork", "crane", "heron", "bald eagle", "golden eagle", "magpie", "finch",
-			"starling", "pheasant", "quail", "emu", "kiwi", "condor", "cuckoo", "swallow", "budgie",
-			"kookaburra", "roadrunner", "nightingale", "mockingbird", "snowy owl", "barn owl",
-			"emperor penguin", "dodo", "mallard", "bird of paradise", "lovebird", "cockatiel", "goldfinch",
-			"blackbird", "pelican", "african grey parrot", "toucan", "puffin", "wild turkey",
+			"blue jay", "woodpecker", "turkey", "dove", "raven", "vulture", "bald eagle", "toucan",
 		},
 		Rare = {
 			"albatross", "kingfisher", "harpy eagle", "osprey", "kestrel", "partridge", "ibis", "spoonbill",
@@ -43,6 +38,11 @@ return {
 			"sapsucker", "red headed woodpecker", "acorn woodpecker", "white pelican", "shag", "auk",
 			"oxpecker", "rhode island red", "american kestrel", "common kestrel", "western meadowlark",
 			"eastern meadowlark", "common loon", "pied billed grebe", "northern harrier", "gouldian finch",
+			"bluebird", "canary", "parakeet", "cockatoo", "macaw", "stork", "crane", "heron", "golden eagle",
+			"magpie", "finch", "starling", "pheasant", "quail", "emu", "kiwi", "condor", "cuckoo", "swallow",
+			"budgie", "kookaburra", "roadrunner", "nightingale", "mockingbird", "snowy owl", "barn owl",
+			"emperor penguin", "dodo", "mallard", "bird of paradise", "lovebird", "cockatiel", "goldfinch",
+			"blackbird", "pelican", "african grey parrot", "puffin", "wild turkey",
 		},
 		DeepCut = {
 			"kakapo", "shoebill", "frogmouth", "tawny frogmouth", "cock of the rock", "capercaillie",

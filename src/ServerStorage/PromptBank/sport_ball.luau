@@ -11,9 +11,7 @@ return {
 		},
 		Schooler = {
 			"rugby", "cricket", "hockey", "table tennis", "bowling", "dodgeball", "american football", "pool",
-			"billiards", "snooker", "kickball", "handball", "softball", "beach volleyball", "field hockey",
-			"mini golf", "croquet", "foosball", "lacrosse", "squash", "gaga ball", "pickleball", "water polo",
-			"badminton", "netball", "four square", "tetherball", "spikeball",
+			"handball", "softball", "badminton",
 		},
 		Rare = {
 			"racquetball", "polo", "bocce", "petanque", "rounders", "futsal", "gaelic football",
@@ -25,7 +23,9 @@ return {
 			"speedball", "catch", "monkey in the middle", "hacky sack", "nine square", "bubble soccer",
 			"indoor cricket", "horse", "knockout", "freestyle football", "street soccer", "wheelchair tennis",
 			"broomball", "pig", "box cricket", "frescobol", "paintball", "stickball", "streetball",
-			"wall ball", "footbag", "sepak takraw", "jai alai",
+			"wall ball", "footbag", "sepak takraw", "jai alai", "billiards", "snooker", "kickball",
+			"beach volleyball", "field hockey", "mini golf", "croquet", "foosball", "lacrosse", "squash",
+			"gaga ball", "pickleball", "water polo", "netball", "four square", "tetherball", "spikeball",
 		},
 		DeepCut = {
 			"rackets", "eton fives", "rugby fives", "fives", "canoe polo", "bicycle polo", "horseball",

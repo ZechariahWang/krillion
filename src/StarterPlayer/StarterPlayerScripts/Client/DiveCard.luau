@@ -102,7 +102,7 @@ local DIVE_DELAY = 0.2 -- the tags drop in once the card is all but in place
 local LAYOUT_WAIT = 0.3 -- a window that still has no size by then gets the authored proportions
 local DROP_TIME = 0.32
 local SETTLE_TIME = 0.32 -- your stamp landing to `finished`, at the least
-local CAMERA_RATE = 9 -- how tightly the view follows its focus, per second
+local CAMERA_RATE = 6 -- how tightly the view follows its focus, per second: a slight trail reads as fluid
 local FOCUS_DELAY = 0.3 -- your stamp gets this long before the view moves on to the deepest answer
 local FOCUS_TIME = 0.6 -- the glide from your tag to the deepest answer
 local CROWN_TIME = 0.4 -- the crown's pop, before `finished`
@@ -143,7 +143,17 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
-local WIND_UP_METRES = 60 -- a pack whose deepest answer is shallower than this just sinks: no show for a short drop
+local WIND_UP_METRES = 1 -- every answered dive winds up and bursts, a common one too; NO ANSWER just sinks
+local PLUNGE_METRES = 55 -- your tag shoots this far past its resting place before it springs back (Plankton)...
+local PLUNGE_PER_TIER = 9 -- ...and this much further for every tier rarer
+local OWN_SOFT = 4 -- metres your tag slows over before it lands: it arrives at speed and flows into the plunge
+-- The fake-out: your tag eases to just above its tier's line, as if it were an answer one tier commoner, creeps
+-- there, then gathers speed through the line to its real depth (DivePack.fakeSlide), never quite stopping. The
+-- chance grows with rarity so it never gets predictable.
+local FAKE_CHANCE: { [string]: number } = { TooClever = 0.35, Schooler = 0.5, Rare = 0.65, DeepCut = 0.8, Mythic = 1 }
+local FAKE_MARGIN = 30 -- metres above your tier's line it stops, well inside the tier above (every band is 60 m or more)
+local FAKE_EASE = 18 -- metres it slows over coming into the fake spot
+local FAKE_TIME = 1.05 -- seconds from the fake spot to its real depth
 local INHALE = 0.09 -- every tag swells this much while the pack winds up under the surface...
 local EXHALE = 0.84 -- ...and snaps to this share of its size as it bursts, before springing back
 local CHARGE_SLOW = 0.17 -- seconds between the wind-up's clicks at its start
@@ -777,7 +787,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		placeStamp()
 		touchDown(own, 1.12)
 		stamp.Visible = true
-		stampScale.Scale = 2.2
+		stampScale.Scale = 2.2 + 0.8 * intensity
 		play(stampScale, TweenInfo.new(0.28 * speed, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 })
 		footer.Text = footerText()
 		local counterScale = counter:FindFirstChildOfClass("UIScale")
@@ -825,11 +835,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		if tierIndex >= Tiers.index("Rare") then
 			play(cardStroke, TweenInfo.new(0.3), { Color = tierColor })
 		end
+		if tierName == "Schooler" then
+			burst(if quick then 2 else 5)
+		end
 		if tierName == "Rare" then
-			burst(if quick then 3 else 6)
+			burst(if quick then 6 else 14)
 		end
 		if tierName == "DeepCut" then
-			burst(if quick then 6 else 12)
+			burst(if quick then 10 else 24)
 		end
 		-- A good answer's stamp keeps a slow pulse while the card holds, so the result has a moment.
 		if not isMythic and tierIndex >= Tiers.index("Rare") then
@@ -846,7 +859,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		if isMythic then
 			sound("Fanfare", 0.8, 1)
 			Fx.shakeOffset(frame, if quick then 5 else 12, 0.5)
-			burst(if quick then 14 else 30)
+			burst(if quick then 14 else 40)
+			-- A second wave, so the best answer of all keeps raining down.
+			task.delay(0.45 * speed, function()
+				if not destroyed then
+					burst(if quick then 8 else 26)
+					sound("Ping", 0.8, 1.6)
+				end
+			end)
 			play(
 				cardStroke,
 				TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 5, true),
@@ -905,6 +925,10 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local reach = SOFT_MIN
 	local leader: Diver? = nil -- the round's deepest answer, when other answers share the card
 	local leaderDeep = false -- it is Rare or better: the tags that stopped short drift away
+	local plunge = 0 -- metres your tag shoots past its resting place on landing (DivePack.overshoot)
+	local fakeRise = 0 -- metres above its resting place your tag stops for the fake-out; 0 for none
+	local fakeLandedAt: number? = nil
+	local slideTickAt = 0
 	local burstAt = math.huge -- seconds into the dive the wind-up ends and the pack bursts down
 	local burst = false
 	local windUp = false -- the pack goes deep enough for the wind-up and burst to be played up
@@ -1000,6 +1024,24 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			end
 		end
 
+		-- Your tag lands with a plunge and a spring back, and the view stays on it until that has played out.
+		if hasAnswer and not quick then
+			local wanted = PLUNGE_METRES + PLUNGE_PER_TIER * (tierIndex - 1)
+			local room = DivePack.overshootRoom(slots, 1, spacing)
+			plunge = math.max(math.min(wanted, room, BOTTOM - own.slot.final), 0)
+			local chance = FAKE_CHANCE[tierName]
+			if chance ~= nil and tierInfo ~= nil and random:NextNumber() < chance then
+				local wanted = own.slot.final - (tierInfo.depthMin - FAKE_MARGIN)
+				if wanted > 0 and wanted <= DivePack.fakeRoom(slots, 1, spacing) then
+					fakeRise = wanted
+				end
+			end
+			local spring = DivePack.overshootSeconds()
+			focusDelay += spring
+			glideDelay += spring
+			settleTime += spring
+		end
+
 		-- `budget` squeezes the whole dive when its last tag would land too late, or when the view would
 		-- reach another player's deepest answer too late (it leaves your tag glideDelay after you land).
 		local budget = options.budget
@@ -1010,9 +1052,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				last = math.max(last, DivePack.landSeconds(diver.slot, spacing, soft, dropTime, sinkTime, reach))
 			end
 			local pace = math.min(1, limit / last)
+			-- The fake-out's hold and snap delay your landing by up to this long, whatever the pace.
+			local fakeDelay = if fakeRise > 0 then FAKE_TIME else 0
+			local ownLands = DivePack.landSeconds(own.slot, spacing, soft, dropTime, sinkTime, reach)
+			if fakeDelay > 0 and limit > fakeDelay then
+				pace = math.min(pace, (limit - fakeDelay) / ownLands)
+			end
 			if leader ~= nil and leader ~= own then
-				local glide = glideDelay + GLIDE_SHARE * focusTime
-				local ownLands = DivePack.landSeconds(own.slot, spacing, soft, dropTime, sinkTime, reach)
+				local glide = glideDelay + GLIDE_SHARE * focusTime + fakeDelay
 				if limit > glide then
 					pace = math.min(pace, (limit - glide) / ownLands)
 				end
@@ -1106,6 +1153,40 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		end
 	end
 
+	-- Your tag during the fake-out: it eases into the fake spot `fakeRise` above its resting place, then slides
+	-- on down to it, slowly at first and faster and faster, and lands for real still moving. Returns its metres.
+	local function fakeOut(packAt: number, now: number): number
+		local stop = own.slot.final - fakeRise
+		local slideFrom = fakeLandedAt
+		if slideFrom == nil then
+			if packAt < stop + FAKE_EASE then
+				return DivePack.softMin(packAt, stop, FAKE_EASE)
+			end
+			fakeLandedAt = now
+			sound("Thud", 0.4, 1.15)
+			local tagScale = own.scale
+			if tagScale ~= nil then
+				tagScale.Scale = own.rest * 1.06
+				play(tagScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = own.rest })
+			end
+			return stop
+		end
+		local u = (now - slideFrom) / FAKE_TIME
+		if u >= 1 then
+			own.landed = true
+			own.landedAt = now
+			ownLandedAt = now
+			task.spawn(land)
+			return own.slot.final
+		end
+		-- Ticks that quicken and rise as it gathers speed.
+		if u >= 0.3 and now >= slideTickAt then
+			slideTickAt = now + 0.1 - 0.06 * u
+			sound("Tick", 0.2 + 0.25 * u, 0.9 + 0.9 * u)
+		end
+		return stop + fakeRise * DivePack.fakeSlide(u)
+	end
+
 	local function step(dt: number)
 		local now = os.clock()
 		if not ready and now - created >= diveDelay then
@@ -1123,8 +1204,16 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			local elapsed = now - started
 			local front = DivePack.front(elapsed, dropTime, sinkTime, reach, START_SKY)
 			for _, diver in divers do
-				local at = DivePack.position(front, diver.slot, spacing, soft)
-				if not diver.landed and DivePack.landed(front, diver.slot, spacing, soft) then
+				local diverSoft = if diver.own and plunge > 0 then OWN_SOFT else soft
+				local at = DivePack.position(front, diver.slot, spacing, diverSoft)
+				if diver.own and fakeRise > 0 and not diver.landed then
+					diver.pos = fakeOut(at, now)
+					continue
+				end
+				if diver.own and diver.landed then
+					at += DivePack.overshoot(now - diver.landedAt, plunge)
+				end
+				if not diver.landed and DivePack.landed(front, diver.slot, spacing, diverSoft) then
 					diver.landed = true
 					diver.landedAt = now
 					if diver.own then

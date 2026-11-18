@@ -10,8 +10,7 @@ return {
 			"dead sea",
 		},
 		Schooler = {
-			"black sea", "baltic", "north sea", "gulf of mexico", "caspian", "persian gulf", "adriatic",
-			"aegean", "south china sea",
+			"black sea", "north sea", "gulf of mexico", "persian gulf", "south china sea",
 		},
 		Rare = {
 			"arabian sea", "east china sea", "yellow sea", "irish sea", "aral sea", "sea of galilee",
@@ -19,7 +18,7 @@ return {
 			"weddell sea", "gulf of aden", "gulf of california", "gulf of alaska", "gulf of oman",
 			"gulf of thailand", "gulf of finland", "gulf of st lawrence", "sea of azov", "sea of marmara",
 			"java sea", "timor sea", "english channel", "bay of bengal", "bering sea", "sea of japan",
-			"coral sea", "tasman sea",
+			"coral sea", "tasman sea", "baltic", "adriatic", "aegean", "caspian",
 		},
 		DeepCut = {
 			"gulf of guinea", "gulf of tonkin", "gulf of suez", "gulf of aqaba", "gulf of carpentaria",

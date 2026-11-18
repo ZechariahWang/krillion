@@ -10,12 +10,10 @@ return {
 			"veil", "bouquet", "dj", "photographer",
 		},
 		Schooler = {
-			"tuxedo", "suit", "bridesmaid", "groomsman", "best man", "maid of honor", "flower girl", "ring bearer", "priest",
-			"minister", "officiant", "vows", "confetti", "rice", "balloons", "music", "dancing", "dance floor", "first dance",
-			"guests", "family", "church", "altar", "aisle", "bench", "pew", "candles", "decorations", "invitation", "gifts",
-			"bow tie", "tie", "high heels", "crown", "limo", "car", "table", "chairs", "food", "buffet", "speech", "toast",
-			"kiss", "tears", "camera", "video", "band", "flower petals", "cupcakes", "favors", "tiara", "pearls", "jewelry",
-			"photos", "roses", "shoes", "drinks",
+			"tuxedo", "suit", "bridesmaid", "groomsman", "best man", "maid of honor", "flower girl",
+			"ring bearer", "priest", "officiant", "vows", "confetti", "music", "dancing", "dance floor",
+			"first dance", "guests", "church", "altar", "aisle", "candles", "invitation", "gifts", "bow tie",
+			"kiss",
 		},
 		Rare = {
 			"centerpiece", "arch", "chuppah", "canopy", "tent", "guest book", "place card", "seating chart", "name tag",
@@ -29,7 +27,10 @@ return {
 			"garter", "garter toss", "bouquet toss", "doves", "slideshow", "microphone", "speakers", "bartender", "cake stand",
 			"mother of the groom", "father of the groom", "junior bridesmaid", "videographer", "garland", "marriage license",
 			"marriage certificate", "witness", "gift table", "card box", "bridal suite", "reception hall", "ballroom", "venue",
-			"bubble machine", "fireworks", "desserts",
+			"bubble machine", "fireworks", "desserts", "rice", "balloons", "family", "bench", "pew",
+			"decorations", "high heels", "crown", "car", "table", "chairs", "food", "buffet", "speech",
+			"toast", "tears", "camera", "video", "flower petals", "favors", "tiara", "pearls", "jewelry",
+			"drinks", "minister", "tie", "shoes", "roses", "cupcakes", "band", "photos", "limo",
 		},
 		DeepCut = {
 			"cummerbund", "cufflinks", "pocket square", "waistcoat", "morning suit", "tailcoat", "cravat", "fascinator",

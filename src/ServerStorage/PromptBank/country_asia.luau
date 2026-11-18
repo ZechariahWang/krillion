@@ -10,15 +10,17 @@ return {
 			"mongolia", "nepal", "singapore", "philippines", "turkey",
 		},
 		Schooler = {
-			"vietnam", "indonesia", "malaysia", "pakistan", "bangladesh", "north korea", "saudi arabia", "iran", "iraq",
-			"israel", "sri lanka", "afghanistan", "taiwan", "cambodia", "laos", "myanmar", "united arab emirates",
-			"qatar", "kuwait", "jordan", "lebanon", "syria", "yemen", "oman", "kazakhstan", "uzbekistan", "maldives",
+			"vietnam", "indonesia", "pakistan", "north korea", "saudi arabia", "iran", "iraq", "israel",
+			"taiwan", "united arab emirates",
 		},
 		Rare = {
-			"brunei", "east timor", "bahrain", "armenia", "azerbaijan", "georgia", "turkmenistan", "tajikistan",
-			"kyrgyzstan", "cyprus", "palestine", "hong kong", "macau", "bhutan",
+			"brunei", "bahrain", "armenia", "azerbaijan", "georgia", "cyprus", "palestine", "hong kong",
+			"bhutan", "myanmar", "qatar", "kuwait", "jordan", "lebanon", "yemen", "kazakhstan", "malaysia",
+			"bangladesh", "sri lanka", "afghanistan", "cambodia", "syria",
 		},
 		DeepCut = {
+			"laos", "oman", "maldives", "uzbekistan", "turkmenistan", "tajikistan", "kyrgyzstan",
+			"east timor", "macau",
 		},
 		Mythic = {
 		},

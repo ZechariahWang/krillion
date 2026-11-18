@@ -7,10 +7,8 @@ return {
 			"t rex", "triceratops", "velociraptor", "stegosaurus", "brachiosaurus",
 		},
 		Schooler = {
-			"diplodocus", "ankylosaurus", "spinosaurus", "pterodactyl", "allosaurus", "apatosaurus",
-			"brontosaurus", "parasaurolophus", "pachycephalosaurus", "dilophosaurus", "archaeopteryx",
-			"giganotosaurus", "utahraptor", "compsognathus", "carnotaurus", "gallimimus", "iguanodon",
-			"pteranodon", "mosasaurus", "dimetrodon", "bird", "chicken", "indominus rex",
+			"diplodocus", "ankylosaurus", "spinosaurus", "pterodactyl", "allosaurus", "brontosaurus",
+			"parasaurolophus", "dilophosaurus", "giganotosaurus", "pteranodon",
 		},
 		Rare = {
 			"deinonychus", "therizinosaurus", "troodon", "oviraptor", "protoceratops", "styracosaurus",
@@ -24,7 +22,9 @@ return {
 			"daspletosaurus", "nanotyrannus", "liopleurodon", "kronosaurus", "tylosaurus", "indoraptor",
 			"godzilla", "yoshi", "littlefoot", "sauropod", "theropod", "dino", "cera", "ducky", "petrie",
 			"chomper", "blue", "aerodactyl", "tyrantrum", "predator x", "turkey", "ostrich", "duck", "eagle",
-			"penguin", "owl", "goose", "pigeon",
+			"penguin", "owl", "goose", "pigeon", "apatosaurus", "pachycephalosaurus", "archaeopteryx",
+			"utahraptor", "compsognathus", "carnotaurus", "gallimimus", "iguanodon", "mosasaurus",
+			"dimetrodon", "bird", "chicken", "indominus rex",
 		},
 		DeepCut = {
 			"ouranosaurus", "scelidosaurus", "polacanthus", "stygimoloch", "nodosaurus", "heterodontosaurus",

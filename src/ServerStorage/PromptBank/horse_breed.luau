@@ -10,10 +10,8 @@ return {
 			"friesian", "lipizzaner", "pinto", "shire", "quarter horse",
 		},
 		Schooler = {
-			"percheron", "morgan", "paint horse", "miniature horse", "icelandic horse", "welsh pony", "haflinger", "andalusian",
-			"belgian", "tennessee walker", "standardbred", "gypsy vanner", "american saddlebred", "przewalskis horse",
-			"connemara", "fjord",
-			"palomino",
+			"percheron", "morgan", "paint horse", "miniature horse", "icelandic horse", "welsh pony",
+			"andalusian", "belgian", "tennessee walker", "gypsy vanner", "fjord", "palomino",
 		},
 		Rare = {
 			"cleveland bay", "lusitano", "oldenburg", "trakehner", "holsteiner", "selle francais", "peruvian paso",
@@ -24,7 +22,8 @@ return {
 			"konik", "paso fino", "akhal teke", "camargue", "criollo", "hackney", "dartmoor pony", "exmoor pony", "brumby",
 			"hanoverian", "dutch warmblood", "falabella",
 			"canadian horse", "pony of the americas", "westphalian", "swedish warmblood", "danish warmblood",
-			"belgian warmblood", "irish sport horse", "anglo arab", "dutch harness horse",
+			"belgian warmblood", "irish sport horse", "anglo arab", "dutch harness horse", "haflinger",
+			"standardbred", "american saddlebred", "przewalskis horse", "connemara",
 		},
 		DeepCut = {
 			"kladruber", "sorraia", "yakutian", "sable island horse", "galiceno", "eriskay pony", "kathiawari", "lokai",

@@ -10,11 +10,8 @@ return {
 			"baba ganoush", "tabbouleh", "kofta", "fattoush", "shish kebab",
 		},
 		Schooler = {
-			"labneh", "shakshuka", "kibbeh", "manakish", "tahini", "halva", "knafeh", "dolma", "couscous",
-			"lentil soup", "pilaf",
-			"lahmacun", "pide", "borek", "turkish delight", "mezze", "ayran", "tagine",
-			"doner kebab", "shish tawook", "harissa", "simit", "manti", "dondurma",
-			"zaatar",
+			"labneh", "shakshuka", "kibbeh", "tahini", "halva", "knafeh", "dolma", "couscous", "lentil soup",
+			"pilaf", "turkish delight", "mezze", "ayran", "tagine", "doner kebab", "harissa", "zaatar",
 		},
 		Rare = {
 			"muhammara", "freekeh", "sumac", "umm ali", "basbousa", "maamoul", "qatayef", "iskender kebab",
@@ -33,7 +30,8 @@ return {
 			"ful medames",
 			"adana kebab",
 			"lavash", "sabich", "zhug", "arayes", "halloumi", "dukkah", "baharat", "pickled turnips", "doogh",
-			"lokma", "kaak",
+			"lokma", "kaak", "manakish", "lahmacun", "pide", "borek", "shish tawook", "simit", "manti",
+			"dondurma",
 		},
 		DeepCut = {
 			"hashweh", "kibbeh nayyeh", "kibbeh labaniyeh", "sheikh al mahshi", "fatayer",

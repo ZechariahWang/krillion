@@ -11,13 +11,9 @@ return {
 		},
 		Schooler = {
 			"katsu", "tonkatsu", "yakitori", "gyoza", "edamame", "wasabi", "soba", "okonomiyaki", "bento",
-			"california roll", "dumplings", "yakisoba", "tofu", "nigiri", "maki", "sukiyaki", "shabu shabu",
-			"karaage", "katsu curry", "japanese curry", "taiyaki", "dango", "daifuku",
-			"pocky", "ramune", "unagi", "tamago", "natto", "seaweed", "nori", "panko", "ponzu", "gyudon",
-			"oyakodon", "katsudon", "hibachi", "spam musubi", "melon pan", "castella",
-			"anpan", "amazake", "furikake", "salmon roll", "dragon roll",
-			"spicy tuna roll", "rainbow roll", "hand roll", "temaki", "chirashi", "tamagoyaki", "dorayaki",
-			"mochi ice cream", "green tea",
+			"california roll", "dumplings", "yakisoba", "tofu", "nigiri", "maki", "sukiyaki", "katsu curry",
+			"japanese curry", "taiyaki", "dango", "pocky", "ramune", "unagi", "seaweed", "nori", "hibachi",
+			"salmon roll", "dragon roll", "hand roll", "mochi ice cream", "green tea",
 		},
 		Rare = {
 			"oden", "yakiniku", "tsukemono", "umeboshi", "kitsune udon", "tantanmen", "tonkotsu ramen",
@@ -31,7 +27,9 @@ return {
 			"spider roll", "philadelphia roll", "futomaki", "uramaki", "kappa maki", "tekka maki", "ebi furai", "anko",
 			"wagashi", "chashu", "onsen tamago", "zaru soba", "kaiseki", "wakame", "daikon", "tonkatsu sauce",
 			"japanese cheesecake", "shokupan", "katsu sando", "gyukatsu", "kakuni", "negitoro", "amaebi", "masago",
-			"katsuobushi",
+			"katsuobushi", "shabu shabu", "karaage", "daifuku", "tamago", "natto", "panko", "ponzu", "gyudon",
+			"oyakodon", "katsudon", "spam musubi", "melon pan", "castella", "anpan", "amazake", "furikake",
+			"spicy tuna roll", "rainbow roll", "temaki", "chirashi", "tamagoyaki", "dorayaki",
 		},
 		DeepCut = {
 			"oshizushi", "temarizushi", "narezushi", "sasazushi", "kaisendon",

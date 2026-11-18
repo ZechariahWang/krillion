@@ -10,11 +10,10 @@ return {
 			"mummy", "jaws", "gremlin",
 		},
 		Schooler = {
-			"vampire", "ghost", "the invisible man", "the blob", "alien", "predator", "the thing", "chucky", "freddy krueger",
-			"jason voorhees", "michael myers", "pennywise", "mothra", "king ghidorah", "kraken", "bigfoot", "demogorgon",
-			"the babadook", "sully", "mike wazowski", "shrek", "dragon", "giant spider", "the grinch", "witch", "skeleton",
-			"smaug", "balrog", "gollum", "troll", "orc", "gargoyle", "the hulk", "medusa", "the terminator", "velociraptor",
-			"t rex", "megalodon", "cyclops", "creature from the black lagoon", "ghoul", "yeti",
+			"vampire", "ghost", "the invisible man", "the blob", "alien", "predator", "chucky",
+			"freddy krueger", "jason voorhees", "michael myers", "pennywise", "mothra", "kraken", "bigfoot",
+			"sully", "mike wazowski", "shrek", "dragon", "the grinch", "witch", "the hulk", "velociraptor",
+			"t rex", "yeti",
 		},
 		Rare = {
 			"cthulhu", "the fly", "gamera", "tarantula", "bride of frankenstein", "nosferatu", "mogwai",
@@ -23,7 +22,10 @@ return {
 			"dr jekyll and mr hyde", "the golem", "queen alien", "the rancor", "the mimic", "the creeper",
 			"the cloverfield monster", "chupacabra", "wendigo", "krampus", "the pale man", "the hydra", "sandworm",
 			"beetlejuice", "pumpkinhead", "candyman", "swamp thing", "boogeyman", "sarlacc", "wampa", "basilisk", "aragog",
-			"mothman", "critters", "anaconda", "piranha",
+			"mothman", "critters", "anaconda", "piranha", "giant spider", "balrog", "gargoyle", "ghoul",
+			"the thing", "king ghidorah", "demogorgon", "the babadook", "skeleton", "smaug", "gollum",
+			"troll", "orc", "medusa", "the terminator", "megalodon", "cyclops",
+			"creature from the black lagoon",
 		},
 		DeepCut = {
 			"anguirus", "baragon", "gorgo", "reptilicus", "the giant behemoth", "the tingler", "gappa", "daimajin", "gyaos",

@@ -10,11 +10,9 @@ return {
 			"gorilla", "meerkat", "ostrich", "chimpanzee", "flamingo",
 		},
 		Schooler = {
-			"rhino", "leopard", "hyena", "crocodile", "monkey", "buffalo", "antelope", "gazelle", "warthog", "baboon",
-			"wildebeest", "camel", "lemur", "mandrill", "vulture", "python", "cobra", "black mamba", "okapi", "aardvark",
-			"jackal", "impala", "springbok", "oryx", "nile crocodile", "white rhino", "black rhino",
-			"cape buffalo", "mountain gorilla", "chameleon", "scorpion", "secretarybird", "pangolin",
-			"honey badger", "fennec fox", "ring tailed lemur", "bonobo",
+			"rhino", "leopard", "hyena", "crocodile", "monkey", "buffalo", "antelope", "gazelle", "warthog",
+			"baboon", "wildebeest", "camel", "lemur", "vulture", "python", "cobra", "jackal", "impala",
+			"chameleon",
 		},
 		Rare = {
 			"kudu", "eland", "wild dog", "serval", "caracal", "mongoose", "bushbaby", "genet", "hyrax", "dik dik", "topi",
@@ -29,7 +27,10 @@ return {
 			"thomsons gazelle", "grants gazelle", "gerenuk", "gemsbok", "addax", "blesbok", "sand cat", "tsetse fly",
 			"dung beetle",
 			"african penguin", "cape fur seal", "forest elephant", "barbary macaque", "locust", "leopard tortoise",
-			"agama", "plains zebra", "mountain zebra",
+			"agama", "plains zebra", "mountain zebra", "mandrill", "black mamba", "okapi", "aardvark",
+			"springbok", "oryx", "nile crocodile", "white rhino", "black rhino", "cape buffalo",
+			"mountain gorilla", "scorpion", "secretarybird", "pangolin", "honey badger", "fennec fox",
+			"ring tailed lemur", "bonobo",
 		},
 		DeepCut = {
 			"aye aye", "giant forest hog", "zorilla", "cape clawless otter", "african golden cat", "black footed cat", "indri",

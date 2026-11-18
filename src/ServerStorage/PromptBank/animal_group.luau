@@ -10,12 +10,9 @@ return {
 			"murder", "gaggle", "pod", "parliament", "colony", "litter", "troop",
 		},
 		Schooler = {
-			"shoal", "army", "brood", "clutch", "covey", "drove", "flight", "kennel", "brace", "clowder", "bevy",
-			"band", "bunch", "mob", "nest", "parade", "pair", "team", "tribe", "plague", "hive", "family",
-			"cluster", "company", "congregation", "convocation", "crash", "murmuration", "business", "unkindness",
-			"skulk", "sleuth", "sloth", "sounder", "tower", "streak", "mischief", "romp", "caravan", "gang",
-			"array", "cete", "bloat", "cackle", "knot", "leap", "ambush", "rookery", "den",
-			"clan",
+			"shoal", "army", "brood", "clutch", "flight", "kennel", "clowder", "band", "bunch", "mob", "nest",
+			"parade", "pair", "team", "tribe", "plague", "hive", "family", "company", "crash", "murmuration",
+			"unkindness", "gang", "den", "clan",
 		},
 		Rare = {
 			"gam", "bask", "charm", "conspiracy", "dazzle", "dole", "exaltation", "ostentation", "pace", "prickle",
@@ -26,7 +23,10 @@ return {
 			"hedge", "huddle", "gulp", "glaring", "drift", "congress", "chain", "clamour", "cast",
 			"bouquet", "bellowing", "drey", "fall", "float", "flush", "husk", "parcel", "quiver", "rout", "span",
 			"tiding", "troubling", "walk", "wisp",
-			"cloud", "bloom", "cohort", "barrel", "host", "committee", "flutter", "run", "cry",
+			"cloud", "bloom", "cohort", "barrel", "host", "committee", "flutter", "run", "cry", "drove",
+			"brace", "covey", "bevy", "cluster", "congregation", "convocation", "business", "skulk", "sleuth",
+			"sloth", "sounder", "tower", "streak", "mischief", "romp", "caravan", "array", "cete", "bloat",
+			"cackle", "knot", "leap", "ambush", "rookery",
 		},
 		DeepCut = {
 			"ascension", "bazaar", "bind", "blessing", "boogle", "bury", "cartload", "clutter", "coterie", "covert",

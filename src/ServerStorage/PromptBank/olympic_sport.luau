@@ -11,17 +11,17 @@ return {
 		},
 		Schooler = {
 			"basketball", "soccer", "tennis", "volleyball", "cycling", "boxing", "diving", "golf",
-			"table tennis", "water polo", "beach volleyball", "baseball", "softball", "handball", "hockey",
-			"skateboarding", "javelin", "long jump", "high jump", "shot put", "discus", "marathon",
-			"sprinting", "hurdles", "pole vault", "relay", "rowing", "fencing", "archery", "judo",
-			"wrestling", "weightlifting", "surfing", "badminton", "taekwondo", "karate",
+			"table tennis", "skateboarding", "fencing", "archery", "judo", "weightlifting", "surfing",
 		},
 		Rare = {
 			"sailing", "sport climbing", "canoeing", "triathlon", "equestrian", "shooting",
 			"artistic gymnastics", "rhythmic gymnastics", "mountain biking", "bmx", "cricket", "lacrosse",
 			"squash", "flag football", "decathlon", "heptathlon", "triple jump", "hammer throw",
 			"race walking", "steeplechase", "windsurfing", "aquatics", "bouldering", "trampoline",
-			"road cycling", "dressage", "show jumping", "artistic swimming", "rugby sevens",
+			"road cycling", "dressage", "show jumping", "artistic swimming", "rugby sevens", "water polo",
+			"beach volleyball", "baseball", "softball", "handball", "hockey", "javelin", "long jump",
+			"high jump", "shot put", "discus", "marathon", "sprinting", "hurdles", "pole vault", "relay",
+			"rowing", "wrestling", "badminton", "taekwondo", "karate",
 		},
 		DeepCut = {
 			"marathon swimming", "canoe slalom", "canoe sprint", "3x3 basketball", "track cycling",

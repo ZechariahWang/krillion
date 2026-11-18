@@ -10,10 +10,9 @@ return {
 			"chicken pot pie", "shepherds pie", "banana cream pie", "mud pie",
 		},
 		Schooler = {
-			"blueberry pie", "peach pie", "lemon meringue pie", "strawberry pie", "sweet potato pie", "cottage pie", "meat pie",
-			"chocolate cream pie", "coconut cream pie", "custard pie", "blackberry pie", "mince pie", "pork pie", "steak pie",
-			"fish pie", "cream pie", "raspberry pie", "rhubarb pie", "strawberry rhubarb pie", "boston cream pie",
-			"french silk pie", "chocolate pie", "ice cream pie", "whoopie pie", "cornish pasty", "quiche", "empanada", "pot pie",
+			"blueberry pie", "peach pie", "lemon meringue pie", "strawberry pie", "sweet potato pie",
+			"cottage pie", "meat pie", "chocolate cream pie", "coconut cream pie", "custard pie",
+			"blackberry pie", "raspberry pie", "boston cream pie", "whoopie pie", "pot pie",
 		},
 		Rare = {
 			"buttermilk pie", "chess pie", "shoofly pie", "hand pie", "gooseberry pie", "plum pie", "pear pie", "apricot pie",
@@ -24,7 +23,9 @@ return {
 			"lemon chess pie", "persimmon pie", "frito pie", "banoffee pie", "chocolate meringue pie", "butterscotch pie",
 			"coconut custard pie", "icebox pie", "chocolate pecan pie", "apple crumb pie", "chicken and mushroom pie",
 			"meat and potato pie", "bacon and egg pie", "mince and cheese pie", "bastilla", "black bottom pie", "chiffon pie",
-			"smores pie", "sour cherry pie", "beef and ale pie", "chicken and ham pie",
+			"smores pie", "sour cherry pie", "beef and ale pie", "chicken and ham pie", "mince pie",
+			"pork pie", "steak pie", "fish pie", "cream pie", "strawberry rhubarb pie", "chocolate pie",
+			"cornish pasty", "empanada", "rhubarb pie", "french silk pie", "ice cream pie", "quiche",
 		},
 		DeepCut = {
 			"funeral pie", "squab pie", "mississippi mud pie", "montgomery pie", "atlantic beach pie", "jefferson davis pie",

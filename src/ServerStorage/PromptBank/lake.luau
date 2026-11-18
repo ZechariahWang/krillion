@@ -11,8 +11,7 @@ return {
 			"lake baikal", "lake titicaca", "crater lake",
 		},
 		Schooler = {
-			"great lakes", "lake geneva", "lake como", "lake placid", "lake powell", "lake mead",
-			"great salt lake", "lake louise", "dead sea",
+			"great lakes", "lake powell", "lake mead", "great salt lake", "dead sea",
 		},
 		Rare = {
 			"lake st clair", "crystal lake", "swan lake", "lake garda", "lake champlain", "lake okeechobee",
@@ -48,7 +47,8 @@ return {
 			"lake vermilion", "leech lake", "mille lacs lake", "red lake", "rainy lake", "lake kabetogama",
 			"lake namakan", "lake saganaga", "lake las vegas", "lake kawaguchi", "lake ashi", "poyang lake",
 			"dongting lake", "tai lake", "qinghai lake", "pangong lake", "dal lake", "tonle sap", "inle lake",
-			"lake merritt", "lake tenaya", "lake tuz", "salton sea",
+			"lake merritt", "lake tenaya", "lake tuz", "salton sea", "lake geneva", "lake como",
+			"lake placid", "lake louise",
 		},
 		DeepCut = {
 			"lake hillier", "peyto lake", "maligne lake", "lake minnewanka", "kootenay lake",

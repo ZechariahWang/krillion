@@ -11,13 +11,9 @@ return {
 		},
 		Schooler = {
 			"white rice", "brown rice", "sticky rice", "egg fried rice", "pilaf", "onigiri", "rice balls",
-			"mexican rice", "coconut rice", "jasmine rice", "basmati rice", "wild rice",
-			"yellow rice", "rice cakes", "bibimbap", "kimchi fried rice", "chicken and rice", "dirty rice",
-			"red beans and rice", "arroz con pollo", "mango sticky rice", "sushi rolls", "poke bowl",
-			"rice bowl", "teriyaki bowl", "chicken fried rice", "shrimp fried rice",
-			"cilantro lime rice", "spam musubi", "california roll",
-			"curry rice", "pineapple fried rice",
-			
+			"mexican rice", "coconut rice", "jasmine rice", "basmati rice", "yellow rice", "rice cakes",
+			"chicken and rice", "mango sticky rice", "sushi rolls", "rice bowl", "chicken fried rice",
+			"shrimp fried rice", "california roll", "curry rice",
 		},
 		Rare = {
 			"jollof rice", "kedgeree", "nasi goreng", "donburi", "gyudon", "katsudon", "oyakodon", "chirashi",
@@ -31,7 +27,9 @@ return {
 			"nasi campur", "nasi uduk", "lontong", "pelau", "moros y cristianos", "arroz negro", "arroz caldo",
 			"bisi bele bath", "pulihora", "tamarind rice", "zarda", "waakye", "tacu tacu", "carreteiro",
 			"galinhada", "baiao de dois", "tehri", "kabuli pulao", "machboos",
-			"tapsilog", "longsilog", "rice and peas", "pigeon peas and rice", "tomato rice",
+			"tapsilog", "longsilog", "rice and peas", "pigeon peas and rice", "tomato rice", "wild rice",
+			"bibimbap", "kimchi fried rice", "dirty rice", "red beans and rice", "arroz con pollo",
+			"poke bowl", "teriyaki bowl", "cilantro lime rice", "spam musubi", "pineapple fried rice",
 		},
 		DeepCut = {
 			"tahchin", "baghali polo", "zereshk polo", "sabzi polo", "albaloo polo", "adas polo", "loobia polo",

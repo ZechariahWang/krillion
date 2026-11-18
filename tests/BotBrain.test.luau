@@ -116,4 +116,24 @@ return function(test)
 		end
 		assert(BotBrain.delay(20, 1) < 20, "a bot always answers before the prompt ends")
 	end)
+
+	test("bots: a typical bot reaches Rare far less often than players do (about 27%)", function()
+		-- Every skill roll and a spread of tier rolls, weighted like a normal curve.
+		local rare = Tiers.index("Rare")
+		local hits = 0
+		local weight = 0
+		for skillStep = 0, 20 do
+			local skill = BotBrain.skill(skillStep / 20)
+			for zStep = -30, 30 do
+				local z = zStep / 10
+				local w = math.exp(-z * z / 2)
+				weight += w
+				if BotBrain.chooseTier(skill, z) >= rare then
+					hits += w
+				end
+			end
+		end
+		local share = hits / weight
+		assert(share < 0.2, "bots reach Rare or better " .. math.floor(share * 100 + 0.5) .. "% of the time")
+	end)
 end

@@ -254,21 +254,57 @@ for _, prompt in list do
 	byId[prompt.id] = prompt
 end
 
+-- Too niche for most players: still in the bank (and its tests), never picked. Delete a line to bring one back.
+local retired: { [string]: boolean } = {
+	roman_emperor = true,
+	egyptian_god = true,
+	military_rank = true,
+	famous_explorer = true,
+	bridge_type = true,
+	poem_type = true,
+	art_movement = true,
+	cut_of_meat = true,
+	sausage = true,
+	lamp_type = true,
+	movie_monster = true,
+	famous_dog = true,
+	bird_of_prey = true,
+	famous_mouse = true,
+	famous_fish = true,
+	famous_bear = true,
+	famous_primate = true,
+	famous_horse = true,
+	famous_cat = true,
+	famous_dragon = true,
+	famous_bird = true,
+	famous_pirate = true,
+	famous_monarch = true,
+	famous_painting = true,
+	famous_scientist = true,
+	deer_or_antelope = true,
+}
+
 local PromptBank = {
 	List = list,
 	ById = byId,
+	Retired = retired,
 }
 
--- A random prompt whose id is not in the exclusion set. Falls back to any prompt when everything is excluded.
+-- A random live prompt whose id is not in the exclusion set. Falls back to any live prompt when every one is
+-- excluded.
 function PromptBank.random(exclude: { [string]: boolean }): Prompt
+	local live = {}
 	local candidates = {}
 	for _, prompt in list do
-		if not exclude[prompt.id] then
-			table.insert(candidates, prompt)
+		if not retired[prompt.id] then
+			table.insert(live, prompt)
+			if not exclude[prompt.id] then
+				table.insert(candidates, prompt)
+			end
 		end
 	end
 	if #candidates == 0 then
-		candidates = list
+		candidates = live
 	end
 	return candidates[math.random(1, #candidates)]
 end

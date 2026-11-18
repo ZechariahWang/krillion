@@ -10,12 +10,12 @@ return {
 			"antarctica", "arctic", "atacama",
 		},
 		Schooler = {
-			"kalahari", "arabian", "sonoran", "namib", "death valley",
+			"kalahari", "arabian", "death valley",
 		},
 		Rare = {
 			"great victoria", "great basin", "syrian", "sinai", "negev", "libyan", "nubian", "painted desert",
 			"rub al khali", "great sandy", "chihuahuan", "thar", "colorado", "western desert", "outback",
-			"tatooine", "cold desert", "hot desert", "taklamakan", "karoo", "patagonian",
+			"tatooine", "cold desert", "hot desert", "taklamakan", "karoo", "patagonian", "namib", "sonoran",
 		},
 		DeepCut = {
 			"karakum", "simpson", "tenere", "danakil", "judean", "black rock", "dasht e lut", "nefud",

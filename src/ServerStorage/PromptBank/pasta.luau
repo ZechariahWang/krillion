@@ -11,14 +11,14 @@ return {
 		},
 		Schooler = {
 			"fettuccine", "lasagna", "ravioli", "linguine", "fusilli", "rigatoni", "tortellini", "farfalle",
-			"ziti", "rotini", "orzo", "tagliatelle", "cannelloni", "gnocchi", "alphabet pasta", "egg noodles",
-			"ramen", "vermicelli",
+			"ziti", "rotini",
 		},
 		Rare = {
 			"ditalini", "cavatappi", "bucatini", "orecchiette", "tortelloni", "agnolotti", "rotelle",
 			"campanelle", "paccheri", "spaghettini", "fideo", "pastina", "gemelli", "mostaccioli", "mafalde",
 			"udon", "soba", "rice noodles", "couscous", "lo mein", "chow mein", "glass noodles", "yakisoba",
-			"radiatori", "cavatelli", "spaetzle", "manicotti", "pappardelle", "conchiglie",
+			"radiatori", "cavatelli", "spaetzle", "manicotti", "pappardelle", "conchiglie", "orzo",
+			"tagliatelle", "cannelloni", "gnocchi", "alphabet pasta", "egg noodles", "ramen", "vermicelli",
 		},
 		DeepCut = {
 			"trofie", "fregola", "malloreddus", "capunti", "bigoli", "pici", "lumaconi", "maltagliati",

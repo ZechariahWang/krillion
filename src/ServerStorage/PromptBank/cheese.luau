@@ -11,8 +11,7 @@ return {
 		},
 		Schooler = {
 			"brie", "feta", "gouda", "swiss", "blue cheese", "cream cheese", "american", "provolone",
-			"pepper jack", "monterey jack", "colby jack", "cottage cheese", "goat cheese", "string cheese",
-			"camembert", "ricotta", "gorgonzola", "queso", "colby",
+			"pepper jack", "cottage cheese", "goat cheese", "string cheese",
 		},
 		Rare = {
 			"havarti", "muenster", "jarlsberg", "mascarpone", "asiago", "fontina", "burrata", "paneer",
@@ -27,7 +26,8 @@ return {
 			"garlic havarti", "shredded cheese", "moon cheese", "garlic cheese", "smoked cream cheese",
 			"jalapeno cream cheese", "chili cheese", "wensleydale", "oaxaca", "queso blanco", "cheese curd",
 			"medium cheddar", "mature cheddar", "marble cheese", "smoked mozzarella", "baby swiss",
-			"cheddar jack", "mexican blend", "edam", "halloumi", "comte", "chihuahua",
+			"cheddar jack", "mexican blend", "edam", "halloumi", "comte", "chihuahua", "monterey jack",
+			"colby jack", "camembert", "ricotta", "gorgonzola", "queso", "colby",
 		},
 		DeepCut = {
 			"port salut", "double gloucester", "cheshire", "caerphilly", "lancashire", "appenzeller",

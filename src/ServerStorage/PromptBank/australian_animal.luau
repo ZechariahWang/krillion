@@ -10,11 +10,10 @@ return {
 			"tasmanian devil", "kookaburra", "echidna", "saltwater crocodile", "wallaby",
 		},
 		Schooler = {
-			"cockatoo", "galah", "frilled lizard", "bilby", "quokka", "numbat", "sugar glider", "possum", "cassowary",
-			"black swan", "thorny devil", "goanna", "taipan", "inland taipan", "red kangaroo", "budgerigar",
-			"rainbow lorikeet", "funnel web spider", "redback spider", "box jellyfish", "bearded dragon",
-			"blue tongue skink", "thylacine", "huntsman spider", "great white shark", "magpie",
-			"cane toad", "clownfish",
+			"cockatoo", "galah", "frilled lizard", "quokka", "sugar glider", "possum", "cassowary",
+			"black swan", "taipan", "red kangaroo", "budgerigar", "rainbow lorikeet", "funnel web spider",
+			"redback spider", "box jellyfish", "bearded dragon", "blue tongue skink", "thylacine", "magpie",
+			"cane toad",
 		},
 		Rare = {
 			"bandicoot", "quoll", "potoroo", "bettong", "wallaroo", "pademelon", "bowerbird", "brown snake",
@@ -30,7 +29,8 @@ return {
 			"southern hairy nosed wombat", "agile wallaby", "western grey kangaroo", "gouldian finch", "powerful owl",
 			"southern boobook", "bush stone curlew", "magpie goose", "australian white ibis", "bull ant",
 			"christmas beetle", "leaf tailed gecko", "crown of thorns starfish", "white tailed spider",
-			"coastal taipan", "woma python", "black headed python", "pink cockatoo",
+			"coastal taipan", "woma python", "black headed python", "pink cockatoo", "numbat", "bilby",
+			"goanna", "huntsman spider", "inland taipan", "thorny devil", "great white shark", "clownfish",
 		},
 		DeepCut = {
 			"kowari", "dunnart", "antechinus", "spinifex hopping mouse", "rakali", "planigale", "honey possum",

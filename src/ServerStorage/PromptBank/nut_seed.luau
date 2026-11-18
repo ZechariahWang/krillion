@@ -10,9 +10,8 @@ return {
 			"hazelnut", "chestnut", "macadamia", "pumpkin seed", "sesame seed", "coconut",
 		},
 		Schooler = {
-			"brazil nut", "pine nut", "acorn", "chia seed", "flax seed", "poppy seed", "hemp seed",
-			"mixed nuts", "watermelon seed", "melon seed", "hickory nut", "black walnut", "pomegranate seed",
-			"apple seed", "avocado seed", "mixed seeds", "bean",
+			"brazil nut", "pine nut", "acorn", "chia seed", "flax seed", "poppy seed", "mixed nuts",
+			"watermelon seed",
 		},
 		Rare = {
 			"buckeye", "cacao bean", "vanilla bean", "pepita", "birdseed", "wild rice", "pinto bean",
@@ -22,7 +21,8 @@ return {
 			"buckwheat", "soybean", "edamame", "corn kernel", "peppercorn", "black pepper", "flower seed",
 			"mustard seed", "english walnut", "rice", "oats", "barley", "chickpea", "lentil", "pea",
 			"coffee bean", "nutmeg", "kidney bean", "black bean", "wheat", "rye", "corn", "buffalo nut",
-			"tallow nut", "cantaloupe seed", "honeydew seed",
+			"tallow nut", "cantaloupe seed", "honeydew seed", "hemp seed", "melon seed", "hickory nut",
+			"black walnut", "pomegranate seed", "apple seed", "avocado seed", "mixed seeds", "bean",
 		},
 		DeepCut = {
 			"ajwain", "annatto", "date palm seed", "date stone", "date seed", "jojoba", "stone pine",

@@ -10,15 +10,15 @@ return {
 			"mushroom cloud", "storm cloud", "rain cloud",
 		},
 		Schooler = {
-			"cumulonimbus", "nimbus", "nimbostratus", "funnel cloud", "contrail", "dark cloud",
-			"fluffy cloud", "white cloud", "snow cloud", "dust cloud", "smoke cloud", "ash cloud", "fog",
+			"cumulonimbus", "nimbus", "nimbostratus", "funnel cloud", "dark cloud", "fluffy cloud",
+			"white cloud",
 		},
 		Rare = {
 			"altostratus", "altocumulus", "cirrostratus", "stratocumulus", "cirrocumulus", "wall cloud",
 			"shelf cloud", "roll cloud", "anvil cloud", "fair weather cumulus", "lenticular", "mammatus",
 			"mist", "supercell", "nebula", "oort cloud", "cloud storage", "iridescent cloud", "ice cloud",
 			"steam cloud", "pink cloud", "sunset cloud", "sulfuric acid cloud", "haze", "smog", "toxic cloud",
-			"hurricane cloud",
+			"hurricane cloud", "contrail", "snow cloud", "dust cloud", "smoke cloud", "ash cloud", "fog",
 		},
 		DeepCut = {
 			"castellanus", "floccus", "fractus", "congestus", "virga", "nacreous", "noctilucent", "asperitas",

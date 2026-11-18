@@ -10,11 +10,10 @@ return {
 			"mango sticky rice", "bulgogi", "tteokbokki", "korean fried chicken", "thai iced tea",
 		},
 		Schooler = {
-			"red curry", "massaman curry", "panang curry", "tom kha", "som tam", "pad see ew", "drunken noodles", "pad kra pao",
-			"satay", "larb", "khao pad", "spring rolls", "yellow curry", "khao soi", "boat noodles", "japchae", "kimbap",
-			"galbi", "samgyeopsal", "ramyeon", "jjajangmyeon", "mandu", "hotteok", "bingsu", "kimchi jjigae", "sundubu jjigae",
-			"naengmyeon", "pajeon", "bossam", "dakgalbi", "budae jjigae", "samgyetang", "banchan", "tteok", "corn dog",
-			"bungeoppang", "kimchi fried rice", "doenjang jjigae", "gyeran jjim", "dalgona",
+			"red curry", "massaman curry", "panang curry", "tom kha", "som tam", "pad see ew",
+			"drunken noodles", "pad kra pao", "satay", "khao pad", "spring rolls", "yellow curry", "japchae",
+			"kimbap", "galbi", "samgyeopsal", "ramyeon", "jjajangmyeon", "mandu", "hotteok", "bingsu",
+			"kimchi jjigae", "corn dog", "bungeoppang", "dalgona",
 		},
 		Rare = {
 			"pad woon sen", "tod mun pla", "gaeng som", "gaeng hang lay", "nam tok", "yum woon sen", "khao man gai", "moo ping",
@@ -24,7 +23,10 @@ return {
 			"songpyeon", "gyeranppang", "bibim naengmyeon", "jeyuk bokkeum", "ojingeo bokkeum", "ssam", "ssamjang", "dongchimi",
 			"pineapple fried rice", "crying tiger", "pad pak boong", "moo krob", "jok", "kuay teow", "curry puff", "bua loy",
 			"kor moo yang", "kimchi jeon", "tteokguk", "yukgaejang", "jjampong", "tangsuyuk", "gyeran mari", "buldak",
-			"dakgangjeong", "bindaetteok", "mul naengmyeon", "gamja jeon", "gochujang", "pepero",
+			"dakgangjeong", "bindaetteok", "mul naengmyeon", "gamja jeon", "gochujang", "pepero", "larb",
+			"khao soi", "boat noodles", "sundubu jjigae", "naengmyeon", "pajeon", "bossam", "dakgalbi",
+			"budae jjigae", "samgyetang", "banchan", "tteok", "kimchi fried rice", "doenjang jjigae",
+			"gyeran jjim",
 		},
 		DeepCut = {
 			"khao tom", "khao kha moo", "gaeng pa", "pad prik khing", "nam prik", "sai krok isan", "miang kham", "chu chee",

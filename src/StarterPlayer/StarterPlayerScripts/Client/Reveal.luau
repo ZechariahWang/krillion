@@ -28,6 +28,7 @@ local ROW_SPREAD = 1.4 -- every row is in within this, however many players ther
 local COUNT_SECONDS = 0.45
 local SCHOOLED_PAUSE = 0.3
 local WAIT_SECONDS = 10
+local PHONE_LIST_SCALE = 0.8 -- phones: the answers list's size, so seven rows fit the short screen
 local CARD_ENTER = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out) -- the dim fades in as the card slides up
 local CARD_EXIT = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In)
 local EXIT_MARGIN = 0.1 -- the card is fully gone this long before the rise starts
@@ -107,6 +108,12 @@ function Reveal.init(playerGui: PlayerGui)
 	badge.Visible = false
 	list = listFound :: Frame
 	rowTemplate = rowFound :: Frame
+	local listScale = list:FindFirstChildOfClass("UIScale")
+	if Ui.isPhone() and listScale ~= nil then
+		-- Ui.appear settles at "Rest", so the list keeps this size every time it rolls in.
+		listScale:SetAttribute("Rest", PHONE_LIST_SCALE)
+		listScale.Scale = PHONE_LIST_SCALE
+	end
 	ready = true
 end
 

@@ -11,13 +11,9 @@ return {
 		},
 		Schooler = {
 			"cocoa pebbles", "fruity pebbles", "trix", "honeycomb", "raisin bran", "special k", "apple jacks",
-			"golden grahams", "kix", "wheaties", "corn pops", "frosted mini wheats", "shredded wheat", "life",
-			"count chocula", "franken berry", "boo berry", "reeses puffs", "cookie crisp", "honey bunches of oats",
-			"grape nuts", "chex", "rice chex", "cocoa krispies", "granola", "waffle crisp", "fruity cheerios",
-			"apple cinnamon cheerios", "frosted cheerios", "honey smacks", "crunch berries", "weetabix",
-			"oatmeal squares", "bran flakes", "fiber one", "total",
-			"cinnamon chex", "corn chex", "honey kix", "golden crisp", "cinnamon life",
-			"pebbles",
+			"golden grahams", "kix", "wheaties", "corn pops", "frosted mini wheats", "life", "count chocula",
+			"franken berry", "boo berry", "reeses puffs", "cookie crisp", "honey bunches of oats", "chex",
+			"rice chex", "cocoa krispies", "waffle crisp", "honey smacks",
 		},
 		Rare = {
 			"all bran", "product 19", "cracklin oat bran", "chocolate chex", "peanut butter chex", "wheat chex",
@@ -31,7 +27,9 @@ return {
 			"muesli",
 			"puffed rice",
 			"puffed wheat",
-			"kashi",
+			"kashi", "shredded wheat", "grape nuts", "granola", "fruity cheerios", "apple cinnamon cheerios",
+			"frosted cheerios", "crunch berries", "weetabix", "oatmeal squares", "bran flakes", "fiber one",
+			"total", "cinnamon chex", "corn chex", "honey kix", "golden crisp", "cinnamon life", "pebbles",
 		},
 		DeepCut = {
 			"quisp", "quake", "kaboom", "freakies", "yummy mummy", "smurfberry crunch", "pac man cereal", "mr t cereal",
