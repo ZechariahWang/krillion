@@ -186,7 +186,6 @@ end
 
 local JUMP_GAP = 16 -- pixels between Roblox's touch jump button and the chip above it
 local chipRest: UDim2? = nil
-local toyRest: UDim2? = nil
 
 -- Roblox's own jump button, once the touch controls exist.
 local function jumpButton(): GuiObject?
@@ -211,19 +210,16 @@ local function dodgeJumpButton()
 	local root = playerGuiRef
 	local rail = if root ~= nil then Ui.findScreen(root, "Rail") else nil
 	local toy = if rail ~= nil then rail:FindFirstChild("ToyButton") else nil
-	if toy ~= nil and toy:IsA("GuiObject") and toyRest == nil then
-		toyRest = toy.Position
-	end
-	local lift = UDim2.fromOffset(0, barExtent())
 	local jump = jumpButton()
 	if jump == nil or not jump.Visible then
-		own.Position = chipRest - lift
-		if toy ~= nil and toy:IsA("GuiObject") and toyRest ~= nil then
-			toy.Position = toyRest - lift
+		-- The chip is authored high enough for the level bar under it; the THROW key stands on the chip.
+		own.Position = chipRest
+		if toy ~= nil and toy:IsA("GuiObject") then
+			toy.Position = UDim2.new(1, -16, 1, chipRest.Y.Offset - own.AbsoluteSize.Y - JUMP_GAP)
 		end
 		return
 	end
-	local bottom = jump.AbsolutePosition.Y - screen.AbsolutePosition.Y - JUMP_GAP - lift.Y.Offset
+	local bottom = jump.AbsolutePosition.Y - screen.AbsolutePosition.Y - JUMP_GAP - barExtent()
 	own.Position = UDim2.new(1, chipRest.X.Offset, 0, bottom)
 	if toy ~= nil and toy:IsA("GuiObject") then
 		toy.Position = UDim2.new(1, -16, 0, bottom - own.AbsoluteSize.Y - JUMP_GAP)
