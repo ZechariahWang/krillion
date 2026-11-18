@@ -53,6 +53,7 @@ return {
 			"silicone", "velveeta", "werthers", "candy apple", "caramel apple", "madame tussauds",
 			"klondike bar", "choco taco", "dum dums", "jelly babies", "jujubes", "styrofoam cup",
 			"jelly shoes", "tungsten", "heart", "frozen custard", "ice sheet", "lava", "toy soldier", "rock",
+			"frozen waterfall", "hot chocolate bomb",
 		},
 		DeepCut = {
 			"pitch", "sulfur", "selenium", "gallium", "caesium", "francium", "bismuth", "indium", "galinstan",
@@ -63,7 +64,7 @@ return {
 			"firn", "sea ice", "pack ice", "pancake ice", "frazil ice", "black ice", "rime", "hoar frost",
 			"verglas", "glaze ice", "iceberg tongue", "ice stalactite", "ice cave", "ice castle",
 			"ice palace", "ice hotel", "ice bar", "ice lantern", "butter sculpture", "cool whip", "lindt",
-			"dairy milk", "wax strips", "heat pack",
+			"dairy milk", "wax strips", "heat pack", "ice kachang", "cendol",
 		},
 		Mythic = {
 			"metallic hydrogen", "fusible alloy", "fields metal", "newtons metal", "cerrobend",
@@ -221,6 +222,11 @@ return {
 		["calippo"] = "popsicle", ["solero"] = "popsicle", ["twister"] = "popsicle",
 		["bingsu"] = "shaved ice", ["gelato cone"] = "gelato", ["army men"] = "toy soldier",
 		["green army men"] = "toy soldier", ["plastic army men"] = "toy soldier",
-		["toy soldiers"] = "toy soldier",
+		["toy soldiers"] = "toy soldier", ["molten rock"] = "lava", ["ice statue"] = "ice sculpture",
+		["glacial ice"] = "glacier", ["glacier ice"] = "glacier", ["ice in a cup"] = "ice cube",
+		["ice in your drink"] = "ice cube", ["ice in lemonade"] = "ice cube",
+		["cheese toasty"] = "grilled cheese", ["wax statue"] = "wax figure", ["lava flow"] = "lava",
+		["snow on roof"] = "snow", ["snow on ground"] = "snow", ["snow on car"] = "snow",
+		["sealing wax stick"] = "wax seal",
 	},
 }
