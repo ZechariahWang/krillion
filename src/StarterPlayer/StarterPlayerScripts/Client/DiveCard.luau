@@ -6,6 +6,7 @@
 -- Clones ReplicatedStorage.Templates.DiveCard (authored in git as a model.json) and only drives it; used by
 -- Reveal (full-screen, match) and LobbyQuiz (warm-up card). The pack's lanes and motion are Shared/DivePack.
 
+local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -138,7 +139,7 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 -- A full-screen card (options.fill) has no frame round it, and its water window takes the room below: these
 -- are fractions of the card's height, in place of the authored portrait layout.
 local FILL_LAYOUT = {
-	headerTop = 0.022, -- the status chips and Shells chip hide while the card shows (Windows.cover)
+	headerTop = 0.022, -- below Roblox's top bar (added in pixels); the status chips and Shells chip hide meanwhile
 	headerHeight = 0.085,
 	windowTop = 0.12, -- the water spans the card's full width from here
 	windowHeight = 0.71,
@@ -428,12 +429,15 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		-- The lip sits a little below the pill, by the same share of the pill's height.
 		local shrink = layout.headerHeight / math.max(header.Size.Y.Scale, 0.001)
 		local lipDrop = (headerLip.Position.Y.Scale - header.Position.Y.Scale) * shrink
-		header.Position = UDim2.fromScale(header.Position.X.Scale, layout.headerTop)
+		-- The card covers the whole screen, Roblox's top bar strip too (SharedUi.DiveCards is not BelowTopbar);
+		-- the header and the water start that many pixels lower, so Roblox's buttons never sit on them.
+		local inset = math.floor(GuiService:GetGuiInset().Y + 0.5)
+		header.Position = UDim2.new(header.Position.X.Scale, 0, layout.headerTop, inset)
 		header.Size = UDim2.fromScale(header.Size.X.Scale, layout.headerHeight)
-		headerLip.Position = UDim2.fromScale(headerLip.Position.X.Scale, layout.headerTop + lipDrop)
+		headerLip.Position = UDim2.new(headerLip.Position.X.Scale, 0, layout.headerTop + lipDrop, inset)
 		headerLip.Size = UDim2.fromScale(headerLip.Size.X.Scale, layout.headerHeight)
-		window.Position = UDim2.fromScale(0, layout.windowTop)
-		window.Size = UDim2.fromScale(1, layout.windowHeight)
+		window.Position = UDim2.new(0, 0, layout.windowTop, inset)
+		window.Size = UDim2.new(1, 0, layout.windowHeight, -inset)
 		-- Edge to edge: the window has no frame of its own either.
 		local windowStroke = window:FindFirstChild("Border")
 		if windowStroke ~= nil and windowStroke:IsA("UIStroke") then

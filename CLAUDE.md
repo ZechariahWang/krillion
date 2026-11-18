@@ -160,7 +160,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   starters' screens to black and the server teleports them; Starting is the 3-2-1 on the pillars
   (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
   `StartCountdownSeconds`.
-- Reveal: your dive card slides in full-screen: `SharedUi.DiveCards.Stage` covers the screen, the status
+- Reveal: your dive card slides in full-screen: `SharedUi.DiveCards` (not BelowTopbar) covers the whole screen, the status
   chips and the Shells chip hide while it shows (`Windows.cover`), and with `fill` the card drops its shadow,
   border and corners and its water window runs edge to edge (`DiveCard` FILL_LAYOUT). Landed tags rest still. The card carries everyone's answers (`DiveCard` options `peers`; a player with
   no answer is left to the answers list, which rolls in as the card leaves). Each is a `Templates.DiveCard...PeerTag` (the player's picture in a
