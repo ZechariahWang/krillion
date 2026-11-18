@@ -20,6 +20,7 @@ local Fx = require(script.Parent.Fx)
 local Sfx = require(script.Parent.Sfx)
 local Toasts = require(script.Parent.Toasts)
 local Ui = require(script.Parent.Ui)
+local Windows = require(script.Parent.Windows)
 
 type RevealRow = Net.RevealRow
 
@@ -139,6 +140,8 @@ end
 local function hideCard(instant: boolean)
 	local leaving = card
 	card = nil
+	-- The status chips and the Shells chip come back as the card leaves.
+	Windows.cover(false)
 	local holder = cardsGui
 	local function closeHolder()
 		if card == nil and holder ~= nil then
@@ -185,6 +188,8 @@ local function showCardWith(options: DiveCard.Options): DiveCard.Handle?
 		return nil
 	end
 	card = handle
+	-- The card has the whole screen: the status chips and the Shells chip hide under it.
+	Windows.cover(true)
 	return handle
 end
 

@@ -138,10 +138,10 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 -- A full-screen card (options.fill) has no frame round it, and its water window takes the room below: these
 -- are fractions of the card's height, in place of the authored portrait layout.
 local FILL_LAYOUT = {
-	headerTop = 0.185, -- under the round and status chips, which draw over the card's top
-	headerHeight = 0.075,
-	windowTop = 0.27, -- the water spans the card's full width from here
-	windowHeight = 0.56,
+	headerTop = 0.022, -- the status chips and Shells chip hide while the card shows (Windows.cover)
+	headerHeight = 0.085,
+	windowTop = 0.12, -- the water spans the card's full width from here
+	windowHeight = 0.71,
 	stampY = 0.73, -- inside the window, clear of the depth counter under it
 	counterY = 0.868,
 	counterHeight = 0.055,

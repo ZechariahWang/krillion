@@ -31,7 +31,8 @@ local FEEDBACK_SECONDS = 1.5
 local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retried once, this much later
 local WAIT_SECONDS = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
-local BOOST_GAP = 8 -- pixels between the boost buttons and what they stand on
+local BOOST_GAP = 8 -- pixels between the Shells chip and the boost buttons above it
+local BOOST_EDGE = 16 -- pixels from the screen edges when there is no Shells chip to stand on
 local BOOST_MIN_SCALE = 0.6 -- the smallest the boost buttons shrink to on a short screen
 local BOOST_DESIGN_HEIGHT = 820 -- screen height the boost buttons are drawn for
 local BOOST_DESKTOP_SCALE = 1.4 -- desktop shows the boost buttons this much larger than authored
@@ -285,20 +286,27 @@ local function boostsShown(): boolean
 	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
 end
 
--- Top edge (screen pixels) of what the desktop boost buttons stand on: the answer bar, or the confirm chip
--- or feedback line over it while one shows, so the buttons never cover them.
-local function boostFloor(): number
-	local top = answerBar.AbsolutePosition.Y
-	for _, line in { confirmChip, feedback } do
-		if line ~= nil and line.Visible and line.AbsoluteSize.Y > 0 then
-			top = math.min(top, line.AbsolutePosition.Y)
-		end
+-- The Shells chip in the bottom-right corner (SharedUi.Wallet.Chip), while it shows.
+local function shellsChip(): GuiObject?
+	local screen = Ui.findScreen(playerGui, "Wallet")
+	local chip = if screen ~= nil then screen:FindFirstChild("Chip") else nil
+	if screen ~= nil and screen.Visible and chip ~= nil and chip:IsA("GuiObject") and chip.Visible and chip.AbsoluteSize.X > 0 then
+		return chip
 	end
-	return top
+	return nil
 end
 
--- The boost buttons stand just above the answer box (not the GO button), centred on it, where the player is
--- already looking, and shrink with the screen height.
+-- The chip's top edge without the bump its UIScale may be playing, so the boosts never jiggle with it.
+-- The chip is anchored at its bottom, so a bump only moves its top.
+local function restingTop(object: GuiObject): number
+	local scale = object:FindFirstChildOfClass("UIScale")
+	local factor = if scale ~= nil and scale.Scale > 0 then scale.Scale / Ui.rest(object) else 1
+	local bottom = object.AbsolutePosition.Y + object.AbsoluteSize.Y
+	return bottom - object.AbsoluteSize.Y / factor
+end
+
+-- The boost buttons stand in the bottom-right column, right above the Shells chip, right edges lined up,
+-- and shrink with the screen height like the rest of the column.
 local function fitBoostBar()
 	local bar = boostBar
 	if bar == nil then
@@ -318,10 +326,15 @@ local function fitBoostBar()
 		scale.Scale = BOOST_MIN_SCALE
 		return
 	end
-	local centre = answerBox.AbsolutePosition.X + answerBox.AbsoluteSize.X / 2 - origin.X
-	local bottom = boostFloor() - origin.Y - BOOST_GAP
-	bar.AnchorPoint = Vector2.new(0.5, 1)
-	bar.Position = UDim2.fromOffset(math.floor(centre + 0.5), math.floor(bottom + 0.5))
+	local right = gui.AbsoluteSize.X - BOOST_EDGE
+	local bottom = gui.AbsoluteSize.Y - BOOST_EDGE
+	local chip = shellsChip()
+	if chip ~= nil then
+		right = chip.AbsolutePosition.X + chip.AbsoluteSize.X - origin.X
+		bottom = restingTop(chip) - origin.Y - BOOST_GAP
+	end
+	bar.AnchorPoint = Vector2.new(1, 1)
+	bar.Position = UDim2.fromOffset(math.floor(right + 0.5), math.floor(bottom + 0.5))
 	if height > 0 then
 		local fit = math.clamp(height / BOOST_DESIGN_HEIGHT, BOOST_MIN_SCALE, 1)
 		scale.Scale = fit * BOOST_DESKTOP_SCALE
@@ -707,18 +720,17 @@ local function bindExtras()
 	end
 	local bar = adopt("BoostBar")
 	if bar ~= nil then
-		-- Out of the answer bar (which clips) and onto the Hud, centred above the bar.
+		-- Out of the answer bar and into the bottom-right column above the Shells chip.
 		bar.Parent = gui
 		boostBar = bar
 		bindChip(bar, "Hint", "HintButton")
 		bindChip(bar, "ExtraTime", "TimeButton")
 		gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
-		answerBar:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
-		answerBar:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
-		for _, line in { confirmChip, feedback } do
-			if line ~= nil then
-				line:GetPropertyChangedSignal("Visible"):Connect(fitBoostBar)
-			end
+		local wallet = Ui.screen(playerGui, "Wallet", WAIT_SECONDS)
+		local chip = if wallet ~= nil then wallet:WaitForChild("Chip", WAIT_SECONDS) else nil
+		if chip ~= nil and chip:IsA("GuiObject") then
+			chip:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
+			chip:GetPropertyChangedSignal("Visible"):Connect(fitBoostBar)
 		end
 		refreshBoosts()
 	end
