@@ -52,7 +52,10 @@ return {
 			"carving knife", "electric knife", "sea monster", "ape", "eel", "rodent", "armadillo", "weasel",
 			"ferret", "meerkat", "mongoose", "dingo", "elk", "reindeer", "buffalo", "bison", "yak", "mule",
 			"ox", "bugs bunny", "mickey mouse", "mogwai", "snail", "slug", "leech", "escalator", "rasp",
-			"key", "paper clip", "hair clip", "stapler",
+			"key", "paper clip", "hair clip", "stapler", "cobra", "rattlesnake", "python", "lynx", "bobcat",
+			"capybara", "xenomorph", "baby shark", "crocodile dentist", "alligator clip", "mousetrap",
+			"stegosaurus", "excavator bucket", "postage stamp", "jawbone", "meat tenderizer", "conger eel",
+			"bicycle gear",
 		},
 		DeepCut = {
 			"cookiecutter shark", "frilled shark", "goblin shark", "gulper eel", "fangtooth", "viperfish",
@@ -146,6 +149,10 @@ return {
 		["viper"] = "snake", ["boa"] = "snake", ["fruit bat"] = "bat", ["carved pumpkin"] = "jack o lantern",
 		["electric saw"] = "saw", ["door key"] = "key", ["hair claw"] = "hair clip",
 		["claw clip"] = "hair clip", ["escalators"] = "escalator", ["afro pick"] = "hair pick",
-		["lice comb"] = "nit comb", ["tape cutter"] = "tape dispenser",
+		["lice comb"] = "nit comb", ["tape cutter"] = "tape dispenser", ["puma"] = "cougar",
+		["hare"] = "rabbit", ["komodo"] = "komodo dragon", ["crocodile clip"] = "alligator clip",
+		["mouse trap"] = "mousetrap", ["flytrap"] = "venus flytrap", ["backhoe bucket"] = "excavator bucket",
+		["stamp"] = "postage stamp", ["tenderizer"] = "meat tenderizer",
+		["meat tenderiser"] = "meat tenderizer", ["urchin"] = "sea urchin", ["zip fastener"] = "zipper",
 	},
 }

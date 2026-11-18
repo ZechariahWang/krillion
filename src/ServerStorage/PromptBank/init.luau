@@ -272,6 +272,7 @@ local list: { Prompt } = {
 	require("@self/lid_thing"),
 	require("@self/throw_thing"),
 	require("@self/teeth_thing"),
+	require("@self/spin_thing"),
 }
 
 local byId: { [string]: Prompt } = {}
@@ -332,6 +333,7 @@ local retired: { [string]: boolean } = {
 	latin_food = true,
 	bean_legume = true,
 	animal_group = true,
+	programming_language = true,
 }
 
 local PromptBank = {
