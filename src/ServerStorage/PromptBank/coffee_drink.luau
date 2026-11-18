@@ -12,12 +12,10 @@ return {
 		Schooler = {
 			"macchiato", "iced coffee", "cold brew", "flat white", "caramel macchiato", "iced latte",
 			"black coffee", "drip coffee", "decaf", "instant coffee", "irish coffee", "vanilla latte",
-			"iced americano", "caramel latte", "white mocha", "caramel frappuccino", "mocha frappuccino",
-			"peppermint mocha", "regular coffee", "chai latte", "hazelnut latte", "matcha latte",
-			"brown sugar latte", "caramel americano", "caramel coffee", "caramel iced coffee",
-			"caramel mocha", "chocolate frappuccino", "coconut latte", "cold coffee", "frozen coffee",
-			"iced cappuccino", "iced caramel latte", "iced espresso", "iced mocha", "iced white mocha",
-			"salted caramel latte", "strawberry frappuccino", "sugar free latte", "vanilla frappuccino",
+			"iced americano", "caramel latte", "caramel frappuccino", "mocha frappuccino", "peppermint mocha",
+			"regular coffee", "chai latte", "hazelnut latte", "matcha latte", "caramel coffee",
+			"caramel iced coffee", "caramel mocha", "chocolate frappuccino", "cold coffee", "frozen coffee",
+			"iced cappuccino", "iced caramel latte", "iced espresso", "iced mocha", "vanilla frappuccino",
 		},
 		Rare = {
 			"ristretto", "lungo", "red eye", "cafe con leche", "nitro cold brew", "breve", "turkish coffee",
@@ -136,7 +134,9 @@ return {
 			"espresso shot", "french press", "pour over", "coffee with cream", "caramel frappe",
 			"mocha frappe", "french vanilla coffee", "dark roast", "shaken espresso", "coffee frappuccino",
 			"moka pot", "coffee with sugar", "decaf latte", "iced chai latte", "sweet cream latte",
-			"chocolate chip frappuccino", "chai tea latte", "java chip frappuccino",
+			"chocolate chip frappuccino", "chai tea latte", "java chip frappuccino", "white mocha",
+			"iced white mocha", "brown sugar latte", "coconut latte", "strawberry frappuccino",
+			"salted caramel latte", "sugar free latte", "caramel americano",
 		},
 		DeepCut = {
 			"einspanner", "marocchino", "carajillo", "espresso romano", "yuanyang", "corretto",

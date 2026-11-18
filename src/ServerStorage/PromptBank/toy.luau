@@ -7,13 +7,11 @@ return {
 			"lego", "barbie", "teddy bear", "doll", "action figure", "ball", "puzzle", "hot wheels",
 		},
 		Schooler = {
-			"building blocks", "toy car", "toy truck", "toy train", "rc car", "drone", "kite", "frisbee",
-			"yo yo", "jump rope", "hula hoop", "slinky", "etch a sketch", "play doh", "crayons",
-			"coloring book", "rubiks cube", "jigsaw puzzle", "board game", "monopoly", "uno", "jenga",
-			"playing cards", "scooter", "skateboard", "stuffed animal", "plush", "dollhouse", "pokemon cards",
-			"nerf gun", "water gun", "super soaker", "funko pop", "beyblade", "rubber duck", "balloon",
-			"bubbles", "hot wheels track", "slime", "pop it", "squishmallow", "fidget toy", "video game",
-			"baby doll", "paper doll",
+			"building blocks", "toy car", "toy truck", "toy train", "rc car", "frisbee", "yo yo", "jump rope",
+			"hula hoop", "slinky", "etch a sketch", "play doh", "crayons", "coloring book", "rubiks cube",
+			"jigsaw puzzle", "board game", "monopoly", "uno", "jenga", "playing cards", "scooter",
+			"skateboard", "stuffed animal", "plush", "dollhouse", "pokemon cards", "nerf gun", "water gun",
+			"balloon", "bubbles", "slime", "pop it", "squishmallow", "fidget toy", "video game", "baby doll",
 		},
 		Rare = {
 			"lite brite", "spirograph", "little people", "fisher price", "playskool", "weebles", "sit n spin",
@@ -312,7 +310,8 @@ return {
 			"super nintendo", "pikachu toy", "elmo doll", "disney doll", "dora doll", "tonka toy",
 			"flying toy", "rc vehicle", "plastic toy", "farm toys", "toy farm animals", "mr potato head",
 			"hungry hungry hippos", "game of life", "guess who", "yahtzee", "lightsaber", "build a bear",
-			"toy dinosaur", "bike",
+			"toy dinosaur", "bike", "drone", "hot wheels track", "funko pop", "beyblade", "super soaker",
+			"paper doll", "kite", "rubber duck",
 		},
 		DeepCut = {
 			"peg puzzle", "knob puzzle", "jigsaw floor puzzle", "tetris puzzle", "puzzle ball", "puzzle box",

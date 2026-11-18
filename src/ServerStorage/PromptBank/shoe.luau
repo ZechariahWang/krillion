@@ -11,10 +11,9 @@ return {
 		},
 		Schooler = {
 			"running shoe", "tennis shoe", "basketball shoe", "hiking boot", "work boot", "combat boot",
-			"rain boot", "snow boot", "ugg boots", "platform shoe", "wedge", "pump", "mary jane", "oxford",
-			"ankle boot", "slide", "cleats", "soccer cleats", "ice skate", "roller skate", "rollerblade",
-			"vans", "air jordan", "nike air force 1", "air max", "dress shoe", "tap shoe", "pointe shoe",
-			"ballet shoe", "birkenstock", "yeezy", "high top",
+			"rain boot", "snow boot", "ugg boots", "pump", "ankle boot", "slide", "cleats", "soccer cleats",
+			"ice skate", "roller skate", "rollerblade", "vans", "air jordan", "dress shoe", "ballet shoe",
+			"birkenstock",
 		},
 		Rare = {
 			"nike cortez", "nike blazer", "air jordan 1", "jordan 1", "air jordan 4", "air jordan 11",
@@ -164,7 +163,9 @@ return {
 			"dress heels", "dress flats", "summer boots", "slip in shoes", "dad trainers", "workout sneakers",
 			"rugby shoes", "tennis court shoes", "ugg shoes", "comfy slippers", "cosy slippers", "nike dunk",
 			"cycling shoe", "fishing boot", "walking boot", "new balance", "timberland", "tims", "dr martens",
-			"mule", "water socks", "dad shoe", "ruby slippers", "puma", "reebok",
+			"mule", "water socks", "dad shoe", "ruby slippers", "puma", "reebok", "mary jane", "oxford",
+			"wedge", "pointe shoe", "tap shoe", "yeezy", "nike air force 1", "air max", "platform shoe",
+			"high top",
 		},
 		DeepCut = {
 			"mukluk", "pac boot", "bunny boot", "alpine boot", "nordic boot", "cross country ski boot",

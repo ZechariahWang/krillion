@@ -8,10 +8,8 @@ return {
 		},
 		Schooler = {
 			"adventure", "documentary", "western", "mystery", "crime", "war", "musical", "family", "kids",
-			"superhero", "romantic comedy", "action comedy", "disaster", "historical", "sports", "spy",
-			"martial arts", "zombie", "vampire", "slasher", "supernatural", "psychological thriller",
-			"suspense", "parody", "post apocalyptic", "dystopian", "time travel", "monster", "cartoon",
-			"anime", "christmas", "halloween",
+			"superhero", "romantic comedy", "historical", "sports", "zombie", "cartoon", "anime", "christmas",
+			"halloween",
 		},
 		Rare = {
 			"ninja", "ninja movie", "period piece", "historical romance", "historical epic", "folk tale",
@@ -270,7 +268,9 @@ return {
 			"mystery drama", "crime mystery", "road comedy", "romantic adventure", "christmas comedy",
 			"christmas romance", "musical drama", "musical romance", "fantasy horror", "vampire horror",
 			"zombie horror", "western drama", "war thriller", "disaster thriller", "political satire",
-			"teen romance", "animal adventure",
+			"teen romance", "animal adventure", "post apocalyptic", "dystopian", "time travel", "parody",
+			"slasher", "martial arts", "disaster", "suspense", "psychological thriller", "spy", "monster",
+			"vampire", "supernatural", "action comedy",
 		},
 		DeepCut = {
 			"lost world", "lost world adventure", "arabian nights", "arabian fantasy", "genie film",

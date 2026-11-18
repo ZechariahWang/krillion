@@ -12,8 +12,7 @@ return {
 		Schooler = {
 			"italian", "portuguese", "russian", "arabic", "hindi", "korean", "mandarin", "cantonese", "dutch",
 			"greek", "hebrew", "turkish", "polish", "swedish", "irish", "vietnamese", "thai", "filipino",
-			"urdu", "bengali", "persian", "swahili", "esperanto", "american sign language", "hawaiian",
-			"elvish", "morse code", "braille",
+			"urdu", "bengali", "persian", "american sign language",
 		},
 		Rare = {
 			"sicilian", "flemish", "scots", "swiss german", "javanese", "hmong", "berber", "phoenician",
@@ -43,7 +42,8 @@ return {
 			"chittagonian", "rohingya", "kachin", "rakhine", "hinglish", "singlish", "mandoa", "tumbuka",
 			"norwegian", "danish", "finnish", "welsh", "scottish gaelic", "indonesian", "tagalog", "zulu",
 			"afrikaans", "hungarian", "czech", "romanian", "ukrainian", "icelandic", "java", "lua", "binary",
-			"spanglish", "latin american spanish", "wookiee",
+			"spanglish", "latin american spanish", "wookiee", "python", "javascript", "elvish", "esperanto",
+			"swahili", "hawaiian", "morse code", "braille",
 		},
 		DeepCut = {
 			"ket", "hadza", "sandawe", "ju hoan", "taa", "nama", "burushaski", "rotokas", "silbo gomero",
@@ -2349,6 +2349,6 @@ return {
 		["nlakapamux"] = "nlaka pamux", ["denaina"] = "dena ina", ["protoitalic"] = "proto italic",
 		["protouralic"] = "proto uralic", ["protosemitic"] = "proto semitic",
 		["protoaustronesian"] = "proto austronesian", ["protosinotibetan"] = "proto sino tibetan",
-		["prototurkic"] = "proto turkic",
+		["prototurkic"] = "proto turkic", ["js"] = "javascript",
 	},
 }
