@@ -15,12 +15,12 @@ return {
 		},
 		Rare = {
 			"leveret", "squab", "poult", "pullet", "cockerel", "hoglet", "cria", "elver", "nymph", "grub",
-			"spiderling", "smolt", "fingerling", "parr", "peachick", "puggle", "squeaker", "porcupette",
-			"larva", "fledgling", "whelp", "nestling", "yearling", "maggot", "pupa",
+			"spiderling", "peachick", "puggle", "squeaker", "larva", "fledgling", "whelp", "nestling",
+			"yearling", "maggot", "pupa",
 		},
 		DeepCut = {
 			"shoat", "eyas", "alevin", "pinkie", "keet", "weaner", "weanling", "stirk", "suckling", "hogget",
-			"farrow", "teg",
+			"farrow", "teg", "smolt", "parr", "fingerling", "porcupette",
 		},
 		Mythic = {
 			"wriggler", "spat",
@@ -57,6 +57,10 @@ return {
 		["tadpol"] = "tadpole", ["jouey"] = "joey", ["bunnys"] = "bunny",
 		["kittin"] = "kitten", ["kitenn"] = "kitten", ["pupies"] = "puppy",
 		["chiks"] = "chick", ["piglit"] = "piglet",  ["pupae"] = "pupa", ["chrysalis"] = "pupa",
-		["cocoon"] = "pupa", ["baby mouse"] = "pinkie", ["wiggler"] = "wriggler",
+		["cocoon"] = "pupa", ["baby mouse"] = "pinkie", ["wiggler"] = "wriggler", ["goat kid"] = "kid",
+		["pupper"] = "puppy", ["doggo"] = "puppy", ["puppers"] = "puppy", ["duckie"] = "duckling",
+		["ducky"] = "duckling", ["chickie"] = "chick", ["piggy"] = "piglet", ["bunny rabbit"] = "bunny",
+		["lamby"] = "lamb", ["baby duckling"] = "duckling", ["baby kitten"] = "kitten",
+		["baby puppy"] = "puppy",
 	},
 }

@@ -11,15 +11,15 @@ return {
 		},
 		Schooler = {
 			"aries", "taurus", "gemini", "cancer", "virgo", "libra", "sagittarius", "capricornus", "aquarius",
-			"pisces",
+			"pisces", "andromeda", "pegasus", "perseus",
 		},
 		Rare = {
 			"ara", "camelopardalis", "canes venatici", "carina", "columba", "coma berenices",
 			"corona australis", "corvus", "crater", "eridanus", "grus", "lupus", "pavo", "piscis austrinus",
 			"puppis", "sagitta", "serpens", "triangulum", "triangulum australe", "tucana", "vela",
-			"summer triangle", "monoceros", "lynx", "lepus", "delphinus", "andromeda", "pegasus", "perseus",
-			"cygnus", "lyra", "aquila", "hercules", "canis major", "canis minor", "hydra", "centaurus",
-			"cepheus", "bootes", "auriga", "phoenix", "corona borealis", "cetus",
+			"summer triangle", "monoceros", "lynx", "lepus", "delphinus", "cygnus", "lyra", "aquila",
+			"hercules", "canis major", "canis minor", "hydra", "centaurus", "cepheus", "bootes", "auriga",
+			"phoenix", "corona borealis", "cetus",
 		},
 		DeepCut = {
 			"antlia", "caelum", "circinus", "horologium", "mensa", "microscopium", "norma", "octans",

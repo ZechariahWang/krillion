@@ -78,6 +78,6 @@ return {
 		["seattle"] = "mariners", ["houston"] = "astros", ["detroit"] = "tigers", ["texas"] = "rangers",
 		["toronto"] = "blue jays", ["philadelphia"] = "phillies", ["st louis"] = "cardinals",
 		["san diego"] = "padres", ["san francisco"] = "giants", ["atlanta"] = "braves", ["as"] = "athletics",
-		["os"] = "orioles", ["oriels"] = "orioles",
+		["os"] = "orioles", ["oriels"] = "orioles", ["phils"] = "phillies",
 	},
 }
