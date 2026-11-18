@@ -249,6 +249,7 @@ local list: { Prompt } = {
 	require("@self/waterfall"),
 	require("@self/rainy_day_activity"),
 	require("@self/yellow_thing"),
+	require("@self/cold_thing"),
 }
 
 local byId: { [string]: Prompt } = {}
@@ -286,6 +287,7 @@ local retired: { [string]: boolean } = {
 	deer_or_antelope = true,
 	nhl_team = true,
 	chicken_breed = true,
+	mlb_team = true,
 }
 
 local PromptBank = {
