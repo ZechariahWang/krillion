@@ -1,6 +1,6 @@
 --!strict
 -- Gives level XP for match answers, rounds survived and Wins (rules in Shared/Levels), and on a level up
--- pays the Shells, toasts it and refreshes the head label's level.
+-- pays the Shells and refreshes the head label's level. The client's level bar celebrates it.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -8,7 +8,6 @@ local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Levels = require(ReplicatedStorage.Shared.Levels)
 local MatchEvents = require(script.Parent.MatchEvents)
 local DataService = require(script.Parent.DataService)
-local NotifyService = require(script.Parent.NotifyService)
 local StoreService = require(script.Parent.StoreService)
 local CosmeticService = require(script.Parent.CosmeticService)
 
@@ -27,9 +26,7 @@ function LevelService.give(player: Player, amount: number)
 	if gained <= 0 then
 		return
 	end
-	local level = Levels.levelOf(before + amount)
 	StoreService.grantShells(player, gained * RULES.ShellsPerLevel, "level")
-	NotifyService.send(player, "LEVEL " .. level .. "!", "good")
 	CosmeticService.refresh(player)
 end
 

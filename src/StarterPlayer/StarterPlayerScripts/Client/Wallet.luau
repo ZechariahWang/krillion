@@ -14,6 +14,7 @@ local Currency = require(ReplicatedStorage.Shared.Currency)
 local Levels = require(ReplicatedStorage.Shared.Levels)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Sfx = require(script.Parent.Sfx)
+local Fx = require(script.Parent.Fx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
@@ -33,6 +34,10 @@ local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter scre
 local MIN_FIT = 0.65
 local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 local FILL_TWEEN = TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local GAIN_RISE = 34 -- pixels a "+15 XP" pop floats up beside the level bar while it fades
+local GAIN_SECONDS = 1.1
+local LEVEL_CONFETTI = 60
+local SKY = Color3.fromHex("00FDFF")
 
 type Swatch = { Top: Color3, Bottom: Color3, Lip: Color3 }
 
@@ -76,6 +81,10 @@ local levelBar: Frame? = nil
 local levelFill: Frame? = nil
 local levelLabel: TextLabel? = nil
 local shownLevel: number? = nil -- nil until the first profile
+local shownXp: number? = nil
+local gainTemplate: TextLabel? = nil
+local rimStroke: UIStroke? = nil
+local rimColor: Color3? = nil
 local phase = ""
 local playing = false -- the local player is on a pillar in the running match
 
@@ -434,6 +443,17 @@ function Wallet.init(playerGui: PlayerGui)
 			levelFill = if fill ~= nil and fill:IsA("Frame") then fill else nil
 			local label = bar:FindFirstChild("Label")
 			levelLabel = if label ~= nil and label:IsA("TextLabel") then label else nil
+			local gain = bar:FindFirstChild("Gain")
+			if gain ~= nil and gain:IsA("TextLabel") then
+				gain.Visible = false
+				gainTemplate = gain
+			end
+			local highlight = bar:FindFirstChild("Highlight")
+			local stroke = if highlight ~= nil then highlight:FindFirstChildOfClass("UIStroke") else nil
+			if stroke ~= nil then
+				rimStroke = stroke
+				rimColor = stroke.Color
+			end
 		else
 			warn("Wallet: Chip.LevelBar is missing; no level bar")
 		end
@@ -451,7 +471,79 @@ function Wallet.init(playerGui: PlayerGui)
 	end)
 end
 
--- Shows the level and fills the bar. A level up fills the bar to the end first, then starts over.
+-- A "+15 XP" beside the level bar that floats up and fades. Each gain gets its own.
+local function popGain(amount: number)
+	local template = gainTemplate
+	if template == nil then
+		return
+	end
+	local pop = template:Clone()
+	pop.Name = "GainLive"
+	pop.Text = "+" .. amount .. " XP"
+	pop.TextTransparency = 1
+	pop.Visible = true
+	pop.Parent = template.Parent
+	local rest = pop.Position
+	pop.Position = rest + UDim2.fromOffset(12, 0)
+	local outline = pop:FindFirstChildOfClass("UIStroke")
+	Tween.play(pop, Theme.Tween.Pop, { Position = rest, TextTransparency = 0 })
+	task.delay(Theme.Tween.Pop.Time, function()
+		local rise = TweenInfo.new(GAIN_SECONDS, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+		Tween.play(pop, rise, { Position = rest - UDim2.fromOffset(0, GAIN_RISE), TextTransparency = 1 })
+		if outline ~= nil then
+			Tween.play(outline, rise, { Transparency = 1 })
+		end
+		task.delay(GAIN_SECONDS, function()
+			pop:Destroy()
+		end)
+	end)
+end
+
+-- The bar's rim lights up in `color`, then settles back to its authored colour.
+local function flashRim(color: Color3)
+	local stroke = rimStroke
+	local rest = rimColor
+	if stroke == nil or rest == nil then
+		return
+	end
+	stroke.Color = color
+	Tween.play(stroke, Theme.Tween.Flash, { Color = rest })
+end
+
+local function popLabel()
+	local label = levelLabel
+	if label ~= nil then
+		Ui.bump(label, 1.35)
+	end
+end
+
+-- Level up: the bar fills to the end and flashes gold, a LEVEL callout lands with confetti and a fanfare,
+-- then the bar starts over from the new level's progress.
+local function celebrateLevel(level: number, target: UDim2)
+	local fill = levelFill
+	if fill == nil then
+		return
+	end
+	Tween.play(fill, FILL_TWEEN, { Size = UDim2.fromScale(1, 1) })
+	task.delay(FILL_TWEEN.Time, function()
+		if shownLevel ~= level then
+			return
+		end
+		flashRim(Theme.Color.Gold)
+		local label = levelLabel
+		if label ~= nil then
+			label.Text = "LV " .. level
+		end
+		popLabel()
+		Fx.callout("LEVEL " .. level .. "!", Theme.Color.Gold)
+		Fx.confetti(LEVEL_CONFETTI)
+		Sfx.play("Fanfare", 0.7)
+		fill.Size = UDim2.fromScale(0, 1)
+		Tween.play(fill, FILL_TWEEN, { Size = target })
+	end)
+end
+
+-- Shows the level and fills the bar. A gain pops "+N XP" beside it, sweeps the fill and flashes the rim.
 local function showLevel(xp: number)
 	local label = levelLabel
 	local fill = levelFill
@@ -461,27 +553,31 @@ local function showLevel(xp: number)
 	local info = Levels.progress(xp)
 	local share = if info.need > 0 then info.into / info.need else 0
 	local target = UDim2.fromScale(share, 1)
-	local previous = shownLevel
+	local previousLevel = shownLevel
+	local previousXp = shownXp
 	shownLevel = info.level
-	label.Text = "LV " .. info.level
-	if previous == nil then
+	shownXp = xp
+	if previousLevel == nil or previousXp == nil then
+		label.Text = "LV " .. info.level
 		Tween.cancel(fill)
 		fill.Size = target
 		return
 	end
-	if info.level <= previous then
-		Tween.play(fill, FILL_TWEEN, { Size = target })
+	local gained = math.floor(xp - previousXp + 0.5)
+	if gained <= 0 then
+		label.Text = "LV " .. info.level
+		fill.Size = target
 		return
 	end
-	Tween.play(fill, FILL_TWEEN, { Size = UDim2.fromScale(1, 1) })
-	task.delay(FILL_TWEEN.Time, function()
-		if shownLevel ~= info.level then
-			return
-		end
-		Sfx.play("Ping", 0.7)
-		fill.Size = UDim2.fromScale(0, 1)
-		Tween.play(fill, FILL_TWEEN, { Size = target })
-	end)
+	popGain(gained)
+	if info.level > previousLevel then
+		celebrateLevel(info.level, target)
+		return
+	end
+	flashRim(SKY)
+	popLabel()
+	Sfx.play("Tick", 0.4, 1.4)
+	Tween.play(fill, FILL_TWEEN, { Size = target })
 end
 
 -- ProfileChanged payload (Net.ProfilePayload). The first one sets the chip; later ones count up to it.
