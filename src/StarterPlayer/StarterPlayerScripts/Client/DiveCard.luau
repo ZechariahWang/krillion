@@ -138,22 +138,26 @@ local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confet
 -- A full-screen card (options.fill) has no frame round it, and its water window takes the room below: these
 -- are fractions of the card's height, in place of the authored portrait layout.
 local FILL_LAYOUT = {
-	windowTop = 0.15,
-	windowHeight = 0.665,
-	stampY = 0.7, -- inside the window, clear of the depth counter under it
-	counterY = 0.868,
-	counterHeight = 0.085,
-	footerY = 0.928,
-	footerHeight = 0.04,
-	shellsY = 0.965,
-	shellsHeight = 0.055,
+	headerTop = 0.185, -- under the round and status chips, which draw over the card's top
+	headerHeight = 0.075,
+	windowTop = 0.27, -- the water spans the card's full width from here
+	windowHeight = 0.595,
+	stampY = 0.78, -- inside the window, clear of the depth counter under it
+	counterY = 0.9,
+	counterHeight = 0.06,
+	footerY = 0.942,
+	footerHeight = 0.028,
+	shellsY = 0.978,
+	shellsHeight = 0.036,
 }
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
 local WIND_UP_METRES = 1 -- every answered dive winds up and bursts, a common one too; NO ANSWER just sinks
-local PLUNGE_METRES = 55 -- your tag shoots this far past its resting place before it springs back (Plankton)...
-local PLUNGE_PER_TIER = 9 -- ...and this much further for every tier rarer
+-- A landing plunge: your tag would shoot this far past its resting place and spring back (Plankton), and this
+-- much further per tier rarer. Off: players found the spring-back jarring, so the tag eases in and rests.
+local PLUNGE_METRES = 0
+local PLUNGE_PER_TIER = 0
 local OWN_SOFT = 4 -- metres your tag slows over before it lands: it arrives at speed and flows into the plunge
 -- The fake-out: your tag eases to just above its tier's line, as if it were an answer one tier commoner, creeps
 -- there, then gathers speed through the line to its real depth (DivePack.fakeSlide), never quite stopping. The
@@ -421,8 +425,24 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			cardCorner:Destroy()
 		end
 		local layout = FILL_LAYOUT
-		window.Position = UDim2.fromScale(window.Position.X.Scale, layout.windowTop)
-		window.Size = UDim2.fromScale(window.Size.X.Scale, layout.windowHeight)
+		-- The lip sits a little below the pill, by the same share of the pill's height.
+		local shrink = layout.headerHeight / math.max(header.Size.Y.Scale, 0.001)
+		local lipDrop = (headerLip.Position.Y.Scale - header.Position.Y.Scale) * shrink
+		header.Position = UDim2.fromScale(header.Position.X.Scale, layout.headerTop)
+		header.Size = UDim2.fromScale(header.Size.X.Scale, layout.headerHeight)
+		headerLip.Position = UDim2.fromScale(headerLip.Position.X.Scale, layout.headerTop + lipDrop)
+		headerLip.Size = UDim2.fromScale(headerLip.Size.X.Scale, layout.headerHeight)
+		window.Position = UDim2.fromScale(0, layout.windowTop)
+		window.Size = UDim2.fromScale(1, layout.windowHeight)
+		-- Edge to edge: the window has no frame of its own either.
+		local windowStroke = window:FindFirstChild("Border")
+		if windowStroke ~= nil and windowStroke:IsA("UIStroke") then
+			windowStroke.Enabled = false
+		end
+		local windowCorner = window:FindFirstChildOfClass("UICorner")
+		if windowCorner ~= nil then
+			windowCorner:Destroy()
+		end
 		stampHome = layout.stampY
 		stamp.Position = UDim2.fromScale(stamp.Position.X.Scale, stampHome)
 		counter.Position = UDim2.fromScale(counter.Position.X.Scale, layout.counterY)
@@ -1057,7 +1077,8 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			end
 		end
 
-		-- Your tag lands with a plunge and a spring back, and the view stays on it until that has played out.
+		-- Your tag eases into its place (no plunge past it and spring back: PLUNGE_METRES is 0). With a plunge
+		-- the view would stay on it until that had played out.
 		if hasAnswer and not quick then
 			local wanted = PLUNGE_METRES + PLUNGE_PER_TIER * (tierIndex - 1)
 			local room = DivePack.overshootRoom(slots, 1, spacing)
@@ -1069,10 +1090,12 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 					fakeRise = wanted
 				end
 			end
-			local spring = DivePack.overshootSeconds()
-			focusDelay += spring
-			glideDelay += spring
-			settleTime += spring
+			if plunge > 0 then
+				local spring = DivePack.overshootSeconds()
+				focusDelay += spring
+				glideDelay += spring
+				settleTime += spring
+			end
 		end
 
 		-- `budget` squeezes the whole dive when its last tag would land too late, or when the view would

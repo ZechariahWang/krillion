@@ -32,9 +32,6 @@ local RETRY_SECONDS = 0.08 -- a check that raced the server's cooldown is retrie
 local WAIT_SECONDS = 10
 local DISABLED_FACE = Color3.fromRGB(88, 100, 124)
 local BOOST_GAP = 8 -- pixels between the boost buttons and what they stand on
--- Desktop: the boost buttons stand centred over the answer bar, above the line that shows over it (the
--- confirm chip, feedback or prompt echo: up to 34 px tall, 8 px above the bar).
-local BOOST_ABOVE_BAR = 8 + 34 + BOOST_GAP
 local BOOST_MIN_SCALE = 0.6 -- the smallest the boost buttons shrink to on a short screen
 local BOOST_DESIGN_HEIGHT = 820 -- screen height the boost buttons are drawn for
 local BOOST_DESKTOP_SCALE = 1.4 -- desktop shows the boost buttons this much larger than authored
@@ -288,8 +285,20 @@ local function boostsShown(): boolean
 	return GameConfig.Boosts.Enabled == 1 and phase == "Prompt" and playing and not locked and not outOfTime
 end
 
--- The boost buttons stand centred above the answer bar, where the player is already looking, and shrink
--- with the screen height.
+-- Top edge (screen pixels) of what the desktop boost buttons stand on: the answer bar, or the confirm chip
+-- or feedback line over it while one shows, so the buttons never cover them.
+local function boostFloor(): number
+	local top = answerBar.AbsolutePosition.Y
+	for _, line in { confirmChip, feedback } do
+		if line ~= nil and line.Visible and line.AbsoluteSize.Y > 0 then
+			top = math.min(top, line.AbsolutePosition.Y)
+		end
+	end
+	return top
+end
+
+-- The boost buttons stand just above the answer box (not the GO button), centred on it, where the player is
+-- already looking, and shrink with the screen height.
 local function fitBoostBar()
 	local bar = boostBar
 	if bar == nil then
@@ -309,8 +318,8 @@ local function fitBoostBar()
 		scale.Scale = BOOST_MIN_SCALE
 		return
 	end
-	local centre = answerBar.AbsolutePosition.X + answerBar.AbsoluteSize.X / 2 - origin.X
-	local bottom = answerBar.AbsolutePosition.Y - origin.Y - BOOST_ABOVE_BAR
+	local centre = answerBox.AbsolutePosition.X + answerBox.AbsoluteSize.X / 2 - origin.X
+	local bottom = boostFloor() - origin.Y - BOOST_GAP
 	bar.AnchorPoint = Vector2.new(0.5, 1)
 	bar.Position = UDim2.fromOffset(math.floor(centre + 0.5), math.floor(bottom + 0.5))
 	if height > 0 then
@@ -706,6 +715,11 @@ local function bindExtras()
 		gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
 		answerBar:GetPropertyChangedSignal("AbsolutePosition"):Connect(fitBoostBar)
 		answerBar:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitBoostBar)
+		for _, line in { confirmChip, feedback } do
+			if line ~= nil then
+				line:GetPropertyChangedSignal("Visible"):Connect(fitBoostBar)
+			end
+		end
 		refreshBoosts()
 	end
 end
