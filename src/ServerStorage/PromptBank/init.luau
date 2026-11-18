@@ -265,6 +265,7 @@ local list: { Prompt } = {
 	require("@self/bounce_thing"),
 	require("@self/button_thing"),
 	require("@self/tail_thing"),
+	require("@self/open_thing"),
 }
 
 local byId: { [string]: Prompt } = {}
@@ -318,6 +319,7 @@ local retired: { [string]: boolean } = {
 	star_wars_character = true,
 	chair_type = true,
 	cat_breed = true,
+	european_city = true,
 }
 
 local PromptBank = {

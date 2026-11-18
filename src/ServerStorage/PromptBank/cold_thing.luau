@@ -27,7 +27,7 @@ return {
 			"chilly", "freezing", "cold weather", "snowball fight", "sleigh", "fingers", "cold air", "polar",
 			"scarf", "gloves", "beanie", "winter jacket", "fur coat", "soft drink", "coke", "pepsi", "sprite",
 			"root beer float", "sundae", "soft serve", "cold milk", "cool breeze", "cold front", "goosebumps",
-			"shivering", "snow boots",
+			"shivering", "snow boots", "metal",
 		},
 		Rare = {
 			"ice sculpture", "ice hotel", "ice castle", "ice cave", "ice age", "ice shelf", "ice sheet",
@@ -71,7 +71,12 @@ return {
 			"tundra", "frostbite", "husky", "seal", "walrus", "mint", "cucumber", "watermelon", "finland",
 			"norway", "russia", "everest", "mountain top", "ice carving", "ice bar", "cryonics",
 			"snow machine", "cold storage", "liquid oxygen", "liquid hydrogen", "walk in cooler",
-			"captain cold", "oort cloud",
+			"captain cold", "oort cloud", "iron", "aluminum", "concrete", "granite", "mirror", "doorknob",
+			"railing", "stream", "creek", "waterfall", "well water", "tonic water", "dippin dots", "magnum",
+			"cornetto", "choc ice", "creamsicle", "fudgsicle", "banana split", "mcflurry", "ghost", "frog",
+			"snake", "lizard", "reptile", "cold war", "cold heart", "cold shoulder", "common cold", "crypt",
+			"tomb", "dungeon", "server room", "refrigerated truck", "night", "tile", "bench", "slide",
+			"river", "pond", "fish", "steel", "stone", "glass",
 		},
 		DeepCut = {
 			"cryosphere", "ice core", "glacial lake", "iceberg tongue", "cryovolcano", "sedna", "eris",
@@ -176,5 +181,10 @@ return {
 		["negative degrees"] = "below freezing", ["minus"] = "below freezing",
 		["negative"] = "below freezing", ["snowsuit"] = "snow pants", ["snow suit"] = "snow pants",
 		["long johns"] = "thermals", ["cold water"] = "ice water", ["ice cold water"] = "ice water",
+		["freeze pop"] = "popsicle", ["skating rink"] = "ice rink", ["ice skating rink"] = "ice rink",
+		["tiles"] = "tile", ["cavern"] = "cave", ["reefer"] = "refrigerated truck",
+		["ice cream headache"] = "brain freeze", ["ice cold"] = "ice", ["metal doorknob"] = "doorknob",
+		["handrail"] = "railing", ["metal slide"] = "slide", ["fudgesicle"] = "fudgsicle",
+		["cold fingers"] = "fingers", ["ice cream van"] = "ice cream truck", ["data center"] = "server room",
 	},
 }

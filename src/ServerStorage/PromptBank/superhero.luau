@@ -20,9 +20,8 @@ return {
 			"avengers", "justice league", "x men", "venom", "goku", "loki", "leonardo", "raphael",
 			"donatello", "michelangelo", "sailor moon", "gamora", "drax", "human torch", "mister fantastic",
 			"invisible woman", "thing", "nightcrawler", "jean grey", "green arrow", "martian manhunter",
-			"she hulk", "moon knight", "quicksilver", "winter soldier", "war machine", "fantastic four",
-			"guardians of the galaxy", "teen titans", "power rangers", "ms marvel", "silver surfer",
-			"nick fury", "dash", "violet", "jack jack",
+			"she hulk", "quicksilver", "winter soldier", "war machine", "fantastic four",
+			"guardians of the galaxy", "teen titans", "power rangers", "ms marvel",
 		},
 		Rare = {
 			"jessica jones", "luke cage", "iron fist", "shang chi", "spider punk", "spider ham", "moon girl",
@@ -50,7 +49,8 @@ return {
 			"underdog", "mighty mouse", "red ranger", "blossom", "bubbles", "buttercup", "steel", "oracle",
 			"black lightning", "power girl", "katana", "wildcat", "kate bishop", "america chavez", "medusa",
 			"dazzler", "domino", "spider man noir", "spider man 2099", "green hornet", "adam warlock",
-			"black bolt", "jocasta", "yelena belova", "king shark", "he man",
+			"black bolt", "jocasta", "yelena belova", "king shark", "he man", "dash", "violet", "jack jack",
+			"silver surfer", "nick fury", "moon knight",
 		},
 		DeepCut = {
 			"patriot", "streaky", "comet the super horse", "beppo", "ace the bat hound", "lockjaw",
