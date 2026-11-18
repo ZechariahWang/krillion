@@ -45,6 +45,7 @@ local suites = {
 	require("./DivePack.test"),
 	require("./Metrics.test"),
 	require("./Levels.test"),
+	require("./Weekly.test"),
 }
 
 for _, suite in suites do

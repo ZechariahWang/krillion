@@ -190,6 +190,7 @@ local GameConfig = {
 	Leaderboard = {
 		RefreshSeconds = 60,
 		Size = 10,
+		WeeklyTopRead = 100, -- the weekly board reads this many places; anyone further down sees "100+"
 	},
 	Special = {
 		MinRound = 3, -- no special rounds before this

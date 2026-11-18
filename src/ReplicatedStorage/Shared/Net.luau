@@ -167,6 +167,13 @@ export type DailyResultPayload = {
 	chest: string?, -- the chest opened for free, if that day has one (its ChestResult follows)
 }
 
+-- WeeklyRank: the receiving player's place on this week's wins board. rank is nil past the top list
+-- (Weekly board's TopRead) or with no wins this week.
+export type WeeklyRankPayload = {
+	rank: number?,
+	wins: number,
+}
+
 -- ShopResult: why a Shells buy did or did not go through.
 export type ShopResultPayload = {
 	status: string, -- "ok" | "cash" | "owned" | "unknown"

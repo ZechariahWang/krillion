@@ -11,7 +11,7 @@ local names: { [number]: string } = {}
 
 local LeaderboardService = {}
 
-local function nameOf(userId: number): string
+function LeaderboardService.nameOf(userId: number): string
 	local cached = names[userId]
 	if cached ~= nil then
 		return cached
@@ -52,7 +52,7 @@ local function refresh()
 			local entry = top[index]
 			if nameLabel ~= nil and winsLabel ~= nil then
 				if entry ~= nil then
-					nameLabel.Text = nameOf(entry.userId)
+					nameLabel.Text = LeaderboardService.nameOf(entry.userId)
 					winsLabel.Text = tostring(entry.wins)
 				else
 					nameLabel.Text = "-"
