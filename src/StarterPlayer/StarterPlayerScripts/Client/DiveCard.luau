@@ -133,14 +133,14 @@ local PEER_SOUND_GAP = 0.09 -- other tags' landing and leaving sounds are at lea
 local BUBBLE_COUNT = 9
 local BASE_HEIGHT = 380 -- card height the authored stroke thicknesses and corner radii are tuned for
 local MAX_STYLE_SCALE = 2.2 -- a full-screen card's outlines stop thickening here
-local FILL_ASPECT = NumberRange.new(0.6, 2.1) -- width / height of a full-screen card, tall phone to landscape phone
+local FILL_ASPECT = NumberRange.new(0.6, 3.2) -- width / height of a full-screen card: wide enough to span any landscape screen
 local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confetti bursts from here
 -- A full-screen card (options.fill) has no frame round it, and its water window takes the room below: these
 -- are fractions of the card's height, in place of the authored portrait layout.
 local FILL_LAYOUT = {
 	windowTop = 0.15,
 	windowHeight = 0.665,
-	stampY = 0.775, -- just inside the window's bottom edge, as the authored stamp sits
+	stampY = 0.7, -- inside the window, clear of the depth counter under it
 	counterY = 0.868,
 	counterHeight = 0.085,
 	footerY = 0.928,
