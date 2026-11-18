@@ -266,6 +266,7 @@ local list: { Prompt } = {
 	require("@self/button_thing"),
 	require("@self/tail_thing"),
 	require("@self/open_thing"),
+	require("@self/striped_thing"),
 }
 
 local byId: { [string]: Prompt } = {}
@@ -319,6 +320,7 @@ local retired: { [string]: boolean } = {
 	star_wars_character = true,
 	chair_type = true,
 	cat_breed = true,
+	unit = true,
 	european_city = true,
 }
 

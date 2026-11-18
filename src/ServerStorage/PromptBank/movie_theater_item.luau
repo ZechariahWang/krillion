@@ -30,8 +30,8 @@ return {
 			"water fountain", "bar", "dbox", "screenx", "velvet rope", "will call", "ads", "raisinets",
 			"arcade", "armrest", "carpet", "refills", "trash can", "stairs", "sundae", "brownie",
 			"funnel cake", "hershey bar", "twix", "milky way", "butterfinger", "starburst", "jolly ranchers",
-			"tic tacs", "mentos", "maltesers", "haribo", "iced tea", "lemonade", "beer", "wine", "staff",
-			"back row", "front row", "doors", "sticky floor", "dine in", "merchandise", "toys", "sandwich",
+			"tic tacs", "mentos", "maltesers", "haribo", "iced tea", "lemonade", "staff", "back row",
+			"front row", "doors", "sticky floor", "dine in", "merchandise", "toys", "sandwich",
 		},
 		DeepCut = {
 			"film reel", "projectionist", "ticket taker", "ticket scanner", "sneeze guard", "popcorn warmer", "butter dispenser",
