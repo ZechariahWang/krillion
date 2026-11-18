@@ -23,7 +23,7 @@ return {
 			"hanoverian", "dutch warmblood", "falabella",
 			"canadian horse", "pony of the americas", "westphalian", "swedish warmblood", "danish warmblood",
 			"belgian warmblood", "irish sport horse", "anglo arab", "dutch harness horse", "haflinger",
-			"standardbred", "american saddlebred", "przewalskis horse", "connemara",
+			"standardbred", "american saddlebred", "przewalskis horse", "connemara", "australian stock horse",
 		},
 		DeepCut = {
 			"kladruber", "sorraia", "yakutian", "sable island horse", "galiceno", "eriskay pony", "kathiawari", "lokai",
@@ -33,6 +33,7 @@ return {
 			"american cream draft", "gotland pony", "finnhorse", "boulonnais", "breton", "comtois", "poitevin",
 			"alter real", "garrano", "manipuri pony", "altai", "kerry bog pony", "galloway pony", "frederiksborg",
 			"wielkopolski", "malopolski", "florida cracker horse", "newfoundland pony", "welara",
+			"rhinelander", "mecklenburger", "zweibrucker", "sumba pony",
 		},
 		Mythic = {
 			"bardigiano", "murgese", "pindos pony", "skyros pony", "tersk", "vladimir heavy draft", "merens",
@@ -77,6 +78,15 @@ return {
 		["newfoundland"] = "newfoundland pony", ["gotland"] = "gotland pony", ["kerry bog"] = "kerry bog pony",
 		["galloway"] = "galloway pony", ["irish sport"] = "irish sport horse", ["anglo arabian"] = "anglo arab",
 		["english thoroughbred"] = "thoroughbred", ["connemara horse"] = "connemara",
-		["marsh tacky horse"] = "marsh tacky", ["ariegeois"] = "merens",
+		["marsh tacky horse"] = "marsh tacky", ["ariegeois"] = "merens", ["kwpn"] = "dutch warmblood",
+		["spanish horse"] = "andalusian", ["pure spanish horse"] = "andalusian", ["lusitanian"] = "lusitano",
+		["mongolian pony"] = "mongolian horse", ["barb horse"] = "barb", ["berber horse"] = "barb",
+		["belgian draft horse"] = "belgian", ["hackney pony"] = "hackney", ["hackney horse"] = "hackney",
+		["gypsy vanner horse"] = "gypsy vanner", ["banker"] = "banker horse",
+		["rocky mountain"] = "rocky mountain horse", ["curly horse"] = "bashkir curly",
+		["american paint"] = "paint horse", ["orlov"] = "orlov trotter", ["budenny"] = "budyonny",
+		["yakut"] = "yakutian", ["knabstrup"] = "knabstrupper", ["shagya"] = "shagya arabian",
+		["egyptian arabian"] = "arabian", ["polish arabian"] = "arabian", ["spiti"] = "spiti pony",
+		["marwari horse"] = "marwari", ["kathiawari horse"] = "kathiawari",
 	},
 }
