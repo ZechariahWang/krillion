@@ -250,6 +250,7 @@ local function refresh()
 		and not inMatchOnPhone
 		and not answersInCorner
 		and not Windows.anyOpen()
+		and not Windows.covered()
 		and not UserInputService.OnScreenKeyboardVisible
 	placeChip()
 	placePops()

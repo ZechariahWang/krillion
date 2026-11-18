@@ -25,8 +25,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   follows a bot's rig on it).
 - Boosts: a Hint costs 35 Robux each (no Shell price, no limit), picks the highest-rarity answer nobody has
   locked in (Mythic first) and locks it in for the player at once. +10 SEC costs Shells or Robux and is
-  limited per round and per match (Boost Plus raises the match limit). The in-match chip asks for a second
-  tap before opening a Robux purchase. The 3-hint pack is `retired` in `Products.BoostPacks`: not sold, its
+  limited per round and per match (Boost Plus raises the match limit). A tap on a chip that costs Robux
+  opens Roblox's purchase dialog at once (it confirms by itself). The 3-hint pack is `retired` in `Products.BoostPacks`: not sold, its
   receipts still honoured.
 - Daily reward: the Daily tab of the REWARDS window (`LobbyUi.Rewards`, see UI layout). Its page
   (`Pages.Daily`, authored) holds `Days.Day1`..`Day7` cards, each with `Amount`, `Bonus`, `Check`, `Today` and
@@ -160,7 +160,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   starters' screens to black and the server teleports them; Starting is the 3-2-1 on the pillars
   (`Client/Transition`, `SharedUi.Transition`). Lengths are `GameConfig.Round.IntroFadeSeconds` and
   `StartCountdownSeconds`.
-- Reveal: your dive card slides in and carries everyone's answers (`DiveCard` options `peers`; a player with
+- Reveal: your dive card slides in full-screen: `SharedUi.DiveCards` (not BelowTopbar) covers the whole screen, the status
+  chips and the Shells chip hide while it shows (`Windows.cover`), and with `fill` the card drops its shadow,
+  border and corners and its water window runs edge to edge (`DiveCard` FILL_LAYOUT). Landed tags rest still. The card carries everyone's answers (`DiveCard` options `peers`; a player with
   no answer is left to the answers list, which rolls in as the card leaves). Each is a `Templates.DiveCard...PeerTag` (the player's picture in a
   circle, or a bot's initial, then the answer), yours too. `Shared/DivePack` (pure, tested) gives every tag a
   lane and sinks them as a pack (a wind-up just under the surface while the tags swell, then a burst), so
@@ -176,7 +178,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `newBest`, which toasts NEW PERSONAL BEST (a first-ever dive is saved without the toast).
 - Every teleport goes through `PlayerService.sendToPlatform` / `sendToLobby`: they anchor the root, move it, and
   release it once the spot has streamed in, so nobody falls through a pillar their client does not have yet.
-- Dying or respawning while alive in a match eliminates the player (RoundService), like sinking.
+- Dying or respawning while alive in a match eliminates the player (RoundService), like sinking. A revived
+  player who comes back during a prompt gets its whole answer time (`AnswerService.allow(player, true)`); the
+  prompt runs on in overtime for them.
 - Metrics: `Server/MetricsService` sends to Roblox's AnalyticsService (Creator Hub > Analytics, developers
   only): the onboarding funnel for first visits, a `Match` funnel (start, each round survived), every Shells
   gain and spend (`StoreService` calls it; a spend passes a `sku`), and custom events (`AnswerGraded`, `Sank`,

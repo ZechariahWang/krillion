@@ -43,7 +43,6 @@ local PRICE_OWNED = Color3.fromRGB(255, 255, 255)
 
 local INVALID_TEXT = "WE DON'T KNOW THAT ONE  |  TRY ANOTHER"
 local SAVE_TEXT = "YOUR SAVE IS STILL LOADING  |  TRY AGAIN SOON"
-local CONFIRM_SECONDS = 3 -- how long a Robux chip waits for the second tap that opens the purchase
 local MIN_BUY_SECONDS = 6 -- with less time than this left, a purchase could not finish in time to be used
 local AUTO_LOCK_SECONDS = 1 -- a checked answer still in the box this close to the end is locked in for you
 local BOOST_MESSAGES: { [string]: string } = {
@@ -107,8 +106,6 @@ local inventory = { Hint = 0, ExtraTime = 0 }
 local timeLeftThisMatch: number? = nil -- +time uses left this match, once the server has said; nil is unknown
 local secondsLeft = 0 -- your own time left on the open prompt
 local saveFailed = false -- the profile did not load: nothing can be bought until it does
-local armedKind: string? = nil -- the Robux chip tapped once, waiting for the confirming tap
-local armedUntil = 0
 local cash = 0
 local uses: Net.BoostUses = { Hint = 0, ExtraTime = 0 }
 local ready = false -- GameUi.Hud and its children were found; every handler is a no-op until then
@@ -371,8 +368,7 @@ function refreshBoosts()
 		elseif cost ~= nil and cash >= cost then
 			chip.price.Text = shellPrice
 		elseif product.productId ~= 0 then
-			local armed = armedKind == kind and os.clock() < armedUntil
-			chip.price.Text = if armed then "TAP AGAIN" else "R$ " .. product.robux
+			chip.price.Text = "R$ " .. product.robux
 			priceColor = PRICE_ROBUX
 		else
 			chip.price.Text = shellPrice
@@ -443,16 +439,7 @@ local function useBoost(kind: string)
 		deny("NOT ENOUGH TIME LEFT TO BUY ONE")
 		return
 	end
-	if armedKind ~= kind or now >= armedUntil then
-		armedKind = kind
-		armedUntil = now + CONFIRM_SECONDS
-		local name = if kind == "Hint" then "A HINT" else "+" .. GameConfig.Boosts.ExtraTimeSeconds .. " SEC"
-		showFeedback(name .. " COSTS " .. product.robux .. " ROBUX  |  TAP AGAIN TO BUY")
-		refreshBoosts()
-		task.delay(CONFIRM_SECONDS, refreshBoosts)
-		return
-	end
-	armedKind = nil
+	-- One tap opens Roblox's purchase dialog, which asks the player to confirm.
 	MarketplaceService:PromptProductPurchase(Players.LocalPlayer, product.productId)
 end
 
@@ -963,7 +950,6 @@ function Hud.onState(payload)
 		checking = nil
 		lastWrongAt = -math.huge
 		uses = { Hint = 0, ExtraTime = 0 }
-		armedKind = nil
 		-- A new match starts the +time count again.
 		if payload.round < lastRound or payload.round <= 1 then
 			timeLeftThisMatch = nil

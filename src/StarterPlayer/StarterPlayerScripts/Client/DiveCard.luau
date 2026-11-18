@@ -6,6 +6,7 @@
 -- Clones ReplicatedStorage.Templates.DiveCard (authored in git as a model.json) and only drives it; used by
 -- Reveal (full-screen, match) and LobbyQuiz (warm-up card). The pack's lanes and motion are Shared/DivePack.
 
+local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -26,7 +27,7 @@ export type Options = {
 	title: string, -- "YOUR DIVE"
 	isYou: boolean, -- blue header for you, pink for someone else
 	userId: number?, -- whose picture your tag carries; the local player's when isYou and this is nil
-	answer: string?, -- bank spelling; nil with no tier shows NO ANSWER bobbing at the surface
+	answer: string?, -- bank spelling; nil with no tier shows NO ANSWER at the surface
 	tier: string?,
 	depth: number, -- metres (Depth.metres)
 	oneIn: number?, -- real "1 in N players", when known
@@ -73,7 +74,7 @@ type Diver = {
 	rest: number, -- the tag's resting UIScale: smaller when many lanes share the window
 	x: number, -- its lane's centre, as a fraction of the window width
 	slot: DivePack.Slot,
-	pos: number, -- metres now, without the bob a landed tag is drawn with
+	pos: number, -- metres now
 	landed: boolean,
 	landedAt: number,
 	washAt: number?, -- when the tag started to drift away
@@ -120,11 +121,6 @@ local GUTTER_PAD = 0.012
 local SOFT_SHARE = 0.18 -- a tag slows over this share of the deepest depth...
 local SOFT_MIN = 10 -- ...but at least this many metres
 local SOFT_MAX = 36 -- ...and at most this many
-local BOB_METRES = 1.2 -- a landed tag keeps a slow bob; the view does not follow it
-local BOB_RATE = 2
-local BOB_EASE = 0.4 -- seconds the bob takes to grow from nothing, so landing has no kick
-local IDLE_BOB_METRES = 4 -- NO ANSWER bobs at the surface
-local IDLE_BOB_RATE = 3
 local WASH_LEAD = 0.35 -- the tags that stopped short start to drift away this long before the view leaves them
 local WASH_BEAT = 0.15 -- one that stops later stays this long first
 local WASH_TIME = 0.55 -- then drifts up, shrinks and fades over this long (no tilt: a rotated tag is not clipped)
@@ -138,14 +134,31 @@ local PEER_SOUND_GAP = 0.09 -- other tags' landing and leaving sounds are at lea
 local BUBBLE_COUNT = 9
 local BASE_HEIGHT = 380 -- card height the authored stroke thicknesses and corner radii are tuned for
 local MAX_STYLE_SCALE = 2.2 -- a full-screen card's outlines stop thickening here
-local FILL_ASPECT = NumberRange.new(0.6, 2.1) -- width / height of a full-screen card, tall phone to landscape phone
+local FILL_ASPECT = NumberRange.new(0.6, 3.2) -- width / height of a full-screen card: wide enough to span any landscape screen
 local STAMP_Y = 0.665 -- the stamp's centre as a fraction of card height; confetti bursts from here
+-- A full-screen card (options.fill) has no frame round it, and its water window takes the room below: these
+-- are fractions of the card's height, in place of the authored portrait layout.
+local FILL_LAYOUT = {
+	headerTop = 0.022, -- below Roblox's top bar (added in pixels); the status chips and Shells chip hide meanwhile
+	headerHeight = 0.085,
+	windowTop = 0.12, -- the water spans the card's full width from here
+	windowHeight = 0.71,
+	stampY = 0.73, -- inside the window, clear of the depth counter under it
+	counterY = 0.868,
+	counterHeight = 0.055,
+	footerY = 0.912,
+	footerHeight = 0.028,
+	shellsY = 0.952,
+	shellsHeight = 0.042,
+}
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
 local SHELLS_DELAY = 0.15 -- the Shells chip pops in just after the stamp
 local WIND_UP_METRES = 1 -- every answered dive winds up and bursts, a common one too; NO ANSWER just sinks
-local PLUNGE_METRES = 55 -- your tag shoots this far past its resting place before it springs back (Plankton)...
-local PLUNGE_PER_TIER = 9 -- ...and this much further for every tier rarer
+-- A landing plunge: your tag would shoot this far past its resting place and spring back (Plankton), and this
+-- much further per tier rarer. Off: players found the spring-back jarring, so the tag eases in and rests.
+local PLUNGE_METRES = 0
+local PLUNGE_PER_TIER = 0
 local OWN_SOFT = 4 -- metres your tag slows over before it lands: it arrives at speed and flows into the plunge
 -- The fake-out: your tag eases to just above its tier's line, as if it were an answer one tier commoner, creeps
 -- there, then gathers speed through the line to its real depth (DivePack.fakeSlide), never quite stopping. The
@@ -399,6 +412,50 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local shellsLip = shellsChip:FindFirstChild("Lip") :: Frame
 	local shellsText = shellsFace:FindFirstChild("Text") :: TextLabel
 	local confettiLayer = body:FindFirstChild("ConfettiLayer") :: Frame
+
+	-- Full-screen: no shadow, border or rounded corners round the card, and the water window grows down
+	-- into the space; the counter, footer and Shells chip move under it.
+	local stampHome = STAMP_Y
+	if options.fill == true then
+		if shadow ~= nil and shadow:IsA("GuiObject") then
+			shadow.Visible = false
+		end
+		cardStroke.Enabled = false
+		local cardCorner = body:FindFirstChildOfClass("UICorner")
+		if cardCorner ~= nil then
+			cardCorner:Destroy()
+		end
+		local layout = FILL_LAYOUT
+		-- The lip sits a little below the pill, by the same share of the pill's height.
+		local shrink = layout.headerHeight / math.max(header.Size.Y.Scale, 0.001)
+		local lipDrop = (headerLip.Position.Y.Scale - header.Position.Y.Scale) * shrink
+		-- The card covers the whole screen, Roblox's top bar strip too (SharedUi.DiveCards is not BelowTopbar);
+		-- the header and the water start that many pixels lower, so Roblox's buttons never sit on them.
+		local inset = math.floor(GuiService:GetGuiInset().Y + 0.5)
+		header.Position = UDim2.new(header.Position.X.Scale, 0, layout.headerTop, inset)
+		header.Size = UDim2.fromScale(header.Size.X.Scale, layout.headerHeight)
+		headerLip.Position = UDim2.new(headerLip.Position.X.Scale, 0, layout.headerTop + lipDrop, inset)
+		headerLip.Size = UDim2.fromScale(headerLip.Size.X.Scale, layout.headerHeight)
+		window.Position = UDim2.new(0, 0, layout.windowTop, inset)
+		window.Size = UDim2.new(1, 0, layout.windowHeight, -inset)
+		-- Edge to edge: the window has no frame of its own either.
+		local windowStroke = window:FindFirstChild("Border")
+		if windowStroke ~= nil and windowStroke:IsA("UIStroke") then
+			windowStroke.Enabled = false
+		end
+		local windowCorner = window:FindFirstChildOfClass("UICorner")
+		if windowCorner ~= nil then
+			windowCorner:Destroy()
+		end
+		stampHome = layout.stampY
+		stamp.Position = UDim2.fromScale(stamp.Position.X.Scale, stampHome)
+		counter.Position = UDim2.fromScale(counter.Position.X.Scale, layout.counterY)
+		counter.Size = UDim2.fromScale(counter.Size.X.Scale, layout.counterHeight)
+		footer.Position = UDim2.fromScale(footer.Position.X.Scale, layout.footerY)
+		footer.Size = UDim2.fromScale(footer.Size.X.Scale, layout.footerHeight)
+		shellsChip.Position = UDim2.fromScale(shellsChip.Position.X.Scale, layout.shellsY)
+		shellsChip.Size = UDim2.fromScale(shellsChip.Size.X.Scale, layout.shellsHeight)
+	end
 
 	local headerColor = if options.isYou then Theme.Header.You else Theme.Header.Other
 	-- Your equipped card theme (DiveCard.setTheme) recolours the header, the card face and the answer tag.
@@ -704,7 +761,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	table.insert(connections, frame.Destroying:Connect(destroy))
 
 	-- Your landing ---------------------------------------------------------------------------------------
-	local stampY = STAMP_Y -- where the stamp lands; placeStamp moves it above a low tag
+	local stampY = stampHome -- where the stamp lands; placeStamp moves it above a low tag
 
 	local function burst(count: number)
 		local piece = findTemplate("Confetti")
@@ -757,7 +814,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		local half = stamp.AbsoluteSize.Y / math.max(stampScale.Scale, 0.01) / 2 / cardHeight
 		local tagTop = (ownTag.AbsolutePosition.Y - cardTop) / cardHeight
 		local tagBottom = (ownTag.AbsolutePosition.Y + ownTag.AbsoluteSize.Y - cardTop) / cardHeight
-		if tagBottom + STAMP_GAP > STAMP_Y - half then
+		if tagBottom + STAMP_GAP > stampHome - half then
 			stampY = math.max(tagTop - STAMP_GAP - half, half)
 			stamp.Position = UDim2.new(stamp.Position.X.Scale, stamp.Position.X.Offset, stampY, 0)
 		end
@@ -1024,7 +1081,8 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 			end
 		end
 
-		-- Your tag lands with a plunge and a spring back, and the view stays on it until that has played out.
+		-- Your tag eases into its place (no plunge past it and spring back: PLUNGE_METRES is 0). With a plunge
+		-- the view would stay on it until that had played out.
 		if hasAnswer and not quick then
 			local wanted = PLUNGE_METRES + PLUNGE_PER_TIER * (tierIndex - 1)
 			local room = DivePack.overshootRoom(slots, 1, spacing)
@@ -1036,10 +1094,12 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 					fakeRise = wanted
 				end
 			end
-			local spring = DivePack.overshootSeconds()
-			focusDelay += spring
-			glideDelay += spring
-			settleTime += spring
+			if plunge > 0 then
+				local spring = DivePack.overshootSeconds()
+				focusDelay += spring
+				glideDelay += spring
+				settleTime += spring
+			end
 		end
 
 		-- `budget` squeezes the whole dive when its last tag would land too late, or when the view would
@@ -1326,15 +1386,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		content.Position = UDim2.fromScale(0, -(viewTop + SKY) / VIEW)
 		for _, diver in divers do
 			if not diver.gone then
-				local at = diver.pos
-				if diver.landed then
-					-- The bob is only drawn: the view follows `pos`, so the water stays still under a resting tag.
-					local since = now - diver.landedAt
-					local swing = if diver.hasAnswer
-						then math.sin(since * BOB_RATE) * BOB_METRES
-						else math.sin(since * IDLE_BOB_RATE) * IDLE_BOB_METRES
-					at += swing * math.min(since / BOB_EASE, 1)
-				end
+				local at = diver.pos -- a landed tag rests still
 				local y = (at - viewTop) / VIEW
 				-- With a deep answer on the card, the tags that stopped short of it drift away once your stamp
 				-- has had its moment, just before the view leaves for the deepest; one that stops later goes a
@@ -1395,7 +1447,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		end
 
 		-- The counter is your depth: it never reads past it, and holds it once your tag has landed (the tag
-		-- keeps bobbing, and may rest lower in a crowded lane).
+		-- may rest lower in a crowded lane).
 		local metres = 0
 		if hasAnswer then
 			metres = if own.landed then math.floor(depth + 0.5) else math.floor(math.clamp(own.pos, 0, depth) + 0.5)

@@ -38,6 +38,7 @@ local eligible: { [Player]: boolean } = {}
 local submissions: { [Player]: Submission } = {}
 local gates: { [Player]: AnswerGate.Gate } = {} -- per-player checks and deadline for the open prompt
 local baseDeadline = 0 -- os.clock() when the prompt's normal time runs out
+local promptSeconds = 0 -- the prompt's normal answer time, what a revived player gets in full
 local DEADLINE_EPSILON = 0.01 -- a deadline this close to the base one counts as "no extra time"
 
 local AnswerService = {}
@@ -73,7 +74,8 @@ function AnswerService.openRound(prompt: AnswerMatcher.Prompt, players: { Player
 	gates = {}
 	closing = false
 	botLocked = {}
-	baseDeadline = os.clock() + (seconds or GameConfig.Round.PromptSeconds)
+	promptSeconds = seconds or GameConfig.Round.PromptSeconds
+	baseDeadline = os.clock() + promptSeconds
 	for _, player in players do
 		eligible[player] = true
 		gates[player] = AnswerGate.new(baseDeadline)
@@ -81,15 +83,17 @@ function AnswerService.openRound(prompt: AnswerMatcher.Prompt, players: { Player
 	accepting = true
 end
 
--- Lets a player who rejoined mid-round (a revive, a late joiner) answer the open prompt, with at least
--- LateJoin.MinSecondsLeft to do it: past the base time the prompt runs on in overtime for them.
-function AnswerService.allow(player: Player)
+-- Lets a player who rejoined mid-round answer the open prompt: a late joiner with at least
+-- LateJoin.MinSecondsLeft to do it, a revived player (`fullTime`) with the prompt's whole answer time, as if
+-- it had just opened. Past the base time the prompt runs on in overtime for them.
+function AnswerService.allow(player: Player, fullTime: boolean?)
 	eligible[player] = true
 	-- In the closing grace there is no time left to hand out: they answer from the next prompt.
 	if not accepting or closing then
 		return
 	end
-	local floor = math.max(baseDeadline, os.clock() + GameConfig.LateJoin.MinSecondsLeft)
+	local give = if fullTime then promptSeconds else GameConfig.LateJoin.MinSecondsLeft
+	local floor = math.max(baseDeadline, os.clock() + give)
 	local gate = gates[player]
 	if gate == nil then
 		gates[player] = AnswerGate.new(floor)
