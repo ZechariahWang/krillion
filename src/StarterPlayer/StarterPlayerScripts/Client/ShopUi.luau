@@ -25,6 +25,7 @@ local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
 local Quests = require(ReplicatedStorage.Shared.Quests)
 local Shop = require(ReplicatedStorage.Shared.Shop)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Rail = require(script.Parent.Rail)
 local Rewards = require(script.Parent.Rewards)
@@ -99,6 +100,7 @@ type Entry = {
 	badge: string?,
 	action: string,
 	enabled: boolean,
+	levelLocked: boolean?, -- a Shells item above the player's level: the key shows faded but still answers a tap
 	owned: boolean,
 	color: Color3,
 	rarity: string?, -- colours the card border
@@ -396,7 +398,14 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 	else
 		entry.price = Currency.digits(item.price)
 		entry.currency = "Cash"
-		if Shop.canBuyWithCash(profile, item) then
+		if Shop.lockedByLevel(profile, item) then
+			-- The server refuses it and says which level it needs.
+			entry.action = "LV " .. Levels.requiredLevel(item)
+			entry.levelLocked = true
+			entry.onClick = function()
+				Net.event("ShopBuy"):FireServer(item.id)
+			end
+		elseif Shop.canBuyWithCash(profile, item) then
 			entry.action = if isConfirming(item.id) then "CONFIRM?" else "BUY"
 			entry.onClick = function()
 				confirmThen(item.id, function()
@@ -840,7 +849,8 @@ local function fillCard(w: Window, card: Frame, entry: Entry)
 	action.Text = entry.action
 	action.TextScaled = #entry.action > LONG_ACTION
 	action.Active = entry.enabled
-	action.BackgroundTransparency = if entry.enabled then 0 else 0.65
+	local faded = not entry.enabled or entry.levelLocked == true
+	action.BackgroundTransparency = if faded then 0.65 else 0
 	action.MouseButton1Click:Connect(function()
 		if not entry.enabled then
 			return

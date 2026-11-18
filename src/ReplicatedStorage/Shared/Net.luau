@@ -169,7 +169,8 @@ export type DailyResultPayload = {
 
 -- ShopResult: why a Shells buy did or did not go through.
 export type ShopResultPayload = {
-	status: string, -- "ok" | "cash" | "owned" | "unknown"
+	status: string, -- "ok" | "cash" | "owned" | "level" | "unknown"
+	level: number?, -- with "level": the level the item needs
 }
 
 -- ToyHit (to every client): a throw. `to` is the target's UserId, or a bot's id when a spectator throws at

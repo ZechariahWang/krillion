@@ -5,6 +5,8 @@
 -- fromStored, combine and merge, or it is silently dropped on save.
 -- No Roblox APIs here, so Lune tests can require it.
 
+local GameConfig = require("../Config/GameConfig")
+
 export type Equipped = {
 	Skin: string?,
 	Title: string?,
@@ -67,6 +69,7 @@ export type Profile = {
 	deepest: number, -- metres of the deepest match dive ever (Depth.metres); 0 before the first answer
 	deepestAnswer: string, -- the answer that dove deepest, in the bank spelling; "" before the first
 	games: number, -- matches played to the end
+	xp: number, -- level XP (Shared/Levels)
 	musicOff: boolean, -- the player turned background music off in Settings
 	musicVolume: number, -- 0..1, the Settings volume bar
 	activeSession: ActiveSession?, -- nil when no server holds the profile
@@ -93,6 +96,7 @@ export type Session = {
 	deepest: number, -- the deepest dive this session, 0 for none; kept with its answer when deeper
 	deepestAnswer: string,
 	games: number, -- delta
+	xp: number, -- delta
 	musicOff: boolean?, -- nil unless the player changed the music setting this session
 	musicVolume: number?, -- nil unless the player moved the volume bar this session
 	activeSession: ActiveSession?, -- nil leaves the stored marker as it is
@@ -113,6 +117,11 @@ end
 
 local function newDaily(): DailyState
 	return { day = 0, streak = 0 }
+end
+
+-- XP for a profile saved before levels existed.
+function Profile.startingXp(games: number, wins: number): number
+	return games * GameConfig.Levels.StartPerGame + wins * GameConfig.Levels.StartPerWin
 end
 
 function Profile.new(): Profile
@@ -137,6 +146,7 @@ function Profile.new(): Profile
 		deepest = 0,
 		deepestAnswer = "",
 		games = 0,
+		xp = 0,
 		musicOff = false,
 		musicVolume = 1,
 	}
@@ -280,6 +290,11 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	profile.deepest = numberOr(stored.deepest, 0)
 	profile.deepestAnswer = if typeof(stored.deepestAnswer) == "string" then stored.deepestAnswer else ""
 	profile.games = numberOr(stored.games, 0)
+	if typeof(stored.xp) == "number" then
+		profile.xp = stored.xp
+	else
+		profile.xp = Profile.startingXp(profile.games, profile.wins)
+	end
 	profile.musicOff = stored.musicOff == true
 	if typeof(stored.musicVolume) == "number" then
 		profile.musicVolume = math.clamp(stored.musicVolume, 0, 1)
@@ -310,6 +325,7 @@ function Profile.newSession(): Session
 		deepest = 0,
 		deepestAnswer = "",
 		games = 0,
+		xp = 0,
 	}
 end
 
@@ -365,6 +381,7 @@ function Profile.combine(first: Session, second: Session): Session
 	combined.deepest = deeper.deepest
 	combined.deepestAnswer = deeper.deepestAnswer
 	combined.games = first.games + second.games
+	combined.xp = first.xp + second.xp
 	if second.musicOff ~= nil then
 		combined.musicOff = second.musicOff
 	else
@@ -434,6 +451,7 @@ function Profile.merge(stored: Profile, session: Session): Profile
 		merged.deepestAnswer = session.deepestAnswer
 	end
 	merged.games = merged.games + session.games
+	merged.xp = math.max(0, merged.xp + session.xp)
 	if session.musicOff ~= nil then
 		merged.musicOff = session.musicOff
 	end

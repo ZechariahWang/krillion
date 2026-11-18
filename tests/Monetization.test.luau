@@ -207,6 +207,7 @@ return function(test)
 	test("chest-only, Robux, pass and reward items can never be bought with Shells", function()
 		local profile = Profile.new()
 		profile.cash = 1e9
+		profile.xp = 1e9
 		for _, item in Cosmetics.List do
 			local expected = Cosmetics.source(item) == "shells"
 			assert(Shop.canBuyWithCash(profile, item) == expected, item.id)

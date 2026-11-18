@@ -2,7 +2,8 @@
 -- Drives SharedUi.Wallet: the chunky gold Shells chip in the bottom-right corner, always on screen (lobby and
 -- match), that counts up, and the "+25 ANSWER" pills (the shell icon is authored on the pill) that bounce in above the corner column for every
 -- payout or spend (ShellsEarned). On a phone the chip hangs in the top-right corner, right under the top bar
--- buttons, with the THROW key under it and the pills dropping in below both.
+-- buttons, with the THROW key under it and the pills dropping in below both. The level bar (Chip.LevelBar)
+-- hangs under the chip and shows the player's level and progress to the next one.
 
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -10,6 +11,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Currency = require(ReplicatedStorage.Shared.Currency)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Sfx = require(script.Parent.Sfx)
 local Ui = require(script.Parent.Ui)
@@ -30,6 +32,7 @@ local PHONE_CHIP_SCALE = 0.8 -- phones: the chip's size, so its shell bubble sta
 local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter screens scale them down
 local MIN_FIT = 0.65
 local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+local FILL_TWEEN = TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 
 type Swatch = { Top: Color3, Bottom: Color3, Lip: Color3 }
 
@@ -59,6 +62,7 @@ local CAPTIONS: { [string]: string } = {
 	purchase = "PURCHASE",
 	pickup = "FOUND",
 	spend = "SPENT",
+	level = "LEVEL UP!",
 }
 
 local gui: Frame? = nil
@@ -68,6 +72,10 @@ local pops: Frame? = nil
 local popsFit: UIScale? = nil
 local popTemplate: Frame? = nil
 local playerGuiRef: PlayerGui? = nil
+local levelBar: Frame? = nil
+local levelFill: Frame? = nil
+local levelLabel: TextLabel? = nil
+local shownLevel: number? = nil -- nil until the first profile
 local phase = ""
 local playing = false -- the local player is on a pillar in the running match
 
@@ -78,6 +86,18 @@ local live: { Frame } = {}
 local fading: { [Frame]: boolean } = {} -- pills mid-fade; a re-slot must keep their fade going
 
 local Wallet = {}
+
+-- How far the level bar reaches below the chip's bottom edge (0 without one), so the column makes room.
+local function barExtent(): number
+	local own = chip
+	local bar = levelBar
+	if own == nil or bar == nil or not bar.Visible or bar.AbsoluteSize.Y <= 0 then
+		return 0
+	end
+	local chipBottom = own.AbsolutePosition.Y + own.AbsoluteSize.Y
+	local barBottom = bar.AbsolutePosition.Y + bar.AbsoluteSize.Y
+	return math.max(0, barBottom - chipBottom)
+end
 
 local function setAmount(value: number)
 	local label = amountLabel
@@ -133,7 +153,7 @@ local function placePops()
 	local right = target.AbsolutePosition.X + target.AbsoluteSize.X - origin.X
 	local top = target.AbsolutePosition.Y - origin.Y
 	if Ui.isPhone() then
-		local bottom = top + target.AbsoluteSize.Y
+		local bottom = top + target.AbsoluteSize.Y + barExtent()
 		local toy = shownToy()
 		if toy ~= nil and toy.AbsoluteSize.Y > 0 then
 			bottom = math.max(bottom, toy.AbsolutePosition.Y + toy.AbsoluteSize.Y - origin.Y)
@@ -185,15 +205,16 @@ local function dodgeJumpButton()
 	if toy ~= nil and toy:IsA("GuiObject") and toyRest == nil then
 		toyRest = toy.Position
 	end
+	local lift = UDim2.fromOffset(0, barExtent())
 	local jump = jumpButton()
 	if jump == nil or not jump.Visible then
-		own.Position = chipRest
+		own.Position = chipRest - lift
 		if toy ~= nil and toy:IsA("GuiObject") and toyRest ~= nil then
-			toy.Position = toyRest
+			toy.Position = toyRest - lift
 		end
 		return
 	end
-	local bottom = jump.AbsolutePosition.Y - screen.AbsolutePosition.Y - JUMP_GAP
+	local bottom = jump.AbsolutePosition.Y - screen.AbsolutePosition.Y - JUMP_GAP - lift.Y.Offset
 	own.Position = UDim2.new(1, chipRest.X.Offset, 0, bottom)
 	if toy ~= nil and toy:IsA("GuiObject") then
 		toy.Position = UDim2.new(1, -16, 0, bottom - own.AbsoluteSize.Y - JUMP_GAP)
@@ -223,7 +244,7 @@ local function placeOnPhone()
 	if rail ~= nil and toy ~= nil and toy:IsA("GuiObject") then
 		-- The key is a child of the rail screen, which has an origin of its own.
 		local railOrigin = rail.AbsolutePosition + guiInset
-		local under = top + own.AbsoluteSize.Y + PHONE_STACK_GAP
+		local under = top + own.AbsoluteSize.Y + barExtent() + PHONE_STACK_GAP
 		toy.AnchorPoint = Vector2.new(1, 0)
 		toy.Position = UDim2.fromOffset(right - railOrigin.X, under - railOrigin.Y)
 	end
@@ -402,7 +423,20 @@ function Wallet.init(playerGui: PlayerGui)
 		pops = layer
 		local fit = layer:FindFirstChild("Fit")
 		popsFit = if fit ~= nil and fit:IsA("UIScale") then fit else nil
-		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placePops)
+		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+			placeChip()
+			placePops()
+		end)
+		local bar = ownChip:FindFirstChild("LevelBar")
+		if bar ~= nil and bar:IsA("Frame") then
+			levelBar = bar
+			local fill = bar:FindFirstChild("Fill")
+			levelFill = if fill ~= nil and fill:IsA("Frame") then fill else nil
+			local label = bar:FindFirstChild("Label")
+			levelLabel = if label ~= nil and label:IsA("TextLabel") then label else nil
+		else
+			warn("Wallet: Chip.LevelBar is missing; no level bar")
+		end
 		local amount = ownChip:FindFirstChild("Amount")
 		if amount ~= nil and amount:IsA("TextLabel") then
 			amountLabel = amount
@@ -417,10 +451,46 @@ function Wallet.init(playerGui: PlayerGui)
 	end)
 end
 
+-- Shows the level and fills the bar. A level up fills the bar to the end first, then starts over.
+local function showLevel(xp: number)
+	local label = levelLabel
+	local fill = levelFill
+	if label == nil or fill == nil then
+		return
+	end
+	local info = Levels.progress(xp)
+	local share = if info.need > 0 then info.into / info.need else 0
+	local target = UDim2.fromScale(share, 1)
+	local previous = shownLevel
+	shownLevel = info.level
+	label.Text = "LV " .. info.level
+	if previous == nil then
+		Tween.cancel(fill)
+		fill.Size = target
+		return
+	end
+	if info.level <= previous then
+		Tween.play(fill, FILL_TWEEN, { Size = target })
+		return
+	end
+	Tween.play(fill, FILL_TWEEN, { Size = UDim2.fromScale(1, 1) })
+	task.delay(FILL_TWEEN.Time, function()
+		if shownLevel ~= info.level then
+			return
+		end
+		Sfx.play("Ping", 0.7)
+		fill.Size = UDim2.fromScale(0, 1)
+		Tween.play(fill, FILL_TWEEN, { Size = target })
+	end)
+end
+
 -- ProfileChanged payload (Net.ProfilePayload). The first one sets the chip; later ones count up to it.
 function Wallet.onProfile(profile)
 	if type(profile) ~= "table" or type(profile.cash) ~= "number" then
 		return
+	end
+	if type(profile.xp) == "number" then
+		showLevel(profile.xp)
 	end
 	local cash = math.floor(profile.cash)
 	local previous = shown

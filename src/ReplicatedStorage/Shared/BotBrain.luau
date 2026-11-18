@@ -63,6 +63,15 @@ function BotBrain.skill(roll: number): number
 	return cfg.MinSkill + (cfg.MaxSkill - cfg.MinSkill) * math.clamp(roll, 0, 1)
 end
 
+-- `roll` in [0, 1) gives the level a bot shows. Squaring the roll keeps most bots low, like most players.
+function BotBrain.level(roll: number): number
+	local cfg = GameConfig.Levels
+	local weighted = math.clamp(roll, 0, 1) ^ 2
+	local span = cfg.BotMax - cfg.BotMin + 1
+	local level = cfg.BotMin + math.floor(span * weighted)
+	return math.min(level, cfg.BotMax)
+end
+
 -- A standard normal deviate from two uniform rolls in [0, 1) (Box-Muller).
 function BotBrain.gaussian(u1: number, u2: number): number
 	local safe = math.max(u1, 1e-9)

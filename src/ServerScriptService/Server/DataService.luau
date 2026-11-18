@@ -194,6 +194,7 @@ local function sendProfile(player: Player)
 	payload.daily = profile.daily
 	payload.krillions = profile.krillions
 	payload.games = profile.games
+	payload.xp = profile.xp
 	payload.musicOff = profile.musicOff
 	payload.musicVolume = profile.musicVolume
 	if DataService.isReadOnly(player) then
@@ -552,6 +553,15 @@ function DataService.addCounter(player: Player, key: string, count: number)
 	else
 		return
 	end
+	DataService.changed(player)
+end
+
+function DataService.addXp(player: Player, amount: number)
+	local current = session(player)
+	if current == nil or amount <= 0 then
+		return
+	end
+	current.xp += amount
 	DataService.changed(player)
 end
 

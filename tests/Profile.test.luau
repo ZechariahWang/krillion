@@ -302,4 +302,32 @@ return function(test)
 		local combined = Profile.combine(session, Profile.newSession()).activeSession
 		assert(combined ~= nil and combined.jobId == "job-b")
 	end)
+
+	test("a new player starts with no XP", function()
+		assert(Profile.fromStored(nil).xp == 0)
+	end)
+
+	test("a saved profile from before levels starts with XP for its games and wins", function()
+		local profile = Profile.fromStored({ cash = 10, games = 4, wins = 2 })
+		assert(profile.xp == Profile.startingXp(4, 2), "got " .. profile.xp)
+		assert(profile.xp > 0)
+		assert(Profile.startingXp(4, 3) > Profile.startingXp(4, 2))
+		assert(Profile.startingXp(5, 2) > Profile.startingXp(4, 2))
+	end)
+
+	test("saved XP is kept as it is, never given the starting XP again", function()
+		local profile = Profile.fromStored({ games = 40, wins = 10, xp = 7 })
+		assert(profile.xp == 7)
+	end)
+
+	test("XP from a session adds on top of what another server saved", function()
+		local stored = Profile.fromStored({ xp = 500 })
+		local first = Profile.newSession()
+		first.xp = 30
+		local second = Profile.newSession()
+		second.xp = 20
+		local merged = Profile.merge(stored, Profile.combine(first, second))
+		assert(merged.xp == 550, "got " .. merged.xp)
+		assert(Profile.fromStored(merged).xp == 550)
+	end)
 end

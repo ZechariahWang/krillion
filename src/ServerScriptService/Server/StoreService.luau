@@ -14,6 +14,7 @@ local Economy = require(ReplicatedStorage.Shared.Economy)
 local Net = require(ReplicatedStorage.Shared.Net)
 local Products = require(ReplicatedStorage.Config.Products)
 local Shop = require(ReplicatedStorage.Shared.Shop)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local CosmeticService = require(script.Parent.CosmeticService)
 local DataService = require(script.Parent.DataService)
 local MetricsService = require(script.Parent.MetricsService)
@@ -234,9 +235,9 @@ local function processReceipt(info): Enum.ProductPurchaseDecision
 	return Enum.ProductPurchaseDecision.NotProcessedYet
 end
 
--- status: "ok" | "cash" | "owned" | "unknown"
-local function shopReply(player: Player, status: string)
-	Net.event("ShopResult"):FireClient(player, { status = status })
+-- status: "ok" | "cash" | "owned" | "level" | "unknown"; level: the level a "level" refusal needs
+local function shopReply(player: Player, status: string, level: number?)
+	Net.event("ShopResult"):FireClient(player, { status = status, level = level })
 end
 
 local function onBuy(player: Player, itemId: any)
@@ -250,6 +251,9 @@ local function onBuy(player: Player, itemId: any)
 	end
 	if profile.owned[item.id] == true then
 		return shopReply(player, "owned")
+	end
+	if Shop.lockedByLevel(profile, item) then
+		return shopReply(player, "level", Levels.requiredLevel(item))
 	end
 	if not Shop.canBuyWithCash(profile, item) then
 		if profile.cash < item.price then

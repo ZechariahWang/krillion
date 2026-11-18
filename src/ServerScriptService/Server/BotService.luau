@@ -11,6 +11,7 @@ local StarterPlayer = game:GetService("StarterPlayer")
 local TweenService = game:GetService("TweenService")
 
 local BotBrain = require(ReplicatedStorage.Shared.BotBrain)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local CosmeticService = require(script.Parent.CosmeticService)
 local MapService = require(script.Parent.MapService)
 
@@ -24,6 +25,7 @@ local IDLE_SPEED_MAX = 1.15
 type Bot = {
 	name: string,
 	skill: number,
+	level: number,
 	look: string?, -- the Templates.BotLooks model it wears
 	rig: Model?,
 }
@@ -74,7 +76,12 @@ function BotService.fill(count: number, usedNames: { [string]: boolean }): { num
 		used[name] = true
 		local id = FIRST_ID - (index - 1)
 		local look = if #looks > 0 then looks[(index - 1) % #looks + 1] else nil
-		bots[id] = { name = name, skill = BotBrain.skill(random:NextNumber()), look = look }
+		bots[id] = {
+			name = name,
+			skill = BotBrain.skill(random:NextNumber()),
+			level = BotBrain.level(random:NextNumber()),
+			look = look,
+		}
 		table.insert(ids, id)
 	end
 	return ids
@@ -194,7 +201,7 @@ function BotService.attach(id: number, platform: Part)
 	bot.rig = rig
 	local head = rig:FindFirstChild("Head")
 	if head ~= nil and bot.look ~= nil then
-		CosmeticService.tagHead(head, bot.name)
+		CosmeticService.tagHead(head, Levels.tagName(bot.level, bot.name))
 	end
 	playIdle(rig)
 end
