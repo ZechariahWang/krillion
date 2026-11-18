@@ -642,14 +642,14 @@ local function updateMeter(payload)
 	local gap = payload.waterY + payload.surge - height
 	local willSink = gap > 0
 	local danger = showTarget and willSink
-	marker.BackgroundColor3 = if danger then Theme.Color.Red else Theme.Color.Cream
+	marker.BackgroundColor3 = if danger then Theme.Color.Red else Theme.Color.Text
 	-- Each label goes on the far side of its line from the other line, so the two never overlap.
 	-- Near the top of the meter YOU drops below its line, clear of the label above the meter.
 	placeLabel(markerLabel, not danger and markerY > LABEL_ROOM)
 	placeLabel(targetLabel, danger)
 	local you = markerLabel
 	if you ~= nil then
-		you.TextColor3 = if danger then Theme.Color.Red else Theme.Color.Cream
+		you.TextColor3 = if danger then Theme.Color.Red else Theme.Color.Text
 	end
 	local need = needLabel
 	if need ~= nil then

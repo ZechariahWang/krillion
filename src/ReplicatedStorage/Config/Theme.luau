@@ -4,7 +4,7 @@
 local Theme = {
 	Color = {
 		-- UI
-		Cream = Color3.fromHex("FFF5DC"),
+		Text = Color3.fromHex("FFFFFF"), -- plain text and the water meter marker
 		Green = Color3.fromHex("50E07A"),
 		Yellow = Color3.fromHex("FFD23F"),
 		Red = Color3.fromHex("FF5A5A"),
