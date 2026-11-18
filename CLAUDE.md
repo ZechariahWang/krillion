@@ -130,7 +130,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - `Arena.Reef` (OuterRim rocks, Ledges, Coral) stays clear of the tank glass (radius 41.0..41.6): rocks outside,
   ledges inside.
 - Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
-  `LobbySpawn`, `HowToBoard`, `HowRareBoard`, `QuizZone` and `QuizArc` stay direct children: code looks them up
+  `LobbySpawn`, `HowToBoard`, `HowRareBoard`, `WeeklyBoard`, `QuizZone` and `QuizArc` stay direct children: code looks them up
   by name. `QuizZone` carries `ArcCenter`, `Outward` and `Radius` attributes describing the glowing semicircle
   (`QuizArc`) in front of the shack: LobbyQuizService serves warm-up prompts to whoever stands on it (`LobbyUi.LobbyQuiz`, a centred window with
   an X; a match closes it). `Lobby.WestStairs`
@@ -201,6 +201,10 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   gain and spend (`StoreService` calls it; a spend passes a `sku`), and custom events (`AnswerGraded`, `Sank`,
   `Won`, `BoostUsed`, `ReviveOffered`, `ReviveUsed`). Names and step numbers are `Shared/Metrics` (tested);
   append onboarding steps, never renumber. Studio records nothing, so there each event prints as `[Metrics] ...`.
+- Weekly board (`Lobby.WeeklyBoard`, THIS WEEK, left of the all-time `Leaderboard`): `Server/WeeklyService` adds
+  each Win to that week's OrderedDataStore (`Shared/Weekly`: weeks start Monday 00:00 UTC, one store per week,
+  Studio writes `..._Studio`), fills `Resets` and the top 10 every minute, and sends each player their place
+  (`WeeklyRank`; past the top 100 it reads `100+`), which `Client/WeeklyBoard` puts in the board's `YouRow`.
 - Settings: music on/off and volume are saved in the profile (`musicOff`, `musicVolume`); AFK is session only.
 - Profiles: a load that fails after retries leaves the player read-only (`DataService.isReadOnly`): no spends,
   payouts or saves, `loadFailed` in the payload, retried every 60 s. Studio is exempt and gets a throwaway
