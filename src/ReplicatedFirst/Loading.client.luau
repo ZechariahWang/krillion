@@ -1,7 +1,7 @@
 --!strict
 -- Shows ReplicatedFirst.LoadingScreen (authored in Studio) instead of Roblox's default screen: the bar follows
--- asset preloading, bubbles drift up, the title and the sea life bob, and it fades straight into the lobby
--- when done. The centre block (title, bar, how-to-play pills) is drawn for DESIGN_SIZE and shrinks to fit.
+-- asset preloading, bubbles drift up, the title and the sea life bob, the kelp sways, and when done a white
+-- flash snaps on and the screen zooms out of the way into the lobby. The centre block (title, bar, how-to-play pills) is drawn for DESIGN_SIZE and shrinks to fit.
 
 local ContentProvider = game:GetService("ContentProvider")
 local Players = game:GetService("Players")
@@ -17,6 +17,12 @@ local DESIGN_SIZE = Vector2.new(980, 600) -- screen size the centre block is aut
 local MIN_FIT = 0.4
 local TITLE_BOB = 8 -- pixels the title sinks and rises
 local BOB_SECONDS = 1.8 -- one way; each creature takes a little longer than the one before
+local SWAY_SECONDS = 2.6 -- one way; each kelp stalk takes a little longer than the one before
+local FLASH_IN = TweenInfo.new(0.06, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local FLASH_HOLD = 0.08
+local FLASH_OUT = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local ZOOM_OUT = TweenInfo.new(0.55, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local ZOOM_SCALE = 1.3
 
 local startedAt = os.clock()
 ReplicatedFirst:RemoveDefaultLoadingScreen()
@@ -35,6 +41,10 @@ local titleScale = title:WaitForChild("UIScale") :: UIScale
 local status = center:FindFirstChild("Status") :: TextLabel?
 local centerFit = center:FindFirstChild("Fit") :: UIScale?
 local creatures = root:FindFirstChild("Creatures")
+local backdrop = root:FindFirstChild("Backdrop")
+local kelp = if backdrop ~= nil then backdrop:FindFirstChild("Kelp") else nil
+local zoom = root:FindFirstChild("Zoom") :: UIScale?
+local flash = gui:FindFirstChild("Flash") :: Frame?
 
 local finished = false
 
@@ -105,6 +115,21 @@ if creatures ~= nil then
 	end
 end
 
+-- Each stalk's Sway attribute is the degrees it leans each way.
+if kelp ~= nil then
+	local count = 0
+	for _, child in kelp:GetChildren() do
+		local degrees = child:GetAttribute("Sway")
+		if child:IsA("GuiObject") and typeof(degrees) == "number" then
+			count += 1
+			child.Rotation = -degrees
+			local info = TweenInfo.new(SWAY_SECONDS + count * 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+			TweenService:Create(child, info, { Rotation = degrees }):Play()
+		end
+	end
+end
+
+-- The hand-over: a white flash snaps on, then fades while the loading art zooms past the camera and goes.
 local function finish()
 	if finished then
 		return
@@ -112,11 +137,17 @@ local function finish()
 	finished = true
 	setProgress(1)
 	task.wait(0.25)
-	local fade = TweenService:Create(root, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		GroupTransparency = 1,
-	})
+	if flash ~= nil then
+		TweenService:Create(flash, FLASH_IN, { BackgroundTransparency = 0 }):Play()
+		task.wait(FLASH_IN.Time + FLASH_HOLD)
+		TweenService:Create(flash, FLASH_OUT, { BackgroundTransparency = 1 }):Play()
+	end
+	if zoom ~= nil then
+		TweenService:Create(zoom, ZOOM_OUT, { Scale = ZOOM_SCALE }):Play()
+	end
+	local fade = TweenService:Create(root, ZOOM_OUT, { GroupTransparency = 1 })
 	fade:Play()
-	fade.Completed:Wait()
+	task.wait(FLASH_OUT.Time)
 	gui:Destroy()
 end
 
