@@ -19,6 +19,7 @@ local WATCH_SLOT = 2 -- the spectate eye, right of Help
 local WAIT_SECONDS = 10
 local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
 local MIN_FIT = 0.45
+local KEY_SHARE = 80 / 96 -- desktop keys show at this share of their fitted size: 80 px at most (authored 96)
 -- One column shrunk below TWO_COLUMNS_BELOW wraps into two; two columns go back to one only above
 -- ONE_COLUMN_ABOVE, so a screen near the threshold never flips back and forth.
 local TWO_COLUMNS_BELOW = 0.62
@@ -39,6 +40,23 @@ local lastHeight = 0
 local lastCount = 0
 
 local Rail = {}
+
+-- The visible keys in their LayoutOrder (GetChildren has no order of its own).
+local function orderedKeys(frame: GuiObject): { TextButton }
+	local keys: { TextButton } = {}
+	for _, child in frame:GetChildren() do
+		if child:IsA("TextButton") and child.Visible then
+			table.insert(keys, child)
+		end
+	end
+	table.sort(keys, function(a, b)
+		if a.LayoutOrder ~= b.LayoutOrder then
+			return a.LayoutOrder < b.LayoutOrder
+		end
+		return a.Name < b.Name
+	end)
+	return keys
+end
 
 local function visibleKeys(frame: GuiObject): (number, number)
 	local count = 0
@@ -82,14 +100,10 @@ local function fitToScreen()
 		lastCount = count
 		columns = 2
 		list.Parent = nil -- a UIListLayout has no off switch; out of the frame it lays out nothing
-		local index = 0
-		for _, child in frame:GetChildren() do
-			if child:IsA("TextButton") and child.Visible then
-				local column = index % 2
-				local row = math.floor(index / 2)
-				child.Position = UDim2.fromOffset(column * (keySize + gap), row * (keySize + gap))
-				index += 1
-			end
+		for index, key in orderedKeys(frame) do
+			local column = (index - 1) % 2
+			local row = math.floor((index - 1) / 2)
+			key.Position = UDim2.fromOffset(column * (keySize + gap), row * (keySize + gap))
 		end
 		local rows = math.ceil(count / 2)
 		frame.Size = UDim2.fromOffset(stackHeight(2, keySize, gap) + edgeWidth, stackHeight(rows, keySize, gap))
@@ -116,7 +130,7 @@ local function fitToScreen()
 	local width = stackHeight(columns, keySize, gap) + edgeWidth
 	list.Wraps = columns > 1
 	frame.Size = UDim2.fromOffset(width, height)
-	scale.Scale = math.clamp(available / height, MIN_FIT, 1)
+	scale.Scale = math.clamp(available / height, MIN_FIT, 1) * KEY_SHARE
 end
 
 local function refresh()
