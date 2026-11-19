@@ -49,7 +49,7 @@ local usedPromptIds: { [string]: boolean } = {}
 local special: string? = nil -- this round's special, if any
 local paidThisMatch = false -- someone used a paid boost (hint, revive, Robux +10 SEC): bots ease off (Shared/BotsOnly)
 local soloRound = false -- this round opened with no player afloat: bots play worse, water rises faster
-local soloRounds = 0 -- bots-only rounds this match
+local soloRounds = 0 -- bots-only rounds played to the end this match (counted after their surge)
 local baseSurge = 0 -- this round's surge before any bots-only speed-up
 local roundSurge = 0 -- how far the water will rise at the end of this round
 local participantCount = 0
@@ -769,9 +769,6 @@ local function runPrompt()
 	baseSurge = SpecialRound.surge(round, special)
 	-- No player afloat: a quick bots-only round (Shared/BotsOnly).
 	soloRound = #alivePlayers() == 0
-	if soloRound then
-		soloRounds += 1
-	end
 	roundSurge = BotsOnly.surge(baseSurge, soloRound)
 	MatchState.forgetCull(match :: MatchState.State)
 	local exclude = table.clone(usedPromptIds)
@@ -936,6 +933,10 @@ local function runSurge()
 	for _, player in alivePlayers() do
 		StoreService.payEarned(player, Economy.matchCash(1, false), "survive")
 		MatchEvents.RoundSurvived.fire(player, round)
+	end
+	-- Counted once the round is over, so the round in progress is never cut short by the cap.
+	if soloRound then
+		soloRounds += 1
 	end
 	settled = true
 	broadcastState()
