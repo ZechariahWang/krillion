@@ -519,7 +519,8 @@ local TOPBAR_GAP = 8 -- pixels between Roblox's last top bar button and ours (Ro
 local TOPBAR_BOTTOM = 2 -- Roblox's buttons end this far above the bottom of GuiService.TopbarInset
 local TOP_SLOTS = 3 -- our top bar buttons: the Settings gear, Help and Watch
 
--- The left and right screen edges of the status bar (SharedUi.Status.StatusFrame), or nil before it exists.
+-- The left and right screen edges of the status bar (SharedUi.Status.StatusFrame and its visible children,
+-- whose Plate is wider than the frame), or nil before it exists.
 local function statusSpan(): (number?, number?)
 	local player = Players.LocalPlayer
 	local playerGui = if player ~= nil then player:FindFirstChildOfClass("PlayerGui") else nil
@@ -528,7 +529,15 @@ local function statusSpan(): (number?, number?)
 	if frame == nil or not frame:IsA("GuiObject") or frame.AbsoluteSize.X <= 0 then
 		return nil, nil
 	end
-	return frame.AbsolutePosition.X, frame.AbsolutePosition.X + frame.AbsoluteSize.X
+	local left = frame.AbsolutePosition.X
+	local right = left + frame.AbsoluteSize.X
+	for _, child in frame:GetChildren() do
+		if child:IsA("GuiObject") and child.Visible and child.AbsoluteSize.X > 0 then
+			left = math.min(left, child.AbsolutePosition.X)
+			right = math.max(right, child.AbsolutePosition.X + child.AbsoluteSize.X)
+		end
+	end
+	return left, right
 end
 
 -- Puts a 44 px circle button on the line of Roblox's own top bar buttons, `slot` places right of them
