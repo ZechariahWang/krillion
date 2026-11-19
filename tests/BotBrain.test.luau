@@ -27,7 +27,7 @@ return function(test)
 		assert(BotBrain.fillCount(6, 4, 12) == 0)
 		assert(BotBrain.fillCount(1, 0, 12) == 0, "FillTo 0 turns bots off")
 		assert(BotBrain.fillCount(1, 4, 2) == 1, "never more pillars than the arena holds")
-		assert(BotBrain.fillCount(1, GameConfig.Bots.FillTo, GameConfig.Server.MaxPlayers) == 5, "a lone player gets five bots")
+		assert(BotBrain.fillCount(1, GameConfig.Bots.FillTo, GameConfig.Server.MaxPlayers) == 7, "a lone player gets seven bots")
 	end)
 
 	test("bots: a username reads like a player's: a word, a capitalised word, a number", function()

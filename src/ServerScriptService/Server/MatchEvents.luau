@@ -32,6 +32,9 @@ local MatchEvents = {
 	-- (player: Player, promptId: string, text: string) when the bank refuses what a player typed, in a
 	-- match or the lobby warm-up. `text` is as typed: not yet normalized, at most twice Answer.MaxLength.
 	AnswerRefused = Signal.new("AnswerRefused"),
+	-- (player: Player, kind: string) a paid boost was used in a match: a Hint, or +10 SEC from the Robux-bought
+	-- inventory. RoundService eases the bots for the rest of the match (revives are counted there).
+	PaidBoostUsed = Signal.new("PaidBoostUsed"),
 }
 
 return MatchEvents

@@ -28,8 +28,10 @@ local function assertSinksBetween(label: string, round: number, low: number, hig
 end
 
 return function(test)
-	test("round 1 surge is gentle", function()
-		assert(WaterCurve.surge(1) <= 0.6, "round 1 surge is " .. WaterCurve.surge(1))
+	test("round 1 surge is big enough to see, but no bigger than a Schooler lift", function()
+		local first = WaterCurve.surge(1)
+		assert(first >= 1.5, "round 1 surge is only " .. first)
+		assert(first <= WaterCurve.lift(Tiers.points("Schooler")), "round 1 surge is " .. first)
 	end)
 
 	test("each round's surge grows by more than the last", function()
@@ -41,10 +43,10 @@ return function(test)
 	end)
 
 	test("survival targets by answer tier", function()
-		assertSinksBetween("Plankton every round", sinkRound("Plankton"), 4, 6)
+		assertSinksBetween("Plankton every round", sinkRound("Plankton"), 6, 6)
 		assertSinksBetween("Plankton missing round 2", sinkRound("Plankton", 2), 4, 100)
-		assertSinksBetween("Schooler every round", sinkRound("Schooler"), 8, 10)
-		assertSinksBetween("Rare every round", sinkRound("Rare"), 12, 15)
+		assertSinksBetween("Schooler every round", sinkRound("Schooler"), 9, 9)
+		assertSinksBetween("Rare every round", sinkRound("Rare"), 13, 13)
 		assertSinksBetween("Mythic every round", sinkRound("Mythic"), 1, 17)
 	end)
 

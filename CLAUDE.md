@@ -146,14 +146,17 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 
 ## Match flow
 
-- A server holds 6 (`GameConfig.Server.MaxPlayers`; Server Size in the Creator Hub is set to match).
+- A server holds 8 (`GameConfig.Server.MaxPlayers`; Server Size in the Creator Hub must be set to match).
+- Water: round r surges `SurgeBase + SurgeGrowth * (r - 1) ^ SurgePower` (1.75 in round 1, so a new player sees it
+  coming) and an answer lifts `points * LiftPerPoint` (0.15); `tests/WaterCurve` pins the round each tier sinks in
+  (Plankton 6, Schooler 9, Rare 13). Scale those numbers together, never one alone.
 - Pillars: `PlatformTemplate` is a Part with `Cap` (the smooth standing surface), `Lift`, `Upright` and `Top`
   (emitters: `Confetti`, `Bubbles`, `Sparks` on a rise, `Sparkle` always). Its decoration (a glowing `Collar`
   and `Band1..5`, corner `Post1..4`, the `PadRing`/`PadDisc`/`Emblem` landing pad, the `GlowPoint.Glow`
   light) is authored as direct child parts welded to it, non-colliding and massless; a piece with a `Tint`
   attribute follows the pillar's colour (`MapService.tint`: its own colour, a skin's, slate when sunk).
   `ServerStorage.PlatformTemplateBackup` is the plain studded pillar from before 2026-11-14.
-- Bots: a match with fewer than 6 players is filled to 6 (`GameConfig.Bots.FillTo`) with bots made to pass
+- Bots: a match with fewer than 8 players is filled to 8 (`GameConfig.Bots.FillTo`) with bots made to pass
   as players: a generated username (`BotBrain.username`, like dogLover234), one of the `Templates.BotLooks`
   characters (authored from Roblox's free classic clothing and hair: R6, block body and block head with no
   body meshes, posed, anchored, joints kept, an `Animator` in the Humanoid), the idle animation players stand in (read from
@@ -165,6 +168,13 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   first-time player: they stay in the lobby for the tutorial, and finishing it (`DataService.TutorialFinished`)
   puts them in once (`LateJoin.arrivalAction`). The JUMP IN card is for the rest. `Templates.BotRig` is only the stand-in when
   `BotLooks` is missing. A bot answers every prompt. A player who outlasts the bots has a Win (`Economy.countsAsWin`).
+  `Shared/BotsOnly` tunes them: once anyone in the match uses a paid boost (a Hint, any revive, +10 SEC from the
+  Robux-bought inventory: `MatchEvents.PaidBoostUsed`) the bots play worse for the rest of the match (bots still
+  thinking re-pick at once, `easePendingBots`), with nothing
+  on screen. When every player has sunk, the match runs on for up to `Bots.SoloRoundsMax` quick rounds (longer
+  while a revive is pending) with worse bots, `Water.SoloSurgeMultiplier` and `Round.SoloPromptSeconds`, so the
+  last player can revive and newcomers can jump in; it ends at once for an empty or all-AFK server or with one
+  bot left. A revive or late join turns the round normal again.
 - Toys: a player who is not in a match throws their equipped toy with the THROW key or T. While spectating
   it goes at whoever they are watching, a player or a bot, at any distance; otherwise they pick a lobby player
   nearby. Every client flies `Templates.Toys.<toy>` and leaves `Templates.ToySplat` welded to the target for
@@ -191,6 +201,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   `Results.Panel.Deepest` (authored) shows it with your all-time best under it. The best is saved in the profile
   (`deepest`, `deepestAnswer`, keeps the max); `DataService.recordDive` flags a beaten best as the reveal row's
   `newBest`, which toasts NEW PERSONAL BEST (a first-ever dive is saved without the toast).
+- Lobby landings (respawn, sinking, a match ending) go to `MapService.getLobbySpreadCFrame`: a spot 1.5 to 5 studs
+  round `Lobby.LobbySpawn`, 2.5 studs clear of anyone there, over the deck (`Shared/SpawnSpread`).
 - Every teleport goes through `PlayerService.sendToPlatform` / `sendToLobby`: they anchor the root, move it, and
   release it once the spot has streamed in, so nobody falls through a pillar their client does not have yet.
 - Dying or respawning while alive in a match eliminates the player (RoundService), like sinking. A revived

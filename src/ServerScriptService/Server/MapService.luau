@@ -2,6 +2,7 @@
 -- Finds the Studio-built map placed in Workspace (Arena, Lobby, Mountains) and spawns per-player pillars from
 -- ServerStorage.PhysicalAssets.PlatformTemplate (the starting ring, late joiners in the gaps, slate for a sunk pillar).
 
+local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 local TweenService = game:GetService("TweenService")
@@ -10,6 +11,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local ArenaLayout = require(ReplicatedStorage.Shared.ArenaLayout)
 local LateJoin = require(ReplicatedStorage.Shared.LateJoin)
+local SpawnSpread = require(ReplicatedStorage.Shared.SpawnSpread)
 local Theme = require(ReplicatedStorage.Config.Theme)
 
 local CAP_HEIGHT = 1
@@ -47,6 +49,49 @@ end
 function MapService.getLobbySpawnCFrame(): CFrame
 	local spawn = lobby:WaitForChild("LobbySpawn") :: SpawnLocation
 	return spawn.CFrame + Vector3.new(0, 3, 0)
+end
+
+local spreadRandom = Random.new()
+local FLOOR_REACH = 6 -- studs above and below the spawn's top a spot's floor may be
+
+-- Where `player` lands in the lobby: a spot round the spawn (Shared/SpawnSpread), clear of the other players
+-- already standing near it and over the deck (a ray finds its floor), so a crowd that respawns together
+-- does not stack. Falls back to the spawn itself.
+function MapService.getLobbySpreadCFrame(player: Player?): CFrame
+	local spawn = lobby:WaitForChild("LobbySpawn") :: SpawnLocation
+	local centre = spawn.Position
+	local top = centre.Y + spawn.Size.Y / 2
+	local taken = {}
+	local ignore: { Instance } = {}
+	for _, other in Players:GetPlayers() do
+		local character = other.Character
+		if character ~= nil then
+			table.insert(ignore, character)
+			local root = character:FindFirstChild("HumanoidRootPart")
+			if other ~= player and root ~= nil and root:IsA("BasePart") then
+				local p = root.Position
+				if math.abs(p.Y - top) < 20 then
+					table.insert(taken, { p.X, p.Z })
+				end
+			end
+		end
+	end
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = ignore
+	params.IgnoreWater = true
+	local function roll(): number
+		return spreadRandom:NextNumber()
+	end
+	for _, spot in SpawnSpread.candidates(centre.X, centre.Z, taken, roll) do
+		local from = Vector3.new(spot[1], top + FLOOR_REACH, spot[2])
+		local hit = workspace:Raycast(from, Vector3.new(0, -2 * FLOOR_REACH, 0), params)
+		if hit ~= nil and hit.Instance.CanCollide and hit.Normal.Y > 0.7 then
+			local facing = spawn.CFrame - spawn.CFrame.Position
+			return CFrame.new(hit.Position + Vector3.new(0, 3, 0)) * facing
+		end
+	end
+	return MapService.getLobbySpawnCFrame()
 end
 
 -- The pillar's center, given the height of its standing surface (top of the cap).

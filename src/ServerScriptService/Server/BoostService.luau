@@ -125,6 +125,7 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 		DataService.spendBoost(player, kind)
 		Boosts.noteUse(usageOf(player), kind)
 		MetricsService.event(player, "BoostUsed", 1, Metrics.field("Kind", kind), Metrics.field("Paid", "Owned"))
+		MatchEvents.PaidBoostUsed.fire(player, kind)
 		local label = Tiers.ByName[tier :: string].label
 		return reply(player, kind, "ok", { hint = Boosts.hintText(label, display :: string) })
 	end
@@ -137,6 +138,10 @@ function BoostService.apply(player: Player, kind: string, pay: string?): string
 	Boosts.noteUse(usageOf(player), kind)
 	local paid = if owned then "Owned" else "Shells"
 	MetricsService.event(player, "BoostUsed", 1, Metrics.field("Kind", kind), Metrics.field("Paid", paid))
+	-- +10 SEC from the inventory was bought with Robux; one paid with Shells is not a paid boost.
+	if owned then
+		MatchEvents.PaidBoostUsed.fire(player, kind)
+	end
 	local secondsLeft = AnswerService.extend(player, GameConfig.Boosts.ExtraTimeSeconds)
 	return reply(player, kind, "ok", { secondsLeft = secondsLeft })
 end

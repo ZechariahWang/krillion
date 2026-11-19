@@ -11,6 +11,7 @@ local GameConfig = {
 		PromptSeconds = 25,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
 		PromptSecondsMin = 14,
+		SoloPromptSeconds = 10, -- a bots-only round (Shared/BotsOnly) is this short at most
 		RevealSeconds = 11.2, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
 		SettleSeconds = 1, -- after the water settles, before the next prompt or the results: room for the callouts
 		ResultsSeconds = 8,
@@ -23,12 +24,15 @@ local GameConfig = {
 		LockBroadcastSeconds = 0.25, -- a lock-in pushes a state update this soon (at most 4 a second)
 	},
 	Water = {
-		StartHeight = 6, -- platform top above the starting water line
+		StartHeight = 12, -- platform top above the starting water line
 		-- Round r surges SurgeBase + SurgeGrowth * (r - 1) ^ SurgePower; tests/WaterCurve pins the survival targets.
-		SurgeBase = 0.5,
-		SurgeGrowth = 0.4,
+		-- Big from the first round, so a new player sees the water coming at once; answers lift further to match
+		-- (the rounds each tier survives are the same as with the old 0.5 / 0.4 / 0.1 and a start of 6).
+		SurgeBase = 1.75,
+		SurgeGrowth = 0.55,
 		SurgePower = 1.5,
-		LiftPerPoint = 0.1,
+		LiftPerPoint = 0.15,
+		SoloSurgeMultiplier = 1.6, -- the surge in a bots-only round (Shared/BotsOnly), so the match ends sooner
 		CullHz = 10,
 		CreepFraction = 0.7, -- slow part of the surge
 		CreepSeconds = 1.4,
@@ -144,17 +148,26 @@ local GameConfig = {
 		ViewMetres = 230, -- how much of the scale the dive window shows at once
 	},
 	Bots = {
-		FillTo = 6, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
+		FillTo = 8, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
 		MinSkill = 0.05, -- bots trail players: about 14% of their answers reach Rare, players about 27%
 		MaxSkill = 0.5,
 		DelayMin = 0.25, -- bots answer between DelayMin and DelayMin + DelayRange of the prompt time
 		DelayRange = 0.6,
+		-- Shared/BotsOnly. Once anyone in a match uses a paid boost (hint, revive, Robux +10 SEC), the bots'
+		-- skill is scaled by this and each skips an answer with this chance, for the rest of the match.
+		PaidSkillScale = 0.35,
+		PaidMissChance = 0.2,
+		-- With no player afloat the match runs on for up to SoloRoundsMax rounds (longer while a revive is
+		-- pending) so the last player can revive and newcomers can join; those rounds the bots play worse.
+		SoloRoundsMax = 3,
+		SoloSkillScale = 0.5,
+		SoloMissChance = 0.25,
 	},
 	Revive = {
 		WindowSeconds = 8, -- long enough for a child to read the card and tap it
 		BuyWindowSeconds = 12, -- Revive Now: long enough to get through the Robux purchase dialog
 		MinOthersAlive = 2, -- fewer than this and the match is already decided
-		HeightAboveWater = 4,
+		HeightAboveWater = 6, -- scaled with the water (Water.LiftPerPoint)
 	},
 	-- The daily reward (Shared/Daily): one claim per UTC day, walked through in order on consecutive days and
 	-- started over after the last. A missed day starts again at day 1. `chest` is opened for free.
@@ -231,7 +244,7 @@ local GameConfig = {
 		FlushSeconds = 60, -- how often a server adds its answers to the day's store
 	},
 	Server = {
-		MaxPlayers = 6, -- also set Server Size to 6 in the Creator Hub (Places > Configure)
+		MaxPlayers = 8, -- also set Server Size to 8 in the Creator Hub (Places > Configure)
 	},
 }
 
