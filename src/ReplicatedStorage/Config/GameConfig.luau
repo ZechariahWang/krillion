@@ -11,6 +11,7 @@ local GameConfig = {
 		PromptSeconds = 25,
 		PromptSecondsStep = 1.5, -- subtracted per round after the first, then floored to whole seconds
 		PromptSecondsMin = 14,
+		SoloPromptSeconds = 10, -- a bots-only round (Shared/BotsOnly) is this short at most
 		RevealSeconds = 11.2, -- long enough for the dive card to land (Reveal.RaiseDelaySeconds) and the pillar to rise
 		SettleSeconds = 1, -- after the water settles, before the next prompt or the results: room for the callouts
 		ResultsSeconds = 8,
@@ -31,6 +32,7 @@ local GameConfig = {
 		SurgeGrowth = 0.55,
 		SurgePower = 1.5,
 		LiftPerPoint = 0.15,
+		SoloSurgeMultiplier = 1.6, -- the surge in a bots-only round (Shared/BotsOnly), so the match ends sooner
 		CullHz = 10,
 		CreepFraction = 0.7, -- slow part of the surge
 		CreepSeconds = 1.4,
@@ -151,6 +153,15 @@ local GameConfig = {
 		MaxSkill = 0.5,
 		DelayMin = 0.25, -- bots answer between DelayMin and DelayMin + DelayRange of the prompt time
 		DelayRange = 0.6,
+		-- Shared/BotsOnly. Once anyone in a match uses a paid boost (hint, revive, Robux +10 SEC), the bots'
+		-- skill is scaled by this and each skips an answer with this chance, for the rest of the match.
+		PaidSkillScale = 0.35,
+		PaidMissChance = 0.2,
+		-- With no player afloat the match runs on for up to SoloRoundsMax rounds (longer while a revive is
+		-- pending) so the last player can revive and newcomers can join; those rounds the bots play worse.
+		SoloRoundsMax = 3,
+		SoloSkillScale = 0.5,
+		SoloMissChance = 0.25,
 	},
 	Revive = {
 		WindowSeconds = 8, -- long enough for a child to read the card and tap it

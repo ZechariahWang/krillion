@@ -9,6 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
 local BotBrain = require(ReplicatedStorage.Shared.BotBrain)
+local BotsOnly = require(ReplicatedStorage.Shared.BotsOnly)
 local Depth = require(ReplicatedStorage.Shared.Depth)
 local LateJoin = require(ReplicatedStorage.Shared.LateJoin)
 local MatchState = require(ReplicatedStorage.Shared.MatchState)
@@ -46,6 +47,10 @@ local match: MatchState.State? = nil
 local platforms: { [Player]: Part } = {}
 local usedPromptIds: { [string]: boolean } = {}
 local special: string? = nil -- this round's special, if any
+local paidThisMatch = false -- someone used a paid boost (hint, revive, Robux +10 SEC): bots ease off (Shared/BotsOnly)
+local soloRound = false -- this round opened with no player afloat: bots play worse, water rises faster
+local soloRounds = 0 -- bots-only rounds this match
+local baseSurge = 0 -- this round's surge before any bots-only speed-up
 local roundSurge = 0 -- how far the water will rise at the end of this round
 local participantCount = 0
 local participantsList: { Player } = {}
@@ -127,10 +132,30 @@ end
 
 -- A solo match (empty server) runs until the lone player sinks instead of ending at once. Bots never
 -- play on alone: the match ends once no player is left afloat.
+local revivePending: () -> boolean
+
+-- Players in the server who are not AFK: someone who could still play or jump in.
+local function activeHumans(): number
+	local count = 0
+	for _, player in Players:GetPlayers() do
+		if player:GetAttribute("Afk") ~= true then
+			count += 1
+		end
+	end
+	return count
+end
+
 local function matchOver(): boolean
 	local alive = RoundService.aliveCount()
 	if #bots > 0 and #alivePlayers() == 0 then
-		return true
+		-- Only bots afloat: the match runs on for a few quick rounds (Shared/BotsOnly) so the last player
+		-- can revive and someone arriving can still jump in, unless nobody is left to play.
+		return not BotsOnly.keepGoing({
+			humansInServer = activeHumans(),
+			aliveBots = alive,
+			soloRounds = soloRounds,
+			revivePending = revivePending(),
+		})
 	end
 	if participantCount + #bots > 1 then
 		return alive <= 1
@@ -367,10 +392,7 @@ local function offerRevive(player: Player)
 	if kind == nil then
 		return
 	end
-	-- With no player left afloat the match ends now, however many bots are still up.
-	if #bots > 0 and #alivePlayers() == 0 then
-		return
-	end
+	-- With no player left afloat the match runs on in quick bots-only rounds (matchOver), so the offer stands.
 	-- A purchase takes longer than a tap, so Revive Now gets the longer window.
 	local seconds = if kind == "buy" then GameConfig.Revive.BuyWindowSeconds else GameConfig.Revive.WindowSeconds
 	reviveOffers[player] = { matchId = matchId, expires = os.clock() + seconds, kind = kind }
@@ -432,6 +454,24 @@ local function liveOffer(player: Player): boolean
 		and PlayerService.hasCharacter(player)
 end
 
+-- Someone who sank may still take their revive offer.
+revivePending = function(): boolean
+	for player in reviveOffers do
+		if liveOffer(player) then
+			return true
+		end
+	end
+	return false
+end
+
+-- A player is afloat again (a revive, a late join): a bots-only round goes back to the normal rise.
+local function humanBack()
+	if soloRound then
+		soloRound = false
+		roundSurge = baseSurge
+	end
+end
+
 -- A revive the glide could not finish (the match ended under it) goes back where it came from.
 local function refundRevive(player: Player, kind: string)
 	reviveUsed[player] = nil
@@ -485,6 +525,9 @@ local function restore(player: Player, kind: string)
 	sunkPlatforms[player] = nil
 	-- Back mid-prompt, they get the whole answer time, not what was left of it.
 	AnswerService.allow(player, true)
+	-- A revive is a paid boost: the bots ease off for the rest of the match. A bots-only round is normal again.
+	paidThisMatch = true
+	humanBack()
 	MapService.riseBurst(platform)
 	broadcastState()
 	setServerAttributes()
@@ -555,6 +598,9 @@ local function startMatch()
 	local state = MatchState.new(GameConfig.Water.StartHeight)
 	match = state
 	round = 0
+	paidThisMatch = false
+	soloRound = false
+	soloRounds = 0
 	matchDeepest = nil
 	usedPromptIds = {}
 	special = nil
@@ -639,8 +685,14 @@ local function scheduleBots(prompt: AnswerService.Prompt, seconds: number)
 	botPending = {}
 	local token = promptToken
 	local taken: { [string]: boolean } = {}
+	local missChance = BotsOnly.missChance(paidThisMatch, soloRound)
 	for _, id in aliveBots() do
-		local aim = BotBrain.chooseTier(BotService.skillOf(id), BotBrain.gaussian(math.random(), math.random()))
+		-- After a paid boost, and in bots-only rounds, bots play worse and now and then give no answer.
+		if math.random() < missChance then
+			continue
+		end
+		local skill = BotsOnly.skill(BotService.skillOf(id), paidThisMatch, soloRound)
+		local aim = BotBrain.chooseTier(skill, BotBrain.gaussian(math.random(), math.random()))
 		local index = BotBrain.nearestTier(prompt.answers, aim)
 		local answer = if index ~= nil then BotBrain.chooseAnswer(prompt.answers, index, taken, math.random()) else nil
 		if answer ~= nil then
@@ -714,7 +766,13 @@ end
 local function runPrompt()
 	round += 1
 	special = SpecialRound.pick(round, special, math.random(), math.random())
-	roundSurge = SpecialRound.surge(round, special)
+	baseSurge = SpecialRound.surge(round, special)
+	-- No player afloat: a quick bots-only round (Shared/BotsOnly).
+	soloRound = #alivePlayers() == 0
+	if soloRound then
+		soloRounds += 1
+	end
+	roundSurge = BotsOnly.surge(baseSurge, soloRound)
 	MatchState.forgetCull(match :: MatchState.State)
 	local exclude = table.clone(usedPromptIds)
 	for id in LobbyQuizService.recentPromptIds(alivePlayers()) do
@@ -724,7 +782,7 @@ local function runPrompt()
 	usedPromptIds[prompt.id] = true
 	currentPrompt = prompt
 	LobbyQuizService.setLivePromptId(prompt.id)
-	local seconds = WaterCurve.promptSeconds(round)
+	local seconds = BotsOnly.promptSeconds(WaterCurve.promptSeconds(round), soloRound)
 	local players = alivePlayers()
 	AnswerService.openRound(prompt, players, seconds)
 	MatchEvents.PromptOpened.fire({ id = prompt.id, prompt = prompt.prompt }, round, players, seconds)
@@ -1079,6 +1137,7 @@ function RoundService.tryJoin(player: Player): (string, string)
 	if phase == "Prompt" then
 		AnswerService.allow(player)
 	end
+	humanBack()
 	MatchEvents.PlayerJoinedMatch.fire(player)
 	for _, other in Players:GetPlayers() do
 		if other ~= player then
@@ -1197,6 +1256,11 @@ local function onTutorialFinished(player: Player)
 end
 
 function RoundService.start()
+	MatchEvents.PaidBoostUsed.connect(function()
+		if match ~= nil then
+			paidThisMatch = true
+		end
+	end)
 	Net.event("ReviveUse").OnServerEvent:Connect(onReviveUse)
 	StoreService.registerProduct(Products.ReviveNow.productId, onReviveBought)
 	Net.event("JoinMatch").OnServerEvent:Connect(function(player)
