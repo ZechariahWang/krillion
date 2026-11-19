@@ -574,6 +574,7 @@ local ROOT_OF: { [string]: string } = {
 	Store = "LobbyUi",
 	LobbyQuiz = "LobbyUi",
 	Rewards = "LobbyUi",
+	Collection = "LobbyUi",
 	Tutorial = "LobbyUi",
 	Hud = "GameUi",
 	Reveal = "GameUi",

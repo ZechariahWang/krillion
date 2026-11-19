@@ -6,6 +6,7 @@
 -- No Roblox APIs here, so Lune tests can require it.
 
 local GameConfig = require("../Config/GameConfig")
+local Tiers = require("../Config/Tiers")
 
 export type Equipped = {
 	Skin: string?,
@@ -42,6 +43,12 @@ export type DailyState = {
 	streak: number,
 }
 
+-- The answer collection: each prompt's best match answer (Shared/Collection), keyed by prompt id.
+export type CollectionCard = {
+	tier: string,
+	answer: string,
+}
+
 -- The server (game.JobId) that has the profile loaded, and when it last wrote this (os.time).
 export type ActiveSession = {
 	jobId: string,
@@ -70,6 +77,7 @@ export type Profile = {
 	deepestAnswer: string, -- the answer that dove deepest, in the bank spelling; "" before the first
 	games: number, -- matches played to the end
 	xp: number, -- level XP (Shared/Levels)
+	collection: { [string]: CollectionCard },
 	musicOff: boolean, -- the player turned background music off in Settings
 	musicVolume: number, -- 0..1, the Settings volume bar
 	activeSession: ActiveSession?, -- nil when no server holds the profile
@@ -97,6 +105,7 @@ export type Session = {
 	deepestAnswer: string,
 	games: number, -- delta
 	xp: number, -- delta
+	collection: { [string]: CollectionCard }, -- cards improved this session
 	musicOff: boolean?, -- nil unless the player changed the music setting this session
 	musicVolume: number?, -- nil unless the player moved the volume bar this session
 	activeSession: ActiveSession?, -- nil leaves the stored marker as it is
@@ -147,6 +156,7 @@ function Profile.new(): Profile
 		deepestAnswer = "",
 		games = 0,
 		xp = 0,
+		collection = {},
 		musicOff = false,
 		musicVolume = 1,
 	}
@@ -180,6 +190,31 @@ local function copyQuests(value: any): QuestDay -- any: stored table or a QuestD
 		end
 	end
 	return quests
+end
+
+local function copyCollection(value: any): { [string]: CollectionCard } -- any: stored table or a collection
+	local cards: { [string]: CollectionCard } = {}
+	if typeof(value) ~= "table" then
+		return cards
+	end
+	for id, card in value do
+		if typeof(id) == "string" and typeof(card) == "table" and typeof(card.tier) == "string" and typeof(card.answer) == "string" then
+			cards[id] = { tier = card.tier, answer = card.answer }
+		end
+	end
+	return cards
+end
+
+-- Each card from either side, the rarer tier winning; on a tie `a` keeps its card.
+local function joinCollections(a: { [string]: CollectionCard }, b: { [string]: CollectionCard }): { [string]: CollectionCard }
+	local joined = copyCollection(a)
+	for id, card in b do
+		local current = joined[id]
+		if current == nil or Tiers.index(card.tier) > Tiers.index(current.tier) then
+			joined[id] = { tier = card.tier, answer = card.answer }
+		end
+	end
+	return joined
 end
 
 local function copyActiveSession(value: any): ActiveSession? -- any: stored table or an ActiveSession
@@ -295,6 +330,7 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	else
 		profile.xp = Profile.startingXp(profile.games, profile.wins)
 	end
+	profile.collection = copyCollection(stored.collection)
 	profile.musicOff = stored.musicOff == true
 	if typeof(stored.musicVolume) == "number" then
 		profile.musicVolume = math.clamp(stored.musicVolume, 0, 1)
@@ -326,6 +362,7 @@ function Profile.newSession(): Session
 		deepestAnswer = "",
 		games = 0,
 		xp = 0,
+		collection = {},
 	}
 end
 
@@ -382,6 +419,7 @@ function Profile.combine(first: Session, second: Session): Session
 	combined.deepestAnswer = deeper.deepestAnswer
 	combined.games = first.games + second.games
 	combined.xp = first.xp + second.xp
+	combined.collection = joinCollections(first.collection, second.collection)
 	if second.musicOff ~= nil then
 		combined.musicOff = second.musicOff
 	else
@@ -452,6 +490,7 @@ function Profile.merge(stored: Profile, session: Session): Profile
 	end
 	merged.games = merged.games + session.games
 	merged.xp = math.max(0, merged.xp + session.xp)
+	merged.collection = joinCollections(merged.collection, session.collection)
 	if session.musicOff ~= nil then
 		merged.musicOff = session.musicOff
 	end

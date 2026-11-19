@@ -13,6 +13,7 @@ local RunService = game:GetService("RunService")
 local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
 local Levels = require(ReplicatedStorage.Shared.Levels)
+local Collection = require(ReplicatedStorage.Shared.Collection)
 local Signal = require(ReplicatedStorage.Shared.Signal)
 
 local PROFILE_STORE = "Profile_v1"
@@ -200,6 +201,7 @@ local function sendProfile(player: Player)
 	payload.krillions = profile.krillions
 	payload.games = profile.games
 	payload.xp = profile.xp
+	payload.collection = profile.collection
 	payload.musicOff = profile.musicOff
 	payload.musicVolume = profile.musicVolume
 	if DataService.isReadOnly(player) then
@@ -559,6 +561,21 @@ function DataService.addCounter(player: Player, key: string, count: number)
 		return
 	end
 	DataService.changed(player)
+end
+
+-- Keeps `answer` as the prompt's collection card when its tier is rarer than the card's. Returns whether it did.
+function DataService.recordCard(player: Player, promptId: string, tier: string, answer: string): boolean
+	local profile = DataService.get(player)
+	local current = session(player)
+	if profile == nil or current == nil then
+		return false
+	end
+	if not Collection.better(profile.collection[promptId], tier) then
+		return false
+	end
+	current.collection[promptId] = { tier = tier, answer = answer }
+	DataService.changed(player)
+	return true
 end
 
 function DataService.addXp(player: Player, amount: number)

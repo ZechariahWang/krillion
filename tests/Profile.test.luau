@@ -330,4 +330,30 @@ return function(test)
 		assert(merged.xp == 550, "got " .. merged.xp)
 		assert(Profile.fromStored(merged).xp == 550)
 	end)
+
+	test("a saved collection card loads, and a broken one is dropped", function()
+		local profile = Profile.fromStored({ collection = { author = { tier = "Rare", answer = "aesop" }, bad = { tier = 5 } } })
+		assert(profile.collection.author ~= nil and profile.collection.author.answer == "aesop")
+		assert(profile.collection.bad == nil)
+	end)
+
+	test("collection cards merge to the rarer tier from either server", function()
+		local stored = Profile.fromStored({ collection = {
+			author = { tier = "DeepCut", answer = "aesop" },
+			wild_cat = { tier = "Rare", answer = "ocelot" },
+		} })
+		local session = Profile.newSession()
+		session.collection.author = { tier = "Rare", answer = "poe" }
+		session.collection.wild_cat = { tier = "Mythic", answer = "margay" }
+		session.collection.vegetable = { tier = "Schooler", answer = "leek" }
+		local merged = Profile.merge(stored, session)
+		assert(merged.collection.author.answer == "aesop")
+		assert(merged.collection.wild_cat.answer == "margay")
+		assert(merged.collection.vegetable.tier == "Schooler")
+		local first = Profile.newSession()
+		first.collection.author = { tier = "Mythic", answer = "aesop" }
+		local second = Profile.newSession()
+		second.collection.author = { tier = "Rare", answer = "poe" }
+		assert(Profile.combine(first, second).collection.author.tier == "Mythic")
+	end)
 end

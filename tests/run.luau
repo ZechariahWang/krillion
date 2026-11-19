@@ -46,6 +46,7 @@ local suites = {
 	require("./Metrics.test"),
 	require("./Levels.test"),
 	require("./Weekly.test"),
+	require("./Collection.test"),
 }
 
 for _, suite in suites do

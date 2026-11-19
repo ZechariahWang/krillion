@@ -28,6 +28,7 @@ local Shop = require(ReplicatedStorage.Shared.Shop)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Rail = require(script.Parent.Rail)
 local Rewards = require(script.Parent.Rewards)
+local Collection = require(script.Parent.Collection)
 local ChestReveal = require(script.Parent.ChestReveal)
 local Icons = require(script.Parent.Icons)
 local ItemIcon = require(script.Parent.ItemIcon)
@@ -361,14 +362,18 @@ local function cosmeticEntry(item: Cosmetics.Item): Entry
 	end
 	local source = Cosmetics.source(item)
 	if source == "reward" then
-		-- Never sold: RewardService grants it, so GET opens the Rewards tab, which says how.
+		-- Never sold: GET opens where it is earned, the Rewards tab or (a collection title) the collection.
 		entry.badge = "FREE"
 		entry.currency = "Free"
 		entry.price = Cosmetics.RewardHow[item.reward :: string] or "Free reward"
 		entry.action = "GET"
 		entry.onClick = function()
 			setOpen(false)
-			Rewards.open("Rewards")
+			if string.sub(item.reward :: string, 1, 7) == "Collect" then
+				Collection.open()
+			else
+				Rewards.open("Rewards")
+			end
 		end
 	elseif source == "pass" then
 		entry.price = "With the " .. string.upper(item.pass :: string) .. " pass"

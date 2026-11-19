@@ -210,6 +210,18 @@ local GameConfig = {
 		BotMin = 2, -- the level range bots show, weighted towards the low end
 		BotMax = 35,
 	},
+	Collection = {
+		-- Paid once each, counted in mastered prompts. `all` means every prompt in the album; a `title` is the
+		-- Cosmetics reward key of the title it unlocks.
+		Milestones = {
+			{ count = 10, shells = 100 },
+			{ count = 25, shells = 250 },
+			{ count = 50, shells = 500, title = "Collect50" },
+			{ count = 100, shells = 1000 },
+			{ count = 200, shells = 2000 },
+			{ all = true, shells = 0, title = "CollectAll" },
+		},
+	},
 	Server = {
 		MaxPlayers = 6, -- also set Server Size to 6 in the Creator Hub (Places > Configure)
 	},
@@ -235,5 +247,7 @@ table.freeze(GameConfig.Revive)
 table.freeze(GameConfig.Toys)
 table.freeze(GameConfig.Leaderboard)
 table.freeze(GameConfig.Levels)
+table.freeze(GameConfig.Collection.Milestones)
+table.freeze(GameConfig.Collection)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)
