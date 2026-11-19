@@ -3,7 +3,7 @@
 -- ALBUM), each with an icon, a label and a "!" badge, the HELP circle on the top bar next to the Settings
 -- gear, and the small THROW key at the right edge. It shows only in the lobby, off a pillar, and hides while
 -- any window is open. The grid's size and layout are authored in Studio (RailFrame scales with the screen
--- height); nothing here resizes it.
+-- height): one column on desktop, and on a phone the layout in RailFrame's Phone* attributes (two columns).
 -- Each button belongs to its own controller: Rewards, ShopUi and Tutorial call Rail.button(name) to connect
 -- it and Rail.setBadge(name, text) to mark it, so this module never needs to know them.
 
@@ -23,6 +23,32 @@ local playing = false
 local phase = ""
 
 local Rail = {}
+
+-- Phones: swaps the authored desktop column for the authored phone grid (RailFrame's Phone* attributes).
+local function usePhoneLayout(frame: GuiObject)
+	local grid = frame:FindFirstChildOfClass("UIGridLayout")
+	local aspect = frame:FindFirstChildOfClass("UIAspectRatioConstraint")
+	local limit = frame:FindFirstChildOfClass("UISizeConstraint")
+	local columns = frame:GetAttribute("PhoneColumns")
+	local height = frame:GetAttribute("PhoneHeight")
+	local ratio = frame:GetAttribute("PhoneAspect")
+	local cell = frame:GetAttribute("PhoneCellSize")
+	local padding = frame:GetAttribute("PhoneCellPadding")
+	local minSize = frame:GetAttribute("PhoneMinSize")
+	if grid == nil or aspect == nil or typeof(columns) ~= "number" or typeof(height) ~= "number"
+		or typeof(ratio) ~= "number" or typeof(cell) ~= "UDim2" or typeof(padding) ~= "UDim2" then
+		warn("Rail: RailFrame has no complete Phone* layout; phones keep the desktop column")
+		return
+	end
+	frame.Size = UDim2.fromScale(0, height)
+	grid.FillDirectionMaxCells = columns
+	grid.CellSize = cell
+	grid.CellPadding = padding
+	aspect.AspectRatio = ratio
+	if limit ~= nil and typeof(minSize) == "Vector2" then
+		limit.MinSize = minSize
+	end
+end
 
 local function refresh()
 	local screen = gui
@@ -54,6 +80,9 @@ function Rail.init(playerGui: PlayerGui)
 	gui = found
 	local frame = found:WaitForChild("RailFrame", WAIT_SECONDS)
 	if frame ~= nil and frame:IsA("GuiObject") then
+		if Ui.isPhone() then
+			usePhoneLayout(frame)
+		end
 		for _, name in BUTTONS do
 			local button = frame:FindFirstChild(name)
 			if button ~= nil and button:IsA("TextButton") then
