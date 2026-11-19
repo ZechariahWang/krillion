@@ -21,8 +21,9 @@ return function(test)
 		assert(Tide.needTier(10, 10, 1, "TidalWave") == "Plankton")
 	end)
 
-	test("a deficit of 11 is out of reach", function()
-		assert(Tide.needTier(10, 18, 3, nil) == "none")
+	test("a deficit past the best lift is out of reach", function()
+		assert(SpecialRound.lift(Tiers.MaxPoints, nil) < 16.5)
+		assert(Tide.needTier(10, 24, 2.5, nil) == "none")
 	end)
 
 	test("the need never skips past a tier that is enough", function()

@@ -23,12 +23,14 @@ local GameConfig = {
 		LockBroadcastSeconds = 0.25, -- a lock-in pushes a state update this soon (at most 4 a second)
 	},
 	Water = {
-		StartHeight = 6, -- platform top above the starting water line
+		StartHeight = 12, -- platform top above the starting water line
 		-- Round r surges SurgeBase + SurgeGrowth * (r - 1) ^ SurgePower; tests/WaterCurve pins the survival targets.
-		SurgeBase = 0.5,
-		SurgeGrowth = 0.4,
+		-- Big from the first round, so a new player sees the water coming at once; answers lift further to match
+		-- (the rounds each tier survives are the same as with the old 0.5 / 0.4 / 0.1 and a start of 6).
+		SurgeBase = 1.75,
+		SurgeGrowth = 0.55,
 		SurgePower = 1.5,
-		LiftPerPoint = 0.1,
+		LiftPerPoint = 0.15,
 		CullHz = 10,
 		CreepFraction = 0.7, -- slow part of the surge
 		CreepSeconds = 1.4,
@@ -154,7 +156,7 @@ local GameConfig = {
 		WindowSeconds = 8, -- long enough for a child to read the card and tap it
 		BuyWindowSeconds = 12, -- Revive Now: long enough to get through the Robux purchase dialog
 		MinOthersAlive = 2, -- fewer than this and the match is already decided
-		HeightAboveWater = 4,
+		HeightAboveWater = 6, -- scaled with the water (Water.LiftPerPoint)
 	},
 	-- The daily reward (Shared/Daily): one claim per UTC day, walked through in order on consecutive days and
 	-- started over after the last. A missed day starts again at day 1. `chest` is opened for free.
