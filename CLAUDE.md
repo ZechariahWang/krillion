@@ -201,6 +201,12 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   gain and spend (`StoreService` calls it; a spend passes a `sku`), and custom events (`AnswerGraded`, `Sank`,
   `Won`, `BoostUsed`, `ReviveOffered`, `ReviveUsed`). Names and step numbers are `Shared/Metrics` (tested);
   append onboarding steps, never renumber. Studio records nothing, so there each event prints as `[Metrics] ...`.
+- Answer collection (ALBUM rail key, `LobbyUi.Collection`: `Holder.Panel` with `Progress`, `Next`, `Search`,
+  `Grid.CardTemplate`): `profile.collection` keeps each prompt's best match answer `{ tier, answer }`; a prompt is
+  mastered at the rarest tier its bank has (`Shared/Collection`). `Server/AnswerCollectionService` (not Roblox's
+  CollectionService) records cards from AnswerGraded, pays the milestones in `GameConfig.Collection` (claim ids
+  `Collect10`..`CollectAll`, Shells and the Collector / Completionist reward titles) and sends the album
+  (`CollectionCatalog`: live prompts and their top tier) since the bank stays on the server. `Client/Collection` draws it.
 - Weekly board (`Lobby.WeeklyBoard`, THIS WEEK, left of the all-time `Leaderboard`): `Server/WeeklyService` adds
   each Win to that week's OrderedDataStore (`Shared/Weekly`: weeks start Monday 00:00 UTC, one store per week,
   Studio writes `..._Studio`), fills `Resets` and the top 10 every minute, and sends each player their place
