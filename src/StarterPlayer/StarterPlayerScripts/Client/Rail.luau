@@ -35,6 +35,7 @@ local function usePhoneLayout(frame: GuiObject)
 	local cell = frame:GetAttribute("PhoneCellSize")
 	local padding = frame:GetAttribute("PhoneCellPadding")
 	local minSize = frame:GetAttribute("PhoneMinSize")
+	local maxSize = frame:GetAttribute("PhoneMaxSize")
 	if grid == nil or aspect == nil or typeof(columns) ~= "number" or typeof(height) ~= "number"
 		or typeof(ratio) ~= "number" or typeof(cell) ~= "UDim2" or typeof(padding) ~= "UDim2" then
 		warn("Rail: RailFrame has no complete Phone* layout; phones keep the desktop column")
@@ -47,6 +48,9 @@ local function usePhoneLayout(frame: GuiObject)
 	aspect.AspectRatio = ratio
 	if limit ~= nil and typeof(minSize) == "Vector2" then
 		limit.MinSize = minSize
+	end
+	if limit ~= nil and typeof(maxSize) == "Vector2" then
+		limit.MaxSize = maxSize
 	end
 end
 
