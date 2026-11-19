@@ -47,6 +47,7 @@ local suites = {
 	require("./Levels.test"),
 	require("./Weekly.test"),
 	require("./Collection.test"),
+	require("./DailyPrompt.test"),
 }
 
 for _, suite in suites do

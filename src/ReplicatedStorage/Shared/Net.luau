@@ -167,6 +167,35 @@ export type DailyResultPayload = {
 	chest: string?, -- the chest opened for free, if that day has one (its ChestResult follows)
 }
 
+-- DailyPromptState: what the Prompt of the Day window shows. share is a percent, nil while too few players
+-- have answered. answered is nil until the player answers today; yesterday's answer is nil if they skipped it.
+export type DailyPromptStatePayload = {
+	day: number,
+	prompt: string,
+	secondsLeft: number,
+	streak: number,
+	chestIn: number,
+	answered: { answer: string, tier: string, share: number? }?,
+	yesterday: {
+		prompt: string,
+		answer: string?,
+		tier: string?,
+		share: number?,
+		top: { { answer: string, share: number? } },
+	}?,
+}
+
+-- DailyPromptResult: status "ok" (locked in and paid), "confirm" (answer is the bank spelling to confirm),
+-- "invalid", "done" (already answered today), "cooldown" or "closed".
+export type DailyPromptResultPayload = {
+	status: string,
+	answer: string?,
+	tier: string?,
+	shells: number?,
+	streak: number?,
+	chest: boolean?,
+}
+
 -- WeeklyRank: the receiving player's place on this week's wins board. rank is nil past the top list
 -- (Weekly board's TopRead) or with no wins this week.
 export type WeeklyRankPayload = {

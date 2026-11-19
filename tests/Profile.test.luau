@@ -356,4 +356,23 @@ return function(test)
 		second.collection.author = { tier = "Rare", answer = "poe" }
 		assert(Profile.combine(first, second).collection.author.tier == "Mythic")
 	end)
+
+	test("a saved Prompt of the Day answer loads, and a new player has none", function()
+		assert(Profile.fromStored(nil).dailyPrompt.day == 0)
+		local profile = Profile.fromStored({ dailyPrompt = { day = 20410, answer = "aesop", tier = "Mythic", streak = 3, prevDay = 20409, prevAnswer = "lynx", prevTier = "Rare" } })
+		local state = profile.dailyPrompt
+		assert(state.day == 20410 and state.answer == "aesop" and state.tier == "Mythic" and state.streak == 3)
+		assert(state.prevDay == 20409 and state.prevAnswer == "lynx" and state.prevTier == "Rare")
+	end)
+
+	test("the later Prompt of the Day answer wins a merge, an older server never rolls it back", function()
+		local stored = Profile.fromStored({ dailyPrompt = { day = 20410, answer = "aesop", tier = "Mythic", streak = 3 } })
+		local stale = Profile.newSession()
+		stale.dailyPrompt = { day = 20409, answer = "poe", tier = "Rare", streak = 2, prevDay = 0, prevAnswer = "", prevTier = "" }
+		assert(Profile.merge(stored, stale).dailyPrompt.answer == "aesop")
+		local newer = Profile.newSession()
+		newer.dailyPrompt = { day = 20411, answer = "lynx", tier = "Rare", streak = 4, prevDay = 20410, prevAnswer = "aesop", prevTier = "Mythic" }
+		assert(Profile.merge(stored, newer).dailyPrompt.answer == "lynx")
+		assert(Profile.combine(newer, stale).dailyPrompt.day == 20411)
+	end)
 end

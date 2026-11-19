@@ -68,6 +68,7 @@ local CAPTIONS: { [string]: string } = {
 	pickup = "FOUND",
 	spend = "SPENT",
 	collection = "COLLECTION",
+	daily = "PROMPT OF THE DAY",
 	level = "LEVEL UP!",
 }
 

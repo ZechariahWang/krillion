@@ -716,6 +716,15 @@ function DataService.setDaily(player: Player, daily: Profile.DailyState)
 	DataService.changed(player)
 end
 
+function DataService.setDailyPrompt(player: Player, state: Profile.DailyPromptState)
+	local current = session(player)
+	if current == nil then
+		return
+	end
+	current.dailyPrompt = table.clone(state)
+	DataService.changed(player)
+end
+
 -- Records the friend whose invite brought this player. Returns false if one is already recorded.
 function DataService.setReferredBy(player: Player, userId: number): boolean
 	local profile = DataService.get(player)
