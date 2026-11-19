@@ -241,9 +241,11 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
-- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
-  its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
-  wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar tile right of
+- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): TODAY, REWARDS, SHOP, STORE, ITEMS, ALBUM keys in a 2x3
+  `UIGridLayout` (LayoutOrder). Each controller connects its key with `Rail.button(name)`; the rail hides in a match
+  and while any window is open. Its size is authored, not coded: RailFrame is a share of the screen height with a
+  `UIAspectRatioConstraint` (ScaleWithParentSize) and a `UISizeConstraint` minimum for phones, and each key's
+  insides are proportions of the key. `Rail.HelpButton` is the top-bar tile right of
   the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye tile right of that (on a screen
   too narrow for the row beside the status bar, both stack under the gear instead): it is always
   there in the lobby, opens the spectate bar (`GameUi.Spectate.SpectateBar`, driven by `Client/Lobby`) when a
