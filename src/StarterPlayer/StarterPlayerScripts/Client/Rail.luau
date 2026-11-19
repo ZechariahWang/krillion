@@ -13,7 +13,7 @@ local UserInputService = game:GetService("UserInputService")
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local BUTTONS = { "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
+local BUTTONS = { "RewardsButton", "ShopButton", "StoreButton", "InventoryButton", "CollectionButton" }
 local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WATCH_SLOT = 2 -- the spectate eye, right of Help
 local WAIT_SECONDS = 10
@@ -130,6 +130,19 @@ local function refresh()
 	end
 end
 
+-- The top tiles stack under the gear when their row would reach the status bar (Ui.placeTopButton), so they
+-- are placed again once the status bar has its size: it may have none yet when the rail starts.
+local function onStatusResized(playerGui: PlayerGui, place: () -> ())
+	task.spawn(function()
+		local status = Ui.screen(playerGui, "Status", WAIT_SECONDS)
+		local frame = if status ~= nil then status:WaitForChild("StatusFrame", WAIT_SECONDS) else nil
+		if frame ~= nil and frame:IsA("GuiObject") then
+			frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(place)
+			place()
+		end
+	end)
+end
+
 function Rail.init(playerGui: PlayerGui)
 	local found = Ui.screen(playerGui, "Rail", WAIT_SECONDS)
 	if found == nil or not found:IsA("Frame") then
@@ -178,6 +191,7 @@ function Rail.init(playerGui: PlayerGui)
 		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeHelp)
 		help:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
 		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
+		onStatusResized(playerGui, placeHelp)
 		placeHelp()
 	end
 	-- The spectate eye sits next to it. Client/Lobby shows it while a match is running and connects it.
@@ -192,6 +206,7 @@ function Rail.init(playerGui: PlayerGui)
 		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeWatch)
 		watch:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeWatch)
 		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeWatch)
+		onStatusResized(playerGui, placeWatch)
 		placeWatch()
 	end
 	Windows.Changed.connect(refresh)
