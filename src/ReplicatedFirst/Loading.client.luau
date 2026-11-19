@@ -18,11 +18,17 @@ local MIN_FIT = 0.4
 local TITLE_BOB = 8 -- pixels the title sinks and rises
 local BOB_SECONDS = 1.8 -- one way; each creature takes a little longer than the one before
 local SWAY_SECONDS = 2.6 -- one way; each kelp stalk takes a little longer than the one before
-local FLASH_IN = TweenInfo.new(0.06, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-local FLASH_HOLD = 1 -- seconds the screen stays white before the zoom into the game
-local FLASH_OUT = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-local ZOOM_OUT = TweenInfo.new(0.55, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
-local ZOOM_SCALE = 1.3
+-- The hand-over: the shell pops at the end of the bar, the art pulls in a touch, a white flash snaps on with a
+-- ping, holds a beat, then fades while the art zooms past the camera into the lobby.
+local SHELL_POP = TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+local SHELL_POP_SCALE = 1.5
+local PULL_IN = TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+local PULL_IN_SCALE = 0.96
+local FLASH_IN = TweenInfo.new(0.05, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local FLASH_HOLD = 0.12 -- seconds the screen stays fully white
+local FLASH_OUT = TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local ZOOM_OUT = TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local ZOOM_SCALE = 1.35
 
 local startedAt = os.clock()
 ReplicatedFirst:RemoveDefaultLoadingScreen()
@@ -130,6 +136,20 @@ if kelp ~= nil then
 end
 
 -- The hand-over: a white flash snaps on, then fades while the loading art zooms past the camera and goes.
+local function playSound(name: string, volume: number)
+	local folder = SoundService:FindFirstChild("RareOrSink")
+	local sound = if folder ~= nil then folder:FindFirstChild(name) else nil
+	if sound ~= nil and sound:IsA("Sound") then
+		local copy = sound:Clone()
+		copy.Volume = volume
+		copy.Parent = SoundService
+		copy:Play()
+		copy.Ended:Connect(function()
+			copy:Destroy()
+		end)
+	end
+end
+
 local function finish()
 	if finished then
 		return
@@ -137,6 +157,17 @@ local function finish()
 	finished = true
 	setProgress(1)
 	task.wait(0.25)
+	local shell = fill:FindFirstChild("Shell")
+	local pop = if shell ~= nil then shell:FindFirstChildOfClass("UIScale") else nil
+	if pop ~= nil then
+		pop.Scale = SHELL_POP_SCALE
+		TweenService:Create(pop, SHELL_POP, { Scale = 1 }):Play()
+	end
+	if zoom ~= nil then
+		TweenService:Create(zoom, PULL_IN, { Scale = PULL_IN_SCALE }):Play()
+	end
+	task.wait(PULL_IN.Time)
+	playSound("Ping", 0.6)
 	if flash ~= nil then
 		TweenService:Create(flash, FLASH_IN, { BackgroundTransparency = 0 }):Play()
 		task.wait(FLASH_IN.Time + FLASH_HOLD)
@@ -145,8 +176,7 @@ local function finish()
 	if zoom ~= nil then
 		TweenService:Create(zoom, ZOOM_OUT, { Scale = ZOOM_SCALE }):Play()
 	end
-	local fade = TweenService:Create(root, ZOOM_OUT, { GroupTransparency = 1 })
-	fade:Play()
+	TweenService:Create(root, ZOOM_OUT, { GroupTransparency = 1 }):Play()
 	task.wait(FLASH_OUT.Time)
 	gui:Destroy()
 end
