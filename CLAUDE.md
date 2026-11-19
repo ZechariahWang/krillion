@@ -169,7 +169,8 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   puts them in once (`LateJoin.arrivalAction`). The JUMP IN card is for the rest. `Templates.BotRig` is only the stand-in when
   `BotLooks` is missing. A bot answers every prompt. A player who outlasts the bots has a Win (`Economy.countsAsWin`).
   `Shared/BotsOnly` tunes them: once anyone in the match uses a paid boost (a Hint, any revive, +10 SEC from the
-  Robux-bought inventory: `MatchEvents.PaidBoostUsed`) the bots play worse for the rest of the match, with nothing
+  Robux-bought inventory: `MatchEvents.PaidBoostUsed`) the bots play worse for the rest of the match (bots still
+  thinking re-pick at once, `easePendingBots`), with nothing
   on screen. When every player has sunk, the match runs on for up to `Bots.SoloRoundsMax` quick rounds (longer
   while a revive is pending) with worse bots, `Water.SoloSurgeMultiplier` and `Round.SoloPromptSeconds`, so the
   last player can revive and newcomers can jump in; it ends at once for an empty or all-AFK server or with one

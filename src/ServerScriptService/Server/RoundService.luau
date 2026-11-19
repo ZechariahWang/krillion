@@ -133,6 +133,7 @@ end
 -- A solo match (empty server) runs until the lone player sinks instead of ending at once. Bots never
 -- play on alone: the match ends once no player is left afloat.
 local revivePending: () -> boolean
+local easePendingBots: () -> ()
 
 -- Players in the server who are not AFK: someone who could still play or jump in.
 local function activeHumans(): number
@@ -528,6 +529,7 @@ local function restore(player: Player, kind: string)
 	-- A revive is a paid boost: the bots ease off for the rest of the match. A bots-only round is normal again.
 	paidThisMatch = true
 	humanBack()
+	easePendingBots()
 	MapService.riseBurst(platform)
 	broadcastState()
 	setServerAttributes()
@@ -699,6 +701,36 @@ local function scheduleBots(prompt: AnswerService.Prompt, seconds: number)
 			taken[answer] = true
 			botPending[id] = answer
 			task.delay(BotBrain.delay(seconds, math.random()), lockBot, token, id)
+		end
+	end
+end
+
+-- A paid boost was just used mid-prompt: every bot that has not locked in yet thinks again at the eased
+-- skill (or gives no answer), so the easing is felt this round, not only from the next prompt on.
+easePendingBots = function()
+	local prompt = currentPrompt
+	if prompt == nil or phase ~= "Prompt" then
+		return
+	end
+	local taken: { [string]: boolean } = {}
+	for _, submission in botAnswers do
+		if submission.corrected ~= nil then
+			taken[submission.corrected] = true
+		end
+	end
+	local missChance = BotsOnly.missChance(true, soloRound)
+	for id in botPending do
+		if math.random() < missChance then
+			botPending[id] = nil
+			continue
+		end
+		local skill = BotsOnly.skill(BotService.skillOf(id), true, soloRound)
+		local aim = BotBrain.chooseTier(skill, BotBrain.gaussian(math.random(), math.random()))
+		local index = BotBrain.nearestTier(prompt.answers, aim)
+		local answer = if index ~= nil then BotBrain.chooseAnswer(prompt.answers, index, taken, math.random()) else nil
+		botPending[id] = answer
+		if answer ~= nil then
+			taken[answer] = true
 		end
 	end
 end
@@ -1260,6 +1292,7 @@ function RoundService.start()
 	MatchEvents.PaidBoostUsed.connect(function()
 		if match ~= nil then
 			paidThisMatch = true
+			easePendingBots()
 		end
 	end)
 	Net.event("ReviveUse").OnServerEvent:Connect(onReviveUse)
