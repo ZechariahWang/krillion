@@ -253,10 +253,6 @@ local function bind(screen: Frame)
 			Collection.close()
 		end)
 	end
-	local scrim = screen:FindFirstChild("Scrim")
-	if scrim ~= nil and scrim:IsA("GuiButton") then
-		scrim.Activated:Connect(Collection.close)
-	end
 	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
 	screen.Visible = false
 	gui = screen
