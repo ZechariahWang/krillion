@@ -294,10 +294,6 @@ local function bind(screen: Frame)
 			DailyPrompt.close()
 		end)
 	end
-	local scrim = screen:FindFirstChild("Scrim")
-	if scrim ~= nil and scrim:IsA("GuiButton") then
-		scrim.Activated:Connect(DailyPrompt.close)
-	end
 	setText("Feedback", "")
 	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
 	screen.Visible = false
