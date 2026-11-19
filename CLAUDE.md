@@ -207,6 +207,12 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   CollectionService) records cards from AnswerGraded, pays the milestones in `GameConfig.Collection` (claim ids
   `Collect10`..`CollectAll`, Shells and the Collector / Completionist reward titles) and sends the album
   (`CollectionCatalog`: live prompts and their top tier) since the bank stays on the server. `Client/Collection` draws it.
+- Prompt of the Day (TODAY rail key, first on the rail with a `!` until answered; `LobbyUi.DailyPrompt`):
+  one prompt per UTC day for everyone (`Shared/DailyPrompt.pick`, never yesterday's), answered once like a match
+  answer, paid twice a match answer's Shells plus XP, with a day streak whose every 7th day opens a free chest
+  (`GameConfig.DailyPrompt`). `profile.dailyPrompt` keeps today's and the previous answer. `Server/DailyPromptService`
+  buffers answers and adds them each minute to the `DailyPrompt_v1` DataStore entry for the day (`_Studio` in
+  Studio), so the window shows the share of players who gave yours and yesterday's top 5. `Client/DailyPrompt` draws it.
 - Weekly board (`Lobby.WeeklyBoard`, THIS WEEK, left of the all-time `Leaderboard`): `Server/WeeklyService` adds
   each Win to that week's OrderedDataStore (`Shared/Weekly`: weeks start Monday 00:00 UTC, one store per week,
   Studio writes `..._Studio`), fills `Resets` and the top 10 every minute, and sends each player their place
