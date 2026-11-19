@@ -3,6 +3,7 @@
 -- an improved card, pays the mastered-count milestones (Shells and reward titles), and sends clients the
 -- album (every live prompt and its rarest tier), since the prompt bank stays on the server.
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
@@ -17,6 +18,8 @@ local MatchEvents = require(script.Parent.MatchEvents)
 local DataService = require(script.Parent.DataService)
 local NotifyService = require(script.Parent.NotifyService)
 local StoreService = require(script.Parent.StoreService)
+
+local CATALOGUE_COOLDOWN = 5 -- seconds between album sends to one player
 
 local catalogue: { Collection.Entry } = {}
 local promptText: { [string]: string } = {}
@@ -104,8 +107,19 @@ function AnswerCollectionService.start()
 	buildCatalogue()
 	MatchEvents.AnswerGraded.connect(onGraded)
 	DataService.ProfileLoaded.connect(checkMilestones)
+	-- The album is the same for everyone; a cooldown keeps a spamming client from making the server resend it.
+	local lastSent: { [Player]: number } = {}
 	Net.event("CollectionCatalog").OnServerEvent:Connect(function(player)
+		local now = os.clock()
+		local last = lastSent[player]
+		if last ~= nil and now - last < CATALOGUE_COOLDOWN then
+			return
+		end
+		lastSent[player] = now
 		Net.event("CollectionCatalog"):FireClient(player, catalogue)
+	end)
+	Players.PlayerRemoving:Connect(function(player)
+		lastSent[player] = nil
 	end)
 end
 
