@@ -16,6 +16,7 @@ local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local Currency = require(ReplicatedStorage.Shared.Currency)
 local Depth = require(ReplicatedStorage.Shared.Depth)
 local DivePack = require(ReplicatedStorage.Shared.DivePack)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local GameConfig = require(ReplicatedStorage.Config.GameConfig)
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Tiers = require(ReplicatedStorage.Config.Tiers)
@@ -151,6 +152,7 @@ local FILL_LAYOUT = {
 	footerHeight = 0.028,
 	shellsY = 0.952,
 	shellsHeight = 0.042,
+	chipGap = 16, -- pixels between the Shells and XP chips, which sit either side of the middle
 }
 local STAMP_GAP = 0.02 -- card-height fraction kept clear between a low answer tag and the stamp
 local LIP_SHADE = 0.45 -- how much darker a lip is than the face above it
@@ -358,6 +360,8 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	-- 0 for the commonest tier up to 1 for Mythic: drives how hard your landing hits.
 	local intensity = if hasAnswer then math.clamp((tierIndex - 1) / math.max(#Tiers.List - 1, 1), 0, 1) else 0
 	local shells = if hasAnswer then options.shells or 0 else 0
+	-- The answer's level XP rides beside the Shells it pays.
+	local xp = if shells > 0 then Levels.answerXp(tierName) else 0
 	local random = Random.new()
 
 	local connections: { RBXScriptConnection } = {}
@@ -412,6 +416,7 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	local shellsFace = shellsChip:FindFirstChild("Face") :: Frame
 	local shellsLip = shellsChip:FindFirstChild("Lip") :: Frame
 	local shellsText = shellsFace:FindFirstChild("Text") :: TextLabel
+	local xpChip = body:FindFirstChild("XpChip") :: Frame?
 	local confettiLayer = body:FindFirstChild("ConfettiLayer") :: Frame
 
 	-- Full-screen: no shadow, border or rounded corners round the card, and the water window grows down
@@ -454,8 +459,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 		counter.Size = UDim2.fromScale(counter.Size.X.Scale, layout.counterHeight)
 		footer.Position = UDim2.fromScale(footer.Position.X.Scale, layout.footerY)
 		footer.Size = UDim2.fromScale(footer.Size.X.Scale, layout.footerHeight)
-		shellsChip.Position = UDim2.fromScale(shellsChip.Position.X.Scale, layout.shellsY)
+		shellsChip.AnchorPoint = Vector2.new(1, 0.5)
+		shellsChip.Position = UDim2.new(0.5, -layout.chipGap / 2, layout.shellsY, 0)
 		shellsChip.Size = UDim2.fromScale(shellsChip.Size.X.Scale, layout.shellsHeight)
+		if xpChip ~= nil then
+			xpChip.AnchorPoint = Vector2.new(0, 0.5)
+			xpChip.Position = UDim2.new(0.5, layout.chipGap / 2, layout.shellsY, 0)
+			xpChip.Size = UDim2.fromScale(xpChip.Size.X.Scale, layout.shellsHeight)
+		end
 	end
 
 	local headerColor = if options.isYou then Theme.Header.You else Theme.Header.Other
@@ -657,6 +668,13 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 	stampLip.BackgroundColor3 = stampColor:Lerp(BLACK, LIP_SHADE)
 	shellsChip.Visible = false
 	shellsLip.BackgroundColor3 = shellsFace.BackgroundColor3:Lerp(BLACK, LIP_SHADE)
+	if xpChip ~= nil then
+		xpChip.Visible = false
+		local xpText = xpChip:FindFirstChild("Text", true)
+		if xpText ~= nil and xpText:IsA("TextLabel") then
+			xpText.Text = "+" .. xp .. " XP"
+		end
+	end
 	if shells > 0 then
 		shellsText.Text = "+" .. Currency.format(shells)
 	else
@@ -877,6 +895,14 @@ function DiveCard.play(parent: GuiObject, options: Options): Handle
 				shellsChip.Visible = true
 				shellsScale.Scale = 0.2
 				play(shellsScale, TweenInfo.new(0.3 * speed, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 })
+				local xpScale = if xpChip ~= nil then xpChip:FindFirstChildOfClass("UIScale") else nil
+				if xpChip ~= nil and xp > 0 then
+					xpChip.Visible = true
+					if xpScale ~= nil then
+						xpScale.Scale = 0.2
+						play(xpScale, TweenInfo.new(0.3 * speed, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 })
+					end
+				end
 				sound("Pop", 0.5, 1.2)
 			end)
 		end

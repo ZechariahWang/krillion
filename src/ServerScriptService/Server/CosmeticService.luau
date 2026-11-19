@@ -10,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Cosmetics = require(ReplicatedStorage.Config.Cosmetics)
 local Shop = require(ReplicatedStorage.Shared.Shop)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local DataService = require(script.Parent.DataService)
 local MapService = require(script.Parent.MapService)
 
@@ -236,7 +237,9 @@ local function applyName(player: Player)
 	if head == nil then
 		return
 	end
-	local label = CosmeticService.tagHead(head, player.DisplayName)
+	local profile = DataService.get(player)
+	local level = if profile ~= nil then Levels.levelOf(profile.xp) else 1
+	local label = CosmeticService.tagHead(head, Levels.tagName(level, player.DisplayName))
 	if label ~= nil then
 		colourName(player, label)
 	end

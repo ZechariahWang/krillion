@@ -2,7 +2,8 @@
 -- Drives SharedUi.Wallet: the chunky gold Shells chip in the bottom-right corner, always on screen (lobby and
 -- match), that counts up, and the "+25 ANSWER" pills (the shell icon is authored on the pill) that bounce in above the corner column for every
 -- payout or spend (ShellsEarned). On a phone the chip hangs in the top-right corner, right under the top bar
--- buttons, with the THROW key under it and the pills dropping in below both.
+-- buttons, with the THROW key under it and the pills dropping in below both. The level bar (Chip.LevelBar)
+-- hangs under the chip and shows the player's level and progress to the next one.
 
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -10,26 +11,33 @@ local UserInputService = game:GetService("UserInputService")
 
 local Theme = require(ReplicatedStorage.Config.Theme)
 local Currency = require(ReplicatedStorage.Shared.Currency)
+local Levels = require(ReplicatedStorage.Shared.Levels)
 local Tween = require(ReplicatedStorage.Shared.Tween)
 local Sfx = require(script.Parent.Sfx)
+local Fx = require(script.Parent.Fx)
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
 local WAIT_SECONDS = 10
 local MAX_POPS = 4
-local POP_SLOT = 64 -- pixels between stacked pills; the newest sits closest to the chip
-local POP_GAP = 12 -- pixels between the chip and the first pill
+local POP_SLOT = 70 -- pixels between stacked pills; the newest sits closest to the chip
+local POP_GAP = 24 -- pixels between the chip and the first pill
 local POP_HOLD = 1.4
 local POP_FADE = 0.3
 local POP_DRIFT = 18 -- pixels a pill moves away from the chip while it fades
 local POP_CLEAR = 10 -- pixels of a slot left clear between two pills
 local PHONE_SIDE = 8 -- phones: pixels from the right end of the top bar to the chip, as the top bar buttons keep
 local PHONE_TOP = 10 -- phones: pixels from the bottom of the top bar to the chip under its buttons
-local PHONE_STACK_GAP = 12 -- phones: pixels between the chip and the THROW key under it
+local PHONE_STACK_GAP = 16 -- phones: pixels between the chip and the THROW key under it
 local PHONE_CHIP_SCALE = 0.8 -- phones: the chip's size, so its shell bubble stays clear of the THROW key
 local DESIGN_HEIGHT = 820 -- screen height the pills are drawn for; shorter screens scale them down
 local MIN_FIT = 0.65
 local POP_IN = TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+local FILL_TWEEN = TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local GAIN_RISE = 34 -- pixels a "+15 XP" pop floats up beside the level bar while it fades
+local GAIN_SECONDS = 1.1
+local LEVEL_CONFETTI = 60
+local SKY = Color3.fromHex("00FDFF")
 
 type Swatch = { Top: Color3, Bottom: Color3, Lip: Color3 }
 
@@ -59,6 +67,9 @@ local CAPTIONS: { [string]: string } = {
 	purchase = "PURCHASE",
 	pickup = "FOUND",
 	spend = "SPENT",
+	collection = "COLLECTION",
+	daily = "PROMPT OF THE DAY",
+	level = "LEVEL UP!",
 }
 
 local gui: Frame? = nil
@@ -68,6 +79,14 @@ local pops: Frame? = nil
 local popsFit: UIScale? = nil
 local popTemplate: Frame? = nil
 local playerGuiRef: PlayerGui? = nil
+local levelBar: Frame? = nil
+local levelFill: Frame? = nil
+local levelLabel: TextLabel? = nil
+local shownLevel: number? = nil -- nil until the first profile
+local shownXp: number? = nil
+local gainTemplate: TextLabel? = nil
+local rimStroke: UIStroke? = nil
+local rimColor: Color3? = nil
 local phase = ""
 local playing = false -- the local player is on a pillar in the running match
 
@@ -78,6 +97,18 @@ local live: { Frame } = {}
 local fading: { [Frame]: boolean } = {} -- pills mid-fade; a re-slot must keep their fade going
 
 local Wallet = {}
+
+-- How far the level bar reaches below the chip's bottom edge (0 without one), so the column makes room.
+local function barExtent(): number
+	local own = chip
+	local bar = levelBar
+	if own == nil or bar == nil or not bar.Visible or bar.AbsoluteSize.Y <= 0 then
+		return 0
+	end
+	local chipBottom = own.AbsolutePosition.Y + own.AbsoluteSize.Y
+	local barBottom = bar.AbsolutePosition.Y + bar.AbsoluteSize.Y
+	return math.max(0, barBottom - chipBottom)
+end
 
 local function setAmount(value: number)
 	local label = amountLabel
@@ -133,7 +164,7 @@ local function placePops()
 	local right = target.AbsolutePosition.X + target.AbsoluteSize.X - origin.X
 	local top = target.AbsolutePosition.Y - origin.Y
 	if Ui.isPhone() then
-		local bottom = top + target.AbsoluteSize.Y
+		local bottom = top + target.AbsoluteSize.Y + barExtent()
 		local toy = shownToy()
 		if toy ~= nil and toy.AbsoluteSize.Y > 0 then
 			bottom = math.max(bottom, toy.AbsolutePosition.Y + toy.AbsoluteSize.Y - origin.Y)
@@ -155,9 +186,8 @@ local function placePops()
 	end
 end
 
-local JUMP_GAP = 8 -- pixels between Roblox's touch jump button and the chip above it
+local JUMP_GAP = 16 -- pixels between Roblox's touch jump button and the chip above it
 local chipRest: UDim2? = nil
-local toyRest: UDim2? = nil
 
 -- Roblox's own jump button, once the touch controls exist.
 local function jumpButton(): GuiObject?
@@ -182,18 +212,16 @@ local function dodgeJumpButton()
 	local root = playerGuiRef
 	local rail = if root ~= nil then Ui.findScreen(root, "Rail") else nil
 	local toy = if rail ~= nil then rail:FindFirstChild("ToyButton") else nil
-	if toy ~= nil and toy:IsA("GuiObject") and toyRest == nil then
-		toyRest = toy.Position
-	end
 	local jump = jumpButton()
 	if jump == nil or not jump.Visible then
+		-- The chip is authored high enough for the level bar under it; the THROW key stands on the chip.
 		own.Position = chipRest
-		if toy ~= nil and toy:IsA("GuiObject") and toyRest ~= nil then
-			toy.Position = toyRest
+		if toy ~= nil and toy:IsA("GuiObject") then
+			toy.Position = UDim2.new(1, -16, 1, chipRest.Y.Offset - own.AbsoluteSize.Y - JUMP_GAP)
 		end
 		return
 	end
-	local bottom = jump.AbsolutePosition.Y - screen.AbsolutePosition.Y - JUMP_GAP
+	local bottom = jump.AbsolutePosition.Y - screen.AbsolutePosition.Y - JUMP_GAP - barExtent()
 	own.Position = UDim2.new(1, chipRest.X.Offset, 0, bottom)
 	if toy ~= nil and toy:IsA("GuiObject") then
 		toy.Position = UDim2.new(1, -16, 0, bottom - own.AbsoluteSize.Y - JUMP_GAP)
@@ -223,7 +251,7 @@ local function placeOnPhone()
 	if rail ~= nil and toy ~= nil and toy:IsA("GuiObject") then
 		-- The key is a child of the rail screen, which has an origin of its own.
 		local railOrigin = rail.AbsolutePosition + guiInset
-		local under = top + own.AbsoluteSize.Y + PHONE_STACK_GAP
+		local under = top + own.AbsoluteSize.Y + barExtent() + PHONE_STACK_GAP
 		toy.AnchorPoint = Vector2.new(1, 0)
 		toy.Position = UDim2.fromOffset(right - railOrigin.X, under - railOrigin.Y)
 	end
@@ -402,7 +430,31 @@ function Wallet.init(playerGui: PlayerGui)
 		pops = layer
 		local fit = layer:FindFirstChild("Fit")
 		popsFit = if fit ~= nil and fit:IsA("UIScale") then fit else nil
-		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placePops)
+		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+			placeChip()
+			placePops()
+		end)
+		local bar = ownChip:FindFirstChild("LevelBar")
+		if bar ~= nil and bar:IsA("Frame") then
+			levelBar = bar
+			local fill = bar:FindFirstChild("Fill")
+			levelFill = if fill ~= nil and fill:IsA("Frame") then fill else nil
+			local label = bar:FindFirstChild("Label")
+			levelLabel = if label ~= nil and label:IsA("TextLabel") then label else nil
+			local gain = bar:FindFirstChild("Gain")
+			if gain ~= nil and gain:IsA("TextLabel") then
+				gain.Visible = false
+				gainTemplate = gain
+			end
+			local highlight = bar:FindFirstChild("Highlight")
+			local stroke = if highlight ~= nil then highlight:FindFirstChildOfClass("UIStroke") else nil
+			if stroke ~= nil then
+				rimStroke = stroke
+				rimColor = stroke.Color
+			end
+		else
+			warn("Wallet: Chip.LevelBar is missing; no level bar")
+		end
 		local amount = ownChip:FindFirstChild("Amount")
 		if amount ~= nil and amount:IsA("TextLabel") then
 			amountLabel = amount
@@ -417,10 +469,122 @@ function Wallet.init(playerGui: PlayerGui)
 	end)
 end
 
+-- A "+15 XP" beside the level bar that floats up and fades. Each gain gets its own.
+local function popGain(amount: number)
+	local template = gainTemplate
+	if template == nil then
+		return
+	end
+	local pop = template:Clone()
+	pop.Name = "GainLive"
+	pop.Text = "+" .. amount .. " XP"
+	pop.TextTransparency = 1
+	pop.Visible = true
+	pop.Parent = template.Parent
+	local rest = pop.Position
+	pop.Position = rest + UDim2.fromOffset(12, 0)
+	local outline = pop:FindFirstChildOfClass("UIStroke")
+	Tween.play(pop, Theme.Tween.Pop, { Position = rest, TextTransparency = 0 })
+	task.delay(Theme.Tween.Pop.Time, function()
+		local rise = TweenInfo.new(GAIN_SECONDS, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+		Tween.play(pop, rise, { Position = rest - UDim2.fromOffset(0, GAIN_RISE), TextTransparency = 1 })
+		if outline ~= nil then
+			Tween.play(outline, rise, { Transparency = 1 })
+		end
+		task.delay(GAIN_SECONDS, function()
+			pop:Destroy()
+		end)
+	end)
+end
+
+-- The bar's rim lights up in `color`, then settles back to its authored colour.
+local function flashRim(color: Color3)
+	local stroke = rimStroke
+	local rest = rimColor
+	if stroke == nil or rest == nil then
+		return
+	end
+	stroke.Color = color
+	Tween.play(stroke, Theme.Tween.Flash, { Color = rest })
+end
+
+local function popLabel()
+	local label = levelLabel
+	if label ~= nil then
+		Ui.bump(label, 1.35)
+	end
+end
+
+-- Level up: the bar fills to the end and flashes gold, a LEVEL callout lands with confetti and a fanfare,
+-- then the bar starts over from the new level's progress.
+local function celebrateLevel(level: number, target: UDim2)
+	local fill = levelFill
+	if fill == nil then
+		return
+	end
+	Tween.play(fill, FILL_TWEEN, { Size = UDim2.fromScale(1, 1) })
+	task.delay(FILL_TWEEN.Time, function()
+		if shownLevel ~= level then
+			return
+		end
+		flashRim(Theme.Color.Gold)
+		local label = levelLabel
+		if label ~= nil then
+			label.Text = "LV " .. level
+		end
+		popLabel()
+		Fx.callout("LEVEL " .. level .. "!", Theme.Color.Gold)
+		Fx.confetti(LEVEL_CONFETTI)
+		Sfx.play("Fanfare", 0.7)
+		fill.Size = UDim2.fromScale(0, 1)
+		Tween.play(fill, FILL_TWEEN, { Size = target })
+	end)
+end
+
+-- Shows the level and fills the bar. A gain pops "+N XP" beside it, sweeps the fill and flashes the rim.
+local function showLevel(xp: number)
+	local label = levelLabel
+	local fill = levelFill
+	if label == nil or fill == nil then
+		return
+	end
+	local info = Levels.progress(xp)
+	local share = if info.need > 0 then info.into / info.need else 0
+	local target = UDim2.fromScale(share, 1)
+	local previousLevel = shownLevel
+	local previousXp = shownXp
+	shownLevel = info.level
+	shownXp = xp
+	if previousLevel == nil or previousXp == nil then
+		label.Text = "LV " .. info.level
+		Tween.cancel(fill)
+		fill.Size = target
+		return
+	end
+	local gained = math.floor(xp - previousXp + 0.5)
+	if gained <= 0 then
+		label.Text = "LV " .. info.level
+		fill.Size = target
+		return
+	end
+	popGain(gained)
+	if info.level > previousLevel then
+		celebrateLevel(info.level, target)
+		return
+	end
+	flashRim(SKY)
+	popLabel()
+	Sfx.play("Tick", 0.4, 1.4)
+	Tween.play(fill, FILL_TWEEN, { Size = target })
+end
+
 -- ProfileChanged payload (Net.ProfilePayload). The first one sets the chip; later ones count up to it.
 function Wallet.onProfile(profile)
 	if type(profile) ~= "table" or type(profile.cash) ~= "number" then
 		return
+	end
+	if type(profile.xp) == "number" then
+		showLevel(profile.xp)
 	end
 	local cash = math.floor(profile.cash)
 	local previous = shown

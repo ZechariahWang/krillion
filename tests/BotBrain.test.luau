@@ -136,4 +136,21 @@ return function(test)
 		local share = hits / weight
 		assert(share < 0.2, "bots reach Rare or better " .. math.floor(share * 100 + 0.5) .. "% of the time")
 	end)
+
+	test("a bot's level stays in the configured range and a higher roll never gives a lower level", function()
+		local previous = 0
+		for step = 0, 100 do
+			local roll = math.min(step / 100, 0.999999)
+			local level = BotBrain.level(roll)
+			assert(level >= GameConfig.Levels.BotMin and level <= GameConfig.Levels.BotMax, "level " .. level)
+			assert(level == math.floor(level))
+			assert(level >= previous)
+			previous = level
+		end
+	end)
+
+	test("most bots sit in the lower half of the level range", function()
+		local middle = (GameConfig.Levels.BotMin + GameConfig.Levels.BotMax) / 2
+		assert(BotBrain.level(0.5) < middle)
+	end)
 end

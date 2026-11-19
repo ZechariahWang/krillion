@@ -190,12 +190,45 @@ local GameConfig = {
 	Leaderboard = {
 		RefreshSeconds = 60,
 		Size = 10,
+		WeeklyTopRead = 100, -- the weekly board reads this many places; anyone further down sees "100+"
 	},
 	Special = {
 		MinRound = 3, -- no special rounds before this
 		Chance = 0.25, -- per eligible round; never two in a row
 		TidalWaveMultiplier = 2, -- water rises this many times further
 		DoubleLiftMultiplier = 2, -- pillars rise this many times further
+	},
+	Levels = {
+		FirstLevelXp = 100, -- XP from level 1 to 2
+		StepXp = 25, -- each level after costs this much more than the one before
+		RoundSurvivedXp = 20, -- answers give their tier's points (Tiers) as XP
+		WinXp = 100,
+		ShellsPerLevel = 50,
+		-- A saved profile from before levels starts with this much XP per finished game and per Win.
+		StartPerGame = 150,
+		StartPerWin = 100,
+		BotMin = 2, -- the level range bots show, weighted towards the low end
+		BotMax = 35,
+	},
+	Collection = {
+		-- Paid once each, counted in mastered prompts. `all` means every prompt in the album; a `title` is the
+		-- Cosmetics reward key of the title it unlocks.
+		Milestones = {
+			{ count = 10, shells = 100 },
+			{ count = 25, shells = 250 },
+			{ count = 50, shells = 500, title = "Collect50" },
+			{ count = 100, shells = 1000 },
+			{ count = 200, shells = 2000 },
+			{ all = true, shells = 0, title = "CollectAll" },
+		},
+	},
+	DailyPrompt = {
+		ShellsMultiplier = 2, -- times a match answer's Shells for the same tier
+		ChestEvery = 7, -- every this many days in a row opens StreakChest free
+		StreakChest = "chest_reef",
+		MinTotal = 40, -- answers needed worldwide before a share is shown
+		TopCount = 5, -- yesterday's most given answers listed
+		FlushSeconds = 60, -- how often a server adds its answers to the day's store
 	},
 	Server = {
 		MaxPlayers = 6, -- also set Server Size to 6 in the Creator Hub (Places > Configure)
@@ -221,5 +254,9 @@ table.freeze(GameConfig.Bots)
 table.freeze(GameConfig.Revive)
 table.freeze(GameConfig.Toys)
 table.freeze(GameConfig.Leaderboard)
+table.freeze(GameConfig.Levels)
+table.freeze(GameConfig.Collection.Milestones)
+table.freeze(GameConfig.Collection)
+table.freeze(GameConfig.DailyPrompt)
 table.freeze(GameConfig.Server)
 return table.freeze(GameConfig)

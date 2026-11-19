@@ -86,6 +86,8 @@ local list: { Item } = {
 	{ id = "title_kraken", slot = "Title", name = "The Kraken", rarity = "Mythic", price = 0, chestOnly = true, color = { 190, 80, 255 } },
 	{ id = "title_vip", slot = "Title", name = "VIP", rarity = "Legendary", price = 0, pass = "Vip", color = { 255, 210, 80 } },
 	{ id = "title_crew", slot = "Title", name = "Reef Crew", rarity = "Rare", price = 0, reward = "Group", color = { 38, 198, 196 } },
+	{ id = "title_collector", slot = "Title", name = "Collector", rarity = "Epic", price = 0, reward = "Collect50", color = { 120, 220, 255 } },
+	{ id = "title_completionist", slot = "Title", name = "Completionist", rarity = "Mythic", price = 0, reward = "CollectAll", color = { 255, 200, 60 } },
 
 	-- Splashes ----------------------------------------------------------------------------------------------
 	{ id = "splash_bubbles", slot = "Splash", name = "Bubble Burst", rarity = "Rare", price = 400, splash = "Bubbles", color = { 170, 225, 255 } },
@@ -163,7 +165,13 @@ for _, item in list do
 end
 
 -- What unlocks each reward item, as the shop card says it.
-local rewardHow: { [string]: string } = { Group = "JOIN GROUP", Referral1 = "INVITE 1 FRIEND", Referral3 = "INVITE 3 FRIENDS" }
+local rewardHow: { [string]: string } = {
+	Group = "JOIN GROUP",
+	Referral1 = "INVITE 1 FRIEND",
+	Referral3 = "INVITE 3 FRIENDS",
+	Collect50 = "MASTER 50 PROMPTS",
+	CollectAll = "MASTER EVERY PROMPT",
+}
 
 -- Every slot, in shop order. Equipped is keyed by these names.
 local slotOrder = { "Skin", "Pet", "Aura", "Trail", "Title", "NameTag", "CardTheme", "Splash", "Toy" }

@@ -41,6 +41,12 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   claim; the rules are `Shared/Daily` and the week is `GameConfig.Daily.Days`. One claim per UTC day, a missed
   day starts over, day 7 opens a free chest. The window opens on the tab by itself once a session while a
   claim waits. The debug command `daily <user> <n>` sets the state for a test.
+- Levels: XP (`profile.xp`, a delta) from match answers (the tier's points), rounds survived and Wins
+  (`Server/LevelService`; rules `Shared/Levels`, numbers `GameConfig.Levels`). Each level pays Shells. The level
+  shows in the head label's name row (`[12] name`; bots get one from `BotBrain.level`) and on the level bar
+  (`SharedUi.Wallet.Chip.LevelBar`: `Fill`, `Label`), which hangs under the Shells chip; `Client/Wallet` lifts
+  the chip and what stacks on it by the bar's height. Levels lock nothing in the shop. A profile saved before
+  levels gets XP for its games and Wins (`Profile.startingXp`).
 - A user's saved data can be deleted with the Studio debug command `erase <userId>` (`DataService.erase`).
   `ServerStorage.Sonar` keeps the retired floating prompt screen model; no code uses it.
 - Map: Arena, Lobby and Mountains sit in Workspace as authored; MapService finds them and builds nothing.
@@ -111,7 +117,9 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   by its `Fit` scale) holds `Title` (two lines, each with a dark `...Shadow` copy behind it), `Tagline`,
   `Track.Fill` (the `Shell` rides its end), `Status` and the three how-to-play pills in `Steps`.
   `Root.Creatures` holds sea life icons whose `Bob` attribute is the pixels they rise and fall;
-  `Backdrop.Rays` are the light shafts. `ReplicatedFirst/Loading.client.luau` drives the bar and the motion.
+  `Backdrop.Rays` are the light shafts, `Backdrop.Kelp` stalks sway by their `Sway` attribute (degrees) and
+  `Root.Vignette` darkens the edges. When loading ends, `Root` fades out into the game.
+  `ReplicatedFirst/Loading.client.luau` drives the bar and the motion.
 - StreamingEnabled is on. Client code must not cache streamed parts: a part that streams back in is a new instance
   (the next-level ring once showed only an arc). Read children when you use them, or watch `ChildAdded`.
   `Arena.SeaLife` swimmers are `Atomic`; `Arena.NextLevel` is `Persistent` (always on every client).
@@ -122,7 +130,7 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
 - `Arena.Reef` (OuterRim rocks, Ledges, Coral) stays clear of the tank glass (radius 41.0..41.6): rocks outside,
   ledges inside.
 - Lobby (`Workspace.Lobby`) is grouped into models (Deck, Railing, Bunting, SnackShack, Lamps, PatioSets, ...).
-  `LobbySpawn`, `HowToBoard`, `HowRareBoard`, `QuizZone` and `QuizArc` stay direct children: code looks them up
+  `LobbySpawn`, `HowToBoard`, `HowRareBoard`, `WeeklyBoard`, `QuizZone` and `QuizArc` stay direct children: code looks them up
   by name. `QuizZone` carries `ArcCenter`, `Outward` and `Radius` attributes describing the glowing semicircle
   (`QuizArc`) in front of the shack: LobbyQuizService serves warm-up prompts to whoever stands on it (`LobbyUi.LobbyQuiz`, a centred window with
   an X; a match closes it). `Lobby.WestStairs`
@@ -193,6 +201,22 @@ Roblox party game. Code is synced with Rojo (`default.project.json`); everything
   gain and spend (`StoreService` calls it; a spend passes a `sku`), and custom events (`AnswerGraded`, `Sank`,
   `Won`, `BoostUsed`, `ReviveOffered`, `ReviveUsed`). Names and step numbers are `Shared/Metrics` (tested);
   append onboarding steps, never renumber. Studio records nothing, so there each event prints as `[Metrics] ...`.
+- Answer collection (ALBUM rail key, `LobbyUi.Collection`: `Holder.Panel` with `Progress`, `Next`, `Search`,
+  `Grid.CardTemplate`): `profile.collection` keeps each prompt's best match answer `{ tier, answer }`; a prompt is
+  mastered at the rarest tier its bank has (`Shared/Collection`). `Server/AnswerCollectionService` (not Roblox's
+  CollectionService) records cards from AnswerGraded, pays the milestones in `GameConfig.Collection` (claim ids
+  `Collect10`..`CollectAll`, Shells and the Collector / Completionist reward titles) and sends the album
+  (`CollectionCatalog`: live prompts and their top tier) since the bank stays on the server. `Client/Collection` draws it.
+- Prompt of the Day (TODAY rail key, first on the rail with a `!` until answered; `LobbyUi.DailyPrompt`):
+  one prompt per UTC day for everyone (`Shared/DailyPrompt.pick`, never yesterday's), answered once like a match
+  answer, paid twice a match answer's Shells plus XP, with a day streak whose every 7th day opens a free chest
+  (`GameConfig.DailyPrompt`). `profile.dailyPrompt` keeps today's and the previous answer. `Server/DailyPromptService`
+  buffers answers and adds them each minute to the `DailyPrompt_v1` DataStore entry for the day (`_Studio` in
+  Studio), so the window shows the share of players who gave yours and yesterday's top 5. `Client/DailyPrompt` draws it.
+- Weekly board (`Lobby.WeeklyBoard`, THIS WEEK, left of the all-time `Leaderboard`): `Server/WeeklyService` adds
+  each Win to that week's OrderedDataStore (`Shared/Weekly`: weeks start Monday 00:00 UTC, one store per week,
+  Studio writes `..._Studio`), fills `Resets` and the top 10 every minute, and sends each player their place
+  (`WeeklyRank`; past the top 100 it reads `100+`), which `Client/WeeklyBoard` puts in the board's `YouRow`.
 - Settings: music on/off and volume are saved in the profile (`musicOff`, `musicVolume`); AFK is session only.
 - Profiles: a load that fails after retries leaves the player read-only (`DataService.isReadOnly`): no spends,
   payouts or saves, `loadFailed` in the payload, retried every 60 s. Studio is exempt and gets a throwaway
@@ -217,10 +241,14 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
 - Layering inside a root is the screen Frame's `ZIndex`; across roots it is the root's `DisplayOrder`.
 - Roots use `IgnoreGuiInset = true`. A screen with attribute `BelowTopbar = true` is moved below the Roblox top
   bar at runtime (Studio has no top bar, so it is authored flush with the top).
-- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): REWARDS, SHOP, STORE, ITEMS keys. Each controller connects
-  its key with `Rail.button(name)`; the rail hides in a match and while any window is open. On short screens it
-  wraps into two columns and sizes itself to its visible keys. `Rail.HelpButton` is the top-bar tile right of
-  the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye tile right of that: it is always
+- Lobby rail (left edge, `LobbyUi.Rail.RailFrame`): TODAY, REWARDS, SHOP, STORE, ITEMS, ALBUM keys in a
+  `UIGridLayout` (LayoutOrder): one column on desktop, two columns by three rows on phones. Each controller connects
+  its key with `Rail.button(name)`; the rail hides in a match and while any window is open. Its size is authored,
+  not coded: RailFrame is a share of the screen height with a `UIAspectRatioConstraint` (ScaleWithParentSize) and a
+  `UISizeConstraint` minimum, each key's insides are proportions of the key, and the phone grid is authored as
+  RailFrame's `Phone*` attributes, which `Client/Rail` applies on a phone. `Rail.HelpButton` is the top-bar tile right of
+  the Settings gear (`Ui.placeTopButton`) and `Rail.WatchButton` the eye tile right of that (on a screen
+  too narrow for the row beside the status bar, both stack under the gear instead): it is always
   there in the lobby, opens the spectate bar (`GameUi.Spectate.SpectateBar`, driven by `Client/Lobby`) when a
   match has anyone left in it, and says so when there is nobody to watch. Bots can be watched: the camera
   follows the rig's Head on its pillar, and the pillar's `OwnerName` attribute gives the name. A player who sinks lands in the lobby with no
@@ -260,7 +288,7 @@ Three ScreenGuis in StarterGui, each holding full-screen screen Frames (one per 
   or while the answers list (`GameUi.Reveal.List`, also top-right) shows (`Ui.answersListCoversCorner`).
   A phone draws the chip and the answers list at 80% through their UIScale's `Rest` attribute. Toasts stack in the bottom-left
   (past the match water meter, above the touch thumbstick). The bottom-right column, from the
-  bottom: the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
+  bottom: the level bar, the one Shells chip (`SharedUi.Wallet.Chip`, always on), the Hint and +10 SEC boosts (`Hud.BoostBar`,
   match only) docked on it, and the Wallet pop-ups above whatever is highest.
 - Icons are ImageLabels authored in Studio; text never carries an emoji. The artwork lives once in
   `ReplicatedStorage.Templates.Icons` (one ImageLabel per name: `Shell`, `Trophy`, `Fish`...). An icon beside

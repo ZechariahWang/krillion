@@ -5,6 +5,9 @@
 -- fromStored, combine and merge, or it is silently dropped on save.
 -- No Roblox APIs here, so Lune tests can require it.
 
+local GameConfig = require("../Config/GameConfig")
+local Tiers = require("../Config/Tiers")
+
 export type Equipped = {
 	Skin: string?,
 	Title: string?,
@@ -40,6 +43,24 @@ export type DailyState = {
 	streak: number,
 }
 
+-- The answer collection: each prompt's best match answer (Shared/Collection), keyed by prompt id.
+export type CollectionCard = {
+	tier: string,
+	answer: string,
+}
+
+-- Prompt of the Day (Shared/DailyPrompt): the UTC day last answered with its answer and tier, the one before
+-- (for yesterday's result) and the day streak. An absolute value in a session too; day 0 means never.
+export type DailyPromptState = {
+	day: number,
+	answer: string,
+	tier: string,
+	streak: number,
+	prevDay: number,
+	prevAnswer: string,
+	prevTier: string,
+}
+
 -- The server (game.JobId) that has the profile loaded, and when it last wrote this (os.time).
 export type ActiveSession = {
 	jobId: string,
@@ -67,6 +88,9 @@ export type Profile = {
 	deepest: number, -- metres of the deepest match dive ever (Depth.metres); 0 before the first answer
 	deepestAnswer: string, -- the answer that dove deepest, in the bank spelling; "" before the first
 	games: number, -- matches played to the end
+	xp: number, -- level XP (Shared/Levels)
+	collection: { [string]: CollectionCard },
+	dailyPrompt: DailyPromptState,
 	musicOff: boolean, -- the player turned background music off in Settings
 	musicVolume: number, -- 0..1, the Settings volume bar
 	activeSession: ActiveSession?, -- nil when no server holds the profile
@@ -93,6 +117,9 @@ export type Session = {
 	deepest: number, -- the deepest dive this session, 0 for none; kept with its answer when deeper
 	deepestAnswer: string,
 	games: number, -- delta
+	xp: number, -- delta
+	collection: { [string]: CollectionCard }, -- cards improved this session
+	dailyPrompt: DailyPromptState, -- day 0 unless answered this session
 	musicOff: boolean?, -- nil unless the player changed the music setting this session
 	musicVolume: number?, -- nil unless the player moved the volume bar this session
 	activeSession: ActiveSession?, -- nil leaves the stored marker as it is
@@ -111,8 +138,17 @@ local function newLobby(): LobbyDay
 	return { day = 0, earned = 0 }
 end
 
+local function newDailyPrompt(): DailyPromptState
+	return { day = 0, answer = "", tier = "", streak = 0, prevDay = 0, prevAnswer = "", prevTier = "" }
+end
+
 local function newDaily(): DailyState
 	return { day = 0, streak = 0 }
+end
+
+-- XP for a profile saved before levels existed.
+function Profile.startingXp(games: number, wins: number): number
+	return games * GameConfig.Levels.StartPerGame + wins * GameConfig.Levels.StartPerWin
 end
 
 function Profile.new(): Profile
@@ -137,6 +173,9 @@ function Profile.new(): Profile
 		deepest = 0,
 		deepestAnswer = "",
 		games = 0,
+		xp = 0,
+		collection = {},
+		dailyPrompt = newDailyPrompt(),
 		musicOff = false,
 		musicVolume = 1,
 	}
@@ -170,6 +209,61 @@ local function copyQuests(value: any): QuestDay -- any: stored table or a QuestD
 		end
 	end
 	return quests
+end
+
+local function stringOr(value: any, fallback: string): string
+	if typeof(value) == "string" then
+		return value
+	end
+	return fallback
+end
+
+local function copyDailyPrompt(value: any): DailyPromptState -- any: stored table or a DailyPromptState
+	local state = newDailyPrompt()
+	if typeof(value) ~= "table" then
+		return state
+	end
+	state.day = numberOr(value.day, 0)
+	state.answer = stringOr(value.answer, "")
+	state.tier = stringOr(value.tier, "")
+	state.streak = numberOr(value.streak, 0)
+	state.prevDay = numberOr(value.prevDay, 0)
+	state.prevAnswer = stringOr(value.prevAnswer, "")
+	state.prevTier = stringOr(value.prevTier, "")
+	return state
+end
+
+-- The later answer of two: an older day never rolls a newer one back.
+local function laterDailyPrompt(a: DailyPromptState, b: DailyPromptState): DailyPromptState
+	if b.day > a.day then
+		return copyDailyPrompt(b)
+	end
+	return copyDailyPrompt(a)
+end
+
+local function copyCollection(value: any): { [string]: CollectionCard } -- any: stored table or a collection
+	local cards: { [string]: CollectionCard } = {}
+	if typeof(value) ~= "table" then
+		return cards
+	end
+	for id, card in value do
+		if typeof(id) == "string" and typeof(card) == "table" and typeof(card.tier) == "string" and typeof(card.answer) == "string" then
+			cards[id] = { tier = card.tier, answer = card.answer }
+		end
+	end
+	return cards
+end
+
+-- Each card from either side, the rarer tier winning; on a tie `a` keeps its card.
+local function joinCollections(a: { [string]: CollectionCard }, b: { [string]: CollectionCard }): { [string]: CollectionCard }
+	local joined = copyCollection(a)
+	for id, card in b do
+		local current = joined[id]
+		if current == nil or Tiers.index(card.tier) > Tiers.index(current.tier) then
+			joined[id] = { tier = card.tier, answer = card.answer }
+		end
+	end
+	return joined
 end
 
 local function copyActiveSession(value: any): ActiveSession? -- any: stored table or an ActiveSession
@@ -280,6 +374,13 @@ function Profile.fromStored(value: any): Profile -- any: raw DataStore value
 	profile.deepest = numberOr(stored.deepest, 0)
 	profile.deepestAnswer = if typeof(stored.deepestAnswer) == "string" then stored.deepestAnswer else ""
 	profile.games = numberOr(stored.games, 0)
+	if typeof(stored.xp) == "number" then
+		profile.xp = stored.xp
+	else
+		profile.xp = Profile.startingXp(profile.games, profile.wins)
+	end
+	profile.collection = copyCollection(stored.collection)
+	profile.dailyPrompt = copyDailyPrompt(stored.dailyPrompt)
 	profile.musicOff = stored.musicOff == true
 	if typeof(stored.musicVolume) == "number" then
 		profile.musicVolume = math.clamp(stored.musicVolume, 0, 1)
@@ -310,6 +411,9 @@ function Profile.newSession(): Session
 		deepest = 0,
 		deepestAnswer = "",
 		games = 0,
+		xp = 0,
+		collection = {},
+		dailyPrompt = newDailyPrompt(),
 	}
 end
 
@@ -365,6 +469,9 @@ function Profile.combine(first: Session, second: Session): Session
 	combined.deepest = deeper.deepest
 	combined.deepestAnswer = deeper.deepestAnswer
 	combined.games = first.games + second.games
+	combined.xp = first.xp + second.xp
+	combined.collection = joinCollections(first.collection, second.collection)
+	combined.dailyPrompt = laterDailyPrompt(first.dailyPrompt, second.dailyPrompt)
 	if second.musicOff ~= nil then
 		combined.musicOff = second.musicOff
 	else
@@ -434,6 +541,9 @@ function Profile.merge(stored: Profile, session: Session): Profile
 		merged.deepestAnswer = session.deepestAnswer
 	end
 	merged.games = merged.games + session.games
+	merged.xp = math.max(0, merged.xp + session.xp)
+	merged.collection = joinCollections(merged.collection, session.collection)
+	merged.dailyPrompt = laterDailyPrompt(merged.dailyPrompt, session.dailyPrompt)
 	if session.musicOff ~= nil then
 		merged.musicOff = session.musicOff
 	end

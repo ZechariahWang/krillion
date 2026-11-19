@@ -1,122 +1,57 @@
 --!strict
--- Drives LobbyUi.Rail: the column of chunky square keys at the left edge (REWARDS, SHOP, STORE, ITEMS), each
--- with an icon, a label and a "!" badge, the HELP circle on the top bar next to the Settings gear, and the
--- small THROW key at the right edge. It
--- shows only in the lobby, off a pillar, and hides while any window is open. On short screens (landscape
--- phones) the keys wrap into two columns and RailFrame.Fit shrinks them to fit.
+-- Drives LobbyUi.Rail: the grid of chunky square keys at the left edge (TODAY, REWARDS, SHOP, STORE, ITEMS,
+-- ALBUM), each with an icon, a label and a "!" badge, the HELP circle on the top bar next to the Settings
+-- gear, and the small THROW key at the right edge. It shows only in the lobby, off a pillar, and hides while
+-- any window is open. The grid's size and layout are authored in Studio (RailFrame scales with the screen
+-- height): one column on desktop, and on a phone the layout in RailFrame's Phone* attributes (two columns).
 -- Each button belongs to its own controller: Rewards, ShopUi and Tutorial call Rail.button(name) to connect
 -- it and Rail.setBadge(name, text) to mark it, so this module never needs to know them.
 
 local GuiService = game:GetService("GuiService")
-local UserInputService = game:GetService("UserInputService")
 
 local Ui = require(script.Parent.Ui)
 local Windows = require(script.Parent.Windows)
 
-local BUTTONS = { "RewardsButton", "ShopButton", "StoreButton", "InventoryButton" }
+local BUTTONS = { "RewardsButton", "ShopButton", "StoreButton", "InventoryButton", "CollectionButton", "TodayButton" }
 local HELP_SLOT = 1 -- top bar place right of the Settings gear
 local WATCH_SLOT = 2 -- the spectate eye, right of Help
 local WAIT_SECONDS = 10
-local HEIGHT_SHARE = 0.62 -- the most of the screen height the rail may take
-local MIN_FIT = 0.45
--- One column shrunk below TWO_COLUMNS_BELOW wraps into two; two columns go back to one only above
--- ONE_COLUMN_ABOVE, so a screen near the threshold never flips back and forth.
-local TWO_COLUMNS_BELOW = 0.62
-local ONE_COLUMN_ABOVE = 0.85
-local JITTER = 4 -- pixels of screen height change that do not count as a resize
-local TOUCH_FIT = 0.58 -- phones: the keys at this scale, always two columns, laid out once
 
 local gui: Frame? = nil
-local railFrame: GuiObject? = nil
-local layout: UIListLayout? = nil
-local fit: UIScale? = nil
-local edgeWidth = 0 -- authored frame width beyond one key (room for the badge)
 local buttons: { [string]: TextButton } = {}
 local playing = false
 local phase = ""
-local columns = 1
-local lastHeight = 0
-local lastCount = 0
 
 local Rail = {}
 
-local function visibleKeys(frame: GuiObject): (number, number)
-	local count = 0
-	local keySize = 0
-	for _, child in frame:GetChildren() do
-		if child:IsA("TextButton") and child.Visible then
-			count += 1
-			keySize = math.max(keySize, child.Size.Y.Offset)
-		end
-	end
-	return count, keySize
-end
-
--- Height of `rows` keys stacked with the layout's gap between them.
-local function stackHeight(rows: number, keySize: number, gap: number): number
-	return rows * keySize + math.max(rows - 1, 0) * gap
-end
-
--- Sizes the rail to its visible keys in one column, or two on short screens (landscape phones), then
--- shrinks it to fit the screen height. The list layout wraps the keys into the second column.
-local function fitToScreen()
-	local screen = gui
-	local frame = railFrame
-	local list = layout
-	local scale = fit
-	if screen == nil or frame == nil or list == nil or scale == nil then
+-- Phones: swaps the authored desktop column for the authored phone grid (RailFrame's Phone* attributes).
+local function usePhoneLayout(frame: GuiObject)
+	local grid = frame:FindFirstChildOfClass("UIGridLayout")
+	local aspect = frame:FindFirstChildOfClass("UIAspectRatioConstraint")
+	local limit = frame:FindFirstChildOfClass("UISizeConstraint")
+	local columns = frame:GetAttribute("PhoneColumns")
+	local height = frame:GetAttribute("PhoneHeight")
+	local ratio = frame:GetAttribute("PhoneAspect")
+	local cell = frame:GetAttribute("PhoneCellSize")
+	local padding = frame:GetAttribute("PhoneCellPadding")
+	local minSize = frame:GetAttribute("PhoneMinSize")
+	local maxSize = frame:GetAttribute("PhoneMaxSize")
+	if grid == nil or aspect == nil or typeof(columns) ~= "number" or typeof(height) ~= "number"
+		or typeof(ratio) ~= "number" or typeof(cell) ~= "UDim2" or typeof(padding) ~= "UDim2" then
+		warn("Rail: RailFrame has no complete Phone* layout; phones keep the desktop column")
 		return
 	end
-	local screenHeight = screen.AbsoluteSize.Y
-	local count, keySize = visibleKeys(frame)
-	if screenHeight <= 0 or count == 0 then
-		return
+	frame.Size = UDim2.fromScale(0, height)
+	grid.FillDirectionMaxCells = columns
+	grid.CellSize = cell
+	grid.CellPadding = padding
+	aspect.AspectRatio = ratio
+	if limit ~= nil and typeof(minSize) == "Vector2" then
+		limit.MinSize = minSize
 	end
-	local gap = list.Padding.Offset
-	if UserInputService.TouchEnabled then
-		-- Phones: the list layout is off and every key gets a fixed slot in two columns, so nothing can
-		-- re-wrap. Laid out again only when the set of visible keys changes.
-		if count == lastCount then
-			return
-		end
-		lastCount = count
-		columns = 2
-		list.Parent = nil -- a UIListLayout has no off switch; out of the frame it lays out nothing
-		local index = 0
-		for _, child in frame:GetChildren() do
-			if child:IsA("TextButton") and child.Visible then
-				local column = index % 2
-				local row = math.floor(index / 2)
-				child.Position = UDim2.fromOffset(column * (keySize + gap), row * (keySize + gap))
-				index += 1
-			end
-		end
-		local rows = math.ceil(count / 2)
-		frame.Size = UDim2.fromOffset(stackHeight(2, keySize, gap) + edgeWidth, stackHeight(rows, keySize, gap))
-		scale.Scale = TOUCH_FIT
-		return
+	if limit ~= nil and typeof(maxSize) == "Vector2" then
+		limit.MaxSize = maxSize
 	end
-	list.Parent = frame
-	if math.abs(screenHeight - lastHeight) < JITTER and count == lastCount then
-		return
-	end
-	lastHeight = screenHeight
-	lastCount = count
-	local available = screenHeight * HEIGHT_SHARE
-	local oneColumn = available / stackHeight(count, keySize, gap)
-	if count < 2 then
-		columns = 1
-	elseif columns == 1 and oneColumn < TWO_COLUMNS_BELOW then
-		columns = 2
-	elseif columns == 2 and oneColumn > ONE_COLUMN_ABOVE then
-		columns = 1
-	end
-	local rows = math.ceil(count / columns)
-	local height = stackHeight(rows, keySize, gap)
-	local width = stackHeight(columns, keySize, gap) + edgeWidth
-	list.Wraps = columns > 1
-	frame.Size = UDim2.fromOffset(width, height)
-	scale.Scale = math.clamp(available / height, MIN_FIT, 1)
 end
 
 local function refresh()
@@ -125,9 +60,19 @@ local function refresh()
 		return
 	end
 	screen.Visible = not playing and phase ~= "Results" and not Windows.anyOpen()
-	if screen.Visible then
-		fitToScreen()
-	end
+end
+
+-- The top tiles stack under the gear when their row would reach the status bar (Ui.placeTopButton), so they
+-- are placed again once the status bar has its size: it may have none yet when the rail starts.
+local function onStatusResized(playerGui: PlayerGui, place: () -> ())
+	task.spawn(function()
+		local status = Ui.screen(playerGui, "Status", WAIT_SECONDS)
+		local frame = if status ~= nil then status:WaitForChild("StatusFrame", WAIT_SECONDS) else nil
+		if frame ~= nil and frame:IsA("GuiObject") then
+			frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(place)
+			place()
+		end
+	end)
 end
 
 function Rail.init(playerGui: PlayerGui)
@@ -139,20 +84,9 @@ function Rail.init(playerGui: PlayerGui)
 	gui = found
 	local frame = found:WaitForChild("RailFrame", WAIT_SECONDS)
 	if frame ~= nil and frame:IsA("GuiObject") then
-		railFrame = frame
-		local scale = frame:FindFirstChild("Fit")
-		fit = if scale ~= nil and scale:IsA("UIScale") then scale else nil
-		local list = frame:FindFirstChildOfClass("UIListLayout")
-		layout = list
-		local _, keySize = visibleKeys(frame)
-		edgeWidth = math.max(frame.Size.X.Offset - keySize, 0)
-		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitToScreen)
-		for _, child in frame:GetChildren() do
-			if child:IsA("TextButton") then
-				child:GetPropertyChangedSignal("Visible"):Connect(fitToScreen)
-			end
+		if Ui.isPhone() then
+			usePhoneLayout(frame)
 		end
-		fitToScreen()
 		for _, name in BUTTONS do
 			local button = frame:FindFirstChild(name)
 			if button ~= nil and button:IsA("TextButton") then
@@ -177,6 +111,8 @@ function Rail.init(playerGui: PlayerGui)
 		end
 		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeHelp)
 		help:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
+		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeHelp)
+		onStatusResized(playerGui, placeHelp)
 		placeHelp()
 	end
 	-- The spectate eye sits next to it. Client/Lobby shows it while a match is running and connects it.
@@ -190,6 +126,8 @@ function Rail.init(playerGui: PlayerGui)
 		end
 		GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeWatch)
 		watch:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeWatch)
+		found:GetPropertyChangedSignal("AbsoluteSize"):Connect(placeWatch)
+		onStatusResized(playerGui, placeWatch)
 		placeWatch()
 	end
 	Windows.Changed.connect(refresh)

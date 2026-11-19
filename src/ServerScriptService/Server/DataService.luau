@@ -12,6 +12,8 @@ local RunService = game:GetService("RunService")
 
 local Net = require(ReplicatedStorage.Shared.Net)
 local Profile = require(ReplicatedStorage.Shared.Profile)
+local Levels = require(ReplicatedStorage.Shared.Levels)
+local Collection = require(ReplicatedStorage.Shared.Collection)
 local Signal = require(ReplicatedStorage.Shared.Signal)
 
 local PROFILE_STORE = "Profile_v1"
@@ -150,6 +152,10 @@ local function updateLeaderstats(player: Player, profile: Profile.Profile)
 	-- "Shells" is the player-list name; "Cash" is the old Studio template's, kept as a fallback.
 	local shells = (stats:FindFirstChild("Shells") or stats:FindFirstChild("Cash")) :: IntValue?
 	local best = stats:FindFirstChild("Best") :: IntValue?
+	local level = stats:FindFirstChild("Level") :: IntValue?
+	if level ~= nil then
+		level.Value = Levels.levelOf(profile.xp)
+	end
 	if wins ~= nil then
 		wins.Value = profile.wins
 	end
@@ -194,6 +200,8 @@ local function sendProfile(player: Player)
 	payload.daily = profile.daily
 	payload.krillions = profile.krillions
 	payload.games = profile.games
+	payload.xp = profile.xp
+	payload.collection = profile.collection
 	payload.musicOff = profile.musicOff
 	payload.musicVolume = profile.musicVolume
 	if DataService.isReadOnly(player) then
@@ -555,6 +563,30 @@ function DataService.addCounter(player: Player, key: string, count: number)
 	DataService.changed(player)
 end
 
+-- Keeps `answer` as the prompt's collection card when its tier is rarer than the card's. Returns whether it did.
+function DataService.recordCard(player: Player, promptId: string, tier: string, answer: string): boolean
+	local profile = DataService.get(player)
+	local current = session(player)
+	if profile == nil or current == nil then
+		return false
+	end
+	if not Collection.better(profile.collection[promptId], tier) then
+		return false
+	end
+	current.collection[promptId] = { tier = tier, answer = answer }
+	DataService.changed(player)
+	return true
+end
+
+function DataService.addXp(player: Player, amount: number)
+	local current = session(player)
+	if current == nil or amount <= 0 then
+		return
+	end
+	current.xp += amount
+	DataService.changed(player)
+end
+
 -- Marks a one-time grant as taken. Returns true only the first time, so the caller grants exactly then.
 -- Per server and best effort: two servers loading the same player before either saves could both say true.
 function DataService.claim(player: Player, id: string): boolean
@@ -681,6 +713,15 @@ function DataService.setDaily(player: Player, daily: Profile.DailyState)
 		return
 	end
 	current.daily = { day = daily.day, streak = daily.streak }
+	DataService.changed(player)
+end
+
+function DataService.setDailyPrompt(player: Player, state: Profile.DailyPromptState)
+	local current = session(player)
+	if current == nil then
+		return
+	end
+	current.dailyPrompt = table.clone(state)
 	DataService.changed(player)
 end
 

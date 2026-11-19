@@ -65,6 +65,13 @@ function Results.init(playerGui: PlayerGui)
 	winnerText = winnerFound :: TextLabel
 	podium = podiumFound :: Frame
 	nextText = nextFound :: TextLabel
+	local close = (panelFound :: Frame):FindFirstChild("CloseButton")
+	if close ~= nil and close:IsA("GuiButton") then
+		Ui.pressable(close)
+		close.MouseButton1Click:Connect(function()
+			screen.Visible = false
+		end)
+	end
 	local deepestFound = (panelFound :: Frame):FindFirstChild("Deepest")
 	deepestRow = if deepestFound ~= nil and deepestFound:IsA("Frame") then deepestFound else nil
 	Net.event("ProfileChanged").OnClientEvent:Connect(function(payload)
