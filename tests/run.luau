@@ -34,6 +34,7 @@ local suites = {
 	require("./Rewards.test"),
 	require("./Cosmetics.test"),
 	require("./Tide.test"),
+	require("./SpawnSpread.test"),
 	require("./AnswerStats.test"),
 	require("./AnswerMisses.test"),
 	require("./BotBrain.test"),

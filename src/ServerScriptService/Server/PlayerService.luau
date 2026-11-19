@@ -52,11 +52,13 @@ function PlayerService.start()
 		-- Respawns always land in the lobby; RoundService eliminates anyone who was mid-match.
 		local root = character:WaitForChild("HumanoidRootPart", 5)
 		if root ~= nil then
-			character:PivotTo(MapService.getLobbySpawnCFrame())
+			-- A spot of its own round the spawn, so players who respawn together do not stack.
+			local spot = MapService.getLobbySpreadCFrame(player)
+			character:PivotTo(spot)
 			-- Roblox places a fresh character on the spawn point after CharacterAdded, so once more a frame later.
 			task.wait()
 			if root.Parent ~= nil and player:GetAttribute("Playing") ~= true then
-				character:PivotTo(MapService.getLobbySpawnCFrame())
+				character:PivotTo(spot)
 			end
 		end
 	end
@@ -129,7 +131,7 @@ end
 function PlayerService.sendToLobby(player: Player)
 	player:SetAttribute("Playing", false)
 	setMovement(player, false)
-	placeAndHold(player, MapService.getLobbySpawnCFrame())
+	placeAndHold(player, MapService.getLobbySpreadCFrame(player))
 end
 
 return PlayerService

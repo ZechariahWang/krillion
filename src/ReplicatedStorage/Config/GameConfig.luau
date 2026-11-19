@@ -146,7 +146,7 @@ local GameConfig = {
 		ViewMetres = 230, -- how much of the scale the dive window shows at once
 	},
 	Bots = {
-		FillTo = 6, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
+		FillTo = 8, -- matches with fewer humans are topped up with bots to this size; 0 turns bots off
 		MinSkill = 0.05, -- bots trail players: about 14% of their answers reach Rare, players about 27%
 		MaxSkill = 0.5,
 		DelayMin = 0.25, -- bots answer between DelayMin and DelayMin + DelayRange of the prompt time
@@ -233,7 +233,7 @@ local GameConfig = {
 		FlushSeconds = 60, -- how often a server adds its answers to the day's store
 	},
 	Server = {
-		MaxPlayers = 6, -- also set Server Size to 6 in the Creator Hub (Places > Configure)
+		MaxPlayers = 8, -- also set Server Size to 8 in the Creator Hub (Places > Configure)
 	},
 }
 
